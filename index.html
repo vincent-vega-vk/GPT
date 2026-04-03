@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retro World Cup 2026 Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>⚽ Retro World Cup 2026 Simulator</h1>
+    <p>Seleziona le 48 nazionali secondo gli slot FIFA 2026 e simula l'intero torneo.</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>1) Selezione nazionali per confederazione</h2>
+      <p class="note">
+        Formato FIFA 2026: AFC 8, CAF 9, CONCACAF 6 (USA/CAN/MEX ospitanti), CONMEBOL 6,
+        OFC 1, UEFA 16, più 2 posti da playoff intercontinentale.
+      </p>
+      <div id="slots-container" class="grid"></div>
+      <div class="controls">
+        <button id="autoFillBtn">Auto-compila con squadre suggerite</button>
+        <button id="validateBtn">Valida selezione</button>
+      </div>
+      <div id="validationMessage" class="message"></div>
+    </section>
+
+    <section class="panel">
+      <h2>2) Power ranking</h2>
+      <p class="note">Ogni nazionale riceve un power ranking (0-100). Puoi modificarlo prima della simulazione.</p>
+      <div class="controls">
+        <button id="generateRankingsBtn">Genera ranking iniziale</button>
+      </div>
+      <div id="rankingsTable"></div>
+    </section>
+
+    <section class="panel">
+      <h2>3) Simula torneo</h2>
+      <div class="controls">
+        <button id="simulateBtn">Simula Coppa del Mondo 2026</button>
+      </div>
+      <div id="results"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Stile retrò arcade • Regole ispirate al formato FIFA World Cup 2026.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
