@@ -1,0 +1,179 @@
+:root {
+  --bg: #120c2d;
+  --panel: #1f1647;
+  --panel-2: #2a1f5e;
+  --text: #f8f7ff;
+  --accent: #f6d32d;
+  --accent-2: #36d6ff;
+  --danger: #ff4f6f;
+  --ok: #49e38f;
+  --border: #6f5fcf;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 20% 20%, #26165a 0 120px, transparent 130px),
+    radial-gradient(circle at 80% 10%, #1a1242 0 100px, transparent 110px),
+    repeating-linear-gradient(
+      180deg,
+      #120c2d,
+      #120c2d 16px,
+      #140f33 16px,
+      #140f33 32px
+    );
+  min-height: 100vh;
+}
+
+header,
+footer {
+  text-align: center;
+  padding: 1rem;
+}
+
+h1,
+h2,
+h3 {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+main {
+  width: min(1200px, 96%);
+  margin: 0 auto 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.panel {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 3px solid var(--border);
+  box-shadow: 0 0 0 3px #130b31, 0 8px 0 #0d0824;
+  padding: 1rem;
+}
+
+.note {
+  color: #d6d1ff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.confed {
+  border: 2px dashed var(--border);
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.confed h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  border: 2px solid var(--border);
+  background: #100b2a;
+  color: var(--text);
+  padding: 0.5rem;
+  font-family: inherit;
+}
+
+.controls {
+  margin: 0.75rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+button {
+  border: 2px solid #0f0927;
+  background: linear-gradient(180deg, var(--accent), #d3ae09);
+  color: #130b31;
+  font-weight: bold;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+button:hover {
+  filter: brightness(1.07);
+}
+
+.message {
+  min-height: 1.5rem;
+  font-weight: bold;
+}
+
+.message.ok {
+  color: var(--ok);
+}
+
+.message.error {
+  color: var(--danger);
+}
+
+.table-wrap {
+  max-height: 320px;
+  overflow: auto;
+  border: 2px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.4rem;
+  text-align: left;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #170f3b;
+}
+
+input[type="number"] {
+  width: 90px;
+  background: #100b2a;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.25rem;
+}
+
+.group-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.group-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+}
+
+.knockout-list {
+  columns: 2;
+}
+
+@media (max-width: 700px) {
+  .knockout-list {
+    columns: 1;
+  }
+}
