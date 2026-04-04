@@ -1,3 +1,5 @@
+const HOSTS_2026 = ["Stati Uniti", "Messico", "Canada"];
+
 const confederations = [
   {
     key: "AFC",
@@ -15,7 +17,8 @@ const confederations = [
     key: "CONCACAF",
     name: "CONCACAF (Nord/Centro America)",
     slots: 6,
-    suggestions: ["Stati Uniti", "Messico", "Canada", "Costa Rica", "Giamaica", "Panama"],
+    lockedTeams: HOSTS_2026,
+    suggestions: [...HOSTS_2026, "Costa Rica", "Giamaica", "Panama"],
   },
   {
     key: "CONMEBOL",
@@ -53,18 +56,8 @@ const validationMessage = document.getElementById("validationMessage");
 const rankingsTable = document.getElementById("rankingsTable");
 const results = document.getElementById("results");
 
-function buildSlotsUI() {
-  slotsContainer.innerHTML = "";
-  confederations.forEach((confed) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "confed";
-    wrapper.innerHTML = `
-      <h3>${confed.name}</h3>
-      <p>Slot disponibili: <strong>${confed.slots}</strong></p>
-      <textarea id="input-${confed.key}" placeholder="Inserisci una nazionale per riga"></textarea>
-    `;
-    slotsContainer.appendChild(wrapper);
-  });
+function normalizeName(name) {
+  return name.trim().toLowerCase();
 }
 
 function normalizeLines(value) {
@@ -74,21 +67,95 @@ function normalizeLines(value) {
     .filter(Boolean);
 }
 
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function buildSlotsUI() {
+  slotsContainer.innerHTML = "";
+
+  confederations.forEach((confed) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "confed";
+
+    const title = document.createElement("h3");
+    title.textContent = confed.name;
+
+    const slots = document.createElement("p");
+    slots.innerHTML = `Slot disponibili: <strong>${confed.slots}</strong>`;
+
+    const textarea = document.createElement("textarea");
+    textarea.id = `input-${confed.key}`;
+    textarea.placeholder = "Inserisci una nazionale per riga";
+
+    wrapper.appendChild(title);
+    wrapper.appendChild(slots);
+
+    if (confed.lockedTeams?.length) {
+      const locked = document.createElement("p");
+      locked.className = "note";
+      locked.textContent = `Ospitanti fisse: ${confed.lockedTeams.join(", ")}.`;
+      wrapper.appendChild(locked);
+    }
+
+    wrapper.appendChild(textarea);
+    slotsContainer.appendChild(wrapper);
+  });
+}
+
+function inferBasePower(confed, teamName = "") {
+  const topTier = new Set(["Argentina", "Brasile", "Francia", "Spagna", "Inghilterra", "Germania", "Portogallo"]);
+  const midHigh = new Set(["Italia", "Paesi Bassi", "Belgio", "Uruguay", "Croazia", "Colombia", "Marocco"]);
+
+  if (topTier.has(teamName)) return randomInt(88, 96);
+  if (midHigh.has(teamName)) return randomInt(80, 90);
+
+  switch (confed) {
+    case "UEFA":
+      return randomInt(68, 90);
+    case "CONMEBOL":
+      return randomInt(69, 91);
+    case "CONCACAF":
+      return randomInt(60, 84);
+    case "CAF":
+      return randomInt(62, 86);
+    case "AFC":
+      return randomInt(58, 83);
+    case "OFC":
+      return randomInt(52, 72);
+    case "PLAYOFF":
+      return randomInt(56, 80);
+    default:
+      return randomInt(60, 80);
+  }
+}
+
+function readConfederationSelection(confed) {
+  const textarea = document.getElementById(`input-${confed.key}`);
+  const listed = normalizeLines(textarea.value);
+
+  const locked = confed.lockedTeams ?? [];
+  const lockedMap = new Set(locked.map(normalizeName));
+
+  const filtered = listed.filter((name) => !lockedMap.has(normalizeName(name)));
+  return [...locked, ...filtered];
+}
+
 function collectTeams() {
   const teams = [];
   const errors = [];
   const seen = new Set();
 
   confederations.forEach((confed) => {
-    const textarea = document.getElementById(`input-${confed.key}`);
-    const lines = normalizeLines(textarea.value);
+    const lines = readConfederationSelection(confed);
 
     if (lines.length !== confed.slots) {
-      errors.push(`${confed.name}: hai inserito ${lines.length}/${confed.slots} squadre.`);
+      errors.push(`${confed.name}: hai inserito ${lines.length}/${confed.slots} squadre (incluse eventuali ospitanti fisse).`);
     }
 
     lines.forEach((team) => {
-      const key = team.toLowerCase();
+      const key = normalizeName(team);
       if (seen.has(key)) {
         errors.push(`Squadra duplicata: ${team}`);
       } else {
@@ -105,44 +172,9 @@ function collectTeams() {
   return { teams, errors };
 }
 
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function inferBasePower(confed) {
-  switch (confed) {
-    case "UEFA":
-      return randomInt(72, 93);
-    case "CONMEBOL":
-      return randomInt(74, 94);
-    case "CONCACAF":
-      return randomInt(62, 86);
-    case "CAF":
-      return randomInt(64, 88);
-    case "AFC":
-      return randomInt(60, 85);
-    case "OFC":
-      return randomInt(55, 74);
-    case "PLAYOFF":
-      return randomInt(58, 82);
-    default:
-      return randomInt(60, 80);
-  }
-}
-
-function generateRankings() {
-  if (!state.teams.length) {
-    showMessage("Valida prima le squadre.", true);
-    return;
-  }
-
-  state.rankings.clear();
-  state.teams.forEach((team) => {
-    state.rankings.set(team.name, inferBasePower(team.confed));
-  });
-
-  renderRankingTable();
-  showMessage("Power ranking generato. Puoi modificarlo manualmente.");
+function showMessage(text, isError = false) {
+  validationMessage.className = `message ${isError ? "error" : "ok"}`;
+  validationMessage.textContent = text;
 }
 
 function renderRankingTable() {
@@ -185,11 +217,6 @@ function renderRankingTable() {
   });
 }
 
-function showMessage(text, isError = false) {
-  validationMessage.className = `message ${isError ? "error" : "ok"}`;
-  validationMessage.textContent = text;
-}
-
 function validateSelection() {
   const { teams, errors } = collectTeams();
 
@@ -203,7 +230,7 @@ function validateSelection() {
   state.teams = teams;
   teams.forEach((team) => {
     if (!state.rankings.has(team.name)) {
-      state.rankings.set(team.name, inferBasePower(team.confed));
+      state.rankings.set(team.name, inferBasePower(team.confed, team.name));
     }
   });
 
@@ -212,44 +239,118 @@ function validateSelection() {
   return true;
 }
 
+function generateRankings() {
+  if (!state.teams.length && !validateSelection()) {
+    return;
+  }
+
+  state.rankings.clear();
+  state.teams.forEach((team) => {
+    state.rankings.set(team.name, inferBasePower(team.confed, team.name));
+  });
+
+  renderRankingTable();
+  showMessage("Power ranking generato. Puoi modificarlo manualmente.");
+}
+
 function probabilityAWin(teamA, teamB) {
   const pa = state.rankings.get(teamA.name) ?? 70;
   const pb = state.rankings.get(teamB.name) ?? 70;
   const diff = pa - pb;
-  const logistic = 1 / (1 + Math.exp(-diff / 8));
-  return Math.max(0.15, Math.min(0.75, logistic));
+  const logistic = 1 / (1 + Math.exp(-diff / 9));
+  return Math.max(0.12, Math.min(0.78, logistic));
 }
 
-function simulateMatch(teamA, teamB, allowDraw = true) {
+function simulateMatch(teamA, teamB, { allowDraw = true } = {}) {
   const pAWin = probabilityAWin(teamA, teamB);
-  const drawChance = allowDraw ? 0.22 : 0;
+  const drawChance = allowDraw ? 0.24 : 0;
   const roll = Math.random();
 
   const strengthA = state.rankings.get(teamA.name) ?? 70;
   const strengthB = state.rankings.get(teamB.name) ?? 70;
 
   if (roll < pAWin - drawChance / 2) {
-    const goalsA = randomInt(1, Math.max(1, Math.floor(strengthA / 25)) + 2);
+    const goalsA = randomInt(1, Math.max(1, Math.floor(strengthA / 24)) + 2);
     const goalsB = randomInt(0, Math.max(0, goalsA - 1));
     return { goalsA, goalsB, winner: teamA.name };
   }
 
   if (roll < pAWin + drawChance / 2 && allowDraw) {
-    const goals = randomInt(0, 2);
+    const goals = randomInt(0, 3);
     return { goalsA: goals, goalsB: goals, winner: null };
   }
 
-  const goalsB = randomInt(1, Math.max(1, Math.floor(strengthB / 25)) + 2);
+  const goalsB = randomInt(1, Math.max(1, Math.floor(strengthB / 24)) + 2);
   const goalsA = randomInt(0, Math.max(0, goalsB - 1));
   return { goalsA, goalsB, winner: teamB.name };
 }
 
-function createGroups(teams) {
-  const shuffled = [...teams].sort(() => Math.random() - 0.5);
-  const groups = [];
-  for (let i = 0; i < 12; i++) {
-    groups.push({ name: `Gruppo ${String.fromCharCode(65 + i)}`, teams: shuffled.slice(i * 4, i * 4 + 4) });
+function confedLimitForGroup(confed) {
+  return confed === "UEFA" ? 2 : 1;
+}
+
+function canEnterGroup(team, group) {
+  const count = group.teams.filter((t) => t.confed === team.confed).length;
+  return count < confedLimitForGroup(team.confed);
+}
+
+function backtrackingPlace(potTeams, groups, idx = 0) {
+  if (idx >= potTeams.length) return true;
+
+  const team = potTeams[idx];
+  const candidateOrder = groups
+    .map((g, i) => ({ i, r: Math.random() }))
+    .sort((a, b) => a.r - b.r)
+    .map((v) => v.i);
+
+  for (const groupIndex of candidateOrder) {
+    const group = groups[groupIndex];
+    if (group.teams.length >= 4) continue;
+    if (!canEnterGroup(team, group)) continue;
+
+    group.teams.push(team);
+    if (backtrackingPlace(potTeams, groups, idx + 1)) return true;
+    group.teams.pop();
   }
+
+  return false;
+}
+
+function createGroups(teams) {
+  const sorted = [...teams].sort((a, b) => (state.rankings.get(b.name) ?? 70) - (state.rankings.get(a.name) ?? 70));
+  const pots = [sorted.slice(0, 12), sorted.slice(12, 24), sorted.slice(24, 36), sorted.slice(36, 48)];
+
+  const groups = Array.from({ length: 12 }, (_, i) => ({
+    name: `Gruppo ${String.fromCharCode(65 + i)}`,
+    teams: [],
+  }));
+
+  // Hosts in groups A, B, C (style FIFA drawing exposure for hosts)
+  const hosts = HOSTS_2026
+    .map((h) => teams.find((t) => normalizeName(t.name) === normalizeName(h)))
+    .filter(Boolean);
+
+  hosts.forEach((host, i) => {
+    groups[i].teams.push(host);
+  });
+
+  for (let p = 0; p < pots.length; p++) {
+    const potTeams = pots[p]
+      .filter((t) => !hosts.some((h) => h.name === t.name))
+      .sort(() => Math.random() - 0.5);
+
+    const ok = backtrackingPlace(potTeams, groups);
+    if (!ok) {
+      // fallback soft: random fill if constraints impossible
+      const leftovers = [...potTeams];
+      groups.forEach((group) => {
+        while (group.teams.length < Math.min(4, p + 1) && leftovers.length) {
+          group.teams.push(leftovers.pop());
+        }
+      });
+    }
+  }
+
   return groups;
 }
 
@@ -261,7 +362,20 @@ function initStandingRow(team) {
     ga: 0,
     gd: 0,
     wins: 0,
+    fairPlay: randomInt(-10, 0),
   };
+}
+
+function applyGroupTieBreakers(rows) {
+  return [...rows].sort(
+    (x, y) =>
+      y.pts - x.pts ||
+      y.gd - x.gd ||
+      y.gf - x.gf ||
+      y.wins - x.wins ||
+      y.fairPlay - x.fairPlay ||
+      x.team.name.localeCompare(y.team.name)
+  );
 }
 
 function simulateGroup(group) {
@@ -271,7 +385,7 @@ function simulateGroup(group) {
     for (let j = i + 1; j < group.teams.length; j++) {
       const a = group.teams[i];
       const b = group.teams[j];
-      const match = simulateMatch(a, b, true);
+      const match = simulateMatch(a, b, { allowDraw: true });
 
       const rowA = table.get(a.name);
       const rowB = table.get(b.name);
@@ -294,15 +408,44 @@ function simulateGroup(group) {
     }
   }
 
-  const standings = [...table.values()]
-    .map((row) => ({ ...row, gd: row.gf - row.ga }))
-    .sort((x, y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf || y.wins - x.wins || x.team.name.localeCompare(y.team.name));
+  const standings = applyGroupTieBreakers(
+    [...table.values()].map((row) => ({ ...row, gd: row.gf - row.ga }))
+  );
 
   return { group, standings };
 }
 
-function simulateKnockoutBracket(roundTeams) {
-  let teams = [...roundTeams];
+function simulateKnockoutMatch(teamA, teamB) {
+  const regular = simulateMatch(teamA, teamB, { allowDraw: true });
+  if (regular.goalsA !== regular.goalsB) return { ...regular, penalties: false };
+
+  const extraA = randomInt(0, 1);
+  const extraB = randomInt(0, 1);
+  const finalA = regular.goalsA + extraA;
+  const finalB = regular.goalsB + extraB;
+
+  if (finalA !== finalB) {
+    return {
+      goalsA: finalA,
+      goalsB: finalB,
+      winner: finalA > finalB ? teamA.name : teamB.name,
+      penalties: false,
+      extraTime: true,
+    };
+  }
+
+  const penWinner = Math.random() < 0.5 ? teamA : teamB;
+  return {
+    goalsA: finalA,
+    goalsB: finalB,
+    winner: penWinner.name,
+    penalties: true,
+    extraTime: true,
+  };
+}
+
+function simulateKnockoutBracket(roundOf32Teams) {
+  let teams = [...roundOf32Teams];
   const rounds = [];
   const labels = ["Sedicesimi", "Ottavi", "Quarti", "Semifinali", "Finale"];
   let roundIndex = 0;
@@ -310,15 +453,11 @@ function simulateKnockoutBracket(roundTeams) {
   while (teams.length > 1) {
     const matches = [];
     const winners = [];
+
     for (let i = 0; i < teams.length; i += 2) {
       const a = teams[i];
       const b = teams[i + 1];
-      let match = simulateMatch(a, b, false);
-
-      if (match.goalsA === match.goalsB) {
-        const penWinner = Math.random() < 0.5 ? a : b;
-        match = { ...match, winner: penWinner.name, penalties: true };
-      }
+      const match = simulateKnockoutMatch(a, b);
 
       winners.push(teams.find((t) => t.name === match.winner));
       matches.push({ a, b, ...match });
@@ -335,7 +474,6 @@ function simulateKnockoutBracket(roundTeams) {
 function simulateTournament() {
   if (!validateSelection()) return;
 
-  // read potentially edited values
   rankingsTable.querySelectorAll("input[type='number']").forEach((input) => {
     const team = input.dataset.team;
     const value = Math.max(1, Math.min(100, Number(input.value) || 1));
@@ -353,11 +491,7 @@ function simulateTournament() {
     thirds.push(g.standings[2]);
   });
 
-  const bestThirds = thirds
-    .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || b.wins - a.wins)
-    .slice(0, 8)
-    .map((row) => row.team);
-
+  const bestThirds = applyGroupTieBreakers(thirds).slice(0, 8).map((row) => row.team);
   const roundOf32 = [...top2, ...bestThirds].sort(() => Math.random() - 0.5);
   const knockout = simulateKnockoutBracket(roundOf32);
 
@@ -370,14 +504,14 @@ function renderResults(groupResults, bestThirds, knockout) {
       const rows = standings
         .map(
           (r, idx) =>
-            `<tr><td>${idx + 1}</td><td>${r.team.name}</td><td>${r.pts}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gd}</td></tr>`
+            `<tr><td>${idx + 1}</td><td>${r.team.name}</td><td>${r.pts}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gd}</td><td>${r.fairPlay}</td></tr>`
         )
         .join("");
       return `
       <div class="group-card">
         <h3>${group.name}</h3>
         <table>
-          <thead><tr><th>#</th><th>Team</th><th>Pt</th><th>GF</th><th>GA</th><th>GD</th></tr></thead>
+          <thead><tr><th>#</th><th>Team</th><th>Pt</th><th>GF</th><th>GA</th><th>GD</th><th>FP</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>`;
@@ -390,8 +524,9 @@ function renderResults(groupResults, bestThirds, knockout) {
     .map((round) => {
       const items = round.matches
         .map((m) => {
-          const pen = m.penalties ? " (dcr)" : "";
-          return `<li>${m.a.name} ${m.goalsA}-${m.goalsB} ${m.b.name} → <strong>${m.winner}</strong>${pen}</li>`;
+          const et = m.extraTime ? " dts" : "";
+          const pen = m.penalties ? " dcr" : "";
+          return `<li>${m.a.name} ${m.goalsA}-${m.goalsB} ${m.b.name} → <strong>${m.winner}</strong>${et}${pen}</li>`;
         })
         .join("");
 
@@ -413,12 +548,14 @@ function renderResults(groupResults, bestThirds, knockout) {
 function autoFill() {
   confederations.forEach((confed) => {
     const textarea = document.getElementById(`input-${confed.key}`);
-    textarea.value = confed.suggestions.join("\n");
+    const suggested = confed.suggestions.filter((name, idx, arr) => arr.indexOf(name) === idx);
+    textarea.value = suggested.join("\n");
   });
   showMessage("Auto-compilazione effettuata. Premi 'Valida selezione'.");
 }
 
 buildSlotsUI();
+autoFill();
 
 document.getElementById("autoFillBtn").addEventListener("click", autoFill);
 document.getElementById("validateBtn").addEventListener("click", validateSelection);
