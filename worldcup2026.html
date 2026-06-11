@@ -485,6 +485,9 @@
 // DATA
 // ===========================
 
+const POSITIONS = ['POR','TD','DC','DS','TCA','CA','TCC','CC','ALA','SEC','ATT'];
+const CLUBS = ['Real Madrid','Barcelona','Man City','Liverpool','PSG','Bayern','Juventus','Arsenal','Chelsea','Inter','Milan','Napoli','Atlético','Dortmund','Ajax','Porto','Benfica','Olympique','Lazio','Roma'];
+
 const TEAMS = [
   // GRUPPO A
   { id:'usa', name:'USA', flag:'🇺🇸', conf:'CONCACAF', group:'A', rating:78, host:true,
@@ -623,9 +626,6 @@ const TACTICS = {
   'possession': { name:'🎯 Possesso', bonus_att:4, bonus_def:2, desc:'Tika-taka, controllo palla' },
   'counter': { name:'🏃 Contropiede', bonus_att:6, bonus_def:4, desc:'Velocità in transizione' },
 };
-
-const POSITIONS = ['POR','TD','DC','DS','TCA','CA','TCC','CC','ALA','SEC','ATT'];
-const CLUBS = ['Real Madrid','Barcelona','Man City','Liverpool','PSG','Bayern','Juventus','Arsenal','Chelsea','Inter','Milan','Napoli','Atlético','Dortmund','Ajax','Porto','Benfica','Olympique','Lazio','Roma'];
 
 function genPlayers(nation, baseRating) {
   const names = generateNationalNames(nation);
