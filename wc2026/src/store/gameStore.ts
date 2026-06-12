@@ -132,10 +132,12 @@ export const useGameStore = create<GameStore>()(
       advanceAfterMatch: () => {
         const { matches, teams, playerTeamId, currentRound, mediaHeat, tournamentLog } = get();
         if (!playerTeamId) return;
+
         const pTeam = teams[playerTeamId];
         const avgMorale = pTeam ? pTeam.players.reduce((a, p) => a + p.morale, 0) / Math.max(1, pTeam.players.length) : 60;
-        // Check if player team is out
         const playerMatch = matches.find(m => m.id === get().currentMatchId);
+
+        // Step 1: Check player elimination in knockout
         let playerEliminated = false;
         if (playerMatch && playerMatch.result && playerMatch.stage !== 'group') {
           const r = playerMatch.result;
@@ -143,66 +145,66 @@ export const useGameStore = create<GameStore>()(
           if (playerMatch.homeTeamId === playerTeamId && !hWin) playerEliminated = true;
           if (playerMatch.awayTeamId === playerTeamId && hWin) playerEliminated = true;
         }
-        if (playerEliminated) {
-          if (isTournamentComplete(matches)) {
-            set({ phase: 'TOURNAMENT_END' });
-            return;
-          }
-          set({ phase: 'TOURNAMENT_END' });
-          return;
-        }
-        // Check press conference
-        const currentMatch = matches.find(m => m.id === get().currentMatchId);
-        if (currentMatch && currentMatch.result) {
-          const isWin = playerTeamId === currentMatch.homeTeamId
-            ? currentMatch.result.homeGoals > currentMatch.result.awayGoals
-            : currentMatch.result.awayGoals > currentMatch.result.homeGoals;
-          const pressQs = generatePressQuestions(currentMatch.result, currentMatch.stage, isWin, mediaHeat);
-          // Drama event
-          const prevEventIds = tournamentLog.filter(l => l.startsWith('drama:')).map(l => l.split(':')[1]);
-          const drama = pickDramaEvent(currentRound, mediaHeat, avgMorale, prevEventIds);
-          if (drama) {
-            set({ pendingDrama: drama, phase: 'DRESSING_ROOM' });
-          } else {
-            set({ pendingPress: pressQs, phase: 'PRESS_CONFERENCE' });
-          }
-          return;
-        }
-        // Check if group stage complete
-        const groupMatches = matches.filter(m => m.stage === 'group');
-        const allGroupPlayed = groupMatches.every(m => m.played);
+
+        // Step 2: Advance tournament state BEFORE press conference
+        let newMatches = [...matches];
+        let newRound = currentRound;
+
+        const groupMatches = newMatches.filter(m => m.stage === 'group');
+        const allGroupPlayed = groupMatches.length > 0 && groupMatches.every(m => m.played);
+
         if (allGroupPlayed && !get().knockoutGenerated) {
-          const r32 = generateR32Matches(teams, matches);
-          set({ matches: [...matches, ...r32], knockoutGenerated: true, currentRound: 4, phase: 'GROUP_TABLES' });
-          return;
-        }
-        // Check if current knockout round complete
-        const stages = ['r32', 'r16', 'qf', 'sf'] as const;
-        for (const stage of stages) {
-          const stageMatches = matches.filter(m => m.stage === stage);
-          if (stageMatches.length > 0 && stageMatches.every(m => m.played)) {
-            const nextMatches = matches.filter(m => m.stage === (stage === 'r32' ? 'r16' : stage === 'r16' ? 'qf' : stage === 'qf' ? 'sf' : 'final'));
-            if (nextMatches.length === 0) {
-              const generated = generateNextKnockoutRound(matches, stage, teams);
-              set({ matches: [...matches, ...generated], currentRound: currentRound + 1, phase: 'KNOCKOUT_BRACKET' });
-              return;
+          // Group stage complete → generate R32
+          const r32 = generateR32Matches(teams, newMatches);
+          newMatches = [...newMatches, ...r32];
+          newRound = 4;
+          set({ matches: newMatches, knockoutGenerated: true, currentRound: newRound });
+        } else if (get().knockoutGenerated) {
+          // Check if a knockout round just finished and needs the next one
+          const stages = ['r32', 'r16', 'qf', 'sf'] as const;
+          for (const stage of stages) {
+            const stageMs = newMatches.filter(m => m.stage === stage);
+            if (stageMs.length > 0 && stageMs.every(m => m.played)) {
+              const nextStageId = stage === 'r32' ? 'r16' : stage === 'r16' ? 'qf' : stage === 'qf' ? 'sf' : 'final';
+              const nextExists = newMatches.some(m => m.stage === nextStageId || (stage === 'sf' && m.stage === 'final'));
+              if (!nextExists) {
+                const generated = generateNextKnockoutRound(newMatches, stage, teams);
+                newMatches = [...newMatches, ...generated];
+                newRound = currentRound + 1;
+                set({ matches: newMatches, currentRound: newRound });
+                break;
+              }
             }
           }
         }
-        const sfMatches = matches.filter(m => m.stage === 'sf');
-        if (sfMatches.length > 0 && sfMatches.every(m => m.played)) {
-          const finalExists = matches.some(m => m.stage === 'final');
-          if (!finalExists) {
-            const generated = generateNextKnockoutRound(matches, 'sf', teams);
-            set({ matches: [...matches, ...generated], currentRound: currentRound + 1, phase: 'KNOCKOUT_BRACKET' });
-            return;
-          }
-        }
-        if (isTournamentComplete(matches)) {
+
+        // Step 3: Check tournament completion
+        if (isTournamentComplete(newMatches)) {
           set({ phase: 'TOURNAMENT_END' });
           return;
         }
-        set({ phase: 'BETWEEN_MATCHES' });
+
+        // Step 4: Player eliminated → end
+        if (playerEliminated) {
+          set({ phase: 'TOURNAMENT_END' });
+          return;
+        }
+
+        // Step 5: Press conference / dressing room
+        const isWin = playerTeamId === playerMatch?.homeTeamId
+          ? (playerMatch?.result?.homeGoals ?? 0) > (playerMatch?.result?.awayGoals ?? 0) ||
+            (playerMatch?.result?.homePens !== undefined && (playerMatch?.result?.homePens ?? 0) > (playerMatch?.result?.awayPens ?? 0))
+          : (playerMatch?.result?.awayGoals ?? 0) > (playerMatch?.result?.homeGoals ?? 0) ||
+            (playerMatch?.result?.awayPens !== undefined && (playerMatch?.result?.awayPens ?? 0) > (playerMatch?.result?.homePens ?? 0));
+        const pressQs = generatePressQuestions(playerMatch?.result ?? null, playerMatch?.stage ?? 'group', isWin, mediaHeat);
+        const prevEventIds = tournamentLog.filter(l => l.startsWith('drama:')).map(l => l.split(':')[1]);
+        const drama = pickDramaEvent(newRound, mediaHeat, avgMorale, prevEventIds);
+
+        if (drama && Math.random() < 0.35) {
+          set({ pendingDrama: drama, pendingPress: pressQs, phase: 'DRESSING_ROOM' });
+        } else {
+          set({ pendingPress: pressQs, phase: 'PRESS_CONFERENCE' });
+        }
       },
 
       updateTactics: (tactics) => {
@@ -237,27 +239,17 @@ export const useGameStore = create<GameStore>()(
         if (!match) return;
         // Simulate AI matches for same round
         const { updatedMatches: aiMatches, updatedTeams: aiTeams } = simulateAIMatches(matches, teams, match.roundNumber, playerTeamId);
-        // Simulate player match
+        // Simulate player match (effects will be applied in goToPostMatch)
         const homeTeam = aiTeams[match.homeTeamId];
         const awayTeam = aiTeams[match.awayTeamId];
         if (!homeTeam || !awayTeam) return;
-        const isPlayerMatch = true;
-        const result = simulateFullMatch(homeTeam, awayTeam, match.stage, difficulty, isPlayerMatch);
-        const { home: newHome, away: newAway } = applyMatchToTeams(homeTeam, awayTeam, result);
-        const finalTeams = { ...aiTeams, [homeTeam.id]: newHome, [awayTeam.id]: newAway };
+        const result = simulateFullMatch(homeTeam, awayTeam, match.stage, difficulty, true);
+        // DON'T apply match effects to player's teams here — goToPostMatch will do it
         const finalMatches = aiMatches.map(m => m.id === currentMatchId ? { ...m, result, played: true } : m);
-        const isWin = playerTeamId === match.homeTeamId
-          ? result.homeGoals > result.awayGoals || (result.homePens !== undefined && result.homePens > (result.awayPens ?? 0))
-          : result.awayGoals > result.homeGoals || (result.awayPens !== undefined && result.awayPens > (result.homePens ?? 0));
-        const heat = isWin ? Math.max(0, get().mediaHeat - 5) : Math.min(100, get().mediaHeat + 10);
-        const rep = isWin ? Math.min(100, get().managerRep + 5) : Math.max(0, get().managerRep - 5);
         set({
-          teams: finalTeams,
+          teams: aiTeams, // AI team effects already applied; player match effects deferred
           matches: finalMatches,
           phase: 'LIVE_MATCH',
-          mediaHeat: heat,
-          managerRep: rep,
-          tournamentLog: [...get().tournamentLog, `${homeTeam.shortName} ${result.homeGoals}-${result.awayGoals} ${awayTeam.shortName}`],
         });
       },
 
@@ -300,7 +292,7 @@ export const useGameStore = create<GameStore>()(
           tournamentLog: [...tournamentLog, `drama:${pendingDrama.id}`],
           mediaHeat: Math.max(0, mediaHeat - 5),
           phase: 'PRESS_CONFERENCE',
-          pendingPress: generatePressQuestions(null, 'group', true, mediaHeat),
+          // pendingPress was already set by advanceAfterMatch; keep it if set, else generate fallback
         });
       },
 

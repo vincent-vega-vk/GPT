@@ -67,6 +67,7 @@ export default function TournamentEnd() {
       tournamentLog: [],
       pendingDrama: null,
       pendingPress: null,
+      penaltyShootout: null,
       notifications: [],
       savedAt: null,
     });

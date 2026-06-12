@@ -49,11 +49,11 @@ export default function GroupTables() {
           </thead>
           <tbody>
             {standings.map((team, i) => {
-              const wins = Math.round((team.groupPoints - (team.groupMatchesPlayed - Math.round((team.groupPoints % 3) / 3))) / 3);
               const gamesPlayed = team.groupMatchesPlayed;
               const pts = team.groupPoints;
-              const draws = pts - wins * 3;
-              const losses = gamesPlayed - wins - draws;
+              const draws = pts % 3;
+              const wins = (pts - draws) / 3;
+              const losses = Math.max(0, gamesPlayed - wins - draws);
               const isQualified = i < 2;
               const isMaybeThird = i === 2;
               const isPlayer = team.id === playerTeamId;

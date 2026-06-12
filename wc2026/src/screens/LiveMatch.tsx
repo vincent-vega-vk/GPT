@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { MatchEvent } from '../types';
 import StatBar from '../components/StatBar';
@@ -34,69 +34,67 @@ export default function LiveMatch() {
   const [showFinal, setShowFinal] = useState(false);
   const [penSequence, setPenSequence] = useState<string[]>([]);
   const [penIdx, setPenIdx] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const transitioned = useRef(false);
-
-  const allEvents = result?.events ?? [];
-  const hasPens = result?.homePens !== undefined;
-
-  // Calculate live score
-  const liveHomeGoals = displayedEvents.filter(e => e.type === 'goal' && e.team === 'home').length;
-  const liveAwayGoals = displayedEvents.filter(e => e.type === 'goal' && e.team === 'away').length;
-
   const [subOut, setSubOut] = useState<string>('');
   const [subIn, setSubIn] = useState<string>('');
   const [showSubModal, setShowSubModal] = useState(false);
   const [show3D, setShow3D] = useState(true);
+  const [speed, setSpeed] = useState(1); // 1 = normal, 2 = fast, 4 = super fast
 
-  function stopTimer() {
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const transitioned = useRef(false);
+  // Refs for values used inside timer/effect callbacks (avoid stale closures)
+  const livePhaseRef = useRef<LivePhase>('first_half');
+  livePhaseRef.current = livePhase;
+  const interventionRef = useRef<InterventionModal | null>(null);
+  interventionRef.current = intervention;
+
+  const allEvents = result?.events ?? [];
+  const hasPens = result?.homePens !== undefined;
+
+  const liveHomeGoals = displayedEvents.filter(e => e.type === 'goal' && e.team === 'home').length;
+  const liveAwayGoals = displayedEvents.filter(e => e.type === 'goal' && e.team === 'away').length;
+
+  const stopTimer = useCallback(() => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-  }
+  }, []);
 
-  function startTimer() {
+  const startTimer = useCallback(() => {
     stopTimer();
+    const intervalMs = Math.round(333 / speed);
     timerRef.current = setInterval(() => {
+      if (interventionRef.current) return; // paused for intervention
       setMinute(prev => {
         const next = prev + 1;
-        // Add events for this minute
         const newEvents = allEvents.filter(e => e.minute === next);
         if (newEvents.length > 0) setDisplayedEvents(de => [...de, ...newEvents]);
-        // Check phase transitions
-        if (next === 45 && livePhase === 'first_half') {
-          stopTimer();
-          setLivePhase('half_time');
-          setIntervention({ type: 'halftime', title: 'HALF TIME' });
-          return 45;
-        }
-        if (next === 90 && livePhase === 'second_half') {
-          if (hasPens && result && result.homeGoals === result.awayGoals) {
-            stopTimer();
-            setLivePhase('extra_time');
-            setIntervention({ type: 'before_et', title: 'EXTRA TIME APPROACHING' });
-            return 90;
-          }
-          stopTimer();
-          setLivePhase('full_time');
-          return 90;
-        }
-        if (next === 120 && livePhase === 'extra_time') {
-          stopTimer();
-          setLivePhase('penalties');
-          setIntervention({ type: 'penalties', title: 'PENALTY SHOOTOUT' });
-          return 120;
-        }
         return next;
       });
-    }, 333); // 1 real second = 3 match minutes
-  }
+    }, intervalMs);
+  }, [stopTimer, allEvents, speed]);
 
+  // React to phase transitions based on minute
   useEffect(() => {
-    if (result && !transitioned.current) {
-      startTimer();
+    if (minute === 45 && livePhaseRef.current === 'first_half') {
+      stopTimer();
+      setLivePhase('half_time');
+      setIntervention({ type: 'halftime', title: 'HALF TIME' });
+    } else if (minute === 90 && livePhaseRef.current === 'second_half') {
+      stopTimer();
+      if (hasPens && result && result.homeGoals === result.awayGoals) {
+        setLivePhase('extra_time');
+        setIntervention({ type: 'before_et', title: 'EXTRA TIME APPROACHING' });
+      } else {
+        setLivePhase('full_time');
+      }
+    } else if (minute === 120 && livePhaseRef.current === 'extra_time') {
+      stopTimer();
+      setLivePhase('penalties');
+      setIntervention({ type: 'penalties', title: 'PENALTY SHOOTOUT' });
     }
-    return () => stopTimer();
-  }, [result]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minute]);
 
+  // Transition to full_time
   useEffect(() => {
     if (livePhase === 'full_time' && !transitioned.current) {
       transitioned.current = true;
@@ -105,9 +103,27 @@ export default function LiveMatch() {
         if (result && currentMatchId) goToPostMatch(result, currentMatchId);
       }, 3000);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [livePhase]);
 
-  // Check for intervention events during play
+  // Start timer when result is loaded
+  useEffect(() => {
+    if (result && !transitioned.current) {
+      startTimer();
+    }
+    return () => stopTimer();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result]);
+
+  // Restart timer when speed changes
+  useEffect(() => {
+    if (timerRef.current && result) {
+      startTimer();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speed]);
+
+  // React to goal conceded
   const lastEvent = displayedEvents[displayedEvents.length - 1];
   const prevLastEventRef = useRef<MatchEvent | null>(null);
   useEffect(() => {
@@ -116,13 +132,13 @@ export default function LiveMatch() {
       const isPlayerHome = playerTeamId === match?.homeTeamId;
       if (lastEvent.type === 'goal') {
         const isMyGoal = (isPlayerHome && lastEvent.team === 'home') || (!isPlayerHome && lastEvent.team === 'away');
-        const isConceded = !isMyGoal;
-        if (isConceded && Math.random() < 0.6) {
+        if (!isMyGoal && Math.random() < 0.5) {
           stopTimer();
           setIntervention({ type: 'goal_conceded', title: 'GOAL CONCEDED — React?' });
         }
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayedEvents]);
 
   if (!match || !result || !homeTeam || !awayTeam) {
@@ -138,37 +154,45 @@ export default function LiveMatch() {
   const myGoals = isHome ? liveHomeGoals : liveAwayGoals;
   const oppGoals = isHome ? liveAwayGoals : liveHomeGoals;
 
+  const benchPlayers = myTeam.players.filter(p => !p.isInStartingXI && !p.isInjured);
+  const startingPlayers = myTeam.players.filter(p => p.isInStartingXI);
+
   function dismissIntervention() {
+    const wasHalfTime = livePhaseRef.current === 'half_time';
     setIntervention(null);
-    if (livePhase === 'half_time') setLivePhase('second_half');
-    if (livePhase === 'full_time' || livePhase === 'extra_time') {}
+    if (wasHalfTime) setLivePhase('second_half');
     startTimer();
+  }
+
+  function skipToEnd() {
+    stopTimer();
+    // Show all remaining events immediately
+    setDisplayedEvents(allEvents);
+    setMinute(hasPens ? 120 : 90);
+    setLivePhase('full_time');
   }
 
   function handlePenalties() {
     if (!result?.homePens) return;
     setIntervention(null);
-    // Show pens sequentially
     setPenIdx(0);
     setLivePhase('penalties');
-    // Build sequence
     const seq: string[] = [];
-    const homePens = result.homePens ?? 0;
-    const awayPens = result.awayPens ?? 0;
-    // Simulate sequence
-    for (let i = 0; i < 5; i++) {
-      const hScore = i < homePens;
-      const aScore = i < awayPens;
+    const hp = result.homePens ?? 0;
+    const ap = result.awayPens ?? 0;
+    for (let i = 0; i < Math.max(hp + ap, 10); i += 2) {
+      const hScore = i / 2 < hp;
+      const aScore = i / 2 < ap;
       seq.push(`H ${hScore ? '✓' : '✗'}`);
       seq.push(`A ${aScore ? '✓' : '✗'}`);
     }
-    setPenSequence(seq);
-    // Show each kick with delay
+    const trimmed = seq.slice(0, 10); // 5 kicks each
+    setPenSequence(trimmed);
     let idx = 0;
     const penTimer = setInterval(() => {
       idx++;
       setPenIdx(idx);
-      if (idx >= seq.length) {
+      if (idx >= trimmed.length) {
         clearInterval(penTimer);
         setTimeout(() => {
           setLivePhase('full_time');
@@ -180,9 +204,6 @@ export default function LiveMatch() {
       }
     }, 1500);
   }
-
-  const benchPlayers = myTeam.players.filter(p => !p.isInStartingXI && !p.isInjured);
-  const startingPlayers = myTeam.players.filter(p => p.isInStartingXI);
 
   return (
     <div className="min-h-screen bg-gray-950 flex flex-col">
@@ -205,6 +226,7 @@ export default function LiveMatch() {
                 {livePhase === 'full_time' ? 'FULL TIME' :
                  livePhase === 'half_time' ? 'HALF TIME' :
                  livePhase === 'penalties' ? 'PENALTIES' :
+                 livePhase === 'extra_time' ? `${minute}' ET` :
                  `${minute}'`}
               </div>
             </div>
@@ -218,8 +240,24 @@ export default function LiveMatch() {
               PENALTIES: {result.homePens ?? 0} – {result.awayPens ?? 0}
             </div>
           )}
+          {/* Speed controls */}
+          <div className="flex justify-center gap-2 mt-3">
+            {([1, 2, 4] as const).map(s => (
+              <button key={s} onClick={() => setSpeed(s)}
+                className={clsx('px-3 py-1 rounded text-xs font-bold transition-all',
+                  speed === s ? 'bg-amber-600 text-black' : 'bg-gray-800 text-gray-400 hover:bg-gray-700',
+                )}>
+                {s === 1 ? '▶ 1x' : s === 2 ? '▶▶ 2x' : '▶▶▶ 4x'}
+              </button>
+            ))}
+            <button onClick={skipToEnd}
+              className="px-3 py-1 rounded text-xs font-bold bg-gray-800 text-gray-500 hover:bg-gray-700 hover:text-white">
+              ⏭ Skip
+            </button>
+          </div>
         </div>
       </div>
+
       {/* Penalty sequence */}
       {livePhase === 'penalties' && penSequence.length > 0 && (
         <div className="bg-gray-900 border-b border-gray-800 px-6 py-3">
@@ -232,6 +270,7 @@ export default function LiveMatch() {
           </div>
         </div>
       )}
+
       {/* 3D Match Viewer */}
       <div className="relative">
         <button
@@ -240,7 +279,7 @@ export default function LiveMatch() {
         >
           {show3D ? '⊟ Hide 3D' : '⊞ Show 3D'}
         </button>
-        {show3D && result.events3D && (
+        {show3D && result.events3D && result.events3D.length > 0 && (
           <MatchViewer3D
             events={result.events3D}
             homeTeamName={homeTeam.shortName}
@@ -256,6 +295,7 @@ export default function LiveMatch() {
           />
         )}
       </div>
+
       {/* Main content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-auto">
         {/* Timeline */}
@@ -286,8 +326,17 @@ export default function LiveMatch() {
               🔄 Substitution
             </button>
           </div>
+          {/* Current score outcome */}
+          <div className={clsx('mt-4 rounded-lg p-3 text-center text-sm font-bold',
+            myGoals > oppGoals ? 'bg-emerald-900/40 text-emerald-400' :
+            myGoals < oppGoals ? 'bg-red-900/40 text-red-400' :
+            'bg-amber-900/40 text-amber-400',
+          )}>
+            {myGoals > oppGoals ? '✅ WINNING' : myGoals < oppGoals ? '❌ LOSING' : '🤝 DRAWING'}
+          </div>
         </div>
       </div>
+
       {/* Full time reveal */}
       {showFinal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
@@ -300,6 +349,7 @@ export default function LiveMatch() {
           </div>
         </div>
       )}
+
       {/* Intervention Modal */}
       {intervention && (
         <div className="fixed inset-0 bg-black/70 flex items-end sm:items-center justify-center z-40 p-4">
@@ -310,7 +360,7 @@ export default function LiveMatch() {
                 <p className="text-gray-400 text-sm mb-3">Half Time. Score: {liveHomeGoals}–{liveAwayGoals}. Make your adjustments.</p>
                 <div className="space-y-2">
                   {(['ultra-attacking','attacking','balanced','defensive'] as const).map(m => (
-                    <button key={m} onClick={() => { changeTacticsMidMatch({ mentality: m }); }}
+                    <button key={m} onClick={() => changeTacticsMidMatch({ mentality: m })}
                       className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm text-left capitalize">
                       → Set Mentality: {m}
                     </button>
@@ -323,9 +373,9 @@ export default function LiveMatch() {
                 <p className="text-gray-400 text-sm mb-3">What's your response?</p>
                 <div className="space-y-2">
                   <button onClick={() => { changeTacticsMidMatch({ mentality: 'attacking' }); dismissIntervention(); }}
-                    className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">⚡ Push Forward (Attacking)</button>
+                    className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">⚡ Push Forward</button>
                   <button onClick={() => { changeTacticsMidMatch({ mentality: 'defensive' }); dismissIntervention(); }}
-                    className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">🛡️ Sit Deeper (Defensive)</button>
+                    className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">🛡️ Sit Deeper</button>
                   <button onClick={() => { changeTacticsMidMatch({ pressingIntensity: 8 }); dismissIntervention(); }}
                     className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">💨 Press Higher</button>
                 </div>
@@ -333,12 +383,12 @@ export default function LiveMatch() {
             )}
             {intervention.type === 'before_et' && (
               <div className="mb-4">
-                <p className="text-gray-400 text-sm mb-3">Extra time approaches! Set up for the extra 30 minutes.</p>
+                <p className="text-gray-400 text-sm mb-3">Extra time! 30 more minutes. {liveHomeGoals}–{liveAwayGoals}</p>
                 <div className="space-y-2">
                   <button onClick={() => { changeTacticsMidMatch({ mentality: 'attacking', tempo: 9 }); dismissIntervention(); }}
                     className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">🔥 Go All Out</button>
                   <button onClick={() => { changeTacticsMidMatch({ mentality: 'balanced', defensiveLine: 5 }); dismissIntervention(); }}
-                    className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">⚖️ Balanced Approach</button>
+                    className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">⚖️ Balanced</button>
                   <button onClick={() => { changeTacticsMidMatch({ mentality: 'defensive' }); dismissIntervention(); }}
                     className="w-full px-4 py-2 bg-gray-800 hover:bg-amber-900/30 text-gray-300 rounded-lg text-sm">🔒 Play for Pens</button>
                 </div>
@@ -362,6 +412,7 @@ export default function LiveMatch() {
           </div>
         </div>
       )}
+
       {/* Sub Modal */}
       {showSubModal && (
         <div className="fixed inset-0 bg-black/70 flex items-end sm:items-center justify-center z-40 p-4">
@@ -384,7 +435,7 @@ export default function LiveMatch() {
               </select>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setShowSubModal(false)}
+              <button onClick={() => { setShowSubModal(false); startTimer(); }}
                 className="flex-1 py-2 bg-gray-800 text-gray-400 rounded-lg text-sm">Cancel</button>
               <button
                 onClick={() => { if (subOut && subIn) { makeSubstitution(subOut, subIn); setShowSubModal(false); startTimer(); } }}
