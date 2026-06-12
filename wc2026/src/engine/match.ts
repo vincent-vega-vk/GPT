@@ -1,4 +1,5 @@
 import type { Team, MatchResult, MatchEvent, MatchStats, PlayerMatchRating, Difficulty, MatchStage } from '../types';
+import { buildMatch3DEvents } from '../components/Match3D/useMatchAnimation';
 
 export function poissonRandom(lambda: number): number {
   const L = Math.exp(-lambda);
@@ -256,9 +257,10 @@ export function simulateFullMatch(
   const awayRatings = buildPlayerRatings(away, awayGoals, awayGoals > homeGoals, ['qf','sf','final'].includes(stage));
   const allRatings = [...homeRatings, ...awayRatings];
   const motm = allRatings.reduce((best, r) => r.rating > best.rating ? r : best, allRatings[0])?.playerName ?? 'Unknown';
+  const events3D = buildMatch3DEvents(events, homeGoals, awayGoals);
   return {
     homeGoals, awayGoals, homePens, awayPens,
-    events, stats, homeRatings, awayRatings,
+    events, events3D, stats, homeRatings, awayRatings,
     tacticalVerdict: getTacticalVerdict(home, away, homeGoals, awayGoals),
     mediaReaction: getMediaReaction(home, away, homeGoals, awayGoals, isPlayerMatch),
     motm,

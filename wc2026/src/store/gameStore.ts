@@ -48,6 +48,7 @@ const initialState: GameState = {
   pendingPress: null,
   notifications: [],
   savedAt: null,
+  penaltyShootout: null,
 };
 
 export const useGameStore = create<GameStore>()(

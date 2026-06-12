@@ -3,6 +3,7 @@ import { useGameStore } from '../store/gameStore';
 import type { MatchEvent } from '../types';
 import StatBar from '../components/StatBar';
 import MatchTimeline from '../components/MatchTimeline';
+import MatchViewer3D from '../components/Match3D/MatchViewer3D';
 import clsx from 'clsx';
 
 type LivePhase = 'first_half' | 'half_time' | 'second_half' | 'extra_time' | 'penalties' | 'full_time';
@@ -46,6 +47,7 @@ export default function LiveMatch() {
   const [subOut, setSubOut] = useState<string>('');
   const [subIn, setSubIn] = useState<string>('');
   const [showSubModal, setShowSubModal] = useState(false);
+  const [show3D, setShow3D] = useState(true);
 
   function stopTimer() {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
@@ -230,6 +232,30 @@ export default function LiveMatch() {
           </div>
         </div>
       )}
+      {/* 3D Match Viewer */}
+      <div className="relative">
+        <button
+          onClick={() => setShow3D(v => !v)}
+          className="absolute top-2 left-2 z-20 bg-black/70 hover:bg-black/90 text-white text-xs px-2 py-1 rounded border border-gray-600"
+        >
+          {show3D ? '⊟ Hide 3D' : '⊞ Show 3D'}
+        </button>
+        {show3D && result.events3D && (
+          <MatchViewer3D
+            events={result.events3D}
+            homeTeamName={homeTeam.shortName}
+            awayTeamName={awayTeam.shortName}
+            homeColor="#3b82f6"
+            awayColor="#ef4444"
+            homeFormation={homeTeam.tactics.formation}
+            awayFormation={awayTeam.tactics.formation}
+            currentMinute={minute}
+            homeGoals={liveHomeGoals}
+            awayGoals={liveAwayGoals}
+            isKeyMoment={lastEvent?.type === 'goal'}
+          />
+        )}
+      </div>
       {/* Main content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-auto">
         {/* Timeline */}
