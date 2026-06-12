@@ -64,13 +64,22 @@ export const useGameStore = create<GameStore>()(
         Object.keys(updatedTeams).forEach(id => {
           updatedTeams[id] = { ...updatedTeams[id], isPlayerTeam: id === teamId };
         });
-        set({ playerTeamId: teamId, teams: updatedTeams });
+        const matches = generateGroupMatches(updatedTeams);
+        set({
+          playerTeamId: teamId,
+          teams: updatedTeams,
+          matches,
+          currentRound: 1,
+          groupsGenerated: true,
+          tournamentLog: [`Tournament started! Managing ${updatedTeams[teamId]?.name ?? 'your team'}.`],
+        });
       },
 
       startTournament: () => {
-        const { playerTeamId, teams } = get();
+        const { playerTeamId, teams, groupsGenerated, matches: existingMatches } = get();
         if (!playerTeamId) return;
-        const matches = generateGroupMatches(teams);
+        // Generate matches only if not already done by selectTeam
+        const matches = groupsGenerated && existingMatches.length > 0 ? existingMatches : generateGroupMatches(teams);
         set({
           matches,
           currentRound: 1,
