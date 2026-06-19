@@ -89,6 +89,40 @@
     'Bordeaux', 'PSV Eindhoven', 'Benfica', 'Galatasaray', 'Club Brugge'
   ];
 
+  /* ---- the division pyramid -------------------------------------------
+   * Top (level 1) to bottom (the Conference, where a new manager starts).
+   * Each division holds CLUBS_PER_DIVISION clubs; the bottom division uses the
+   * CONFERENCE list above, the upper divisions draw from UPPER_CLUBS.
+   */
+  const CLUBS_PER_DIVISION = 22;
+  const DIVISION_DEFS = [
+    { name: 'Premier Division', tierBase: 1 },
+    { name: 'Division One',     tierBase: 2 },
+    { name: 'Division Two',     tierBase: 3 },
+    { name: 'Conference',       tierBase: 4 }
+  ];
+  // 66 clubs for the three divisions above the Conference (22 each, in order)
+  const UPPER_CLUBS = [
+    // Premier Division
+    'Arsenal', 'Aston Villa', 'Liverpool', 'Manchester United', 'Manchester City',
+    'Tottenham Hotspur', 'Everton', 'Newcastle United', 'Leeds United', 'West Ham United',
+    'Blackburn Rovers', 'Leicester City', 'Derby County', 'Middlesbrough', 'Sheffield Wednesday',
+    'Coventry City', 'Southampton', 'Sunderland', 'Nottingham Forest', 'Wimbledon',
+    'Bolton Wanderers', 'Charlton Athletic',
+    // Division One
+    'Barnsley', 'Bradford City', 'Ipswich Town', 'Wolverhampton W', 'Birmingham City',
+    'Norwich City', 'Sheffield United', 'Huddersfield Town', 'Stockport County', 'Crystal Palace',
+    'Queens Park Rangers', 'Portsmouth', 'Tranmere Rovers', 'Bristol City', 'Oxford United',
+    'Grimsby Town', 'Port Vale', 'Swindon Town', 'Bury', 'Fulham',
+    'Burnley', 'Gillingham',
+    // Division Two
+    'Wrexham', 'Preston North End', 'Bournemouth', 'Luton Town', 'Millwall',
+    'Blackpool', 'Bristol Rovers', 'Wycombe Wanderers', 'Chesterfield', 'Plymouth Argyle',
+    'Darlington', 'Scunthorpe United', 'Shrewsbury Town', 'Cambridge United', 'Brighton & Hove',
+    'Reading', 'Stoke City', 'Wigan Athletic', 'Notts County', 'Colchester United',
+    'Brentford', 'Cardiff City'
+  ];
+
   const POSITIONS = ['G', 'D', 'M', 'A'];
   const POS_NAME = { G: 'Goalkeeper', D: 'Defender', M: 'Midfielder', A: 'Attacker' };
 
@@ -155,6 +189,7 @@
     makeRng, ri, pick,
     FORENAMES, SURNAMES,
     CONFERENCE, ENGLISH_CLUBS, EURO_CLUBS,
+    CLUBS_PER_DIVISION, DIVISION_DEFS, UPPER_CLUBS,
     POSITIONS, POS_NAME,
     valueOf, generatePlayer, generateSquad, generateClub
   };

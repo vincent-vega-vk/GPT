@@ -73,14 +73,26 @@ async function shoot(page, sel, name) {
   await shoot(page, '#screen-transfer', '6-transfer-market.png');
   await page.click('#tm-close');
 
-  /* ---- league table (after simulating a chunk of the season) ---- */
-  await page.goto(BASE + '/?fresh=1&club=0&seed=' + seed, { waitUntil: 'networkidle0' });
+  /* ---- league + results (after simulating a chunk of the season) ---- */
+  await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#choose-grid tbody tr');
+  await page.click('#choose-confirm');                 // take charge of Romford
   await page.waitForSelector('#squad-grid tbody tr');
   await page.evaluate(() => window.SIMSOC_TEST.advance(15));
   await page.click('#btn-league');
   await page.waitForSelector('#lg-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-league', '7-league-table.png');
+  await shoot(page, '#screen-league', '7-league-table.png');     // user division (Conference)
+  // switch up to the top division to show the pyramid is all simulated
+  await page.click('#lg-prev'); await page.click('#lg-prev'); await page.click('#lg-prev');
+  await sleep(150);
+  await shoot(page, '#screen-league', '8-league-premier.png');
+  await page.click('#lg-close');
+  // classified results with scorers
+  await page.click('#btn-results');
+  await page.waitForSelector('#rs-grid tbody tr');
+  await sleep(150);
+  await shoot(page, '#screen-results', '9-classified-results.png');
 
   /* ---- a full-window desktop shot ---- */
   await page.evaluate(() => window.SIMSOC_TEST.show('screen-squad'));

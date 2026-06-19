@@ -1,10 +1,11 @@
 # SIMSOC 6 — remake
 
 A faithful, **from-scratch browser recreation** of the classic late-90s football
-management game *SIMSOC 6*. You take charge of **Romford** in the **Conference**
-(the 5th tier of English football), pick your squad, work the open transfer
-market, and watch your matches play out in the automated side-on match engine —
-exactly the loop the original was loved for.
+management game *SIMSOC 6*. You take charge of a club in the **Conference** (the
+bottom of a four-division pyramid), pick your squad, work the open transfer
+market, watch your matches play out in the automated side-on match engine, and
+try to win **promotion all the way up to the Premier Division** — exactly the
+"work your way up" loop the original was loved for.
 
 It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 
@@ -23,9 +24,13 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 |---|---|
 | ![Team Selector](shots/3-team-selector.png) | ![Match](shots/4-match.png) |
 
-| Transfer Market | League table |
+| Transfer Market | Classified results |
 |---|---|
-| ![Transfer Market](shots/6-transfer-market.png) | ![League](shots/7-league-table.png) |
+| ![Transfer Market](shots/6-transfer-market.png) | ![Classified results](shots/9-classified-results.png) |
+
+| League tables — your division | …and the division above |
+|---|---|
+| ![Conference table](shots/7-league-table.png) | ![Premier Division table](shots/8-league-premier.png) |
 
 ## Features
 
@@ -46,9 +51,15 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 - **Open transfer market** — players from English & European clubs, filter by
   position / European / sort by skill, name search, **Bid** within your budget,
   and **Sign Unlisted Player**.
-- **A real season** — a 22-club Conference, a balanced 42-game home/away
-  fixture list, an updating **league table**, **top scorers** across the league,
-  gate receipts, and automatic season rollover.
+- **A four-division pyramid** — 88 clubs across Premier Division, Division One,
+  Division Two and the Conference. **All divisions are simulated every round**,
+  with **promotion and relegation** (top/bottom three swap) at season's end, so
+  you climb — or slide — between tiers. Bigger divisions pay bigger gate receipts.
+- **League tables for every division** — browse any tier, with **top scorers
+  across all leagues**, plus a **Classified Results** screen listing a full
+  round of fixtures with the scorers for every club.
+- **A real season** — a balanced 42-game home/away fixture list, gate receipts,
+  manager rating, and automatic season rollover.
 - **Autosave** to `localStorage`, so your game is there when you come back.
 
 ## Run it
@@ -64,8 +75,8 @@ npm start            # then open http://localhost:8080
 ```
 
 Useful URL params: `?fresh=1` starts a new game ignoring the save;
-`?seed=12345` seeds the world deterministically; `?club=7` jumps straight in
-as that Conference club (0–21), skipping the chooser.
+`?seed=12345` seeds the world deterministically; `?club=66` jumps straight in
+as that club by global index (0–87), skipping the chooser.
 
 ## Develop / verify
 
@@ -80,14 +91,16 @@ npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ## How it's put together
 
 ```
-index.html        all six windows (Choose Club, Squad, Team Selector, Game, Transfer, League)
+index.html        all seven windows (Choose Club, Squad, Team Selector, Game,
+                  Transfer, League tables, Classified Results)
 css/style.css     Windows 9x styling (3D widgets, title bars, data grids)
-js/data.js        seeded RNG, name pools, clubs, player/squad generation   (UMD)
-js/engine.js      league + fixtures, ratings, match sim, transfers, season (UMD)
+js/data.js        seeded RNG, name pools, division/club/squad generation    (UMD)
+js/engine.js      division pyramid, fixtures, ratings, match sim, transfers,
+                  promotion/relegation, season loop                          (UMD)
 js/match.js       canvas match animation (plays out the engine's timeline)
 js/ui.js          screen rendering, input handling, wiring
 server.js         zero-dependency static file server
-test/run.js       head-less engine self-test
+test/run.js       head-less engine self-test (51 checks)
 tools/screenshots.js   Puppeteer screenshot capture
 ```
 

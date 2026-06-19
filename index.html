@@ -74,9 +74,10 @@
           <div class="spacer"></div>
           <button id="btn-transfer" style="height:34px; font-weight:bold">Transfer Market</button>
           <label class="chk small"><input type="checkbox" id="chk-explayers"> Include ex-players</label>
+          <button id="btn-play" style="font-weight:bold">Play Next Match &raquo;</button>
           <div class="row">
-            <button id="btn-league" class="spacer">League Table</button>
-            <button id="btn-play">Play &raquo;</button>
+            <button id="btn-league" class="spacer">Tables</button>
+            <button id="btn-results" class="spacer">Results</button>
           </div>
         </div>
       </div>
@@ -234,14 +235,18 @@
 <!-- ========================= LEAGUE TABLE ======================= -->
 <section id="screen-league" class="win hidden" style="width:600px">
   <div class="win-inner">
-    <div class="titlebar"><span class="t-title">League Conference &mdash; Table &amp; Top Scorers</span>
+    <div class="titlebar"><span class="t-title">Football Pyramid &mdash; Tables &amp; Top Scorers</span>
       <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
     </div>
     <div class="client">
       <div class="row">
         <div style="flex:1">
-          <div class="bold small" id="lg-title">League Table</div>
-          <div class="grid-wrap" style="height:380px">
+          <div class="row" style="align-items:center; margin-bottom:3px">
+            <button id="lg-prev" style="min-height:18px; padding:0 8px">&#9664;</button>
+            <div class="bold center spacer" id="lg-title">Division</div>
+            <button id="lg-next" style="min-height:18px; padding:0 8px">&#9654;</button>
+          </div>
+          <div class="grid-wrap" style="height:360px">
             <table class="grid" id="lg-grid">
               <thead><tr><th>Pos</th><th>Club</th><th class="num">P</th><th class="num">W</th>
               <th class="num">D</th><th class="num">L</th><th class="num">F</th><th class="num">A</th>
@@ -251,8 +256,8 @@
           </div>
         </div>
         <div style="width:210px" class="col">
-          <div class="bold small">Top Scorers</div>
-          <div class="grid-wrap" style="height:380px">
+          <div class="bold small">Top Scorers (all divisions)</div>
+          <div class="grid-wrap" style="height:360px">
             <table class="grid" id="ts-grid">
               <thead><tr><th>Player</th><th>Club</th><th class="num">Gls</th></tr></thead>
               <tbody></tbody>
@@ -264,6 +269,29 @@
         <div class="small" id="lg-season">Season 1</div>
         <div class="spacer"></div>
         <button id="lg-close" style="font-weight:bold">OK</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== CLASSIFIED RESULTS ==================== -->
+<section id="screen-results" class="win hidden" style="width:580px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Classified Results</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="bold small" id="rs-title">Latest Results</div>
+      <div class="grid-wrap" style="height:340px">
+        <table class="grid" id="rs-grid">
+          <thead><tr><th>Home</th><th class="num">Score</th><th>Away</th><th>Scorers</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:6px; align-items:center">
+        <div class="small" id="rs-info"></div>
+        <div class="spacer"></div>
+        <button id="rs-close" style="font-weight:bold">OK</button>
       </div>
     </div>
   </div>

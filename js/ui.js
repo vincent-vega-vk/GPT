@@ -11,7 +11,7 @@
   const SAVE_KEY = 'simsoc6.save';
 
   /* ---- game state ----------------------------------------------------- */
-  let S, squadSelId = null, tmSelId = null, anim = null, subsUsed = 0, chooseSelIdx = 0;
+  let S, squadSelId = null, tmSelId = null, anim = null, subsUsed = 0, chooseSelIdx = 0, leagueDivView = 0;
 
   const params = new URLSearchParams(location.search);
   function boot() {
@@ -117,6 +117,7 @@
     $('rt-a-def').textContent = ar.defence; $('rt-a-mid').textContent = ar.midfield;
     $('rt-a-att').textContent = ar.attack; $('rt-a-mor').textContent = ar.morale;
 
+    $('league-name').textContent = S.divisions[S.userDivision].name;
     $('opp-name').textContent = opp.club.name;
     $('btn-venue').textContent = opp.home ? 'Home' : 'Away';
     $('team-mgr').textContent = S.managerRating;
@@ -210,25 +211,49 @@
     $('tm-funds').textContent = Math.round(E.user(S).balance).toLocaleString('en-GB');
   }
 
-  /* ===================== LEAGUE TABLE ================================ */
+  /* ===================== LEAGUE TABLES ============================== */
   function renderLeague() {
-    const table = E.standings(S);
+    const d = leagueDivView;
+    const userHere = (d === S.userDivision);
+    const table = E.standings(S, d);
     renderGrid('lg-grid', table.map((r, i) => Object.assign({ id: r.name, pos: i + 1 }, r)), r =>
       '<td class="num">' + r.pos + '</td><td' + (r.isUser ? ' class="bold"' : '') + '>' + r.name + '</td>' +
       '<td class="num">' + r.P + '</td><td class="num">' + r.W + '</td><td class="num">' + r.D + '</td>' +
       '<td class="num">' + r.L + '</td><td class="num">' + r.F + '</td><td class="num">' + r.A + '</td>' +
       '<td class="num">' + (r.GD > 0 ? '+' : '') + r.GD + '</td><td class="num bold">' + r.Pts + '</td>',
-      null, E.user(S).name);
+      null, userHere ? E.user(S).name : null);
     const sc = E.topScorers(S, 16);
     renderGrid('ts-grid', sc.map((x, i) => Object.assign({ id: i }, x)), x =>
       '<td>' + x.name + '</td><td>' + x.club + '</td><td class="num bold">' + x.goals + '</td>', null, null);
-    $('lg-season').textContent = 'Season ' + S.season + '  ·  Round ' + Math.min(S.round + 1, E.totalRounds(S)) +
-      ' of ' + E.totalRounds(S) + '  ·  ' + E.user(S).name + ' lie ' + E.ordinal(E.leaguePosition(S, E.user(S).name));
+    $('lg-title').textContent = S.divisions[d].name + (userHere ? '  (your division)' : '');
+    $('lg-prev').disabled = (d === 0);
+    $('lg-next').disabled = (d === S.divisions.length - 1);
+    $('lg-season').textContent = 'Season ' + S.season + '  ·  Round ' + Math.min(S.round + 1, E.totalRounds()) +
+      ' of ' + E.totalRounds() + '  ·  ' + E.user(S).name + ' ' + E.ordinal(E.leaguePosition(S, E.user(S).name)) +
+      ' in ' + S.divisions[S.userDivision].name;
+  }
+
+  /* ===================== CLASSIFIED RESULTS ========================= */
+  function renderResults() {
+    const lr = E.lastRoundResults(S);
+    renderGrid('rs-grid', lr.games.map((g, i) => Object.assign({ id: i }, g)), g => {
+      const fmt = side => g.scorers.filter(x => x.s === side).map(x => x.n + " " + x.m + "'").join(', ');
+      const h = fmt('home'), a = fmt('away');
+      const sc = [h && '<b>' + g.home + ':</b> ' + h, a && '<b>' + g.away + ':</b> ' + a].filter(Boolean).join(' &nbsp; ');
+      return '<td>' + g.home + '</td><td class="num bold">' + g.hg + ' - ' + g.ag + '</td><td>' + g.away + '</td>' +
+        '<td class="small">' + (sc || '&mdash;') + '</td>';
+    }, null, null);
+    $('rs-title').textContent = S.divisions[S.userDivision].name + ' — ' +
+      (lr.round != null ? 'Round ' + (lr.round + 1) + ' results' : 'no matches played yet');
+    $('rs-info').textContent = lr.games.length + ' matches in your division';
   }
 
   /* ===================== CHOOSE CLUB ================================= */
+  function bottomMembers() { return S.divisions[S.divisions.length - 1].members; }
   function renderChoose() {
-    const rows = S.clubs.map((c, i) => ({ id: i, club: c }));
+    const members = bottomMembers();
+    if (members.indexOf(chooseSelIdx) < 0) chooseSelIdx = members[0];
+    const rows = members.map(i => ({ id: i, club: S.clubs[i] }));
     renderGrid('choose-grid', rows, r => {
       const c = r.club;
       return '<td class="bold">' + c.name + '</td>' +
@@ -256,7 +281,8 @@
     // squad
     $('btn-play').onclick = () => { S.selection = E.defaultSelection(S); renderTeam(); show('screen-team'); };
     $('btn-transfer').onclick = () => { renderTransfer(); show('screen-transfer'); };
-    $('btn-league').onclick = () => { renderLeague(); show('screen-league'); };
+    $('btn-league').onclick = () => { leagueDivView = S.userDivision; renderLeague(); show('screen-league'); };
+    $('btn-results').onclick = () => { renderResults(); show('screen-results'); };
     $('edit-forename').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.forename = e.target.value; renderSquad(); save(); } };
     $('edit-surname').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.surname = e.target.value; renderSquad(); save(); } };
     $('chk-list').onchange = e => { const p = selectedSquadPlayer(); if (p) { p.transferListed = e.target.checked; toast(e.target.checked ? fullName(p) + ' is transfer listed - he may be sold before the next match.' : fullName(p) + ' taken off the list.'); save(); } };
@@ -315,8 +341,11 @@
     };
     $('tm-close').onclick = () => { renderSquad(); show('screen-squad'); flushNotices(); };
 
-    // league
+    // league tables (with division switcher) + classified results
+    $('lg-prev').onclick = () => { leagueDivView = Math.max(0, leagueDivView - 1); renderLeague(); };
+    $('lg-next').onclick = () => { leagueDivView = Math.min(S.divisions.length - 1, leagueDivView + 1); renderLeague(); };
     $('lg-close').onclick = () => { renderSquad(); show('screen-squad'); };
+    $('rs-close').onclick = () => { renderSquad(); show('screen-squad'); };
 
     // title-bar close buttons -> back to squad (the chooser is excluded so it
     // can't be dismissed without picking a club)
