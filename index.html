@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIMSOC 6</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="hint">SIMSOC 6 &mdash; remake. Manage Romford in the Conference.</div>
+
+<!-- ============================ SQUAD ============================ -->
+<section id="screen-squad" class="win" style="width:624px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Squad</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1">
+          <div style="display:flex; font-weight:bold; padding-left:2px">
+            <div style="flex:1"></div>
+            <div style="width:120px; text-align:center">This Season</div>
+            <div style="width:120px; text-align:center">Total for team</div>
+          </div>
+          <div class="grid-wrap" style="height:360px">
+            <table class="grid" id="squad-grid">
+              <thead><tr>
+                <th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th>
+                <th class="num">Apps</th><th class="num">Goals</th>
+                <th class="num">Apps</th><th class="num">Goals</th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="right-panel col">
+          <div class="small">Edit the names below if desired.</div>
+          <div class="small bold">Forename</div>
+          <input class="field" id="edit-forename" type="text">
+          <div class="small bold" style="color:#00c">Surname</div>
+          <input class="field" id="edit-surname" type="text">
+          <button id="btn-analysis">Player Analysis</button>
+          <label class="chk small" style="margin-top:6px"><input type="checkbox" id="chk-list"> Transfer Listed</label>
+          <div class="small bold" style="font-style:italic">Check here to sell the highlighted player</div>
+          <div style="margin-top:4px"><span class="rating-pill" id="mgr-rating">50</span> Manager Rating %</div>
+          <button id="btn-resign" style="margin-top:6px">Resign as Manager</button>
+          <div class="spacer"></div>
+          <button id="btn-transfer" style="height:34px; font-weight:bold">Transfer Market</button>
+          <label class="chk small"><input type="checkbox" id="chk-explayers"> Include ex-players</label>
+          <div class="row">
+            <button id="btn-league" class="spacer">League Table</button>
+            <button id="btn-play">Play &raquo;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TEAM SELECTOR ========================= -->
+<section id="screen-team" class="win hidden" style="width:600px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Team Selector</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <!-- left: selection -->
+        <div style="width:300px" class="col">
+          <div class="bold small">Team Selection</div>
+          <div class="grid-wrap" style="height:150px">
+            <table class="grid" id="xi-grid">
+              <thead><tr><th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Fit</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <!-- ratings -->
+          <div class="ratings">
+            <div class="rt-head" id="rt-home-name">Romford</div>
+            <div class="rt-head"></div>
+            <div class="rt-head" id="rt-away-name">Opponent</div>
+            <div class="statbox sb-def" id="rt-h-def">0</div><div class="rt-lab">Defence</div><div class="statbox sb-def" id="rt-a-def">0</div>
+            <div class="statbox sb-mid" id="rt-h-mid">0</div><div class="rt-lab">Midfield</div><div class="statbox sb-mid" id="rt-a-mid">0</div>
+            <div class="statbox sb-att" id="rt-h-att">0</div><div class="rt-lab">Attack</div><div class="statbox sb-att" id="rt-a-att">0</div>
+            <div class="statbox sb-mor" id="rt-h-mor">0</div><div class="rt-lab">Morale</div><div class="statbox sb-mor" id="rt-a-mor">0</div>
+          </div>
+          <!-- subs -->
+          <div class="bold small" style="margin-top:2px">Substitutes</div>
+          <div class="grid-wrap" style="height:78px">
+            <table class="grid" id="subs-grid">
+              <thead><tr><th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Fit</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="row" style="align-items:center">
+            <div class="small">Pick 11 players + at least 1 substitute</div>
+            <div class="spacer"></div>
+            <button id="btn-action" style="height:30px; font-weight:bold">Action</button>
+          </div>
+        </div>
+        <!-- right: opponent / reserves -->
+        <div style="flex:1" class="col">
+          <div class="statbox" style="background:#9a9a00; color:#fff; font-size:15px; padding:8px" id="league-name">League Conference</div>
+          <div class="row">
+            <button id="btn-venue" style="width:64px">Home</button>
+            <div class="statbox" style="flex:1; background:#7fd4ff; font-size:15px; padding:6px" id="opp-name">Opponent</div>
+          </div>
+          <div class="bold small">Reserves</div>
+          <div class="grid-wrap" style="height:150px">
+            <table class="grid cyan" id="res-grid">
+              <thead><tr><th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Fit</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="spacer"></div>
+          <div class="row">
+            <button id="btn-clear" class="spacer">Clear Selection</button>
+            <button id="btn-history" class="spacer">History</button>
+          </div>
+          <button id="btn-bestxi">Pick Best XI</button>
+          <div class="small">Your rating as a manager: <span id="team-mgr">50</span> %</div>
+          <button id="btn-team-back">&laquo; Back to Squad</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ MATCH =========================== -->
+<section id="screen-match" class="win hidden" style="width:560px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Game</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="scoreboard">
+        <div class="team" id="m-home">Home</div>
+        <div class="score"><span id="m-hg">0</span>&nbsp;-&nbsp;<span id="m-ag">0</span></div>
+        <div class="team" id="m-away">Away</div>
+      </div>
+      <canvas id="pitch" width="524" height="300"></canvas>
+      <div class="commentary">
+        <div class="name home" id="m-ball-home">&mdash;</div>
+        <div class="name away" id="m-ball-away">&mdash;</div>
+      </div>
+      <div class="complabel" id="m-event">League</div>
+      <div class="matchctl">
+        <div class="lab small">Speed</div>
+        <input type="range" id="m-speed" min="1" max="10" value="5">
+        <div class="progress"><span id="m-bar" style="width:0%"></span>
+          <div class="ticks"><span>0</span><span>45</span><span>90</span></div>
+        </div>
+        <button id="m-sub">Sub</button>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div class="small" id="m-status">Kick off!</div>
+        <div class="spacer"></div>
+        <button id="m-skip">Skip to result</button>
+        <button id="m-continue" class="hidden" style="font-weight:bold">Continue &raquo;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TRANSFER MARKET ====================== -->
+<section id="screen-transfer" class="win hidden" style="width:560px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Transfer Market</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1" class="col">
+          <div class="row" style="align-items:center">
+            <input class="field" id="tm-search" placeholder="" style="width:160px">
+            <span class="small">&larr; Name Search</span>
+          </div>
+          <div class="grid-wrap" style="height:300px">
+            <table class="grid" id="tm-grid">
+              <thead><tr><th>Name</th><th class="num">Skill</th><th>Posn</th><th class="num">Price</th><th>Team</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="right-panel col">
+          <div class="small">Highlight the player you want to buy &amp; press the bid button:</div>
+          <button id="tm-bid" style="height:46px; font-weight:bold; font-size:14px">Bid</button>
+          <div class="small">Funds available:</div>
+          <div class="field num" id="tm-funds">0</div>
+          <button id="tm-unlisted" style="margin-top:6px">Sign Unlisted Player</button>
+          <div class="col" style="gap:2px; margin-top:6px">
+            <label class="chk small"><input type="checkbox" id="f-G" checked> Goalkeepers</label>
+            <label class="chk small"><input type="checkbox" id="f-D" checked> Defence</label>
+            <label class="chk small"><input type="checkbox" id="f-M" checked> Midfield</label>
+            <label class="chk small"><input type="checkbox" id="f-A" checked> Attack</label>
+            <label class="chk small"><input type="checkbox" id="f-euro" checked> Include European</label>
+            <label class="chk small"><input type="checkbox" id="f-sort" checked> Sort by skill</label>
+          </div>
+          <div class="spacer"></div>
+          <button id="tm-close" style="height:34px">No Bid</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= LEAGUE TABLE ======================= -->
+<section id="screen-league" class="win hidden" style="width:600px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">League Conference &mdash; Table &amp; Top Scorers</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1">
+          <div class="bold small" id="lg-title">League Table</div>
+          <div class="grid-wrap" style="height:380px">
+            <table class="grid" id="lg-grid">
+              <thead><tr><th>Pos</th><th>Club</th><th class="num">P</th><th class="num">W</th>
+              <th class="num">D</th><th class="num">L</th><th class="num">F</th><th class="num">A</th>
+              <th class="num">GD</th><th class="num">Pts</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="width:210px" class="col">
+          <div class="bold small">Top Scorers</div>
+          <div class="grid-wrap" style="height:380px">
+            <table class="grid" id="ts-grid">
+              <thead><tr><th>Player</th><th>Club</th><th class="num">Gls</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div class="small" id="lg-season">Season 1</div>
+        <div class="spacer"></div>
+        <button id="lg-close" style="font-weight:bold">OK</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/match.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
