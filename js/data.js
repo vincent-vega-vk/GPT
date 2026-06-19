@@ -138,13 +138,16 @@
   }
 
   /* ---- a club -------------------------------------------------------- */
-  function generateClub(rng, def, isUser) {
+  // starting balance scales with the club's tier (stronger clubs are richer)
+  const TIER_FUNDS = { 1: 520000, 2: 380000, 3: 270000, 4: 195000, 5: 120000 };
+  function generateClub(rng, def) {
+    const base = TIER_FUNDS[def.tier] || 200000;
     return {
       name: def.name,
       tier: def.tier,
-      isUser: !!isUser,
+      isUser: false,
       players: generateSquad(rng, def.tier),
-      balance: isUser ? 211857 : ri(rng, 40000, 600000)
+      balance: Math.round(base * (0.85 + rng() * 0.3))
     };
   }
 

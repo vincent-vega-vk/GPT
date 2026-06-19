@@ -11,7 +11,7 @@
   const SAVE_KEY = 'simsoc6.save';
 
   /* ---- game state ----------------------------------------------------- */
-  let S, squadSelId = null, tmSelId = null, anim = null, subsUsed = 0;
+  let S, squadSelId = null, tmSelId = null, anim = null, subsUsed = 0, chooseSelIdx = 0;
 
   const params = new URLSearchParams(location.search);
   function boot() {
@@ -19,9 +19,16 @@
     if (!params.has('fresh')) {
       try { const raw = localStorage.getItem(SAVE_KEY); if (raw) S = E.deserialize(raw); } catch (e) {}
     }
-    if (!S) S = E.newGame(seed);
-    renderAll();
-    show('screen-squad');
+    if (S) { renderAll(); show('screen-squad'); return; }   // resume a saved game
+    // brand new game: build the world, then let the player choose a club
+    S = E.newGame(seed);
+    if (params.has('club')) {                                // automation / power-user shortcut
+      E.setUserClub(S, parseInt(params.get('club'), 10) || 0);
+      save(); renderAll(); show('screen-squad'); return;
+    }
+    chooseSelIdx = 0;
+    renderChoose();
+    show('screen-choose');
   }
   function save() { try { localStorage.setItem(SAVE_KEY, E.serialize(S)); } catch (e) {} }
 
@@ -219,6 +226,29 @@
       ' of ' + E.totalRounds(S) + '  ·  ' + E.user(S).name + ' lie ' + E.ordinal(E.leaguePosition(S, E.user(S).name));
   }
 
+  /* ===================== CHOOSE CLUB ================================= */
+  function renderChoose() {
+    const rows = S.clubs.map((c, i) => ({ id: i, club: c }));
+    renderGrid('choose-grid', rows, r => {
+      const c = r.club;
+      return '<td class="bold">' + c.name + '</td>' +
+        '<td>' + E.difficultyLabel(c.tier) + '</td>' +
+        '<td class="num">' + E.clubOverall(c) + '</td>' +
+        '<td class="num">' + c.players.length + '</td>' +
+        '<td class="num">' + Math.round(c.balance).toLocaleString('en-GB') + '</td>';
+    }, r => { chooseSelIdx = r.id; renderChoose(); }, chooseSelIdx);
+    const c = S.clubs[chooseSelIdx];
+    $('choose-sel-name').textContent = c ? c.name + '  (' + E.difficultyLabel(c.tier) + ')' : '—';
+  }
+  function confirmClub() {
+    E.setUserClub(S, chooseSelIdx);
+    squadSelId = null;
+    save();
+    renderAll();
+    show('screen-squad');
+    toast('You are now the manager of ' + E.user(S).name + '. Good luck!', 6000);
+  }
+
   function renderAll() { renderSquad(); }
 
   /* ===================== EVENT WIRING ================================= */
@@ -238,9 +268,13 @@
     $('btn-resign').onclick = () => {
       if (!confirm('Resign as manager and start a new game?')) return;
       try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
-      S = E.newGame((Math.random() * 1e9) >>> 0); squadSelId = null; renderAll(); show('screen-squad');
-      toast('New game started. Good luck at ' + E.user(S).name + '!');
+      S = E.newGame((Math.random() * 1e9) >>> 0);
+      squadSelId = null; chooseSelIdx = 0; renderChoose(); show('screen-choose');
     };
+
+    // choose-club screen
+    $('choose-confirm').onclick = confirmClub;
+    $('choose-random').onclick = () => { chooseSelIdx = Math.floor(Math.random() * S.clubs.length); renderChoose(); };
 
     // team selector
     $('btn-team-back').onclick = () => { save(); renderSquad(); show('screen-squad'); };
@@ -284,8 +318,9 @@
     // league
     $('lg-close').onclick = () => { renderSquad(); show('screen-squad'); };
 
-    // title-bar close buttons -> back to squad (except squad's, which is a no-op)
-    document.querySelectorAll('.t-btn').forEach(b => { if (b.textContent === '×') b.onclick = () => { renderSquad(); show('screen-squad'); }; });
+    // title-bar close buttons -> back to squad (the chooser is excluded so it
+    // can't be dismissed without picking a club)
+    document.querySelectorAll('.win:not(#screen-choose) .t-btn').forEach(b => { if (b.textContent === '×') b.onclick = () => { renderSquad(); show('screen-squad'); }; });
   }
 
   /* ---- automation hook (used by the screenshot tool & manual testing) - */

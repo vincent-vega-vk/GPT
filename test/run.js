@@ -107,6 +107,21 @@ const scorers = E.topScorers(s3, 10);
 check('top scorers list produced', scorers.length > 0, scorers.length);
 check('top scorers sorted', scorers.length < 2 || scorers[0].goals >= scorers[1].goals);
 
+/* ---- club selection -------------------------------------------------- */
+section('Club selection');
+const cs = E.newGame(555);
+check('default user is club 0 (Romford)', cs.userIndex === 0 && E.user(cs).name === 'Romford');
+E.setUserClub(cs, 4);
+check('setUserClub changes the managed club', cs.userIndex === 4 && E.user(cs).isUser === true);
+check('only one club flagged as user', cs.clubs.filter(c => c.isUser).length === 1);
+check('manager rating reset on takeover', cs.managerRating === 50, cs.managerRating);
+check('selection rebuilt for new club (11 starters)', cs.selection.xi.length === 11, cs.selection.xi.length);
+const cs2 = E.newGame(555, 7);
+check('newGame honours a chosen userIndex', cs2.userIndex === 7 && cs2.clubs[7].isUser === true);
+check('clubOverall in range', E.clubOverall(cs2.clubs[3]) > 0 && E.clubOverall(cs2.clubs[3]) < 100, E.clubOverall(cs2.clubs[3]));
+check('difficultyLabel returns text', typeof E.difficultyLabel(1) === 'string' && E.difficultyLabel(1).length > 0);
+check('every club has positive funds', cs2.clubs.every(c => c.balance > 0));
+
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');
 const snap = E.serialize(s3);

@@ -33,28 +33,36 @@ async function shoot(page, sel, name) {
 
   const seed = 20259;
 
-  /* ---- squad ---- */
+  /* ---- choose club ---- */
   await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#choose-grid tbody tr');
+  await sleep(150);
+  await shoot(page, '#screen-choose', '1-choose-club.png');
+
+  /* ---- squad (after taking charge) ---- */
+  await page.click('#choose-confirm');
+  await page.waitForSelector('#screen-squad:not(.hidden)');
   await page.waitForSelector('#squad-grid tbody tr');
-  await shoot(page, '#screen-squad', '1-squad.png');
+  await sleep(100);
+  await shoot(page, '#screen-squad', '2-squad.png');
 
   /* ---- team selector ---- */
   await page.click('#btn-play');
   await page.waitForSelector('#xi-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-team', '2-team-selector.png');
+  await shoot(page, '#screen-team', '3-team-selector.png');
 
   /* ---- match (let it run, then capture in play) ---- */
   await page.click('#btn-action');
   await page.waitForSelector('#screen-match:not(.hidden)');
   await page.$eval('#m-speed', el => { el.value = '9'; el.dispatchEvent(new Event('input')); });
   await sleep(3200);
-  await shoot(page, '#screen-match', '3-match.png');
+  await shoot(page, '#screen-match', '4-match.png');
   // skip to full time and capture the result state
   await page.click('#m-skip');
   await page.waitForSelector('#m-continue:not(.hidden)');
   await sleep(300);
-  await shoot(page, '#screen-match', '4-match-fulltime.png');
+  await shoot(page, '#screen-match', '5-match-fulltime.png');
   await page.click('#m-continue');
 
   /* ---- transfer market ---- */
@@ -62,17 +70,17 @@ async function shoot(page, sel, name) {
   await page.click('#btn-transfer');
   await page.waitForSelector('#tm-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-transfer', '5-transfer-market.png');
+  await shoot(page, '#screen-transfer', '6-transfer-market.png');
   await page.click('#tm-close');
 
   /* ---- league table (after simulating a chunk of the season) ---- */
-  await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
+  await page.goto(BASE + '/?fresh=1&club=0&seed=' + seed, { waitUntil: 'networkidle0' });
   await page.waitForSelector('#squad-grid tbody tr');
   await page.evaluate(() => window.SIMSOC_TEST.advance(15));
   await page.click('#btn-league');
   await page.waitForSelector('#lg-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-league', '6-league-table.png');
+  await shoot(page, '#screen-league', '7-league-table.png');
 
   /* ---- a full-window desktop shot ---- */
   await page.evaluate(() => window.SIMSOC_TEST.show('screen-squad'));

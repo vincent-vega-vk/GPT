@@ -9,8 +9,34 @@
 <body>
 <div id="hint">SIMSOC 6 &mdash; remake. Manage Romford in the Conference.</div>
 
+<!-- ========================= CHOOSE CLUB ======================== -->
+<section id="screen-choose" class="win hidden" style="width:560px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">SIMSOC 6 &mdash; New Game</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="statbox" style="background:#9a9a00; color:#fff; font-size:15px; padding:8px; margin-bottom:6px">League Conference</div>
+      <div class="bold" style="margin-bottom:2px">Choose a club to manage</div>
+      <div class="small" style="margin-bottom:6px">Take charge of any club in the Conference for your first season in management.</div>
+      <div class="grid-wrap" style="height:320px">
+        <table class="grid" id="choose-grid">
+          <thead><tr><th>Club</th><th>Prospects</th><th class="num">Overall</th><th class="num">Squad</th><th class="num">Funds</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:8px; align-items:center">
+        <div class="small">Selected: <span class="bold" id="choose-sel-name">&mdash;</span></div>
+        <div class="spacer"></div>
+        <button id="choose-random">Random Club</button>
+        <button id="choose-confirm" style="font-weight:bold; height:30px">Take Charge &raquo;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ SQUAD ============================ -->
-<section id="screen-squad" class="win" style="width:624px">
+<section id="screen-squad" class="win hidden" style="width:624px">
   <div class="win-inner">
     <div class="titlebar"><span class="t-title">Squad</span>
       <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>

@@ -15,16 +15,23 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 
 ## Screens
 
-| Squad | Team Selector |
+| Choose your club | Squad |
 |---|---|
-| ![Squad](shots/1-squad.png) | ![Team Selector](shots/2-team-selector.png) |
+| ![Choose your club](shots/1-choose-club.png) | ![Squad](shots/2-squad.png) |
 
-| Match engine | Transfer Market | League table |
-|---|---|---|
-| ![Match](shots/3-match.png) | ![Transfer Market](shots/5-transfer-market.png) | ![League](shots/6-league-table.png) |
+| Team Selector | Match engine |
+|---|---|
+| ![Team Selector](shots/3-team-selector.png) | ![Match](shots/4-match.png) |
+
+| Transfer Market | League table |
+|---|---|
+| ![Transfer Market](shots/6-transfer-market.png) | ![League](shots/7-league-table.png) |
 
 ## Features
 
+- **Choose your club** — at kick-off you take charge of any of the 22
+  Conference clubs, each with its own squad strength, prospects (title
+  favourites → relegation battle) and finances. Pick one or hit Random Club.
 - **Squad management** — full roster with position colour-coding (G/D/M/A),
   per-season and career Apps/Goals, editable player names, a Player Analysis
   readout, transfer-listing to sell, and a live Manager Rating %.
@@ -57,7 +64,8 @@ npm start            # then open http://localhost:8080
 ```
 
 Useful URL params: `?fresh=1` starts a new game ignoring the save;
-`?seed=12345` seeds the world deterministically.
+`?seed=12345` seeds the world deterministically; `?club=7` jumps straight in
+as that Conference club (0–21), skipping the chooser.
 
 ## Develop / verify
 
@@ -72,7 +80,7 @@ npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ## How it's put together
 
 ```
-index.html        all five windows (Squad, Team Selector, Game, Transfer, League)
+index.html        all six windows (Choose Club, Squad, Team Selector, Game, Transfer, League)
 css/style.css     Windows 9x styling (3D widgets, title bars, data grids)
 js/data.js        seeded RNG, name pools, clubs, player/squad generation   (UMD)
 js/engine.js      league + fixtures, ratings, match sim, transfers, season (UMD)

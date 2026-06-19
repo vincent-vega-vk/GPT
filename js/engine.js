@@ -45,13 +45,15 @@
 
   function blankRow() { return { P: 0, W: 0, D: 0, L: 0, F: 0, A: 0, Pts: 0 }; }
 
-  /* ---- new game -------------------------------------------------------- */
-  function newGame(seed) {
+  /* ---- new game -------------------------------------------------------- *
+   * `userIndex` selects which Conference club the player manages (default 0 =
+   * Romford). Use setUserClub() to change it later (e.g. from the chooser).
+   */
+  function newGame(seed, userIndex) {
     seed = seed >>> 0 || 12345;
     const rng = Data.makeRng(seed);
 
-    const clubs = Data.CONFERENCE.map((def, i) => Data.generateClub(rng, def, i === 0));
-    const userIndex = 0;
+    const clubs = Data.CONFERENCE.map(def => Data.generateClub(rng, def));
 
     const table = {};
     clubs.forEach(c => { table[c.name] = blankRow(); });
@@ -82,11 +84,30 @@
       transferPool,
       lastResult: null,
       notices: [],
-      // default selection = the user's best XI
       selection: null
     };
-    state.selection = defaultSelection(state);
+    setUserClub(state, userIndex == null ? 0 : userIndex);
     return state;
+  }
+
+  /* ---- choose / change the managed club -------------------------------- */
+  function setUserClub(s, index) {
+    index = Math.max(0, Math.min(s.clubs.length - 1, index | 0));
+    s.clubs.forEach((c, i) => { c.isUser = (i === index); });
+    s.userIndex = index;
+    s.managerRating = 50;
+    s.selection = defaultSelection(s);
+    return s;
+  }
+
+  /* ---- club overall strength + difficulty hint (for the chooser) ------- */
+  function clubOverall(club) {
+    const xi = playersByIds(club, bestXI(club).xi);
+    if (!xi.length) return 0;
+    return Math.round(xi.reduce((a, p) => a + p.skill, 0) / xi.length);
+  }
+  function difficultyLabel(tier) {
+    return ['', 'Title favourites', 'Promotion hopefuls', 'Mid-table', 'Lower half', 'Relegation battle'][tier] || 'Mid-table';
   }
 
   const user = s => s.clubs[s.userIndex];
@@ -423,7 +444,8 @@
   function deserialize(str) { return JSON.parse(str); }
 
   return {
-    newGame, user, totalRounds, nextOpponent, defaultSelection, bestXI,
+    newGame, setUserClub, clubOverall, difficultyLabel,
+    user, totalRounds, nextOpponent, defaultSelection, bestXI,
     availablePlayers, playersByIds, fullName,
     userRatings, clubRatings, ratingsFor, moraleOf,
     simulateMatch, playUserMatch, commitUserResult,
