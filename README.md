@@ -48,9 +48,16 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   names, adjustable **Speed**, in-match **Subs**, and "Skip to result". The
   scoreline and goal timeline are pre-simulated by the engine so the league
   stays consistent — just like the original "fully automated" matches.
-- **Open transfer market** — players from English & European clubs, filter by
-  position / European / sort by skill, name search, **Bid** within your budget,
-  and **Sign Unlisted Player**.
+- **A dynamic transfer market** — player skill runs **20–99** (with rare 90+
+  stars); listings churn through the season. Filter by position / European /
+  sort by skill, name search, **Bid** within budget, **Sign Unlisted Player**,
+  and tick **Inc. unlisted players** to approach (for a premium) anyone at
+  another club. **Selling is instant** — list a player and the fee is banked now.
+- **Squad development** — players have an **age**; each close season their skill
+  **drifts** up or down (youngsters rise, veterans fade) and values are repriced.
+  **Injuries** strike during matches and players need games to recover, while
+  starting drains **fitness** and resting restores it — so **rotation matters**,
+  and **Training** gives the whole squad a fitness boost (once a week).
 - **A four-division pyramid** — 88 clubs across Premier Division, Division One,
   Division Two and the Conference. **All divisions are simulated every round**,
   with **promotion and relegation** (top/bottom three swap) at season's end, so

@@ -116,12 +116,17 @@
   }
 
   /* ---- selection ------------------------------------------------------- */
-  function availablePlayers(club) { return club.players.filter(p => !p.injured && p.fit > 0); }
+  function isFit(p) { return (!p.injuredFor || p.injuredFor <= 0) && p.fit > 0; }
+  function availablePlayers(club) { return club.players.filter(isFit); }
   function byPos(players, pos) { return players.filter(p => p.pos === pos).sort((a, b) => b.skill - a.skill); }
   function bestXI(club) {
-    const a = availablePlayers(club);
+    // never field fewer than 11: if injuries/fatigue bite, fall back to the whole squad
+    let a = availablePlayers(club);
+    if (a.length < 11) a = club.players.slice();
     const xi = [].concat(byPos(a, 'G').slice(0, 1), byPos(a, 'D').slice(0, 4), byPos(a, 'M').slice(0, 4), byPos(a, 'A').slice(0, 2));
+    // top up to 11 from whoever is left (covers thin positions)
     const ids = new Set(xi.map(p => p.id));
+    a.slice().sort((x, y) => y.skill - x.skill).forEach(p => { if (xi.length < 11 && !ids.has(p.id)) { xi.push(p); ids.add(p.id); } });
     const subs = a.filter(p => !ids.has(p.id)).sort((x, y) => y.skill - x.skill).slice(0, 5);
     return { xi: xi.map(p => p.id), subs: subs.map(p => p.id) };
   }
@@ -293,7 +298,9 @@
       user(s).balance += Math.round(Data.ri(Data.makeRng((s.seed ^ s.round) >>> 0), 8000, 22000) * mult);
     }
 
-    sellListed(s);
+    // fitness drain / recovery + injuries for every club this matchday
+    applyMatchdayEffects(s, s.selection.xi);
+
     s.lastResult = {
       division: userDiv(s).name, homeName: match.homeName, awayName: match.awayName,
       hg: match.hg, ag: match.ag,
@@ -302,8 +309,32 @@
 
     s.round++;
     if (s.round >= totalRounds()) endSeason(s);
-    else s.selection = defaultSelection(s);
+    else {
+      s.selection = defaultSelection(s);
+      if (s.round % 5 === 0) refreshMarket(s);   // keep the market moving through the season
+    }
     return s.lastResult;
+  }
+
+  /* ---- per-matchday fitness & injuries (all clubs) --------------------- */
+  function applyMatchdayEffects(s, userXiIds) {
+    const rng = Data.makeRng((s.seed ^ (s.season * 7919) ^ (s.round * 1299721)) >>> 0);
+    const userStart = new Set(userXiIds || []);
+    s.clubs.forEach(c => {
+      const start = c.isUser ? userStart : new Set(bestXI(c).xi);
+      c.players.forEach(p => {
+        if (p.injuredFor > 0) { p.injuredFor--; p.injured = p.injuredFor > 0; }
+        if (start.has(p.id)) {
+          p.fit = clamp(p.fit - Data.ri(rng, 6, 14), 10, 100);
+          if (rng() < 0.025) {
+            p.injuredFor = Data.ri(rng, 2, 7); p.injured = true;
+            if (c.isUser) s.notices.push('Injury: ' + fullName(p) + ' is out for ' + p.injuredFor + ' match(es).');
+          }
+        } else {
+          p.fit = clamp(p.fit + Data.ri(rng, 8, 16), 10, 100);
+        }
+      });
+    });
   }
 
   /* ---- standings / scorers / results ----------------------------------- */
@@ -340,57 +371,105 @@
   }
 
   /* ---- transfers ------------------------------------------------------- */
+  const UNLISTED_PREMIUM = 1.6;   // cost to prise an unlisted player from his club
   function marketList(s, filters) {
     filters = filters || {};
-    let list = s.transferPool.slice();
-    if (filters.search) {
-      const q = filters.search.toLowerCase();
-      list = list.filter(p => fullName(p).toLowerCase().indexOf(q) >= 0 || p.surname.toLowerCase().indexOf(q) >= 0);
-    }
     const allow = filters.pos || { G: true, D: true, M: true, A: true };
-    list = list.filter(p => allow[p.pos]);
-    if (filters.includeEuropean === false) list = list.filter(p => !p.european);
-    if (filters.sortBySkill !== false) list.sort((a, b) => b.skill - a.skill);
-    else list.sort((a, b) => a.surname.localeCompare(b.surname));
-    return list;
+    const q = filters.search ? filters.search.toLowerCase() : null;
+    const match = p => (!q || fullName(p).toLowerCase().indexOf(q) >= 0 || p.surname.toLowerCase().indexOf(q) >= 0)
+      && allow[p.pos] && (filters.includeEuropean !== false || !p.european);
+    const out = [];
+    // free agents / players actively listed on the market
+    s.transferPool.forEach(p => { if (match(p)) out.push(Object.assign({}, p, { price: p.value, source: 'pool', fromClub: p.club })); });
+    // optionally, unlisted players at other clubs you can approach for a premium
+    if (filters.includeUnlisted) {
+      s.clubs.forEach((c, ci) => {
+        if (ci === s.userClub) return;
+        c.players.forEach(p => { if (match(p)) out.push(Object.assign({}, p, { price: Math.round(p.value * UNLISTED_PREMIUM), source: ci, fromClub: c.name })); });
+      });
+    }
+    if (filters.sortBySkill !== false) out.sort((a, b) => b.skill - a.skill);
+    else out.sort((a, b) => a.surname.localeCompare(b.surname));
+    return out;
   }
-  function bid(s, playerId) {
-    const i = s.transferPool.findIndex(p => p.id === playerId);
-    if (i < 0) return { ok: false, msg: 'Player no longer available.' };
-    const p = s.transferPool[i];
-    if (user(s).balance < p.value) return { ok: false, msg: 'Insufficient funds for ' + fullName(p) + '.' };
-    user(s).balance -= p.value;
-    s.transferPool.splice(i, 1);
+  function addToUser(s, p) {
     p.club = user(s).name; p.appsSeason = 0; p.goalsSeason = 0; p.transferListed = false;
     user(s).players.push(p);
-    s.notices.push('Signed ' + fullName(p) + ' (' + p.pos + ', skill ' + p.skill + ') for £' + p.value.toLocaleString() + '.');
-    return { ok: true, player: p };
+  }
+  function bid(s, playerId) {
+    // 1) on the open market
+    const i = s.transferPool.findIndex(p => p.id === playerId);
+    if (i >= 0) {
+      const p = s.transferPool[i];
+      if (user(s).balance < p.value) return { ok: false, msg: 'Insufficient funds for ' + fullName(p) + '.' };
+      user(s).balance -= p.value; s.transferPool.splice(i, 1); addToUser(s, p);
+      s.notices.push('Signed ' + fullName(p) + ' (' + p.pos + ', skill ' + p.skill + ') for £' + p.value.toLocaleString() + '.');
+      return { ok: true, player: p, fee: p.value };
+    }
+    // 2) approach a club for an unlisted player
+    for (let ci = 0; ci < s.clubs.length; ci++) {
+      if (ci === s.userClub) continue;
+      const c = s.clubs[ci], pi = c.players.findIndex(p => p.id === playerId);
+      if (pi < 0) continue;
+      const p = c.players[pi], fee = Math.round(p.value * UNLISTED_PREMIUM);
+      if (c.players.length <= 14) return { ok: false, msg: c.name + " won't sell — their squad is too thin." };
+      if (user(s).balance < fee) return { ok: false, msg: 'Need £' + fee.toLocaleString() + ' to prise ' + fullName(p) + ' from ' + c.name + '.' };
+      user(s).balance -= fee; c.players.splice(pi, 1); addToUser(s, p);
+      s.notices.push('Signed ' + fullName(p) + ' from ' + c.name + ' for £' + fee.toLocaleString() + '.');
+      return { ok: true, player: p, fee: fee };
+    }
+    return { ok: false, msg: 'Player no longer available.' };
   }
   function signUnlisted(s, pos) {
     const rng = Data.makeRng((Date.now() ^ s.transferPool.length) >>> 0);
     const p = Data.generatePlayer(rng, { pos: pos || Data.pick(rng, Data.POSITIONS), tier: Data.ri(rng, 2, 5) });
     const fee = Math.round(p.value * 0.6);
     if (user(s).balance < fee) return { ok: false, msg: 'Insufficient funds.' };
-    user(s).balance -= fee; p.club = user(s).name;
-    user(s).players.push(p);
+    user(s).balance -= fee; addToUser(s, p);
     s.notices.push('Signed unlisted player ' + fullName(p) + ' (' + p.pos + ', skill ' + p.skill + ') for £' + fee.toLocaleString() + '.');
     return { ok: true, player: p };
+  }
+  // selling is immediate: the player leaves at once and the fee is banked now
+  function sellPlayer(s, playerId) {
+    const club = user(s), i = club.players.findIndex(p => p.id === playerId);
+    if (i < 0) return { ok: false, msg: 'Player not in your squad.' };
+    if (club.players.length <= 12) return { ok: false, msg: 'You must keep at least 12 players.' };
+    const p = club.players[i], fee = Math.round(p.value * 0.95);
+    club.players.splice(i, 1); club.balance += fee;
+    p.club = '(free agent)'; p.transferListed = false; s.transferPool.push(p);
+    s.notices.push('Sold ' + fullName(p) + ' for £' + fee.toLocaleString() + '.');
+    return { ok: true, player: p, fee: fee };
   }
   function setTransferListed(s, playerId, listed) {
     const p = user(s).players.find(pl => pl.id === playerId);
     if (p) p.transferListed = !!listed;
   }
-  function sellListed(s) {
-    const rng = Data.makeRng((s.seed ^ s.round ^ 7919) >>> 0);
-    const keep = [];
+
+  /* ---- training: lift fitness (and nudge youngsters), once per week ----- */
+  function train(s) {
+    if (s.trainedRound === s.round && s.trainedSeason === s.season) return { ok: false, msg: 'Your squad has already trained this week.' };
+    s.trainedRound = s.round; s.trainedSeason = s.season;
+    const rng = Data.makeRng((s.seed ^ s.round ^ (s.season * 5147)) >>> 0);
+    let improved = 0;
     user(s).players.forEach(p => {
-      if (p.transferListed && keep.length + (user(s).players.length - keep.length) > 11 && rng() < 0.85) {
-        const fee = Math.round(p.value * (0.85 + rng() * 0.3));
-        user(s).balance += fee;
-        s.notices.push('Sold ' + fullName(p) + ' for £' + fee.toLocaleString() + '.');
-      } else keep.push(p);
+      p.fit = clamp(p.fit + Data.ri(rng, 5, 12), 10, 100);
+      if (p.age <= 23 && rng() < 0.07 && p.skill < 99) { p.skill++; Data.recomputeValue(p, rng); improved++; }
     });
-    if (keep.length >= 11) user(s).players = keep;
+    return { ok: true, improved: improved };
+  }
+
+  /* ---- keep the transfer market dynamic -------------------------------- */
+  function refreshMarket(s) {
+    const rng = Data.makeRng((s.seed ^ (s.season * 333667) ^ (s.round * 99989)) >>> 0);
+    s.transferPool = s.transferPool.filter(() => rng() > 0.35);          // some move on
+    const origins = Data.ENGLISH_CLUBS.concat(Data.EURO_CLUBS);
+    const add = Data.ri(rng, 8, 16);
+    for (let k = 0; k < add; k++) {                                       // fresh listings
+      const p = Data.generatePlayer(rng, { tier: Data.ri(rng, 1, 5) });
+      p.club = Data.pick(rng, origins); p.european = Data.EURO_CLUBS.indexOf(p.club) >= 0;
+      s.transferPool.push(p);
+    }
+    s.transferPool.forEach(p => { if (rng() < 0.4) p.value = Math.round(p.value * (0.9 + rng() * 0.25)); });
   }
 
   /* ---- season rollover: promotion & relegation ------------------------- */
@@ -418,13 +497,23 @@
     s.notices.push(msg);
 
     // reset for the new season
-    s.season++; s.round = 0;
+    s.season++; s.round = 0; s.trainedRound = -1;
     s.divisions.forEach(dv => { dv.table = blankTable(dv.members, s.clubs); dv.results = []; dv.fixtures = makeFixtures(dv.members, rng); });
+    // a year passes: players age and their skill drifts up or down (often barely)
     s.clubs.forEach(c => c.players.forEach(p => {
       p.appsSeason = 0; p.goalsSeason = 0;
-      p.fit = Math.min(100, p.fit + Data.ri(rng, 0, 15));
-      p.injured = rng() < 0.04;
+      p.age = (p.age || 24) + 1;
+      let drift;
+      if (p.age <= 23) drift = Data.ri(rng, -1, 4);
+      else if (p.age <= 29) drift = Data.ri(rng, -2, 3);
+      else if (p.age <= 32) drift = Data.ri(rng, -4, 1);
+      else drift = Data.ri(rng, -6, 0);
+      p.skill = clamp((p.skill || 40) + drift, 20, 99);
+      Data.recomputeValue(p, rng);
+      p.fit = clamp(85 + Data.ri(rng, 0, 15), 10, 100);
+      p.injuredFor = rng() < 0.04 ? Data.ri(rng, 1, 4) : 0; p.injured = p.injuredFor > 0;
     }));
+    refreshMarket(s);
     s.selection = defaultSelection(s);
   }
   function ordinal(n) {
@@ -443,7 +532,7 @@
     userRatings, clubRatings, ratingsFor, moraleOf,
     simulateMatch, playUserMatch, commitUserResult,
     standings, leaguePosition, topScorers, lastRoundResults,
-    marketList, bid, signUnlisted, setTransferListed,
+    marketList, bid, signUnlisted, setTransferListed, sellPlayer, train, refreshMarket,
     serialize, deserialize, ordinal
   };
 });

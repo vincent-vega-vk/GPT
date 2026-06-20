@@ -126,6 +126,55 @@ sd.clubs.forEach((c, i) => { if (!sd.divisions[c.division].members.includes(i)) 
 check('club.division matches membership for all clubs', consistent);
 check('memberships partition all 88 clubs', sd.divisions.reduce((a, d) => a + d.members.length, 0) === 88);
 
+/* ---- player & market mechanics --------------------------------------- */
+section('Player & market mechanics');
+const pm = E.newGame(9001);
+let maxSkill = 0, minSkill = 99, hasAge = true;
+pm.clubs.forEach(c => c.players.forEach(p => {
+  if (p.skill > maxSkill) maxSkill = p.skill;
+  if (p.skill < minSkill) minSkill = p.skill;
+  if (!(p.age >= 16 && p.age <= 45)) hasAge = false;
+}));
+check('skills can reach the 90s', maxSkill >= 90, maxSkill);
+check('skills stay within 20..99', maxSkill <= 99 && minSkill >= 20, minSkill + '..' + maxSkill);
+check('players have a sensible age', hasAge);
+
+const sq0 = E.user(pm).players.length;
+const sellTarget = E.user(pm).players[sq0 - 1];
+const sres = E.sellPlayer(pm, sellTarget.id);
+check('sellPlayer succeeds immediately', sres.ok, sres.msg);
+check('squad shrank by 1 on sale', E.user(pm).players.length === sq0 - 1);
+check('sold player gone from squad', !E.user(pm).players.find(p => p.id === sellTarget.id));
+
+const listedOnly = E.marketList(pm, { includeUnlisted: false });
+const withUnlisted = E.marketList(pm, { includeUnlisted: true });
+check('unlisted filter adds approachable players', withUnlisted.length > listedOnly.length, withUnlisted.length + ' vs ' + listedOnly.length);
+const approach = withUnlisted.find(p => p.source !== 'pool');
+check('unlisted entries priced at a premium', !!approach && approach.price > approach.value);
+if (approach) {
+  const srcClub = pm.clubs[approach.source], had = srcClub.players.length;
+  E.user(pm).balance = 99999999;
+  const br = E.bid(pm, approach.id);
+  check('bid for an unlisted player succeeds', br.ok, br.msg);
+  check('unlisted player left his old club', !srcClub.players.find(p => p.id === approach.id) && srcClub.players.length === had - 1);
+}
+
+E.user(pm).players.forEach(p => { p.fit = 40; });
+const tr = E.train(pm);
+check('training works once per week', tr.ok);
+check('training raised fitness', E.user(pm).players.every(p => p.fit > 40));
+check('training blocked twice in same week', !E.train(pm).ok);
+
+const inj = E.newGame(31337);
+for (let k = 0; k < 20; k++) E.commitUserResult(inj, E.playUserMatch(inj));
+check('injuries occur during the season', inj.clubs.some(c => c.players.some(p => p.injuredFor > 0)));
+
+const dr = E.newGame(424242);
+const skillsBefore = E.user(dr).players.map(p => ({ id: p.id, skill: p.skill }));
+while (dr.season === 1) E.commitUserResult(dr, E.playUserMatch(dr));
+const changed = skillsBefore.some(b => { const a = E.user(dr).players.find(p => p.id === b.id); return a && a.skill !== b.skill; });
+check('player skills drift across a season', changed);
+
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');
 const snap = E.serialize(s3);

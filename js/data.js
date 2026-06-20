@@ -126,12 +126,16 @@
   const POSITIONS = ['G', 'D', 'M', 'A'];
   const POS_NAME = { G: 'Goalkeeper', D: 'Defender', M: 'Midfielder', A: 'Attacker' };
 
-  /* ---- value of a player given his skill ------------------------------- */
-  function valueOf(skill, rng) {
-    const base = 20000 + skill * skill * 14;
-    const noise = rng ? (0.92 + rng() * 0.16) : 1; // +/-8%
-    return Math.round(base * noise / 1) ;
+  /* ---- value of a player given his skill (and age) --------------------- */
+  function valueOf(skill, rng, age) {
+    let base = 20000 + skill * skill * 14;
+    if (skill > 80) base += (skill - 80) * (skill - 80) * 1500;   // stars cost a premium
+    const ageF = age == null ? 1 : age <= 20 ? 0.9 : age <= 29 ? 1 : age <= 32 ? 0.78 : 0.5;
+    const noise = rng ? (0.92 + rng() * 0.16) : 1;                // +/-8%
+    return Math.round(base * ageF * noise);
   }
+  // re-price a player after his skill / age changes
+  function recomputeValue(p, rng) { p.value = valueOf(p.skill, rng, p.age); return p.value; }
 
   let _id = 1;
   function nextId() { return _id++; }
@@ -140,25 +144,25 @@
   function generatePlayer(rng, opts) {
     opts = opts || {};
     const pos = opts.pos || pick(rng, POSITIONS);
-    // skill band: tier 1 (strong) -> higher skill; tier 5 (weak) -> lower.
     const tier = opts.tier == null ? 3 : opts.tier;
-    const centre = 64 - (tier - 1) * 8;            // t1~64, t5~32
-    let skill = Math.round(centre + (rng() - 0.5) * 34);
+    const centre = 70 - (tier - 1) * 8.5;            // t1~70, t5~36
+    let skill = Math.round(centre + (rng() - 0.5) * 32);
+    if (rng() < 0.04) skill += ri(rng, 12, 26);      // rare elite talents (reach the 90s)
     if (opts.skill != null) skill = opts.skill;
-    skill = Math.max(12, Math.min(96, skill));
-    const fit = opts.fit != null ? opts.fit : ri(rng, 60, 100);
+    skill = Math.max(20, Math.min(99, skill));
+    const age = opts.age != null ? opts.age : ri(rng, 17, 36);
+    const fit = opts.fit != null ? opts.fit : ri(rng, 70, 100);
+    const injuredFor = opts.injuredFor != null ? opts.injuredFor : (rng() < 0.05 ? ri(rng, 1, 5) : 0);
     return {
       id: nextId(),
       forename: pick(rng, FORENAMES),
       surname: pick(rng, SURNAMES),
-      pos,
-      skill,
-      fit,
-      injured: rng() < 0.05,
+      pos, skill, age, fit,
+      injuredFor, injured: injuredFor > 0,
       appsSeason: 0, goalsSeason: 0,
       appsTotal: opts.appsTotal || 0, goalsTotal: opts.goalsTotal || 0,
       transferListed: false,
-      value: valueOf(skill, rng)
+      value: valueOf(skill, rng, age)
     };
   }
 
@@ -191,6 +195,6 @@
     CONFERENCE, ENGLISH_CLUBS, EURO_CLUBS,
     CLUBS_PER_DIVISION, DIVISION_DEFS, UPPER_CLUBS,
     POSITIONS, POS_NAME,
-    valueOf, generatePlayer, generateSquad, generateClub
+    valueOf, recomputeValue, generatePlayer, generateSquad, generateClub
   };
 });

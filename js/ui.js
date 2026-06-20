@@ -69,7 +69,8 @@
     const players = sortSquad(club.players);
     if (squadSelId == null && players.length) squadSelId = players[0].id;
     renderGrid('squad-grid', players, p =>
-      '<td>' + p.surname + '</td><td>' + p.forename + '</td><td>' + posCell(p.pos) + '</td>' +
+      '<td>' + p.surname + (p.injuredFor > 0 ? ' <span class="red" title="injured">+' + p.injuredFor + '</span>' : '') + '</td>' +
+      '<td>' + p.forename + '</td><td>' + posCell(p.pos) + '</td>' +
       '<td class="num">' + p.skill + '</td>' +
       '<td class="num">' + p.appsSeason + '</td><td class="num">' + p.goalsSeason + '</td>' +
       '<td class="num">' + p.appsTotal + '</td><td class="num">' + p.goalsTotal + '</td>',
@@ -103,10 +104,10 @@
     renderGrid('subs-grid', subs, pRow, p => { moveToReserves(p.id); renderTeam(); });
     const resRows = sortSquad(reserves).concat(injured.map(p => Object.assign({}, p)));
     renderGrid('res-grid', resRows, p =>
-      (p.injured || p.fit <= 0)
-        ? '<td>' + p.surname + '</td><td>' + p.forename + '</td><td>' + posCell(p.pos) + '</td><td class="num">' + p.skill + '</td><td class="num red">Injured</td>'
+      (p.injuredFor > 0 || p.fit <= 0)
+        ? '<td>' + p.surname + '</td><td>' + p.forename + '</td><td>' + posCell(p.pos) + '</td><td class="num">' + p.skill + '</td><td class="num red">' + (p.injuredFor > 0 ? 'Inj ' + p.injuredFor : 'Unfit') + '</td>'
         : pRow(p),
-      p => { if (!(p.injured || p.fit <= 0)) { addFromReserves(p.id); renderTeam(); } });
+      p => { if (!(p.injuredFor > 0 || p.fit <= 0)) { addFromReserves(p.id); renderTeam(); } });
 
     // ratings
     const hr = E.userRatings(S), ar = E.clubRatings(opp.club);
@@ -195,18 +196,19 @@
       search: $('tm-search').value.trim(),
       pos: { G: $('f-G').checked, D: $('f-D').checked, M: $('f-M').checked, A: $('f-A').checked },
       includeEuropean: $('f-euro').checked,
-      sortBySkill: $('f-sort').checked
+      sortBySkill: $('f-sort').checked,
+      includeUnlisted: $('f-unlisted').checked
     };
   }
   function renderTransfer() {
     const list = E.marketList(S, tmFilters());
     if (!list.find(p => p.id === tmSelId)) tmSelId = list.length ? list[0].id : null;
     renderGrid('tm-grid', list, p =>
-      '<td>' + p.surname + ', ' + p.forename + '</td>' +
+      '<td>' + p.surname + ', ' + p.forename + (p.source !== 'pool' ? ' <span class="small" title="not listed - costs a premium">·</span>' : '') + '</td>' +
       '<td class="num"><span class="pos-' + p.pos + '">' + p.skill + '</span></td>' +
       '<td>' + posCell(p.pos) + '</td>' +
-      '<td class="num">' + Math.round(p.value).toLocaleString('en-GB') + '</td>' +
-      '<td>' + p.club + (p.european ? ' *' : '') + '</td>',
+      '<td class="num">' + Math.round(p.price).toLocaleString('en-GB') + '</td>' +
+      '<td>' + p.fromClub + (p.european ? ' *' : '') + '</td>',
       p => { tmSelId = p.id; renderTransfer(); }, tmSelId);
     $('tm-funds').textContent = Math.round(E.user(S).balance).toLocaleString('en-GB');
   }
@@ -285,11 +287,25 @@
     $('btn-results').onclick = () => { renderResults(); show('screen-results'); };
     $('edit-forename').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.forename = e.target.value; renderSquad(); save(); } };
     $('edit-surname').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.surname = e.target.value; renderSquad(); save(); } };
-    $('chk-list').onchange = e => { const p = selectedSquadPlayer(); if (p) { p.transferListed = e.target.checked; toast(e.target.checked ? fullName(p) + ' is transfer listed - he may be sold before the next match.' : fullName(p) + ' taken off the list.'); save(); } };
+    // ticking the box sells the highlighted player immediately
+    $('chk-list').onchange = e => {
+      if (!e.target.checked) return;
+      const p = selectedSquadPlayer(); if (!p) { e.target.checked = false; return; }
+      if (!confirm('Sell ' + fullName(p) + ' now for about ' + money(p.value * 0.95) + '?')) { e.target.checked = false; return; }
+      const r = E.sellPlayer(S, p.id);
+      toast(r.ok ? 'Sold ' + fullName(r.player) + ' for ' + money(r.fee) + '.' : r.msg);
+      e.target.checked = false; squadSelId = null; renderSquad(); save();
+    };
     $('btn-analysis').onclick = () => {
       const p = selectedSquadPlayer(); if (!p) return;
-      toast(fullName(p) + ' — ' + D.POS_NAME[p.pos] + '. Skill ' + p.skill + ', fitness ' + p.fit +
-        '%. ' + p.appsSeason + ' apps / ' + p.goalsSeason + ' goals this season. Valued at ' + money(p.value) + '.', 7000);
+      toast(fullName(p) + ' — ' + D.POS_NAME[p.pos] + ', age ' + p.age + '. Skill ' + p.skill + ', fitness ' + p.fit + '%' +
+        (p.injuredFor > 0 ? ' (injured, ' + p.injuredFor + ' to go)' : '') +
+        '. ' + p.appsSeason + ' apps / ' + p.goalsSeason + ' goals this season. Valued at ' + money(p.value) + '.', 7000);
+    };
+    $('btn-train').onclick = () => {
+      const r = E.train(S);
+      toast(r.ok ? 'Good session — fitness up across the squad' + (r.improved ? ', ' + r.improved + ' youngster(s) improved.' : '.') : r.msg);
+      renderSquad(); save();
     };
     $('btn-resign').onclick = () => {
       if (!confirm('Resign as manager and start a new game?')) return;
@@ -326,11 +342,11 @@
 
     // transfer market
     ['tm-search'].forEach(id => $(id).oninput = renderTransfer);
-    ['f-G', 'f-D', 'f-M', 'f-A', 'f-euro', 'f-sort'].forEach(id => $(id).onchange = renderTransfer);
+    ['f-G', 'f-D', 'f-M', 'f-A', 'f-euro', 'f-sort', 'f-unlisted'].forEach(id => $(id).onchange = renderTransfer);
     $('tm-bid').onclick = () => {
       if (tmSelId == null) return;
       const r = E.bid(S, tmSelId);
-      toast(r.ok ? r.player ? 'Signed ' + fullName(r.player) + ' for ' + money(r.player.value) + '!' : 'Bid accepted.' : r.msg);
+      toast(r.ok ? 'Signed ' + fullName(r.player) + ' for ' + money(r.fee) + '!' : r.msg);
       tmSelId = null; renderTransfer(); renderSquad(); save();
     };
     $('tm-unlisted').onclick = () => {
