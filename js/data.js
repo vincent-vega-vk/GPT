@@ -96,10 +96,10 @@
    */
   const CLUBS_PER_DIVISION = 22;
   const DIVISION_DEFS = [
-    { name: 'Premier Division', tierBase: 1 },
-    { name: 'Division One',     tierBase: 2 },
-    { name: 'Division Two',     tierBase: 3 },
-    { name: 'Conference',       tierBase: 4 }
+    { name: 'Premier Division', tierBase: 1, size: 20 },
+    { name: 'Division One',     tierBase: 2, size: 22 },
+    { name: 'Division Two',     tierBase: 3, size: 22 },
+    { name: 'Conference',       tierBase: 4, size: 22 }
   ];
   // 66 clubs for the three divisions above the Conference (22 each, in order)
   const UPPER_CLUBS = [
@@ -121,6 +121,19 @@
     'Darlington', 'Scunthorpe United', 'Shrewsbury Town', 'Cambridge United', 'Brighton & Hove',
     'Reading', 'Stoke City', 'Wigan Athletic', 'Notts County', 'Colchester United',
     'Brentford', 'Cardiff City'
+  ];
+
+  // continental clubs that fill out the European competitions (knockout only)
+  const FOREIGN_CLUBS = [
+    'Real Madrid', 'Barcelona', 'Atletico Madrid', 'Valencia', 'Deportivo',
+    'Juventus', 'AC Milan', 'Inter Milan', 'AS Roma', 'Lazio', 'Parma', 'Fiorentina',
+    'Bayern Munich', 'Borussia Dortmund', 'Bayer Leverkusen', 'Schalke 04', 'Werder Bremen',
+    'Ajax', 'PSV Eindhoven', 'Feyenoord', 'FC Porto', 'Benfica', 'Sporting Lisbon',
+    'Marseille', 'AS Monaco', 'Lyon', 'Paris St Germain', 'Bordeaux',
+    'Celtic', 'Rangers', 'Galatasaray', 'Fenerbahce', 'Besiktas',
+    'Anderlecht', 'Club Brugge', 'Steaua Bucharest', 'Dynamo Kyiv', 'Spartak Moscow',
+    'CSKA Moscow', 'Red Star Belgrade', 'Panathinaikos', 'Olympiacos', 'Rosenborg',
+    'Sparta Prague', 'Dinamo Zagreb', 'Shakhtar Donetsk', 'Brondby', 'Vitesse'
   ];
 
   const POSITIONS = ['G', 'D', 'M', 'A'];
@@ -150,7 +163,7 @@
     if (rng() < 0.04) skill += ri(rng, 12, 26);      // rare elite talents (reach the 90s)
     if (opts.skill != null) skill = opts.skill;
     skill = Math.max(20, Math.min(99, skill));
-    const age = opts.age != null ? opts.age : ri(rng, 17, 36);
+    const age = opts.age != null ? opts.age : ri(rng, 17, 33);
     const fit = opts.fit != null ? opts.fit : ri(rng, 70, 100);
     const injuredFor = opts.injuredFor != null ? opts.injuredFor : (rng() < 0.05 ? ri(rng, 1, 5) : 0);
     return {
@@ -158,6 +171,7 @@
       forename: pick(rng, FORENAMES),
       surname: pick(rng, SURNAMES),
       pos, skill, age, fit,
+      retireAge: opts.retireAge != null ? opts.retireAge : ri(rng, 35, 40),
       injuredFor, injured: injuredFor > 0,
       appsSeason: 0, goalsSeason: 0,
       appsTotal: opts.appsTotal || 0, goalsTotal: opts.goalsTotal || 0,
@@ -192,7 +206,7 @@
   return {
     makeRng, ri, pick,
     FORENAMES, SURNAMES,
-    CONFERENCE, ENGLISH_CLUBS, EURO_CLUBS,
+    CONFERENCE, ENGLISH_CLUBS, EURO_CLUBS, FOREIGN_CLUBS,
     CLUBS_PER_DIVISION, DIVISION_DEFS, UPPER_CLUBS,
     POSITIONS, POS_NAME,
     valueOf, recomputeValue, generatePlayer, generateSquad, generateClub

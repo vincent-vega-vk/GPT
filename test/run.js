@@ -24,7 +24,11 @@ function step(s) {
 /* ---- new game -------------------------------------------------------- */
 section('New game');
 const s = E.newGame(20259);
-check('88 clubs across the pyramid', s.clubs.length === 88, s.clubs.length);
+const pyramid = s.clubs.filter(c => c.division >= 0);
+check('86 clubs across the pyramid', pyramid.length === 86, pyramid.length);
+check('Premier Division has 20 clubs', s.divisions[0].members.length === 20, s.divisions[0].members.length);
+check('lower divisions have 22 clubs', s.divisions.slice(1).every(d => d.members.length === 22));
+check('foreign clubs exist for Europe', s.clubs.some(c => c.foreign), s.clubs.length);
 check('4 divisions', s.divisions.length === 4, s.divisions.length);
 check('user club is Romford', E.user(s).name === 'Romford', E.user(s).name);
 check('user starts in the Conference (bottom)', s.userDivision === 3 && s.divisions[3].name === 'Conference');
@@ -127,17 +131,19 @@ check('every club has positive funds', cs2.clubs.every(c => c.balance > 0));
 /* ---- promotion / relegation ----------------------------------------- */
 section('Divisions & promotion / relegation');
 const sd = E.newGame(4242);
-check('each division has 22 clubs', sd.divisions.every(d => d.members.length === 22), JSON.stringify(sd.divisions.map(d => d.members.length)));
-check('all 88 club names unique', new Set(sd.clubs.map(c => c.name)).size === 88);
+const sizes0 = sd.divisions.map(d => d.members.length);
+check('division sizes are 20,22,22,22', JSON.stringify(sizes0) === JSON.stringify([20, 22, 22, 22]), JSON.stringify(sizes0));
+check('all club names unique', new Set(sd.clubs.map(c => c.name)).size === sd.clubs.length);
+const clubs0 = sd.clubs.length;
 for (let guard = 0; guard < 4000 && sd.season < 3; guard++) { step(sd); }
 check('advanced past season 1', sd.season >= 2, sd.season);
-check('divisions still 22 each after promotion/relegation', sd.divisions.every(d => d.members.length === 22), JSON.stringify(sd.divisions.map(d => d.members.length)));
-check('total clubs conserved', sd.clubs.length === 88);
+check('division sizes preserved after promotion/relegation', JSON.stringify(sd.divisions.map(d => d.members.length)) === JSON.stringify(sizes0), JSON.stringify(sd.divisions.map(d => d.members.length)));
+check('club count conserved', sd.clubs.length === clubs0, sd.clubs.length);
 check('user club sits in its division members', sd.divisions[sd.userDivision].members.includes(sd.userClub));
 let consistent = true;
-sd.clubs.forEach((c, i) => { if (!sd.divisions[c.division].members.includes(i)) consistent = false; });
-check('club.division matches membership for all clubs', consistent);
-check('memberships partition all 88 clubs', sd.divisions.reduce((a, d) => a + d.members.length, 0) === 88);
+sd.clubs.forEach((c, i) => { if (c.division >= 0 && !sd.divisions[c.division].members.includes(i)) consistent = false; });
+check('club.division matches membership for pyramid clubs', consistent);
+check('memberships partition the pyramid (86)', sd.divisions.reduce((a, d) => a + d.members.length, 0) === 86);
 
 /* ---- player & market mechanics --------------------------------------- */
 section('Player & market mechanics');
@@ -198,6 +204,36 @@ check('honours recorded after a season', cg.honours.length >= 1, cg.honours.leng
 check('honours list league 1st/2nd/3rd', cg.honours[0].divisions.every(d => d.first && d.second && d.third));
 check('every cup produced a winner', cg.honours[0].cups.length >= 2 && cg.honours[0].cups.every(c => c.winner && c.winner !== '—'), JSON.stringify(cg.honours[0].cups));
 check('cups rebuilt for the new season', E.cupsSummary(cg).length >= 2 && E.cupsSummary(cg).every(c => c.winner == null));
+
+/* ---- finances, history, ex-players, Europe, match box score ---------- */
+section('Finances, history, ex-players & Europe');
+const fx = E.newGame(2718);
+const b0 = E.user(fx).balance;
+const tl = E.takeLoan(fx, 500000);
+check('takeLoan adds cash and debt', tl.ok && E.user(fx).balance === b0 + 500000 && fx.debt === 500000, tl.msg);
+const rl = E.repayLoan(fx, 200000);
+check('repayLoan reduces debt', rl.ok && fx.debt === 300000, rl.msg);
+const exBefore = fx.exPlayers.length;
+E.sellPlayer(fx, E.user(fx).players[E.user(fx).players.length - 1].id);
+check('selling records an ex-player', fx.exPlayers.length === exBefore + 1);
+check('European Cup has 32 entrants', fx.cups.champions && fx.cups.champions.participants.length === 32, fx.cups.champions && fx.cups.champions.participants.length);
+check('European Cup includes foreign clubs', fx.cups.champions.participants.some(ci => fx.clubs[ci].foreign));
+E.prepareNextUserMatch(fx);
+const m = E.playUserMatch(fx);
+check('match carries box-score stats', !!m.stats && typeof m.stats.possHome === 'number');
+check('match carries cards & subs arrays', Array.isArray(m.cards) && Array.isArray(m.subs));
+check('match has a userSide', m.userSide === 'home' || m.userSide === 'away');
+const oppName = m.opponent.name;
+E.commitUserResult(fx, m);
+check('head-to-head history recorded', E.historyVs(fx, oppName).length >= 1, E.historyVs(fx, oppName).length);
+check('round-up captured the matchday', (fx.roundup || []).length >= 1, (fx.roundup || []).length);
+check('userLeagueRounds matches division size', E.userLeagueRounds(fx) === (E.userDiv(fx).members.length - 1) * 2);
+
+const rt = E.newGame(909090);
+let g2 = 0; while (rt.season < 3 && g2++ < 4000) step(rt);
+check('all clubs remain fieldable after seasons', rt.clubs.every(c => c.players.length >= 11));
+check('players have a retirement age', rt.clubs[0].players.every(p => p.retireAge >= 35 && p.retireAge <= 40));
+check('cup bracket accessor works', (() => { const br = E.cupBracket(rt, E.cupIds(rt)[0]); return !!br && br.rounds.length > 0; })());
 
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');

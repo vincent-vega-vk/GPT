@@ -50,18 +50,19 @@
   function newGame(seed, userIndex) {
     seed = seed >>> 0 || 12345;
     const rng = Data.makeRng(seed);
-    const per = Data.CLUBS_PER_DIVISION;
     const defs = Data.DIVISION_DEFS;
     const clubs = [], divisions = [];
+    let upperCursor = 0;
 
     defs.forEach((dd, d) => {
+      const size = dd.size || Data.CLUBS_PER_DIVISION;
       const members = [];
-      for (let k = 0; k < per; k++) {
+      for (let k = 0; k < size; k++) {
         let name, tier;
         if (d === defs.length - 1) {                 // bottom division = Conference list
           const cd = Data.CONFERENCE[k]; name = cd.name; tier = cd.tier;
         } else {
-          name = Data.UPPER_CLUBS[d * per + k];
+          name = Data.UPPER_CLUBS[upperCursor++];
           tier = clamp(dd.tierBase + Data.ri(rng, -1, 1), 1, 5);
         }
         const club = Data.generateClub(rng, { name, tier });
@@ -72,6 +73,13 @@
         name: dd.name, level: d + 1, members,
         fixtures: makeFixtures(members, rng), results: [], table: blankTable(members, clubs)
       });
+    });
+
+    // continental clubs (division -1): they only feature in the European cups
+    Data.FOREIGN_CLUBS.forEach(name => {
+      const club = Data.generateClub(rng, { name: name, tier: Data.ri(rng, 1, 2) });
+      club.division = -1; club.foreign = true;
+      clubs.push(club);
     });
 
     // open transfer market: a broad pool of players from other clubs
@@ -92,19 +100,22 @@
       userClub: 0, userDivision: defs.length - 1,
       managerRating: 50, transferPool,
       cups: {}, calendar: [], honours: [], euroQual: null,
+      history: [], exPlayers: [], debt: 0, debtSince: -1,
       trainedRound: -1, trainedSeason: 0,
-      lastResult: null, notices: [], selection: null
+      lastResult: null, lastRoundup: null, notices: [], selection: null
     };
     state.euroQual = seedEuroQual(state);              // season-1 qualification by strength
     startSeasonCups(state);                            // build cups + the season calendar
-    const bottomFirst = (defs.length - 1) * per;       // Romford
+    const bottomFirst = divisions[defs.length - 1].members[0];   // Romford
     setUserClub(state, userIndex == null ? bottomFirst : userIndex);
     return state;
   }
 
   const user = s => s.clubs[s.userClub];
   const userDiv = s => s.divisions[s.userDivision];
-  const totalRounds = () => (Data.CLUBS_PER_DIVISION - 1) * 2;
+  const divisionRounds = (s, d) => (s.divisions[d].members.length - 1) * 2;
+  const totalRounds = s => s ? Math.max.apply(null, s.divisions.map((dv) => (dv.members.length - 1) * 2)) : (Data.CLUBS_PER_DIVISION - 1) * 2;
+  const userLeagueRounds = s => divisionRounds(s, s.userDivision);
   const numDivisions = s => s.divisions.length;
   const divisionName = (s, d) => s.divisions[d].name;
 
@@ -268,19 +279,63 @@
     const uPlayers = playersByIds(uClub, s.selection.xi);
     const uRat = ratingsFor(uPlayers, moraleOf(s, uClub));
     const oRat = clubRatings(opp.club);
-    const oPlayers = playersByIds(opp.club, bestXI(opp.club).xi);
+    const oBest = bestXI(opp.club);
+    const oPlayers = playersByIds(opp.club, oBest.xi);
+    const oSubs = playersByIds(opp.club, oBest.subs);
+    const uSubs = playersByIds(uClub, s.selection.subs);
     const home = opp.home;
     const sim = home ? simulateMatch(rng, uRat, oRat, uPlayers, oPlayers)
                      : simulateMatch(rng, oRat, uRat, oPlayers, uPlayers);
+    const extra = buildMatchExtras(s, {
+      homePlayers: home ? uPlayers : oPlayers, awayPlayers: home ? oPlayers : uPlayers,
+      homeSubs: home ? uSubs : oSubs, awaySubs: home ? oSubs : uSubs,
+      hRat: home ? uRat : oRat, aRat: home ? oRat : uRat, hg: sim.hg, ag: sim.ag
+    });
     return {
       comp: opp.comp, compName: opp.compName, isCup: opp.comp !== 'league',
       fixture: opp.fixture, tie: opp.tie, cupId: opp.comp,
-      home, opponent: opp.club,
+      home, opponent: opp.club, userSide: home ? 'home' : 'away',
       homeName: home ? uClub.name : opp.club.name,
       awayName: home ? opp.club.name : uClub.name,
       userPlayers: uPlayers, oppPlayers: oPlayers,
-      hg: sim.hg, ag: sim.ag, events: sim.events
+      hg: sim.hg, ag: sim.ag, events: sim.events,
+      cards: extra.cards, injuries: extra.injuries, subs: extra.subs, stats: extra.stats
     };
+  }
+  /* ---- extra match colour: bookings, injuries, auto-subs, box score ---- */
+  function buildMatchExtras(s, m) {
+    const rng = Data.makeRng((s.seed ^ (s.season * 991) ^ (s.day * 131) ^ 0x5bd1e995) >>> 0);
+    const hN = m.homePlayers.map(fullName), aN = m.awayPlayers.map(fullName);
+    const pickName = side => { const a = side === 'home' ? hN : aN; return a.length ? a[Math.floor(rng() * a.length)] : 'Unknown'; };
+    const cards = [];
+    for (let i = 0, n = Data.ri(rng, 2, 6); i < n; i++) { const side = rng() < 0.5 ? 'home' : 'away'; cards.push({ minute: Data.ri(rng, 5, 90), side, name: pickName(side), color: 'Y' }); }
+    if (rng() < 0.25) { const side = rng() < 0.5 ? 'home' : 'away'; cards.push({ minute: Data.ri(rng, 25, 90), side, name: pickName(side), color: 'R' }); }
+    cards.sort((a, b) => a.minute - b.minute);
+    const injuries = [];
+    for (let i = 0, n = Data.ri(rng, 0, 2); i < n; i++) { const side = rng() < 0.5 ? 'home' : 'away'; injuries.push({ minute: Data.ri(rng, 10, 85), side, name: pickName(side) }); }
+    injuries.sort((a, b) => a.minute - b.minute);
+    function subsFor(side, starters, subs) {
+      const out = [];
+      for (let i = 0, n = Math.min(3, subs.length); i < n && rng() < 0.85; i++) {
+        const off = starters[starters.length - 1 - i], on = subs[i];
+        if (off && on) out.push({ minute: Data.ri(rng, 58, 82), side, off: fullName(off), on: fullName(on) });
+      }
+      return out;
+    }
+    const subs = subsFor('home', m.homePlayers, m.homeSubs).concat(subsFor('away', m.awayPlayers, m.awaySubs)).sort((a, b) => a.minute - b.minute);
+    const hAtt = m.hRat.attack + m.hRat.midfield + 1, aAtt = m.aRat.attack + m.aRat.midfield + 1;
+    const possHome = clamp(Math.round(50 + (m.hRat.midfield - m.aRat.midfield) * 0.8 + (rng() - 0.5) * 8), 30, 70);
+    const shotsHome = Math.max(m.hg, Math.round(m.hg * 2 + 4 + (hAtt / aAtt) * 3 + rng() * 4));
+    const shotsAway = Math.max(m.ag, Math.round(m.ag * 2 + 4 + (aAtt / hAtt) * 3 + rng() * 4));
+    const stats = {
+      possHome: possHome, possAway: 100 - possHome,
+      shotsHome: shotsHome, shotsAway: shotsAway,
+      sotHome: Math.max(m.hg, Math.round(shotsHome * (0.4 + rng() * 0.2))),
+      sotAway: Math.max(m.ag, Math.round(shotsAway * (0.4 + rng() * 0.2))),
+      cornersHome: Data.ri(rng, 2, 11), cornersAway: Data.ri(rng, 1, 9),
+      foulsHome: Data.ri(rng, 6, 16), foulsAway: Data.ri(rng, 6, 16)
+    };
+    return { cards: cards, injuries: injuries, subs: subs, stats: stats };
   }
 
   /* ---- commit the user's match and resolve the rest of the matchday ---- */
@@ -343,6 +398,12 @@
         scorers: match.events.map(ev => ({ side: ev.side, name: ev.scorer, minute: ev.minute })) };
     }
 
+    // head-to-head history + matchday round-up + finances
+    s.history.push({ season: s.season, comp: match.comp, compName: match.compName, oppName: match.opponent.name, home: match.home, hg: match.hg, ag: match.ag, pens: !!(match.tie && match.tie.pens) });
+    if (match.comp === 'league') pushRoundup(s, 'League — Matchday ' + (e.round + 1), leagueRoundup(s, e.round));
+    else pushRoundup(s, match.compName, cupRoundup(s, s.cups[match.comp], e.round));
+    applyFinances(s);
+
     applyMatchdayEffects(s, played);
     advanceDay(s);
     return s.lastResult;
@@ -359,6 +420,7 @@
 
   /* ---- skip matchdays the user isn't involved in, then return his match  */
   function prepareNextUserMatch(s) {
+    s.roundup = [];                 // collect everything simulated before the user's next game
     let guard = 0;
     while (guard++ < 2000 && !matchdayHasUserMatch(s)) autoSimMatchday(s);
     s.selection = defaultSelection(s);
@@ -367,7 +429,9 @@
   function matchdayHasUserMatch(s) {
     const e = s.calendar[s.day];
     if (!e) return false;
-    if (e.comp === 'league') return true;
+    if (e.comp === 'league') {     // the user's division may have fewer rounds than the calendar
+      return userDiv(s).fixtures.some(f => f.round === e.round && (f.home === s.userClub || f.away === s.userClub));
+    }
     const cup = s.cups[e.comp];
     if (!cup || !cup.rounds[e.round]) return false;
     return cup.rounds[e.round].ties.some(t => t.away !== -1 && t.winner == null && (t.home === s.userClub || t.away === s.userClub));
@@ -394,6 +458,8 @@
         if (cupRoundComplete(cup, e.round)) advanceCupAfterRound(s, cup, e.round);
       }
     }
+    if (e.comp === 'league') pushRoundup(s, 'League — Matchday ' + (e.round + 1), leagueRoundup(s, e.round));
+    else if (s.cups[e.comp] && s.cups[e.comp].rounds[e.round]) pushRoundup(s, s.cups[e.comp].name + ' — ' + s.cups[e.comp].rounds[e.round].name, cupRoundup(s, s.cups[e.comp], e.round));
     applyMatchdayEffects(s, played);
     advanceDay(s);
   }
@@ -475,31 +541,37 @@
     if (winners.length === 1) { cup.winner = winners[0]; }
     else buildCupRound(cup, winners, Data.makeRng((s.seed ^ (s.season * 61) ^ hashId(cup.id) ^ (r * 7919)) >>> 0));
   }
+  // European qualification = ENGLISH (pyramid) clubs only; foreign clubs are added in startSeasonCups
   function seedEuroQual(s) {
-    const ranked = s.clubs.map((c, i) => ({ i: i, ov: clubOverall(c) })).sort((a, b) => b.ov - a.ov).map(x => x.i);
-    return { champions: ranked.slice(0, 16), uefa: ranked.slice(16, 48) };
+    const ranked = s.clubs.map((c, i) => ({ i: i, ov: clubOverall(c) })).filter(x => s.clubs[x.i].division >= 0).sort((a, b) => b.ov - a.ov).map(x => x.i);
+    return { champions: ranked.slice(0, 8), uefa: ranked.slice(8, 24) };
   }
   function computeEuroQual(s, snaps) {
     const idxByName = {}; s.clubs.forEach((c, i) => { idxByName[c.name] = i; });
     const ids = d => snaps[d].map(r => idxByName[r.name]);
     const prem = ids(0), d1 = ids(1), d2 = ids(2);
     return {
-      champions: prem.slice(0, 8).concat(d1.slice(0, 4)).concat(d2.slice(0, 4)),
-      uefa: prem.slice(8, 20).concat(d1.slice(4, 16)).concat(d2.slice(4, 12))
+      champions: prem.slice(0, 4).concat(d1.slice(0, 2)).concat(d2.slice(0, 2)),   // 8 English
+      uefa: prem.slice(4, 12).concat(d1.slice(2, 8)).concat(d2.slice(2, 4))          // 16 English
     };
   }
   function startSeasonCups(s) {
     const rng = Data.makeRng((s.seed ^ (s.season * 2246822519)) >>> 0);
     s.cups = {};
-    const all = s.clubs.map((_, i) => i);
+    const pyramid = s.clubs.map((_, i) => i).filter(i => s.clubs[i].division >= 0);
+    const foreign = s.clubs.map((_, i) => i).filter(i => s.clubs[i].foreign)
+      .sort((a, b) => clubOverall(s.clubs[b]) - clubOverall(s.clubs[a]));
     CUP_DEFS.forEach(def => {
-      const parts = def.type === 'all' ? all.slice() : def.type === 'euroC' ? (s.euroQual.champions || []).slice() : (s.euroQual.uefa || []).slice();
+      let parts;
+      if (def.type === 'all') parts = pyramid.slice();                                   // FA / League Cup: all 86
+      else if (def.type === 'euroC') parts = (s.euroQual.champions || []).concat(foreign.slice(0, 24));  // 8 + 24 = 32
+      else parts = (s.euroQual.uefa || []).concat(foreign.slice(24, 40));                // 16 + 16 = 32
       if (parts.length >= 2) s.cups[def.id] = initCup(def, parts, rng);
     });
     s.calendar = buildCalendar(s);
   }
   function buildCalendar(s) {
-    const entries = [], L = totalRounds();
+    const entries = [], L = totalRounds(s);
     for (let r = 0; r < L; r++) entries.push({ key: r * 1000, comp: 'league', round: r });
     Object.keys(s.cups).forEach((id, ci) => {
       const T = s.cups[id].totalRounds;
@@ -620,6 +692,7 @@
     if (club.players.length <= 12) return { ok: false, msg: 'You must keep at least 12 players.' };
     const p = club.players[i], fee = Math.round(p.value * 0.95);
     club.players.splice(i, 1); club.balance += fee;
+    s.exPlayers.push(exRecord(s, p, 'Sold for £' + fee.toLocaleString()));
     p.club = '(free agent)'; p.transferListed = false; s.transferPool.push(p);
     s.notices.push('Sold ' + fullName(p) + ' for £' + fee.toLocaleString() + '.');
     return { ok: true, player: p, fee: fee };
@@ -654,6 +727,76 @@
       s.transferPool.push(p);
     }
     s.transferPool.forEach(p => { if (rng() < 0.4) p.value = Math.round(p.value * (0.9 + rng() * 0.25)); });
+  }
+
+  /* ---- finances: loans, interest and forced sales ---------------------- */
+  function loanCap(s) { return 1500000 + (s.divisions.length - 1 - s.userDivision) * 1500000; }
+  function takeLoan(s, amount) {
+    amount = Math.max(0, Math.round(amount || 0));
+    if (amount <= 0) return { ok: false, msg: 'Enter an amount to borrow.' };
+    if ((s.debt || 0) + amount > loanCap(s)) return { ok: false, msg: 'Your loan limit is £' + loanCap(s).toLocaleString() + '.' };
+    s.debt = (s.debt || 0) + amount; user(s).balance += amount;
+    return { ok: true, msg: 'Borrowed £' + amount.toLocaleString() + '. Debt is now £' + s.debt.toLocaleString() + '.' };
+  }
+  function repayLoan(s, amount) {
+    amount = Math.max(0, Math.min(Math.round(amount || 0), s.debt || 0, user(s).balance));
+    if (amount <= 0) return { ok: false, msg: 'Nothing to repay, or not enough cash.' };
+    s.debt -= amount; user(s).balance -= amount;
+    return { ok: true, msg: 'Repaid £' + amount.toLocaleString() + '. Debt is now £' + s.debt.toLocaleString() + '.' };
+  }
+  function applyFinances(s) {
+    if (s.debt > 0) user(s).balance -= Math.round(s.debt * 0.01);     // ~1% interest per week
+    if (user(s).balance < 0) {
+      if (s.debtSince < 0) s.debtSince = s.day;
+      if ((s.day - s.debtSince) >= 6 || user(s).balance < -250000) forcedSale(s);
+    } else s.debtSince = -1;
+  }
+  function forcedSale(s) {
+    const club = user(s);
+    if (club.players.length <= 12) return;
+    const p = club.players.slice().sort((a, b) => b.value - a.value)[0];
+    const fee = Math.round(p.value * 0.9);
+    club.players.splice(club.players.indexOf(p), 1); club.balance += fee;
+    const repay = Math.min(s.debt || 0, fee); s.debt -= repay; club.balance -= repay;
+    p.club = '(free agent)'; p.transferListed = false; s.transferPool.push(p);
+    s.exPlayers.push(exRecord(s, p, 'Sold to cover debts'));
+    s.notices.push('DEBT: forced to sell ' + fullName(p) + ' for £' + fee.toLocaleString() + ' to service the overdraft.');
+    s.debtSince = user(s).balance < 0 ? s.day : -1;
+  }
+  function exRecord(s, p, reason) {
+    return { forename: p.forename, surname: p.surname, pos: p.pos, skill: p.skill, age: p.age, appsTotal: p.appsTotal, goalsTotal: p.goalsTotal, reason: reason, season: s.season };
+  }
+
+  /* ---- head-to-head history ------------------------------------------- */
+  function historyVs(s, oppName) { return (s.history || []).filter(h => h.oppName === oppName); }
+
+  /* ---- post-matchday round-up (results of everything simulated) -------- */
+  function pushRoundup(s, title, groups) { (s.roundup = s.roundup || []).push({ title: title, groups: groups }); }
+  function leagueRoundup(s, round) {
+    const out = [];
+    s.divisions.forEach(dv => {
+      const games = dv.results.filter(r => r.round === round).map(r => ({ home: s.clubs[r.home].name, away: s.clubs[r.away].name, hg: r.hg, ag: r.ag }));
+      if (games.length) out.push({ group: dv.name, games: games });
+    });
+    return out;
+  }
+  function cupRoundup(s, cup, r) {
+    const rd = cup.rounds[r]; if (!rd) return [];
+    return [{ group: cup.name + ' — ' + rd.name, games: rd.ties.filter(t => t.away !== -1).map(t => ({
+      home: s.clubs[t.home].name, away: s.clubs[t.away].name, hg: t.hg, ag: t.ag,
+      winner: t.winner != null ? s.clubs[t.winner].name : null, pens: !!t.pens })) }];
+  }
+
+  /* ---- cup bracket (for the UI) --------------------------------------- */
+  function cupIds(s) { return Object.keys(s.cups); }
+  function cupBracket(s, id) {
+    const cup = s.cups[id]; if (!cup) return null;
+    return {
+      id: id, name: cup.name, winner: cup.winner != null ? s.clubs[cup.winner].name : null,
+      rounds: cup.rounds.map(rd => ({ name: rd.name, ties: rd.ties.map(t => ({
+        home: s.clubs[t.home].name, away: t.away === -1 ? '(bye)' : s.clubs[t.away].name,
+        hg: t.hg, ag: t.ag, winner: t.winner != null ? s.clubs[t.winner].name : null, pens: !!t.pens })) }))
+    };
   }
 
   /* ---- season rollover: honours, qualification, promotion & relegation -- */
@@ -692,20 +835,30 @@
     // reset for the new season
     s.season++; s.day = 0; s.trainedRound = -1;
     s.divisions.forEach(dv => { dv.table = blankTable(dv.members, s.clubs); dv.results = []; dv.fixtures = makeFixtures(dv.members, rng); });
-    // a year passes: players age and their skill drifts up or down (often barely)
-    s.clubs.forEach(c => c.players.forEach(p => {
-      p.appsSeason = 0; p.goalsSeason = 0;
-      p.age = (p.age || 24) + 1;
-      let drift;
-      if (p.age <= 23) drift = Data.ri(rng, -1, 4);
-      else if (p.age <= 29) drift = Data.ri(rng, -2, 3);
-      else if (p.age <= 32) drift = Data.ri(rng, -4, 1);
-      else drift = Data.ri(rng, -6, 0);
-      p.skill = clamp((p.skill || 40) + drift, 20, 99);
-      Data.recomputeValue(p, rng);
-      p.fit = clamp(85 + Data.ri(rng, 0, 15), 10, 100);
-      p.injuredFor = rng() < 0.04 ? Data.ri(rng, 1, 4) : 0; p.injured = p.injuredFor > 0;
-    }));
+    // a year passes: age everyone, retire the veterans, drift skills (very aleatory), regrow squads
+    s.clubs.forEach(c => {
+      const retained = [];
+      c.players.forEach(p => {
+        p.age = (p.age || 24) + 1;
+        if (p.age >= (p.retireAge || 38)) {                       // retirement (35-40, per player)
+          if (c.isUser) s.exPlayers.push(exRecord(s, p, 'Retired aged ' + p.age));
+          return;
+        }
+        p.appsSeason = 0; p.goalsSeason = 0;
+        // age bias plus a big random swing — form can rise or fall sharply year to year
+        const bias = p.age <= 22 ? 2 : p.age <= 29 ? 0 : p.age <= 32 ? -2 : -4;
+        p.skill = clamp((p.skill || 40) + bias + Data.ri(rng, -7, 7), 20, 99);
+        Data.recomputeValue(p, rng);
+        p.fit = clamp(85 + Data.ri(rng, 0, 15), 10, 100);
+        p.injuredFor = rng() < 0.04 ? Data.ri(rng, 1, 4) : 0; p.injured = p.injuredFor > 0;
+        retained.push(p);
+      });
+      c.players = retained;
+      while (c.players.length < 18) {                              // promote youth to refill the squad
+        const np = Data.generatePlayer(rng, { tier: c.tier || 3, age: Data.ri(rng, 17, 21) });
+        np.club = c.name; c.players.push(np);
+      }
+    });
     refreshMarket(s);
     startSeasonCups(s);          // fresh cups + calendar for the new season
     s.selection = defaultSelection(s);
@@ -721,12 +874,13 @@
 
   return {
     newGame, setUserClub, clubOverall, difficultyLabel,
-    user, userDiv, totalRounds, numDivisions, divisionName, nextOpponent, defaultSelection, bestXI,
+    user, userDiv, totalRounds, userLeagueRounds, divisionRounds, numDivisions, divisionName, nextOpponent, defaultSelection, bestXI,
     availablePlayers, playersByIds, fullName,
     userRatings, clubRatings, ratingsFor, moraleOf,
     simulateMatch, playUserMatch, commitUserResult, prepareNextUserMatch,
-    standings, leaguePosition, topScorers, lastRoundResults, cupsSummary, honours,
+    standings, leaguePosition, topScorers, lastRoundResults, cupsSummary, honours, cupIds, cupBracket, historyVs,
     marketList, bid, signUnlisted, setTransferListed, sellPlayer, train, refreshMarket,
+    takeLoan, repayLoan, loanCap,
     serialize, deserialize, ordinal
   };
 });
