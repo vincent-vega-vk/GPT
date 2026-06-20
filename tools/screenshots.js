@@ -93,8 +93,44 @@ async function shoot(page, sel, name) {
   await page.waitForSelector('#rs-grid tbody tr');
   await sleep(150);
   await shoot(page, '#screen-results', '9-classified-results.png');
+  await page.click('#rs-close');
+
+  /* ---- roll of honour (finish a season first) ---- */
+  await page.evaluate(() => window.SIMSOC_TEST.advance(70));   // play out the rest of the season
+  await page.waitForSelector('#screen-squad:not(.hidden)');
+  await page.click('#btn-honours');
+  await page.waitForSelector('#hon-grid tbody tr');
+  await sleep(150);
+  await shoot(page, '#screen-honours', '10-roll-of-honour.png');
+
+  /* ---- a cup tie in the team selector ---- */
+  await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#choose-grid tbody tr');
+  await page.click('#choose-confirm');
+  await page.waitForSelector('#squad-grid tbody tr');
+  let gotCup = false;
+  for (let i = 0; i < 14 && !gotCup; i++) {
+    await page.click('#btn-play');
+    await page.waitForSelector('#screen-team:not(.hidden)');
+    const comp = await page.$eval('#league-name', el => el.textContent);
+    if (/Cup/.test(comp)) {
+      await sleep(150);
+      await shoot(page, '#screen-team', '11-cup-tie.png');
+      gotCup = true;
+      break;
+    }
+    await page.click('#btn-action');
+    await page.waitForSelector('#screen-match:not(.hidden)');
+    await page.$eval('#m-speed', el => { el.value = '10'; el.dispatchEvent(new Event('input')); });
+    await page.click('#m-skip');
+    await page.waitForSelector('#m-continue:not(.hidden)');
+    await page.click('#m-continue');
+    await page.waitForSelector('#screen-squad:not(.hidden)');
+  }
 
   /* ---- a full-window desktop shot ---- */
+  await page.goto(BASE + '/?fresh=1&club=66&seed=' + seed, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#squad-grid tbody tr');
   await page.evaluate(() => window.SIMSOC_TEST.show('screen-squad'));
   await page.waitForSelector('#screen-squad:not(.hidden)');
   await sleep(100);

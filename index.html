@@ -80,6 +80,7 @@
             <button id="btn-league" class="spacer">Tables</button>
             <button id="btn-results" class="spacer">Results</button>
           </div>
+          <button id="btn-honours">Roll of Honour</button>
         </div>
       </div>
     </div>
@@ -294,6 +295,42 @@
         <div class="small" id="rs-info"></div>
         <div class="spacer"></div>
         <button id="rs-close" style="font-weight:bold">OK</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= ROLL OF HONOUR ===================== -->
+<section id="screen-honours" class="win hidden" style="width:660px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Roll of Honour</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1">
+          <div class="bold small">League honours &mdash; champions · runners-up · third</div>
+          <div class="grid-wrap" style="height:340px">
+            <table class="grid" id="hon-grid">
+              <thead><tr><th>Sn</th><th>Division</th><th>Champions</th><th>Runners-up</th><th>Third</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="width:236px">
+          <div class="bold small">Cup winners</div>
+          <div class="grid-wrap" style="height:340px">
+            <table class="grid cyan" id="honc-grid">
+              <thead><tr><th>Sn</th><th>Competition</th><th>Winner</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:6px; align-items:center">
+        <div class="small" id="hon-info"></div>
+        <div class="spacer"></div>
+        <button id="hon-close" style="font-weight:bold">OK</button>
       </div>
     </div>
   </div>

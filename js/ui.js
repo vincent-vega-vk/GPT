@@ -118,7 +118,7 @@
     $('rt-a-def').textContent = ar.defence; $('rt-a-mid').textContent = ar.midfield;
     $('rt-a-att').textContent = ar.attack; $('rt-a-mor').textContent = ar.morale;
 
-    $('league-name').textContent = S.divisions[S.userDivision].name;
+    $('league-name').textContent = opp.compName;        // division name, or e.g. "FA Cup — Last 16"
     $('opp-name').textContent = opp.club.name;
     $('btn-venue').textContent = opp.home ? 'Home' : 'Away';
     $('team-mgr').textContent = S.managerRating;
@@ -144,7 +144,7 @@
     $('m-away').textContent = match.awayName;
     $('m-hg').textContent = '0'; $('m-ag').textContent = '0';
     $('m-bar').style.width = '0%';
-    $('m-event').textContent = 'League';
+    $('m-event').textContent = match.compName || 'League';
     $('m-status').textContent = 'Kick off!';
     $('m-continue').classList.add('hidden');
     $('m-ball-home').textContent = '—'; $('m-ball-away').textContent = '—';
@@ -168,7 +168,9 @@
   }
   function finishMatch(match) {
     const res = E.commitUserResult(S, match);
-    $('m-event').textContent = 'Full time: ' + match.homeName + ' ' + res.hg + ' - ' + res.ag + ' ' + match.awayName;
+    let txt = 'Full time: ' + match.homeName + ' ' + res.hg + ' - ' + res.ag + ' ' + match.awayName;
+    if (res.winnerName) txt += (res.pens ? ' (on pens) ' : ' ') + '— ' + res.winnerName + ' go through';
+    $('m-event').textContent = txt;
     $('m-continue').classList.remove('hidden');
     flushNotices();
     save();
@@ -250,6 +252,25 @@
     $('rs-info').textContent = lr.games.length + ' matches in your division';
   }
 
+  /* ===================== HONOURS (roll of honour) =================== */
+  function renderHonours() {
+    const h = S.honours.slice().reverse();
+    const leagueRows = [];
+    h.forEach(rec => rec.divisions.forEach(d => leagueRows.push({ season: rec.season, name: d.name, first: d.first, second: d.second, third: d.third })));
+    renderGrid('hon-grid', leagueRows.map((r, i) => Object.assign({ id: i }, r)), r =>
+      '<td class="num">' + r.season + '</td><td>' + r.name + '</td>' +
+      '<td class="bold">' + (r.first || '—') + '</td><td>' + (r.second || '—') + '</td><td>' + (r.third || '—') + '</td>',
+      null, null);
+    const cupRows = [];
+    h.forEach(rec => rec.cups.forEach(c => cupRows.push({ season: rec.season, name: c.name, winner: c.winner })));
+    renderGrid('honc-grid', cupRows.map((r, i) => Object.assign({ id: i }, r)), r =>
+      '<td class="num">' + r.season + '</td><td>' + r.name + '</td><td class="bold">' + (r.winner || '—') + '</td>',
+      null, null);
+    $('hon-info').textContent = S.honours.length
+      ? S.honours.length + ' season(s) in the books'
+      : 'No seasons completed yet — the roll of honour fills up at the end of each season.';
+  }
+
   /* ===================== CHOOSE CLUB ================================= */
   function bottomMembers() { return S.divisions[S.divisions.length - 1].members; }
   function renderChoose() {
@@ -281,10 +302,11 @@
   /* ===================== EVENT WIRING ================================= */
   function wire() {
     // squad
-    $('btn-play').onclick = () => { S.selection = E.defaultSelection(S); renderTeam(); show('screen-team'); };
+    $('btn-play').onclick = () => { E.prepareNextUserMatch(S); flushNotices(); renderTeam(); show('screen-team'); save(); };
     $('btn-transfer').onclick = () => { renderTransfer(); show('screen-transfer'); };
     $('btn-league').onclick = () => { leagueDivView = S.userDivision; renderLeague(); show('screen-league'); };
     $('btn-results').onclick = () => { renderResults(); show('screen-results'); };
+    $('btn-honours').onclick = () => { renderHonours(); show('screen-honours'); };
     $('edit-forename').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.forename = e.target.value; renderSquad(); save(); } };
     $('edit-surname').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.surname = e.target.value; renderSquad(); save(); } };
     // ticking the box sells the highlighted player immediately
@@ -337,7 +359,7 @@
     $('m-skip').onclick = () => { if (anim) anim.skip(); };
     $('m-continue').onclick = () => {
       squadSelId = null; renderSquad(); show('screen-squad'); flushNotices();
-      if (S.round === 0 && S.season > 1) { renderLeague(); }
+      if (S.day === 0 && S.season > 1) { renderHonours(); show('screen-honours'); }  // a season just ended
     };
 
     // transfer market
@@ -362,6 +384,7 @@
     $('lg-next').onclick = () => { leagueDivView = Math.min(S.divisions.length - 1, leagueDivView + 1); renderLeague(); };
     $('lg-close').onclick = () => { renderSquad(); show('screen-squad'); };
     $('rs-close').onclick = () => { renderSquad(); show('screen-squad'); };
+    $('hon-close').onclick = () => { renderSquad(); show('screen-squad'); };
 
     // title-bar close buttons -> back to squad (the chooser is excluded so it
     // can't be dismissed without picking a club)
@@ -371,9 +394,10 @@
   /* ---- automation hook (used by the screenshot tool & manual testing) - */
   window.SIMSOC_TEST = {
     advance(n) {
-      for (let i = 0; i < n && E.nextOpponent(S); i++) {
+      for (let i = 0; i < n; i++) {
+        E.prepareNextUserMatch(S);
         const m = E.playUserMatch(S);
-        S.selection = E.defaultSelection(S);
+        if (!m) break;
         E.commitUserResult(S, m);
       }
       save(); squadSelId = null; renderSquad();

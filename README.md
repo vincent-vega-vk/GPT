@@ -32,6 +32,10 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 |---|---|
 | ![Conference table](shots/7-league-table.png) | ![Premier Division table](shots/8-league-premier.png) |
 
+| A cup tie | Roll of honour |
+|---|---|
+| ![FA Cup tie](shots/11-cup-tie.png) | ![Roll of honour](shots/10-roll-of-honour.png) |
+
 ## Features
 
 - **Choose your club** — at kick-off you take charge of any of the 22
@@ -65,6 +69,13 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 - **League tables for every division** — browse any tier, with **top scorers
   across all leagues**, plus a **Classified Results** screen listing a full
   round of fixtures with the scorers for every club.
+- **Cup competitions** — the **FA Cup** and **League Cup** (all 88 clubs), plus
+  the **European Cup** and **UEFA Cup** for clubs that qualify through their
+  league finish. Knockout draws are interleaved with the league on a season
+  calendar; you play your ties in the match engine (level ties settled on
+  penalties) and every other tie is simulated.
+- **Roll of honour** — a per-season archive of each division's champions,
+  runners-up and third place, plus every cup winner.
 - **A real season** — a balanced 42-game home/away fixture list, gate receipts,
   manager rating, and automatic season rollover.
 - **Autosave** to `localStorage`, so your game is there when you come back.
@@ -98,16 +109,16 @@ npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ## How it's put together
 
 ```
-index.html        all seven windows (Choose Club, Squad, Team Selector, Game,
-                  Transfer, League tables, Classified Results)
+index.html        all eight windows (Choose Club, Squad, Team Selector, Game,
+                  Transfer, League tables, Classified Results, Roll of Honour)
 css/style.css     Windows 9x styling (3D widgets, title bars, data grids)
 js/data.js        seeded RNG, name pools, division/club/squad generation    (UMD)
-js/engine.js      division pyramid, fixtures, ratings, match sim, transfers,
-                  promotion/relegation, season loop                          (UMD)
+js/engine.js      division pyramid, season calendar, cups, fixtures, ratings,
+                  match sim, transfers, promotion/relegation, honours        (UMD)
 js/match.js       canvas match animation (plays out the engine's timeline)
 js/ui.js          screen rendering, input handling, wiring
 server.js         zero-dependency static file server
-test/run.js       head-less engine self-test (51 checks)
+test/run.js       head-less engine self-test (79 checks)
 tools/screenshots.js   Puppeteer screenshot capture
 ```
 

@@ -12,6 +12,14 @@ function check(name, cond, extra) {
   if (!ok) failures++;
 }
 function section(t) { console.log('\n' + t); }
+// play one user matchday (auto-skips cup days the user isn't in); returns its result
+function step(s) {
+  E.prepareNextUserMatch(s);
+  const m = E.playUserMatch(s);
+  if (!m) return null;
+  const res = E.commitUserResult(s, m);
+  return { comp: m.comp, hg: m.hg, ag: m.ag, res: res };
+}
 
 /* ---- new game -------------------------------------------------------- */
 section('New game');
@@ -34,6 +42,9 @@ udv.members.forEach(i => udv.members.forEach(j => {
   if (udv.fixtures.filter(f => f.home === i && f.away === j).length !== 1) venueOk = false;
 }));
 check('balanced home/away schedule', venueOk);
+check('cups built (FA, League + European)', !!s.cups.fa && !!s.cups.leaguecup && Object.keys(s.cups).length >= 2, Object.keys(s.cups).join(','));
+check('season calendar interleaves cups', s.calendar.length > 42, s.calendar.length);
+check('calendar opens on a league day', s.season === 1 && s.day === 0 && s.calendar[0].comp === 'league');
 
 /* ---- ratings --------------------------------------------------------- */
 section('Team ratings');
@@ -59,22 +70,23 @@ check('sign unlisted works', su.ok, su.msg);
 
 /* ---- play a full season --------------------------------------------- */
 section('Play a full season');
-let matchesPlayed = 0, goalsSeen = 0;
-const maxRound = E.totalRounds();
-while (s.season === 1 && s.round < maxRound) {
-  const m = E.playUserMatch(s);
-  if (!m) break;
-  goalsSeen += m.hg + m.ag;
-  E.commitUserResult(s, m);
-  matchesPlayed++;
+let leagueMatches = 0, cupMatches = 0, goalsSeen = 0, guardFS = 0;
+while (s.season === 1 && guardFS++ < 250) {
+  const r = step(s);
+  if (!r) break;
+  if (r.comp === 'league') leagueMatches++; else cupMatches++;
+  goalsSeen += r.hg + r.ag;
 }
-check('played 42 league rounds', matchesPlayed === 42, matchesPlayed);
+check('user plays 42 league matches in a season', leagueMatches === 42, leagueMatches);
+check('user also contests cup ties', cupMatches >= 1, cupMatches);
 check('some goals were scored', goalsSeen > 0, goalsSeen);
+check('season rolled over to 2', s.season === 2, s.season);
 
 /* ---- table integrity ------------------------------------------------- */
 section('League table integrity');
 const s3 = E.newGame(2024);
-for (let k = 0; k < 10; k++) { E.commitUserResult(s3, E.playUserMatch(s3)); }
+let lm3 = 0, g3 = 0;
+while (lm3 < 8 && g3++ < 120) { const r = step(s3); if (r && r.comp === 'league') lm3++; }
 const tbl = E.standings(s3);
 let pointsOk = true, playedConsistent = true, totF = 0, totA = 0;
 tbl.forEach(row => {
@@ -86,6 +98,7 @@ check('points = W*3 + D for every club', pointsOk);
 check('P = W + D + L for every club', playedConsistent);
 check('goals for == goals against within a division', totF === totA, totF + ' vs ' + totA);
 check('every club played the same number of games', new Set(tbl.map(r => r.P)).size === 1, JSON.stringify(tbl.map(r => r.P)));
+check('league untouched by cup matchdays (8 played)', tbl[0].P === 8, tbl[0].P);
 
 const scorers = E.topScorers(s3, 10);
 check('top scorers list produced', scorers.length > 0, scorers.length);
@@ -116,7 +129,7 @@ section('Divisions & promotion / relegation');
 const sd = E.newGame(4242);
 check('each division has 22 clubs', sd.divisions.every(d => d.members.length === 22), JSON.stringify(sd.divisions.map(d => d.members.length)));
 check('all 88 club names unique', new Set(sd.clubs.map(c => c.name)).size === 88);
-for (let guard = 0; guard < 260 && sd.season < 3; guard++) { E.commitUserResult(sd, E.playUserMatch(sd)); }
+for (let guard = 0; guard < 4000 && sd.season < 3; guard++) { step(sd); }
 check('advanced past season 1', sd.season >= 2, sd.season);
 check('divisions still 22 each after promotion/relegation', sd.divisions.every(d => d.members.length === 22), JSON.stringify(sd.divisions.map(d => d.members.length)));
 check('total clubs conserved', sd.clubs.length === 88);
@@ -166,23 +179,35 @@ check('training raised fitness', E.user(pm).players.every(p => p.fit > 40));
 check('training blocked twice in same week', !E.train(pm).ok);
 
 const inj = E.newGame(31337);
-for (let k = 0; k < 20; k++) E.commitUserResult(inj, E.playUserMatch(inj));
+for (let k = 0; k < 20; k++) step(inj);
 check('injuries occur during the season', inj.clubs.some(c => c.players.some(p => p.injuredFor > 0)));
 
 const dr = E.newGame(424242);
 const skillsBefore = E.user(dr).players.map(p => ({ id: p.id, skill: p.skill }));
-while (dr.season === 1) E.commitUserResult(dr, E.playUserMatch(dr));
+let gd = 0; while (dr.season === 1 && gd++ < 250) step(dr);
 const changed = skillsBefore.some(b => { const a = E.user(dr).players.find(p => p.id === b.id); return a && a.skill !== b.skill; });
 check('player skills drift across a season', changed);
+
+/* ---- cups & honours -------------------------------------------------- */
+section('Cups & honours');
+const cg = E.newGame(5150);
+let s0 = cg.season, gc = 0, sawCup = false;
+while (cg.season === s0 && gc++ < 250) { const r = step(cg); if (r && r.comp !== 'league') sawCup = true; }
+check('user contested a cup tie', sawCup);
+check('honours recorded after a season', cg.honours.length >= 1, cg.honours.length);
+check('honours list league 1st/2nd/3rd', cg.honours[0].divisions.every(d => d.first && d.second && d.third));
+check('every cup produced a winner', cg.honours[0].cups.length >= 2 && cg.honours[0].cups.every(c => c.winner && c.winner !== '—'), JSON.stringify(cg.honours[0].cups));
+check('cups rebuilt for the new season', E.cupsSummary(cg).length >= 2 && E.cupsSummary(cg).every(c => c.winner == null));
 
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');
 const snap = E.serialize(s3);
 const loaded = E.deserialize(snap);
 check('round trip preserves season', loaded.season === s3.season);
-check('round trip preserves round', loaded.round === s3.round);
+check('round trip preserves calendar day', loaded.day === s3.day);
 check('round trip preserves user balance', loaded.clubs[loaded.userClub].balance === E.user(s3).balance);
 check('round trip preserves divisions', loaded.divisions.length === s3.divisions.length);
+check('round trip preserves cups', Object.keys(loaded.cups).length === Object.keys(s3.cups).length);
 
 /* ---- summary --------------------------------------------------------- */
 section(failures === 0 ? 'ALL CHECKS PASSED' : (failures + ' CHECK(S) FAILED'));
