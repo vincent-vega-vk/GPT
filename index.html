@@ -52,7 +52,7 @@
           <div class="grid-wrap" style="height:360px">
             <table class="grid" id="squad-grid">
               <thead><tr>
-                <th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th>
+                <th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Age</th>
                 <th class="num">Apps</th><th class="num">Goals</th>
                 <th class="num">Apps</th><th class="num">Goals</th>
               </tr></thead>
@@ -61,13 +61,11 @@
           </div>
         </div>
         <div class="right-panel col">
-          <div class="small">Edit the names below if desired.</div>
-          <div class="small bold">Forename</div>
-          <input class="field" id="edit-forename" type="text">
-          <div class="small bold" style="color:#00c">Surname</div>
-          <input class="field" id="edit-surname" type="text">
+          <div class="small bold">Selected player</div>
+          <input class="field" id="edit-forename" type="text" readonly>
+          <input class="field" id="edit-surname" type="text" readonly style="color:#00c">
+          <div class="small" id="sel-info">&nbsp;</div>
           <button id="btn-analysis">Player Analysis</button>
-          <button id="btn-train">Training (boost fitness)</button>
           <label class="chk small" style="margin-top:6px"><input type="checkbox" id="chk-list"> Transfer Listed</label>
           <div class="small bold" style="font-style:italic">Check here to sell the highlighted player</div>
           <div style="margin-top:4px"><span class="rating-pill" id="mgr-rating">50</span> Manager Rating %</div>
@@ -226,7 +224,7 @@
           </div>
           <div class="grid-wrap" style="height:300px">
             <table class="grid" id="tm-grid">
-              <thead><tr><th>Name</th><th class="num">Skill</th><th>Posn</th><th class="num">Price</th><th>Team</th></tr></thead>
+              <thead><tr><th>Name</th><th class="num">Skill</th><th>Posn</th><th class="num">Age</th><th class="num">Price</th><th>Team</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>

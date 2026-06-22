@@ -57,7 +57,7 @@
     let carrier = null;
 
     // state
-    let minute = 0, hg = 0, ag = 0, fired = 0, speed = 5, running = true, finished = false;
+    let minute = 0, hg = 0, ag = 0, fired = 0, speed = 5, running = true, finished = false, celebrate = false;
     let flash = null;            // { text, t }
     let raf = 0, last = 0;
     const events = match.events.slice().sort((a, b) => a.minute - b.minute);
@@ -139,8 +139,15 @@
         const d = (p.x - ball.x) ** 2 + (p.y - ball.y) ** 2;
         if (d < best) { best = d; carrier = p; }
       });
-      // ball drifts toward its target; retarget toward attacked goal now and then
-      if (Math.random() < 0.012 * speed || Math.abs(ball.x - ball.tx) + Math.abs(ball.y - ball.ty) < 6) {
+      // when a goal is about to happen the scoring side drives at the right end (FM-style build-up)
+      const nextEv = events[fired];
+      const imminent = nextEv && nextEv.minute - minute < 1.5 && nextEv.minute - minute >= 0;
+      if (imminent) {
+        possession = nextEv.side;
+        const dir = nextEv.side === 'home' ? 1 : -1;
+        ball.tx = dir > 0 ? F.x1 - 10 : F.x0 + 10;
+        ball.ty = midY + (Math.random() - 0.5) * 30;
+      } else if (!celebrate && (Math.random() < 0.012 * speed || Math.abs(ball.x - ball.tx) + Math.abs(ball.y - ball.ty) < 6)) {
         const dir = possession === 'home' ? 1 : -1;
         const toGoal = Math.random() < 0.45;
         ball.tx = toGoal ? (dir > 0 ? F.x1 - 14 : F.x0 + 14) : rand(F.x0 + 20, F.x1 - 20);
@@ -166,9 +173,12 @@
 
     function triggerGoal(ev) {
       if (ev.side === 'home') hg++; else ag++;
-      possession = ev.side === 'home' ? 'away' : 'home';   // kickoff to conceding team
-      ball.x = (F.x0 + F.x1) / 2; ball.y = midY; ball.tx = ball.x; ball.ty = midY;
-      flash = { text: 'GOAL!', t: 1 };
+      const dir = ev.side === 'home' ? 1 : -1;             // the goal that was attacked
+      ball.x = dir > 0 ? F.x1 + 1 : F.x0 - 1;              // the ball nestles in the net
+      ball.y = midY + (Math.random() - 0.5) * 18;
+      ball.tx = ball.x; ball.ty = ball.y;
+      celebrate = true;                                    // hold on the goal, then kick off
+      flash = { text: 'GOAL!', t: 1.5, side: ev.side };
       cb.onScore && cb.onScore(ev.side, ev.scorer, ev.minute, hg, ag);
     }
 
@@ -219,7 +229,16 @@
       }
       if (!finished) {                            // freeze the players once the whistle goes
         step(dt);
-        if (flash) { flash.t -= dt * 1.1; if (flash.t <= 0) flash = null; }
+        if (flash) {
+          flash.t -= dt * 1.1;
+          if (flash.t <= 0) {
+            if (celebrate) {                                   // restart from the centre, conceding side kicks off
+              possession = flash.side === 'home' ? 'away' : 'home';
+              ball.x = (F.x0 + F.x1) / 2; ball.y = midY; ball.tx = ball.x; ball.ty = midY; celebrate = false;
+            }
+            flash = null;
+          }
+        }
         draw();
         raf = requestAnimationFrame(frame);
       } else {

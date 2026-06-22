@@ -26,25 +26,40 @@
   const ri = (rng, lo, hi) => lo + Math.floor(rng() * (hi - lo + 1)); // inclusive
   const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
 
-  /* ---- name pools ------------------------------------------------------ */
+  /* ---- name pools (international, for that epic 90s feel) -------------- */
   const FORENAMES = [
-    'Tony', 'Ian', 'Matthew', 'Kevin', 'Christopher', 'Barrie', 'Stuart', 'Mike',
-    'Mark', 'Darren', 'Stacy', 'Rob', 'Norman', 'Eddie', 'Dave', 'Andrew',
-    'Michael', 'Stewart', 'Steve', 'Clive', 'Lee', 'Greg', 'Tony', 'Brian',
-    'Chris', 'John', 'Jason', 'Paul', 'Gary', 'Neil', 'Scott', 'Wayne',
-    'Lee', 'Carl', 'Dean', 'Craig', 'Glen', 'Ryan', 'Adam', 'Danny',
-    'Sean', 'Nicky', 'Terry', 'Barry', 'Alan', 'Keith', 'Trevor', 'Russell',
-    'Marcus', 'Leon', 'Dale', 'Shaun', 'Jamie', 'Ashley', 'Damien', 'Frank'
+    // British / Irish
+    'Tony', 'Ian', 'Matthew', 'Kevin', 'Stuart', 'Mark', 'Darren', 'Rob', 'Eddie', 'Dave',
+    'Andrew', 'Michael', 'Steve', 'Lee', 'Chris', 'John', 'Jason', 'Paul', 'Gary', 'Neil',
+    'Scott', 'Wayne', 'Carl', 'Dean', 'Craig', 'Ryan', 'Danny', 'Sean', 'Alan', 'Keith',
+    // Italian
+    'Paolo', 'Marco', 'Alessandro', 'Roberto', 'Gianluca', 'Francesco', 'Fabio', 'Christian', 'Filippo', 'Andrea',
+    // Spanish / Portuguese
+    'Carlos', 'Raul', 'Fernando', 'Jose', 'Pedro', 'Sergio', 'Luis', 'Rui', 'Joao', 'Nuno',
+    // French
+    'Thierry', 'Zinedine', 'Didier', 'Laurent', 'Patrick', 'Christophe', 'Sylvain', 'Emmanuel', 'Youri', 'Robert',
+    // German / Dutch / Nordic
+    'Lothar', 'Jurgen', 'Oliver', 'Stefan', 'Dennis', 'Marc', 'Edwin', 'Patrick', 'Henrik', 'Brian',
+    // South American / African / Eastern Europe
+    'Gabriel', 'Rivaldo', 'Romario', 'Diego', 'Juan', 'Hidetoshi', 'Nwankwo', 'Jay-Jay', 'Hristo', 'Pavel',
+    'Andriy', 'Davor', 'Georgi', 'Krassimir', 'Igor', 'Dragan', 'Emre', 'Hakan', 'Abedi', 'Tony'
   ];
   const SURNAMES = [
-    'Elliott', 'Evans', 'Carbon', 'Dix', 'Fuller', 'Hart', 'Rae', 'Whitlow',
-    'Bonner', 'Butcher', 'Coldicott', 'Cross', 'Graves', 'Youds', 'Comer', 'Martin',
-    'Taylor', 'Ball', 'Buckley', 'Howarth', 'Lee', 'Thorpe', 'Rigg', 'Preston',
-    'Pragnell', 'Foster', 'Lightfoot', 'Stockwell', 'Denilson', 'Peacock', 'Gittens',
-    'Sinclair', 'Askey', 'Wright', 'Christie', 'Richards', 'Fettis', 'Johnson',
-    'Pearce', 'Hughes', 'Barnes', 'Walsh', 'Lowe', 'Newton', 'Brooker', 'Reid',
-    'Holmes', 'Dyer', 'Connor', 'Brennan', 'Salmon', 'Carter', 'Webb', 'Mortimer',
-    'Bircham', 'Charles', 'Okafor', 'Mendez', 'Larsson', 'Bergkamp', 'Vialli'
+    // British / Irish
+    'Elliott', 'Evans', 'Fuller', 'Hart', 'Cross', 'Graves', 'Taylor', 'Ball', 'Lee', 'Foster',
+    'Wright', 'Johnson', 'Pearce', 'Hughes', 'Barnes', 'Reid', 'Carter', 'Webb', 'Sinclair', 'Sheringham',
+    // Italian
+    'Maldini', 'Baggio', 'Zola', 'Vialli', 'Costacurta', 'Albertini', 'Di Matteo', 'Ravanelli', 'Inzaghi', 'Cannavaro',
+    // Spanish / Portuguese
+    'Hierro', 'Guardiola', 'Raul', 'Morientes', 'Figo', 'Rui Costa', 'Couto', 'Sousa', 'Amancio', 'Sergi',
+    // French
+    'Zidane', 'Henry', 'Deschamps', 'Blanc', 'Vieira', 'Petit', 'Djorkaeff', 'Karembeu', 'Dugarry', 'Lizarazu',
+    // German / Dutch / Nordic
+    'Matthaus', 'Klinsmann', 'Kahn', 'Sammer', 'Bergkamp', 'Kluivert', 'Davids', 'Seedorf', 'Larsson', 'Laudrup',
+    // South American / African / Eastern Europe / Asia
+    'Ronaldo', 'Rivaldo', 'Romario', 'Batistuta', 'Veron', 'Nakata', 'Kanu', 'Okocha', 'Stoichkov', 'Nedved',
+    'Shevchenko', 'Suker', 'Hagi', 'Mihajlovic', 'Boban', 'Prosinecki', 'Hakan', 'Pele', 'Weah', 'Yekini',
+    'Mendez', 'Okafor', 'Lightfoot', 'Bircham', 'Charles', 'Denilson', 'Peacock', 'Brooker', 'Mortimer', 'Pragnell'
   ];
 
   /* ---- the Conference (your league) ------------------------------------

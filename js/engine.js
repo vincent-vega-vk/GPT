@@ -164,8 +164,12 @@
     if (!cup || !cup.rounds[e.round]) return null;
     const tie = cup.rounds[e.round].ties.find(t => t.away !== -1 && t.winner == null && (t.home === s.userClub || t.away === s.userClub));
     if (!tie) return null;
-    const home = tie.home === s.userClub;
-    return { comp: e.comp, compName: cup.name + ' — ' + cup.rounds[e.round].name, club: s.clubs[home ? tie.away : tie.home], home, tie, cup };
+    const leg = e.leg || 0;
+    const host = (!isSingleLeg(cup, e.round) && leg === 1) ? tie.away : tie.home;   // 2nd leg flips the venue
+    const home = host === s.userClub;
+    const oppIdx = tie.home === s.userClub ? tie.away : tie.home;
+    const legLabel = (cup.twoLeg && !isSingleLeg(cup, e.round)) ? (leg === 1 ? ' (2nd leg)' : ' (1st leg)') : '';
+    return { comp: e.comp, compName: cup.name + ' — ' + cup.rounds[e.round].name + legLabel, club: s.clubs[oppIdx], home, tie, cup, leg };
   }
 
   /* ---- club overall strength + difficulty hint (for the chooser) ------- */
@@ -293,7 +297,7 @@
     });
     return {
       comp: opp.comp, compName: opp.compName, isCup: opp.comp !== 'league',
-      fixture: opp.fixture, tie: opp.tie, cupId: opp.comp,
+      fixture: opp.fixture, tie: opp.tie, cupId: opp.comp, leg: opp.leg || 0,
       home, opponent: opp.club, userSide: home ? 'home' : 'away',
       homeName: home ? uClub.name : opp.club.name,
       awayName: home ? opp.club.name : uClub.name,
@@ -371,30 +375,26 @@
       s.lastResult = { comp: match.compName, homeName: match.homeName, awayName: match.awayName, hg: match.hg, ag: match.ag,
         scorers: match.events.map(ev => ({ side: ev.side, name: ev.scorer, minute: ev.minute })) };
     } else {
-      const cup = s.cups[match.comp], tie = match.tie;
-      tie.hg = match.hg; tie.ag = match.ag;
-      decideTie(s, tie, match.hg, match.ag);
+      const cup = s.cups[match.comp], tie = match.tie, leg = match.leg || 0;
       creditApps(user(s), s.selection.xi);
-      markPlayed(tie.home, bestXI(s.clubs[tie.home]).xi); markPlayed(tie.away, bestXI(s.clubs[tie.away]).xi);
+      const cupPlayed = playCupMatchday(s, match.comp, e.round, leg, { tie: tie, hg: match.hg, ag: match.ag });
+      Object.keys(cupPlayed).forEach(ci => { played[ci] = cupPlayed[ci]; });
       markPlayed(s.userClub, s.selection.xi);
-      cup.rounds[e.round].ties.forEach(t => {
-        if (t === tie || t.winner != null) return;
-        const rng = Data.makeRng((s.seed ^ (s.season * 5417) ^ hashId(match.comp) ^ (e.round * 999331) ^ (t.home * 131 + (t.away + 2) * 977)) >>> 0);
-        simulateCupTie(s, t, rng);
-        if (t.away !== -1) { markPlayed(t.home, bestXI(s.clubs[t.home]).xi); markPlayed(t.away, bestXI(s.clubs[t.away]).xi); }
-      });
-      if (cupRoundComplete(cup, e.round)) advanceCupAfterRound(s, cup, e.round);
-      if (match.home && tie.home === s.userClub || !match.home && tie.away === s.userClub) { /* keep */ }
-      if (tie.winner === s.userClub) {
-        s.managerRating = Math.round(clamp(s.managerRating + 2, 1, 99));
-        if (cup.winner === s.userClub) s.notices.push('Congratulations — you have won the ' + cup.name + '!');
-      } else {
-        s.notices.push('Knocked out of the ' + cup.name + ' by ' + s.clubs[match.opponent ? (tie.home === s.userClub ? tie.away : tie.home) : tie.winner].name + '.');
+      const decided = tie.winner != null;
+      if (decided) {
+        if (tie.winner === s.userClub) {
+          s.managerRating = Math.round(clamp(s.managerRating + 2, 1, 99));
+          if (cup.winner === s.userClub) s.notices.push('Congratulations — you have won the ' + cup.name + '!');
+        } else {
+          const byIdx = tie.home === s.userClub ? tie.away : tie.home;
+          s.notices.push('Knocked out of the ' + cup.name + ' by ' + s.clubs[byIdx].name + '.');
+        }
       }
       const gate = Math.round(Data.ri(Data.makeRng((s.seed ^ s.day ^ 99) >>> 0), 9000, 26000));
       if (match.home) user(s).balance += gate;
+      const agg = (decided && !isSingleLeg(cup, e.round)) ? (tie.aggH + '-' + tie.aggA) : null;
       s.lastResult = { comp: match.compName, homeName: match.homeName, awayName: match.awayName, hg: match.hg, ag: match.ag,
-        winnerName: s.clubs[tie.winner].name, pens: !!tie.pens,
+        winnerName: decided ? s.clubs[tie.winner].name : null, pens: !!tie.pens, agg: agg,
         scorers: match.events.map(ev => ({ side: ev.side, name: ev.scorer, minute: ev.minute })) };
     }
 
@@ -447,16 +447,8 @@
         played[f.home] = hx; played[f.away] = ax;
       }));
     } else {
-      const cup = s.cups[e.comp];
-      if (cup && cup.rounds[e.round]) {
-        cup.rounds[e.round].ties.forEach(t => {
-          if (t.winner != null) return;
-          const rng = Data.makeRng((s.seed ^ (s.season * 5417) ^ hashId(e.comp) ^ (e.round * 999331) ^ (t.home * 131 + (t.away + 2) * 977)) >>> 0);
-          simulateCupTie(s, t, rng);
-          if (t.away !== -1) { played[t.home] = bestXI(s.clubs[t.home]).xi; played[t.away] = bestXI(s.clubs[t.away]).xi; }
-        });
-        if (cupRoundComplete(cup, e.round)) advanceCupAfterRound(s, cup, e.round);
-      }
+      const cp = playCupMatchday(s, e.comp, e.round, e.leg || 0, null);
+      Object.keys(cp).forEach(ci => { played[ci] = cp[ci]; });
     }
     if (e.comp === 'league') pushRoundup(s, 'League — Matchday ' + (e.round + 1), leagueRoundup(s, e.round));
     else if (s.cups[e.comp] && s.cups[e.comp].rounds[e.round]) pushRoundup(s, s.cups[e.comp].name + ' — ' + s.cups[e.comp].rounds[e.round].name, cupRoundup(s, s.cups[e.comp], e.round));
@@ -487,12 +479,12 @@
     });
   }
 
-  /* ---- cups: knockout competitions ------------------------------------- */
+  /* ---- cups: knockout competitions (European ones are two-legged) ------ */
   const CUP_DEFS = [
     { id: 'fa', name: 'FA Cup', type: 'all' },
     { id: 'leaguecup', name: 'League Cup', type: 'all' },
-    { id: 'champions', name: 'European Cup', type: 'euroC' },
-    { id: 'uefa', name: 'UEFA Cup', type: 'euroU' }
+    { id: 'champions', name: 'Champions League', type: 'euroC', twoLeg: true },
+    { id: 'uefa', name: 'UEFA Cup', type: 'euroU', twoLeg: true }
   ];
   function hashId(str) { let h = 0; for (let i = 0; i < str.length; i++) h = (h * 131 + str.charCodeAt(i)) | 0; return h >>> 0; }
   function shuffle(arr, rng) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; }
@@ -507,32 +499,83 @@
   function buildCupRound(cup, clubIdxs, rng) {
     const list = shuffle(clubIdxs.slice(), rng), ties = [];
     for (let i = 0; i < list.length; i += 2) {
-      if (i + 1 < list.length) ties.push({ home: list[i], away: list[i + 1], hg: null, ag: null, winner: null });
-      else ties.push({ home: list[i], away: -1, hg: null, ag: null, winner: list[i] }); // bye
+      if (i + 1 < list.length) ties.push({ home: list[i], away: list[i + 1], winner: null, pens: false });
+      else ties.push({ home: list[i], away: -1, winner: list[i], pens: false }); // bye
     }
-    cup.rounds.push({ name: cupRoundName(list.length, cup.rounds.length), ties });
+    cup.rounds.push({ name: cupRoundName(list.length, cup.rounds.length), ties: ties });
   }
   function initCup(def, participants, rng) {
-    const cup = { id: def.id, name: def.name, type: def.type, participants: participants.slice(), rounds: [], winner: null, totalRounds: Math.max(1, Math.ceil(Math.log2(participants.length))) };
+    const cup = { id: def.id, name: def.name, type: def.type, twoLeg: !!def.twoLeg, participants: participants.slice(), rounds: [], winner: null, totalRounds: Math.max(1, Math.ceil(Math.log2(participants.length))) };
     buildCupRound(cup, participants, rng);
     return cup;
   }
-  function decideTie(s, tie, hg, ag) {
+  // a cup round is one or two "units" (legs); the final is always a single match
+  function cupUnits(cup) {
+    const u = [];
+    for (let r = 0; r < cup.totalRounds; r++) {
+      const finalRound = r === cup.totalRounds - 1;
+      if (cup.twoLeg && !finalRound) { u.push({ round: r, leg: 0 }); u.push({ round: r, leg: 1 }); }
+      else u.push({ round: r, leg: 0 });
+    }
+    return u;
+  }
+  function isSingleLeg(cup, round) { return !cup.twoLeg || round === cup.totalRounds - 1; }
+  function recordLeg(tie, leg, single, hg, ag) {
+    if (single) { tie.hg = hg; tie.ag = ag; }
+    else if (leg === 0) { tie.l1h = hg; tie.l1a = ag; }
+    else { tie.l2h = hg; tie.l2a = ag; }
+  }
+  function pensWinner(s, tie) {
+    const hr = clubRatings(s.clubs[tie.home]), ar = clubRatings(s.clubs[tie.away]);
+    const hs = hr.attack + hr.midfield + hr.defence + 1, as = ar.attack + ar.midfield + ar.defence + 1;
+    const rng = Data.makeRng((s.seed ^ s.day ^ (tie.home * 73) ^ (tie.away * 19)) >>> 0);
+    tie.pens = true;
+    return rng() < hs / (hs + as) ? tie.home : tie.away;
+  }
+  function finalizeTie(s, tie, single) {
     if (tie.away === -1) { tie.winner = tie.home; return; }
-    if (hg > ag) tie.winner = tie.home;
-    else if (ag > hg) tie.winner = tie.away;
-    else {
-      const hr = clubRatings(s.clubs[tie.home]), ar = clubRatings(s.clubs[tie.away]);
-      const hs = hr.attack + hr.midfield + hr.defence, as = ar.attack + ar.midfield + ar.defence;
-      const rng = Data.makeRng((s.seed ^ s.day ^ (tie.home * 73) ^ (tie.away * 19)) >>> 0);
-      tie.winner = rng() < hs / (hs + as) ? tie.home : tie.away; tie.pens = true;
+    if (single) {
+      if (tie.hg > tie.ag) tie.winner = tie.home;
+      else if (tie.ag > tie.hg) tie.winner = tie.away;
+      else tie.winner = pensWinner(s, tie);
+    } else {
+      const aggH = (tie.l1h || 0) + (tie.l2a || 0), aggA = (tie.l1a || 0) + (tie.l2h || 0);
+      tie.aggH = aggH; tie.aggA = aggA;
+      if (aggH > aggA) tie.winner = tie.home;
+      else if (aggA > aggH) tie.winner = tie.away;
+      else if ((tie.l2a || 0) > (tie.l1a || 0)) tie.winner = tie.home;   // away-goals rule
+      else if ((tie.l1a || 0) > (tie.l2a || 0)) tie.winner = tie.away;
+      else tie.winner = pensWinner(s, tie);
     }
   }
-  function simulateCupTie(s, tie, rng) {
+  function simulateCupLeg(s, cup, tie, leg, single, rng) {
     if (tie.away === -1) { tie.winner = tie.home; return; }
-    const sim = simulateMatch(rng, clubRatings(s.clubs[tie.home]), clubRatings(s.clubs[tie.away]),
-      playersByIds(s.clubs[tie.home], bestXI(s.clubs[tie.home]).xi), playersByIds(s.clubs[tie.away], bestXI(s.clubs[tie.away]).xi));
-    decideTie(s, tie, sim.hg, sim.ag);
+    const host = (!single && leg === 1) ? tie.away : tie.home;
+    const visitor = (!single && leg === 1) ? tie.home : tie.away;
+    const sim = simulateMatch(rng, clubRatings(s.clubs[host]), clubRatings(s.clubs[visitor]),
+      playersByIds(s.clubs[host], bestXI(s.clubs[host]).xi), playersByIds(s.clubs[visitor], bestXI(s.clubs[visitor]).xi));
+    recordLeg(tie, leg, single, sim.hg, sim.ag);
+  }
+  // play one cup matchday (a leg). `userInfo` = {tie,hg,ag} for the user's own tie, else null.
+  function playCupMatchday(s, comp, round, leg, userInfo) {
+    const cup = s.cups[comp], rd = cup.rounds[round], played = {};
+    if (!rd) return played;
+    const single = isSingleLeg(cup, round);
+    rd.ties.forEach(t => {
+      if (t.away === -1) { t.winner = t.home; return; }
+      if (userInfo && t === userInfo.tie) recordLeg(t, leg, single, userInfo.hg, userInfo.ag);
+      else {
+        const rng = Data.makeRng((s.seed ^ (s.season * 5417) ^ hashId(comp) ^ (round * 999331) ^ (leg * 7) ^ (t.home * 131 + (t.away + 2) * 977)) >>> 0);
+        simulateCupLeg(s, cup, t, leg, single, rng);
+      }
+      const host = (!single && leg === 1) ? t.away : t.home, vis = (!single && leg === 1) ? t.home : t.away;
+      played[host] = bestXI(s.clubs[host]).xi; played[vis] = bestXI(s.clubs[vis]).xi;
+    });
+    if (single || leg === 1) {                                  // tie concludes on a single leg, or after the 2nd leg
+      rd.ties.forEach(t => { if (t.away !== -1 && t.winner == null) finalizeTie(s, t, single); });
+      if (cupRoundComplete(cup, round)) advanceCupAfterRound(s, cup, round);
+    }
+    return played;
   }
   function cupRoundComplete(cup, r) { return cup.rounds[r].ties.every(t => t.winner != null); }
   function advanceCupAfterRound(s, cup, r) {
@@ -542,18 +585,24 @@
     else buildCupRound(cup, winners, Data.makeRng((s.seed ^ (s.season * 61) ^ hashId(cup.id) ^ (r * 7919)) >>> 0));
   }
   // European qualification = ENGLISH (pyramid) clubs only; foreign clubs are added in startSeasonCups
+  // season 1: only the strongest PREMIER clubs go to Europe (no lower divisions)
   function seedEuroQual(s) {
-    const ranked = s.clubs.map((c, i) => ({ i: i, ov: clubOverall(c) })).filter(x => s.clubs[x.i].division >= 0).sort((a, b) => b.ov - a.ov).map(x => x.i);
-    return { champions: ranked.slice(0, 8), uefa: ranked.slice(8, 24) };
+    const prem = s.divisions[0].members.slice().sort((a, b) => clubOverall(s.clubs[b]) - clubOverall(s.clubs[a]));
+    return { champions: prem.slice(0, 4), uefa: prem.slice(4, 12) };
   }
+  // later seasons: top of the Premier qualify by position; FA & League Cup winners take UEFA spots
   function computeEuroQual(s, snaps) {
     const idxByName = {}; s.clubs.forEach((c, i) => { idxByName[c.name] = i; });
-    const ids = d => snaps[d].map(r => idxByName[r.name]);
-    const prem = ids(0), d1 = ids(1), d2 = ids(2);
-    return {
-      champions: prem.slice(0, 4).concat(d1.slice(0, 2)).concat(d2.slice(0, 2)),   // 8 English
-      uefa: prem.slice(4, 12).concat(d1.slice(2, 8)).concat(d2.slice(2, 4))          // 16 English
-    };
+    const prem = snaps[0].map(r => idxByName[r.name]);
+    const champions = prem.slice(0, 4);
+    const champSet = new Set(champions);
+    const uefa = [];
+    prem.slice(4, 8).forEach(i => { if (!champSet.has(i)) uefa.push(i); });
+    ['fa', 'leaguecup'].forEach(id => {                                  // domestic cup winners qualify
+      const w = s.cups[id] && s.cups[id].winner;
+      if (w != null && !champSet.has(w) && uefa.indexOf(w) < 0) uefa.push(w);
+    });
+    return { champions: champions, uefa: uefa };
   }
   function startSeasonCups(s) {
     const rng = Data.makeRng((s.seed ^ (s.season * 2246822519)) >>> 0);
@@ -561,27 +610,32 @@
     const pyramid = s.clubs.map((_, i) => i).filter(i => s.clubs[i].division >= 0);
     const foreign = s.clubs.map((_, i) => i).filter(i => s.clubs[i].foreign)
       .sort((a, b) => clubOverall(s.clubs[b]) - clubOverall(s.clubs[a]));
+    let fcur = 0;                                                        // cursor into the foreign pool (no overlap)
     CUP_DEFS.forEach(def => {
       let parts;
-      if (def.type === 'all') parts = pyramid.slice();                                   // FA / League Cup: all 86
-      else if (def.type === 'euroC') parts = (s.euroQual.champions || []).concat(foreign.slice(0, 24));  // 8 + 24 = 32
-      else parts = (s.euroQual.uefa || []).concat(foreign.slice(24, 40));                // 16 + 16 = 32
+      if (def.type === 'all') parts = pyramid.slice();                  // FA / League Cup: the whole pyramid
+      else {
+        const eng = (def.type === 'euroC' ? s.euroQual.champions : s.euroQual.uefa) || [];
+        const target = def.type === 'euroC' ? 32 : 24;
+        const need = Math.max(0, target - eng.length);
+        parts = eng.concat(foreign.slice(fcur, fcur + need)); fcur += need;
+      }
       if (parts.length >= 2) s.cups[def.id] = initCup(def, parts, rng);
     });
     s.calendar = buildCalendar(s);
   }
   function buildCalendar(s) {
     const entries = [], L = totalRounds(s);
-    for (let r = 0; r < L; r++) entries.push({ key: r * 1000, comp: 'league', round: r });
+    for (let r = 0; r < L; r++) entries.push({ key: r * 1000, comp: 'league', round: r, leg: 0 });
     Object.keys(s.cups).forEach((id, ci) => {
-      const T = s.cups[id].totalRounds;
-      for (let r = 0; r < T; r++) {
-        const boundary = Math.min(L - 1, Math.floor((r + 1) * L / (T + 1)));
-        entries.push({ key: boundary * 1000 + 50 + ci * 8 + r, comp: id, round: r }); // sits just after that league round
-      }
+      const units = cupUnits(s.cups[id]);          // 1 or 2 matchdays per round (two-legged ties)
+      units.forEach((u, k) => {
+        const boundary = Math.min(L - 1, Math.floor((k + 1) * L / (units.length + 1)));
+        entries.push({ key: boundary * 1000 + 50 + ci * 8 + k, comp: id, round: u.round, leg: u.leg });
+      });
     });
     entries.sort((a, b) => a.key - b.key);
-    return entries.map(e => ({ comp: e.comp, round: e.round }));
+    return entries.map(e => ({ comp: e.comp, round: e.round, leg: e.leg }));
   }
   // read-only views for the UI
   function cupsSummary(s) {
@@ -745,7 +799,11 @@
     return { ok: true, msg: 'Repaid £' + amount.toLocaleString() + '. Debt is now £' + s.debt.toLocaleString() + '.' };
   }
   function applyFinances(s) {
-    if (s.debt > 0) user(s).balance -= Math.round(s.debt * 0.01);     // ~1% interest per week
+    if (s.debt > 0) {                                                  // ~2% interest per week, added to the debt
+      const interest = Math.max(1, Math.round(s.debt * 0.02));
+      s.debt += interest;
+      s.notices.push('Loan interest of £' + interest.toLocaleString() + ' added (debt £' + s.debt.toLocaleString() + ').');
+    }
     if (user(s).balance < 0) {
       if (s.debtSince < 0) s.debtSince = s.day;
       if ((s.day - s.debtSince) >= 6 || user(s).balance < -250000) forcedSale(s);
@@ -775,16 +833,26 @@
   function leagueRoundup(s, round) {
     const out = [];
     s.divisions.forEach(dv => {
-      const games = dv.results.filter(r => r.round === round).map(r => ({ home: s.clubs[r.home].name, away: s.clubs[r.away].name, hg: r.hg, ag: r.ag }));
+      const games = dv.results.filter(r => r.round === round).map(r => ({ home: s.clubs[r.home].name, away: s.clubs[r.away].name, score: r.hg + '-' + r.ag }));
       if (games.length) out.push({ group: dv.name, games: games });
     });
     return out;
   }
+  // a readable score for a tie (single leg, or both legs + aggregate)
+  function tieResultText(cup, ri, t) {
+    if (t.away === -1) return { score: 'bye', agg: '' };
+    if (isSingleLeg(cup, ri)) return { score: (t.hg != null ? t.hg + '-' + t.ag : ''), agg: '' };
+    const l1 = t.l1h != null ? t.l1h + '-' + t.l1a : '–';
+    const l2 = t.l2h != null ? t.l2h + '-' + t.l2a : '–';
+    return { score: l1 + ' / ' + l2, agg: t.aggH != null ? 'agg ' + t.aggH + '-' + t.aggA : '' };
+  }
   function cupRoundup(s, cup, r) {
     const rd = cup.rounds[r]; if (!rd) return [];
-    return [{ group: cup.name + ' — ' + rd.name, games: rd.ties.filter(t => t.away !== -1).map(t => ({
-      home: s.clubs[t.home].name, away: s.clubs[t.away].name, hg: t.hg, ag: t.ag,
-      winner: t.winner != null ? s.clubs[t.winner].name : null, pens: !!t.pens })) }];
+    return [{ group: cup.name + ' — ' + rd.name, games: rd.ties.filter(t => t.away !== -1).map(t => {
+      const rt = tieResultText(cup, r, t);
+      return { home: s.clubs[t.home].name, away: s.clubs[t.away].name, score: rt.score, agg: rt.agg,
+        winner: t.winner != null ? s.clubs[t.winner].name : null, pens: !!t.pens };
+    }) }];
   }
 
   /* ---- cup bracket (for the UI) --------------------------------------- */
@@ -792,10 +860,12 @@
   function cupBracket(s, id) {
     const cup = s.cups[id]; if (!cup) return null;
     return {
-      id: id, name: cup.name, winner: cup.winner != null ? s.clubs[cup.winner].name : null,
-      rounds: cup.rounds.map(rd => ({ name: rd.name, ties: rd.ties.map(t => ({
-        home: s.clubs[t.home].name, away: t.away === -1 ? '(bye)' : s.clubs[t.away].name,
-        hg: t.hg, ag: t.ag, winner: t.winner != null ? s.clubs[t.winner].name : null, pens: !!t.pens })) }))
+      id: id, name: cup.name, twoLeg: !!cup.twoLeg, winner: cup.winner != null ? s.clubs[cup.winner].name : null,
+      rounds: cup.rounds.map((rd, ri) => ({ name: rd.name, ties: rd.ties.map(t => {
+        const rt = tieResultText(cup, ri, t);
+        return { home: s.clubs[t.home].name, away: t.away === -1 ? '(bye)' : s.clubs[t.away].name,
+          score: rt.score, agg: rt.agg, winner: t.winner != null ? s.clubs[t.winner].name : null, pens: !!t.pens };
+      }) }))
     };
   }
 

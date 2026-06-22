@@ -50,8 +50,8 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   Conference clubs, each with its own squad strength, prospects (title
   favourites → relegation battle) and finances. Pick one or hit Random Club.
 - **Squad management** — full roster with position colour-coding (G/D/M/A),
-  per-season and career Apps/Goals, editable player names, a Player Analysis
-  readout, transfer-listing to sell, and a live Manager Rating %.
+  age, per-season and career Apps/Goals, a Player Analysis readout,
+  transfer-listing to sell, and a live Manager Rating %.
 - **Team selector** — pick 11 starters + subs from your reserves, with live
   **Defence / Midfield / Attack / Morale** ratings for you and the opponent
   (morale tracks recent form). "Pick Best XI" and "Clear Selection" helpers.
@@ -66,11 +66,12 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   sort by skill, name search, **Bid** within budget, **Sign Unlisted Player**,
   and tick **Inc. unlisted players** to approach (for a premium) anyone at
   another club. **Selling is instant** — list a player and the fee is banked now.
-- **Squad development** — players have an **age**; each close season their skill
-  **drifts** up or down (youngsters rise, veterans fade) and values are repriced.
-  **Injuries** strike during matches and players need games to recover, while
-  starting drains **fitness** and resting restores it — so **rotation matters**,
-  and **Training** gives the whole squad a fitness boost (once a week).
+- **Squad development** — players have an **age** (shown everywhere) and their
+  skill is **re-rolled each close season** — strongly random, with an age bias so
+  youngsters tend to rise and veterans fade. **Injuries** strike during matches
+  and cost games to recover, while starting drains **fitness** and resting
+  restores it, so **rotation matters**. Player names come from a broad
+  **international 90s pool** and are fixed (no renaming).
 - **A four-division pyramid** — 86 league clubs: a 20-club **Premier Division**
   above Division One, Division Two and the 22-club Conference. **Every division
   is simulated each round**, with **promotion and relegation** (top/bottom three
@@ -79,11 +80,13 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   across all leagues**, plus a **Classified Results** screen listing a full
   round of fixtures with the scorers for every club.
 - **Cup competitions, with brackets** — the **FA Cup** and **League Cup** (all
-  86 clubs) plus the **European Cup** and **UEFA Cup**, which add a field of
-  **continental clubs** to the English sides that qualify by league finish
-  (UEFA-style, knockout only — no group stage). View the full **draw/bracket**
-  for any cup; you play your own ties in the match engine and **level ties go to
-  penalties**, shown in the result.
+  86 clubs) plus the **Champions League** and **UEFA Cup**. The European cups add
+  a field of **continental clubs** (knockout only — no group stage) to the
+  English qualifiers: only the **top Premier Division finishers** plus the
+  **FA Cup and League Cup winners** qualify. European ties are **two-legged
+  (home & away) except the final**, decided on **aggregate** (away goals, then
+  penalties). View the full **draw/bracket** for every cup — all results, not
+  just yours — and your own ties play out in the match engine.
 - **Results round-up** — after every game you play, a screen rounds up the
   results of *every* competition simulated since your last match, with one click
   through to the **tables** or the **cup brackets**.
@@ -120,7 +123,7 @@ as that club by global index (0–87), skipping the chooser.
 ## Develop / verify
 
 ```bash
-npm test             # head-less engine self-test, 96 checks (seasons, cups, finances, retirement, save/load)
+npm test             # head-less engine self-test, 101 checks (seasons, cups, finances, retirement, save/load)
 npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ```
 

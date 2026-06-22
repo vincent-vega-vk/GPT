@@ -71,9 +71,10 @@
       const ex = (S.exPlayers || []).slice().reverse();
       renderGrid('squad-grid', ex.map((p, i) => Object.assign({ id: 'ex' + i }, p)), p =>
         '<td>' + p.surname + '</td><td>' + p.forename + '</td><td>' + posCell(p.pos) + '</td>' +
-        '<td class="num">' + p.skill + '</td><td class="small" colspan="2">S' + p.season + ' · ' + (p.reason || '') + '</td>' +
+        '<td class="num">' + p.skill + '</td><td class="num">' + (p.age || '') + '</td>' +
+        '<td class="small" colspan="2">S' + p.season + ' · ' + (p.reason || '') + '</td>' +
         '<td class="num">' + p.appsTotal + '</td><td class="num">' + p.goalsTotal + '</td>', null, null);
-      if (!ex.length) renderGrid('squad-grid', [{ id: 0 }], () => '<td colspan="8" class="center small">No former players yet.</td>', null, null);
+      if (!ex.length) renderGrid('squad-grid', [{ id: 0 }], () => '<td colspan="9" class="center small">No former players yet.</td>', null, null);
       return;
     }
     const players = sortSquad(club.players);
@@ -81,18 +82,18 @@
     renderGrid('squad-grid', players, p =>
       '<td>' + p.surname + (p.injuredFor > 0 ? ' <span class="red" title="injured">+' + p.injuredFor + '</span>' : '') + '</td>' +
       '<td>' + p.forename + '</td><td>' + posCell(p.pos) + '</td>' +
-      '<td class="num">' + p.skill + '</td>' +
+      '<td class="num">' + p.skill + '</td><td class="num">' + p.age + '</td>' +
       '<td class="num">' + p.appsSeason + '</td><td class="num">' + p.goalsSeason + '</td>' +
       '<td class="num">' + p.appsTotal + '</td><td class="num">' + p.goalsTotal + '</td>',
       p => { squadSelId = p.id; renderSquadSide(); renderSquad(); }, squadSelId);
     renderSquadSide();
-    $('mgr-rating').textContent = S.managerRating;
   }
   function selectedSquadPlayer() { return E.user(S).players.find(p => p.id === squadSelId); }
   function renderSquadSide() {
     const p = selectedSquadPlayer(); if (!p) return;
     $('edit-forename').value = p.forename;
     $('edit-surname').value = p.surname;
+    $('sel-info').textContent = D.POS_NAME[p.pos] + ' · age ' + p.age + ' · skill ' + p.skill + ' · ' + money(p.value);
     $('chk-list').checked = !!p.transferListed;
   }
 
@@ -200,7 +201,8 @@
     $('bx-foul-h').textContent = st.foulsHome; $('bx-foul-a').textContent = st.foulsAway;
     const res = E.commitUserResult(S, match);
     let txt = 'Full time: ' + match.homeName + ' ' + res.hg + ' - ' + res.ag + ' ' + match.awayName;
-    if (res.winnerName) txt += (res.pens ? ' (on pens) ' : ' ') + '— ' + res.winnerName + ' go through';
+    if (res.agg) txt += ' (agg ' + res.agg + ')';
+    if (res.winnerName) txt += (res.pens ? ' — on pens, ' : ' — ') + res.winnerName + ' go through';
     $('m-event').textContent = txt;
     $('m-continue').classList.remove('hidden');
     save();
@@ -223,6 +225,7 @@
       '<td>' + p.surname + ', ' + p.forename + (p.source !== 'pool' ? ' <span class="small" title="not listed - costs a premium">·</span>' : '') + '</td>' +
       '<td class="num"><span class="pos-' + p.pos + '">' + p.skill + '</span></td>' +
       '<td>' + posCell(p.pos) + '</td>' +
+      '<td class="num">' + p.age + '</td>' +
       '<td class="num">' + Math.round(p.price).toLocaleString('en-GB') + '</td>' +
       '<td>' + p.fromClub + (p.european ? ' *' : '') + '</td>',
       p => { tmSelId = p.id; renderTransfer(); }, tmSelId);
@@ -240,14 +243,23 @@
       '<td class="num">' + r.L + '</td><td class="num">' + r.F + '</td><td class="num">' + r.A + '</td>' +
       '<td class="num">' + (r.GD > 0 ? '+' : '') + r.GD + '</td><td class="num bold">' + r.Pts + '</td>',
       null, userHere ? E.user(S).name : null);
-    const sc = E.topScorers(S, 16);
-    renderGrid('ts-grid', sc.map((x, i) => Object.assign({ id: i }, x)), x =>
-      '<td>' + x.name + '</td><td>' + x.club + '</td><td class="num bold">' + x.goals + '</td>', null, null);
+    const uName = E.user(S).name;
+    let sc = E.topScorers(S, 18);
+    if (!sc.some(x => x.club === uName)) {                 // always surface my own leading scorer
+      const mine = E.topScorers(S, 99999).filter(x => x.club === uName);
+      if (mine.length) sc = sc.concat([mine[0]]);
+    }
+    renderGrid('ts-grid', sc.map((x, i) => Object.assign({ id: i }, x)), x => {
+      const b = x.club === uName ? ' class="bold"' : '';
+      return '<td' + b + '>' + x.name + '</td><td' + b + '>' + x.club + '</td><td class="num bold">' + x.goals + '</td>';
+    }, null, null);
     $('lg-title').textContent = S.divisions[d].name + (userHere ? '  (your division)' : '');
     $('lg-prev').disabled = (d === 0);
     $('lg-next').disabled = (d === S.divisions.length - 1);
-    $('lg-season').textContent = 'Season ' + S.season + '  ·  Round ' + Math.min(S.round + 1, E.totalRounds()) +
-      ' of ' + E.totalRounds() + '  ·  ' + E.user(S).name + ' ' + E.ordinal(E.leaguePosition(S, E.user(S).name)) +
+    const totalMd = E.userLeagueRounds(S);
+    const playedMd = S.divisions[S.userDivision].table[E.user(S).name].P;
+    $('lg-season').textContent = 'Season ' + S.season + '  ·  Matchday ' + Math.min(playedMd, totalMd) +
+      ' of ' + totalMd + '  ·  ' + E.user(S).name + ' ' + E.ordinal(E.leaguePosition(S, E.user(S).name)) +
       ' in ' + S.divisions[S.userDivision].name;
   }
 
@@ -296,8 +308,9 @@
         const hh = gm.winner && gm.winner === gm.home ? '<b>' + gm.home + '</b>' : gm.home;
         const aa = gm.winner && gm.winner === gm.away ? '<b>' + gm.away + '</b>' : gm.away;
         const d = document.createElement('div'); d.className = 'res';
-        d.innerHTML = '<div class="h">' + hh + '</div><div class="sc">' + gm.hg + ' - ' + gm.ag +
-          (gm.pens ? ' <span class="pk">p</span>' : '') + '</div><div class="a">' + aa + '</div>';
+        d.innerHTML = '<div class="h">' + hh + '</div><div class="sc">' + (gm.score || '') +
+          (gm.pens ? ' <span class="pk">p</span>' : '') + '</div><div class="a">' + aa + '</div>' +
+          (gm.agg ? '<div class="small" style="flex-basis:100%;text-align:center;color:#666">' + gm.agg + '</div>' : '');
         body.appendChild(d);
       });
     }));
@@ -329,10 +342,11 @@
         const d = document.createElement('div'); d.className = 'tie';
         if (t.away === '(bye)') { d.innerHTML = '<div class="w">' + t.home + '</div><div class="l">(bye)</div>'; }
         else {
-          const sc = t.hg == null ? '' : '<span class="sc">' + t.hg + '-' + t.ag + (t.pens ? ' p' : '') + '</span>';
+          const sc = t.score ? '<span class="sc">' + t.score + (t.pens ? ' p' : '') + '</span>' : '';
           const hw = t.winner === t.home, aw = t.winner === t.away;
           d.innerHTML = '<div class="' + (hw ? 'w' : (t.winner ? 'l' : '')) + '">' + t.home + sc + '</div>' +
-            '<div class="' + (aw ? 'w' : (t.winner ? 'l' : '')) + '">' + t.away + '</div>';
+            '<div class="' + (aw ? 'w' : (t.winner ? 'l' : '')) + '">' + t.away + '</div>' +
+            (t.agg ? '<div class="l" style="font-size:10px">' + t.agg + '</div>' : '');
         }
         col.appendChild(d);
       });
@@ -401,8 +415,6 @@
     $('btn-cups').onclick = () => { renderBracketTabs(); renderBracket(); show('screen-bracket'); };
     $('btn-finance').onclick = () => { renderFinance(); show('screen-finance'); };
     $('chk-explayers').onchange = () => { squadSelId = null; renderSquad(); };
-    $('edit-forename').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.forename = e.target.value; renderSquad(); save(); } };
-    $('edit-surname').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.surname = e.target.value; renderSquad(); save(); } };
     // ticking the box sells the highlighted player immediately
     $('chk-list').onchange = e => {
       if (!e.target.checked) return;
@@ -417,11 +429,6 @@
       toast(fullName(p) + ' — ' + D.POS_NAME[p.pos] + ', age ' + p.age + '. Skill ' + p.skill + ', fitness ' + p.fit + '%' +
         (p.injuredFor > 0 ? ' (injured, ' + p.injuredFor + ' to go)' : '') +
         '. ' + p.appsSeason + ' apps / ' + p.goalsSeason + ' goals this season. Valued at ' + money(p.value) + '.', 7000);
-    };
-    $('btn-train').onclick = () => {
-      const r = E.train(S);
-      toast(r.ok ? 'Good session — fitness up across the squad' + (r.improved ? ', ' + r.improved + ' youngster(s) improved.' : '.') : r.msg);
-      renderSquad(); save();
     };
     $('btn-resign').onclick = () => {
       if (!confirm('Resign as manager and start a new game?')) return;

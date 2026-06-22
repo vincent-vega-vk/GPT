@@ -236,6 +236,22 @@ check('all clubs remain fieldable after seasons', rt.clubs.every(c => c.players.
 check('players have a retirement age', rt.clubs[0].players.every(p => p.retireAge >= 35 && p.retireAge <= 40));
 check('cup bracket accessor works', (() => { const br = E.cupBracket(rt, E.cupIds(rt)[0]); return !!br && br.rounds.length > 0; })());
 
+/* ---- two-leg Europe, qualification & loan interest ------------------- */
+section('Two-leg Europe, qualification & loan interest');
+const eu = E.newGame(13131);
+check('Champions League is two-legged', eu.cups.champions.twoLeg === true);
+check('UEFA Cup is two-legged', eu.cups.uefa.twoLeg === true);
+const champEng = eu.cups.champions.participants.filter(ci => !eu.clubs[ci].foreign);
+check('season-1 Champions English entrants are all Premier', champEng.length > 0 && champEng.every(ci => eu.clubs[ci].division === 0), JSON.stringify(champEng.map(ci => eu.clubs[ci].division)));
+E.takeLoan(eu, 500000);
+const debtBefore = eu.debt;
+E.prepareNextUserMatch(eu); E.commitUserResult(eu, E.playUserMatch(eu));
+check('loan debt grows with interest', eu.debt > debtBefore, debtBefore + ' -> ' + eu.debt);
+const eu2 = E.newGame(246810);
+let ge = 0; const es0 = eu2.season; while (eu2.season === es0 && ge++ < 400) step(eu2);
+const clRec = eu2.honours[0].cups.find(c => c.name === 'Champions League');
+check('Champions League completes with a winner', !!clRec && clRec.winner && clRec.winner !== '—', clRec && clRec.winner);
+
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');
 const snap = E.serialize(s3);
