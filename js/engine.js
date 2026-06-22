@@ -489,11 +489,12 @@
   function hashId(str) { let h = 0; for (let i = 0; i < str.length; i++) h = (h * 131 + str.charCodeAt(i)) | 0; return h >>> 0; }
   function shuffle(arr, rng) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; }
   function cupRoundName(entering, idx) {
-    if (entering <= 2) return 'Final';
+    if (entering === 2) return 'Final';
     if (entering <= 4) return 'Semi-finals';
     if (entering <= 8) return 'Quarter-finals';
-    if (entering <= 16) return 'Last 16';
-    if (entering <= 32) return 'Last 32';
+    if (entering === 16) return 'Round of 16';
+    if (entering === 32) return 'Round of 32';
+    if (entering === 64) return 'Round of 64';
     return 'Round ' + (idx + 1);
   }
   function buildCupRound(cup, clubIdxs, rng) {
@@ -616,23 +617,42 @@
       if (def.type === 'all') parts = pyramid.slice();                  // FA / League Cup: the whole pyramid
       else {
         const eng = (def.type === 'euroC' ? s.euroQual.champions : s.euroQual.uefa) || [];
-        const target = def.type === 'euroC' ? 32 : 24;
-        const need = Math.max(0, target - eng.length);
+        const need = Math.max(0, 64 - eng.length);                      // 64-team knockout (Round of 64 -> Final)
         parts = eng.concat(foreign.slice(fcur, fcur + need)); fcur += need;
       }
       if (parts.length >= 2) s.cups[def.id] = initCup(def, parts, rng);
     });
+    // one-off curtain-raisers from last season's winners (season 2 onwards)
+    const pv = s.prev;
+    if (pv) {
+      if (pv.premChamp != null && pv.faCup != null) {
+        const opp = pv.faCup !== pv.premChamp ? pv.faCup : pv.premRunnerUp;
+        if (opp != null && opp !== pv.premChamp) s.cups.shield = initCup({ id: 'shield', name: 'Community Shield', type: 'oneoff' }, [pv.premChamp, opp], rng);
+      }
+      if (pv.ucl != null && pv.uefa != null && pv.ucl !== pv.uefa) {
+        s.cups.supercup = initCup({ id: 'supercup', name: 'European Super Cup', type: 'oneoff' }, [pv.ucl, pv.uefa], rng);
+      }
+    }
     s.calendar = buildCalendar(s);
   }
   function buildCalendar(s) {
     const entries = [], L = totalRounds(s);
     for (let r = 0; r < L; r++) entries.push({ key: r * 1000, comp: 'league', round: r, leg: 0 });
     Object.keys(s.cups).forEach((id, ci) => {
-      const units = cupUnits(s.cups[id]);          // 1 or 2 matchdays per round (two-legged ties)
-      units.forEach((u, k) => {
-        const boundary = Math.min(L - 1, Math.floor((k + 1) * L / (units.length + 1)));
-        entries.push({ key: boundary * 1000 + 50 + ci * 8 + k, comp: id, round: u.round, leg: u.leg });
-      });
+      const cup = s.cups[id], units = cupUnits(cup), lastRound = cup.totalRounds - 1;
+      if (cup.type === 'oneoff') {                  // Community Shield / Super Cup: curtain-raisers
+        entries.push({ key: -2000 + ci, comp: id, round: 0, leg: 0 });
+      } else if (cup.twoLeg) {                       // European cups: finals AFTER the league (UEFA, then Champions)
+        units.forEach((u, k) => {
+          if (u.round === lastRound) entries.push({ key: (L + (id === 'uefa' ? 1 : 2)) * 1000, comp: id, round: u.round, leg: 0 });
+          else { const b = Math.min(L - 2, Math.floor((k + 1) * (L - 2) / units.length)); entries.push({ key: b * 1000 + 50 + ci * 8 + k, comp: id, round: u.round, leg: u.leg }); }
+        });
+      } else {                                       // national cups spread through the season
+        units.forEach((u, k) => {
+          const b = Math.min(L - 1, Math.floor((k + 1) * L / (units.length + 1)));
+          entries.push({ key: b * 1000 + 50 + ci * 8 + k, comp: id, round: u.round, leg: u.leg });
+        });
+      }
     });
     entries.sort((a, b) => a.key - b.key);
     return entries.map(e => ({ comp: e.comp, round: e.round, leg: e.leg }));
@@ -885,6 +905,16 @@
     });
     // next season's European qualification, from this season's standings
     s.euroQual = computeEuroQual(s, snaps);
+
+    // remember last season's winners for the curtain-raisers (Shield / Super Cup)
+    const idxByName = {}; s.clubs.forEach((c, i) => { idxByName[c.name] = i; });
+    s.prev = {
+      premChamp: snaps[0][0] ? idxByName[snaps[0][0].name] : null,
+      premRunnerUp: snaps[0][1] ? idxByName[snaps[0][1].name] : null,
+      faCup: s.cups.fa ? s.cups.fa.winner : null,
+      ucl: s.cups.champions ? s.cups.champions.winner : null,
+      uefa: s.cups.uefa ? s.cups.uefa.winner : null
+    };
 
     // promotion / relegation
     const moves = [];

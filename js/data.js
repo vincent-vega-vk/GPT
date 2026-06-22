@@ -138,17 +138,41 @@
     'Brentford', 'Cardiff City'
   ];
 
-  // continental clubs that fill out the European competitions (knockout only)
+  // continental clubs that fill out the European competitions (knockout only).
+  // A 64-team Champions League + 64-team UEFA Cup need a deep pool.
   const FOREIGN_CLUBS = [
-    'Real Madrid', 'Barcelona', 'Atletico Madrid', 'Valencia', 'Deportivo',
-    'Juventus', 'AC Milan', 'Inter Milan', 'AS Roma', 'Lazio', 'Parma', 'Fiorentina',
-    'Bayern Munich', 'Borussia Dortmund', 'Bayer Leverkusen', 'Schalke 04', 'Werder Bremen',
-    'Ajax', 'PSV Eindhoven', 'Feyenoord', 'FC Porto', 'Benfica', 'Sporting Lisbon',
-    'Marseille', 'AS Monaco', 'Lyon', 'Paris St Germain', 'Bordeaux',
-    'Celtic', 'Rangers', 'Galatasaray', 'Fenerbahce', 'Besiktas',
-    'Anderlecht', 'Club Brugge', 'Steaua Bucharest', 'Dynamo Kyiv', 'Spartak Moscow',
-    'CSKA Moscow', 'Red Star Belgrade', 'Panathinaikos', 'Olympiacos', 'Rosenborg',
-    'Sparta Prague', 'Dinamo Zagreb', 'Shakhtar Donetsk', 'Brondby', 'Vitesse'
+    // Spain
+    'Real Madrid', 'Barcelona', 'Atletico Madrid', 'Valencia', 'Deportivo', 'Real Sociedad', 'Athletic Bilbao',
+    'Real Betis', 'Sevilla', 'Celta Vigo', 'Zaragoza', 'Espanyol', 'Tenerife', 'Mallorca', 'Valladolid',
+    // Italy
+    'Juventus', 'AC Milan', 'Inter Milan', 'AS Roma', 'Lazio', 'Parma', 'Fiorentina', 'Napoli', 'Sampdoria',
+    'Torino', 'Udinese', 'Bologna', 'Vicenza', 'Cagliari', 'Perugia', 'Brescia',
+    // Germany
+    'Bayern Munich', 'Borussia Dortmund', 'Bayer Leverkusen', 'Schalke 04', 'Werder Bremen', 'Stuttgart',
+    'Hamburg', 'Kaiserslautern', 'Moenchengladbach', 'FC Cologne', 'Hertha Berlin', 'Wolfsburg', 'Freiburg',
+    // France
+    'Marseille', 'AS Monaco', 'Lyon', 'Paris St Germain', 'Bordeaux', 'Auxerre', 'Nantes', 'RC Lens',
+    'Montpellier', 'Strasbourg', 'FC Metz', 'Bastia', 'Rennes', 'Guingamp',
+    // Netherlands
+    'Ajax', 'PSV Eindhoven', 'Feyenoord', 'Vitesse', 'Roda JC', 'FC Twente', 'Heerenveen', 'Willem II', 'AZ Alkmaar',
+    // Portugal
+    'FC Porto', 'Benfica', 'Sporting Lisbon', 'Boavista', 'Vitoria Guimaraes', 'SC Braga', 'Maritimo',
+    // Belgium
+    'Anderlecht', 'Club Brugge', 'Standard Liege', 'Genk', 'Lierse', 'AA Gent',
+    // Scotland
+    'Celtic', 'Rangers', 'Hearts', 'Aberdeen', 'Hibernian', 'Kilmarnock', 'Dundee United',
+    // Turkey / Greece
+    'Galatasaray', 'Fenerbahce', 'Besiktas', 'Trabzonspor', 'Panathinaikos', 'Olympiacos', 'AEK Athens', 'PAOK',
+    // Russia / Ukraine
+    'Spartak Moscow', 'CSKA Moscow', 'Dynamo Kyiv', 'Shakhtar Donetsk', 'Lokomotiv Moscow', 'Dynamo Moscow', 'Zenit',
+    // Central / Eastern Europe
+    'Steaua Bucharest', 'Rapid Bucharest', 'Red Star Belgrade', 'Partizan Belgrade', 'Dinamo Zagreb', 'Hajduk Split',
+    'Sparta Prague', 'Slavia Prague', 'Legia Warsaw', 'Widzew Lodz', 'Ferencvaros', 'Slovan Bratislava',
+    // Scandinavia
+    'Rosenborg', 'Brondby', 'FC Copenhagen', 'IFK Gothenburg', 'Helsingborg', 'Molde', 'AaB Aalborg',
+    // Alpine / others
+    'Grasshoppers', 'FC Basel', 'Servette', 'Sturm Graz', 'Rapid Vienna', 'Austria Vienna', 'Maccabi Haifa',
+    'APOEL', 'Dinamo Tbilisi', 'Levski Sofia', 'CSKA Sofia', 'Maccabi Tel Aviv', 'Hapoel Tel Aviv'
   ];
 
   const POSITIONS = ['G', 'D', 'M', 'A'];

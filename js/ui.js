@@ -446,6 +446,13 @@
     $('btn-bestxi').onclick = () => { const b = E.bestXI(E.user(S)); S.selection.xi = b.xi; S.selection.subs = b.subs; renderTeam(); };
     $('btn-clear').onclick = () => { S.selection.xi = []; S.selection.subs = []; renderTeam(); };
     $('btn-action').onclick = startMatch;
+    $('btn-simulate').onclick = () => {           // instant result, no animation
+      if (S.selection.xi.length !== 11) return toast('Pick exactly 11 starters (you have ' + S.selection.xi.length + ').');
+      if (S.selection.subs.length < 1) return toast('Pick at least one substitute.');
+      const m = E.playUserMatch(S); if (!m) return;
+      E.commitUserResult(S, m);
+      renderRoundup(); show('screen-roundup'); flushNotices(); save();
+    };
     $('btn-history').onclick = () => {           // head-to-head vs the upcoming opponent
       const o = E.nextOpponent(S);
       if (!o) return toast('No upcoming match.');

@@ -100,6 +100,7 @@ table.grid.cyan tr.sel td{background:#8b0000; color:#fff}
 
 /* ---- layout helpers ------------------------------------------------- */
 .row{display:flex; gap:10px}
+.row>*{min-width:0}   /* let flex children shrink so data grids scroll instead of overflowing */
 .col{display:flex; flex-direction:column; gap:6px}
 .spacer{flex:1}
 .small{font-size:11px}
@@ -152,7 +153,7 @@ input[type=range]{flex:1}
 table.grid.bx{width:100%; background:var(--yellow)}
 table.grid.bx td{padding:3px 6px; border-bottom:1px solid #e6e6b0}
 .bxlog{font-size:11px; background:#fff; min-height:100%}
-.bxlog .ev{padding:1px 5px; border-bottom:1px solid #eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bxlog .ev{padding:1px 5px; border-bottom:1px solid #eee; white-space:normal; word-break:break-word}
 .bxlog .ev .min{display:inline-block; width:24px; color:#555; text-align:right; margin-right:6px}
 .bxlog .goal{font-weight:bold}
 .bxlog .yc{color:#a8860b}.bxlog .rc{color:#c00000}.bxlog .sub{color:#0a7a3a}.bxlog .inj{color:#b06000}

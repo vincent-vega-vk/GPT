@@ -76,9 +76,10 @@ check('sign unlisted works', su.ok, su.msg);
 /* ---- play a full season --------------------------------------------- */
 section('Play a full season');
 let leagueMatches = 0, cupMatches = 0, goalsSeen = 0, guardFS = 0;
-while (s.season === 1 && guardFS++ < 250) {
+while (guardFS++ < 300) {
+  const before = s.season;
   const r = step(s);
-  if (!r) break;
+  if (!r || s.season !== before) break;     // a step can roll the season (end-of-season euro finals)
   if (r.comp === 'league') leagueMatches++; else cupMatches++;
   goalsSeen += r.hg + r.ag;
 }
@@ -204,7 +205,7 @@ check('user contested a cup tie', sawCup);
 check('honours recorded after a season', cg.honours.length >= 1, cg.honours.length);
 check('honours list league 1st/2nd/3rd', cg.honours[0].divisions.every(d => d.first && d.second && d.third));
 check('every cup produced a winner', cg.honours[0].cups.length >= 2 && cg.honours[0].cups.every(c => c.winner && c.winner !== '—'), JSON.stringify(cg.honours[0].cups));
-check('cups rebuilt for the new season', E.cupsSummary(cg).length >= 2 && E.cupsSummary(cg).every(c => c.winner == null));
+check('league/euro cups rebuilt for the new season', ['fa', 'leaguecup', 'champions', 'uefa'].every(id => cg.cups[id] && cg.cups[id].winner == null));
 
 /* ---- finances, history, ex-players, Europe, match box score ---------- */
 section('Finances, history, ex-players & Europe');
@@ -217,8 +218,8 @@ check('repayLoan reduces debt', rl.ok && fx.debt === 300000, rl.msg);
 const exBefore = fx.exPlayers.length;
 E.sellPlayer(fx, E.user(fx).players[E.user(fx).players.length - 1].id);
 check('selling records an ex-player', fx.exPlayers.length === exBefore + 1);
-check('European Cup has 32 entrants', fx.cups.champions && fx.cups.champions.participants.length === 32, fx.cups.champions && fx.cups.champions.participants.length);
-check('European Cup includes foreign clubs', fx.cups.champions.participants.some(ci => fx.clubs[ci].foreign));
+check('Champions League has 64 entrants', fx.cups.champions && fx.cups.champions.participants.length === 64, fx.cups.champions && fx.cups.champions.participants.length);
+check('Champions League includes foreign clubs', fx.cups.champions.participants.some(ci => fx.clubs[ci].foreign));
 E.prepareNextUserMatch(fx);
 const m = E.playUserMatch(fx);
 check('match carries box-score stats', !!m.stats && typeof m.stats.possHome === 'number');
@@ -249,8 +250,12 @@ E.prepareNextUserMatch(eu); E.commitUserResult(eu, E.playUserMatch(eu));
 check('loan debt grows with interest', eu.debt > debtBefore, debtBefore + ' -> ' + eu.debt);
 const eu2 = E.newGame(246810);
 let ge = 0; const es0 = eu2.season; while (eu2.season === es0 && ge++ < 400) step(eu2);
+check('European knockout starts at Round of 64', eu.cups.champions.rounds[0].name === 'Round of 64', eu.cups.champions.rounds[0].name);
 const clRec = eu2.honours[0].cups.find(c => c.name === 'Champions League');
 check('Champions League completes with a winner', !!clRec && clRec.winner && clRec.winner !== '—', clRec && clRec.winner);
+check('last-season winners tracked for curtain-raisers', eu2.prev && eu2.prev.ucl != null && eu2.prev.uefa != null);
+check('European Super Cup created in season 2', !!eu2.cups.supercup, Object.keys(eu2.cups).join(','));
+check('Super Cup contestants are the two European winners', !!eu2.cups.supercup && eu2.cups.supercup.participants.length === 2);
 
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');

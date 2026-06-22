@@ -60,7 +60,8 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   A live **box score** sits alongside (possession, shots, on target, corners,
   fouls) with a rolling **match-events tabellino**: every **GOAL**, **booking**
   (yellows and reds), **injury** and **automatic substitution**. Adjustable
-  **Speed** and "Skip to result"; the animation **freezes at full time**.
+  **Speed** and "Skip to result"; the animation **freezes at full time**. Prefer
+  numbers? **Simulate** returns the result instantly without the animation.
 - **A dynamic transfer market** — player skill runs **20–99** (with rare 90+
   stars); listings churn through the season. Filter by position / European /
   sort by skill, name search, **Bid** within budget, **Sign Unlisted Player**,
@@ -80,13 +81,17 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   across all leagues**, plus a **Classified Results** screen listing a full
   round of fixtures with the scorers for every club.
 - **Cup competitions, with brackets** — the **FA Cup** and **League Cup** (all
-  86 clubs) plus the **Champions League** and **UEFA Cup**. The European cups add
-  a field of **continental clubs** (knockout only — no group stage) to the
-  English qualifiers: only the **top Premier Division finishers** plus the
-  **FA Cup and League Cup winners** qualify. European ties are **two-legged
-  (home & away) except the final**, decided on **aggregate** (away goals, then
-  penalties). View the full **draw/bracket** for every cup — all results, not
-  just yours — and your own ties play out in the match engine.
+  86 clubs) plus the **Champions League** and **UEFA Cup**, run in the 90s
+  pre-group-stage format: **64-team knockouts** (Round of 64 → 32 → 16 →
+  quarters → semis → **final**). The European cups add a deep field of
+  **continental clubs** to the English qualifiers — and only the **top Premier
+  Division finishers** plus the **FA Cup and League Cup winners** qualify (no
+  random teams). European ties are **two-legged except the final**, decided on
+  **aggregate** (away goals, then penalties); the **UEFA Cup final then the
+  Champions League final close the season**. Two curtain-raisers open the next
+  one: the **Community Shield** (league champions v FA Cup winners) and the
+  **European Super Cup** (Champions League v UEFA Cup winners). View the full
+  **draw/bracket** for every cup — all results, not just yours.
 - **Results round-up** — after every game you play, a screen rounds up the
   results of *every* competition simulated since your last match, with one click
   through to the **tables** or the **cup brackets**.
@@ -123,7 +128,7 @@ as that club by global index (0–87), skipping the chooser.
 ## Develop / verify
 
 ```bash
-npm test             # head-less engine self-test, 101 checks (seasons, cups, finances, retirement, save/load)
+npm test             # head-less engine self-test, 105 checks (seasons, cups, finances, retirement, save/load)
 npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ```
 
