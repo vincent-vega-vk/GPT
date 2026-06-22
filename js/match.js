@@ -172,6 +172,28 @@
       cb.onScore && cb.onScore(ev.side, ev.scorer, ev.minute, hg, ag);
     }
 
+    /* ---- timed colour: cards, injuries, automatic substitutions ------ */
+    const cardsT = (match.cards || []).slice().sort((a, b) => a.minute - b.minute);
+    const injT = (match.injuries || []).slice().sort((a, b) => a.minute - b.minute);
+    const subT = (match.subs || []).slice().sort((a, b) => a.minute - b.minute);
+    let fc = 0, fi = 0, fs = 0;
+    function applySubSprite(sv) {
+      const team = sv.side === 'home' ? home : away;
+      const p = team.find(pl => pl.name === sv.off) || team.find(pl => pl.role !== 'G');
+      if (p) p.name = sv.on;
+    }
+    function processTimed(mins) {
+      while (fc < cardsT.length && cardsT[fc].minute <= mins) { cb.onCard && cb.onCard(cardsT[fc]); fc++; }
+      while (fi < injT.length && injT[fi].minute <= mins) { cb.onInjury && cb.onInjury(injT[fi]); fi++; }
+      while (fs < subT.length && subT[fs].minute <= mins) { applySubSprite(subT[fs]); cb.onSub && cb.onSub(subT[fs]); fs++; }
+    }
+
+    function drawFullTime() {
+      ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, midY - 22, W, 44);
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 22px Tahoma'; ctx.textAlign = 'center';
+      ctx.fillText('FULL TIME', W / 2, midY + 8); ctx.textAlign = 'left';
+    }
+
     /* ---- main loop --------------------------------------------------- */
     function frame(ts) {
       if (!last) last = ts;
@@ -181,9 +203,8 @@
       if (running && !finished) {
         minute += dt * speed * 3.2;              // ~ full match in a sensible time
         if (minute > 90) minute = 90;
-        while (fired < events.length && events[fired].minute <= minute) {
-          triggerGoal(events[fired]); fired++;
-        }
+        while (fired < events.length && events[fired].minute <= minute) { triggerGoal(events[fired]); fired++; }
+        processTimed(minute);
         cb.onMinute && cb.onMinute(minute);
         if (carrier) {
           const opp = (carrier.side === 'home' ? away : home);
@@ -196,19 +217,24 @@
         }
         if (minute >= 90) finish();
       }
-      step(dt);
-      if (flash) { flash.t -= dt * 1.4; if (flash.t <= 0) flash = null; }
-      draw();
-      raf = requestAnimationFrame(frame);
+      if (!finished) {                            // freeze the players once the whistle goes
+        step(dt);
+        if (flash) { flash.t -= dt * 1.1; if (flash.t <= 0) flash = null; }
+        draw();
+        raf = requestAnimationFrame(frame);
+      } else {
+        draw(); drawFullTime();                   // one final, static frame
+      }
     }
 
     function finish() {
       if (finished) return;
       finished = true; running = false;
-      // make sure the displayed score matches the engine result
-      while (fired < events.length) { triggerGoal(events[fired]); fired++; }
+      while (fired < events.length) { triggerGoal(events[fired]); fired++; }   // sync score to engine
+      processTimed(90);                                                        // flush remaining events
       minute = 90;
       cb.onMinute && cb.onMinute(90);
+      draw(); drawFullTime();
       cb.onFullTime && cb.onFullTime(hg, ag);
     }
 
@@ -217,14 +243,9 @@
     return {
       setSpeed(v) { speed = clamp(+v, 1, 12); },
       pause() { running = false; },
-      resume() { running = true; last = 0; },
+      resume() { if (!finished) { running = true; last = 0; raf = requestAnimationFrame(frame); } },
       skip() { finish(); },
-      substitute(side, outName, inName) {
-        const team = side === 'home' ? home : away;
-        const p = team.find(pl => pl.name === outName) || team.find(pl => pl.role !== 'G');
-        if (p) p.name = inName;
-      },
-      stop() { cancelAnimationFrame(raf); },
+      stop() { cancelAnimationFrame(raf); finished = true; },
       get score() { return { hg, ag }; }
     };
   }

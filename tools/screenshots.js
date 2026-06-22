@@ -55,76 +55,104 @@ async function shoot(page, sel, name) {
   /* ---- match (let it run, then capture in play) ---- */
   await page.click('#btn-action');
   await page.waitForSelector('#screen-match:not(.hidden)');
-  await page.$eval('#m-speed', el => { el.value = '9'; el.dispatchEvent(new Event('input')); });
-  await sleep(3200);
+  await page.$eval('#m-speed', el => { el.value = '8'; el.dispatchEvent(new Event('input')); });
+  await sleep(3600);
   await shoot(page, '#screen-match', '4-match.png');
-  // skip to full time and capture the result state
   await page.click('#m-skip');
   await page.waitForSelector('#m-continue:not(.hidden)');
   await sleep(300);
   await shoot(page, '#screen-match', '5-match-fulltime.png');
   await page.click('#m-continue');
 
-  /* ---- transfer market ---- */
+  /* ---- results round-up ---- */
+  await page.waitForSelector('#screen-roundup:not(.hidden)');
+  await sleep(150);
+  await shoot(page, '#screen-roundup', '6-results-roundup.png');
+  await page.click('#ru-ok');
   await page.waitForSelector('#screen-squad:not(.hidden)');
+
+  /* ---- transfer market ---- */
   await page.click('#btn-transfer');
   await page.waitForSelector('#tm-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-transfer', '6-transfer-market.png');
+  await shoot(page, '#screen-transfer', '7-transfer-market.png');
   await page.click('#tm-close');
 
-  /* ---- league + results (after simulating a chunk of the season) ---- */
+  /* ---- league, brackets, results, finances (after a chunk of the season) ---- */
   await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
   await page.waitForSelector('#choose-grid tbody tr');
-  await page.click('#choose-confirm');                 // take charge of Romford
+  await page.click('#choose-confirm');
   await page.waitForSelector('#squad-grid tbody tr');
-  await page.evaluate(() => window.SIMSOC_TEST.advance(15));
+  await page.evaluate(() => window.SIMSOC_TEST.advance(20));
   await page.click('#btn-league');
   await page.waitForSelector('#lg-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-league', '7-league-table.png');     // user division (Conference)
-  // switch up to the top division to show the pyramid is all simulated
+  await shoot(page, '#screen-league', '8-league-table.png');       // user division (Conference)
   await page.click('#lg-prev'); await page.click('#lg-prev'); await page.click('#lg-prev');
   await sleep(150);
-  await shoot(page, '#screen-league', '8-league-premier.png');
+  await shoot(page, '#screen-league', '9-league-premier.png');
   await page.click('#lg-close');
-  // classified results with scorers
+  await page.click('#btn-cups');
+  await page.waitForSelector('#screen-bracket:not(.hidden)');
+  await page.waitForSelector('#bk-body .bcol');
+  await sleep(150);
+  await shoot(page, '#screen-bracket', '10-cup-bracket.png');
+  await page.click('#bk-close');
   await page.click('#btn-results');
   await page.waitForSelector('#rs-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-results', '9-classified-results.png');
+  await shoot(page, '#screen-results', '11-classified-results.png');
   await page.click('#rs-close');
+  await page.click('#btn-finance');
+  await page.waitForSelector('#screen-finance:not(.hidden)');
+  await page.$eval('#fin-amount', el => { el.value = '400000'; });
+  await page.click('#fin-borrow');
+  await sleep(120);
+  await shoot(page, '#screen-finance', '12-finances.png');
+  await page.click('#fin-close');
 
-  /* ---- roll of honour (finish a season first) ---- */
-  await page.evaluate(() => window.SIMSOC_TEST.advance(70));   // play out the rest of the season
+  /* ---- roll of honour (finish the season) ---- */
+  await page.evaluate(() => window.SIMSOC_TEST.advance(80));
   await page.waitForSelector('#screen-squad:not(.hidden)');
   await page.click('#btn-honours');
   await page.waitForSelector('#hon-grid tbody tr');
   await sleep(150);
-  await shoot(page, '#screen-honours', '10-roll-of-honour.png');
+  await shoot(page, '#screen-honours', '13-roll-of-honour.png');
+  await page.click('#hon-close');
 
-  /* ---- a cup tie in the team selector ---- */
+  /* ---- head-to-head + a cup tie ---- */
+  await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#choose-grid tbody tr');
+  await page.click('#choose-confirm');
+  await page.waitForSelector('#squad-grid tbody tr');
+  await page.evaluate(() => window.SIMSOC_TEST.advance(55));        // build up some history
+  await page.click('#btn-play');
+  await page.waitForSelector('#screen-team:not(.hidden)');
+  await page.$eval('#btn-history', el => el.click());
+  await page.waitForSelector('#screen-history:not(.hidden)');
+  await sleep(150);
+  await shoot(page, '#screen-history', '14-head-to-head.png');
+  await page.$eval('#h2h-close', el => el.click());
+  await page.waitForSelector('#screen-team:not(.hidden)');
+  /* ---- a cup tie in the team selector (fresh start, before being knocked out) ---- */
   await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
   await page.waitForSelector('#choose-grid tbody tr');
   await page.click('#choose-confirm');
   await page.waitForSelector('#squad-grid tbody tr');
   let gotCup = false;
-  for (let i = 0; i < 14 && !gotCup; i++) {
-    await page.click('#btn-play');
+  for (let i = 0; i < 12 && !gotCup; i++) {
+    await page.$eval('#btn-play', el => el.click());
     await page.waitForSelector('#screen-team:not(.hidden)');
     const comp = await page.$eval('#league-name', el => el.textContent);
-    if (/Cup/.test(comp)) {
-      await sleep(150);
-      await shoot(page, '#screen-team', '11-cup-tie.png');
-      gotCup = true;
-      break;
-    }
-    await page.click('#btn-action');
+    if (/Cup/.test(comp)) { await sleep(150); await shoot(page, '#screen-team', '15-cup-tie.png'); gotCup = true; break; }
+    await page.$eval('#btn-action', el => el.click());
     await page.waitForSelector('#screen-match:not(.hidden)');
     await page.$eval('#m-speed', el => { el.value = '10'; el.dispatchEvent(new Event('input')); });
-    await page.click('#m-skip');
+    await page.$eval('#m-skip', el => el.click());
     await page.waitForSelector('#m-continue:not(.hidden)');
-    await page.click('#m-continue');
+    await page.$eval('#m-continue', el => el.click());
+    await page.waitForSelector('#screen-roundup:not(.hidden)');
+    await page.$eval('#ru-ok', el => el.click());
     await page.waitForSelector('#screen-squad:not(.hidden)');
   }
 

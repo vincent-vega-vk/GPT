@@ -11,7 +11,7 @@
   const SAVE_KEY = 'simsoc6.save';
 
   /* ---- game state ----------------------------------------------------- */
-  let S, squadSelId = null, tmSelId = null, anim = null, subsUsed = 0, chooseSelIdx = 0, leagueDivView = 0;
+  let S, squadSelId = null, tmSelId = null, anim = null, chooseSelIdx = 0, leagueDivView = 0, bracketCup = null;
 
   const params = new URLSearchParams(location.search);
   function boot() {
@@ -66,6 +66,16 @@
   /* ===================== SQUAD SCREEN ================================= */
   function renderSquad() {
     const club = E.user(S);
+    $('mgr-rating').textContent = S.managerRating;
+    if ($('chk-explayers') && $('chk-explayers').checked) {          // show former players instead
+      const ex = (S.exPlayers || []).slice().reverse();
+      renderGrid('squad-grid', ex.map((p, i) => Object.assign({ id: 'ex' + i }, p)), p =>
+        '<td>' + p.surname + '</td><td>' + p.forename + '</td><td>' + posCell(p.pos) + '</td>' +
+        '<td class="num">' + p.skill + '</td><td class="small" colspan="2">S' + p.season + ' · ' + (p.reason || '') + '</td>' +
+        '<td class="num">' + p.appsTotal + '</td><td class="num">' + p.goalsTotal + '</td>', null, null);
+      if (!ex.length) renderGrid('squad-grid', [{ id: 0 }], () => '<td colspan="8" class="center small">No former players yet.</td>', null, null);
+      return;
+    }
     const players = sortSquad(club.players);
     if (squadSelId == null && players.length) squadSelId = players[0].id;
     renderGrid('squad-grid', players, p =>
@@ -134,12 +144,20 @@
   }
 
   /* ===================== MATCH SCREEN ================================= */
+  let matchEnded = false;
+  function bxAdd(cls, minute, html) {
+    const log = $('bx-events');
+    const d = document.createElement('div'); d.className = 'ev ' + (cls || '');
+    d.innerHTML = '<span class="min">' + Math.round(minute) + "'</span>" + html;
+    log.appendChild(d); log.parentElement.scrollTop = log.parentElement.scrollHeight;
+  }
   function startMatch() {
     if (S.selection.xi.length !== 11) return toast('Pick exactly 11 starters (you have ' + S.selection.xi.length + ').');
     if (S.selection.subs.length < 1) return toast('Pick at least one substitute.');
     const match = E.playUserMatch(S);
     if (!match) return;
-    window._match = match; subsUsed = 0;
+    window._match = match; matchEnded = false;
+    const sideName = side => side === 'home' ? match.homeName : match.awayName;
     $('m-home').textContent = match.homeName;
     $('m-away').textContent = match.awayName;
     $('m-hg').textContent = '0'; $('m-ag').textContent = '0';
@@ -148,48 +166,44 @@
     $('m-status').textContent = 'Kick off!';
     $('m-continue').classList.add('hidden');
     $('m-ball-home').textContent = '—'; $('m-ball-away').textContent = '—';
+    $('bx-events').innerHTML = '';
+    ['poss', 'shots', 'sot', 'cor', 'foul'].forEach(k => { $('bx-' + k + '-h').textContent = '–'; $('bx-' + k + '-a').textContent = '–'; });
     show('screen-match');
 
     if (anim) anim.stop();
     anim = M.create($('pitch'), match, {
       onScore: (side, name, minute, hg, ag) => {
         $('m-hg').textContent = hg; $('m-ag').textContent = ag;
-        $('m-event').textContent = Math.round(minute) + "'  GOAL!  " + name +
-          ' (' + (side === 'home' ? match.homeName : match.awayName) + ')';
+        $('m-event').textContent = Math.round(minute) + "'  GOAL!  " + name + ' (' + sideName(side) + ')';
+        bxAdd('goal', minute, '&#9917; <b>GOAL</b> — ' + name + ' <span class="l">(' + sideName(side) + ')</span>');
       },
+      onCard: c => bxAdd(c.color === 'R' ? 'rc' : 'yc', c.minute, (c.color === 'R' ? '&#9632; Red card' : '&#9632; Booking') + ' — ' + c.name + ' <span class="l">(' + sideName(c.side) + ')</span>'),
+      onInjury: iv => bxAdd('inj', iv.minute, '&#10010; Injury — ' + iv.name + ' <span class="l">(' + sideName(iv.side) + ')</span>'),
+      onSub: sv => bxAdd('sub', sv.minute, '&#8644; Sub — ' + sv.on + ' for ' + sv.off + ' <span class="l">(' + sideName(sv.side) + ')</span>'),
       onMinute: m => {
         $('m-bar').style.width = (m / 90 * 100) + '%';
         $('m-status').textContent = m >= 90 ? 'Full time' : Math.floor(m) + ' mins';
       },
       onBall: (h, a) => { if (h) $('m-ball-home').textContent = h; if (a) $('m-ball-away').textContent = a; },
-      onFullTime: (hg, ag) => finishMatch(match)
+      onFullTime: () => finishMatch(match)
     });
     anim.setSpeed($('m-speed').value);
   }
   function finishMatch(match) {
+    if (matchEnded) return;                       // onFullTime can fire once; guard double commit
+    matchEnded = true;
+    const st = match.stats;
+    $('bx-poss-h').textContent = st.possHome; $('bx-poss-a').textContent = st.possAway;
+    $('bx-shots-h').textContent = st.shotsHome; $('bx-shots-a').textContent = st.shotsAway;
+    $('bx-sot-h').textContent = st.sotHome; $('bx-sot-a').textContent = st.sotAway;
+    $('bx-cor-h').textContent = st.cornersHome; $('bx-cor-a').textContent = st.cornersAway;
+    $('bx-foul-h').textContent = st.foulsHome; $('bx-foul-a').textContent = st.foulsAway;
     const res = E.commitUserResult(S, match);
     let txt = 'Full time: ' + match.homeName + ' ' + res.hg + ' - ' + res.ag + ' ' + match.awayName;
     if (res.winnerName) txt += (res.pens ? ' (on pens) ' : ' ') + '— ' + res.winnerName + ' go through';
     $('m-event').textContent = txt;
     $('m-continue').classList.remove('hidden');
-    flushNotices();
     save();
-  }
-  function doSub() {
-    if (!anim) return;
-    if (subsUsed >= 3) return toast('No substitutions remaining.');
-    const club = E.user(S);
-    const xiOutfield = E.playersByIds(club, S.selection.xi).filter(p => p.pos !== 'G');
-    const subPlayers = E.playersByIds(club, S.selection.subs);
-    if (!subPlayers.length) return toast('No substitutes available.');
-    const out = xiOutfield.slice().sort((a, b) => a.fit - b.fit)[0];
-    const inP = subPlayers.slice().sort((a, b) => b.skill - a.skill)[0];
-    S.selection.xi[S.selection.xi.indexOf(out.id)] = inP.id;
-    S.selection.subs[S.selection.subs.indexOf(inP.id)] = out.id;
-    const userSide = window._match && window._match.home ? 'home' : 'away';
-    anim.substitute(userSide, fullName(out), fullName(inP));
-    subsUsed++;
-    toast('Substitution: ' + fullName(inP) + ' replaces ' + fullName(out) + '.');
   }
 
   /* ===================== TRANSFER MARKET ============================= */
@@ -271,6 +285,83 @@
       : 'No seasons completed yet — the roll of honour fills up at the end of each season.';
   }
 
+  /* ===================== RESULTS ROUND-UP =========================== */
+  function renderRoundup() {
+    const body = $('ru-body'); body.innerHTML = '';
+    const ru = S.roundup || [];
+    if (!ru.length) { body.innerHTML = '<div class="ev">Nothing else was simulated.</div>'; }
+    ru.forEach(entry => entry.groups.forEach(g => {
+      const h = document.createElement('h4'); h.textContent = g.group; body.appendChild(h);
+      g.games.forEach(gm => {
+        const hh = gm.winner && gm.winner === gm.home ? '<b>' + gm.home + '</b>' : gm.home;
+        const aa = gm.winner && gm.winner === gm.away ? '<b>' + gm.away + '</b>' : gm.away;
+        const d = document.createElement('div'); d.className = 'res';
+        d.innerHTML = '<div class="h">' + hh + '</div><div class="sc">' + gm.hg + ' - ' + gm.ag +
+          (gm.pens ? ' <span class="pk">p</span>' : '') + '</div><div class="a">' + aa + '</div>';
+        body.appendChild(d);
+      });
+    }));
+    const r = S.lastResult;
+    $('ru-info').textContent = r ? r.comp + ': ' + r.homeName + ' ' + r.hg + '-' + r.ag + ' ' + r.awayName : '';
+  }
+
+  /* ===================== CUP BRACKETS =============================== */
+  function renderBracketTabs() {
+    const tabs = $('bk-tabs'); tabs.innerHTML = '';
+    E.cupIds(S).forEach(id => {
+      const b = document.createElement('button'); b.className = 'spacer';
+      b.textContent = E.cupBracket(S, id).name;
+      b.onclick = () => { bracketCup = id; renderBracket(); };
+      tabs.appendChild(b);
+    });
+  }
+  function renderBracket() {
+    const ids = E.cupIds(S); const body = $('bk-body');
+    if (!ids.length) { body.innerHTML = 'No cups in progress.'; $('bk-title').textContent = ''; return; }
+    if (!bracketCup || ids.indexOf(bracketCup) < 0) bracketCup = ids[0];
+    const br = E.cupBracket(S, bracketCup);
+    $('bk-title').textContent = br.name + (br.winner ? '  —  Winners: ' + br.winner : '');
+    body.innerHTML = '';
+    br.rounds.forEach(rd => {
+      const col = document.createElement('div'); col.className = 'bcol';
+      const rn = document.createElement('div'); rn.className = 'rname'; rn.textContent = rd.name; col.appendChild(rn);
+      rd.ties.forEach(t => {
+        const d = document.createElement('div'); d.className = 'tie';
+        if (t.away === '(bye)') { d.innerHTML = '<div class="w">' + t.home + '</div><div class="l">(bye)</div>'; }
+        else {
+          const sc = t.hg == null ? '' : '<span class="sc">' + t.hg + '-' + t.ag + (t.pens ? ' p' : '') + '</span>';
+          const hw = t.winner === t.home, aw = t.winner === t.away;
+          d.innerHTML = '<div class="' + (hw ? 'w' : (t.winner ? 'l' : '')) + '">' + t.home + sc + '</div>' +
+            '<div class="' + (aw ? 'w' : (t.winner ? 'l' : '')) + '">' + t.away + '</div>';
+        }
+        col.appendChild(d);
+      });
+      body.appendChild(col);
+    });
+  }
+
+  /* ===================== HEAD TO HEAD =============================== */
+  function renderHistory(oppName) {
+    const recs = E.historyVs(S, oppName);
+    $('h2h-title').textContent = E.user(S).name + '  vs  ' + oppName;
+    let w = 0, d = 0, l = 0, gf = 0, ga = 0;
+    recs.forEach(h => { const our = h.home ? h.hg : h.ag, their = h.home ? h.ag : h.hg; gf += our; ga += their; if (our > their) w++; else if (our === their) d++; else l++; });
+    $('h2h-sum').textContent = recs.length ? ('Played ' + recs.length + ' — won ' + w + ', drawn ' + d + ', lost ' + l + ' (goals ' + gf + '-' + ga + ')') : 'You have never faced ' + oppName + '.';
+    renderGrid('h2h-grid', recs.slice().reverse().map((h, i) => Object.assign({ id: i }, h)), h => {
+      const our = h.home ? h.hg : h.ag, their = h.home ? h.ag : h.hg;
+      const cls = our > their ? 'pos-G' : our === their ? '' : 'red';
+      return '<td class="num">' + h.season + '</td><td>' + h.compName + '</td><td>' + (h.home ? 'Home' : 'Away') + '</td>' +
+        '<td class="num"><span class="' + cls + '">' + h.hg + ' - ' + h.ag + (h.pens ? ' p' : '') + '</span></td>';
+    }, null, null);
+  }
+
+  /* ===================== FINANCES =================================== */
+  function renderFinance() {
+    $('fin-balance').textContent = money(E.user(S).balance);
+    $('fin-debt').textContent = money(S.debt || 0);
+    $('fin-cap').textContent = money(E.loanCap(S));
+  }
+
   /* ===================== CHOOSE CLUB ================================= */
   function bottomMembers() { return S.divisions[S.divisions.length - 1].members; }
   function renderChoose() {
@@ -307,6 +398,9 @@
     $('btn-league').onclick = () => { leagueDivView = S.userDivision; renderLeague(); show('screen-league'); };
     $('btn-results').onclick = () => { renderResults(); show('screen-results'); };
     $('btn-honours').onclick = () => { renderHonours(); show('screen-honours'); };
+    $('btn-cups').onclick = () => { renderBracketTabs(); renderBracket(); show('screen-bracket'); };
+    $('btn-finance').onclick = () => { renderFinance(); show('screen-finance'); };
+    $('chk-explayers').onchange = () => { squadSelId = null; renderSquad(); };
     $('edit-forename').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.forename = e.target.value; renderSquad(); save(); } };
     $('edit-surname').oninput = e => { const p = selectedSquadPlayer(); if (p) { p.surname = e.target.value; renderSquad(); save(); } };
     // ticking the box sells the highlighted player immediately
@@ -345,22 +439,24 @@
     $('btn-bestxi').onclick = () => { const b = E.bestXI(E.user(S)); S.selection.xi = b.xi; S.selection.subs = b.subs; renderTeam(); };
     $('btn-clear').onclick = () => { S.selection.xi = []; S.selection.subs = []; renderTeam(); };
     $('btn-action').onclick = startMatch;
-    $('btn-history').onclick = () => {
-      if (!S.lastResult) return toast('No matches played yet.');
-      const r = S.lastResult;
-      toast('Last result: ' + r.homeName + ' ' + r.hg + ' - ' + r.ag + ' ' + r.awayName +
-        (r.scorers.length ? '. Scorers: ' + r.scorers.map(x => x.name + " " + x.minute + "'").join(', ') : ''), 8000);
+    $('btn-history').onclick = () => {           // head-to-head vs the upcoming opponent
+      const o = E.nextOpponent(S);
+      if (!o) return toast('No upcoming match.');
+      renderHistory(o.club.name); show('screen-history');
     };
     $('btn-venue').onclick = () => toast('The venue is fixed by the fixture list.');
+    $('h2h-close').onclick = () => { renderTeam(); show('screen-team'); };
 
     // match
     $('m-speed').oninput = e => { if (anim) anim.setSpeed(e.target.value); };
-    $('m-sub').onclick = doSub;
     $('m-skip').onclick = () => { if (anim) anim.skip(); };
-    $('m-continue').onclick = () => {
-      squadSelId = null; renderSquad(); show('screen-squad'); flushNotices();
-      if (S.day === 0 && S.season > 1) { renderHonours(); show('screen-honours'); }  // a season just ended
+    $('m-continue').onclick = () => { renderRoundup(); show('screen-roundup'); flushNotices(); };
+    $('ru-ok').onclick = () => {
+      squadSelId = null; renderSquad(); show('screen-squad');
+      if (S.day === 0 && S.season > 1) { renderHonours(); show('screen-honours'); }   // a season just ended
     };
+    $('ru-tables').onclick = () => { leagueDivView = S.userDivision; renderLeague(); show('screen-league'); };
+    $('ru-cups').onclick = () => { renderBracketTabs(); renderBracket(); show('screen-bracket'); };
 
     // transfer market
     ['tm-search'].forEach(id => $(id).oninput = renderTransfer);
@@ -385,6 +481,12 @@
     $('lg-close').onclick = () => { renderSquad(); show('screen-squad'); };
     $('rs-close').onclick = () => { renderSquad(); show('screen-squad'); };
     $('hon-close').onclick = () => { renderSquad(); show('screen-squad'); };
+    $('bk-close').onclick = () => { renderSquad(); show('screen-squad'); };
+
+    // finances / loans
+    $('fin-close').onclick = () => { renderSquad(); show('screen-squad'); };
+    $('fin-borrow').onclick = () => { const r = E.takeLoan(S, parseInt($('fin-amount').value, 10)); toast(r.msg); renderFinance(); renderSquad(); save(); };
+    $('fin-repay').onclick = () => { const r = E.repayLoan(S, parseInt($('fin-amount').value, 10)); toast(r.msg); renderFinance(); renderSquad(); save(); };
 
     // title-bar close buttons -> back to squad (the chooser is excluded so it
     // can't be dismissed without picking a club)

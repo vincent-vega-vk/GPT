@@ -69,6 +69,7 @@ check('bid succeeds', res.ok, res.msg);
 check('squad grew by 1', E.user(s).players.length === before + 1);
 check('balance reduced', E.user(s).balance === balBefore - affordable.value);
 check('player removed from market', !s.transferPool.find(p => p.id === affordable.id));
+E.user(s).balance = 9999999;                 // top up so the (randomly priced) signing is affordable
 const su = E.signUnlisted(s, 'M');
 check('sign unlisted works', su.ok, su.msg);
 

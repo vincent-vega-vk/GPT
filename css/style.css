@@ -148,5 +148,28 @@ input[type=range]{flex:1}
 }
 .hidden{display:none !important}
 
+/* ---- match box score + event log ----------------------------------- */
+table.grid.bx{width:100%; background:var(--yellow)}
+table.grid.bx td{padding:3px 6px; border-bottom:1px solid #e6e6b0}
+.bxlog{font-size:11px; background:#fff; min-height:100%}
+.bxlog .ev{padding:1px 5px; border-bottom:1px solid #eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bxlog .ev .min{display:inline-block; width:24px; color:#555; text-align:right; margin-right:6px}
+.bxlog .goal{font-weight:bold}
+.bxlog .yc{color:#a8860b}.bxlog .rc{color:#c00000}.bxlog .sub{color:#0a7a3a}.bxlog .inj{color:#b06000}
+.bxlog h4{margin:0; background:#000080; color:#fff; padding:2px 5px; font-size:11px; position:sticky; top:0}
+.bxlog .res{display:flex; gap:6px; padding:1px 5px; border-bottom:1px solid #eee}
+.bxlog .res .h{flex:1; text-align:right}.bxlog .res .a{flex:1}
+.bxlog .res .sc{font-weight:bold; width:54px; text-align:center}
+.bxlog .res .pk{color:#a00; font-size:10px}
+
+/* ---- cup bracket ---------------------------------------------------- */
+.bracket{display:flex; gap:10px; align-items:flex-start; padding:4px; min-width:max-content}
+.bracket .bcol{min-width:160px}
+.bracket .rname{font-weight:bold; font-size:11px; background:var(--face); border:2px solid; border-color:var(--hl) var(--sh) var(--sh) var(--hl); padding:2px 4px; margin-bottom:4px; text-align:center}
+.bracket .tie{background:#fff; border:1px solid #999; padding:2px 5px; margin-bottom:5px; font-size:11px; line-height:1.5}
+.bracket .tie .w{font-weight:bold}
+.bracket .tie .l{color:#999}
+.bracket .tie .sc{float:right; color:#333}
+
 /* desktop hint */
 #hint{position:fixed; left:10px; top:8px; color:#dfffdf; font-size:11px; opacity:.85}

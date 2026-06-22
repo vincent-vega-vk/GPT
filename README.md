@@ -20,21 +20,29 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 |---|---|
 | ![Choose your club](shots/1-choose-club.png) | ![Squad](shots/2-squad.png) |
 
-| Team Selector | Match engine |
+| Team selector (league or cup) | Match engine with live box score |
 |---|---|
-| ![Team Selector](shots/3-team-selector.png) | ![Match](shots/4-match.png) |
+| ![Team Selector](shots/3-team-selector.png) | ![Match full time](shots/5-match-fulltime.png) |
 
-| Transfer Market | Classified results |
+| Results round-up | Transfer market |
 |---|---|
-| ![Transfer Market](shots/6-transfer-market.png) | ![Classified results](shots/9-classified-results.png) |
+| ![Results round-up](shots/6-results-roundup.png) | ![Transfer Market](shots/7-transfer-market.png) |
 
-| League tables — your division | …and the division above |
+| League tables (any division) | Classified results |
 |---|---|
-| ![Conference table](shots/7-league-table.png) | ![Premier Division table](shots/8-league-premier.png) |
+| ![League table](shots/8-league-table.png) | ![Classified results](shots/11-classified-results.png) |
 
-| A cup tie | Roll of honour |
+| Cup draws & brackets | A cup tie |
 |---|---|
-| ![FA Cup tie](shots/11-cup-tie.png) | ![Roll of honour](shots/10-roll-of-honour.png) |
+| ![Cup bracket](shots/10-cup-bracket.png) | ![FA Cup tie](shots/15-cup-tie.png) |
+
+| Head-to-head record | Finances & loans |
+|---|---|
+| ![Head to head](shots/14-head-to-head.png) | ![Finances](shots/12-finances.png) |
+
+| Roll of honour | The desktop |
+|---|---|
+| ![Roll of honour](shots/13-roll-of-honour.png) | ![Desktop](shots/0-desktop.png) |
 
 ## Features
 
@@ -48,10 +56,11 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   **Defence / Midfield / Attack / Morale** ratings for you and the opponent
   (morale tracks recent form). "Pick Best XI" and "Clear Selection" helpers.
 - **Automated match engine** — a canvas side-view match with mown pitch, crowd,
-  goalmouths, 22 sprite players and the ball, a 0–90 clock, on-ball commentary
-  names, adjustable **Speed**, in-match **Subs**, and "Skip to result". The
-  scoreline and goal timeline are pre-simulated by the engine so the league
-  stays consistent — just like the original "fully automated" matches.
+  goalmouths, 22 sprite players and the ball, a 0–90 clock and on-ball commentary.
+  A live **box score** sits alongside (possession, shots, on target, corners,
+  fouls) with a rolling **match-events tabellino**: every **GOAL**, **booking**
+  (yellows and reds), **injury** and **automatic substitution**. Adjustable
+  **Speed** and "Skip to result"; the animation **freezes at full time**.
 - **A dynamic transfer market** — player skill runs **20–99** (with rare 90+
   stars); listings churn through the season. Filter by position / European /
   sort by skill, name search, **Bid** within budget, **Sign Unlisted Player**,
@@ -62,18 +71,30 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   **Injuries** strike during matches and players need games to recover, while
   starting drains **fitness** and resting restores it — so **rotation matters**,
   and **Training** gives the whole squad a fitness boost (once a week).
-- **A four-division pyramid** — 88 clubs across Premier Division, Division One,
-  Division Two and the Conference. **All divisions are simulated every round**,
-  with **promotion and relegation** (top/bottom three swap) at season's end, so
-  you climb — or slide — between tiers. Bigger divisions pay bigger gate receipts.
+- **A four-division pyramid** — 86 league clubs: a 20-club **Premier Division**
+  above Division One, Division Two and the 22-club Conference. **Every division
+  is simulated each round**, with **promotion and relegation** (top/bottom three
+  swap) at season's end. Bigger divisions pay bigger gate receipts.
 - **League tables for every division** — browse any tier, with **top scorers
   across all leagues**, plus a **Classified Results** screen listing a full
   round of fixtures with the scorers for every club.
-- **Cup competitions** — the **FA Cup** and **League Cup** (all 88 clubs), plus
-  the **European Cup** and **UEFA Cup** for clubs that qualify through their
-  league finish. Knockout draws are interleaved with the league on a season
-  calendar; you play your ties in the match engine (level ties settled on
-  penalties) and every other tie is simulated.
+- **Cup competitions, with brackets** — the **FA Cup** and **League Cup** (all
+  86 clubs) plus the **European Cup** and **UEFA Cup**, which add a field of
+  **continental clubs** to the English sides that qualify by league finish
+  (UEFA-style, knockout only — no group stage). View the full **draw/bracket**
+  for any cup; you play your own ties in the match engine and **level ties go to
+  penalties**, shown in the result.
+- **Results round-up** — after every game you play, a screen rounds up the
+  results of *every* competition simulated since your last match, with one click
+  through to the **tables** or the **cup brackets**.
+- **Finances & loans** — **borrow** against a division-scaled limit (weekly
+  interest applies) and **repay** when flush; leave the account overdrawn too
+  long and the board **sells your most valuable player** to cover it.
+- **Head-to-head** — the team selector's **History** button shows your full
+  record against the side you're about to face.
+- **Ageing & retirement** — players carry an age and retire between **35 and 40**;
+  veterans hang up their boots each close season and youth is promoted to refill
+  the squad. **Include ex-players** on the squad screen to review who has left.
 - **Roll of honour** — a per-season archive of each division's champions,
   runners-up and third place, plus every cup winner.
 - **A real season** — a balanced 42-game home/away fixture list, gate receipts,
@@ -99,7 +120,7 @@ as that club by global index (0–87), skipping the chooser.
 ## Develop / verify
 
 ```bash
-npm test             # head-less engine self-test (season sim, table maths, transfers, save/load)
+npm test             # head-less engine self-test, 96 checks (seasons, cups, finances, retirement, save/load)
 npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ```
 
@@ -109,12 +130,14 @@ npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ## How it's put together
 
 ```
-index.html        all eight windows (Choose Club, Squad, Team Selector, Game,
-                  Transfer, League tables, Classified Results, Roll of Honour)
+index.html        every window: Choose Club, Squad, Team Selector, Game (with
+                  box score), Results round-up, Transfer, League tables, Cup
+                  brackets, Classified Results, Head-to-head, Finances, Roll of Honour
 css/style.css     Windows 9x styling (3D widgets, title bars, data grids)
 js/data.js        seeded RNG, name pools, division/club/squad generation    (UMD)
-js/engine.js      division pyramid, season calendar, cups, fixtures, ratings,
-                  match sim, transfers, promotion/relegation, honours        (UMD)
+js/engine.js      pyramid + foreign clubs, season calendar, cups, fixtures,
+                  ratings, match sim (incl. box-score timeline), transfers,
+                  finances/loans, promotion/relegation, retirement, honours  (UMD)
 js/match.js       canvas match animation (plays out the engine's timeline)
 js/ui.js          screen rendering, input handling, wiring
 server.js         zero-dependency static file server
