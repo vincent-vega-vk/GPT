@@ -272,6 +272,10 @@ const noBye = ['fa', 'leaguecup', 'champions', 'uefa'].every(id => fc.cups[id].r
 check('no byes in any cup round', noBye);
 check('low reputation -> only bottom-tier clubs offered', E.eligibleClubs(fc, 30).every(i => fc.clubs[i].division === fc.divisions.length - 1));
 check('high reputation -> Premier clubs offered', E.eligibleClubs(fc, 90).some(i => fc.clubs[i].division === 0));
+// taking over a new club wipes any debt carried from the old one
+fc.debt = 300000; fc.debtSince = fc.day;
+E.chooseClub(fc, E.eligibleClubs(fc, 90).find(i => i !== fc.userClub));
+check('changing club clears inherited debt', fc.debt === 0 && fc.debtSince === -1, fc.debt);
 
 const ff = E.newGame(33445);
 E.prepareNextUserMatch(ff);

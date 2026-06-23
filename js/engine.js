@@ -129,6 +129,7 @@
     s.userClub = index;
     s.userDivision = s.clubs[index].division;
     s.managerRating = 50;
+    s.debt = 0; s.debtSince = -1;        // a new club starts you with a clean sheet — no inherited debt
     s.selection = defaultSelection(s);
     return s;
   }

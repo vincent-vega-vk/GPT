@@ -126,6 +126,8 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 - **Resign and move on** — quit your post and the **clubs willing to hire you
   depend on your reputation**: a strong manager rating opens up bigger jobs all
   the way to the Premier Division, a poor one keeps you in the lower leagues.
+  You start each new job with a clean sheet — **any loan debt stays with the
+  club you left**, not with you.
 - **Keyboard** — tap the **spacebar** to press the current screen's main
   "advance" button and click through the game quickly.
 - **A real season** — a balanced 42-game home/away fixture list, gate receipts,
@@ -151,7 +153,7 @@ as that club by global index (0–87), skipping the chooser.
 ## Develop / verify
 
 ```bash
-npm test             # head-less engine self-test, 116 checks (seasons, cups, finances, retirement, formations, save/load)
+npm test             # head-less engine self-test, 117 checks (seasons, cups, finances, retirement, formations, save/load)
 npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ```
 
@@ -172,7 +174,7 @@ js/engine.js      pyramid + foreign clubs, season calendar, cups, fixtures,
 js/match.js       canvas match animation (plays out the engine's timeline)
 js/ui.js          screen rendering, input handling, wiring
 server.js         zero-dependency static file server
-test/run.js       head-less engine self-test (116 checks)
+test/run.js       head-less engine self-test (117 checks)
 tools/screenshots.js   Puppeteer screenshot capture
 ```
 
