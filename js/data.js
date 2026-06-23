@@ -212,6 +212,7 @@
       pos, skill, age, fit,
       retireAge: opts.retireAge != null ? opts.retireAge : ri(rng, 35, 40),
       injuredFor, injured: injuredFor > 0,
+      yellows: 0, suspendedFor: 0,
       appsSeason: 0, goalsSeason: 0,
       appsTotal: opts.appsTotal || 0, goalsTotal: opts.goalsTotal || 0,
       transferListed: false,

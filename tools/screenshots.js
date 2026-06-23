@@ -27,7 +27,7 @@ async function shoot(page, sel, name) {
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--force-device-scale-factor=1']
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 980, height: 720, deviceScaleFactor: 1 });
+  await page.setViewport({ width: 1000, height: 760, deviceScaleFactor: 1 });
   page.on('pageerror', e => console.log('  [pageerror]', e.message));
   page.on('console', m => { if (m.type() === 'error') console.log('  [console.error]', m.text()); });
 
@@ -119,6 +119,14 @@ async function shoot(page, sel, name) {
   await sleep(150);
   await shoot(page, '#screen-honours', '13-roll-of-honour.png');
   await page.click('#hon-close');
+
+  /* ---- my career ---- */
+  await page.click('#btn-career');
+  await page.waitForSelector('#screen-career:not(.hidden)');
+  await page.waitForSelector('#car-grid tbody tr');
+  await sleep(150);
+  await shoot(page, '#screen-career', '16-my-career.png');
+  await page.click('#car-close');
 
   /* ---- head-to-head + a cup tie ---- */
   await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });

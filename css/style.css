@@ -105,6 +105,10 @@ table.grid.cyan tr.sel td{background:#8b0000; color:#fff}
 .spacer{flex:1}
 .small{font-size:11px}
 .red{color:#c00000}.bold{font-weight:bold}
+/* the club you manage, highlighted in red + bold everywhere it appears */
+.me{color:#c00000; font-weight:bold}
+table.grid tr.sel td .me{color:#fff}
+select.field{height:22px; padding:1px 2px}
 .right-panel{width:170px}
 .rating-pill{
   display:inline-block; background:var(--face); padding:2px 10px; font-weight:bold;

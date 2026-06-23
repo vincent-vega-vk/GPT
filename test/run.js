@@ -257,6 +257,39 @@ check('last-season winners tracked for curtain-raisers', eu2.prev && eu2.prev.uc
 check('European Super Cup created in season 2', !!eu2.cups.supercup, Object.keys(eu2.cups).join(','));
 check('Super Cup contestants are the two European winners', !!eu2.cups.supercup && eu2.cups.supercup.participants.length === 2);
 
+/* ---- squad cap, formations, bye-free cups, suspensions, career ------- */
+section('Squad cap, formations, bye-free cups, career');
+const fc = E.newGame(8642);
+E.user(fc).balance = 999999999;
+for (let k = 0; k < 40; k++) { const list = E.marketList(fc, { includeUnlisted: true }); const t = list.find(p => p.price <= E.user(fc).balance); if (!t) break; if (!E.bid(fc, t.id).ok) break; }
+check('squad capped at 23', E.user(fc).players.length === 23, E.user(fc).players.length);
+const anyMkt = E.marketList(fc, { includeUnlisted: true })[0];
+check('signing rejected when squad full', !E.bid(fc, anyMkt.id).ok);
+const f352 = E.bestXI(E.user(fc), { formation: '352' });
+check('Fresh XI returns 11', E.bestXI(E.user(fc), { mode: 'fresh' }).xi.length === 11);
+check('formation carried on the selection', f352.formation === '352');
+const noBye = ['fa', 'leaguecup', 'champions', 'uefa'].every(id => fc.cups[id].rounds.every(rd => rd.ties.every(t => t.away !== -1)));
+check('no byes in any cup round', noBye);
+check('low reputation -> only bottom-tier clubs offered', E.eligibleClubs(fc, 30).every(i => fc.clubs[i].division === fc.divisions.length - 1));
+check('high reputation -> Premier clubs offered', E.eligibleClubs(fc, 90).some(i => fc.clubs[i].division === 0));
+
+const ff = E.newGame(33445);
+E.prepareNextUserMatch(ff);
+E.user(ff).players.forEach((p, i) => { if (i > 2) p.injuredFor = 3; });   // leave only 3 fit
+const fm = E.playUserMatch(ff);
+check('walkover when fewer than 8 are fit', !!fm && fm.forfeit === true);
+
+const cr = E.newGame(11223);
+let gcr = 0, cs0 = cr.season, sawCupScorers = false;
+while (cr.season === cs0 && gcr++ < 400) {
+  step(cr);
+  // cups are rebuilt at the season rollover (scorers reset), so sample mid-season
+  if (cr.season === cs0 && (E.topScorersForCup(cr, 'fa').length > 0 || E.topScorersForCup(cr, 'champions').length > 0)) sawCupScorers = true;
+}
+check('career logged after a season', cr.career.length >= 1 && !!cr.career[0].club, cr.career.length);
+check('honours tally produced', E.honoursTally(cr).length > 0);
+check('cups keep their own scorer charts', sawCupScorers);
+
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');
 const snap = E.serialize(s3);

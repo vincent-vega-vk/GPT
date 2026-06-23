@@ -40,9 +40,13 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
 |---|---|
 | ![Head to head](shots/14-head-to-head.png) | ![Finances](shots/12-finances.png) |
 
-| Roll of honour | The desktop |
+| Roll of honour | My career |
 |---|---|
-| ![Roll of honour](shots/13-roll-of-honour.png) | ![Desktop](shots/0-desktop.png) |
+| ![Roll of honour](shots/13-roll-of-honour.png) | ![My career](shots/16-my-career.png) |
+
+| The desktop |
+|---|
+| ![Desktop](shots/0-desktop.png) |
 
 ## Features
 
@@ -54,7 +58,12 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   transfer-listing to sell, and a live Manager Rating %.
 - **Team selector** — pick 11 starters + subs from your reserves, with live
   **Defence / Midfield / Attack / Morale** ratings for you and the opponent
-  (morale tracks recent form). "Pick Best XI" and "Clear Selection" helpers.
+  (morale tracks recent form). Choose a **formation** (3-4-3, 3-5-2, 4-4-2,
+  4-5-1, 5-4-1) and let the auto-pickers fill it: **Pick Best XI** (quality
+  first), **Pick Fresh XI** (freshest legs, for rotation) or **Best + Fresh XI**
+  (a blend), plus **Clear Selection**. Squads are capped at **23 players**;
+  injured **and suspended** players are flagged as unavailable. Turn up with
+  **fewer than 8 fit players and the match is forfeited** (a 0–3 walkover).
 - **Automated match engine** — a canvas side-view match with mown pitch, crowd,
   goalmouths, 22 sprite players and the ball, a 0–90 clock and on-ball commentary.
   A live **box score** sits alongside (possession, shots, on target, corners,
@@ -71,7 +80,9 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   skill is **re-rolled each close season** — strongly random, with an age bias so
   youngsters tend to rise and veterans fade. **Injuries** strike during matches
   and cost games to recover, while starting drains **fitness** and resting
-  restores it, so **rotation matters**. Player names come from a broad
+  restores it, so **rotation matters**. **Bookings** carry consequences too — a
+  red card or **five accumulated yellows** earns a **one-match suspension** —
+  giving you another reason to rotate. Player names come from a broad
   **international 90s pool** and are fixed (no renaming).
 - **A four-division pyramid** — 86 league clubs: a 20-club **Premier Division**
   above Division One, Division Two and the 22-club Conference. **Every division
@@ -90,8 +101,10 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   **aggregate** (away goals, then penalties); the **UEFA Cup final then the
   Champions League final close the season**. Two curtain-raisers open the next
   one: the **Community Shield** (league champions v FA Cup winners) and the
-  **European Super Cup** (Champions League v UEFA Cup winners). View the full
-  **draw/bracket** for every cup — all results, not just yours.
+  **European Super Cup** (Champions League v UEFA Cup winners). Every draw is a
+  **complete bracket — no byes**, with the domestic cups slotted into the league
+  calendar. View the full **draw/bracket** for every cup — all results, not just
+  yours — alongside that competition's **own top-scorers chart**.
 - **Results round-up** — after every game you play, a screen rounds up the
   results of *every* competition simulated since your last match, with one click
   through to the **tables** or the **cup brackets**.
@@ -104,7 +117,17 @@ It runs with **zero runtime dependencies** — plain HTML, CSS and JavaScript.
   veterans hang up their boots each close season and youth is promoted to refill
   the squad. **Include ex-players** on the squad screen to review who has left.
 - **Roll of honour** — a per-season archive of each division's champions,
-  runners-up and third place, plus every cup winner.
+  runners-up and third place, plus every cup winner, **and a per-club trophy
+  count** with the breakdown by competition.
+- **My Career** — your own managerial record: every season you've finished, the
+  club and division, where you placed and the trophies you lifted. The club you
+  manage is shown **in red and bold everywhere** it appears — tables, results,
+  brackets, round-ups, scorer charts and honours.
+- **Resign and move on** — quit your post and the **clubs willing to hire you
+  depend on your reputation**: a strong manager rating opens up bigger jobs all
+  the way to the Premier Division, a poor one keeps you in the lower leagues.
+- **Keyboard** — tap the **spacebar** to press the current screen's main
+  "advance" button and click through the game quickly.
 - **A real season** — a balanced 42-game home/away fixture list, gate receipts,
   manager rating, and automatic season rollover.
 - **Autosave** to `localStorage`, so your game is there when you come back.
@@ -128,7 +151,7 @@ as that club by global index (0–87), skipping the chooser.
 ## Develop / verify
 
 ```bash
-npm test             # head-less engine self-test, 105 checks (seasons, cups, finances, retirement, save/load)
+npm test             # head-less engine self-test, 116 checks (seasons, cups, finances, retirement, formations, save/load)
 npm run shots        # drives the game in headless Chrome and writes shots/*.png
 ```
 
@@ -149,7 +172,7 @@ js/engine.js      pyramid + foreign clubs, season calendar, cups, fixtures,
 js/match.js       canvas match animation (plays out the engine's timeline)
 js/ui.js          screen rendering, input handling, wiring
 server.js         zero-dependency static file server
-test/run.js       head-less engine self-test (79 checks)
+test/run.js       head-less engine self-test (116 checks)
 tools/screenshots.js   Puppeteer screenshot capture
 ```
 
