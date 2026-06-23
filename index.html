@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIMSOC 6</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="hint">SIMSOC 6 &mdash; remake. Manage Romford in the Conference.</div>
+
+<!-- ========================= CHOOSE CLUB ======================== -->
+<section id="screen-choose" class="win hidden" style="width:560px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">SIMSOC 6 &mdash; New Game</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="statbox" id="choose-band" style="background:#9a9a00; color:#fff; font-size:15px; padding:8px; margin-bottom:6px">League Conference</div>
+      <div class="bold" id="choose-head" style="margin-bottom:2px">Choose a club to manage</div>
+      <div class="small" id="choose-sub" style="margin-bottom:6px">Take charge of any club in the Conference for your first season in management.</div>
+      <div class="grid-wrap" style="height:320px">
+        <table class="grid" id="choose-grid">
+          <thead><tr><th>Club</th><th id="choose-col2">Prospects</th><th class="num">Overall</th><th class="num">Squad</th><th class="num">Funds</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:8px; align-items:center">
+        <div class="small">Selected: <span class="bold" id="choose-sel-name">&mdash;</span></div>
+        <div class="spacer"></div>
+        <button id="choose-random">Random Club</button>
+        <button id="choose-confirm" style="font-weight:bold; height:30px">Take Charge &raquo;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SQUAD ============================ -->
+<section id="screen-squad" class="win hidden" style="width:624px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Squad</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1">
+          <div style="display:flex; font-weight:bold; padding-left:2px">
+            <div style="flex:1"></div>
+            <div style="width:120px; text-align:center">This Season</div>
+            <div style="width:120px; text-align:center">Total for team</div>
+          </div>
+          <div class="grid-wrap" style="height:360px">
+            <table class="grid" id="squad-grid">
+              <thead><tr>
+                <th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Age</th>
+                <th class="num">Apps</th><th class="num">Goals</th>
+                <th class="num">Apps</th><th class="num">Goals</th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="right-panel col">
+          <div class="small bold">Selected player</div>
+          <input class="field" id="edit-forename" type="text" readonly>
+          <input class="field" id="edit-surname" type="text" readonly style="color:#00c">
+          <div class="small" id="sel-info">&nbsp;</div>
+          <button id="btn-analysis">Player Analysis</button>
+          <label class="chk small" style="margin-top:6px"><input type="checkbox" id="chk-list"> Transfer Listed</label>
+          <div class="small bold" style="font-style:italic">Check here to sell the highlighted player</div>
+          <div style="margin-top:4px"><span class="rating-pill" id="mgr-rating">50</span> Manager Rating %</div>
+          <button id="btn-resign" style="margin-top:6px">Resign as Manager</button>
+          <div class="spacer"></div>
+          <button id="btn-transfer" style="height:34px; font-weight:bold">Transfer Market</button>
+          <label class="chk small"><input type="checkbox" id="chk-explayers"> Include ex-players</label>
+          <button id="btn-play" style="font-weight:bold">Play Next Match &raquo;</button>
+          <div class="row">
+            <button id="btn-league" class="spacer">Tables</button>
+            <button id="btn-results" class="spacer">Results</button>
+          </div>
+          <div class="row">
+            <button id="btn-honours" class="spacer">Honours</button>
+            <button id="btn-cups" class="spacer">Cups</button>
+          </div>
+          <div class="row">
+            <button id="btn-career" class="spacer">My Career</button>
+            <button id="btn-finance" class="spacer">Finances / Loans</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TEAM SELECTOR ========================= -->
+<section id="screen-team" class="win hidden" style="width:600px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Team Selector</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <!-- left: selection -->
+        <div style="width:300px" class="col">
+          <div class="bold small">Team Selection</div>
+          <div class="grid-wrap" style="height:150px">
+            <table class="grid" id="xi-grid">
+              <thead><tr><th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Fit</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <!-- ratings -->
+          <div class="ratings">
+            <div class="rt-head" id="rt-home-name">Romford</div>
+            <div class="rt-head"></div>
+            <div class="rt-head" id="rt-away-name">Opponent</div>
+            <div class="statbox sb-def" id="rt-h-def">0</div><div class="rt-lab">Defence</div><div class="statbox sb-def" id="rt-a-def">0</div>
+            <div class="statbox sb-mid" id="rt-h-mid">0</div><div class="rt-lab">Midfield</div><div class="statbox sb-mid" id="rt-a-mid">0</div>
+            <div class="statbox sb-att" id="rt-h-att">0</div><div class="rt-lab">Attack</div><div class="statbox sb-att" id="rt-a-att">0</div>
+            <div class="statbox sb-mor" id="rt-h-mor">0</div><div class="rt-lab">Morale</div><div class="statbox sb-mor" id="rt-a-mor">0</div>
+          </div>
+          <!-- subs -->
+          <div class="bold small" style="margin-top:2px">Substitutes</div>
+          <div class="grid-wrap" style="height:78px">
+            <table class="grid" id="subs-grid">
+              <thead><tr><th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Fit</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="row" style="align-items:center">
+            <div class="small">Pick 11 + a sub</div>
+            <div class="spacer"></div>
+            <button id="btn-simulate" style="height:30px">Simulate</button>
+            <button id="btn-action" style="height:30px; font-weight:bold">Action</button>
+          </div>
+        </div>
+        <!-- right: opponent / reserves -->
+        <div style="flex:1" class="col">
+          <div class="statbox" style="background:#9a9a00; color:#fff; font-size:15px; padding:8px" id="league-name">League Conference</div>
+          <div class="row">
+            <button id="btn-venue" style="width:64px">Home</button>
+            <div class="statbox" style="flex:1; background:#7fd4ff; font-size:15px; padding:6px" id="opp-name">Opponent</div>
+          </div>
+          <div class="bold small">Reserves</div>
+          <div class="grid-wrap" style="height:150px">
+            <table class="grid cyan" id="res-grid">
+              <thead><tr><th>Surname</th><th>Forename</th><th>Posn</th><th class="num">Skill</th><th class="num">Fit</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="spacer"></div>
+          <div class="row" style="align-items:center">
+            <span class="small">Formation</span>
+            <select class="field spacer" id="sel-formation">
+              <option value="343">3-4-3</option>
+              <option value="352">3-5-2</option>
+              <option value="442" selected>4-4-2</option>
+              <option value="451">4-5-1</option>
+              <option value="541">5-4-1</option>
+            </select>
+          </div>
+          <div class="row">
+            <button id="btn-clear" class="spacer">Clear Selection</button>
+            <button id="btn-history" class="spacer">History</button>
+          </div>
+          <button id="btn-bestxi">Pick Best XI</button>
+          <div class="row">
+            <button id="btn-freshxi" class="spacer">Pick Fresh XI</button>
+            <button id="btn-mixxi" class="spacer">Best + Fresh XI</button>
+          </div>
+          <div class="small">Your rating as a manager: <span id="team-mgr">50</span> %</div>
+          <button id="btn-team-back">&laquo; Back to Squad</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ MATCH =========================== -->
+<section id="screen-match" class="win hidden" style="width:828px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Game</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="scoreboard">
+        <div class="team" id="m-home">Home</div>
+        <div class="score"><span id="m-hg">0</span>&nbsp;-&nbsp;<span id="m-ag">0</span></div>
+        <div class="team" id="m-away">Away</div>
+      </div>
+      <div class="row">
+        <div style="width:528px">
+          <canvas id="pitch" width="524" height="300"></canvas>
+          <div class="commentary">
+            <div class="name home" id="m-ball-home">&mdash;</div>
+            <div class="name away" id="m-ball-away">&mdash;</div>
+          </div>
+          <div class="complabel" id="m-event">League</div>
+          <div class="matchctl">
+            <div class="lab small">Speed</div>
+            <input type="range" id="m-speed" min="1" max="10" value="5">
+            <div class="progress"><span id="m-bar" style="width:0%"></span>
+              <div class="ticks"><span>0</span><span>45</span><span>90</span></div>
+            </div>
+          </div>
+          <div class="row" style="margin-top:6px">
+            <div class="small" id="m-status">Kick off!</div>
+            <div class="spacer"></div>
+            <button id="m-skip">Skip to result</button>
+            <button id="m-continue" class="hidden" style="font-weight:bold">Continue &raquo;</button>
+          </div>
+        </div>
+        <div style="flex:1" class="col">
+          <div class="bold small center">Match statistics</div>
+          <table class="grid bx" id="bx-stats">
+            <tr><td class="num" id="bx-poss-h">50</td><td class="center">Possession %</td><td class="num" id="bx-poss-a">50</td></tr>
+            <tr class="alt"><td class="num" id="bx-shots-h">0</td><td class="center">Shots</td><td class="num" id="bx-shots-a">0</td></tr>
+            <tr><td class="num" id="bx-sot-h">0</td><td class="center">On target</td><td class="num" id="bx-sot-a">0</td></tr>
+            <tr class="alt"><td class="num" id="bx-cor-h">0</td><td class="center">Corners</td><td class="num" id="bx-cor-a">0</td></tr>
+            <tr><td class="num" id="bx-foul-h">0</td><td class="center">Fouls</td><td class="num" id="bx-foul-a">0</td></tr>
+          </table>
+          <div class="bold small" style="margin-top:4px">Match events</div>
+          <div class="grid-wrap" style="height:150px"><div id="bx-events" class="bxlog"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TRANSFER MARKET ====================== -->
+<section id="screen-transfer" class="win hidden" style="width:560px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Transfer Market</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1" class="col">
+          <div class="row" style="align-items:center">
+            <input class="field" id="tm-search" placeholder="" style="width:160px">
+            <span class="small">&larr; Name Search</span>
+          </div>
+          <div class="grid-wrap" style="height:300px">
+            <table class="grid" id="tm-grid">
+              <thead><tr><th>Name</th><th class="num">Skill</th><th>Posn</th><th class="num">Age</th><th class="num">Price</th><th>Team</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="right-panel col">
+          <div class="small">Highlight the player you want to buy &amp; press the bid button:</div>
+          <button id="tm-bid" style="height:46px; font-weight:bold; font-size:14px">Bid</button>
+          <div class="small">Funds available:</div>
+          <div class="field num" id="tm-funds">0</div>
+          <button id="tm-unlisted" style="margin-top:6px">Sign Unlisted Player</button>
+          <div class="col" style="gap:2px; margin-top:6px">
+            <label class="chk small"><input type="checkbox" id="f-G" checked> Goalkeepers</label>
+            <label class="chk small"><input type="checkbox" id="f-D" checked> Defence</label>
+            <label class="chk small"><input type="checkbox" id="f-M" checked> Midfield</label>
+            <label class="chk small"><input type="checkbox" id="f-A" checked> Attack</label>
+            <label class="chk small"><input type="checkbox" id="f-euro" checked> Include European</label>
+            <label class="chk small"><input type="checkbox" id="f-sort" checked> Sort by skill</label>
+            <label class="chk small"><input type="checkbox" id="f-unlisted"> Inc. unlisted players</label>
+          </div>
+          <div class="spacer"></div>
+          <button id="tm-close" style="height:34px">No Bid</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= LEAGUE TABLE ======================= -->
+<section id="screen-league" class="win hidden" style="width:600px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Football Pyramid &mdash; Tables &amp; Top Scorers</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1">
+          <div class="row" style="align-items:center; margin-bottom:3px">
+            <button id="lg-prev" style="min-height:18px; padding:0 8px">&#9664;</button>
+            <div class="bold center spacer" id="lg-title">Division</div>
+            <button id="lg-next" style="min-height:18px; padding:0 8px">&#9654;</button>
+          </div>
+          <div class="grid-wrap" style="height:360px">
+            <table class="grid" id="lg-grid">
+              <thead><tr><th>Pos</th><th>Club</th><th class="num">P</th><th class="num">W</th>
+              <th class="num">D</th><th class="num">L</th><th class="num">F</th><th class="num">A</th>
+              <th class="num">GD</th><th class="num">Pts</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="width:210px" class="col">
+          <div class="bold small" id="ts-title">Top Scorers</div>
+          <div class="grid-wrap" style="height:360px">
+            <table class="grid" id="ts-grid">
+              <thead><tr><th>Player</th><th>Club</th><th class="num">Gls</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div class="small" id="lg-season">Season 1</div>
+        <div class="spacer"></div>
+        <button id="lg-close" style="font-weight:bold">OK</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== CLASSIFIED RESULTS ==================== -->
+<section id="screen-results" class="win hidden" style="width:580px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Classified Results</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="bold small" id="rs-title">Latest Results</div>
+      <div class="grid-wrap" style="height:340px">
+        <table class="grid" id="rs-grid">
+          <thead><tr><th>Home</th><th class="num">Score</th><th>Away</th><th>Scorers</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:6px; align-items:center">
+        <div class="small" id="rs-info"></div>
+        <div class="spacer"></div>
+        <button id="rs-close" style="font-weight:bold">OK</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= ROLL OF HONOUR ===================== -->
+<section id="screen-honours" class="win hidden" style="width:660px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Roll of Honour</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row">
+        <div style="flex:1">
+          <div class="bold small">League honours &mdash; champions · runners-up · third</div>
+          <div class="grid-wrap" style="height:236px">
+            <table class="grid" id="hon-grid">
+              <thead><tr><th>Sn</th><th>Division</th><th>Champions</th><th>Runners-up</th><th>Third</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="width:236px">
+          <div class="bold small">Cup winners</div>
+          <div class="grid-wrap" style="height:236px">
+            <table class="grid cyan" id="honc-grid">
+              <thead><tr><th>Sn</th><th>Competition</th><th>Winner</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="bold small" style="margin-top:6px">Trophies won &mdash; total per club, with the breakdown by competition</div>
+      <div class="grid-wrap" style="height:132px">
+        <table class="grid" id="hont-grid">
+          <thead><tr><th>Club</th><th class="num">Total</th><th>Breakdown by competition</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:6px; align-items:center">
+        <div class="small" id="hon-info"></div>
+        <div class="spacer"></div>
+        <button id="hon-close" style="font-weight:bold">OK</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== MY CAREER ======================== -->
+<section id="screen-career" class="win hidden" style="width:600px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">My Career</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="bold" id="car-sum">&nbsp;</div>
+      <div class="small" id="car-now" style="margin:2px 0 6px"></div>
+      <div class="grid-wrap" style="height:340px">
+        <table class="grid" id="car-grid">
+          <thead><tr><th>Sn</th><th>Club</th><th>Division</th><th class="num">Finished</th><th>Trophies</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:6px; align-items:center">
+        <div class="small" id="car-info"></div>
+        <div class="spacer"></div>
+        <button id="car-close" style="font-weight:bold">OK</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= RESULTS ROUND-UP ===================== -->
+<section id="screen-roundup" class="win hidden" style="width:600px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Results round-up</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="grid-wrap" style="height:382px"><div id="ru-body" class="bxlog"></div></div>
+      <div class="row" style="margin-top:6px; align-items:center">
+        <div class="small" id="ru-info"></div>
+        <div class="spacer"></div>
+        <button id="ru-tables">Tables</button>
+        <button id="ru-cups">Cup draws</button>
+        <button id="ru-ok" style="font-weight:bold">Continue &raquo;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== CUP DRAWS ========================= -->
+<section id="screen-bracket" class="win hidden" style="width:980px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Cup Draws &amp; Brackets</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="row" id="bk-tabs" style="margin-bottom:4px"></div>
+      <div class="bold" id="bk-title">&nbsp;</div>
+      <div class="row">
+        <div class="grid-wrap spacer" style="height:392px"><div id="bk-body" class="bracket"></div></div>
+        <div style="width:206px">
+          <div class="bold small">Top scorers &mdash; this cup</div>
+          <div class="grid-wrap" style="height:392px">
+            <table class="grid cyan" id="bk-scorers">
+              <thead><tr><th>Player</th><th>Club</th><th class="num">Gls</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:6px"><div class="spacer"></div><button id="bk-close" style="font-weight:bold">OK</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= HEAD TO HEAD ======================= -->
+<section id="screen-history" class="win hidden" style="width:520px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Head to Head</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client">
+      <div class="bold" id="h2h-title">&nbsp;</div>
+      <div class="small" id="h2h-sum" style="margin:2px 0 6px"></div>
+      <div class="grid-wrap" style="height:300px">
+        <table class="grid" id="h2h-grid">
+          <thead><tr><th>Sn</th><th>Competition</th><th>Venue</th><th class="num">Result</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row" style="margin-top:6px"><div class="spacer"></div><button id="h2h-close" style="font-weight:bold">OK</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== FINANCES ========================= -->
+<section id="screen-finance" class="win hidden" style="width:430px">
+  <div class="win-inner">
+    <div class="titlebar"><span class="t-title">Finances</span>
+      <span class="t-btns"><span class="t-btn">_</span><span class="t-btn">&#9633;</span><span class="t-btn">&times;</span></span>
+    </div>
+    <div class="client col" style="gap:8px">
+      <div class="group" style="margin-top:6px">
+        <div class="lbl">Club account</div>
+        <div class="row"><div style="flex:1">Bank balance</div><div class="bold" id="fin-balance">£0</div></div>
+        <div class="row"><div style="flex:1">Outstanding loan</div><div class="bold red" id="fin-debt">£0</div></div>
+        <div class="row"><div style="flex:1">Loan limit</div><div id="fin-cap">£0</div></div>
+      </div>
+      <div class="small">A loan tops up the bank now; ~1% interest is charged each week. Leave the
+        account overdrawn too long and the board will sell your most valuable player.</div>
+      <div class="row" style="align-items:center">
+        <span class="small">Amount £</span>
+        <input class="field" id="fin-amount" type="number" value="250000" step="50000" style="width:120px">
+        <div class="spacer"></div>
+        <button id="fin-borrow">Borrow</button>
+        <button id="fin-repay">Repay</button>
+      </div>
+      <div class="row"><div class="spacer"></div><button id="fin-close" style="font-weight:bold">OK</button></div>
+    </div>
+  </div>
+</section>
+
+<div id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/match.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>

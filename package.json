@@ -1,0 +1,15 @@
+{
+  "name": "simsoc6-remake",
+  "version": "1.0.0",
+  "description": "A faithful browser recreation of the classic football management game SIMSOC 6 (1998).",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/run.js",
+    "shots": "node tools/screenshots.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}
