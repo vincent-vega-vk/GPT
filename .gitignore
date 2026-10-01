@@ -1,0 +1,4 @@
+node_modules/
+finquest/dist/artifact.html
+finquest/dist/shots/
+.DS_Store

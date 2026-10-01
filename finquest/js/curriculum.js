@@ -1,0 +1,168 @@
+/* FinQuest — curriculum: 10 unità × 10 livelli = 100 livelli, 20 tappe ciascuno.
+   Ogni livello: [id, titolo, icona, calc keys, chart keys, sim] */
+(function (root) {
+  const FQ = (root.FQ = root.FQ || {});
+
+  FQ.UNITS = [
+    { id: 1, title: 'Le basi del denaro', tag: 'Principiante', color: 'u1', desc: 'Budget, risparmio, interessi, inflazione e il legame tra rischio e rendimento.' },
+    { id: 2, title: 'Come funzionano i mercati', tag: 'Principiante', color: 'u2', desc: 'Borse, broker, ordini, prezzi, liquidità e indici: la macchina del mercato.' },
+    { id: 3, title: 'Le azioni', tag: 'Base', color: 'u3', desc: 'Cosa compri quando compri un’azione: dividendi, capitalizzazione, settori, stili.' },
+    { id: 4, title: 'Obbligazioni e tassi', tag: 'Base', color: 'u4', desc: 'Cedole, prezzi, rendimenti, rating, duration, BTP e spread.' },
+    { id: 5, title: 'Fondi, ETF e diversificazione', tag: 'Intermedio', color: 'u5', desc: 'Strumenti collettivi, costi, asset allocation, ribilanciamento e PAC.' },
+    { id: 6, title: 'Analisi fondamentale', tag: 'Intermedio', color: 'u6', desc: 'Leggere un bilancio, i multipli, la redditività e valutare un’azienda.' },
+    { id: 7, title: 'Analisi tecnica', tag: 'Avanzato', color: 'u7', desc: 'Candele, trend, supporti, medie mobili, oscillatori e i loro limiti.' },
+    { id: 8, title: 'Macroeconomia e mercati', tag: 'Avanzato', color: 'u8', desc: 'PIL, inflazione, banche centrali, valute, materie prime e crisi.' },
+    { id: 9, title: 'Derivati e strumenti avanzati', tag: 'Esperto', color: 'u9', desc: 'Leva, short, futures, opzioni, CFD, forex e cripto: potenza e rischi.' },
+    { id: 10, title: 'Rischio, psicologia e strategia', tag: 'Esperto', color: 'u10', desc: 'Position sizing, drawdown, bias, fisco italiano e un piano che regge.' },
+  ];
+
+  const L = [
+    // Unità 1 — Le basi del denaro
+    [1, 'Che cos’è il denaro', '💶', ['pct', 'pp'], ['infl', 'maxmin'], 'budget'],
+    [2, 'Reddito, spese e budget', '🧾', ['budget', 'goal'], ['pie', 'bars'], 'budget'],
+    [3, 'Il fondo di emergenza', '🛟', ['emerg', 'goal'], ['bars', 'maxmin'], 'budget'],
+    [4, 'L’interesse semplice', '➕', ['simple', 'pct'], ['growth', 'maxmin'], 'lab'],
+    [5, 'L’interesse composto', '❄️', ['compound', 'r72'], ['growth', 'chg'], 'lab'],
+    [6, 'Inflazione e potere d’acquisto', '🎈', ['realret', 'pp', 'cpi'], ['infl', 'chg'], 'lab'],
+    [7, 'Debito buono e debito cattivo', '⚖️', ['loan', 'simple'], ['bars', 'growth'], 'budget'],
+    [8, 'Banche, conti e depositi', '🏦', ['simple', 'bollo'], ['bars', 'maxmin'], 'lab'],
+    [9, 'Rischio e rendimento', '🎢', ['wret', 'pct'], ['volat', 'ddchart'], 'alloc'],
+    [10, 'Obiettivi e orizzonte temporale', '🎯', ['goal', 'compound'], ['growth', 'trend'], 'lab'],
+    // Unità 2 — Come funzionano i mercati
+    [11, 'Che cos’è un mercato finanziario', '🏛️', ['pct', 'mcap'], ['trend', 'maxmin'], 'trade'],
+    [12, 'Mercato primario e secondario', '🔁', ['mcap', 'pct'], ['trend', 'chg'], 'trade'],
+    [13, 'Le borse valori nel mondo', '🌍', ['fx', 'pct'], ['bars', 'trend'], 'trade'],
+    [14, 'Intermediari e broker', '🤝', ['ordercost', 'pct'], ['bars', 'chg'], 'trade'],
+    [15, 'Domanda, offerta e prezzo', '📊', ['pct', 'spread'], ['trend', 'volume'], 'trade'],
+    [16, 'Bid, ask e spread', '↔️', ['spread', 'ordercost'], ['maxmin', 'chg'], 'trade'],
+    [17, 'I tipi di ordine', '📝', ['limitfill', 'ordercost'], ['sr', 'maxmin'], 'trade'],
+    [18, 'Liquidità e volumi', '💧', ['spread', 'pct'], ['volume', 'volat'], 'trade'],
+    [19, 'Gli indici di borsa', '📈', ['index', 'pct'], ['trend', 'chg'], 'trade'],
+    [20, 'Regole e vigilanza', '🛡️', ['pct', 'ordercost'], ['ddchart', 'trend'], 'trade'],
+    // Unità 3 — Le azioni
+    [21, 'Che cos’è un’azione', '🧩', ['mcap', 'pct'], ['trend', 'chg'], 'trade'],
+    [22, 'La capitalizzazione di mercato', '🏢', ['mcap', 'index'], ['bars', 'pie'], 'trade'],
+    [23, 'I dividendi', '🍰', ['divy', 'payout'], ['bars', 'chg'], 'trade'],
+    [24, 'IPO e quotazione', '🔔', ['mcap', 'pct'], ['chg', 'volume'], 'trade'],
+    [25, 'Settori e ciclicità', '🏭', ['pct', 'wret'], ['cycle', 'volat'], 'alloc'],
+    [26, 'Growth e Value', '🌱', ['pe', 'divy'], ['volat', 'bars'], 'trade'],
+    [27, 'Split, aumenti di capitale e buyback', '✂️', ['split', 'eps'], ['chg', 'trend'], 'trade'],
+    [28, 'I diritti degli azionisti', '🗳️', ['votes', 'divy'], ['pie', 'bars'], 'trade'],
+    [29, 'Small, mid e large cap', '🐘', ['mcap', 'pct'], ['volat', 'bars'], 'alloc'],
+    [30, 'Il rendimento totale', '🏆', ['totret', 'cagr'], ['growth', 'ddchart'], 'lab'],
+    // Unità 4 — Obbligazioni e tassi
+    [31, 'Che cos’è un’obbligazione', '📜', ['coupon', 'cy'], ['bars', 'maxmin'], 'alloc'],
+    [32, 'Cedola, scadenza e nominale', '🎟️', ['coupon', 'cy'], ['bars', 'trend'], 'lab'],
+    [33, 'Prezzo e rendimento: la relazione inversa', '🔄', ['bondprice', 'cy'], ['trend', 'chg'], 'trade'],
+    [34, 'I titoli di Stato italiani', '🇮🇹', ['ytm', 'tax'], ['curve', 'bars'], 'alloc'],
+    [35, 'Obbligazioni societarie e rating', '🅰️', ['cy', 'bps'], ['bars', 'maxmin'], 'alloc'],
+    [36, 'Duration e rischio tasso', '⏳', ['bondprice', 'coupon'], ['chg', 'trend'], 'trade'],
+    [37, 'La curva dei rendimenti', '〰️', ['bps', 'ytm'], ['curve', 'bars'], 'alloc'],
+    [38, 'Lo spread BTP-Bund', '📏', ['bps', 'cy'], ['trend', 'maxmin'], 'trade'],
+    [39, 'Obbligazioni legate all’inflazione', '🌡️', ['realret', 'coupon'], ['infl', 'bars'], 'alloc'],
+    [40, 'Rischio di credito e default', '⚠️', ['eloss', 'cy'], ['bars', 'ddchart'], 'alloc'],
+    // Unità 5 — Fondi, ETF e diversificazione
+    [41, 'I fondi comuni di investimento', '🧺', ['ter', 'pct'], ['bars', 'trend'], 'alloc'],
+    [42, 'Gli ETF', '🧱', ['ter', 'index'], ['pie', 'trend'], 'alloc'],
+    [43, 'I costi e il loro impatto', '💸', ['ter', 'compound'], ['growth', 'bars'], 'lab'],
+    [44, 'Gestione attiva e passiva', '🧭', ['ter', 'cagr'], ['bars', 'growth'], 'alloc'],
+    [45, 'La diversificazione', '🥚', ['wret', 'pct'], ['divers', 'volat'], 'alloc'],
+    [46, 'La correlazione tra asset', '🔗', ['wret', 'pct'], ['divers', 'trend'], 'alloc'],
+    [47, 'L’asset allocation', '🥧', ['wret', 'rebal'], ['pie', 'bars'], 'alloc'],
+    [48, 'Il ribilanciamento', '⚙️', ['rebal', 'wret'], ['pie', 'bars'], 'alloc'],
+    [49, 'Il piano di accumulo (PAC)', '🪜', ['pac', 'compound'], ['trend', 'ddchart'], 'lab'],
+    [50, 'Il profilo di rischio', '🧬', ['wret', 'dd'], ['volat', 'pie'], 'alloc'],
+    // Unità 6 — Analisi fondamentale
+    [51, 'Il bilancio di un’azienda', '📚', ['margin', 'eps'], ['bars', 'chg'], 'trade'],
+    [52, 'Il conto economico', '🧮', ['margin', 'eps'], ['bars', 'trend'], 'trade'],
+    [53, 'Lo stato patrimoniale', '🏗️', ['debteq', 'roe'], ['pie', 'bars'], 'trade'],
+    [54, 'Rendiconto finanziario e free cash flow', '🌊', ['fcf', 'margin'], ['bars', 'chg'], 'trade'],
+    [55, 'Utile per azione e P/E', '🔢', ['eps', 'pe'], ['bars', 'trend'], 'trade'],
+    [56, 'P/B, EV/EBITDA e altri multipli', '🧪', ['pb', 'evebitda'], ['bars', 'maxmin'], 'trade'],
+    [57, 'Redditività: ROE, ROA e margini', '💹', ['roe', 'margin'], ['bars', 'trend'], 'trade'],
+    [58, 'Debito e solidità finanziaria', '🏋️', ['debteq', 'icr'], ['bars', 'ddchart'], 'trade'],
+    [59, 'Valutare con il DCF', '🔮', ['dcf', 'cagr'], ['growth', 'bars'], 'lab'],
+    [60, 'Il vantaggio competitivo (moat)', '🏰', ['roe', 'margin'], ['bars', 'trend'], 'trade'],
+    // Unità 7 — Analisi tecnica
+    [61, 'Grafici e candele giapponesi', '🕯️', ['pct', 'rr'], ['candle', 'maxmin'], 'trade'],
+    [62, 'Trend e linee di tendenza', '↗️', ['pct', 'rr'], ['trend', 'ma'], 'trade'],
+    [63, 'Supporti e resistenze', '🧱', ['rr', 'pct'], ['sr', 'trend'], 'trade'],
+    [64, 'Le medie mobili', '〽️', ['sma', 'pct'], ['ma', 'trend'], 'trade'],
+    [65, 'Volumi e conferme', '🔊', ['pct', 'rr'], ['volume', 'sr'], 'trade'],
+    [66, 'RSI e oscillatori', '🎚️', ['rsicalc', 'pct'], ['rsi', 'trend'], 'trade'],
+    [67, 'MACD e momentum', '🚀', ['macdcalc', 'sma'], ['ma', 'trend'], 'trade'],
+    [68, 'I pattern grafici', '👤', ['measured', 'rr'], ['pattern', 'sr'], 'trade'],
+    [69, 'I ritracciamenti di Fibonacci', '🐚', ['fib', 'rr'], ['sr', 'trend'], 'trade'],
+    [70, 'I limiti dell’analisi tecnica', '🎲', ['ev', 'pct'], ['volat', 'trend'], 'trade'],
+    // Unità 8 — Macroeconomia e mercati
+    [71, 'PIL e ciclo economico', '🔃', ['gdp', 'pct'], ['cycle', 'bars'], 'alloc'],
+    [72, 'Inflazione e indici dei prezzi', '🛒', ['cpi', 'realret'], ['infl', 'bars'], 'lab'],
+    [73, 'Le banche centrali: BCE e Fed', '🏦', ['realret', 'bps'], ['bars', 'trend'], 'alloc'],
+    [74, 'Tassi di interesse e mercati', '🌡️', ['bondprice', 'dcf'], ['curve', 'trend'], 'alloc'],
+    [75, 'Politica monetaria: QE e QT', '🖨️', ['pct', 'bps'], ['trend', 'bars'], 'alloc'],
+    [76, 'Lavoro, consumi e dati macro', '👷', ['unemp', 'pct'], ['bars', 'cycle'], 'trade'],
+    [77, 'Valute e tassi di cambio', '💱', ['fx', 'fxret'], ['trend', 'volat'], 'trade'],
+    [78, 'Materie prime e oro', '🥇', ['pct', 'fx'], ['trend', 'volat'], 'alloc'],
+    [79, 'Recessioni e crisi storiche', '🌪️', ['dd', 'pct'], ['ddchart', 'trend'], 'alloc'],
+    [80, 'Notizie, aspettative e reazioni', '📰', ['pct', 'ev'], ['volume', 'volat'], 'trade'],
+    // Unità 9 — Derivati e strumenti avanzati
+    [81, 'Leva finanziaria e margine', '🏗️', ['lev', 'dd'], ['volat', 'ddchart'], 'trade'],
+    [82, 'La vendita allo scoperto', '🐻', ['short', 'lev'], ['trend', 'chg'], 'trade'],
+    [83, 'I futures', '📅', ['fut', 'lev'], ['trend', 'volat'], 'trade'],
+    [84, 'Le opzioni call', '📞', ['call', 'optbe'], ['payoff', 'trend'], 'trade'],
+    [85, 'Le opzioni put', '🪂', ['put', 'optbe'], ['payoff', 'ddchart'], 'trade'],
+    [86, 'Strategie con le opzioni', '♟️', ['call', 'put'], ['payoff', 'volat'], 'trade'],
+    [87, 'Volatilità e greche', '🌀', ['delta', 'call'], ['volat', 'payoff'], 'trade'],
+    [88, 'CFD e prodotti a leva', '🎰', ['lev', 'ordercost'], ['ddchart', 'volat'], 'trade'],
+    [89, 'Il mercato Forex', '💵', ['fx', 'pip'], ['trend', 'volat'], 'trade'],
+    [90, 'Criptovalute e asset digitali', '🪙', ['pct', 'dd'], ['volat', 'ddchart'], 'trade'],
+    // Unità 10 — Rischio, psicologia e strategia
+    [91, 'Gestione del rischio e position sizing', '📐', ['possize', 'rr'], ['ddchart', 'volat'], 'trade'],
+    [92, 'Stop loss e take profit', '🛑', ['rr', 'possize'], ['sr', 'ddchart'], 'trade'],
+    [93, 'Drawdown e recupero', '🕳️', ['dd', 'pct'], ['ddchart', 'trend'], 'alloc'],
+    [94, 'Misurare la performance', '📏', ['sharpe', 'cagr'], ['volat', 'growth'], 'alloc'],
+    [95, 'Bias cognitivi e finanza comportamentale', '🧠', ['ev', 'pct'], ['trend', 'volat'], 'trade'],
+    [96, 'La fiscalità degli investimenti in Italia', '🧾', ['tax', 'bollo'], ['bars', 'pie'], 'lab'],
+    [97, 'Costruire un piano di investimento', '🗺️', ['compound', 'wret'], ['growth', 'pie'], 'alloc'],
+    [98, 'Trading e investimento a lungo termine', '⏱️', ['ordercost', 'cagr'], ['volat', 'growth'], 'trade'],
+    [99, 'Truffe finanziarie: come riconoscerle', '🕵️', ['ponzi', 'r72'], ['growth', 'ddchart'], 'lab'],
+    [100, 'Gran finale: investitore consapevole', '👑', ['possize', 'tax', 'compound', 'pe'], ['trend', 'pie', 'curve'], 'alloc'],
+  ];
+
+  FQ.LEVELS = L.map(([id, title, icon, calc, chart, sim]) => ({
+    id, title, icon, calc, chart, sim, unit: Math.ceil(id / 10),
+  }));
+
+  // Punti di partenza disponibili all'onboarding
+  FQ.STARTS = [
+    { level: 1, name: 'Principiante', desc: 'Parto da zero: cos’è il denaro, budget, interessi.' },
+    { level: 11, name: 'Base', desc: 'So gestire i miei soldi, voglio capire i mercati.' },
+    { level: 31, name: 'Intermedio', desc: 'Conosco azioni e conti titoli, voglio approfondire.' },
+    { level: 61, name: 'Avanzato', desc: 'Investo già: analisi tecnica, macro, strategia.' },
+    { level: 81, name: 'Esperto', desc: 'Derivati, leva, gestione del rischio e fisco.' },
+  ];
+
+  // 20 tappe per livello: tipo di sessione
+  FQ.STAGES = [
+    { k: 'intro', name: 'Introduzione', icon: '📖' },
+    { k: 'vocab', name: 'Parole chiave', icon: '🔤' },
+    { k: 'deep', name: 'Approfondimento', icon: '🔍' },
+    { k: 'tf', name: 'Vero o falso', icon: '✅' },
+    { k: 'calc', name: 'Numeri in gioco', icon: '🧮' },
+    { k: 'chart', name: 'Leggi il grafico', icon: '📉' },
+    { k: 'mix', name: 'Mettiti alla prova', icon: '🎯' },
+    { k: 'scen', name: 'Situazione reale', icon: '🧭' },
+    { k: 'fill', name: 'Completa la frase', icon: '✍️' },
+    { k: 'check', name: 'Checkpoint', icon: '🎁' },
+    { k: 'info', name: 'Infografica', icon: '🖼️' },
+    { k: 'sort', name: 'Classifica e ordina', icon: '🗂️' },
+    { k: 'calc2', name: 'Calcolo avanzato', icon: '📐' },
+    { k: 'chart2', name: 'Analisi grafica', icon: '🕵️' },
+    { k: 'decide', name: 'Decisione d’investimento', icon: '🤔' },
+    { k: 'timed', name: 'Sfida a tempo', icon: '⏱️' },
+    { k: 'myth', name: 'Errori comuni', icon: '🚫' },
+    { k: 'sim', name: 'Simulazione di mercato', icon: '🕹️' },
+    { k: 'review', name: 'Ripasso totale', icon: '🔁' },
+    { k: 'boss', name: 'Esame del livello', icon: '👑' },
+  ];
+})(typeof window !== 'undefined' ? window : globalThis);
