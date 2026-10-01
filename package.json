@@ -1,11 +1,12 @@
 {
   "name": "simsoc6-remake",
-  "version": "1.0.0",
-  "description": "A faithful browser recreation of the classic football management game SIMSOC 6 (1998).",
+  "version": "2.0.0",
+  "description": "A football management game in the browser: eight nations, twelve leagues, live matches \u2014 a modern remake inspired by SIMSOC 6 (1998).",
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
     "test": "node test/run.js",
+    "test:ui": "node test/ui.js",
     "shots": "node tools/screenshots.js"
   },
   "license": "MIT",

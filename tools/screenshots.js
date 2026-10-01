@@ -1,177 +1,100 @@
 /*
- * Drives the game in headless Chrome (Puppeteer) and captures a screenshot of
- * each screen, so we can prove the remake actually runs and renders.
- * Output: ./shots/*.png
+ * Drives the game in headless Chrome (Puppeteer) and captures the README
+ * screenshots into ./shots. Uses CHROME=/path/to/chrome if set, otherwise a
+ * Playwright Chromium under /opt/pw-browsers, otherwise Puppeteer's own.
  */
 const path = require('path');
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 
 process.env.PORT = process.env.PORT || '8099';
-require('../server.js'); // starts the static server
+require('../server.js');
 const BASE = 'http://localhost:' + process.env.PORT;
 const OUT = path.join(__dirname, '..', 'shots');
 fs.mkdirSync(OUT, { recursive: true });
-
+fs.readdirSync(OUT).filter(f => f.endsWith('.png')).forEach(f => fs.unlinkSync(path.join(OUT, f)));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-async function shoot(page, sel, name) {
-  const el = await page.$(sel);
-  await el.screenshot({ path: path.join(OUT, name) });
-  console.log('  captured', name);
+function chromePath() {
+  if (process.env.CHROME) return process.env.CHROME;
+  try {
+    const d = fs.readdirSync('/opt/pw-browsers').find(x => /^chromium-\d+/.test(x));
+    if (d) return '/opt/pw-browsers/' + d + '/chrome-linux/chrome';
+  } catch (e) { /* default */ }
+  return undefined;
 }
 
 (async () => {
-  const browser = await puppeteer.launch({
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--force-device-scale-factor=1']
-  });
+  const browser = await puppeteer.launch({ headless: 'new', executablePath: chromePath(), args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
-  await page.setViewport({ width: 1000, height: 760, deviceScaleFactor: 1 });
+  await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
   page.on('pageerror', e => console.log('  [pageerror]', e.message));
   page.on('console', m => { if (m.type() === 'error') console.log('  [console.error]', m.text()); });
-
+  const shot = async name => { await sleep(350); await page.screenshot({ path: path.join(OUT, name + '.png') }); console.log('  captured', name); };
+  const go = async r => { await page.evaluate(r => { location.hash = '#/' + r; }, r); await sleep(350); };
+  const clearToasts = () => page.evaluate(() => { document.getElementById('toasts').innerHTML = ''; });
   const seed = 20259;
 
-  /* ---- choose club ---- */
+  /* ---- new career ---- */
   await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
-  await page.waitForSelector('#choose-grid tbody tr');
-  await sleep(150);
-  await shoot(page, '#screen-choose', '1-choose-club.png');
+  await sleep(500);
+  await page.evaluate(() => { const c = [...document.querySelectorAll('.club-card')].find(x => /Romford/.test(x.textContent)); c.click(); });
+  await shot('01-new-career');
+  await page.evaluate(() => document.querySelector('[data-act="newStart"]').click());
+  await sleep(500);
 
-  /* ---- squad (after taking charge) ---- */
-  await page.click('#choose-confirm');
-  await page.waitForSelector('#screen-squad:not(.hidden)');
-  await page.waitForSelector('#squad-grid tbody tr');
-  await sleep(100);
-  await shoot(page, '#screen-squad', '2-squad.png');
+  /* ---- a first match, live ---- */
+  await clearToasts();
+  await page.keyboard.press('Space'); await sleep(1000);
+  await shot('03-match-preview');
+  await page.evaluate(() => document.querySelector('[data-act="mtKick"]').click());
+  await page.evaluate(() => document.querySelector('[data-act="mtSpeed"][data-v="2"]').click());
+  await sleep(9000);
+  await shot('04-match-live');
+  await page.evaluate(() => document.querySelector('[data-act="mtSpeed"][data-v="8"]').click());
+  for (let i = 0; i < 80; i++) { if (await page.$('.talk-opts')) break; await sleep(150); }
+  await shot('05-half-time-team-talk');
+  await page.evaluate(() => document.querySelector('.talk-opts [data-v="encourage"]').click());
+  await sleep(400);
+  await page.evaluate(() => document.querySelector('[data-act="mtSkip"]').click());
+  await sleep(700); await clearToasts();
+  await shot('06-full-time');
+  await page.keyboard.press('Space'); await sleep(700); await clearToasts();
+  await shot('07-results-roundup');
+  await page.keyboard.press('Space'); await sleep(500);
 
-  /* ---- team selector ---- */
-  await page.click('#btn-play');
-  await page.waitForSelector('#xi-grid tbody tr');
-  await sleep(150);
-  await shoot(page, '#screen-team', '3-team-selector.png');
+  /* ---- a chunk of the season ---- */
+  await page.evaluate(() => window.SIMSOC_TEST.advance(16));
+  await sleep(500); await go('home'); await clearToasts();
+  await shot('02-home');
+  await go('tactics'); await shot('08-tactics');
+  await go('squad'); await shot('09-squad');
+  const pid = await page.evaluate(() => { const s = window.SIMSOC_TEST.state(); return s.clubs[s.userClub].players.slice().sort((a, b) => b.skill - a.skill)[0].id; });
+  await go('player/' + pid); await shot('10-player');
+  await go('league/3'); await shot('11-league-table');
+  await go('league/4/stats'); await shot('12-league-stats');
+  await go('cup/champions'); await shot('13-cup-bracket');
+  await go('transfers'); await shot('14-transfers');
+  await go('inbox'); await page.evaluate(() => { const m = document.querySelector('.msg'); if (m) m.click(); }); await sleep(300); await shot('15-inbox');
+  await go('finances'); await shot('16-finances');
+  await go('competitions'); await shot('17-competitions');
+  await go('club/' + (await page.evaluate(() => window.SIMSOC_TEST.state().divisions[0].members[0]))); await shot('18-club');
 
-  /* ---- match (let it run, then capture in play) ---- */
-  await page.click('#btn-action');
-  await page.waitForSelector('#screen-match:not(.hidden)');
-  await page.$eval('#m-speed', el => { el.value = '8'; el.dispatchEvent(new Event('input')); });
-  await sleep(3600);
-  await shoot(page, '#screen-match', '4-match.png');
-  await page.click('#m-skip');
-  await page.waitForSelector('#m-continue:not(.hidden)');
-  await sleep(300);
-  await shoot(page, '#screen-match', '5-match-fulltime.png');
-  await page.click('#m-continue');
+  /* ---- end of the season ---- */
+  await page.evaluate(() => window.SIMSOC_TEST.advance(40));
+  await sleep(500);
+  await go('review'); await clearToasts(); await shot('19-season-review');
+  await page.evaluate(() => { window.SIMSOC_TEST.state().pendingReview = null; });
+  await go('honours/totals'); await shot('20-hall-of-fame');
+  await go('career'); await shot('21-career');
+  await go('board'); await shot('22-board');
 
-  /* ---- results round-up ---- */
-  await page.waitForSelector('#screen-roundup:not(.hidden)');
-  await sleep(150);
-  await shoot(page, '#screen-roundup', '6-results-roundup.png');
-  await page.click('#ru-ok');
-  await page.waitForSelector('#screen-squad:not(.hidden)');
-
-  /* ---- transfer market ---- */
-  await page.click('#btn-transfer');
-  await page.waitForSelector('#tm-grid tbody tr');
-  await sleep(150);
-  await shoot(page, '#screen-transfer', '7-transfer-market.png');
-  await page.click('#tm-close');
-
-  /* ---- league, brackets, results, finances (after a chunk of the season) ---- */
-  await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
-  await page.waitForSelector('#choose-grid tbody tr');
-  await page.click('#choose-confirm');
-  await page.waitForSelector('#squad-grid tbody tr');
-  await page.evaluate(() => window.SIMSOC_TEST.advance(20));
-  await page.click('#btn-league');
-  await page.waitForSelector('#lg-grid tbody tr');
-  await sleep(150);
-  await shoot(page, '#screen-league', '8-league-table.png');       // user division (Conference)
-  await page.click('#lg-prev'); await page.click('#lg-prev'); await page.click('#lg-prev');
-  await sleep(150);
-  await shoot(page, '#screen-league', '9-league-premier.png');
-  await page.click('#lg-close');
-  await page.click('#btn-cups');
-  await page.waitForSelector('#screen-bracket:not(.hidden)');
-  await page.waitForSelector('#bk-body .bcol');
-  await sleep(150);
-  await shoot(page, '#screen-bracket', '10-cup-bracket.png');
-  await page.click('#bk-close');
-  await page.click('#btn-results');
-  await page.waitForSelector('#rs-grid tbody tr');
-  await sleep(150);
-  await shoot(page, '#screen-results', '11-classified-results.png');
-  await page.click('#rs-close');
-  await page.click('#btn-finance');
-  await page.waitForSelector('#screen-finance:not(.hidden)');
-  await page.$eval('#fin-amount', el => { el.value = '400000'; });
-  await page.click('#fin-borrow');
-  await sleep(120);
-  await shoot(page, '#screen-finance', '12-finances.png');
-  await page.click('#fin-close');
-
-  /* ---- roll of honour (finish the season) ---- */
-  await page.evaluate(() => window.SIMSOC_TEST.advance(80));
-  await page.waitForSelector('#screen-squad:not(.hidden)');
-  await page.click('#btn-honours');
-  await page.waitForSelector('#hon-grid tbody tr');
-  await sleep(150);
-  await shoot(page, '#screen-honours', '13-roll-of-honour.png');
-  await page.click('#hon-close');
-
-  /* ---- my career ---- */
-  await page.click('#btn-career');
-  await page.waitForSelector('#screen-career:not(.hidden)');
-  await page.waitForSelector('#car-grid tbody tr');
-  await sleep(150);
-  await shoot(page, '#screen-career', '16-my-career.png');
-  await page.click('#car-close');
-
-  /* ---- head-to-head + a cup tie ---- */
-  await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
-  await page.waitForSelector('#choose-grid tbody tr');
-  await page.click('#choose-confirm');
-  await page.waitForSelector('#squad-grid tbody tr');
-  await page.evaluate(() => window.SIMSOC_TEST.advance(55));        // build up some history
-  await page.click('#btn-play');
-  await page.waitForSelector('#screen-team:not(.hidden)');
-  await page.$eval('#btn-history', el => el.click());
-  await page.waitForSelector('#screen-history:not(.hidden)');
-  await sleep(150);
-  await shoot(page, '#screen-history', '14-head-to-head.png');
-  await page.$eval('#h2h-close', el => el.click());
-  await page.waitForSelector('#screen-team:not(.hidden)');
-  /* ---- a cup tie in the team selector (fresh start, before being knocked out) ---- */
-  await page.goto(BASE + '/?fresh=1&seed=' + seed, { waitUntil: 'networkidle0' });
-  await page.waitForSelector('#choose-grid tbody tr');
-  await page.click('#choose-confirm');
-  await page.waitForSelector('#squad-grid tbody tr');
-  let gotCup = false;
-  for (let i = 0; i < 12 && !gotCup; i++) {
-    await page.$eval('#btn-play', el => el.click());
-    await page.waitForSelector('#screen-team:not(.hidden)');
-    const comp = await page.$eval('#league-name', el => el.textContent);
-    if (/Cup/.test(comp)) { await sleep(150); await shoot(page, '#screen-team', '15-cup-tie.png'); gotCup = true; break; }
-    await page.$eval('#btn-action', el => el.click());
-    await page.waitForSelector('#screen-match:not(.hidden)');
-    await page.$eval('#m-speed', el => { el.value = '10'; el.dispatchEvent(new Event('input')); });
-    await page.$eval('#m-skip', el => el.click());
-    await page.waitForSelector('#m-continue:not(.hidden)');
-    await page.$eval('#m-continue', el => el.click());
-    await page.waitForSelector('#screen-roundup:not(.hidden)');
-    await page.$eval('#ru-ok', el => el.click());
-    await page.waitForSelector('#screen-squad:not(.hidden)');
-  }
-
-  /* ---- a full-window desktop shot ---- */
-  await page.goto(BASE + '/?fresh=1&club=66&seed=' + seed, { waitUntil: 'networkidle0' });
-  await page.waitForSelector('#squad-grid tbody tr');
-  await page.evaluate(() => window.SIMSOC_TEST.show('screen-squad'));
-  await page.waitForSelector('#screen-squad:not(.hidden)');
-  await sleep(100);
-  await page.screenshot({ path: path.join(OUT, '0-desktop.png') });
-  console.log('  captured 0-desktop.png');
+  /* ---- title & phone ---- */
+  await page.evaluate(() => window.SIMSOC_TEST.save());
+  await page.goto(BASE + '/', { waitUntil: 'networkidle0' }); await sleep(800);
+  await shot('00-title');
+  await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+  await page.evaluate(() => window.SimUI.acts.loadAuto()); await sleep(900); await clearToasts();
+  await shot('23-phone-home');
 
   await browser.close();
   console.log('Done. Screenshots in', OUT);
