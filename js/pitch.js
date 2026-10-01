@@ -114,10 +114,10 @@
         }
         if (evs.some(e => e.type === 'corner')) { const cs = evs.find(e => e.type === 'corner').side; const gx = cs === 'home' ? PW - 0.5 : 0.5; pts.push({ x: gx, y: Math.random() < 0.5 ? 0.5 : PH - 0.5 }); }
       }
-      // schedule
+      // schedule: a shot arrives with a quarter of the minute to spare, so a goal sits in the net before the restart
       const now = performance.now();
       let t = now;
-      const seg = dur / Math.max(1, pts.length);
+      const seg = (shot ? dur * 0.75 : dur) / Math.max(1, pts.length);
       ball.path = pts.map(p => { t += seg; return Object.assign(p, { at: t, from: null }); });
       ball.t0 = now;
     }

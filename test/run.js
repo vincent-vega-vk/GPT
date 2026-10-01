@@ -310,6 +310,8 @@ check('league matchdays fall on Saturdays', w.calendar.filter(e => e.comp === 'l
 check('season label is 1996/97', E.seasonLabel(w) === '1996/97', E.seasonLabel(w));
 const clNations = new Set(w.cups.champions.participants.map(ci => w.clubs[ci].division >= 0 ? w.divisions[w.clubs[ci].division].nation : w.clubs[ci].nation));
 check('Champions League draws clubs from many nations', clNations.size >= 10, clNations.size);
+const natOfW = ci => (w.clubs[ci].division >= 0 ? w.divisions[w.clubs[ci].division].nation : w.clubs[ci].nation);
+check('European first-round draws keep same-nation clubs apart', ['champions', 'uefa'].every(id => w.cups[id].rounds[0].ties.every(t => natOfW(t.home) !== natOfW(t.away))));
 for (let k = 0; k < 6; k++) step(w);
 check('foreign leagues are simulated too', w.divisions[4].table[w.clubs[w.divisions[4].members[0]].name].P > 0 && w.divisions[11].table[w.clubs[w.divisions[11].members[0]].name].P > 0);
 check('league leaders tables produced', E.leagueLeaders(w, 6).scorers.length > 0);
@@ -419,6 +421,20 @@ check('a manager with no board support gets sacked', sk.sacked === true);
 check('the job centre still has clubs for you', E.eligibleClubs(sk, sk.reputation).length > 0);
 E.chooseClub(sk, E.eligibleClubs(sk, sk.reputation)[0]);
 check('taking a new job clears the sack', sk.sacked === false && E.user(sk).isUser);
+
+/* ---- achievements, predictions, stadium ------------------------------ */
+section('Achievements, predictions & stadium');
+const ac = E.newGame(5151);
+check('media predictions exist for every league', ac.divisions.every(d => d.prediction && d.prediction.length === d.members.length));
+check('standings carry the predicted position', E.standings(ac, 3).every(r => r.pred >= 1));
+let gac = 0; while (gac++ < 30) step(ac);
+check('achievements unlock as you play', Object.keys(ac.achievements).length > 0 && ac.achievements['first-win'], JSON.stringify(Object.keys(ac.achievements)));
+check('achievement catalogue view', E.achievementsView(ac).length === E.ACHIEVEMENTS.length);
+E.user(ac).balance = 1e7; ac.board.confidence = 80;
+const cap0 = E.user(ac).capacity, so = E.stadiumOffer(ac);
+const ex = E.expandStadium(ac);
+check('stadium expansion adds seats and costs money', ex.ok && E.user(ac).capacity === cap0 + so.add && ac.achievements.stadium, ex.msg);
+check('only one stadium project per season', !E.expandStadium(ac).ok);
 
 /* ---- save / load ----------------------------------------------------- */
 section('Save / load');

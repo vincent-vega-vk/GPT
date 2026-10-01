@@ -136,6 +136,12 @@ The game has **no runtime dependencies**: it's plain HTML, CSS and JavaScript.
   the **total trophies per club with a breakdown by competition**.
 - **Season review**: your verdict, promotions and relegations, champions and award winners
   across Europe.
+- **20 achievements** to chase, from your first win to winning the Champions League. Locked
+  achievements are shown as goals.
+- **Media predictions**: the pre-season forecast sits next to every league table, so you
+  can see who is beating expectations.
+- **Stadium expansion**: once a season, if the board backs you, add seats to grow your gate
+  income as you climb.
 
 ### Interface
 - A dark, Football-Manager-style layout: a sidebar for navigation and a top bar showing your
@@ -169,7 +175,7 @@ testing:
 ## Test it
 
 ```bash
-npm test             # head-less engine self-test: 167 checks
+npm test             # head-less engine self-test: 174 checks
 npm run test:ui      # drives the real UI in headless Chrome: 28 interaction checks
 npm run shots        # regenerates the screenshots in shots/
 ```

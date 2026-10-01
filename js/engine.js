@@ -72,7 +72,7 @@
   function blankTable(memberIds, clubs) {
     const t = {}; memberIds.forEach(i => { t[clubs[i].name] = blankRow(); }); return t;
   }
-  function blankFinance() { return { season: { gate: 0, tv: 0, prize: 0, sales: 0, wages: 0, purchases: 0, interest: 0 }, last: null, history: [] }; }
+  function blankFinance() { return { season: { gate: 0, tv: 0, prize: 0, sales: 0, wages: 0, purchases: 0, interest: 0, stadium: 0, attSum: 0, attN: 0 }, last: null, history: [] }; }
   const divisionRounds = (s, d) => (s.divisions[d].members.length - 1) * (s.divisions[d].legs || 2);
 
   /* ===================================================================== *
@@ -127,7 +127,8 @@
       inbox: [], news: [], msgSeq: 1, offers: [], offerSeq: 1, shortlist: [], transferLog: [],
       board: { confidence: 60, objective: null, warnedDay: -99 }, finance: blankFinance(),
       posHistory: [], record: { P: 0, W: 0, D: 0, L: 0 }, seasonRecord: { P: 0, W: 0, D: 0, L: 0 },
-      pendingReview: null, sacked: false, awards: []
+      pendingReview: null, sacked: false, awards: [],
+      achievements: {}, streak: { w: 0, unbeaten: 0, cs: 0 }, nationsManaged: [], stadiumSeason: 0
     };
     const bottomFirst = divisions[3].members[0];   // Romford
     const ui = userIndex == null ? bottomFirst : userIndex;
@@ -187,6 +188,13 @@
   }
   function onTakeover(s, first) {
     setObjective(s);
+    const nat = userDiv(s).nation;
+    s.nationsManaged = s.nationsManaged || [];
+    if (s.nationsManaged.indexOf(nat) < 0) s.nationsManaged.push(nat);
+    if (!first) {
+      if (userDiv(s).tier === 1) unlock(s, 'top-flight');
+      if (s.nationsManaged.length >= 2) unlock(s, 'globetrotter');
+    }
     s.board.confidence = 60; s.board.warnedDay = -99;
     const c = user(s), dv = userDiv(s), wages = wageBill(s);
     mail(s, {
@@ -678,7 +686,7 @@
         const kind = cup.type.indexOf('euro') === 0 ? 'euro' : 'cup';
         gateReceipts(s, homeIdx, awayIdx, kind, uHome ? (kind === 'euro' ? 1 : 0.55) : (kind === 'euro' ? 0 : 0.45));
       }
-      const agg = (decided && !isSingleLeg(cup, e.round)) ? (tie.aggH + '-' + tie.aggA) : null;
+      const agg = (decided && !isSingleLeg(cup, e.round)) ? (leg === 1 ? tie.aggA + '-' + tie.aggH : tie.aggH + '-' + tie.aggA) : null;   // home side of THIS leg first
       s.lastResult = { comp: match.compName, homeName: match.homeName, awayName: match.awayName, hg: match.hg, ag: match.ag,
         winnerName: decided ? s.clubs[tie.winner].name : null, pens: !!tie.pens, agg: agg,
         scorers: match.events.map(ev => ({ side: ev.side, name: ev.scorer, minute: ev.minute })) };
@@ -689,6 +697,7 @@
     // records
     const rec = ug > og ? 'W' : ug === og ? 'D' : 'L';
     [s.record, s.seasonRecord].forEach(r => { r.P++; r[rec]++; });
+    afterUserMatch(s, match, ug, og, homeIdx, awayIdx);
     if (match.potm && match.potm.id != null) {
       const potmClub = match.potm.side === 'home' ? s.clubs[homeIdx] : s.clubs[awayIdx];
       const pp = potmClub.players.find(p => p.id === match.potm.id); if (pp) pp.potm = (pp.potm || 0) + 1;
@@ -817,19 +826,29 @@
     if (entering === 64) return 'Round of 64';
     return 'Round ' + (idx + 1);
   }
-  function buildCupRound(cup, clubIdxs, rng) {
+  function buildCupRound(cup, clubIdxs, rng, natOf) {
     const list = shuffle(clubIdxs.slice(), rng), ties = [];
+    // European draws keep clubs from the same nation apart until the quarter-finals
+    if (natOf && cup.nation === 'EUR' && list.length > 8) {
+      for (let i = 0; i + 1 < list.length; i += 2) {
+        if (natOf(list[i]) !== natOf(list[i + 1])) continue;
+        for (let j = i + 2; j < list.length; j++) {
+          const partnerOfJ = list[j % 2 ? j - 1 : j + 1];
+          if (natOf(list[j]) !== natOf(list[i]) && natOf(list[i + 1]) !== natOf(partnerOfJ)) { const t = list[i + 1]; list[i + 1] = list[j]; list[j] = t; break; }
+        }
+      }
+    }
     for (let i = 0; i < list.length; i += 2) {
       if (i + 1 < list.length) ties.push({ home: list[i], away: list[i + 1], winner: null, pens: false });
       else ties.push({ home: list[i], away: -1, winner: list[i], pens: false }); // bye (never with power-of-two draws)
     }
     cup.rounds.push({ name: cupRoundName(list.length, cup.rounds.length), ties: ties });
   }
-  function initCup(def, participants, rng) {
+  function initCup(def, participants, rng, natOf) {
     const cup = { id: def.id, name: def.name, type: def.type, nation: def.nation || null, twoLeg: !!def.twoLeg,
       participants: participants.slice(), rounds: [], winner: null, scorers: {},
       totalRounds: Math.max(1, Math.ceil(Math.log2(participants.length))) };
-    buildCupRound(cup, participants, rng);
+    buildCupRound(cup, participants, rng, natOf);
     return cup;
   }
   function tallyCupScorers(cup, events, homeName, awayName) {
@@ -932,7 +951,7 @@
       cup.winner = winners[0];
       news(s, s.clubs[cup.winner].name + ' win the ' + cup.name + '!', 'trophy');
     } else {
-      buildCupRound(cup, winners, Data.makeRng((s.seed ^ (s.season * 61) ^ hashId(cup.id) ^ (r * 7919)) >>> 0));
+      buildCupRound(cup, winners, Data.makeRng((s.seed ^ (s.season * 61) ^ hashId(cup.id) ^ (r * 7919)) >>> 0), ci => nationOfClub(s, ci));
       const nr = cup.rounds[cup.rounds.length - 1];
       const t = nr.ties.find(x => x.home === s.userClub || x.away === s.userClub);
       if (t) {
@@ -995,6 +1014,7 @@
         if (isPow2(parts.length)) s.cups[cd.id] = initCup({ id: cd.id, name: cd.name, type: 'domestic', nation: nat }, parts, rng);
       });
     };
+    predictTables(s, str);
     domestic('ENG');
     // European cups: 64-team knockouts, topped up from the rest of Europe
     const rest = s.clubs.map((c, i) => i).filter(i => s.clubs[i].division < 0)
@@ -1006,7 +1026,7 @@
       const parts = q.slice(0, 64);
       if (id === 'champions') parts.forEach(ci => clIn.add(ci));
       while (parts.length < 64 && rcur < rest.length) parts.push(rest[rcur++]);
-      if (isPow2(parts.length)) s.cups[id] = initCup({ id: id, name: name, type: type, twoLeg: true, nation: 'EUR' }, parts, rng);
+      if (isPow2(parts.length)) s.cups[id] = initCup({ id: id, name: name, type: type, twoLeg: true, nation: 'EUR' }, parts, rng, ci => nationOfClub(s, ci));
     });
     Data.NATION_ORDER.slice(1).forEach(domestic);
     // one-off curtain-raisers from last season's winners (season 2 onwards)
@@ -1123,7 +1143,8 @@
     const dv = s.divisions[divIdx];
     return dv.members.map(i => {
       const c = s.clubs[i], row = dv.table[c.name];
-      return Object.assign({ name: c.name, idx: i, isUser: c.isUser, GD: row.F - row.A, form: (c.form || []).slice(-5) }, row);
+      return Object.assign({ name: c.name, idx: i, isUser: c.isUser, GD: row.F - row.A, form: (c.form || []).slice(-5),
+        pred: dv.prediction ? dv.prediction.indexOf(i) + 1 : null }, row);
     }).sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.F - a.F || a.name.localeCompare(b.name));
   }
   function leaguePosition(s, name, divIdx) {
@@ -1268,6 +1289,7 @@
     user(s).players.push(p);
     s.transferLog.unshift({ season: s.season, date: currentDate(s), dir: 'in', name: fullName(p), id: p.id, from: fromName, fee: fee });
     if (fee > 0) news(s, user(s).name + ' sign ' + fullName(p) + ' from ' + fromName + ' for ' + fmtMoney(fee) + '.', 'transfer');
+    if (fee >= 1000000) unlock(s, 'big-spender');
   }
   function bid(s, playerId) {
     if (user(s).players.length >= MAX_SQUAD) return { ok: false, msg: 'Squad is full (max ' + MAX_SQUAD + '). Sell a player first.' };
@@ -1518,6 +1540,7 @@
     const amt = Math.round(att * price * share);
     user(s).balance += amt; book(s, 'gate', amt);
     s.lastGate = { attendance: att, amount: amt };
+    if (hi === s.userClub && kind === 'league') { book(s, 'attSum', att); book(s, 'attN', 1); }
     return amt;
   }
   function weeklyTick(s, unitIdx) {
@@ -1540,6 +1563,7 @@
       s.board.confidence = clamp(s.board.confidence - 0.8, 0, 100);
     } else s.debtSince = -1;
     s.finance.history.push({ season: s.season, day: s.day, date: currentDate(s), balance: c.balance });
+    if (c.balance >= 1000000) unlock(s, 'millionaire');
     if (s.finance.history.length > 260) s.finance.history.shift();
 
     maybeIncomingBid(s, rng);
@@ -1577,13 +1601,103 @@
   }
   function financeSummary(s) {
     const f = s.finance || blankFinance(), se = f.season;
-    const income = se.gate + se.tv + se.prize + se.sales, spend = se.wages + se.purchases;
+    const income = se.gate + se.tv + se.prize + se.sales, spend = se.wages + se.purchases + (se.stadium || 0);
     return { balance: user(s).balance, debt: s.debt || 0, loanCap: loanCap(s), wageBill: wageBill(s), season: se,
       income: income, spend: spend, interest: se.interest, history: f.history.filter(h => h.season === s.season), last: f.last,
-      tvWeekly: (Data.ECON[userDiv(s).level] || Data.ECON[2]).tv, capacity: user(s).capacity, lastGate: s.lastGate || null };
+      tvWeekly: (Data.ECON[userDiv(s).level] || Data.ECON[2]).tv, capacity: user(s).capacity, lastGate: s.lastGate || null, stadium: stadiumOffer(s) };
   }
   function exRecord(s, p, reason) {
     return { id: p.id, forename: p.forename, surname: p.surname, nat: p.nat, pos: p.pos, skill: p.skill, age: p.age, appsTotal: p.appsTotal, goalsTotal: p.goalsTotal, reason: reason, season: s.season };
+  }
+
+  /* ===================================================================== *
+   * ACHIEVEMENTS
+   * ===================================================================== */
+  const ACHIEVEMENTS = [
+    ['first-win', 'Off the mark', 'Win your first competitive match.'],
+    ['thrashing', 'Thrashing', 'Win a match by five goals or more.'],
+    ['hat-trick', 'Hat-trick hero', 'One of your players scores three in a match.'],
+    ['winning-run', 'On a roll', 'Win five matches in a row.'],
+    ['clean-sheets', 'The wall', 'Keep four clean sheets in a row.'],
+    ['unbeaten-10', 'Unbeatable', 'Go ten matches unbeaten.'],
+    ['giant-killer', 'Giant killer', 'Knock a club from a higher level out of a cup.'],
+    ['european-night', 'European night', 'Win a European tie.'],
+    ['cup-winner', 'Silverware', 'Win a cup.'],
+    ['promotion', 'Going up!', 'Win promotion.'],
+    ['champions', 'Champions', 'Win a league title.'],
+    ['european-champion', 'Kings of Europe', 'Win the Champions League.'],
+    ['golden-boot', 'Golden boot', 'One of your players finishes as his league\'s top scorer.'],
+    ['manager-of-month', 'Manager of the Month', 'Win a Manager of the Month award.'],
+    ['top-flight', 'The big time', 'Manage a club in a top division.'],
+    ['globetrotter', 'Globetrotter', 'Manage clubs in two different nations.'],
+    ['big-spender', 'Big spender', 'Sign a player for £1m or more.'],
+    ['millionaire', 'In the black', 'Have £1m in the bank.'],
+    ['stadium', 'Bricks and mortar', 'Expand your stadium.'],
+    ['centurion', 'Centurion', 'Manage 100 matches.']
+  ];
+  function unlock(s, id) {
+    if (!s.achievements) s.achievements = {};
+    if (s.achievements[id]) return false;
+    const a = ACHIEVEMENTS.find(x => x[0] === id); if (!a) return false;
+    s.achievements[id] = { date: currentDate(s), season: s.season };
+    s.notices.push('Achievement unlocked: ' + a[1] + '!');
+    mail(s, { cat: 'competition', from: 'SIMSOC', subject: 'Achievement unlocked: ' + a[1], body: a[2], actions: [{ label: 'My career', cmd: 'go', args: { route: 'career' } }] });
+    return true;
+  }
+  function achievementsView(s) {
+    return ACHIEVEMENTS.map(a => ({ id: a[0], title: a[1], desc: a[2], got: (s.achievements || {})[a[0]] || null }));
+  }
+  function afterUserMatch(s, match, ug, og, homeIdx, awayIdx) {
+    const st = s.streak || (s.streak = { w: 0, unbeaten: 0, cs: 0 });
+    if (match.forfeit) { st.w = 0; st.unbeaten = 0; st.cs = 0; return; }
+    st.w = ug > og ? st.w + 1 : 0; st.unbeaten = ug >= og ? st.unbeaten + 1 : 0; st.cs = og === 0 ? st.cs + 1 : 0;
+    if (ug > og) unlock(s, 'first-win');
+    if (ug - og >= 5) unlock(s, 'thrashing');
+    if (st.w >= 5) unlock(s, 'winning-run');
+    if (st.unbeaten >= 10) unlock(s, 'unbeaten-10');
+    if (st.cs >= 4) unlock(s, 'clean-sheets');
+    const counts = {};
+    (match.events || []).forEach(e => { if (e.side === match.userSide) counts[e.scorerId] = (counts[e.scorerId] || 0) + 1; });
+    if (Object.keys(counts).some(k => counts[k] >= 3)) unlock(s, 'hat-trick');
+    if (s.record.P >= 100) unlock(s, 'centurion');
+    if (match.comp !== 'league') {
+      const cup = s.cups[match.comp], tie = match.tie;
+      if (tie && tie.winner === s.userClub) {
+        const opp = tie.home === s.userClub ? tie.away : tie.home;
+        if (levelOf(s, opp) < levelOf(s, s.userClub)) unlock(s, 'giant-killer');
+        if (cup.nation === 'EUR' && cup.type !== 'oneoff') unlock(s, 'european-night');
+        if (cup.winner === s.userClub) { unlock(s, 'cup-winner'); if (cup.id === 'champions') unlock(s, 'european-champion'); }
+      }
+    }
+  }
+
+  /* ---- media predictions & the stadium ------------------------------- */
+  function predictTables(s, str) {
+    s.divisions.forEach(dv => { dv.prediction = dv.members.slice().sort((a, b) => str(b) - str(a)); });
+  }
+  const SEAT_COST = { 1: 900, 2: 450, 3: 220, 4: 110 }, CAP_MAX = { 1: 85000, 2: 50000, 3: 28000, 4: 14000 };
+  function stadiumOffer(s) {
+    const c = user(s), lv = userDiv(s).level, max = CAP_MAX[lv] || 30000;
+    const add = Math.min(Math.max(500, Math.round(c.capacity * 0.2 / 100) * 100), Math.max(0, max - c.capacity));
+    const cost = Math.round(add * (SEAT_COST[lv] || 300) / 1000) * 1000;
+    const se = (s.finance && s.finance.season) || {};
+    const avg = se.attN ? Math.round(se.attSum / se.attN) : null;
+    let reason = '';
+    if (s.stadiumSeason === s.season) reason = 'The builders are already on site this season.';
+    else if (add <= 0) reason = 'The ground is as big as the board will allow at this level.';
+    else if (s.board.confidence < 40) reason = 'The board won\'t back building work while confidence is this low.';
+    else if (c.balance < cost) reason = 'You need ' + fmtMoney(cost) + ' in the bank.';
+    return { capacity: c.capacity, add: add, cost: cost, max: max, avgAttendance: avg, ok: !reason, reason: reason };
+  }
+  function expandStadium(s) {
+    const o = stadiumOffer(s);
+    if (!o.ok) return { ok: false, msg: o.reason };
+    const c = user(s);
+    c.balance -= o.cost; book(s, 'stadium', o.cost);
+    c.capacity += o.add; s.stadiumSeason = s.season;
+    unlock(s, 'stadium');
+    news(s, c.name + ' expand their ground to ' + c.capacity.toLocaleString('en-GB') + ' seats.', 'club');
+    return { ok: true, msg: 'Work is done: capacity is now ' + c.capacity.toLocaleString('en-GB') + '.' };
   }
 
   /* ===================================================================== *
@@ -1731,6 +1845,7 @@
     const label = 'Manager of the Month (' + dv.name + ')';
     if (best === s.userClub) {
       s.awards.push({ season: s.season, date: currentDate(s), award: label });
+      unlock(s, 'manager-of-month');
       s.reputation = clamp(s.reputation + 1.5, 0, 100);
       s.board.confidence = clamp(s.board.confidence + 3, 0, 100);
       mail(s, { cat: 'competition', from: 'League Office', important: true, subject: 'You are ' + label + '!',
@@ -1861,6 +1976,13 @@
       else { s.board.confidence = clamp(s.board.confidence - 15, 0, 100); verdict = 'The board is disappointed with the season.'; }
     }
 
+    if (!s.sacked) {
+      if (snaps[oldUserDiv][0] && snaps[oldUserDiv][0].isUser) unlock(s, 'champions');
+      if (promoted) unlock(s, 'promotion');
+      const boot = awards[oldUserDiv] && awards[oldUserDiv].boot;
+      if (boot && boot.club === uc.name) unlock(s, 'golden-boot');
+      if (s.divisions[s.userDivision].tier === 1) unlock(s, 'top-flight');
+    }
     let msg = 'Season ' + seasonLabel(s) + ' over. ' + s.divisions[0].name + ' champions: ' + snaps[0][0].name + '. ';
     if (promoted) msg += 'PROMOTED! ' + uc.name + ' go up to ' + s.divisions[s.userDivision].name + '.';
     else if (relegated) msg += uc.name + ' relegated to ' + s.divisions[s.userDivision].name + '.';
@@ -2058,6 +2180,7 @@
     takeLoan, repayLoan, loanCap, financeSummary, wageBill, attendance,
     mail, notify, news, unreadCount, markRead, inboxAction, acceptBid,
     formatDate, currentDate, seasonLabel, clubIndexByName, findPlayer, playerView, attributes, nationsView, levelOf,
+    achievementsView, ACHIEVEMENTS, stadiumOffer, expandStadium,
     serialize, deserialize, isCompatible, ordinal, MAX_SQUAD, MIN_SQUAD, FREE_AGENT
   };
 });

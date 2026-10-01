@@ -113,8 +113,9 @@
         UI.fitBar(p.fit) + '<b class="num">' + p.skill + '</b></div>';
     }).join('') + '</div><div class="small muted" style="margin-top:8px">Bench: ' + (E.playersByIds(uc, s.selection.subs).map(p => esc(p.surname)).join(', ') || 'none') + '</div>';
     const h2h = pv.h2h.length ? (() => { let w = 0, d = 0, l = 0; pv.h2h.forEach(h => { const a = h.home ? h.hg : h.ag, b = h.home ? h.ag : h.hg; if (a > b) w++; else if (a === b) d++; else l++; }); return 'Head to head: P' + pv.h2h.length + ' W' + w + ' D' + d + ' L' + l; })() : 'You have never played them.';
+    const t = opp.tie, firstLeg = t && opp.leg === 1 && t.l1h != null ? '<span class="tag cup">First leg: ' + esc(s.clubs[t.home].name) + ' ' + t.l1h + '-' + t.l1a + ' ' + esc(s.clubs[t.away].name) + '</span>' : '';
     return head +
-      '<div class="row" style="margin-bottom:14px">' + UI.compTag(opp.comp, opp.comp === 'league' ? 'League' : null) + '<span class="muted small">' + (opp.home ? 'Home' : 'Away') + ' · expected crowd ' +
+      '<div class="row" style="margin-bottom:14px">' + UI.compTag(opp.comp, opp.comp === 'league' ? 'League' : null) + firstLeg + '<span class="muted small">' + (opp.home ? 'Home' : 'Away') + ' · expected crowd ' +
       (pv.attendance || 0).toLocaleString('en-GB') + ' · ' + esc(h2h) + '</span><span class="spacer"></span>' +
       (valid < 11 ? '<span class="badge red">' + valid + '/11 fit starters</span>' : '') +
       '<button class="btn" data-act="mtQuick">' + UI.icon('bolt') + ' Quick result</button><button class="btn go lg" data-act="mtKick">' + UI.icon('play') + ' Kick off</button></div>' +
@@ -167,7 +168,7 @@
     const s = S(), c = mt.cfg;
     const hi = E.clubIndexByName(s, c.home.name), ai = E.clubIndexByName(s, c.away.name);
     return '<div class="scorebar" style="--home:' + c.home.kit[0] + ';--away:' + c.away.kit[0] + '"><div class="team">' + UI.crest(s.clubs[hi], 'lg') + UI.clubLink(hi, { crest: false }) + '</div>' +
-      '<div><span class="comp">' + esc(mt.meta.compName) + '</span><div class="score" id="mt-score">0 - 0</div><span class="clock" id="mt-clock">KICK OFF</span></div>' +
+      '<div><span class="comp">' + esc(mt.meta.compName) + '</span><div class="score" id="mt-score">0 - 0</div><span class="clock" id="mt-clock">KICK OFF</span><span class="comp" id="mt-agg"></span></div>' +
       '<div class="team away">' + UI.clubLink(ai, { crest: false }) + UI.crest(s.clubs[ai], 'lg') + '</div></div>' +
       '<div class="match-layout"><div class="stack"><div class="card" style="padding:10px"><div class="pitch-wrap"><canvas id="pitch-canvas"></canvas><div id="mt-goal"></div></div>' +
       '<div class="momentum" id="mt-momentum" title="Momentum: who has been attacking"></div>' +
@@ -208,14 +209,19 @@
     const lv = mt.live;
     if (lv.halfTime) { stopLoop(); mt.renderer.freeze('HALF TIME'); updateAll(); openTalk(); return; }
     if (lv.finished) { endMatch(); return; }
-    const before = lv.score.hg + lv.score.ag;
+    const prev = { hg: lv.score.hg, ag: lv.score.ag };
     const evs = lv.step();
     const ms_ = (SPEEDS.find(x => x[0] === speed) || SPEEDS[1])[2];
     if (evs.some(e => e.type === 'sub' || e.type === 'red')) syncPlayers();
     mt.renderer.minute({ poss: lv.poss, events: evs, duration: ms_ * 0.95, attack: lv.momentum[lv.momentum.length - 1] !== 0 });
     const goal = evs.find(e => e.type === 'goal');
-    if (goal) showGoal(goal);
     const inj = evs.find(e => e.type === 'injury' && e.side === mt.userKey);
+    if (goal) {
+      // keep the scoreboard (and commentary) quiet until the ball is in the net, then let the moment breathe
+      mt.shown = prev;
+      setTimeout(() => { if (!mt || mt.phase !== 'live') return; mt.shown = null; showGoal(goal); updateAll(); }, ms_ * 0.8);
+      if (speed <= 4) { stopLoop(); setTimeout(() => { if (mt && mt.phase === 'live' && !mt.paused) startLoop(); }, ms_ + 1400); }
+    } else mt.shown = null;
     updateAll();
     if (inj) {
       const me = lv.state()[mt.userKey].lineup.find(p => p.id === inj.playerId);
@@ -237,9 +243,11 @@
   }
   function updateAll() {
     if (!mt || !$('#mt-score')) return;
-    const lv = mt.live, sc = lv.score, st = lv.state();
+    const lv = mt.live, sc = mt.shown || lv.score, st = lv.state();
     $('#mt-score').textContent = sc.hg + ' - ' + sc.ag;
     $('#mt-clock').textContent = clockText();
+    const t = mt.meta.tie;
+    if (t && mt.meta.leg === 1 && t.l1h != null) $('#mt-agg').textContent = 'Aggregate ' + (sc.hg + t.l1a) + '-' + (sc.ag + t.l1h);
     // mentality control
     const um = st[mt.userKey].mentality;
     $('#mt-ment').innerHTML = [[-2, 'V.Def'], [-1, 'Def'], [0, 'Bal'], [1, 'Att'], [2, 'V.Att']].map(x => '<button class="' + (x[0] === um ? 'on' : '') + '" data-act="mtLiveMent" data-v="' + x[0] + '">' + x[1] + '</button>').join('');
@@ -255,7 +263,7 @@
     const p = $('#mt-panel'); if (!p) return;
     const lv = mt.live;
     if (mt.tab === 'feed') {
-      const f = lv.feed.filter(x => x.text);
+      const f = lv.feed.filter(x => x.text && !(mt.shown && x.minute >= lv.minute));
       p.innerHTML = '<div class="feed">' + f.slice().reverse().map(x => '<div class="ln ' + x.type + '"><span class="m">' + (x.minute ? x.minute + "'" : '') + '</span><span class="t">' + esc(x.text) + '</span></div>').join('') + '</div>';
     } else if (mt.tab === 'stats') {
       const s = st.stats, hk = mt.cfg.home.kit[0], ak = mt.cfg.away.kit[0];
@@ -280,7 +288,7 @@
     }
   }
   UI.acts.mtTab = el => { mt.tab = el.dataset.v; document.querySelectorAll('#mt-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.v === mt.tab)); renderPanel(mt.live.state()); };
-  UI.acts.mtPause = () => { mt.paused = !mt.paused; updateAll(); };
+  UI.acts.mtPause = () => { mt.paused = !mt.paused; if (!mt.paused && !mt.timer && !mt.live.halfTime) startLoop(); updateAll(); };
   UI.acts.mtSpeed = el => {
     speed = +el.dataset.v; try { localStorage.setItem('simsoc6.speed', String(speed)); } catch (e) { /* ignore */ }
     document.querySelectorAll('.match-ctl .seg button[data-act="mtSpeed"]').forEach(b => b.classList.toggle('on', +b.dataset.v === speed));

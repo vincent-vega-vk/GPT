@@ -155,7 +155,8 @@
         '<div class="stack">' + card('Inbox', '<div class="list" style="margin:-6px -16px">' + msgs + '</div>', { more: ['Open inbox', 'inbox'] }) +
           card('The board', '<div class="small muted">Objective</div><div class="bold" style="margin:2px 0 10px">' + esc(obj.label || '—') + '</div>' +
             '<div class="row small"><span class="muted">Confidence</span><span class="spacer"></span><b>' + Math.round(s.board.confidence) + '%</b></div>' + meter(s.board.confidence, confColor(s.board.confidence)) +
-            '<div class="row small" style="margin-top:10px"><span class="muted">Reputation</span><span class="spacer"></span>' + UI.stars(s.reputation) + '</div>', { more: ['Board', 'board'] }) +
+            '<div class="row small" style="margin-top:10px"><span class="muted">Media prediction</span><span class="spacer"></span><b>' + (dv.prediction ? UI.ordinal(dv.prediction.indexOf(ui) + 1) : '—') + '</b></div>' +
+            '<div class="row small" style="margin-top:6px"><span class="muted">Reputation</span><span class="spacer"></span>' + UI.stars(s.reputation) + '</div>', { more: ['Board', 'board'] }) +
           card('Finances', '<div class="row"><div><div class="small muted">Balance</div><div class="bold" style="font-size:20px">' + ms(fin.balance) + '</div></div><div class="spacer"></div>' +
             '<div class="num"><div class="small muted">Wages / week</div><div class="bold">' + ms(fin.wageBill) + '</div></div></div>' +
             (fin.debt ? '<div class="small bad" style="margin-top:6px">Loan outstanding: ' + money(fin.debt) + '</div>' : ''), { more: ['Finances', 'finances'] }) + '</div>' +
@@ -526,12 +527,13 @@
     const s = S(), st = E.standings(s, d), z = E.tableZones(s, d);
     const rows = st.map((r, i) => '<tr class="click' + (r.idx === s.userClub ? ' mine' : '') + '" data-go="club/' + r.idx + '"><td class="zone ' + (z[i + 1] || '') + '"></td><td class="num">' + (i + 1) + '</td><td>' + UI.clubLink(r.idx) + '</td>' +
       '<td class="num">' + r.P + '</td><td class="num">' + r.W + '</td><td class="num">' + r.D + '</td><td class="num">' + r.L + '</td><td class="num">' + r.F + '</td><td class="num">' + r.A + '</td>' +
-      '<td class="num">' + (r.GD > 0 ? '+' : '') + r.GD + '</td><td class="num bold">' + r.Pts + '</td><td>' + UI.form(r.form) + '</td></tr>').join('');
+      '<td class="num">' + (r.GD > 0 ? '+' : '') + r.GD + '</td><td class="num bold">' + r.Pts + '</td><td>' + UI.form(r.form) + '</td>' +
+      '<td class="num small" title="Pre-season media prediction">' + (r.pred ? r.pred + (r.P ? (r.pred > i + 1 ? ' <span class="good">▲</span>' : r.pred < i + 1 ? ' <span class="bad">▼</span>' : '') : '') : '') + '</td></tr>').join('');
     const used = new Set(Object.values(z));
     const legend = '<div class="legend">' + (used.has('cl') ? '<span><i style="background:#2f6bff"></i>Champions League</span>' : '') + (used.has('uefa') ? '<span><i style="background:#9b6dff"></i>UEFA Cup</span>' : '') +
       (used.has('promo') ? '<span><i style="background:var(--good)"></i>Promotion</span>' : '') + (used.has('releg') ? '<span><i style="background:var(--bad)"></i>Relegation</span>' : '') + '</div>';
     return '<div class="grid" style="grid-template-columns:minmax(0,1fr) minmax(260px,320px)">' +
-      card('', '<div class="tbl-wrap"><table class="tbl"><thead><tr><th></th><th class="num">#</th><th>Club</th><th class="num">P</th><th class="num">W</th><th class="num">D</th><th class="num">L</th><th class="num">F</th><th class="num">A</th><th class="num">GD</th><th class="num">Pts</th><th>Form</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + '<div style="padding:0 14px 12px">' + legend + '</div>', { cls: 'flush' }) +
+      card('', '<div class="tbl-wrap"><table class="tbl"><thead><tr><th></th><th class="num">#</th><th>Club</th><th class="num">P</th><th class="num">W</th><th class="num">D</th><th class="num">L</th><th class="num">F</th><th class="num">A</th><th class="num">GD</th><th class="num">Pts</th><th>Form</th><th class="num" title="Pre-season media prediction">Pred.</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + '<div style="padding:0 14px 12px">' + legend + '</div>', { cls: 'flush' }) +
       card('Top scorers — ' + esc(s.divisions[d].name), scorerList(E.leagueLeaders(s, d, 12).scorers, 'goals'), { more: ['All stats', 'league/' + d + '/stats'] }) + '</div>';
   }
   function scorerList(rows, unit) {
@@ -721,7 +723,8 @@
     render() {
       const s = S(), f = E.financeSummary(s), se = f.season;
       const inc = [['Gate receipts', se.gate], ['TV & sponsorship', se.tv], ['Prize money', se.prize], ['Player sales', se.sales]];
-      const out = [['Wages', se.wages], ['Transfer fees', se.purchases], ['Loan interest (added to debt)', se.interest]];
+      const out = [['Wages', se.wages], ['Transfer fees', se.purchases], ['Stadium works', se.stadium || 0], ['Loan interest (added to debt)', se.interest]];
+      const st = f.stadium;
       const mx = Math.max(1, ...inc.map(x => x[1]), ...out.map(x => x[1]));
       const bars = (list, col) => list.map(x => '<div style="margin:8px 0"><div class="row small"><span>' + x[0] + '</span><span class="spacer"></span><b>' + money(x[1]) + '</b></div>' +
         '<div class="bar lg" style="margin-top:4px"><span style="width:' + (x[1] / mx * 100) + '%;background:' + col + '"></span></div></div>').join('');
@@ -738,10 +741,23 @@
           'If the account stays overdrawn for too long the board will sell your most valuable player.</p><div class="row"><input class="input" id="loan-amt" type="number" step="10000" value="' +
           Math.min(Math.max(50000, Math.round(f.loanCap / 4 / 10000) * 10000), f.loanCap) + '" style="width:160px"><button class="btn primary" data-act="loan" data-v="borrow">Borrow</button>' +
           '<button class="btn" data-act="loan" data-v="repay"' + (f.debt ? '' : ' disabled') + '>Repay</button></div>') +
+        card('Stadium', '<div class="row"><div><div class="small muted">Capacity</div><div class="bold" style="font-size:20px">' + st.capacity.toLocaleString('en-GB') + '</div></div><div class="spacer"></div>' +
+          '<div class="num"><div class="small muted">Average league crowd</div><div class="bold">' + (st.avgAttendance != null ? st.avgAttendance.toLocaleString('en-GB') : '—') + '</div></div></div>' +
+          '<p class="small muted">More seats mean bigger gates when the team is doing well. One project per season; the board must be behind you.</p>' +
+          (st.add > 0 ? '<button class="btn primary" data-act="expandStadium"' + (st.ok ? '' : ' disabled') + '>Add ' + st.add.toLocaleString('en-GB') + ' seats for ' + ms(st.cost) + '</button>' : '') +
+          (st.reason ? '<div class="small warn" style="margin-top:8px">' + esc(st.reason) + '</div>' : '')) +
         card('Last season', last ? '<div class="small">' + [['Gate', last.gate], ['TV', last.tv], ['Prizes', last.prize], ['Sales', last.sales], ['Wages', -last.wages], ['Purchases', -last.purchases]]
           .map(x => '<div class="row"><span class="muted">' + x[0] + '</span><span class="spacer"></span><b class="' + (x[1] < 0 ? 'bad' : '') + '">' + money(x[1]) + '</b></div>').join('') + '</div>' : '<div class="muted">This is your first season.</div>') + '</div>';
     }
   });
+  UI.acts.expandStadium = () => {
+    const st = E.stadiumOffer(S());
+    UI.confirm('Expand the stadium?', 'Add ' + st.add.toLocaleString('en-GB') + ' seats for ' + money(st.cost) + '.', 'Build it').then(ok => {
+      if (!ok) return;
+      const r = E.expandStadium(S()); S().notices.length = 0;
+      UI.toast(r.msg, r.ok ? 'good' : 'bad'); UI.save(); UI.refresh();
+    });
+  };
   UI.acts.loan = el => {
     const amt = +($('#loan-amt').value || 0), s = S();
     const r = el.dataset.v === 'borrow' ? E.takeLoan(s, amt) : E.repayLoan(s, amt);
@@ -808,6 +824,9 @@
         kpi('Win rate', rec.P ? Math.round(rec.W / rec.P * 100) + '%' : '–') + kpi('Trophies', trophies) + kpi('Clubs managed', clubs) + kpi('Reputation', UI.stars(s.reputation)) + '</div>' +
         card('Season by season', '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Season</th><th>Club</th><th>Division</th><th class="num">Finished</th><th class="num">W-D-L</th><th>Objective</th><th>Trophies</th></tr></thead><tbody>' +
           (rows || '<tr><td colspan="7" class="center muted" style="padding:18px">Your first season is under way — your record fills in as seasons end.</td></tr>') + '</tbody></table></div>', { cls: 'flush' }) +
+        '<div style="height:16px"></div>' + card('Achievements (' + E.achievementsView(s).filter(a => a.got).length + ' / ' + E.ACHIEVEMENTS.length + ')',
+          '<div class="ach-grid">' + E.achievementsView(s).map(a => '<div class="ach' + (a.got ? ' got' : '') + '"><span class="ach-ico">' + (a.got ? '★' : '☆') + '</span><div><b>' + esc(a.title) + '</b>' +
+            '<div class="small muted">' + esc(a.desc) + '</div>' + (a.got ? '<div class="tiny good">' + esc(E.formatDate(a.got.date)) + '</div>' : '') + '</div></div>').join('') + '</div>') +
         '<div style="height:16px"></div>' + card('Manager awards', s.awards.length ? s.awards.slice().reverse().map(a => '<div class="row small"><span>' + esc(a.award) + '</span><span class="spacer"></span><span class="muted">' + esc(E.formatDate(a.date)) + '</span></div>').join('') : '<div class="muted small">No awards yet — win four in a row to be Manager of the Month.</div>');
     }
   });
