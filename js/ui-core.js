@@ -478,7 +478,33 @@
     }
     if (q.has('fresh')) { UI.newSeed = seed; UI.go('new', true); return; }
     UI.newSeed = seed;
-    Store.meta('auto').then(m => { UI.autoMeta = m; UI.render(); }).catch(() => UI.render());
+    const title = () => Store.meta('auto').then(m => { UI.autoMeta = m; UI.render(); }).catch(() => UI.render());
+    // A hosting page may swap this page for a newer build while it is open. It
+    // asks for a snapshot first and hands it back to the new build, so the
+    // career resumes on the same screen (from the autosave) instead of the title.
+    const hot = window.claude && window.claude.hot;
+    let started = false;
+    const start = data => {
+      if (started) return;
+      started = true;
+      const route = data && typeof data.route === 'string' ? data.route : '';
+      if (!route) return title();
+      UI.loadFrom('auto').then(() => UI.go(route, true)).catch(title);
+    };
+    try {
+      if (hot && typeof hot.snapshot === 'function') {
+        hot.snapshot(() => {
+          const r = (location.hash || '').replace(/^#\/?/, '');
+          return { route: !UI.S || !r || /^(match|new|title|load)(\/|$)/.test(r) ? (UI.S ? 'home' : '') : r };
+        });
+      }
+      if (hot && typeof hot.ready === 'function') {
+        hot.ready(start);
+        setTimeout(() => start(hot.data || {}), 1500);               // in case the host never calls back
+        return;
+      }
+    } catch (e) { /* the hook is optional */ }
+    start((hot && hot.data) || {});
   }
 
   /* ---- automation hook (screenshots & play-tests) ------------------- */

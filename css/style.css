@@ -24,7 +24,7 @@ input, select { font: inherit; }
 .hidden { display: none !important; }
 
 /* ---- shell ---------------------------------------------------------- */
-#app { display: grid; grid-template-columns: var(--sidebar) 1fr; grid-template-rows: var(--topbar) 1fr; height: 100vh; }
+#app { display: grid; grid-template-columns: var(--sidebar) 1fr; grid-template-rows: var(--topbar) 1fr; height: 100%; }
 #topbar { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; padding: 0 14px; background: linear-gradient(180deg, #151e31, #111a2b); min-width: 0; overflow: hidden;
   border-bottom: 1px solid var(--line); position: relative; z-index: 20; }
 #topbar::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, var(--club), transparent 60%); opacity: .9; }
