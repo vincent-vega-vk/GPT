@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geopolitica 2026 — Grand Strategy</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+</head>
+<body>
+<header id="top">
+  <div class="brand">🌐 GEOPOLITICA 2026</div>
+  <div id="hud"></div>
+  <div class="actions">
+    <button id="btnHelp" title="Regole e aiuto">❓ Aiuto</button>
+    <button id="btnSave" title="Salva nel browser">💾</button>
+    <button id="btnLoad" title="Carica dal browser">📂</button>
+    <button id="btnExport" title="Esporta salvataggio in file">⬇️</button>
+    <button id="btnImport" title="Importa salvataggio da file">⬆️</button>
+    <input type="file" id="fileImport" accept="application/json" class="hidden">
+    <button id="btnNew">🆕 Nuova partita</button>
+    <button id="btnEnd" class="primary">Fine turno ▶</button>
+  </div>
+</header>
+<main id="game" class="hidden">
+  <aside id="left">
+    <nav class="tabs" id="leftTabs">
+      <button data-tab="governo" class="active">🏛️ Governo</button>
+      <button data-tab="tech">🔬 Tecnologia</button>
+      <button data-tab="mil">🪖 Militare</button>
+      <button data-tab="borsa">📈 Borsa</button>
+    </nav>
+    <div class="panel" id="leftPanel"></div>
+  </aside>
+  <section id="center">
+    <div id="mapWrap">
+      <canvas id="map"></canvas>
+      <div id="mapCtl"><button class="small" id="btnLines">Linee: tutte</button></div>
+      <div id="mapLegend"></div>
+      <div id="tooltip" class="hidden"></div>
+    </div>
+    <div id="newsWrap">
+      <div id="newsBar"><b class="small">📰 Notiziario</b> <span id="newsFilters"></span></div>
+      <div id="news"></div>
+    </div>
+  </section>
+  <aside id="right">
+    <nav class="tabs" id="rightTabs">
+      <button data-tab="nazione" class="active">🏳️ Nazione</button>
+      <button data-tab="rank">🏆 Classifiche</button>
+      <button data-tab="mondo">🌍 Mondo</button>
+    </nav>
+    <div class="panel" id="rightPanel"></div>
+  </aside>
+</main>
+<div id="modal" class="hidden"></div>
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
