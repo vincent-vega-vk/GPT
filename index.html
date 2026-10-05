@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Pulisci Pupù Negoziatore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@500;700;900&display=swap">
+<style>
+/* Layout: a fixed 16:9 "stage" (canvas) with a HUD above and a dialogue panel below, like a point-and-click. */
+:root{
+  --bg:#141a2b;          /* ink blue ground */
+  --panel:#fbf6e9;       /* paper for the dialogue panel */
+  --ink:#1c1a17;         /* text on paper */
+  --chrome:#1f2740;      /* HUD chrome */
+  --chrome-fg:#eef1ff;
+  --accent:#f2b63a;      /* mustard (the spray bottle colour) */
+  --accent-ink:#2a1d00;
+  --good:#3fbf7f;
+  --bad:#e5554f;
+  --muted:#7f8aa8;
+  --brown:#7a4a22;
+  --display:"Luckiest Guy", "Impact", "Arial Black", sans-serif;
+  --body:"Nunito", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--chrome-fg);font-family:var(--body);font-size:16px;line-height:1.4}
+#app{max-width:1040px;margin:0 auto;padding-block:10px 24px;padding-inline:16px;display:flex;flex-direction:column;gap:10px}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--chrome);border-radius:14px;padding:8px 14px}
+.logo{font-family:var(--display);font-size:26px;letter-spacing:.5px;color:var(--accent);text-shadow:2px 2px 0 #000;line-height:1}
+.logo small{display:block;font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-shadow:none;margin-top:4px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{min-width:118px;background:#0f1424;border-radius:10px;padding:6px 10px}
+.stat .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.stat .val{font-weight:900;font-size:18px;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:#2a3352;border-radius:4px;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--accent);width:50%;transition:width .5s}
+.stat.fiducia .bar i{background:#5aa9ff}.stat.interesse .bar i{background:#ff7a59}.stat.rep .bar i{background:#9be56b}
+.stage{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+canvas{width:100%;height:100%;display:block}
+.tag{position:absolute;top:10px;left:10px;background:rgba(10,12,20,.78);color:#fff;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;backdrop-filter:blur(4px)}
+.tag b{color:var(--accent)}
+#fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.pop{position:absolute;font-weight:900;font-size:20px;text-shadow:0 2px 0 #000,0 0 10px rgba(0,0,0,.6);animation:rise 1.6s ease-out forwards;white-space:nowrap}
+.pop.good{color:var(--good)}.pop.bad{color:var(--bad)}.pop.money{color:var(--accent)}
+@keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-90px);opacity:0}}
+.panel{background:var(--panel);color:var(--ink);border-radius:14px;padding:14px 16px;display:grid;gap:10px;min-height:170px;border:3px solid #2a2320;box-shadow:inset 0 0 0 2px #fff}
+.speaker{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:20px;letter-spacing:.5px;color:#2a2320}
+.speaker .dot{width:14px;height:14px;border-radius:50%;background:var(--accent);border:2px solid #2a2320}
+.line{font-size:17px;font-weight:600;max-width:70ch;min-height:48px}
+.line em{font-style:normal;background:#ffe8a3;padding:0 4px;border-radius:4px}
+.timer{height:8px;background:#e8dfc8;border-radius:4px;overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#e5554f,#f2b63a);transition:width .25s linear}
+.choices{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.btn{appearance:none;border:2px solid #2a2320;background:#fff;color:var(--ink);border-radius:10px;padding:10px 12px;font:inherit;font-weight:700;text-align:left;cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center;transition:transform .08s,background .15s;box-shadow:3px 3px 0 #2a2320}
+.btn:hover:not(:disabled){background:#fff3cf;transform:translate(-1px,-1px)}
+.btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:0 0 0 #2a2320}
+.btn:focus-visible{outline:3px solid #5aa9ff;outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn .meta{display:flex;gap:6px;flex-shrink:0}
+.chip{font-size:11px;font-weight:900;letter-spacing:.06em;padding:2px 7px;border-radius:999px;border:2px solid #2a2320;background:#fff}
+.chip.cost{background:var(--accent);color:var(--accent-ink)}
+.chip.risk{background:#dfe9ff}
+.btn.primary{background:var(--accent);justify-content:center;font-size:17px}
+.negoz{display:grid;gap:10px}
+.negoz h4{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#6a5f52}
+.prices{display:flex;flex-wrap:wrap;gap:6px}
+.pbtn{border:2px solid #2a2320;background:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-weight:900;cursor:pointer;font-variant-numeric:tabular-nums}
+.pbtn[aria-pressed="true"]{background:#2a2320;color:#fff}
+.levers{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.lev{display:flex;gap:8px;align-items:flex-start;border:2px dashed #b9ad94;border-radius:8px;padding:8px;cursor:pointer;font-size:14px}
+.lev input{margin-top:3px}
+.lev b{display:block}
+#overlay{position:fixed;inset:0;background:rgba(10,12,20,.9);display:grid;place-items:center;padding:16px;overflow:auto;z-index:10}
+.card{background:var(--panel);color:var(--ink);border-radius:18px;padding:24px;max-width:640px;width:100%;border:3px solid #2a2320;box-shadow:8px 8px 0 #2a2320;display:grid;gap:14px}
+.card h1{font-family:var(--display);font-size:clamp(34px,7vw,54px);margin:0;line-height:.95;color:#b3263a;text-shadow:3px 3px 0 var(--accent);text-wrap:balance}
+.card h2{font-family:var(--display);font-size:28px;margin:0;color:#2a2320;text-wrap:balance}
+.card p{margin:0;max-width:62ch}
+.card ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.ledger{display:grid;grid-template-columns:1fr auto;gap:4px 16px;font-variant-numeric:tabular-nums;border-top:2px solid #2a2320;border-bottom:2px solid #2a2320;padding:8px 0}
+.ledger b{text-align:right}
+.ledger .tot{font-weight:900;font-size:18px}
+.grade{font-family:var(--display);font-size:64px;line-height:1;color:var(--accent);text-shadow:3px 3px 0 #2a2320;text-align:center}
+.help{font-size:13px;color:#6a5f52}
+@media (max-width:520px){.logo{font-size:20px}.stat{min-width:calc(50% - 4px)}.line{font-size:15px}}
+@media (prefers-reduced-motion:reduce){.pop{animation-duration:.01s}}
+</style>
+
+<div id="app">
+  <div class="hud">
+    <div class="logo">PULISCI PUPÙ<small>Il negoziatore · 6 scene</small></div>
+    <div class="stats">
+      <div class="stat budget"><div class="lbl"><span>Budget</span><span>€</span></div><div class="val" id="v-budget">2.000</div><div class="bar"><i id="b-budget"></i></div></div>
+      <div class="stat fiducia"><div class="lbl"><span>Fiducia</span><span id="v-fiducia">50</span></div><div class="bar"><i id="b-fiducia"></i></div></div>
+      <div class="stat interesse"><div class="lbl"><span>Interesse</span><span id="v-interesse">20</span></div><div class="bar"><i id="b-interesse"></i></div></div>
+      <div class="stat rep"><div class="lbl"><span>Reputazione</span><span id="v-rep">60</span></div><div class="bar"><i id="b-rep"></i></div></div>
+    </div>
+  </div>
+  <div class="stage">
+    <canvas id="cv" aria-label="Scena animata del gioco"></canvas>
+    <div class="tag" id="tag">Scena <b>1</b>/6 · La caccia alla lead</div>
+    <div id="fx"></div>
+  </div>
+  <div class="panel">
+    <div class="speaker"><span class="dot" id="dot"></span><span id="who">Narratore</span></div>
+    <div class="line" id="line"></div>
+    <div class="timer" id="timer" hidden><i id="timer-i"></i></div>
+    <div class="choices" id="choices"></div>
+  </div>
+</div>
+
+<div id="overlay">
+  <div class="card" id="start">
+    <h1>Pulisci Pupù<br>Il Negoziatore</h1>
+    <p><strong>Il prodotto:</strong> uno spray enzimatico che elimina la pupù e l'odore all'istante. Fai dove vuoi, pulisci dove vuoi.</p>
+    <p><strong>La missione:</strong> piazzarlo nei 412 supermercati IperFresco. Dalla fiera alla firma, in sei scene, con una persona vera davanti che cammina, si spazientisce e ti giudica.</p>
+    <ul>
+      <li><strong>Budget 2.000 €</strong>: informatori, mazzette a usciere, reception e assistente, promo. Ogni euro speso pesa sul margine finale.</li>
+      <li><strong>Fiducia, Interesse, Reputazione</strong> decidono il verdetto. Le bugie pagano finché non ti scoprono.</li>
+      <li><strong>Barra di pazienza</strong>: se non rispondi in tempo, chi hai davanti si stufa.</li>
+    </ul>
+    <button class="btn primary" id="play">Inizia la trattativa</button>
+    <div class="help">Costo industriale del flacone: 3 €. Tutto quello che strappi sopra è margine.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ------------------------------------------------------------------ STATE */
+const START = {budget:2000, fiducia:50, interesse:20, rep:60, scene:1, attempts:0, round:1, counter:null, price:null, units:20000, flags:{}, spent:0};
+let S = JSON.parse(JSON.stringify(START));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const eur=n=>n.toLocaleString('it-IT');
+
+/* ------------------------------------------------------------------ AUDIO */
+let AC=null;
+function beep(f=440,d=.08,type='square',g=.04){
+  try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(),v=AC.createGain();o.type=type;o.frequency.value=f;v.gain.value=g;
+    o.connect(v);v.connect(AC.destination);o.start();v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d);
+  }catch(e){}
+}
+const sfx={click:()=>beep(520,.06),ok:()=>{beep(660,.1,'triangle');setTimeout(()=>beep(990,.14,'triangle'),90)},ko:()=>{beep(220,.18,'sawtooth');setTimeout(()=>beep(160,.25,'sawtooth'),120)},money:()=>{beep(880,.05);setTimeout(()=>beep(1320,.08),60)},spray:()=>beep(2400,.25,'sine',.02)};
+
+/* ------------------------------------------------------------------ CANVAS */
+const W=960,H=540,DPR=2;
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Cast definitions */
+const CAST={
+  tu:{name:'Tu',color:'#2f4f9e',skin:'#f0c8a0',hair:'#2b1d12',hairStyle:'short',prop:'briefcase',pants:'#1f2a44'},
+  bellini:{name:'Dott.ssa Bellini',color:'#b3263a',skin:'#f3d2b5',hair:'#4a2b1a',hairStyle:'bob',pants:'#2a2a2a',prop:'tablet'},
+  sabrina:{name:'Sabrina',color:'#3a8f7a',skin:'#e8b894',hair:'#1a1a1a',hairStyle:'long',pants:'#333',prop:'headset'},
+  gennaro:{name:'Gennaro',color:'#2c3e50',skin:'#d9a57c',hair:'#777',hairStyle:'bald',prop:'cap',pants:'#1b2733'},
+  luca:{name:'Luca',color:'#8e5bb5',skin:'#f1c9a5',hair:'#c98a3a',hairStyle:'short',pants:'#3b3b4a',prop:'tray'},
+  ferri:{name:'Ing. Ferri',color:'#eeeeee',skin:'#e7bf9b',hair:'#333',hairStyle:'short',pants:'#444',prop:'glasses'},
+  pino:{name:'Pino',color:'#c9a24a',skin:'#e0b48a',hair:'#999',hairStyle:'short',pants:'#5a4632',prop:'broom'},
+  corriere:{name:'Corriere',color:'#f0a020',skin:'#d9a57c',hair:'#222',hairStyle:'cap',pants:'#333',prop:'box'},
+};
+let chars=[];   // active characters
+let extras=[];  // background walkers
+let dog=null;
+let props={poop:null,spray:[],coffee:null};
+let sceneDef=null;
+let T=0, last=performance.now();
+
+function mkChar(id,x,range,opts={}){
+  const d=CAST[id];
+  return Object.assign({id,x,y:opts.y||470,tx:x,range,scale:opts.scale||1,facing:opts.facing||1,walking:false,talking:0,mood:'neutral',phase:Math.random()*6.28,
+    nextWander:rnd(1,3),blink:0,nextBlink:rnd(1,4),gesture:0,speed:opts.speed||70,home:x,visible:true,lock:false},d,opts);
+}
+
+/* ---- person renderer: feet at (x,y) */
+function drawPerson(c,p,t){
+  const sc=p.scale,walk=p.walking,ph=p.phase;
+  const bob=walk?Math.abs(Math.sin(t*9+ph))*5:Math.sin(t*2.2+ph)*2.2;
+  const swing=walk?Math.sin(t*9+ph):0;
+  c.save();c.translate(p.x,p.y);
+  c.fillStyle='rgba(0,0,0,.2)';c.beginPath();c.ellipse(0,0,22*sc,7*sc,0,0,Math.PI*2);c.fill();
+  c.scale(p.facing*sc,sc);c.translate(0,-bob);
+  c.lineCap='round';c.lineJoin='round';
+  // legs
+  c.strokeStyle=p.pants||'#333';c.lineWidth=11;
+  const lf=walk?swing*16:-4, rf=walk?-swing*16:4;
+  c.beginPath();c.moveTo(-7,-50);c.lineTo(-7+lf,-2);c.moveTo(7,-50);c.lineTo(7+rf,-2);c.stroke();
+  c.fillStyle='#1a1a1a';c.beginPath();c.ellipse(-7+lf+2,0,9,4,0,0,6.28);c.fill();c.beginPath();c.ellipse(7+rf+2,0,9,4,0,0,6.28);c.fill();
+  // body
+  c.fillStyle=p.color;rr(c,-21,-102,42,56,10);c.fill();
+  if(p.prop==='glasses'){ c.fillStyle='#d9d9d9';rr(c,-6,-102,12,52,2);c.fill(); }
+  else if(p.id!=='sabrina'&&p.id!=='bellini'){ c.fillStyle='#fff';c.beginPath();c.moveTo(-6,-102);c.lineTo(0,-88);c.lineTo(6,-102);c.closePath();c.fill();
+    c.fillStyle=p.id==='tu'?'#f2b63a':'#222';c.beginPath();c.moveTo(0,-88);c.lineTo(-3,-70);c.lineTo(0,-62);c.lineTo(3,-70);c.closePath();c.fill(); }
+  else { c.fillStyle='rgba(255,255,255,.35)';c.beginPath();c.moveTo(-8,-102);c.lineTo(0,-90);c.lineTo(8,-102);c.closePath();c.fill(); }
+  // arms
+  c.strokeStyle=p.color;c.lineWidth=10;
+  let lh=[-28,-52+Math.sin(t*2+ph)*2], rh=[28,-52+Math.sin(t*2+ph+1)*2];
+  if(walk){lh=[-14+-swing*18,-55];rh=[-14+swing*18+28,-55];}
+  if(p.mood==='angry'&&!walk){lh=[8,-78];rh=[-8,-76];}
+  if(p.talking>0&&!walk){ rh=[36,-80+Math.sin(t*7)*8]; if(Math.sin(t*1.3+ph)>0.3) lh=[-34,-70+Math.sin(t*5)*6]; }
+  if(p.gesture>0&&!walk){ rh=[34,-100+Math.sin(t*9)*5]; }
+  c.beginPath();c.moveTo(-18,-94);c.lineTo(lh[0],lh[1]);c.moveTo(18,-94);c.lineTo(rh[0],rh[1]);c.stroke();
+  c.fillStyle=p.skin;c.beginPath();c.arc(lh[0],lh[1],6,0,6.28);c.fill();c.beginPath();c.arc(rh[0],rh[1],6,0,6.28);c.fill();
+  // props in hands
+  if(p.prop==='briefcase'){c.fillStyle='#5a3a1a';rr(c,lh[0]-12,lh[1]+2,24,18,3);c.fill();c.fillStyle='#f2b63a';c.fillRect(lh[0]-4,lh[1]+9,8,3);}
+  if(p.prop==='tray'){c.fillStyle='#777';rr(c,lh[0]-16,lh[1]-4,32,5,2);c.fill();c.fillStyle='#fff';rr(c,lh[0]-6,lh[1]-14,12,10,2);c.fill();c.strokeStyle='#ccc';c.lineWidth=1;for(let i=0;i<2;i++){c.beginPath();c.moveTo(lh[0]-2+i*4,lh[1]-16);c.quadraticCurveTo(lh[0]+i*4,lh[1]-22-Math.sin(t*4+i)*3,lh[0]-2+i*4,lh[1]-28);c.stroke();}}
+  if(p.prop==='tablet'){c.fillStyle='#222';rr(c,lh[0]-10,lh[1]-14,20,26,2);c.fill();c.fillStyle='#8fd3ff';rr(c,lh[0]-8,lh[1]-12,16,20,1);c.fill();}
+  if(p.prop==='broom'){c.strokeStyle='#8a6a3a';c.lineWidth=3;c.beginPath();c.moveTo(lh[0],lh[1]-40);c.lineTo(lh[0]-6,10);c.stroke();c.fillStyle='#d9b45a';c.beginPath();c.moveTo(lh[0]-14,0);c.lineTo(lh[0]+4,0);c.lineTo(lh[0]+2,12);c.lineTo(lh[0]-16,12);c.closePath();c.fill();}
+  if(p.prop==='box'){c.fillStyle='#c48a3f';rr(c,-22,-70,44,30,2);c.fill();c.fillStyle='#8a5a22';c.fillRect(-22,-58,44,3);}
+  // head
+  c.fillStyle=p.skin;c.beginPath();c.arc(0,-121,18,0,6.28);c.fill();
+  // hair
+  c.fillStyle=p.hair;
+  if(p.hairStyle==='short'){c.beginPath();c.arc(0,-124,18,Math.PI,0);c.fill();}
+  if(p.hairStyle==='bob'){c.beginPath();c.arc(0,-124,19,Math.PI,0);c.fill();c.fillRect(-19,-124,8,24);c.fillRect(11,-124,8,20);}
+  if(p.hairStyle==='long'){c.beginPath();c.arc(0,-124,19,Math.PI,0);c.fill();c.fillRect(-19,-124,7,40);c.fillRect(12,-124,7,40);}
+  if(p.hairStyle==='bald'){c.beginPath();c.arc(-13,-118,5,0,6.28);c.arc(13,-118,5,0,6.28);c.fill();}
+  if(p.hairStyle==='cap'){c.beginPath();c.arc(0,-124,18,Math.PI,0);c.fill();}
+  if(p.prop==='cap'){c.fillStyle='#1b2733';c.beginPath();c.arc(0,-130,18,Math.PI,0);c.fill();c.fillRect(-18,-132,42,5);c.fillStyle='#f2b63a';c.fillRect(-4,-140,8,4);}
+  if(p.prop==='headset'){c.strokeStyle='#222';c.lineWidth=3;c.beginPath();c.arc(0,-124,20,Math.PI*1.05,Math.PI*1.95);c.stroke();c.beginPath();c.moveTo(16,-118);c.quadraticCurveTo(20,-104,8,-108);c.stroke();}
+  // eyes
+  const blink=p.blink>0;
+  c.fillStyle='#fff';
+  if(!blink){c.beginPath();c.arc(6,-124,4,0,6.28);c.arc(14,-124,4,0,6.28);c.fill();c.fillStyle='#222';c.beginPath();c.arc(7,-124,2,0,6.28);c.arc(15,-124,2,0,6.28);c.fill();}
+  else{c.strokeStyle='#222';c.lineWidth=2;c.beginPath();c.moveTo(2,-124);c.lineTo(10,-124);c.moveTo(11,-124);c.lineTo(18,-124);c.stroke();}
+  if(p.prop==='glasses'){c.strokeStyle='#222';c.lineWidth=2;c.beginPath();c.arc(6,-124,6,0,6.28);c.stroke();c.beginPath();c.arc(15,-124,6,0,6.28);c.stroke();}
+  // brows
+  c.strokeStyle='#222';c.lineWidth=2.5;c.beginPath();
+  if(p.mood==='angry'){c.moveTo(2,-133);c.lineTo(10,-130);c.moveTo(11,-130);c.lineTo(19,-133);}
+  else if(p.mood==='happy'){c.moveTo(2,-131);c.lineTo(10,-133);c.moveTo(11,-133);c.lineTo(19,-131);}
+  else{c.moveTo(2,-131);c.lineTo(10,-131);c.moveTo(11,-131);c.lineTo(19,-131);}
+  c.stroke();
+  // mouth
+  c.strokeStyle='#7a2a2a';c.lineWidth=2;c.fillStyle='#5a1a1a';
+  if(p.talking>0){const o=2+Math.abs(Math.sin(t*14+ph))*5;c.beginPath();c.ellipse(11,-112,4,o,0,0,6.28);c.fill();}
+  else if(p.mood==='happy'){c.beginPath();c.arc(10,-114,5,0.15,Math.PI-0.15);c.stroke();}
+  else if(p.mood==='angry'){c.beginPath();c.arc(10,-108,5,Math.PI+0.3,-0.3);c.stroke();}
+  else{c.beginPath();c.moveTo(7,-112);c.lineTo(15,-112);c.stroke();}
+  c.restore();
+  // talking indicator + name
+  if(p.talking>0){c.save();c.translate(p.x,p.y-150*p.scale+Math.sin(t*6)*3);c.fillStyle='#fff';rr(c,-16,-10,32,16,8);c.fill();c.fillStyle='#222';for(let i=0;i<3;i++){c.beginPath();c.arc(-8+i*8,-2,2+(Math.sin(t*10+i)>0.5?1:0),0,6.28);c.fill();}c.restore();}
+  if(p.name&&p.scale>=0.9){c.save();c.font='700 11px Nunito, sans-serif';c.textAlign='center';c.fillStyle='rgba(255,255,255,.85)';c.strokeStyle='rgba(0,0,0,.6)';c.lineWidth=3;c.strokeText(p.name,p.x,p.y+16);c.fillText(p.name,p.x,p.y+16);c.restore();}
+}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+
+/* ---- pug */
+function drawDog(c,d,t){
+  const walk=d.walking,ph=d.phase;const bob=walk?Math.abs(Math.sin(t*12+ph))*3:Math.sin(t*2.5)*1.2;
+  c.save();c.translate(d.x,d.y);c.fillStyle='rgba(0,0,0,.18)';c.beginPath();c.ellipse(0,0,26,6,0,0,6.28);c.fill();
+  c.scale(d.facing,1);c.translate(0,-bob);
+  c.strokeStyle='#8f7a5a';c.lineWidth=6;c.lineCap='round';const sw=walk?Math.sin(t*12+ph)*7:0;
+  c.beginPath();c.moveTo(-14,-14);c.lineTo(-14+sw,0);c.moveTo(-6,-14);c.lineTo(-6-sw,0);c.moveTo(8,-14);c.lineTo(8-sw,0);c.moveTo(16,-14);c.lineTo(16+sw,0);c.stroke();
+  c.fillStyle='#c9ad7f';c.beginPath();c.ellipse(0,-20,24,13,0,0,6.28);c.fill();
+  c.strokeStyle='#c9ad7f';c.lineWidth=5;c.beginPath();c.moveTo(-22,-24);c.quadraticCurveTo(-32,-36,-24,-38);c.stroke();
+  c.fillStyle='#c9ad7f';c.beginPath();c.arc(22,-30,13,0,6.28);c.fill();
+  c.fillStyle='#3a2a1a';c.beginPath();c.ellipse(28,-28,8,6,0,0,6.28);c.fill();c.beginPath();c.moveTo(12,-40);c.lineTo(18,-30);c.lineTo(8,-32);c.fill();c.beginPath();c.moveTo(30,-42);c.lineTo(34,-30);c.lineTo(24,-34);c.fill();
+  c.fillStyle='#fff';c.beginPath();c.arc(20,-33,3.5,0,6.28);c.arc(31,-33,3.5,0,6.28);c.fill();c.fillStyle='#000';c.beginPath();c.arc(21,-33,1.8,0,6.28);c.arc(32,-33,1.8,0,6.28);c.fill();
+  if(d.talking>0){c.fillStyle='#e07a8a';c.beginPath();c.ellipse(32,-22,3,4+Math.abs(Math.sin(t*10))*2,0,0,6.28);c.fill();}
+  c.restore();
+}
+function drawPoop(c,x,y,s){c.save();c.translate(x,y);c.scale(s,s);c.fillStyle='#6b3f1d';c.beginPath();c.ellipse(0,-5,16,7,0,0,6.28);c.fill();c.beginPath();c.ellipse(0,-13,12,6,0,0,6.28);c.fill();c.beginPath();c.ellipse(1,-20,8,5,0,0,6.28);c.fill();c.beginPath();c.moveTo(0,-25);c.quadraticCurveTo(6,-30,4,-33);c.lineWidth=3;c.strokeStyle='#6b3f1d';c.stroke();
+  c.fillStyle='#fff';c.beginPath();c.arc(-4,-13,2.5,0,6.28);c.arc(4,-13,2.5,0,6.28);c.fill();c.fillStyle='#000';c.beginPath();c.arc(-3.5,-13,1.2,0,6.28);c.arc(4.5,-13,1.2,0,6.28);c.fill();
+  c.strokeStyle='#aaa';c.lineWidth=1.5;for(let i=-1;i<=1;i++){c.beginPath();c.moveTo(i*8,-28);c.quadraticCurveTo(i*8+3,-36,i*8,-42);c.stroke();}c.restore();}
+
+/* ---- backgrounds */
+function bgFiera(c,t){
+  const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#dfe7f1');g.addColorStop(1,'#b9c5d4');c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.fillStyle='#8f9bb0';c.fillRect(0,330,W,210);c.fillStyle='rgba(255,255,255,.12)';for(let i=0;i<12;i++)c.fillRect(i*80+((t*20)%80),330,2,210);
+  const booths=[['#e05a4f','PULITO!'],['#3a8f7a','SCOPE 3000'],['#f2b63a','IGIENIKA'],['#5a7ce0','BIDET PRO'],['#b35aa0','AROMA']];
+  booths.forEach((b,i)=>{const x=40+i*190;c.fillStyle=b[0];c.fillRect(x,180,160,150);c.fillStyle='#fff';c.fillRect(x+10,200,140,40);c.fillStyle='#222';c.font='900 16px Nunito';c.textAlign='center';c.fillText(b[1],x+80,226);c.fillStyle='rgba(0,0,0,.15)';c.fillRect(x,310,160,20);});
+  c.fillStyle='#fff';c.font='900 40px "Luckiest Guy"';c.textAlign='center';c.fillStyle='#223';c.fillText('HYGIENIKA 2026 · RIMINI',W/2,80);c.fillStyle='#e05a4f';c.font='900 16px Nunito';c.fillText('IL SALONE DELLA PULIZIA PROFESSIONALE',W/2,105);
+  for(let i=0;i<6;i++){const x=120+i*150,y=130+Math.sin(t*1.5+i)*8;c.fillStyle=['#e05a4f','#f2b63a','#3a8f7a','#5a7ce0'][i%4];c.beginPath();c.ellipse(x,y,14,18,0,0,6.28);c.fill();c.strokeStyle='#555';c.lineWidth=1;c.beginPath();c.moveTo(x,y+18);c.lineTo(x+Math.sin(t+i)*4,y+60);c.stroke();}
+}
+function bgLobby(c,t){
+  c.fillStyle='#f1ebe0';c.fillRect(0,0,W,330);c.fillStyle='#d9d2c4';c.fillRect(0,330,W,210);
+  c.strokeStyle='rgba(0,0,0,.08)';c.lineWidth=1;for(let i=0;i<10;i++){c.beginPath();c.moveTo(0,330+i*24);c.lineTo(W,330+i*24);c.stroke();}
+  for(let i=0;i<16;i++){c.beginPath();c.moveTo(i*70,330);c.lineTo(i*70-80,540);c.stroke();}
+  c.fillStyle='#2e7d4f';c.font='900 34px "Luckiest Guy"';c.textAlign='center';c.fillText('IperFresco',W/2,70);c.fillStyle='#777';c.font='700 13px Nunito';c.fillText('SEDE CENTRALE · 412 PUNTI VENDITA · DAL 1987',W/2,92);
+  // elevator
+  const open=Math.max(0,Math.sin(t*0.6))*34;c.fillStyle='#9a9a9a';c.fillRect(800,150,120,180);c.fillStyle='#555';c.fillRect(810,160,100,170);c.fillStyle='#bfc4cc';c.fillRect(810,160,50-open,170);c.fillRect(860+open,160,50-open,170);
+  c.fillStyle='#e0392c';c.font='900 12px Nunito';c.fillText(open>2?'▲ 3':'',860,145);
+  // desk
+  c.fillStyle='#7a5a3a';rr(c,520,300,250,60,6);c.fill();c.fillStyle='#5a3f26';c.fillRect(520,356,250,60);c.fillStyle='#fff';c.font='900 14px Nunito';c.fillText('RECEPTION',645,338);
+  c.fillStyle='#222';rr(c,690,270,46,30,3);c.fill();c.fillStyle='#8fd3ff';c.fillRect(694,274,38,22);
+  // plant
+  c.fillStyle='#9a6a3a';c.fillRect(60,300,40,40);c.fillStyle='#3f8f4a';for(let i=0;i<5;i++){c.beginPath();c.ellipse(80+Math.cos(i*1.3)*22,270+Math.sin(i)*18+Math.sin(t*2+i)*2,18,10,i,0,6.28);c.fill();}
+  // security monitor
+  c.fillStyle='#333';c.fillRect(280,120,90,60);c.fillStyle=Math.sin(t*4)>0?'#3fbf7f':'#2a8f5f';c.fillRect(285,125,80,50);c.fillStyle='#222';c.font='700 10px Nunito';c.fillText('CAM 03 · HALL',325,165);
+  // guard booth
+  c.fillStyle='#9fb3c8';c.fillRect(120,180,160,150);c.fillStyle='#d9e6f2';c.fillRect(130,190,140,70);c.fillStyle='#223';c.font='900 12px Nunito';c.fillText('PORTINERIA',200,300);
+}
+function bgOffice(c,t,sunset){
+  c.fillStyle=sunset?'#e8d4c0':'#eef2f6';c.fillRect(0,0,W,330);c.fillStyle=sunset?'#8a6a55':'#6e7f8f';c.fillRect(0,330,W,210);
+  c.fillStyle='rgba(255,255,255,.08)';for(let i=0;i<8;i++)c.fillRect(0,330+i*26,W,2);
+  // window
+  c.fillStyle='#223';c.fillRect(560,60,340,220);const sky=c.createLinearGradient(0,60,0,280);if(sunset){sky.addColorStop(0,'#ff9a5a');sky.addColorStop(1,'#ffd27a');}else{sky.addColorStop(0,'#6fb5ff');sky.addColorStop(1,'#cfe8ff');}c.fillStyle=sky;c.fillRect(570,70,320,200);
+  c.fillStyle=sunset?'#ffe36b':'#fff';for(let i=0;i<3;i++){const x=570+((t*12+i*140)%360)-30,y=100+i*40;c.beginPath();c.ellipse(x,y,34,12,0,0,6.28);c.ellipse(x+20,y-8,22,12,0,0,6.28);c.fill();}
+  c.fillStyle='#2a3a4a';for(let i=0;i<9;i++){const h=40+((i*37)%70);c.fillRect(575+i*36,270-h,28,h);}c.fillStyle='#223';c.fillRect(728,70,6,200);c.fillRect(570,168,320,6);
+  if(sunset){c.fillStyle='#ffd27a';c.fillRect(700,150,30,20);c.fillRect(600,120,10,8);}
+  // desk
+  c.fillStyle='#8a6a4a';rr(c,560,320,360,30,6);c.fill();c.fillStyle='#6a4f35';c.fillRect(580,350,20,70);c.fillRect(880,350,20,70);
+  c.fillStyle='#222';rr(c,700,260,90,60,4);c.fill();c.fillStyle='#8fd3ff';c.fillRect(705,265,80,50);c.fillStyle='#222';c.font='700 9px Nunito';c.textAlign='left';c.fillText('ACQUISTI Q4 ▲ 12%',710,290);c.fillRect(735,320,20,6);
+  // whiteboard
+  c.fillStyle='#fff';c.fillRect(60,70,300,180);c.strokeStyle='#999';c.lineWidth=6;c.strokeRect(60,70,300,180);
+  c.fillStyle='#223';c.font='900 18px Nunito';c.textAlign='left';c.fillText('Q4 · Reparto casa',80,100);c.strokeStyle='#e05a4f';c.lineWidth=3;c.beginPath();c.moveTo(80,220);for(let i=0;i<=10;i++){c.lineTo(80+i*26,220-Math.abs(Math.sin(i*0.9))*80-i*4);}c.stroke();
+  c.fillStyle='#3a8f7a';c.font='700 12px Nunito';c.fillText('obiettivo: +15% novità',80,240);
+  // plant + clock
+  c.fillStyle='#9a6a3a';c.fillRect(440,290,36,40);c.fillStyle='#3f8f4a';for(let i=0;i<4;i++){c.beginPath();c.ellipse(458+Math.cos(i*1.6)*18,262+Math.sin(i*1.1)*14+Math.sin(t*2+i)*2,16,9,i,0,6.28);c.fill();}
+  c.fillStyle='#fff';c.beginPath();c.arc(470,110,26,0,6.28);c.fill();c.strokeStyle='#222';c.lineWidth=3;c.stroke();c.lineWidth=2;c.beginPath();c.moveTo(470,110);c.lineTo(470+Math.cos(t*2)*18,110+Math.sin(t*2)*18);c.moveTo(470,110);c.lineTo(470,96);c.stroke();
+  // poster
+  c.fillStyle='#2e7d4f';c.fillRect(400,150,70,100);c.fillStyle='#fff';c.font='900 10px Nunito';c.textAlign='center';c.fillText('IperFresco',435,175);c.fillText('FRESCHEZZA',435,200);c.fillText('OGNI GIORNO',435,214);
+}
+function bgMeeting(c,t){
+  c.fillStyle='#f3f0ea';c.fillRect(0,0,W,330);c.fillStyle='#5f6b78';c.fillRect(0,330,W,210);
+  c.fillStyle='rgba(255,255,255,.06)';for(let i=0;i<8;i++)c.fillRect(0,330+i*26,W,2);
+  // screen with changing slides
+  const slide=Math.floor(t/3)%4;c.fillStyle='#111';c.fillRect(330,50,300,170);c.fillStyle='#fff';c.fillRect(340,60,280,150);
+  c.textAlign='center';c.fillStyle='#223';c.font='900 18px Nunito';
+  const slides=[['PULISCI PUPÙ','Fai dove vuoi. Pulisci dove vuoi.'],['IL PROBLEMA','9.000.000 kg / giorno'],['LA SOLUZIONE','4 secondi · odore: pino'],['IL MARGINE','3 € costo · tu decidi il prezzo']];
+  c.fillText(slides[slide][0],480,120);c.font='700 13px Nunito';c.fillStyle='#b3263a';c.fillText(slides[slide][1],480,150);
+  c.fillStyle='#f2b63a';c.fillRect(340,195,280*((t%3)/3),6);
+  // long table
+  c.fillStyle='#8a6a4a';c.beginPath();c.moveTo(120,330);c.lineTo(840,330);c.lineTo(900,380);c.lineTo(60,380);c.closePath();c.fill();c.fillStyle='#6a4f35';c.fillRect(60,380,840,14);
+  c.fillStyle='#fff';for(let i=0;i<5;i++){rr(c,180+i*150,342,40,26,3);c.fill();}
+  c.fillStyle='#f2b63a';rr(c,470,300,20,36,4);c.fill();c.fillStyle='#222';c.fillRect(474,292,12,10);c.fillStyle='#fff';c.font='900 7px Nunito';c.fillText('PP',480,322);
+  // windows
+  c.fillStyle='#cfe8ff';c.fillRect(40,60,220,200);c.fillStyle='#223';c.fillRect(148,60,6,200);c.fillRect(40,158,220,6);c.fillStyle='#fff';for(let i=0;i<2;i++){const x=40+((t*10+i*120)%260)-20;c.beginPath();c.ellipse(x,100+i*50,26,10,0,0,6.28);c.fill();}
+  c.fillStyle='#cfe8ff';c.fillRect(700,60,220,200);c.fillStyle='#223';c.fillRect(808,60,6,200);c.fillRect(700,158,220,6);
+  // coffee stain
+  if(props.coffee){c.fillStyle='rgba(70,40,20,'+props.coffee.a+')';c.beginPath();c.ellipse(props.coffee.x,props.coffee.y,34,10,0,0,6.28);c.fill();}
+}
+
+/* ---- scenes */
+const SCENES={
+  1:{title:'La caccia alla lead',place:'Fiera HYGIENIKA · Rimini',bg:bgFiera,extras:2.2,cast:()=>[mkChar('tu',300,[160,520]),mkChar('pino',760,[600,900],{speed:40})]},
+  2:{title:'La fortezza',place:'Sede IperFresco · Bologna',bg:bgLobby,extras:7,cast:()=>[mkChar('tu',300,[160,460]),mkChar('sabrina',645,[625,665],{y:300,scale:.8,speed:20}),mkChar('gennaro',200,[120,480],{speed:45}),mkChar('luca',-80,[-100,1100],{y:420,scale:.85,speed:90,crosser:true})]},
+  3:{title:'La presentazione',place:'Ufficio Bellini · 3° piano',bg:bgOffice,extras:0,cast:()=>[mkChar('tu',280,[160,420]),mkChar('bellini',600,[480,760],{facing:-1}),mkChar('luca',-80,[-100,1100],{y:430,scale:.85,speed:90,crosser:true})],dog:true},
+  4:{title:'Le obiezioni',place:'Sala riunioni · 3° piano',bg:bgMeeting,extras:0,cast:()=>[mkChar('tu',240,[140,380]),mkChar('bellini',560,[460,660],{facing:-1}),mkChar('ferri',760,[680,880],{facing:-1,speed:35}),mkChar('luca',-80,[-100,1100],{y:445,scale:.85,speed:70,crosser:true})]},
+  5:{title:'La trattativa',place:'Sala riunioni · 3° piano',bg:bgMeeting,extras:0,cast:()=>[mkChar('tu',240,[140,380]),mkChar('bellini',560,[460,660],{facing:-1}),mkChar('ferri',780,[700,880],{facing:-1,speed:30})]},
+  6:{title:'La decisione',place:'Ufficio Bellini · ore 18:40',bg:(c,t)=>bgOffice(c,t,true),extras:0,cast:()=>[mkChar('tu',260,[180,360],{speed:40}),mkChar('bellini',620,[440,800],{facing:-1,speed:95}),mkChar('luca',-80,[-100,1100],{y:430,scale:.85,speed:90,crosser:true})],dog:true},
+};
+function loadScene(n){
+  S.scene=n;sceneDef=SCENES[n];chars=sceneDef.cast();extras=[];props={poop:null,spray:[],coffee:null};
+  dog=sceneDef.dog?{x:420,y:500,tx:420,range:[200,860],facing:1,walking:false,phase:0,nextWander:1,talking:0,speed:60}:null;
+  document.getElementById('tag').innerHTML='Scena <b>'+n+'</b>/6 · '+sceneDef.title+' · <span style="opacity:.7">'+sceneDef.place+'</span>';
+}
+function getChar(id){return chars.find(c=>c.id===id);}
+
+/* ---- animation update */
+function spawnExtra(){
+  const fromLeft=Math.random()<.5,back=Math.random()<.5;
+  const e={id:'x',name:'',color:pick(['#777','#9a5a5a','#5a7a9a','#7a9a5a','#c0a060','#555']),skin:pick(['#f0c8a0','#d9a57c','#8d5a3a','#f3d2b5']),hair:pick(['#222','#5a3a1a','#999','#c98a3a']),hairStyle:pick(['short','long','bald','bob']),pants:'#333',
+    x:fromLeft?-60:W+60,y:back?380:505,scale:back?.72:1.02,facing:fromLeft?1:-1,walking:true,talking:0,mood:'neutral',phase:Math.random()*6,speed:rnd(50,110),blink:0,nextBlink:rnd(1,4),gesture:0,extra:true,prop:Math.random()<.3?'box':null};
+  extras.push(e);
+}
+let extraTimer=1;
+function update(dt){
+  T+=dt;
+  if(sceneDef&&sceneDef.extras>0){extraTimer-=dt;if(extraTimer<=0){spawnExtra();extraTimer=rnd(1.2,3.5)/(sceneDef.extras/2);}}
+  extras.forEach(e=>{e.x+=e.facing*e.speed*dt;});extras=extras.filter(e=>e.x>-100&&e.x<W+100);
+  const all=chars.concat(extras);
+  all.forEach(p=>{
+    p.nextBlink-=dt;if(p.nextBlink<=0){p.blink=.12;p.nextBlink=rnd(1.5,5);}if(p.blink>0)p.blink-=dt;
+    if(p.talking>0)p.talking-=dt;if(p.gesture>0)p.gesture-=dt;
+    if(p.extra)return;
+    if(p.crosser){ // walks across the scene now and then
+      if(!p.walking){p.nextWander-=dt;if(p.nextWander<=0){p.walking=true;p.x=Math.random()<.5?-80:W+80;p.facing=p.x<0?1:-1;p.tx=p.x<0?W+80:-80;}}
+      else{p.x+=p.facing*p.speed*dt;if((p.facing>0&&p.x>=p.tx)||(p.facing<0&&p.x<=p.tx)){p.walking=false;p.nextWander=rnd(6,14);}}
+      return;
+    }
+    if(p.lock){p.walking=false;return;}
+    if(p.walking){const d=p.tx-p.x;const step=p.speed*dt;if(Math.abs(d)<=step){p.x=p.tx;p.walking=false;p.nextWander=rnd(1.5,5);}else{p.x+=Math.sign(d)*step;p.facing=Math.sign(d);}}
+    else{p.nextWander-=dt;if(p.nextWander<=0&&!reduceMotion){p.tx=rnd(p.range[0],p.range[1]);p.walking=Math.abs(p.tx-p.x)>15;}
+      // face the player (or the speaker) while idle
+      if(p.id!=='tu'){const tu=getChar('tu');if(tu&&Math.random()<.02)p.facing=Math.sign(tu.x-p.x)||1;}
+      else if(currentSpeaker&&currentSpeaker!=='tu'){const sp=getChar(currentSpeaker);if(sp)p.facing=Math.sign(sp.x-p.x)||1;}
+    }
+  });
+  if(dog){dog.talking>0&&(dog.talking-=dt);if(dog.walking){const d=dog.tx-dog.x,st=dog.speed*dt;if(Math.abs(d)<=st){dog.x=dog.tx;dog.walking=false;dog.nextWander=rnd(1,4);}else{dog.x+=Math.sign(d)*st;dog.facing=Math.sign(d);}}else{dog.nextWander-=dt;if(dog.nextWander<=0&&!dog.lock){dog.tx=rnd(dog.range[0],dog.range[1]);dog.walking=true;}}}
+  if(props.poop){props.poop.life-=dt;if(props.poop.life<=0)props.poop=null;}
+  props.spray.forEach(s=>{s.x+=s.vx*dt;s.y+=s.vy*dt;s.vy+=20*dt;s.life-=dt;});props.spray=props.spray.filter(s=>s.life>0);
+  if(props.coffee&&props.coffee.fade){props.coffee.a-=dt*.8;if(props.coffee.a<=0)props.coffee=null;}
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  if(!sceneDef){ctx.fillStyle='#141a2b';ctx.fillRect(0,0,W,H);return;}
+  sceneDef.bg(ctx,T);
+  const all=chars.concat(extras).filter(p=>p.visible!==false);
+  const layer=all.map(p=>({p,z:p.y}));if(dog)layer.push({dog:true,z:dog.y});
+  if(props.poop)layer.push({poop:true,z:props.poop.y});
+  layer.sort((a,b)=>a.z-b.z);
+  layer.forEach(l=>{if(l.dog)drawDog(ctx,dog,T);else if(l.poop)drawPoop(ctx,props.poop.x,props.poop.y,props.poop.s);else drawPerson(ctx,l.p,T);});
+  props.spray.forEach(s=>{ctx.fillStyle='rgba(120,255,180,'+Math.min(1,s.life)+')';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.28);ctx.fill();});
+  // vignette
+  const v=ctx.createRadialGradient(W/2,H/2,H*.5,W/2,H/2,H);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.35)');ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+}
+function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+
+/* ---- animation events */
+function sprayAt(x,y){sfx.spray();for(let i=0;i<40;i++)props.spray.push({x:x+rnd(-10,10),y:y-rnd(10,40),vx:rnd(-60,60),vy:rnd(-90,-10),r:rnd(2,5),life:rnd(.6,1.4)});}
+const ANIM={
+  dogPoop(){if(!dog)return;dog.lock=true;dog.walking=false;dog.tx=dog.x;dog.talking=1;setTimeout(()=>{props.poop={x:dog.x-dog.facing*30,y:dog.y+2,s:1,life:99};dog.lock=false;},700);
+    setTimeout(()=>{const tu=getChar('tu');if(tu){tu.tx=props.poop?props.poop.x-50:tu.x;tu.walking=true;tu.gesture=1.5;}},1400);
+    setTimeout(()=>{if(props.poop){sprayAt(props.poop.x,props.poop.y);props.poop.life=.4;}const b=getChar('bellini');if(b){b.mood='happy';b.gesture=1.2;}},2600);},
+  dogNope(){if(!dog)return;dog.lock=true;dog.walking=false;setTimeout(()=>{dog.lock=false;},2500);const tu=getChar('tu');if(tu){tu.gesture=2;setTimeout(()=>sprayAt(tu.x+40,tu.y-60),900);}},
+  sprayFail(){const tu=getChar('tu');if(tu)sprayAt(tu.x+30,tu.y-70);},
+  coffeeSpill(){const l=getChar('luca');if(l){l.walking=true;l.x=-60;l.facing=1;l.tx=380;l.nextWander=99;setTimeout(()=>{props.coffee={x:400,y:500,a:.8};l.talking=1;l.mood='angry';},2200);}},
+  coffeeClean(){const tu=getChar('tu');if(tu){tu.tx=350;tu.walking=true;}setTimeout(()=>{if(props.coffee){sprayAt(props.coffee.x,props.coffee.y);props.coffee.fade=true;}},1200);},
+  selfDemo(){const tu=getChar('tu');if(tu){tu.lock=true;setTimeout(()=>{props.poop={x:tu.x+30,y:tu.y+2,s:.8,life:99};},800);setTimeout(()=>{if(props.poop){sprayAt(props.poop.x,props.poop.y);props.poop.life=.4;}tu.lock=false;},2200);}
+    const l=getChar('luca');if(l){l.walking=true;l.x=-60;l.facing=1;l.tx=200;l.nextWander=99;setTimeout(()=>{l.talking=1.5;l.mood='angry';l.gesture=1.5;},1500);}},
+  kicked(){const g=getChar('gennaro');const tu=getChar('tu');if(g&&tu){g.tx=tu.x+50;g.walking=true;g.mood='angry';setTimeout(()=>{tu.tx=-100;tu.walking=true;tu.lock=false;g.tx=-60;g.walking=true;},1500);}},
+  phone(){const b=getChar('bellini');if(b){b.tx=700;b.walking=true;b.talking=4;}},
+  pace(){const b=getChar('bellini');if(b){b.speed=120;b.mood='neutral';}},
+};
+function mood(id,m){const c=getChar(id);if(c)c.mood=m;}
+
+/* ------------------------------------------------------------------ UI HELPERS */
+const $=id=>document.getElementById(id);
+function refreshHUD(){
+  $('v-budget').textContent=eur(S.budget);$('b-budget').style.width=clamp(S.budget/2000*100,0,100)+'%';
+  ['fiducia','interesse','rep'].forEach(k=>{$('v-'+k).textContent=Math.round(S[k]);$('b-'+k).style.width=clamp(S[k],0,100)+'%';});
+}
+function pop(text,kind){const d=document.createElement('div');d.className='pop '+kind;d.textContent=text;d.style.left=(30+Math.random()*50)+'%';d.style.top=(30+Math.random()*30)+'%';$('fx').appendChild(d);setTimeout(()=>d.remove(),1700);}
+function applyFx(fx){
+  if(!fx)return;const names={fiducia:'Fiducia',interesse:'Interesse',rep:'Reputazione'};
+  let i=0;Object.keys(fx).forEach(k=>{const v=fx[k];if(!v)return;setTimeout(()=>{S[k]=clamp(S[k]+v,0,100);pop((v>0?'+':'')+v+' '+names[k],v>0?'good':'bad');refreshHUD();},i*220);i++;});
+}
+function spend(n){if(!n)return;S.budget-=n;S.spent+=n;pop('−'+eur(n)+' €','money');sfx.money();refreshHUD();}
+
+let currentSpeaker=null;
+const SPEAKERS={narr:['Narratore','#f2b63a'],tu:['Tu','#2f4f9e'],bellini:['Dott.ssa Marta Bellini · Direttrice Acquisti','#b3263a'],sabrina:['Sabrina · Reception','#3a8f7a'],gennaro:['Gennaro · Usciere','#2c3e50'],luca:['Luca · Assistente','#8e5bb5'],ferri:['Ing. Ferri · Qualità e sicurezza','#777'],pino:['Pino · Scope & Affini','#c9a24a'],dog:['Napoleone · Carlino','#c9ad7f']};
+function say(speaker,text){
+  const sp=SPEAKERS[speaker]||SPEAKERS.narr;$('who').textContent=sp[0];$('dot').style.background=sp[1];
+  $('line').innerHTML=text;currentSpeaker=speaker;
+  chars.forEach(c=>c.talking=0);
+  const c=getChar(speaker);if(c){c.talking=clamp(text.length*.045,1.5,7);c.gesture=0.8;const tu=getChar('tu');if(tu&&c!==tu){c.facing=Math.sign(tu.x-c.x)||1;tu.facing=Math.sign(c.x-tu.x)||1;}}
+  if(speaker==='dog'&&dog)dog.talking=2;
+}
+
+/* ---- patience timer */
+let timerId=null,timerLeft=0;const PATIENCE=25;
+function startTimer(onExpire){stopTimer();timerLeft=PATIENCE;$('timer').hidden=false;$('timer-i').style.width='100%';
+  timerId=setInterval(()=>{timerLeft-=.25;$('timer-i').style.width=(timerLeft/PATIENCE*100)+'%';if(timerLeft<=0){stopTimer();onExpire();}},250);}
+function stopTimer(){if(timerId)clearInterval(timerId);timerId=null;$('timer').hidden=true;}
+
+/* ---- choices */
+function renderChoices(list){
+  const box=$('choices');box.innerHTML='';
+  list.forEach(ch=>{
+    const b=document.createElement('button');b.className='btn'+(ch.primary?' primary':'');
+    const l=document.createElement('span');l.textContent=ch.label;b.appendChild(l);
+    const m=document.createElement('span');m.className='meta';
+    if(ch.cost){const c=document.createElement('span');c.className='chip cost';c.textContent='−'+eur(ch.cost)+' €';m.appendChild(c);}
+    if(ch.risk!=null){const r=document.createElement('span');r.className='chip risk';r.textContent='🎲 ~'+Math.round(ch.risk*100)+'%';m.appendChild(r);}
+    if(m.children.length)b.appendChild(m);
+    if(ch.cost&&ch.cost>S.budget){b.disabled=true;b.title='Budget insufficiente';}
+    b.onclick=()=>{sfx.click();stopTimer();ch.go();};
+    box.appendChild(b);
+  });
+}
+
+/* ------------------------------------------------------------------ DIALOGUE DATA */
+const NAG={bellini:['Allora? Ho altre tre riunioni.','Mi sta facendo perdere tempo.','Guarda l\'orologio. Poi guarda te.','"Posso aiutarla a trovare le parole?"'],sabrina:['"Signore? È ancora lì?"','Sabrina torna a digitare.'],gennaro:['Gennaro si avvicina di un passo.','"Tutto bene, signore?"'],ferri:['"Ingegnere, aspetto una risposta."','Ferri annota qualcosa. Non è un complimento.'],narr:['Il tempo passa. Nessuno ti aspetta.','Esiti troppo. Si nota.'],luca:['Luca guarda l\'orologio per te.'],pino:['Pino continua a parlare di scope.']};
+
+const leadChance=(calda,tiepida,fredda)=>()=>({calda,tiepida,fredda})[S.flags.lead||'fredda'];
+
+const NODES={
+/* ============ SCENA 1 — FIERA */
+s1_intro:{scene:1,speaker:'narr',text:'Fiera <em>HYGIENIKA 2026</em>, Rimini. Tre giorni, 2.000 € di budget e un flacone di Pulisci Pupù nella valigetta. Ti serve un decisore: qualcuno che possa firmare un ordine da migliaia di pezzi.',choices:[
+  {label:'Fermo il primo che passa con un badge BUYER',chance:.3,ok:{speaker:'narr',text:'Il tipo si ferma, guarda il flacone e ride. "Cerchi Marta Bellini, IperFresco. Vuole novità per il reparto casa. Padiglione C." Hai un nome.',set:{lead:'tiepida'},next:'s1_channel'},ko:{speaker:'pino',text:'"Pino, piacere. Scope, spazzoloni, mocio. Ti racconto come ho iniziato nel \'91..." Venti minuti dopo sai tutto delle scope e niente dei buyer.',next:'s1_again',mood:{pino:'happy'}}},
+  {label:'Offro un caffè al barista, che sa tutto di tutti',cost:80,chance:.8,ok:{speaker:'narr',text:'Il barista abbassa la voce: "Marta Bellini, Direttrice Acquisti IperFresco. 412 negozi. Questo è il suo cellulare. Non dirle chi te l\'ha dato."',set:{lead:'calda'},next:'s1_channel'},ko:{speaker:'narr',text:'"Mai sentita." Si tiene il caffè, la mancia e la tua dignità.',next:'s1_again'}},
+  {label:'Compro la lista buyer dall\'organizzazione',cost:250,ok:{speaker:'narr',text:'Lista in mano, 40 pagine. Riga 212: "Marta Bellini, Direttrice Acquisti IperFresco, email aziendale". Nessun telefono.',set:{lead:'tiepida'},next:'s1_channel'}},
+  {label:'Mi siedo al bar e cerco su LinkedIn',ok:{speaker:'narr',text:'Un\'ora di scroll. "Marta Bellini · Direttrice Acquisti @ IperFresco · 412 punti vendita". Nessun contatto diretto, ma almeno sai chi cerchi.',set:{lead:'fredda'},next:'s1_channel'}},
+]},
+s1_again:{scene:1,speaker:'narr',text:'Il padiglione è enorme e la gente scorre. Riprova.',choices:()=>NODES.s1_intro.choices},
+s1_channel:{scene:1,speaker:'narr',text:'Obiettivo: <em>Dott.ssa Marta Bellini</em>, Direttrice Acquisti IperFresco. Come la contatti per avere un appuntamento?',choices:[
+  {label:'Email con oggetto: "La rivoluzione parte dal bagno"',chance:leadChance(.55,.3,.15),ok:{speaker:'narr',text:'Due giorni dopo: "Curiosa. Giovedì ore 10, quindici minuti. Non uno di più."',set:{appuntamento:true},fx:{interesse:5},next:'s2_warm'},ko:{speaker:'narr',text:'Silenzio. L\'email è finita nello spam, o peggio: l\'ha letta.',next:'s2_cold'}},
+  {label:'Telefonata diretta',chance:leadChance(.6,.25,.1),ok:{speaker:'bellini',text:'"Ha trenta secondi." Li usi tutti. "Giovedì alle 10. Non mi faccia pentire."',set:{appuntamento:true},fx:{fiducia:5},next:'s2_warm'},ko:{speaker:'narr',text:'Centralino: "La Dottoressa è in riunione." Lo sarà per sempre, a quanto pare.',next:'s2_cold'}},
+  {label:'Messaggio LinkedIn con il video del prodotto',chance:leadChance(.5,.35,.3),ok:{speaker:'narr',text:'Visualizzato. Risposta: una faccina che ride. Poi: "Ok, giovedì alle 10. Questa la voglio sentire."',set:{appuntamento:true},fx:{interesse:8},next:'s2_warm'},ko:{speaker:'narr',text:'Visualizzato. Nessuna risposta. Il video ha tre like: tuo, di tua madre e di Pino.',next:'s2_cold'}},
+  {label:'Niente contatti: giovedì mi presento in sede',ok:{speaker:'narr',text:'Decisione presa. Sede IperFresco, Bologna, giovedì ore 9. Senza appuntamento, con molta faccia tosta.',next:'s2_cold'}},
+]},
+/* ============ SCENA 2 — RECEPTION */
+s2_warm:{scene:2,speaker:'sabrina',text:'"Buongiorno, benvenuto in IperFresco. Ha un appuntamento?"',choices:[
+  {label:'"Sì, Dott.ssa Bellini alle 10. Mi aspetta."',ok:{speaker:'sabrina',text:'"Confermo. Terzo piano, Luca la accompagna." Luca appare con un vassoio e un sorriso stanco.',fx:{fiducia:5},next:'s3_intro'}},
+  {label:'"Sì. E le ho portato un omaggio: un flacone di Pulisci Pupù."',chance:.5,ok:{speaker:'sabrina',text:'Legge l\'etichetta e scoppia a ridere. "È il regalo più strano della mia carriera. Terzo piano!"',fx:{rep:5,fiducia:5},next:'s3_intro',mood:{sabrina:'happy'}},ko:{speaker:'sabrina',text:'Guarda il flacone come se fosse radioattivo. "...Terzo piano."',next:'s3_intro'}},
+]},
+s2_cold:{scene:2,speaker:'sabrina',text:'"Buongiorno. Ha un appuntamento con qualcuno?" Gennaro, l\'usciere, smette di camminare e ti osserva.',choices:[
+  {label:'"No, ma ho un prodotto che la Dott.ssa Bellini deve vedere."',chance:()=>.2+S.fiducia/400,ok:{speaker:'sabrina',text:'Sospira. "Ha un buco alle 11. Dieci minuti. Se mi fa fare brutta figura, la faccio portare fuori da Gennaro."',next:'s3_intro'},ko:{speaker:'sabrina',text:'"Lasci pure una brochure, la farò avere." Traduzione: cestino.',next:'s2_hub'}},
+  {label:'"Sì, alle 10 con la Dott.ssa Bellini." (bluff)',chance:.3,ok:{speaker:'sabrina',text:'Non controlla nemmeno. "Terzo piano."',set:{bluff:true},next:'s3_intro'},ko:{speaker:'sabrina',text:'Apre l\'agenda. "Non risulta nulla." Gennaro fa un passo avanti.',fx:{rep:-15},next:'s2_hub',mood:{gennaro:'angry'}}},
+  {label:'"Sono il nuovo fornitore di carta igienica, devo vedere i bagni."',chance:.35,ok:{speaker:'sabrina',text:'"Ah, finalmente! Terzo piano, bagni a sinistra." Tu giri a destra.',set:{intruso:true},next:'s3_intro'},ko:{speaker:'sabrina',text:'"Il fornitore di carta igienica è venuto ieri. Ed era una signora."',fx:{rep:-10},next:'s2_hub'}},
+]},
+s2_hub:{scene:2,redirect:()=>S.attempts>=4?'s2_over':null,speaker:'narr',text:()=>'Sei nella hall. Gennaro cammina avanti e indietro senza perderti di vista. Luca, l\'assistente della Bellini, passa ogni tanto col vassoio del caffè. <em>Tentativi rimasti: '+(4-S.attempts)+'</em>',choices:()=>[
+  {label:'Corrompi Gennaro l\'usciere',cost:60,chance:.55,ok:{speaker:'gennaro',text:'Fa sparire la banconota nel taschino. "Ascensore B. Io non ti ho mai visto, tu non hai mai visto me."',next:'s3_intro',set:{intruso:true},mood:{gennaro:'happy'}},ko:{speaker:'gennaro',text:'"Mi sta offrendo una MAZZETTA? In DIVISA?" Si tiene i soldi comunque.',fx:{rep:-20},attempt:true,next:'s2_hub',mood:{gennaro:'angry'}}},
+  {label:'Corrompi Sabrina alla reception',cost:150,chance:.7,ok:{speaker:'sabrina',text:'La banconota scompare sotto la tastiera. "Guarda caso si è liberato uno slot alle 11:15."',next:'s3_intro',mood:{sabrina:'happy'}},ko:{speaker:'sabrina',text:'"Mi sta prendendo in giro?" Alza il telefono. "Gennaro?"',fx:{rep:-15},attempt:true,next:'s2_hub'}},
+  {label:'Corrompi Luca, l\'assistente della Bellini',cost:350,chance:.9,ok:{speaker:'luca',text:'"Vieni con me, ti presento io. Dico che sei un mio amico dell\'università. Fingi di sapere cos\'è un bilancio."',fx:{fiducia:10},next:'s3_intro',mood:{luca:'happy'}},ko:{speaker:'luca',text:'"Sono incorruttibile." Pausa. "Cioè, costo di più."',fx:{rep:-5},attempt:true,next:'s2_hub'}},
+  {label:'Aspetta nella hall che passi la Bellini',chance:.35,ok:{speaker:'narr',text:'Le porte dell\'ascensore si aprono. Marta Bellini, al telefono, attraversa la hall a passo di carica.',next:'s2_pitch'},ko:{speaker:'narr',text:'Due ore. Passano tutti tranne lei. Gennaro ti porta un bicchiere d\'acqua, per pietà.',attempt:true,next:'s2_hub'}},
+  {label:'Infilati dietro il corriere con i pacchi',chance:.4,ok:{speaker:'narr',text:'Dentro! Il corriere ti guarda, tu gli fai l\'occhiolino. Terzo piano.',set:{intruso:true},next:'s3_intro'},ko:{speaker:'gennaro',text:'Ti prende per il colletto con una mano sola. "Fuori."',fx:{rep:-25},attempt:true,next:'s2_hub',anim:'kicked',mood:{gennaro:'angry'}}},
+]},
+s2_pitch:{scene:2,speaker:'bellini',text:'"...sì, poi ti richiamo." Chiude la chiamata. "Lei chi è?"',onEnter(){if(getChar('bellini'))return;const b=mkChar('bellini',830,[700,860],{facing:-1,speed:110});chars.push(b);b.tx=560;b.walking=true;},choices:[
+  {label:'"Marta Bellini? Ho venti secondi e un prodotto che le farà ridere e poi guadagnare."',ok:{speaker:'bellini',text:'Si ferma. "Venti secondi. Vada." Venti secondi dopo: "Salga."',fx:{interesse:10},next:'s3_intro'}},
+  {label:'"Scusi, le è caduto questo." (le porgi un flacone di Pulisci Pupù)',chance:.5,ok:{speaker:'bellini',text:'Legge l\'etichetta. Ride forte, da sola, in mezzo alla hall. "Salga. Questa la voglio sentire."',fx:{interesse:15},next:'s3_intro',mood:{bellini:'happy'}},ko:{speaker:'bellini',text:'"Tenga pure." Entra in ascensore. Le porte si chiudono sul tuo sorriso.',attempt:true,next:'s2_hub'}},
+  {label:'"Sono qui per il colloquio delle 10."',ok:{speaker:'bellini',text:'"Non facciamo colloqui." Porte chiuse.',fx:{rep:-5},attempt:true,next:'s2_hub'}},
+]},
+s2_over:{scene:2,speaker:'narr',text:'Gennaro ti accompagna fuori con delicatezza. Poi ti mostra la foto appesa in guardiola: la tua, con sopra scritto NON FAR ENTRARE.',end:'cacciato'},
+/* ============ SCENA 3 — UFFICIO */
+s3_intro:{scene:3,speaker:'bellini',text:()=>S.flags.intruso?'"Come è arrivato fin qui? ...Lasci stare, ormai è dentro. Cinque minuti. E Napoleone la tiene d\'occhio."':'"Si accomodi. Dieci minuti, poi ho il comitato acquisti. Mi dica."',onEnter(){if(S.flags.intruso){applyFx({fiducia:-10});mood('bellini','angry');}},choices:[
+  {label:'"Ogni giorno in Italia produciamo 9 milioni di chili di... materiale. E nessuno ha un piano."',ok:{speaker:'bellini',text:'"Un piano." Posa la penna. "Continui."',fx:{interesse:15,fiducia:5},next:'s3_product'}},
+  {label:'"Immagini: autostrada, agosto, bambino di quattro anni, prossima area di servizio a 40 km."',ok:{speaker:'bellini',text:'Chiude gli occhi. "Ho vissuto esattamente quella scena. Due volte."',fx:{interesse:10,fiducia:10},next:'s3_product'}},
+  {label:'"Che ufficio splendido. Si vede che ha gusto, Dottoressa."',ok:{speaker:'bellini',text:'"Nove minuti."',fx:{fiducia:-8},next:'s3_product',mood:{bellini:'angry'}}},
+  {label:'"Non le dico niente. Guardi."',ok:{speaker:'bellini',text:'Alza un sopracciglio. "Vada."',fx:{interesse:5},next:'s3_demo'}},
+]},
+s3_product:{scene:3,speaker:'bellini',text:'"Pulisci... Pupù. Sul serio si chiama così?"',choices:[
+  {label:'"Sì. Se lo ricorda già, vero? Appunto."',ok:{speaker:'bellini',text:'Ride, contro la sua volontà. "Touché."',fx:{interesse:8},next:'s3_demo',mood:{bellini:'happy'}}},
+  {label:'"È provvisorio. Il marketing sta valutando ExcrementoZero."',ok:{speaker:'bellini',text:'"Tenga Pulisci Pupù. Mi creda."',fx:{fiducia:-5,interesse:-5},next:'s3_demo'}},
+  {label:'"Spray enzimatico: dissolve, deodora e sanifica in quattro secondi. Fai dove vuoi, pulisci dove vuoi."',ok:{speaker:'bellini',text:'"Quattro secondi." Scrive. "Dimostri."',fx:{fiducia:10,interesse:8},next:'s3_demo'}},
+]},
+s3_demo:{scene:3,speaker:'bellini',text:'"Belle parole. Mi faccia vedere che funziona." Napoleone, il carlino, gira per l\'ufficio con l\'aria di chi ha mangiato troppo.',choices:[
+  {label:'"Napoleone sarà il nostro testimonial."',chance:.75,ok:{speaker:'narr',text:'Napoleone, da professionista, lascia un ricordino sul tappeto persiano. Uno spruzzo: sparito. Odore: pino. La Bellini si alza in piedi.',fx:{interesse:25,fiducia:10},anim:'dogPoop',delay:3200,next:'s3_obj',mood:{bellini:'happy'}},ko:{speaker:'dog',text:'Napoleone ti guarda, sbadiglia e si siede. Niente. Spruzzi nell\'aria per riempire il silenzio.',fx:{interesse:-5},anim:'dogNope',next:'s3_obj'}},
+  {label:'"Le mostro il video sul telefono."',ok:{speaker:'bellini',text:'"Un video. Ne ho visti mille. Con mille effetti speciali."',fx:{interesse:6},next:'s3_obj'}},
+  {label:'Demo su una pupù di plastilina portata da casa',ok:{speaker:'bellini',text:'"È plastilina." "È una simulazione." "È plastilina."',fx:{fiducia:-8,interesse:3},anim:'sprayFail',next:'s3_obj'}},
+  {label:'"Faccio una dimostrazione in prima persona. Qui. Adesso."',chance:.5,ok:{speaker:'narr',text:'Luca entra col caffè e urla. La Bellini non batte ciglio. Spruzzi: sparito. "Ok. Questo non l\'avevo mai visto. E non lo rivedrò."',fx:{interesse:20,fiducia:-15,rep:-15},anim:'selfDemo',delay:2600,next:'s3_obj'},ko:{speaker:'narr',text:'Luca entra col caffè, lo rovescia, scivola. La Bellini chiama Gennaro al terzo piano. Il flacone, almeno, funziona.',fx:{rep:-40,fiducia:-20,interesse:5},anim:'selfDemo',delay:2600,next:'s3_obj',mood:{bellini:'angry'}}},
+]},
+s3_obj:{scene:3,speaker:'bellini',text:'"Il problema è uno solo: è disgustoso."',choices:[
+  {label:'"Disgustosa è la realtà senza Pulisci Pupù."',ok:{speaker:'bellini',text:'"Slogan da cartellone. Però funziona."',fx:{interesse:10},next:'s4_intro'}},
+  {label:'"I suoi clienti hanno cani, bambini e nonni. Vende pannolini a milioni e nessuno si scandalizza."',ok:{speaker:'bellini',text:'"Pannolini." Annuisce lentamente. "Luca, chiama Ferri in sala riunioni."',fx:{fiducia:10,interesse:12},next:'s4_intro'}},
+  {label:'"Sì."',chance:.5,ok:{speaker:'bellini',text:'Lunga pausa. "Mi piace chi non si arrampica sugli specchi. Sala riunioni."',fx:{fiducia:15},next:'s4_intro'},ko:{speaker:'bellini',text:'"Sì?" Guarda l\'orologio. "Sala riunioni, ho già convocato Ferri. Vediamo se regge."',fx:{fiducia:-10},next:'s4_intro'}},
+]},
+/* ============ SCENA 4 — SALA RIUNIONI */
+s4_intro:{scene:4,speaker:'narr',text:'Sala riunioni. La Bellini ha convocato l\'<em>Ing. Ferri</em>, responsabile qualità e sicurezza. Luca serve il caffè camminando come su un campo minato.',next:'s4_ferri'},
+s4_ferri:{scene:4,speaker:'ferri',text:'"Ferri, qualità. Composizione? Certificazioni? Scheda di sicurezza?"',choices:[
+  {label:'"Enzimi proteolitici, tensioattivi vegetali, profumo di pino. Test dermatologici fatti, certificazione in corso."',ok:{speaker:'ferri',text:'"In corso." Annota. "Almeno è onesto. È raro."',fx:{fiducia:12},next:'s4_comp'}},
+  {label:'"Certificato CE, ISO 9001, FDA e testato dalla NASA."',chance:.4,ok:{speaker:'ferri',text:'"Dalla NASA." Non chiede altro. Per ora.',fx:{interesse:10},next:'s4_comp'},ko:{speaker:'ferri',text:'Apre il laptop. "La NASA non certifica spray. L\'FDA non certifica in Italia. La ISO 9001 non riguarda il prodotto." Tre su tre.',fx:{fiducia:-25,rep:-10},next:'s4_comp',mood:{ferri:'angry',bellini:'angry'}}},
+  {label:'"Ingegnere, preferisco parlare di risultati."',ok:{speaker:'ferri',text:'"E io preferisco parlare di chimica. Siamo in due a restare delusi."',fx:{fiducia:-8},next:'s4_comp',mood:{ferri:'angry'}}},
+]},
+s4_comp:{scene:4,speaker:'bellini',text:'"Cacca-Away ci ha offerto un prodotto simile a <em>4 euro</em> al flacone. Perché dovrei pagare di più?"',choices:[
+  {label:'"Cacca-Away copre l\'odore. Noi eliminiamo la causa. Test comparativo, qui, adesso."',ok:{speaker:'bellini',text:'"La causa." Guarda Ferri. Ferri annuisce di mezzo millimetro.',fx:{interesse:15},next:'s4_refs'}},
+  {label:'"Vi faccio 3,90."',ok:{speaker:'bellini',text:'"3,90. Segnato." Hai appena regalato il tuo margine prima ancora di trattare.',set:{ancoraBassa:true},fx:{interesse:5},next:'s4_refs'}},
+  {label:'"Cacca-Away è stata ritirata dal mercato in Germania."',chance:.5,ok:{speaker:'bellini',text:'"Davvero?" Scrive. Non controlla.',fx:{interesse:10},next:'s4_refs'},ko:{speaker:'ferri',text:'"Ho lavorato lì tre anni. Non è vero." Silenzio nella sala.',fx:{fiducia:-30},next:'s4_refs',mood:{ferri:'angry'}}},
+  {label:'"Esclusiva nazionale per IperFresco per dodici mesi."',ok:{speaker:'bellini',text:'Scrive "esclusiva" e lo sottolinea due volte. "Interessante."',set:{esclusiva:true},fx:{interesse:12},next:'s4_refs'}},
+]},
+s4_refs:{scene:4,speaker:'bellini',text:'"Chi lo sta già usando?"',choices:[
+  {label:'"Nessuno. Lei sarebbe la prima. E la prima si prende il mercato."',ok:{speaker:'bellini',text:'"La prima." Le piace la parola, si vede.',fx:{fiducia:10,interesse:6},next:'s4_coffee'}},
+  {label:'"Esselunga e Conad stanno facendo i test."',chance:.45,ok:{speaker:'bellini',text:'"Conad." Stringe gli occhi. "Allora dobbiamo muoverci."',fx:{interesse:15},next:'s4_coffee'},ko:{speaker:'bellini',text:'"La buyer di Conad è mia cugina." Prende il telefono. Lo posa. "Non serve, vero?"',fx:{fiducia:-35,rep:-10},next:'s4_coffee',mood:{bellini:'angry'}}},
+  {label:'"L\'esercito svizzero."',chance:.5,ok:{speaker:'narr',text:'Ferri ride. Per la prima volta nella sua vita, a giudicare dalla faccia della Bellini.',fx:{interesse:10,fiducia:5},next:'s4_coffee',mood:{ferri:'happy'}},ko:{speaker:'narr',text:'Silenzio. Luca, in imbarazzo per te, inciampa.',fx:{fiducia:-10},next:'s4_coffee'}},
+]},
+s4_coffee:{scene:4,speaker:'narr',text:'Luca inciampa e rovescia il caffè sul tappeto della sala riunioni. Tutti guardano te. Poi il flacone.',onEnter(){ANIM.coffeeSpill();},choices:[
+  {label:'"Funziona anche sul caffè." (spruzzi)',chance:.65,ok:{speaker:'ferri',text:'Macchia sparita. Ferri prende il flacone e lo annusa. "...Pino."',fx:{interesse:12},anim:'coffeeClean',next:'s5_intro',mood:{ferri:'happy'}},ko:{speaker:'narr',text:'La macchia resta. "È ottimizzato per la pupù", dici. Nessuno ride.',fx:{interesse:-8},anim:'sprayFail',next:'s5_intro'}},
+  {label:'"No. Solo pupù. Non prometto cose che non fa."',ok:{speaker:'bellini',text:'"Finalmente un fornitore che dice no." Ferri annota: "onesto", con il punto esclamativo.',fx:{fiducia:12},next:'s5_intro'}},
+  {label:'"Lo aggiungiamo al prossimo batch."',ok:{speaker:'ferri',text:'"Il prossimo batch." Non scrive niente.',fx:{interesse:4,fiducia:-3},next:'s5_intro'}},
+]},
+/* ============ SCENA 5 — TRATTATIVA */
+s5_intro:{scene:5,speaker:'bellini',text:()=>'"Parliamo di numeri. Ordine iniziale: <em>20.000 flaconi</em>. Il mio prezzo d\'ingresso ideale è <em>'+target().toFixed(2).replace('.',',')+' €</em>. Il suo costo industriale, se non sbaglio, è intorno ai 3. Mi faccia la sua proposta."',next:'s5_round'},
+s5_round:{scene:5,custom:'negotiation'},
+/* ============ SCENA 6 — DECISIONE */
+s6_intro:{scene:6,speaker:'narr',text:'Ore 18:40. La Bellini cammina avanti e indietro. Luca entra ed esce. Il telefono squilla. Napoleone dorme, o finge.',onEnter(){ANIM.pace();},next:'s6_phone'},
+s6_phone:{scene:6,speaker:'bellini',text:'(al telefono) "...sì Ferri, ho letto la sua nota. ...Capisco. ...No. Decido io."',onEnter(){ANIM.phone();},next:'s6_luca'},
+s6_luca:{scene:6,speaker:'luca',text:'"Dottoressa, il comitato acquisti aspetta la sua decisione. E Gennaro chiede se deve salire."',onEnter(){const l=getChar('luca');if(l){l.walking=true;l.x=-60;l.facing=1;l.tx=420;l.nextWander=99;}},next:'s6_verdict'},
+s6_verdict:{scene:6,custom:'verdict'},
+};
+
+/* ------------------------------------------------------------------ ENGINE */
+let nodeId=null;
+function nagLoop(sp){return function expire(){applyFx({fiducia:-6});say(sp,pick(NAG[sp]));const c=getChar(sp);if(c)c.mood='angry';startTimer(expire);};}
+function target(){return S.flags.ancoraBassa?4:5;}
+function go(id){
+  const n=NODES[id];if(!n)return;nodeId=id;
+  if(n.scene!==S.scene||!sceneDef)loadScene(n.scene);
+  if(n.redirect){const r=n.redirect();if(r)return go(r);}
+  if(n.onEnter)n.onEnter();
+  if(n.custom==='negotiation')return renderNegotiation();
+  if(n.custom==='verdict')return renderVerdict();
+  const text=typeof n.text==='function'?n.text():n.text;
+  say(n.speaker,text);
+  if(n.end){renderChoices([{label:'Vedi il risultato',primary:true,go:()=>endGame(n.end)}]);return;}
+  if(n.next){renderChoices([{label:'Continua',primary:true,go:()=>go(n.next)}]);return;}
+  const list=(typeof n.choices==='function'?n.choices():n.choices).map(ch=>{
+    const risk=typeof ch.chance==='function'?ch.chance():ch.chance;
+    return {label:ch.label,cost:ch.cost,risk:ch.chance!=null?risk:null,go:()=>resolve(ch,risk)};
+  });
+  renderChoices(list);
+  startTimer(nagLoop(NAG[n.speaker]?n.speaker:'narr'));
+}
+function resolve(ch,risk){
+  stopTimer();
+  if(ch.cost)spend(ch.cost);
+  const tu=getChar('tu');if(tu){tu.talking=1.6;tu.gesture=1;}
+  let out=ch.ok;
+  if(ch.chance!=null){const roll=Math.random();out=roll<risk?ch.ok:ch.ko;(roll<risk?sfx.ok:sfx.ko)();}
+  if(out.attempt)S.attempts++;
+  if(out.set)Object.assign(S.flags,out.set);
+  if(out.mood)Object.keys(out.mood).forEach(k=>mood(k,out.mood[k]));
+  if(out.anim&&ANIM[out.anim])ANIM[out.anim]();
+  const show=()=>{say(out.speaker||'narr',out.text||'...');applyFx(out.fx);renderChoices([{label:'Continua',primary:true,go:()=>go(out.next)}]);};
+  if(out.delay){$('choices').innerHTML='';say('narr','...');setTimeout(show,out.delay);}else show();
+}
+
+/* ---- negotiation */
+function renderNegotiation(){
+  const b=getChar('bellini');if(b)b.mood='neutral';
+  const tgt=target();
+  const counter=S.counter;
+  say('bellini',S.round===1?'"La ascolto. Prezzo al flacone e condizioni."':'"Round '+S.round+'. Mi faccia un\'offerta seria. A <em>'+counter.toFixed(2).replace('.',',')+' €</em> siamo già d\'accordo, se vuole chiudere subito."');
+  const box=$('choices');box.innerHTML='';
+  const wrap=document.createElement('div');wrap.className='negoz';
+  const prices=[11,9.5,8,7,6,5,4];if(counter&&!prices.includes(counter))prices.push(counter);prices.sort((a,b)=>b-a);
+  let price=counter||7,lever='none';
+  const h=document.createElement('h4');h.textContent='Prezzo al flacone (costo 3 €)';wrap.appendChild(h);
+  const pr=document.createElement('div');pr.className='prices';
+  prices.forEach(p=>{const bt=document.createElement('button');bt.className='pbtn';bt.textContent=p.toFixed(2).replace('.',',')+' €'+(p===counter?' ★':'');bt.setAttribute('aria-pressed',p===price);bt.onclick=()=>{price=p;pr.querySelectorAll('.pbtn').forEach(x=>x.setAttribute('aria-pressed',false));bt.setAttribute('aria-pressed',true);sfx.click();};pr.appendChild(bt);});
+  wrap.appendChild(pr);
+  const h2=document.createElement('h4');h2.textContent='Una leva per questo round';wrap.appendChild(h2);
+  const LEV=[['none','Nessuna leva','Prezzo nudo e crudo.',0,0],['pay90','Pagamento a 90 giorni','Le piace: migliora la sua cassa.',.12,0],['samples','Campioni gratis in 50 negozi','Costa 300 € del tuo budget.',.15,300],['promo','Promo in-store a carico nostro','Costa 600 €. Lei adora le promo pagate dagli altri.',.25,600],['volume','Volume minimo 50.000 pezzi','Più ricavo per te, ma spaventa.',-.15,0]];
+  const lv=document.createElement('div');lv.className='levers';
+  LEV.forEach(([k,t,d,bonus,cost])=>{const lab=document.createElement('label');lab.className='lev';const r=document.createElement('input');r.type='radio';r.name='lever';r.id='lev-'+k;r.value=k;r.checked=k==='none';if(cost>S.budget)r.disabled=true;r.onchange=()=>{lever=k;sfx.click();};const sp=document.createElement('span');sp.innerHTML='<b>'+t+(cost?' <span class="chip cost">−'+eur(cost)+' €</span>':'')+'</b>'+d;lab.appendChild(r);lab.appendChild(sp);lv.appendChild(lab);});
+  wrap.appendChild(lv);
+  const sub=document.createElement('button');sub.className='btn primary';sub.textContent='Proponi';
+  sub.onclick=()=>{sfx.click();stopTimer();const L=LEV.find(x=>x[0]===lever);if(L[4])spend(L[4]);S.flags['lev_'+lever]=true;
+    const base=(S.interesse*.5+S.fiducia*.3+S.rep*.2)/100;
+    let p=base-(price-tgt)*.14+L[3]-(S.round-1)*.04;if(counter&&price<=counter)p=Math.max(p,.95);
+    p=clamp(p,.03,.97);const tu=getChar('tu');if(tu){tu.talking=2;tu.gesture=1.4;}
+    if(lever==='volume')S.units=50000;
+    if(Math.random()<p){sfx.ok();S.price=price;mood('bellini','happy');const bb=getChar('bellini');if(bb){bb.tx=tu?tu.x+90:bb.x;bb.walking=true;}
+      say('bellini','"'+price.toFixed(2).replace('.',',')+' €'+(lever==='volume'?', 50.000 pezzi':'')+(lever==='pay90'?', a 90 giorni':'')+'. Va bene. Firmo l\'intesa preliminare, poi la decisione finale la prendo stasera con il comitato."');applyFx({fiducia:5,interesse:5});
+      renderChoices([{label:'Stringi la mano',primary:true,go:()=>go('s6_intro')}]);}
+    else{sfx.ko();mood('bellini','angry');const c=Math.max(tgt,Math.round((price-1.5)*2)/2);S.counter=c;
+      if(S.round>=3){say('bellini','"Non ci siamo. Ci devo pensare. Luca, accompagna il signore in sala d\'attesa."');applyFx({interesse:-10});S.price=null;renderChoices([{label:'Aspetta il verdetto',primary:true,go:()=>go('s6_intro')}]);}
+      else{S.round++;say('bellini','"Troppo. A <em>'+c.toFixed(2).replace('.',',')+' €</em> ci possiamo parlare. Riprovi."');applyFx({interesse:-4});renderChoices([{label:'Nuova proposta',primary:true,go:()=>go('s5_round')}]);}}
+  };
+  wrap.appendChild(sub);box.appendChild(wrap);
+  startTimer(nagLoop('bellini'));
+}
+
+/* ---- verdict */
+function outcome(){
+  if(S.rep<15)return 'cacciato';
+  const score=S.interesse*.45+S.fiducia*.35+S.rep*.2+(S.price?10:-10);
+  if(score>=75)return 'mega';if(score>=55)return 'deal';if(score>=40)return 'pilota';return 'no';
+}
+const VERDICT={
+  mega:{title:'MEGA ORDINE',grade:'S',text:()=>'"Ho deciso. <em>100.000 flaconi</em>, esclusiva nazionale, lancio a settembre in testata di gondola. E voglio Napoleone sulla confezione."',units:()=>100000},
+  deal:{title:'ORDINE FIRMATO',grade:'A',text:()=>'"Facciamo l\'ordine: <em>'+eur(S.units)+' flaconi</em>. Se vende, raddoppiamo a Natale. Se non vende, lei non è mai esistito."',units:()=>S.units},
+  pilota:{title:'TEST PILOTA',grade:'B',text:()=>'"Test pilota: <em>2.000 flaconi</em> in dieci negozi dell\'Emilia. Se funziona ne riparliamo. Se non funziona, non ne riparliamo."',units:()=>2000},
+  no:{title:'NESSUN ORDINE',grade:'C',text:()=>'"No. La presentazione mi è piaciuta, ma non mi fido abbastanza. Lasci pure il flacone, per Napoleone."',units:()=>0},
+  cacciato:{title:'CACCIATO',grade:'D',text:()=>'"Gennaro, può accompagnare il signore? E stavolta fino al parcheggio."',units:()=>0},
+};
+function renderVerdict(){
+  const o=outcome();const v=VERDICT[o];const b=getChar('bellini');if(b){b.lock=true;b.tx=b.x;b.mood=o==='mega'||o==='deal'?'happy':o==='no'||o==='cacciato'?'angry':'neutral';}
+  if(o!=='no'&&o!=='cacciato'&&!S.price)S.price=target();
+  say('bellini',v.text());
+  if(o==='cacciato'){chars.push(mkChar('gennaro',-60,[-100,1100],{speed:130}));ANIM.kicked();}
+  renderChoices([{label:'Vedi il risultato',primary:true,go:()=>endGame(o)}]);
+}
+function endGame(o){
+  const v=VERDICT[o];const units=v.units();const price=S.price||0;const ricavo=units*price;const margine=units*(price-3);const netto=margine-S.spent;
+  const card=document.createElement('div');card.className='card';
+  card.innerHTML='<div class="grade">'+v.grade+'</div><h2>'+v.title+'</h2><p>'+v.text().replace(/<\/?em>/g,'')+'</p>'+
+   '<div class="ledger"><span>Prezzo concordato</span><b>'+(price?price.toFixed(2).replace('.',',')+' €':'—')+'</b><span>Flaconi</span><b>'+eur(units)+'</b><span>Ricavo</span><b>'+eur(ricavo)+' €</b><span>Margine lordo (costo 3 €)</span><b>'+eur(margine)+' €</b><span>Speso in fiera, mazzette e promo</span><b>−'+eur(S.spent)+' €</b><span class="tot">Risultato netto</span><b class="tot">'+eur(netto)+' €</b></div>'+
+   '<p class="help">Fiducia '+Math.round(S.fiducia)+' · Interesse '+Math.round(S.interesse)+' · Reputazione '+Math.round(S.rep)+' · Budget residuo '+eur(S.budget)+' €'+(S.flags.esclusiva?' · Esclusiva concessa':'')+(S.flags.ancoraBassa?' · Hai ancorato tu il prezzo in basso':'')+'</p>'+
+   '<button class="btn primary" id="again">Rigioca</button>';
+  const ov=$('overlay');ov.innerHTML='';ov.appendChild(card);ov.hidden=false;
+  $('again').onclick=()=>{S=JSON.parse(JSON.stringify(START));refreshHUD();ov.hidden=true;go('s1_intro');};
+  (o==='mega'||o==='deal')?sfx.ok():sfx.ko();
+}
+
+/* ------------------------------------------------------------------ BOOT */
+function start(saved){
+  refreshHUD();
+  if(saved&&saved.S&&saved.nodeId&&NODES[saved.nodeId]){S=saved.S;$('overlay').hidden=true;refreshHUD();go(saved.nodeId);return;}
+  $('play').onclick=()=>{sfx.click();$('overlay').hidden=true;go('s1_intro');};
+}
+try{window.claude&&window.claude.hot&&window.claude.hot.snapshot&&window.claude.hot.snapshot(()=>({S,nodeId}));}catch(e){}
+(window.claude&&window.claude.hot&&window.claude.hot.ready)?window.claude.hot.ready(start):start((window.claude&&window.claude.hot&&window.claude.hot.data)||{});
+})();
+</script>
+</body>
+</html>
