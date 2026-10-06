@@ -1,0 +1,134 @@
+<title>Pulisci Pupù Negoziatore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@500;700;900&display=swap">
+<style>
+/* Layout: HUD strip, a 16:9 animated stage with a collapsible dossier beside it, dialogue panel below. Single dark "arcade" theme by choice. */
+:root{
+  --bg:#10131f;--bg2:#171b2c;--panel:#fbf6e9;--ink:#1c1a17;--chrome:#1c2238;--chrome-fg:#eef1ff;
+  --accent:#f2b63a;--accent-ink:#2a1d00;--good:#3fbf7f;--bad:#e5554f;--muted:#8d97b5;--line:#2a2320;
+  --display:"Luckiest Guy","Impact","Arial Black",sans-serif;--body:"Nunito","Segoe UI",system-ui,sans-serif;color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#232a48 0%,var(--bg) 60%);color:var(--chrome-fg);font-family:var(--body);font-size:16px;line-height:1.4;min-height:100%}
+#app{max-width:1180px;margin:0 auto;padding-block:10px 24px;padding-inline:16px;display:grid;gap:10px;grid-template-columns:minmax(0,1fr) 250px;grid-template-areas:"hud hud" "stage dossier" "panel panel"}
+.hud{grid-area:hud;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--chrome);border-radius:14px;padding:8px 14px;border:1px solid #2c3454}
+.logo{font-family:var(--display);font-size:26px;letter-spacing:.5px;color:var(--accent);text-shadow:2px 2px 0 #000;line-height:1}
+.logo small{display:block;font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-shadow:none;margin-top:4px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stat{min-width:124px;background:#0f1424;border-radius:10px;padding:6px 10px;border:1px solid #232a44}
+.stat .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.stat .val{font-weight:900;font-size:18px;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:#2a3352;border-radius:4px;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--accent);width:50%;transition:width .5s}
+.stat.fiducia .bar i{background:#5aa9ff}.stat.interesse .bar i{background:#ff7a59}.stat.rep .bar i{background:#9be56b}
+.client{font-weight:900;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);color:var(--accent-ink);padding:6px 10px;border-radius:999px}
+.stage{grid-area:stage;position:relative;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 14px 50px rgba(0,0,0,.6),inset 0 0 0 2px #2a3150;min-width:0}
+canvas{width:100%;height:100%;display:block}
+.tag{position:absolute;top:10px;left:10px;background:rgba(10,12,20,.78);color:#fff;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;backdrop-filter:blur(4px);max-width:calc(100% - 20px)}
+.tag b{color:var(--accent)}
+#fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.pop{position:absolute;font-weight:900;font-size:22px;text-shadow:0 2px 0 #000,0 0 10px rgba(0,0,0,.6);animation:rise 1.6s ease-out forwards;white-space:nowrap}
+.pop.good{color:var(--good)}.pop.bad{color:var(--bad)}.pop.money{color:var(--accent)}
+@keyframes rise{0%{transform:translateY(0) scale(.8);opacity:0}15%{opacity:1;transform:translateY(-6px) scale(1.1)}100%{transform:translateY(-90px) scale(1);opacity:0}}
+.scard{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;background:rgba(8,10,18,.4)}
+.scard.show{animation:scard 1.7s ease forwards}
+@keyframes scard{0%{opacity:0}12%{opacity:1}75%{opacity:1}100%{opacity:0}}
+.scard div{text-align:center;transform:translateY(8px)}
+.scard b{display:block;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+.scard h3{font-family:var(--display);font-size:clamp(28px,5vw,56px);margin:4px 0;color:#fff;text-shadow:4px 4px 0 #000;letter-spacing:1px}
+.scard p{margin:0;font-weight:700;color:#dfe5ff}
+.dossier{grid-area:dossier;background:var(--chrome);border:1px solid #2c3454;border-radius:14px;padding:12px;font-size:13px;display:grid;gap:10px;align-content:start;min-width:0}
+.dossier h5{margin:0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.dossier button{appearance:none;background:none;border:1px solid #3a4468;color:var(--chrome-fg);border-radius:6px;font:inherit;font-size:11px;padding:2px 8px;cursor:pointer;display:none}
+.dh{display:flex;gap:10px;align-items:center}.dh small{display:block;color:var(--muted)}
+.dlogo{width:34px;height:34px;border-radius:50%;flex-shrink:0;border:3px solid #fff2;box-shadow:0 0 0 2px #000}
+.drow{display:grid;gap:2px;border-top:1px solid #2c3454;padding-top:8px}
+.drow>span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.drow small{color:#cfd6ee}.drow ul{margin:0;padding-left:16px;display:grid;gap:3px}.drow li.unk{color:var(--muted)}
+.panel{grid-area:panel;background:var(--panel);color:var(--ink);border-radius:14px;padding:14px 16px;display:grid;gap:10px;min-height:190px;border:3px solid var(--line);box-shadow:inset 0 0 0 2px #fff,0 10px 30px rgba(0,0,0,.4);min-width:0}
+.speaker{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:20px;letter-spacing:.5px;color:#2a2320}
+.speaker .dot{width:14px;height:14px;border-radius:50%;background:var(--accent);border:2px solid var(--line);flex-shrink:0}
+.line{font-size:17px;font-weight:600;max-width:75ch;min-height:48px}
+.line em{font-style:normal;background:#ffe8a3;padding:0 4px;border-radius:4px}
+.line small{color:#6a5f52;font-weight:700}
+.timer{height:8px;background:#e8dfc8;border-radius:4px;overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#e5554f,#f2b63a);transition:width .25s linear}
+.choices{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.choices.many{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.btn{appearance:none;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:10px 12px;font:inherit;font-weight:700;text-align:left;cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center;transition:transform .08s,background .15s;box-shadow:3px 3px 0 var(--line);min-width:0}
+.btn>span:first-child{min-width:0}
+.btn:hover:not(:disabled){background:#fff3cf;transform:translate(-1px,-1px)}
+.btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:0 0 0 var(--line)}
+.btn:focus-visible{outline:3px solid #5aa9ff;outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn .meta{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:45%}
+.chip{font-size:11px;font-weight:900;letter-spacing:.04em;padding:2px 7px;border-radius:999px;border:2px solid var(--line);background:#fff;white-space:nowrap}
+.chip.cost{background:var(--accent);color:var(--accent-ink)}.chip.risk{background:#dfe9ff}.chip.hint{background:#e6f7ea;border-style:dashed}
+.btn.primary{background:var(--accent);justify-content:center;font-size:17px}
+.negoz{display:grid;gap:10px}
+.negoz h4{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#6a5f52}
+.prices{display:flex;flex-wrap:wrap;gap:6px}
+.pbtn{border:2px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-weight:900;cursor:pointer;font-variant-numeric:tabular-nums}
+.pbtn[aria-pressed="true"]{background:var(--line);color:#fff}.pbtn:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.levers{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.lev{display:flex;gap:8px;align-items:flex-start;border:2px dashed #b9ad94;border-radius:8px;padding:8px;cursor:pointer;font-size:14px}
+.lev input{margin-top:3px}.lev b{display:block}
+#overlay{position:fixed;inset:0;background:rgba(8,10,18,.92);display:grid;place-items:center;padding:16px;overflow:auto;z-index:10}
+.card{background:var(--panel);color:var(--ink);border-radius:18px;padding:24px;max-width:660px;width:100%;border:3px solid var(--line);box-shadow:8px 8px 0 var(--line);display:grid;gap:14px}
+.card h1{font-family:var(--display);font-size:clamp(34px,7vw,56px);margin:0;line-height:.95;color:#b3263a;text-shadow:3px 3px 0 var(--accent);text-wrap:balance}
+.card h2{font-family:var(--display);font-size:28px;margin:0;color:#2a2320;text-wrap:balance}
+.card p{margin:0;max-width:64ch}.card ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.ledger{display:grid;grid-template-columns:1fr auto;gap:4px 16px;font-variant-numeric:tabular-nums;border-top:2px solid var(--line);border-bottom:2px solid var(--line);padding:8px 0}
+.ledger b{text-align:right}.ledger .tot{font-weight:900;font-size:18px}
+.grade{font-family:var(--display);font-size:64px;line-height:1;color:var(--accent);text-shadow:3px 3px 0 var(--line);text-align:center}
+.help{font-size:13px;color:#6a5f52}
+@media (max-width:860px){#app{grid-template-columns:1fr;grid-template-areas:"hud" "stage" "dossier" "panel"}.dossier button{display:inline-block}.dossier .dbody{display:none}.dossier.open .dbody{display:grid;gap:10px}}
+@media (max-width:520px){.logo{font-size:20px}.stat{min-width:calc(50% - 4px)}.line{font-size:15px}.btn .meta{max-width:100%}}
+@media (prefers-reduced-motion:reduce){.pop{animation-duration:.01s}.scard.show{animation-duration:.6s}}
+</style>
+
+<div id="app">
+  <div class="hud">
+    <div class="logo">PULISCI PUPÙ<small>Il negoziatore · carriera a 3 clienti</small></div>
+    <div class="stats">
+      <span class="client" id="client-n">Cliente 1/3</span>
+      <div class="stat budget"><div class="lbl"><span>Budget</span><span>€</span></div><div class="val" id="v-budget">2.000</div><div class="bar"><i id="b-budget"></i></div></div>
+      <div class="stat fiducia"><div class="lbl"><span>Fiducia</span><span id="v-fiducia">50</span></div><div class="bar"><i id="b-fiducia"></i></div></div>
+      <div class="stat interesse"><div class="lbl"><span>Interesse</span><span id="v-interesse">20</span></div><div class="bar"><i id="b-interesse"></i></div></div>
+      <div class="stat rep"><div class="lbl"><span>Reputazione</span><span id="v-rep">60</span></div><div class="bar"><i id="b-rep"></i></div></div>
+    </div>
+  </div>
+  <div class="stage">
+    <canvas id="cv" aria-label="Scena animata del gioco"></canvas>
+    <div class="tag" id="tag">In attesa</div>
+    <div id="fx"></div>
+    <div class="scard" id="scard"><div><b>Scena 1</b><h3>Titolo</h3><p>Luogo</p></div></div>
+  </div>
+  <aside class="dossier" id="dossier-wrap">
+    <h5>Dossier cliente <button id="dossier-toggle" type="button">apri</button></h5>
+    <div class="dbody" id="dossier"><small style="color:var(--muted)">Il dossier si compila quando parte la partita.</small></div>
+  </aside>
+  <div class="panel">
+    <div class="speaker"><span class="dot" id="dot"></span><span id="who">Narratore</span></div>
+    <div class="line" id="line">Premi "Inizia" per generare il primo cliente.</div>
+    <div class="timer" id="timer" hidden><i id="timer-i"></i></div>
+    <div class="choices" id="choices"></div>
+  </div>
+</div>
+
+<div id="overlay">
+  <div class="card" id="start">
+    <h1>Pulisci Pupù<br>Il Negoziatore</h1>
+    <p><strong>Il prodotto:</strong> uno spray enzimatico che elimina la pupù e l'odore all'istante, in sei versioni (Classic, Kids, Pet, Industrial, Luxe, Medical).</p>
+    <p><strong>La carriera:</strong> tre clienti pescati a caso tra sedici aziende, ognuno con un decisore generato sul momento: nome, faccia, tre tratti di carattere nascosti, un animale in ufficio, un prezzo in testa.</p>
+    <ul>
+      <li><strong>Sei scene per cliente</strong>: fiera, lounge, golf, matrimonio o treno per la lead; portieri, suore, sentinelle e concierge da convincere o corrompere; presentazione, imprevisti, trattativa, verdetto.</li>
+      <li><strong>Budget</strong>: informatori, dossier, mazzette, promo. Ogni euro pesa sul netto finale. Il tuo capo vieta di vendere sotto un prezzo minimo che cambia ogni partita.</li>
+      <li><strong>Dossier</strong>: scopri i tratti del decisore e le scelte giuste si illuminano. Le bugie pagano finché non ti scoprono.</li>
+    </ul>
+    <button class="btn primary" id="play">Inizia la carriera</button>
+    <div class="help">Costo industriale del flacone: 3 €. Tutto quello che strappi sopra è margine. La barra di pazienza non perdona.</div>
+  </div>
+</div>
