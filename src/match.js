@@ -96,14 +96,13 @@
     setup() {
       const H = HUD();
       H.setTeams(this.A, this.B, this.playerSide);
-      H.setStage(this.o.label || '', this.so.mode);
+      H.setStage(this.o.label || '', this.so.mode, this.isFinal);
       this._refreshHud();
       this.kickNo = 0;
       this._prepareKick();
       this.phase = 'coin';
       this.pt = 0;
-      const firstName = this.teams[this.first].name;
-      H.comment(`Sorteggio: batte per prima ${firstName}.`);
+      H.comment('');
       A().whistle();
     }
 
@@ -151,6 +150,9 @@
       this.resultInfo = null;
       this.moodSet = false;
       this.humanDove = false;
+      this.keeperCmd = null;
+      this.replay = null;
+      this.replayed = false;
       this.texts = [];
       this.wobAmp = 0.035 + 0.17 * this.sit.pressure * (1.12 - this.kickerP.comp);
       this.wobPhase = this.rng() * 6;
@@ -176,10 +178,10 @@
       const info = so.sudden ? `Oltranza — ${tn}` : `Rigore ${num} — ${tn}`;
       H.setKicker(`${this.kickerP.initial}. ${this.kickerP.name}`, this.kickerP.number, this.teams[this.team], this.sit);
       H.comment(info + (this.sit.mustScore ? ' · DEVE SEGNARE!' : this.sit.matchPoint ? ' · può chiudere la partita' : ''));
-      this._enterPhase('after-setup');
+      this._enterPhase();
     }
 
-    _enterPhase(x) {
+    _enterPhase() {
       // intro pannelli se il rigore è importante
       const important = this.kickNo === 1 || this.sit.decisive || this.sit.sudden || this.isFinal;
       if (important) {
@@ -188,7 +190,6 @@
         this.introDur = this.kickNo === 1 || this.sit.decisive || this.sit.sudden ? 2.0 : 1.15;
         A().whoosh();
       } else this._startControl();
-      void x;
     }
 
     _startControl() {
@@ -225,6 +226,7 @@
       if (!down) return;
       if (this.phase === 'intro') { this.pt = this.introDur; return; }
       if (this.phase === 'result' && this.pt > 0.7) { this.pt = 99; return; }
+      if (this.phase === 'replay') { this.endReplay(); return; }
       if (this.phase === 'end') { this.advanceFromEnd(); return; }
       if (this.humanKicks && pointerType !== 'touch') this.pressKick();
       else if (this.humanKeeps && ['ready', 'run', 'flight'].includes(this.phase)) {
@@ -238,6 +240,8 @@
       if (!down) return;
       if (this.phase === 'intro') { this.pt = this.introDur; return; }
       if (this.phase === 'result' && this.pt > 0.7) { this.pt = 99; return; }
+      if (this.phase === 'replay') { this.endReplay(); return; }
+      if (this.phase === 'replay') { this.endReplay(); return; }
       if (this.phase === 'end') { this.advanceFromEnd(); return; }
       if (code === 'KeyF') this.toggleSuper();
       if (this.humanKicks) {
@@ -291,7 +295,7 @@
         this._refreshHud();
       }
       this.humanDove = true;
-      this.keeper.command(this.sim.t, target, { special });
+      this._cmd(target, special);
       this.diveMarker = { x: target.x, y: target.y, t0: this.t };
       HUD().setPrompt('');
       A().whoosh();
@@ -391,7 +395,6 @@
 
     // ------------------------------------------------------------- eventi fisici
     onSimEvent(ev) {
-      const sim = this.sim;
       const wp = (x, y, z) => ({ x, y, z });
       switch (ev.type) {
         case 'post': case 'bar':
@@ -436,7 +439,6 @@
           break;
         default:
       }
-      void sim;
     }
 
     addText(text, x, y, z, size, colors) {
@@ -450,8 +452,6 @@
       const scored = type === 'goal';
       const sp = !!this.special;
       let banner, line, mood = 'sad', kmood = 'sad';
-      const crowd = this.teams[this.team].code;
-      void crowd;
       if (scored) {
         banner = sp && res.broke ? { text: 'SUPER GOL!', c1: '#ff9a1f', c2: '#8a1a00', sub: this.special.name } : { text: 'GOOOL!', c1: '#ff3d6b', c2: '#7a0a2a', sub: `${this.kickerP.name} · ${this.speedText || ''}` };
         line = res.woodHit ? pick(LINES.postGoal) : sp ? pick(LINES.goalSpecial) : pick(LINES.goal);
@@ -474,7 +474,6 @@
         line = over ? pick(LINES.over) : pick(LINES.wide);
         A().boo(1);
       }
-      const decisive = this.sit.decisive;
       this.resultInfo = { type, scored, banner, line, res };
       HUD().comment(line);
       this.bannerInfo = { t0: this.t, dur: 2.0, ...banner };
@@ -485,7 +484,6 @@
       this.moodSet = true;
       this.dollyTarget = scored ? 0.3 : type === 'saved' ? 0.7 : 0.5;
       if (scored) this.fx.burst('conf', { x: 0, y: 3.2, z: GOAL.Z - 2 }, 90, { speed: 5, up: 4, life: 2.8, size: 0.08, col: [this.kits[this.team].shirt, this.kits[this.team].trim, '#ffd23a', '#ffffff'], g: 3 });
-      void decisive;
       this.phase = 'result';
       this.pt = 0;
       HUD().setPrompt('');
@@ -518,6 +516,77 @@
       A().whistle();
       setTimeout(() => A().whistle(), 400);
       if (w) A().cheer(1.2);
+    }
+
+    // ------------------------------------------------------------------ ripetizione
+    wantReplay() {
+      const r = this.resultInfo;
+      if (!r || this.replayed || this.auto) return false;
+      const res = r.res;
+      return !!(this.special || this.keeperSpecial || res.woodHit || (this.sit.decisive && res.type !== 'short'));
+    }
+
+    startReplay() {
+      const sim0 = this.sim;
+      const rk = new PK.Keeper({ seed: this.keeper.seed });
+      const tStart = this.tContact - 0.55;
+      const rs = new PK.Phys.Sim(rk, { t0: tStart, breakThrough: sim0.breakThrough });
+      const sx = this.shot && this.shot.target.x >= 0 ? 1 : -1;
+      const cam = new PK.Camera();
+      cam.setSize(this.w, this.h);
+      this.replay = {
+        sim: rs, keeper: rk, cam, sx, t: 0, launched: false, cmdDone: false, trail: [], lastTrail: 0, speed: 0.5, over: 0,
+        kicker: new PK.Kicker({ foot: this.kickerP.foot, aimX: this.shot ? this.shot.target.x : 0 }),
+      };
+      if (this.keeperCmd && this.keeperCmd.t < tStart) {
+        rk.command(this.keeperCmd.t, this.keeperCmd.target, { special: this.keeperCmd.special });
+        this.replay.cmdDone = true;
+      }
+      this.replayed = true;
+      this.phase = 'replay';
+      this.pt = 0;
+      this.shake = 0;
+      HUD().setReplay(true);
+      A().whoosh();
+    }
+
+    updateReplay(dt) {
+      const R = this.replay;
+      if (!R) return this.endReplay();
+      const rs = R.sim;
+      if (this.pt > 0.45 && !R.running) R.running = true;
+      if (R.running) {
+        rs.advance(dt * R.speed);
+        if (!R.cmdDone && this.keeperCmd && rs.t >= this.keeperCmd.t) {
+          R.cmdDone = true;
+          R.keeper.command(this.keeperCmd.t, this.keeperCmd.target, { special: this.keeperCmd.special });
+        }
+        if (!R.launched && rs.t >= this.tContact) {
+          R.launched = true;
+          rs.launch({ v: this.solved.v, w: this.solved.w, wob: this.solved.wob, special: !!this.special });
+        }
+        if (R.launched && rs.t - R.lastTrail > 1 / 120) {
+          R.lastTrail = rs.t;
+          R.trail.push({ p: { x: rs.ball.p.x, y: rs.ball.p.y, z: rs.ball.p.z } });
+          if (R.trail.length > 16) R.trail.shift();
+        }
+        if (rs.result) R.over += dt;
+      }
+      // camera dietro la porta, dal lato del tiro
+      const cam = R.cam;
+      const k = Math.min(1, this.pt / 1.2);
+      const bp = rs.ball.p;
+      cam.pos = { x: R.sx * (4.6 - 0.8 * k), y: 1.55, z: 14.7 };
+      cam.target = { x: lerp(0, clamp(bp.x, -4, 4), 0.35), y: 1.0 + (clamp(bp.y, 0, 2.6) - 1) * 0.15, z: lerp(8.5, 10.4, k) };
+      cam.f = cam.baseF() * 0.72;
+      cam.shakeX = cam.shakeY = 0;
+      if (R.over > 1.3 || this.pt > 9) this.endReplay();
+    }
+
+    endReplay() {
+      this.replay = null;
+      HUD().setReplay(false);
+      this.commitKick();
     }
 
     // ------------------------------------------------------------------ update
@@ -562,8 +631,10 @@
         this.timeScale = M.damp(this.timeScale, 1, 5, dt);
         this.stepSim(dt * this.timeScale);
         if (this.pt > 2.7) {
-          this.commitKick();
+          if (this.wantReplay()) this.startReplay(); else this.commitKick();
         }
+      } else if (ph === 'replay') {
+        this.updateReplay(dt);
       } else if (ph === 'end') {
         this.stepSim(dt);
         if (this.pt > 1.0 && this.auto && !this.finished) this._deliver();
@@ -591,12 +662,12 @@
         const p = this.plan;
         if (p.mode === 'early' && sim.t >= this.tContact + p.t) {
           this.planDone = true;
-          this.keeper.command(sim.t, p.target, { special: p.special });
+          this._cmd(p.target, p.special);
           if (p.special) this.aiKeeperSpecialFx();
         } else if (p.mode === 'react' && this.launched && sim.sinceLaunch >= p.t) {
           this.planDone = true;
           const tg = PK.AI.keeperReadTarget(sim, p, this.rng);
-          this.keeper.command(sim.t, tg, { special: p.special });
+          this._cmd(tg, p.special);
           if (p.special) this.aiKeeperSpecialFx();
         }
       }
@@ -616,6 +687,11 @@
         const z = sim.ball.p.z;
         if (z > 8 && !this.humanKeeps) this.timeScale = M.damp(this.timeScale, this.special ? 0.22 : 0.4, 4, 0.016);
       }
+    }
+
+    _cmd(target, special) {
+      this.keeperCmd = { t: this.sim.t, target: { x: target.x, y: target.y }, special: !!special };
+      this.keeper.command(this.sim.t, target, { special: !!special });
     }
 
     aiKeeperSpecialFx() {
@@ -681,6 +757,7 @@
       const cam = this.cam;
       const sim = this.sim;
       if (!sim) { ctx.fillStyle = '#05060f'; ctx.fillRect(0, 0, w, h); return; }
+      if (this.phase === 'replay' && this.replay) { this.drawReplay(ctx, w, h); return; }
       // tempo del rigorista (relativo al contatto)
       const tk = Number.isFinite(this.tContact) ? sim.t - this.tContact : -PK.Kicker.T_RUN - 0.02;
       const ksk = this.kicker.skeleton(this.hitStop > 0 && this.hitInfo && this.hitInfo.kind === 'kick' ? 0 : tk);
@@ -693,7 +770,7 @@
         t: this.t, energy: this.energy, pano: this.pano, net: sim.net,
         keeper: { sk: gsk, look: this.kitLook(this.keeperP || this.squads.B.gk, gkit, true, gExpr) },
         kicker: this.kickerP ? { sk: ksk, look: this.kitLook(this.kickerP, kit, false, kExpr) } : null,
-        ball: sim.ball, ballOpts,
+        ball: sim.ball, ballOpts, extra: this.extras(cam),
       });
       if (this.special && this.launched && sim.ball && !sim.result) PK.FX.ballFx(ctx, cam, this.special.fx, sim.ball, this.trailAlpha(), this.special.col, this.t);
       if (this.keeperSpecial && this.keeper.dive && this.keeper.dive.special) this.drawKeeperAura(ctx, gsk);
@@ -735,6 +812,80 @@
       if (this.phase === 'coin') this.drawCoin(ctx, w, h);
       if (this.flashA > 0) PK.FX.flash(ctx, w, h, this.flashA * (this.special ? 0.9 : 0.5));
       if (this.phase === 'end') this.drawEnd(ctx, w, h);
+    }
+
+    /** oggetti di scena extra (coppa del mondo sul campo nella finale) */
+    extras(cam) {
+      if (!this.isFinal) return [];
+      if (!this._trophy) {
+        const cv = root.document.createElement('canvas');
+        cv.width = 260; cv.height = 320;
+        PK.drawTrophy(cv, '#1b2a6b');
+        this._trophy = cv;
+      }
+      const base = { x: -7.4, y: 0, z: 11.4 };
+      return [{
+        key: cam.depth(base),
+        draw: (ctx) => {
+          const p0 = cam.project(base), p1 = cam.project({ x: base.x, y: 0.55, z: base.z }), p2 = cam.project({ x: base.x, y: 1.75, z: base.z });
+          if (!p0 || !p1 || !p2) return;
+          const ph = p1.y - p2.y, pw = ph * 260 / 320;
+          // piedistallo
+          const bw = 0.5 * p0.s;
+          ctx.fillStyle = '#0f1530'; ctx.strokeStyle = '#ffd23a'; ctx.lineWidth = 2;
+          ctx.fillRect(p0.x - bw / 2, p1.y, bw, p0.y - p1.y); ctx.strokeRect(p0.x - bw / 2, p1.y, bw, p0.y - p1.y);
+          ctx.save();
+          ctx.globalCompositeOperation = 'lighter';
+          const g = ctx.createRadialGradient(p1.x, p2.y + ph * 0.4, 0, p1.x, p2.y + ph * 0.4, ph * 1.3);
+          g.addColorStop(0, 'rgba(255,220,110,0.55)'); g.addColorStop(1, 'rgba(255,200,60,0)');
+          ctx.fillStyle = g; ctx.fillRect(p1.x - ph * 1.4, p2.y - ph * 0.6, ph * 2.8, ph * 2.6);
+          ctx.restore();
+          ctx.drawImage(this._trophy, p1.x - pw / 2, p2.y, pw, ph);
+        },
+      }];
+    }
+
+    drawReplay(ctx, w, h) {
+      const R = this.replay, cam = R.cam, rs = R.sim;
+      const tk = rs.t - this.tContact;
+      const ksk = R.kicker.skeleton(tk);
+      const gsk = R.keeper.skeleton(rs.t);
+      const kit = this.kits[this.team], gkit = this.gkKits[this.opp];
+      const trail = R.trail.map((p, i) => ({ p: p.p, a: 0.05 + 0.3 * (i / Math.max(1, R.trail.length)) }));
+      PK.Scene.draw(ctx, cam, {
+        t: this.t, energy: 0.6, pano: this.pano, net: rs.net,
+        keeper: { sk: gsk, look: this.kitLook(this.keeperP, gkit, true, 'focus') },
+        kicker: { sk: ksk, look: this.kitLook(this.kickerP, kit, false, 'focus') },
+        ball: rs.ball, ballOpts: { trail, trailColor: this.special ? this.special.col[2] : 'rgba(255,255,255,0.9)' }, extra: this.extras(cam),
+      });
+      if (this.special && R.launched && !rs.result) PK.FX.ballFx(ctx, cam, this.special.fx, rs.ball, trail, this.special.col, this.t);
+      if (R.keeper.dive && R.keeper.dive.special) this.drawKeeperAuraCam(ctx, cam, gsk);
+      PK.FX.crowdFlashes(ctx, w, h, this.t, 14, h * 0.02, h * 0.4);
+      PK.FX.vignette(ctx, w, h, 0.5);
+      PK.FX.letterbox(ctx, w, h, Math.min(1, this.pt / 0.3));
+      // tendina di transizione all'ingresso
+      if (this.pt < 0.45) {
+        const k = this.pt / 0.45;
+        const x = lerp(-w * 0.4, w * 1.4, k);
+        ctx.save();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.moveTo(x - w * 0.12, 0); ctx.lineTo(x + w * 0.12, 0); ctx.lineTo(x + w * 0.02, h); ctx.lineTo(x - w * 0.22, h); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = this.kits[this.team].shirt;
+        ctx.beginPath(); ctx.moveTo(x - w * 0.5, 0); ctx.lineTo(x - w * 0.12, 0); ctx.lineTo(x - w * 0.22, h); ctx.lineTo(x - w * 0.6, h); ctx.closePath(); ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    drawKeeperAuraCam(ctx, cam, gsk) {
+      [gsk.handTipR, gsk.handTipL].forEach((p) => {
+        const q = cam.project(p);
+        if (!q) return;
+        const r = 0.45 * q.s;
+        const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, r);
+        g.addColorStop(0, 'rgba(255,246,200,0.95)'); g.addColorStop(0.4, 'rgba(255,200,60,0.5)'); g.addColorStop(1, 'rgba(255,140,0,0)');
+        ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, 7); ctx.fill(); ctx.restore();
+      });
     }
 
     trailAlpha() {
@@ -843,10 +994,10 @@
         const f = this.teams[this.first];
         ctx.save();
         ctx.globalAlpha = a;
-        PK.FX.bigText(ctx, 'SORTEGGIO', w / 2, h * 0.68, Math.min(h * 0.11, w * 0.07), { tt: tt - 1.4 });
+        PK.FX.bigText(ctx, this.isFinal ? 'LA FINALE!' : 'SORTEGGIO', w / 2, h * 0.64, Math.min(h * 0.11, w * 0.07), { tt: tt - 1.4 });
         ctx.font = `italic 800 ${Math.round(h * 0.05)}px Impact, sans-serif`;
         ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.shadowColor = '#000'; ctx.shadowBlur = 8;
-        ctx.fillText(`Batte per prima ${f.name}`, w / 2, h * 0.77);
+        ctx.fillText(`Batte per prima ${f.name}`, w / 2, h * 0.74);
         ctx.restore();
       }
     }

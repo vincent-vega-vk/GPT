@@ -296,5 +296,6 @@
     }
   }
 
-  root.addEventListener('DOMContentLoaded', () => G.init());
+  if (doc.readyState === 'loading') root.addEventListener('DOMContentLoaded', () => G.init());
+  else G.init();
 })(typeof window !== 'undefined' ? window : globalThis);

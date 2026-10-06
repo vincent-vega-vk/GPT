@@ -379,4 +379,5 @@
   }
 
   PK.Screens = Screens;
+  PK.drawTrophy = drawTrophy;
 })(typeof window !== 'undefined' ? window : globalThis);

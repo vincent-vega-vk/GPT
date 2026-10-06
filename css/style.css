@@ -14,6 +14,7 @@
   --dim: #9fb0dd;
   --disp: "Bangers", "Russo One", Impact, "Arial Black", "Haettenschweiler", sans-serif;
   --body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--body); overflow: hidden; overscroll-behavior: none; }
@@ -114,7 +115,7 @@ button { font-family: inherit; color: inherit; cursor: pointer; }
 #topbtns button { min-width: 44px; height: 44px; font-size: 18px; padding: 0 10px; }
 
 /* -------------------------------------------------------------- schermate */
-#screen { position: absolute; inset: 0; overflow: auto; -webkit-overflow-scrolling: touch; display: flex; justify-content: center; padding: 18px 14px 28px; background: radial-gradient(ellipse at 50% 30%, rgba(8, 14, 46, 0.62), rgba(3, 5, 18, 0.9)); animation: fade 0.35s ease-out; }
+#screen { position: absolute; inset: 0; overflow: auto; -webkit-overflow-scrolling: touch; display: flex; justify-content: center; padding: 18px 16px 28px; background: radial-gradient(ellipse at 50% 30%, rgba(8, 14, 46, 0.62), rgba(3, 5, 18, 0.9)); animation: fade 0.35s ease-out; }
 @keyframes fade { from { opacity: 0; } }
 .wrap { width: 100%; max-width: 1080px; margin: auto; display: flex; flex-direction: column; gap: 14px; }
 h1, h2, h3 { font-family: var(--disp); margin: 0; letter-spacing: 1.5px; font-weight: 400; }
@@ -244,3 +245,23 @@ img.fl { width: 44px; height: auto; aspect-ratio: 3 / 2; border-radius: 4px; bor
 .champ img.fl { width: 72px; }
 .title-bar img.fl { width: 52px; }
 .tcard img.fl { width: 100%; }
+
+/* tabellone compatto per schermi stretti o bassi (telefono in orizzontale) */
+@media (max-width: 900px), (max-height: 520px) {
+  #scoreboard .team { padding: 3px 8px 2px; column-gap: 5px; }
+  #scoreboard .team .flag { width: 24px; height: 16px; }
+  .code { font-size: 15px; letter-spacing: 1px; }
+  .score { font-size: 24px; min-width: 16px; }
+  .dot { width: 10px; height: 10px; border-width: 1.5px; }
+  .dots { gap: 3px; max-width: 120px; }
+  #team-a { padding-right: 16px; } #team-b { padding-left: 16px; }
+  #scoreboard .mid { min-width: 84px; max-width: 26vw; padding: 2px 8px; }
+  #stage-label { font-size: 10px; letter-spacing: 0.5px; } #kick-info { font-size: 10px; } #kick-info img { width: 16px; height: 10px; }
+  .supers { font-size: 10px !important; gap: 6px !important; }
+  #prompt { top: 78px; font-size: 14px; padding: 4px 10px; }
+  #topbtns button { min-width: 38px; height: 38px; font-size: 15px; }
+}
+#stage-label.final { color: #ffd23a; text-shadow: 0 0 10px rgba(255, 210, 58, 0.8); animation: glow 1.6s infinite; }
+@keyframes glow { 50% { text-shadow: 0 0 18px rgba(255, 210, 58, 1), 0 0 4px #fff; } }
+#replay-tag { position: absolute; left: 14px; top: 94px; font-family: var(--disp); font-size: 20px; letter-spacing: 3px; padding: 3px 14px 3px 10px; background: #d62839; border: 2px solid #fff; transform: skewX(-10deg); box-shadow: 0 4px 10px rgba(0,0,0,.5); }
+#replay-tag::before { content: "●"; margin-right: 8px; animation: pulse 0.9s infinite; display: inline-block; }

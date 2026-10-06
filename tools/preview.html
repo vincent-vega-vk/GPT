@@ -45,4 +45,14 @@ window.render = function (opts) {
   });
   return true;
 };
+
+window.sheet = function (list, cols, cw, ch) {
+  const rows = Math.ceil(list.length / cols);
+  let sc = document.getElementById('sheet');
+  if (!sc) { sc = document.createElement('canvas'); sc.id = 'sheet'; document.body.appendChild(sc); document.getElementById('c').style.display = 'none'; }
+  sc.width = cols * cw; sc.height = rows * ch;
+  const g = sc.getContext('2d');
+  list.forEach((o, i) => { window.render(o); g.drawImage(cv, 0, 0, 1280, 720, (i % cols) * cw, Math.floor(i / cols) * ch, cw, ch); g.fillStyle = '#fff'; g.font = 'bold 16px sans-serif'; g.fillText(o.label || '', (i % cols) * cw + 8, Math.floor(i / cols) * ch + 20); });
+  return true;
+};
 </script></body></html>

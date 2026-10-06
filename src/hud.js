@@ -52,9 +52,14 @@
         el.classList.toggle('me', playerSide === side);
       });
     },
-    setStage(label, mode) {
+    setStage(label, mode, isFinal) {
       this.els.stage.textContent = label || '';
       this.els.stage.dataset.mode = mode || '';
+      this.els.stage.classList.toggle('final', !!isFinal);
+    },
+    setReplay(on) {
+      const el = doc.getElementById('replay-tag');
+      if (el) el.classList.toggle('hidden', !on);
     },
     setScore(a, b) {
       const e = this.els;

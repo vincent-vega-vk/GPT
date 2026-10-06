@@ -1,0 +1,13 @@
+{
+  "name": "super-rigori-world-cup",
+  "version": "1.0.0",
+  "description": "Coppa del Mondo di soli calci di rigore in stile anime anni '80: fisica realistica, 32 nazionali, gironi e tabellone.",
+  "private": true,
+  "scripts": {
+    "test": "node tests/rules.test.js && node tests/physics.test.js 150 && node tests/fuzz.test.js 600",
+    "calib": "node tests/calib.js 500",
+    "build": "node build.js",
+    "start": "npx http-server -p 8080 -c-1 ."
+  },
+  "license": "MIT"
+}
