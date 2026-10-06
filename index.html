@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#060918">
+<title>Super Rigori World Cup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="stage"></canvas>
+
+  <div id="hud" class="hidden">
+    <div id="scoreboard">
+      <div class="team" id="team-a"><img class="flag" alt=""><span class="code"></span><span class="score">0</span><span class="name"></span><div class="dots"></div><div class="supers"></div></div>
+      <div class="mid"><div id="stage-label"></div><div id="kick-info"></div></div>
+      <div class="team" id="team-b"><img class="flag" alt=""><span class="code"></span><span class="score">0</span><span class="name"></span><div class="dots"></div><div class="supers"></div></div>
+    </div>
+    <div id="commentary"></div>
+    <div id="prompt" class="hidden"></div>
+    <div id="ctl-kick" class="ctl hidden">
+      <div id="spin"><button data-spin="-1" title="Effetto a sinistra (Q)">↶</button><button data-spin="0" class="on" title="Dritto">↑</button><button data-spin="1" title="Effetto a destra (E)">↷</button></div>
+      <div id="power"><div id="power-zone"></div><div id="power-fill"></div><div id="power-cursor"></div><span class="label">POTENZA</span></div>
+      <div class="btns"><button id="btn-super" class="super">⚡ SUPER <span class="n">1</span></button><button id="btn-kick" class="big">TIRA!</button></div>
+    </div>
+    <div id="ctl-save" class="ctl hidden">
+      <div class="hint">Clicca/tocca la porta per tuffarti · <kbd>Q W E</kbd> <kbd>A S D</kbd> <kbd>Z X C</kbd></div>
+      <button id="btn-super2" class="super">⚡ SUPER PARATA <span class="n">1</span></button>
+    </div>
+    <div id="topbtns"><button id="btn-mute" title="Audio (M)">🔊</button><button id="btn-pause" title="Pausa (Esc)">❚❚</button></div>
+  </div>
+
+  <div id="screen" class="hidden"></div>
+  <div id="rotate-hint">📱 Gira il telefono in orizzontale per giocare meglio</div>
+</div>
+
+<script src="src/math.js"></script>
+<script src="src/data.js"></script>
+<script src="src/shootout.js"></script>
+<script src="src/tournament.js"></script>
+<script src="src/rig.js"></script>
+<script src="src/keeper.js"></script>
+<script src="src/kicker.js"></script>
+<script src="src/physics.js"></script>
+<script src="src/ai.js"></script>
+<script src="src/camera.js"></script>
+<script src="src/stadium.js"></script>
+<script src="src/characters.js"></script>
+<script src="src/scene.js"></script>
+<script src="src/fx.js"></script>
+<script src="src/audio.js"></script>
+<script src="src/hud.js"></script>
+<script src="src/match.js"></script>
+<script src="src/screens.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>

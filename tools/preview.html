@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><title>preview</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1280" height="720"></canvas>
+<script src="../src/math.js"></script><script src="../src/data.js"></script><script src="../src/shootout.js"></script>
+<script src="../src/rig.js"></script><script src="../src/keeper.js"></script><script src="../src/kicker.js"></script>
+<script src="../src/physics.js"></script><script src="../src/camera.js"></script><script src="../src/stadium.js"></script>
+<script src="../src/characters.js"></script><script src="../src/scene.js"></script>
+<script>
+const PK = window.PK, M = PK.M;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const cam = new PK.Camera(); cam.setSize(1280, 720); cam.f = cam.baseF();
+const pano = { far: PK.Stadium.makePanorama({ seed: 3, colA: '#1e5bd8', colB: '#ffd800' }), near: PK.Stadium.makePanorama({ seed: 9, colA: '#d62839', colB: '#2a6fdb' }) };
+const A = PK.TEAM.ITA, B = PK.TEAM.BRA;
+const kits = PK.pickKits(A, B, 1);
+const sqA = PK.buildSquad(A), sqB = PK.buildSquad(B);
+function look(p, kit, gk) { return { skin: p.skin, hair: p.hair, hairStyle: p.hairStyle, shirt: kit.shirt, trim: kit.trim, shorts: kit.shorts, socks: kit.socks, gloves: gk ? kit.gloves : null, number: p.number, name: p.name, expr: gk ? 'focus' : 'focus' }; }
+window.render = function (opts) {
+  opts = opts || {};
+  const keeper = new PK.Keeper({});
+  const kp = sqA.kickers[4];
+  const kicker = new PK.Kicker({ foot: kp.foot, aimX: 2 });
+  const tK = opts.tk != null ? opts.tk : -0.5;
+  if (opts.mood) kicker.setMood(opts.mood, 0);
+  if (opts.dive) keeper.command(0, opts.dive, { special: !!opts.special });
+  const tg = opts.tg != null ? opts.tg : 0.0;
+  const sim = new PK.Phys.Sim(keeper, { t0: 0 });
+  if (opts.fly) {
+    const sh = PK.Phys.solveShot(opts.fly, 0.8, 0, null, {});
+    sim.launch({ v: sh.v, w: sh.w });
+    sim.advance(opts.flyT || 0.25);
+  }
+  const c = opts.cam || {};
+  cam.pos = c.pos || { x: 0.0, y: 2.0, z: -6.2 };
+  cam.target = c.target || { x: 0, y: 1.2, z: 11 };
+  cam.f = cam.baseF() * (c.zoom || 1);
+  const ksk = kicker.skeleton(tK);
+  const gsk = keeper.skeleton(tg);
+  PK.Scene.draw(ctx, cam, {
+    t: 1.0, energy: 0.2, pano, net: sim.net,
+    keeper: { sk: gsk, look: look(sqB.gk, kits.gkB, true) },
+    kicker: opts.nokicker ? null : { sk: ksk, look: look(kp, kits.a, false) },
+    ball: sim.ball,
+    ballOpts: {},
+  });
+  return true;
+};
+</script></body></html>

@@ -1,0 +1,31 @@
+/* Collaudo end-to-end: node tools/e2e.js  */
+const { chromium } = require('playwright');
+const path = require('path');
+const OUT = process.env.SHOT_DIR || '/tmp/claude-0/-home-user-GPT/4f84b9e1-f814-59bf-a155-0a30802c06e3/scratchpad';
+(async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+  const errs = [];
+  page.on('pageerror', (e) => errs.push('pageerror: ' + e.message + '\n' + (e.stack || '').split('\n').slice(0, 4).join('\n')));
+  page.on('console', (m) => { if (m.type() === 'error') errs.push('console: ' + m.text()); });
+  await page.goto('file://' + path.resolve(__dirname, '../index.html'));
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: OUT + '/e1_title.png' });
+  await page.click('#b-new');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: OUT + '/e2_teams.png' });
+  await page.click('.tcard[data-c="ITA"]');
+  await page.click('#b-ok');
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: OUT + '/e3_draw.png' });
+  await page.click('#b-go');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: OUT + '/e4_hub.png' });
+  await page.click('#b-play');
+  await page.waitForTimeout(3000);
+  await page.screenshot({ path: OUT + '/e5_match_coin.png' });
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: OUT + '/e6_match.png' });
+  console.log(errs.length ? 'ERRORS:\n' + errs.join('\n') : 'no errors');
+  await browser.close();
+})();
