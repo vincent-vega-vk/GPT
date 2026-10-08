@@ -974,7 +974,7 @@
     if (p.stability >= 85 && (s.stabStreak = (s.stabStreak || 0) + 1) >= 8) ach('ordine', 'Pax interna', 'Stabilità ≥ 85 per 8 turni consecutivi.'); else if (p.stability < 85) s.stabStreak = 0;
     if (p.politics && p.politics.terms >= 4) ach('longevita', 'Statista', 'Quattro mandati consecutivi.');
     if (p.tech.energy >= 10 && p.policies && p.policies.energia !== 'fossile') ach('verde', 'Potenza verde', 'Energia al massimo livello senza fossili.');
-    if (E.alliesOf(s, s.player).filter(a => s.nations[a].regime === 'democrazia').length >= 8) ach('faro', 'Faro della democrazia', 'Alleanze con otto democrazie.');
+    if (E.treatiesOf(s, s.player, 'difesa').map(t => t.a === s.player ? t.b : t.a).filter(a => s.nations[a].regime === 'democrazia').length >= 6) ach('faro', 'Faro della democrazia', 'Alleanze bilaterali con sei democrazie.');
     if (s.turn > s.maxTurns) {
       const pos = rank.findIndex(r => r.id === s.player) + 1;
       s.gameOver = { type: pos === 1 ? 'vittoria' : 'fine', text: pos === 1 ? `🏆 Fine della partita: sei la prima potenza mondiale con ${me.score} punti!` : `Fine della partita: ti classifichi ${pos}° con ${me.score} punti. Vince ${s.nations[top.id].flag} ${s.nations[top.id].name} (${top.score}).` };
