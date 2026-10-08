@@ -90,8 +90,8 @@ let deals = 0, shotPlay = false, shotDebrief = false;
 for (let guard = 0; guard < 40; guard++) {
   const sc = await screen();
   if (sc === 'summary') break;
-  if (sc === 'forecast') { await shot('35-forecast-sheet'); await driveForecast(page, policy === 'best' ? 'honest' : 'random'); continue; }
-  if (sc === 'closing') { await shot('36-closing'); await driveClosing(page); continue; }
+  if (sc === 'forecast') { await page.waitForSelector('.fcsheet .fcrow', { timeout: 30000 }); await page.waitForTimeout(500); await shot('35-forecast-sheet'); await driveForecast(page, policy === 'best' ? 'honest' : 'random'); continue; }
+  if (sc === 'closing') { await page.waitForTimeout(shots ? 4500 : 0); await shot('36-closing'); await driveClosing(page); continue; }
   if (sc === 'event') {
     await shot('30-event');
     await page.locator('.choice').first().click();
