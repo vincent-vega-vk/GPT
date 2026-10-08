@@ -29,6 +29,25 @@
   };
   UI.sceneEls = (lines, cast, sc) => lines.map((l, i) => { const el = UI.lineEl(l, { cast, sc }); el.style.animationDelay = i * 90 + 'ms'; return el; });
 
+  /* scorrimento consapevole del viewport "appiccicoso": barra in alto + viewport restano visibili */
+  const reduced = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+  const stickyTop = () => {
+    const bar = document.querySelector('.topbar');
+    let off = bar ? bar.getBoundingClientRect().height : 0;
+    const vp = document.querySelector('.vp-host:not([hidden])');
+    if (vp && getComputedStyle(vp).position === 'sticky') off += vp.getBoundingClientRect().height + 10;
+    return off;
+  };
+  const scrollBy = (dy) => { if (Math.abs(dy) > 2) window.scrollBy({ top: dy, behavior: reduced() || UI.settings.fast ? 'auto' : 'smooth' }); };
+  /* mode: 'start' = l'elemento sotto la zona fissa; 'nearest' = il minimo scorrimento perché sia tutto visibile */
+  UI.scrollTo = (el, mode) => {
+    if (!el) return;
+    const r = el.getBoundingClientRect(), top = stickyTop() + 8, bottom = window.innerHeight - 14;
+    if (mode === 'start') return scrollBy(r.top - top);
+    if (r.top < top) return scrollBy(r.top - top);
+    if (r.bottom > bottom) return scrollBy(Math.min(r.bottom - bottom, r.top - top));
+  };
+
   const speakerOf = (l) => (l.you ? 'you' : l.w ? l.w : l.chat ? l.chat.from : null);
   const readMs = (l) => Math.min(1500, 320 + String(l.t || l.n || l.think || '').length * 11);
 
@@ -45,6 +64,7 @@
       const l = lines[i++];
       const el = UI.lineEl(l, ctx);
       host.appendChild(el);
+      if (!ctx.still) UI.scrollTo(el, 'nearest');
       if (l.sfx) UI.sfx(l.sfx);
       if (ctx.vp) ctx.vp.speak(speakerOf(l));
       if (ctx.onLine) ctx.onLine(l);
@@ -353,13 +373,13 @@
     stage.classList.toggle('wild', isWild);
     setView(node, lines);
     if (isWild) UI.sfx('alert');
-    stage.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    UI.scrollTo(stage, 'start');
     const ok = await UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(l.w) });
     if (!ok || tok !== S.nodeTok) return;
     S.phase = 'choose';
     prompt.hidden = false; box.hidden = false;
     if (timerBar) { timerBar.hidden = false; startTimer(timerBar, node.t || 30, onTimeout); }
-    box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    UI.scrollTo(box, 'nearest');
   }
 
   function onTimeout() {
@@ -408,7 +428,7 @@
     slot.replaceChildren(fb);
     const btn = UI.$('[data-next]', slot);
     if (btn) btn.focus({ preventScroll: true });
-    fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    UI.scrollTo(fb, 'nearest');
   }
 
   function feedbackEl(rec, node, wasWild) {

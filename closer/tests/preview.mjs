@@ -4,7 +4,8 @@
                               [--wild=<id>]   forza un imprevisto (id scenario o generico) alla prima occasione
                               [--shocks]      scatta una scheda per ogni shock dello scenario (colpito/protetto)
                               [--hud]         scatta il cruscotto con i widget a stato iniziale e a stato ricco
-                              [--fc]          stampa le sfide di forecast possibili per lo scenario (testo) */
+                              [--fc]          stampa le sfide di forecast possibili per lo scenario (testo)
+                              [--vp]          screenshot della sola finestra (come la vede il giocatore), non della pagina intera */
 import path from 'node:path';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -31,7 +32,7 @@ await page.addInitScript((s) => { let a = s >>> 0; Math.random = () => { a = (a 
 await page.goto(pathToFileURL(path.join(root, 'src', 'index.html')).href);
 await page.waitForFunction(() => window.CL && CL.booted);
 let n = 0;
-const shot = async (label, full = true) => { const f = path.join(out, `${scId}-${String(++n).padStart(2, '0')}-${label}.png`); await page.screenshot({ path: f, fullPage: full }); console.log(f); };
+const shot = async (label, full = !flag('vp')) => { const f = path.join(out, `${scId}-${String(++n).padStart(2, '0')}-${label}.png`); await page.screenshot({ path: f, fullPage: full }); console.log(f); };
 const settle = (ms = 250) => page.waitForTimeout(ms);
 
 if (flag('fc')) {

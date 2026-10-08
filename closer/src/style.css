@@ -560,3 +560,11 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   .you .bub { max-width: 100%; }
   .shock h4 { font-size: 22px; }
 }
+
+/* viewport appiccicoso: resta in vista mentre il testo scorre */
+.vp-host { position: sticky; top: 58px; z-index: 6; }
+.vp-host .vp { max-height: clamp(150px, 30vh, 320px); min-height: 150px; }
+@media (max-width: 980px) {
+  .vp-host { top: 54px; }
+  .vp-host .vp { max-height: clamp(130px, 21vh, 190px); min-height: 130px; }
+}
