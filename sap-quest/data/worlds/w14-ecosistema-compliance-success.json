@@ -51,12 +51,12 @@
             "say": "Voglio un'app di un partner già certificata, acquistabile con un processo semplice."
           },
           "o": [
-            "Su SAP Store, verificando se l'applicazione è una Endorsed App certificata da SAP",
-            "Nel codice standard di SAP, dove le funzioni dei partner sono incluse nel prodotto",
+            "In un contratto separato con il partner, fuori dal canale ufficiale di SAP",
             "Nei cataloghi dei competitor, dove le applicazioni compatibili sono già pre-integrate",
-            "In un contratto separato con il partner, fuori dal canale ufficiale di SAP"
+            "Su SAP Store, verificando se l'applicazione è una Endorsed App certificata da SAP",
+            "Nel codice standard di SAP, dove le funzioni dei partner sono incluse nel prodotto"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "SAP Store è il canale ufficiale per soluzioni di partner e le Endorsed Apps sono quelle con certificazione premium. Le altre opzioni non corrispondono a come funziona l'ecosistema."
         },
         {
@@ -134,12 +134,12 @@
           "t": "mcq",
           "q": "Quale orientamento ha avuto il rinnovo 2025 di PartnerEdge?",
           "o": [
-            "Un programma orientato al cloud, con livelli legati a competenze e specializzazioni cloud",
-            "Un programma basato sul fatturato storico del partner, a prescindere dalle competenze",
             "Un programma riservato agli hyperscaler, con esclusione degli integratori locali",
+            "Un programma basato sul fatturato storico del partner, a prescindere dalle competenze",
+            "Un programma orientato al cloud, con livelli legati a competenze e specializzazioni cloud",
             "Un programma concentrato sulle licenze on-premise, con l'AI esclusa dai criteri di livello"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "Secondo le comunicazioni SAP il programma è stato orientato al cloud, con competenze e specializzazioni a pesare nei livelli e con l'AI come priorità. Le altre risposte descrivono logiche diverse da quelle dichiarate."
         },
         {
@@ -168,11 +168,11 @@
           "t": "fill",
           "q": "Il SAP Partner Summit EMEA & MEE 2026 si svolge: ___.",
           "o": [
-            "{{w14.partner_summit_emea_2026}}",
             "27-29 ottobre 2026, Messe Berlin",
+            "{{w14.partner_summit_emea_2026}}",
             "11-13 maggio 2026, Orlando (Florida)"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "Il Summit EMEA & MEE è ad Amsterdam, in ottobre 2026. Berlino ospita TechEd e Orlando è la sede di Sapphire: sono eventi diversi. Verifica sempre date e agenda su events.sap.com."
         },
         {
@@ -180,15 +180,15 @@
           "q": "Quali comportamenti sono corretti con un partner che chiede dettagli sui livelli del programma?",
           "o": [
             "Rimandare ai documenti ufficiali del programma",
-            "Coinvolgere il team Partner di SAP Italia",
-            "Aggiornarti sulle novità annunciate al Partner Summit",
+            "Condividere le condizioni di altri partner",
             "Promettere incentivi non ancora annunciati",
-            "Condividere le condizioni di altri partner"
+            "Coinvolgere il team Partner di SAP Italia",
+            "Aggiornarti sulle novità annunciate al Partner Summit"
           ],
           "a": [
             0,
-            1,
-            2
+            3,
+            4
           ],
           "exp": "Le fonti ufficiali e il team Partner sono il canale giusto. Promettere incentivi non annunciati o condividere condizioni altrui è scorretto e può violare riservatezza."
         }
@@ -217,12 +217,12 @@
             "say": "Mi mandi la lista dei contatti del cliente così preparo una campagna?"
           },
           "o": [
-            "Condivido solo i dati necessari, con base giuridica e tutele, secondo la policy",
-            "Ti mando la lista completa dei contatti: sei un partner e conosci le regole",
             "Ti mando i contatti senza il nome dell'azienda, così non violiamo la privacy",
-            "Non condivido nulla con i partner, nemmeno i dati che il cliente ha autorizzato"
+            "Ti mando la lista completa dei contatti: sei un partner e conosci le regole",
+            "Non condivido nulla con i partner, nemmeno i dati che il cliente ha autorizzato",
+            "Condivido solo i dati necessari, con base giuridica e tutele, secondo la policy"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "I dati si condividono se necessari, con base giuridica e policy. Mandare tutto o togliere il nome dell'azienda non risolve il problema: restano dati personali. Il rifiuto totale ignora i casi in cui il cliente ha autorizzato."
         },
         {
@@ -235,12 +235,12 @@
           "t": "mcq",
           "q": "Chi è responsabile delle stime di tempi e costi nella proposta del partner?",
           "o": [
-            "Il partner, che le formalizza per iscritto verso il cliente",
-            "L'AE di SAP, che le garantisce come parte dell'offerta commerciale",
             "Il cliente, che le definisce in autonomia prima della firma del contratto",
+            "L'AE di SAP, che le garantisce come parte dell'offerta commerciale",
+            "Il partner, che le formalizza per iscritto verso il cliente",
             "Nessuno, finché il progetto non parte e le stime diventano definitive"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "Le stime di delivery sono del partner e vanno messe per iscritto. L'AE non deve farle sue: se le garantisce, si assume una responsabilità che non è sua."
         },
         {
@@ -282,11 +282,11 @@
           "t": "multi",
           "q": "Quali sono segnali di possibile conflitto di interessi da dichiarare?",
           "o": [
-            "Rapporto familiare o economico con il titolare del partner",
             "Partner che ricompensa personalmente l'AE",
             "Partner già incumbent con interessi di servizi sul progetto",
-            "Partner con una certificazione valida",
-            "Partner che usa il tuo stesso CRM"
+            "Rapporto familiare o economico con il titolare del partner",
+            "Partner che usa il tuo stesso CRM",
+            "Partner con una certificazione valida"
           ],
           "a": [
             0,
@@ -349,39 +349,39 @@
             "say": "Ho già Enterprise Support: perché dovrei prendere altro?"
           },
           "o": [
+            "Perché il piano superiore è previsto per chi supera una soglia di utenti e licenze",
             "Parto da cosa copre oggi e da quale risultato vuoi proteggere, poi valutiamo il resto",
-            "Perché senza il piano Max le soluzioni cloud non funzionano come previsto dal contratto",
             "Perché i competitor offrono un servizio equivalente a un prezzo molto più basso del nostro",
-            "Perché il piano superiore è previsto per chi supera una soglia di utenti e licenze"
+            "Perché senza il piano Max le soluzioni cloud non funzionano come previsto dal contratto"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "Parti da ciò che il cliente ha già e da quale risultato vuole proteggere; poi valuti se serve altro. Creare paura, confrontarsi con il prezzo altrui o inventare soglie non sono argomenti verificabili."
         },
         {
           "t": "mcq",
           "q": "Chi guida il Customer Value Group nato dall'unione di Customer Success e Customer Services & Delivery?",
           "o": [
-            "{{w14.chief_customer_officer}}",
+            "Christian Klein, Chief Executive Officer di SAP SE",
             "Dominik Asam, Chief Financial Officer di SAP SE",
-            "Christian Klein, Chief Executive Officer di SAP SE"
+            "{{w14.chief_customer_officer}}"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "Dal 1° aprile 2026 il Customer Value Group è guidato dal Chief Customer Officer. Conoscere i ruoli ti aiuta a coinvolgere la persona giusta nelle escalation strategiche."
         },
         {
           "t": "multi",
           "q": "Cosa dovrebbe contenere una conversazione sul success plan?",
           "o": [
-            "Obiettivi di business misurabili",
-            "Metriche di adozione",
+            "Un confronto con il prezzo di un competitor non verificato",
             "Cosa è già incluso in Enterprise Support",
             "Un invito a firmare entro la fine del trimestre",
-            "Un confronto con il prezzo di un competitor non verificato"
+            "Obiettivi di business misurabili",
+            "Metriche di adozione"
           ],
           "a": [
-            0,
             1,
-            2
+            3,
+            4
           ],
           "exp": "Obiettivi, adozione e confini di ciò che è incluso rendono il piano comprensibile. Pressione sulla data e confronti non verificati non aiutano il cliente."
         }
@@ -410,12 +410,12 @@
             "say": "Non vedo i benefici promessi nel business case. Perché dovrei rinnovare?"
           },
           "o": [
-            "Rivediamo KPI promessi, dati d'uso e risultati, e definiamo cosa manca per raggiungerli",
             "Il contratto è firmato e i benefici dipendono dall'impegno del tuo team, non da noi",
+            "Rivediamo KPI promessi, dati d'uso e risultati, e definiamo cosa manca per raggiungerli",
             "Ti propongo uno sconto sul rinnovo, così il rapporto costi-benefici torna in equilibrio",
             "I benefici del business case erano stime indicative, quindi non erano un impegno nostro"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "Il CFO chiede evidenza di valore: la risposta giusta rivede KPI e dati e costruisce un piano per colmare il gap. Scaricare la responsabilità o scontare subito non risolve il tema."
         },
         {
@@ -444,12 +444,12 @@
             "say": "Solo il 30% degli utenti accede al sistema. Cosa facciamo?"
           },
           "o": [
+            "Ignoriamo il dato per non creare tensione prima del rinnovo e ne parliamo più avanti",
             "Capiamo i blocchi di adozione (formazione, processi, sponsorship) con il Customer Success",
             "Aumentiamo le licenze, così più utenti vengono coinvolti e l'adozione cresce da sola",
-            "Ignoriamo il dato per non creare tensione prima del rinnovo e ne parliamo più avanti",
             "Riduciamo subito le licenze al numero di utenti attivi, senza analizzare le cause"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "Prima capisci perché l'adozione è bassa, insieme al Customer Success. Vendere più licenze, nascondere il dato o tagliare senza analisi peggiora il rapporto e il valore."
         },
         {
@@ -460,12 +460,12 @@
             "say": "Vogliamo estendere il sistema ad altre due società: da dove partiamo?"
           },
           "o": [
-            "misurati con i KPI",
             "promessi nel pitch",
             "stimati dal vendor",
+            "misurati con i KPI",
             "attesi dal partner"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "L'espansione è credibile quando poggia su valore misurato nelle aree già adottate. Promesse, stime e attese non sono evidenza."
         }
       ]
@@ -489,12 +489,12 @@
           "t": "mcq",
           "q": "Qual è il rischio principale di un «land» troppo ambizioso?",
           "o": [
+            "Il contratto non può essere esteso, perché richiede una nuova gara a ogni fase",
             "Il primo progetto si dilata o fallisce e blocca l'espansione prevista dopo il go-live",
             "Il cliente paga meno e il partner non ha margine sufficiente per l'implementazione",
-            "Il business case non serve più, perché l'espansione si decide sull'esperienza vissuta",
-            "Il contratto non può essere esteso, perché richiede una nuova gara a ogni fase"
+            "Il business case non serve più, perché l'espansione si decide sull'esperienza vissuta"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "Un primo progetto troppo grande rischia ritardi e frustrazione, e rende più difficile giustificare le fasi successive. Meglio un land piccolo e riuscito, con architettura pronta per crescere."
         },
         {
@@ -511,12 +511,12 @@
             "say": "Puoi dirmi quale azienda farmaceutica italiana usa questa soluzione?"
           },
           "o": [
+            "Ti dico che nessuna azienda italiana del settore la usa ancora, per ora",
             "Non nomino clienti senza autorizzazione: descrivo uno scenario e chiedo una reference",
             "Ti faccio il nome, tanto la collaborazione è stata pubblicata sul loro sito aziendale",
-            "Ti dico che nessuna azienda italiana del settore la usa ancora, per ora",
             "Preferisco non rispondere e passo subito al confronto economico con i competitor"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "La risposta corretta protegge il cliente reale e dà comunque al prospect qualcosa di utile: uno scenario simile e la possibilità di una reference approvata. Dire il falso o cambiare tema è peggio."
         },
         {
@@ -547,15 +547,15 @@
           "q": "Quando è opportuno chiedere una reference?",
           "o": [
             "Quando il valore è misurato e condiviso",
+            "Durante una disputa contrattuale",
             "Quando il cliente è soddisfatto del progetto",
             "Dopo aver chiarito consenso e canale ufficiale",
-            "Durante una disputa contrattuale",
             "Subito dopo un incidente grave"
           ],
           "a": [
             0,
-            1,
-            2
+            2,
+            3
           ],
           "exp": "La reference nasce da valore misurato e da un cliente soddisfatto, con consenso e canale chiari. Chiederla in un momento di tensione danneggia la relazione."
         }
@@ -571,7 +571,7 @@
           "{{w14.sugen}}",
           "I user group sono indipendenti da SAP: rappresentano i clienti, danno feedback sulla roadmap e organizzano eventi. Per un AE sono una fonte di ascolto, non un canale di vendita.",
           "SAP Community è la piattaforma pubblica per domande, blog e risorse; SAP Learning offre percorsi di formazione. Sono utili a te e ai clienti per l'adozione.",
-          "In Italia, se un cliente chiede dove confrontarsi con altri utenti, indica SAP Community, i gruppi del network SUGEN e gli eventi SAP Italia; per un user group italiano verifica prima con SAP Italia."
+          "Se un cliente chiede dove confrontarsi con altri utenti indica SAP Community, gli eventi SAP Italia e, per chi opera in più paesi, i user group del network SUGEN; per un gruppo italiano verifica prima con SAP Italia."
         ],
         "ae": "Se un cliente DACH è in DSAG, chiedi quali sono le sue priorità di roadmap: ti dicono cosa conta per gli utenti. Ascolta, non vendere durante gli eventi del gruppo."
       },
@@ -614,9 +614,9 @@
           },
           "o": [
             "SAP Community, user group ed eventi di settore; sul gruppo italiano chiedo a SAP Italia",
-            "Nei corsi a pagamento di SAP, dove si incontrano le aziende dello stesso settore",
             "Esiste il forum del tuo partner, che raccoglie le domande degli utenti SAP",
-            "Non esistono comunità di utenti SAP in Europa, quindi conviene chiedere ai colleghi"
+            "Non esistono comunità di utenti SAP in Europa, quindi conviene chiedere ai colleghi",
+            "Nei corsi a pagamento di SAP, dove si incontrano le aziende dello stesso settore"
           ],
           "a": 0,
           "exp": "Le comunità esistono, ma per un user group italiano specifico non dare per scontato: verifica con SAP Italia prima di citarlo. Inventare luoghi o negare l'esistenza di comunità danneggia la tua credibilità."
@@ -625,24 +625,24 @@
           "t": "mcq",
           "q": "Qual è l'approccio corretto dell'AE ai user group?",
           "o": [
-            "Ascolto le priorità degli utenti e le porto nel dialogo sulla roadmap",
             "Uso gli eventi come elenco di lead da contattare con una proposta commerciale mirata",
-            "Li evito del tutto, perché sono indipendenti da SAP e non riguardano il mio lavoro",
-            "Sostengo economicamente il gruppo per influenzarne le posizioni sulla roadmap SAP"
+            "Ascolto le priorità degli utenti e le porto nel dialogo sulla roadmap",
+            "Sostengo economicamente il gruppo per influenzarne le posizioni sulla roadmap SAP",
+            "Li evito del tutto, perché sono indipendenti da SAP e non riguardano il mio lavoro"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "I user group sono una fonte di feedback: ascoltare e riportare le priorità è utile a tutti. Usarli come lead list o tentare di influenzarli danneggia la fiducia e può creare problemi di compliance."
         },
         {
           "t": "fill",
           "q": "SUGEN è nato nel ___ per coordinare i user group con SAP.",
           "o": [
-            "2007",
             "1991",
+            "2015",
             "1988",
-            "2015"
+            "2007"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "SUGEN è stato costituito nel 2007. Il 1991 è l'anno di fondazione di ASUG e il 1988 quello di UKISUG: non confondere la rete con i suoi membri."
         }
       ]
@@ -699,40 +699,40 @@
             "say": "Per ottenere l'ordine posso pagare una commissione extra a un consulente locale, nessuno farà domande."
           },
           "o": [
-            "Mi fermo e coinvolgo Compliance e Legal: commissioni anomale a terzi sono rischiose",
-            "Procedo se la commissione è documentata in contratto e coerente con il servizio dichiarato",
             "Procedo se l'importo è contenuto, perché sotto una certa soglia il rischio è trascurabile",
+            "Procedo se la commissione è documentata in contratto e coerente con il servizio dichiarato",
+            "Mi fermo e coinvolgo Compliance e Legal: commissioni anomale a terzi sono rischiose",
             "Lascio gestire al partner locale senza conoscere i dettagli, così non sono coinvolto"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "Pagamenti anomali a intermediari sono il classico schema di corruzione: ti fermi e chiedi a Compliance e Legal. Documentare, minimizzare l'importo o delegare senza controllo non ti protegge."
         },
         {
           "t": "mcq",
           "q": "Che ruolo ha il modello organizzativo 231 per un'azienda italiana?",
           "o": [
-            "Regole e controlli che, se idonei e attuati, riducono o escludono la responsabilità",
             "Un obbligo di legge limitato alle imprese pubbliche o a partecipazione statale diretta",
+            "Un'assicurazione obbligatoria che copre le sanzioni delle persone fisiche e dell'ente",
             "Un certificato rilasciato dal tribunale dopo una verifica sull'organizzazione dell'azienda",
-            "Un'assicurazione obbligatoria che copre le sanzioni delle persone fisiche e dell'ente"
+            "Regole e controlli che, se idonei e attuati, riducono o escludono la responsabilità"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "Il modello 231 è l'insieme di regole e controlli (mappatura dei rischi, protocolli, organismo di vigilanza, segnalazioni) che, se idoneo ed efficace, può escludere o ridurre la responsabilità dell'ente."
         },
         {
           "t": "multi",
           "q": "Quali sono segnali di rischio corruttivo in una trattativa?",
           "o": [
-            "Richiesta di pagamenti in contanti o verso paesi non collegati",
-            "Intermediario con legami con un decisore pubblico",
-            "Commissioni sproporzionate rispetto al servizio",
             "Sconto previsto da una policy approvata",
-            "Contratto firmato con tutte le approvazioni"
+            "Intermediario con legami con un decisore pubblico",
+            "Richiesta di pagamenti in contanti o verso paesi non collegati",
+            "Contratto firmato con tutte le approvazioni",
+            "Commissioni sproporzionate rispetto al servizio"
           ],
           "a": [
-            0,
             1,
-            2
+            2,
+            4
           ],
           "exp": "Pagamenti anomali, legami con decisori pubblici e commissioni sproporzionate sono segnali classici. Uno sconto approvato e un contratto con tutte le approvazioni sono processi regolari."
         }
@@ -762,8 +762,8 @@
           },
           "o": [
             "Non a decisione aperta: propongo di rimandare a dopo la decisione",
-            "Organizzo la cena con la pre-approvazione di Compliance, anche a decisione aperta",
             "Accetto l'idea ma pago io di tasca mia, così il costo non risulta a carico di SAP",
+            "Organizzo la cena con la pre-approvazione di Compliance, anche a decisione aperta",
             "Propongo un incontro informale senza registrarlo, per non creare formalità inutili"
           ],
           "a": 0,
@@ -783,12 +783,12 @@
             "say": "Mi inviteresti al vostro evento a Berlino con la mia famiglia?"
           },
           "o": [
-            "Non posso invitare familiari né coprire spese estranee al contenuto: chiedo a Compliance",
             "Certo, la famiglia è la benvenuta: sarà un'occasione per consolidare la relazione",
+            "Posso invitare i familiari se partecipano ad almeno una sessione dell'evento",
             "Posso coprire il viaggio dei familiari se lo registro come spesa di rappresentanza",
-            "Posso invitare i familiari se partecipano ad almeno una sessione dell'evento"
+            "Non posso invitare familiari né coprire spese estranee al contenuto: chiedo a Compliance"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "Con un ente pubblico l'ospitalità deve essere strettamente legata al contenuto professionale, senza vantaggi per familiari. Le altre risposte aggirano la regola con una formula contabile o formale."
         },
         {
@@ -811,16 +811,16 @@
             "say": "Registra tutto, ma bastano due righe."
           },
           "o": [
-            "Lo scopo di business",
-            "Il valore stimato",
-            "Partecipanti e organizzazione di appartenenza",
             "Una nota vaga come «relazione»",
-            "Solo il nome del manager"
+            "Il valore stimato",
+            "Lo scopo di business",
+            "Solo il nome del manager",
+            "Partecipanti e organizzazione di appartenenza"
           ],
           "a": [
-            0,
             1,
-            2
+            2,
+            4
           ],
           "exp": "Scopo, valore e partecipanti rendono l'invito verificabile. Una nota vaga o il solo nome del manager non permettono a Compliance di valutare."
         }
@@ -845,12 +845,12 @@
           "t": "mcq",
           "q": "Qual è lo scopo legittimo delle consultazioni preliminari di mercato?",
           "o": [
-            "Informare la stazione appaltante sul mercato con trasparenza e parità di trattamento",
             "Concordare in anticipo con il fornitore le condizioni che la gara dovrà poi rispecchiare",
             "Ottenere un affidamento diretto del contratto, evitando i tempi di una procedura di gara",
-            "Costruire un capitolato con requisiti coerenti con la soluzione di un operatore specifico"
+            "Costruire un capitolato con requisiti coerenti con la soluzione di un operatore specifico",
+            "Informare la stazione appaltante sul mercato con trasparenza e parità di trattamento"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "Le consultazioni servono a informare l'amministrazione sul mercato, nel rispetto di trasparenza e parità di trattamento. Usarle per preordinare l'esito o orientare il bando è scorretto e può portare all'esclusione."
         },
         {
@@ -867,24 +867,24 @@
             "say": "Potete aiutarci a scrivere il capitolato in modo che sia adatto alla vostra soluzione?"
           },
           "o": [
-            "Non influenzo i requisiti a favore di SAP: uso consultazioni formali e coinvolgo Legal",
-            "Certo, scriviamo insieme il capitolato così da evitare contestazioni in fase di gara",
             "Posso bozzare io i requisiti tecnici, purché nel capitolato non compaia il nome di SAP",
-            "Ti mando il capitolato di un altro cliente da usare come base per la vostra gara"
+            "Ti mando il capitolato di un altro cliente da usare come base per la vostra gara",
+            "Non influenzo i requisiti a favore di SAP: uso consultazioni formali e coinvolgo Legal",
+            "Certo, scriviamo insieme il capitolato così da evitare contestazioni in fase di gara"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "Scrivere o orientare il capitolato falsa la concorrenza anche se il nome di SAP non compare. La strada corretta sono consultazioni formali e il coinvolgimento di Legal."
         },
         {
           "t": "fill",
           "q": "Il Codice dei contratti pubblici attualmente in vigore è il D.Lgs. ___.",
           "o": [
-            "36/2023",
             "163/2006",
-            "50/2016",
-            "231/2001"
+            "231/2001",
+            "36/2023",
+            "50/2016"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "Il Codice attuale è il D.Lgs. 36/2023, modificato dal correttivo del 2024. Il 50/2016 e il 163/2006 sono i codici precedenti; il 231/2001 riguarda la responsabilità degli enti."
         },
         {
@@ -948,9 +948,9 @@
           },
           "o": [
             "Prima verifico provenienza, base giuridica e informativa con Legal e Privacy",
+            "Carico i contatti nel CRM e valutiamo la compliance dopo i primi risultati",
             "Procedo: sono contatti B2B e quindi il GDPR non si applica alle email aziendali",
-            "Procedo, ma inserisco il link di opt-out dalla seconda email della sequenza",
-            "Carico i contatti nel CRM e valutiamo la compliance dopo i primi risultati"
+            "Procedo, ma inserisco il link di opt-out dalla seconda email della sequenza"
           ],
           "a": 0,
           "exp": "Una lista acquistata va verificata prima dell'uso: provenienza, base giuridica, informativa e canale. Anche le email aziendali nominative sono dati personali e l'opt-out deve esserci fin dal primo messaggio."
@@ -969,12 +969,12 @@
             "say": "Smettete di scrivermi."
           },
           "o": [
+            "Aspetto tre mesi e riprovo con un messaggio diverso, magari su un altro canale",
             "Registro l'opposizione nel CRM e interrompo il marketing diretto",
             "Gli scrivo un'ultima volta per capire il motivo e provare a recuperare la relazione",
-            "Lo sposto in un'altra lista di nurturing, dove riceve comunicazioni meno frequenti",
-            "Aspetto tre mesi e riprovo con un messaggio diverso, magari su un altro canale"
+            "Lo sposto in un'altra lista di nurturing, dove riceve comunicazioni meno frequenti"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "L'opposizione al marketing diretto va rispettata: registri e smetti. Nuovi tentativi su altre liste o canali violano il diritto dell'interessato."
         },
         {
@@ -997,11 +997,11 @@
             "say": "Nel CRM metto note sulle opinioni politiche di un decisore: potrebbe servire."
           },
           "o": [
+            "Annotare fonte e data dei contatti",
             "Registrare solo dati pertinenti e necessari",
             "Evitare dati sensibili e commenti non professionali",
-            "Annotare fonte e data dei contatti",
-            "Aggiungere informazioni personali non pertinenti",
-            "Conservare tutti i dati per un tempo indefinito"
+            "Conservare tutti i dati per un tempo indefinito",
+            "Aggiungere informazioni personali non pertinenti"
           ],
           "a": [
             0,
@@ -1053,24 +1053,24 @@
             "say": "Usa l'AI per scrivere in cinque minuti la battlecard sui competitor e mandala al cliente."
           },
           "o": [
-            "Uso l'AI per la bozza, verifico ogni affermazione con fonti e uso materiali approvati",
             "La invio dopo una rilettura veloce: l'AI conosce bene i prodotti dei competitor",
             "La invio dichiarando che è stata scritta da un esperto di competitor, per credibilità",
+            "Uso l'AI per la bozza, verifico ogni affermazione con fonti e uso materiali approvati",
             "Chiedo all'AI di aggiungere esempi di clienti reali, per renderla più convincente"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "L'AI può accelerare la bozza, ma affermazioni sui competitor e materiali per clienti richiedono verifica, fonti e approvazione. Attribuirla a un esperto o aggiungere clienti reali è scorretto."
         },
         {
           "t": "fill",
           "q": "Dopo il Digital Omnibus on AI, i sistemi ad alto rischio dell'Allegato III si applicano dal ___.",
           "o": [
-            "{{w14.eu_ai_act_annex3_date}}",
-            "2 agosto 2026",
             "2 agosto 2028",
-            "2 febbraio 2027"
+            "2 febbraio 2027",
+            "2 agosto 2026",
+            "{{w14.eu_ai_act_annex3_date}}"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "Il rinvio ha spostato gli obblighi dell'Allegato III al 2 dicembre 2027; l'Allegato I (prodotti regolamentati) al 2 agosto 2028. Il 2 agosto 2026 era la data originaria. Verifica con Legal quali obblighi sono già applicabili."
         },
         {
@@ -1164,8 +1164,8 @@
           "o": [
             "Ti indirizzo al Trust Center o al team security per la versione valida",
             "Te lo mando dal mio archivio: è lo stesso documento che trovi nei materiali pubblici",
-            "Ti confermo a voce che copriamo tutti i servizi, così velocizziamo il processo",
-            "Ti dico che per il tuo caso non serve, perché la certificazione ISO è sufficiente"
+            "Ti dico che per il tuo caso non serve, perché la certificazione ISO è sufficiente",
+            "Ti confermo a voce che copriamo tutti i servizi, così velocizziamo il processo"
           ],
           "a": 0,
           "exp": "I report vanno forniti dal canale ufficiale per garantire versione valida, scope corretto e NDA. Inviare copie vecchie o rassicurare a voce espone il cliente e SAP."
@@ -1179,9 +1179,9 @@
           },
           "o": [
             "Raccolgo la richiesta e la porto a Legal e Security per una risposta contrattuale",
-            "Rispondo a memoria: i dati restano in Europa e i subprocessor sono tutti europei",
             "Rispondo che il tema è coperto dalla certificazione ISO e non serve altro",
-            "Rimando la domanda alla fase di firma del contratto, quando sarà più concreta"
+            "Rimando la domanda alla fase di firma del contratto, quando sarà più concreta",
+            "Rispondo a memoria: i dati restano in Europa e i subprocessor sono tutti europei"
           ],
           "a": 0,
           "exp": "Subprocessor e trasferimenti hanno una risposta tecnica e contrattuale (DPA) che spetta a Legal e Security. Rispondere a memoria o rimandare espone a promesse sbagliate."
@@ -1190,16 +1190,16 @@
           "t": "multi",
           "q": "Quali sono domande utili sulla sovranità del dato?",
           "o": [
-            "Dove risiedono dati e backup?",
-            "Chi amministra e supporta il servizio e da dove?",
             "Quali subprocessor e trasferimenti extra-UE esistono?",
             "Quanto sconto è previsto sulla sicurezza?",
-            "Di che colore è il data center?"
+            "Dove risiedono dati e backup?",
+            "Di che colore è il data center?",
+            "Chi amministra e supporta il servizio e da dove?"
           ],
           "a": [
             0,
-            1,
-            2
+            2,
+            4
           ],
           "exp": "Residenza, controllo operativo e subprocessor definiscono il profilo di sovranità. Sconti e colore del data center non c'entrano."
         }
@@ -1235,12 +1235,12 @@
           "t": "mcq",
           "q": "Quale fonte usi per verificare lo stato di una funzione SAP (disponibile, beta, roadmap)?",
           "o": [
-            "Roadmap Explorer e la documentazione ufficiale, con data di consultazione",
+            "Una presentazione dell'anno scorso, salvata nella cartella condivisa del team",
             "Il ricordo di un collega che ha seguito l'annuncio durante l'ultimo evento",
             "Il materiale di un partner che ha già venduto la funzione a un altro cliente",
-            "Una presentazione dell'anno scorso, salvata nella cartella condivisa del team"
+            "Roadmap Explorer e la documentazione ufficiale, con data di consultazione"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "Lo stato di una funzione cambia: la fonte ufficiale aggiornata e la data di consultazione ti proteggono dal promettere ciò che non è disponibile."
         },
         {
@@ -1257,12 +1257,12 @@
             "say": "L'evento è finito: cosa ci portiamo dai clienti questa settimana?"
           },
           "o": [
-            "Rileggo gli annunci su fonti ufficiali e aggiorno schede e battlecard con data e stato",
+            "Copio le slide dell'evento nei miei materiali senza controllare stato e date",
             "Aspetto che il team di marketing mi invii il riepilogo e uso quello per i clienti",
             "Cito gli annunci ai clienti come funzioni già disponibili, per dare un'idea di innovazione",
-            "Copio le slide dell'evento nei miei materiali senza controllare stato e date"
+            "Rileggo gli annunci su fonti ufficiali e aggiorno schede e battlecard con data e stato"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "Dopo un evento molti annunci sono roadmap o early adopter. Ricontrolli sulle fonti ufficiali e aggiorni con data e stato, per non promettere ciò che non è disponibile."
         },
         {
@@ -1314,24 +1314,24 @@
             "say": "Dammi in anticipo i prezzi che farà SAP al cliente, così preparo la mia offerta."
           },
           "o": [
-            "Non condivido condizioni riservate: ci allineiamo su ruoli e perimetro",
             "Ti anticipo i prezzi di massima, così prepari un'offerta coerente con la nostra",
+            "Ti mando la bozza di offerta SAP appena la finalizzo, senza altre condizioni",
             "Ti dico quale sconto abbiamo concordato con altri partner per lo stesso progetto",
-            "Ti mando la bozza di offerta SAP appena la finalizzo, senza altre condizioni"
+            "Non condivido condizioni riservate: ci allineiamo su ruoli e perimetro"
           ],
-          "a": 0,
+          "a": 3,
           "exp": "Le condizioni commerciali riservate non si condividono con i partner. Ci si allinea su ruoli e perimetro attraverso i canali ufficiali."
         },
         {
           "t": "fill",
           "q": "Foundational è uno dei tre Success Plan, insieme ad Advanced e ___.",
           "o": [
-            "Max",
             "Gold",
+            "Max",
             "Premium",
             "Platinum"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "I tre piani del portafoglio 2026 sono Foundational, Advanced e Max. Gold e Platinum appartengono a vecchie strutture di livelli dei partner."
         },
         {
@@ -1348,28 +1348,28 @@
             "say": "Posso ricevere una vostra reference da un'azienda del mio settore?"
           },
           "o": [
-            "Chiedo il consenso al cliente e uso i canali ufficiali SAP prima di condividere nomi",
             "Ti do il nome di un cliente soddisfatto: so che ne sarebbe contento e lo conosco bene",
+            "Chiedo il consenso al cliente e uso i canali ufficiali SAP prima di condividere nomi",
             "Ti propongo un caso anonimizzato ma con i numeri reali, così che sia identificabile",
             "Ti dico che le reference non sono disponibili in Italia per ragioni di riservatezza"
           ],
-          "a": 0,
+          "a": 1,
           "exp": "Nomi, dati e numeri di un cliente richiedono consenso e canali ufficiali. Un caso anonimizzato ma identificabile viola ugualmente la riservatezza."
         },
         {
           "t": "multi",
           "q": "Quali affermazioni sulla compliance anticorruzione sono corrette?",
           "o": [
-            "Le terze parti vanno selezionate con una due diligence",
+            "Segnalare i dubbi a Compliance è doveroso",
             "Regali e ospitalità vanno pre-approvati e registrati",
+            "Le terze parti vanno selezionate con una due diligence",
             "Una soglia bassa dispensa dalla registrazione",
-            "Un enforcement più debole elimina il rischio per l'azienda",
-            "Segnalare i dubbi a Compliance è doveroso"
+            "Un enforcement più debole elimina il rischio per l'azienda"
           ],
           "a": [
             0,
             1,
-            4
+            2
           ],
           "exp": "Due diligence, pre-approvazione e segnalazione sono pratiche corrette. Una soglia bassa non dispensa dalla registrazione e l'enforcement variabile non elimina il rischio."
         },
@@ -1416,12 +1416,12 @@
             "say": "L'AI Act non si applica più perché è stato rinviato, giusto?"
           },
           "o": [
-            "Non è abrogato: alcune scadenze slittano; verifico con Legal quali obblighi valgono",
             "Sì, il rinvio lo ha reso inapplicabile per tutte le aziende fino alla fine del 2027",
-            "Sì, è stato sostituito da una nuova norma che riguarda i fornitori di modelli",
-            "No, si applica già per intero e il rinvio ha riguardato le sanzioni"
+            "No, si applica già per intero e il rinvio ha riguardato le sanzioni",
+            "Non è abrogato: alcune scadenze slittano; verifico con Legal quali obblighi valgono",
+            "Sì, è stato sostituito da una nuova norma che riguarda i fornitori di modelli"
           ],
-          "a": 0,
+          "a": 2,
           "exp": "Il Digital Omnibus on AI ha spostato alcune scadenze (per esempio l'Allegato III) ma non ha abrogato il regolamento. Gli obblighi vanno verificati con Legal caso per caso."
         },
         {
@@ -1468,9 +1468,9 @@
           },
           "o": [
             "Non confermo stime non mie: chiedo al partner una proposta scritta e concordiamo i ruoli",
-            "Confermo: lo conosco bene e so che rispetta tempi e costi meglio di altri partner",
             "Dico che i partner promettono troppo e propongo di affidare il progetto ai servizi SAP",
-            "Propongo io una data di go-live, così il cliente ha un riferimento chiaro per pianificare"
+            "Propongo io una data di go-live, così il cliente ha un riferimento chiaro per pianificare",
+            "Confermo: lo conosco bene e so che rispetta tempi e costi meglio di altri partner"
           ],
           "a": 0,
           "exp": "Le stime di delivery sono del partner e vanno formalizzate per iscritto. Confermarle a nome tuo o proporre date proprie ti espone a promesse che non controlli."

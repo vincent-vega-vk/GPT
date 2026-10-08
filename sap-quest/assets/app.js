@@ -541,7 +541,7 @@
       var prog = assess ? assess.step / assess.total : sess.progress();
       var withHearts = !assess;
       var body = h('div', { 'class': 'stack', 'aria-live': 'polite' });
-      body.appendChild(h('div', { 'class': 'q-label', text: assess ? 'Domanda ' + (assess.step + 1) + ' di ' + assess.total : typeLabel(p) }));
+      body.appendChild(h('div', { 'class': 'q-label', text: assess ? 'Domanda ' + (assess.step + 1) + ' di ' + assess.total + ' · ' + typeLabel(p) : typeLabel(p) }));
       if (p.ctx) body.appendChild(h('div', { 'class': 'ctx' }, h('div', { 'class': 'av', 'aria-hidden': 'true', text: '💬' }), h('div', { 'class': 'say' }, h('div', { 'class': 'who', text: p.ctx.who }), h('div', { text: p.ctx.say }))));
       var qEl;
       if (p.t === 'fill') {
@@ -873,7 +873,7 @@
     sfx('win'); confetti();
   }
   function radarSVG(res) {
-    var ws = PLAYABLE.filter(function (w) { return res[w.id]; }), N = ws.length, cx = 150, cy = 150, R = 92;
+    var ws = PLAYABLE.filter(function (w) { return res[w.id]; }), N = ws.length, cx = 150, cy = 150, R = 106;
     function pt(i, f) { var a = -Math.PI / 2 + i * 2 * Math.PI / N; return [cx + Math.cos(a) * R * f, cy + Math.sin(a) * R * f]; }
     function poly(f) { return ws.map(function (_, i) { return pt(i, f).map(function (v) { return v.toFixed(1); }).join(','); }).join(' '); }
     var svg = sv('svg', { 'class': 'radar', viewBox: '0 0 300 300', width: '100%', role: 'img', 'aria-label': 'Radar delle competenze per area' });
@@ -883,7 +883,7 @@
     svg.appendChild(sv('polygon', { 'class': 'area', points: pts }));
     ws.forEach(function (w, i) {
       var q = pt(i, (res[w.id].score + 0.3) / 3.3); svg.appendChild(sv('circle', { 'class': 'pt', cx: q[0].toFixed(1), cy: q[1].toFixed(1), r: 4 }));
-      var l = pt(i, 1.2), tx = sv('text', { x: l[0].toFixed(1), y: (l[1] + 5).toFixed(1), 'text-anchor': 'middle', 'font-size': 16 }); tx.textContent = w.icon; svg.appendChild(tx);
+      var l = pt(i, 1.17), tx = sv('text', { x: l[0].toFixed(1), y: (l[1] + 5).toFixed(1), 'text-anchor': 'middle', 'font-size': 16 }); tx.textContent = w.icon; svg.appendChild(tx);
     });
     return svg;
   }

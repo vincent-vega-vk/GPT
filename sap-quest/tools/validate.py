@@ -93,6 +93,8 @@ def check_facts(path, facts, rep, prefix=None):
         src = f.get("source", "")
         if isinstance(src, str) and not re.match(r"^https?://[^\s]+\.[^\s]+$", src):
             rep.err(w, "source deve essere un URL http(s) reale")
+        if isinstance(src, str) and re.match(r"^https?://[^/]+/?$", src):
+            rep.warn(w, "source è solo la home di un sito: indica la pagina precisa (altrimenti il fatto non è verificabile)")
         if valid_date(f.get("checked")) and valid_date(f.get("staleAfter")):
             if f["staleAfter"] < f["checked"]:
                 rep.warn(w, "staleAfter precede checked: il fatto nasce già scaduto")

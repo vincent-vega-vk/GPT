@@ -110,13 +110,13 @@
   },
   "w13.veeva_vault_crm": {
     "label": "Veeva: Vault CRM e migrazione dalla piattaforma Salesforce",
-    "value": "Veeva sta portando la propria offerta CRM per le life sciences sulla piattaforma proprietaria Vault CRM e migrando la base clienti dal CRM basato su piattaforma Salesforce; le date di fine supporto della versione precedente sono riportate in modo discordante (2029 o 2030).",
+    "value": "Veeva è un fornitore di cloud software verticale per le life sciences (CRM e altre applicazioni sulla piattaforma Vault, per esempio in ambito regolatorio e qualità). Sta portando l'offerta CRM su Vault CRM, piattaforma proprietaria, e migrando la base clienti dal CRM basato su piattaforma Salesforce; le date di fine supporto della versione precedente sono riportate in modo discordante (2029 o 2030).",
     "asOf": "2026-03-04",
     "checked": "2026-10-08",
     "staleAfter": "2026-12-31",
     "source": "https://www.nasdaq.com/articles/veeva-systems-lifts-outlook-crm-wins",
     "confidence": "low",
-    "note": "Fonti secondarie, in parte di una società che vende servizi di migrazione. Il comunicato Veeva non era raggiungibile: riverificare su earnings e comunicati ufficiali Veeva."
+    "note": "Fonti secondarie, in parte di una società che vende servizi di migrazione. Nei risultati compaiono Vault CRM e un agente per le approvazioni regolatorie; l'elenco completo delle aree Vault è conoscenza generale non verificata qui. Riverificare su earnings e comunicati ufficiali Veeva."
   },
   "w13.rimini_2040": {
     "label": "Rimini Street: supporto SAP ECC fino al 2040 (dichiarazione del fornitore)",

@@ -74,10 +74,10 @@
     "value": "SAP Batch Release Hub for Life Sciences",
     "asOf": "2026-10-08",
     "checked": "2026-10-08",
-    "staleAfter": "2026-11-08",
-    "source": "https://www.sap.com/",
-    "confidence": "low",
-    "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso."
+    "staleAfter": "2027-01-08",
+    "source": "https://www.sap.com/products/scm/batch-release-hub.html",
+    "confidence": "primary",
+    "note": "Pagina prodotto ufficiale SAP, letta solo tramite sintesi di ricerca: SaaS su cloud pubblico con integrazione nativa a S/4HANA; prezzi non pubblici (su richiesta). Una funzione AI basata su Joule per il rilascio lotti è descritta in una pagina separata."
   },
   "w10.autonomous_rgm": {
     "label": "Scenario AI di industria per il consumer products (Sapphire 2026)",
