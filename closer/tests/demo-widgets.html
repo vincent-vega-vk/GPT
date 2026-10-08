@@ -96,6 +96,8 @@
   const CK_D2 = { days: 7, of: 11, label: 'Giorni alla firma', sub: 'Il board si riunisce il 14 novembre: ogni giorno perso a monte lo recuperi dopo.' };
   const CK_L = { days: 23, of: 90, label: 'Giorni alla chiusura del trimestre', sub: 'Tre trattative aperte.' };
   const CK_L2 = { days: 4, of: 90, urgent: true, label: 'Giorni alla chiusura del trimestre', sub: 'Tre trattative aperte.' };
+  const CK_O = { label: 'Termine scaduto', time: '18:30', deadline: '18:00', pct: 7, urgent: true, sub: 'Valori fuori scala: la percentuale viene riportata a 100%.' };
+  const CK_O2 = { days: 1500, of: 90, label: 'Giorni alla chiusura', sub: 'Oltre mille giorni il quadrante mostra 999+.' };
 
   /* — foglio di negoziazione — */
   const TS_A = { cols: ['Richiesta', 'Nostra posizione', 'Stato'], rows: [
@@ -131,6 +133,8 @@
     { title: 'Finanza', cards: [{ t: 'Piano di pagamento', st: 'doing', k: 'x7' }] },
   ] };
   const BD_XB = mut(BD_X, (d) => { d.cols[0].cards[1].st = 'doing'; d.cols[2].cards.push({ t: 'Albo fornitori', st: 'todo', k: 'x8' }); d.cols[1].cards[0].st = 'done'; });
+  const BD_5 = { cols: ['Sicurezza', 'Legale', 'Acquisti', 'Finanza', 'IT'].map((t, i) => ({ title: t, cards: [{ t: 'Attività ' + (i + 1) + 'a', st: ['done', 'doing', 'todo', 'blocked', 'doing'][i], k: 'f' + i + 'a' }, { t: 'Attività ' + (i + 1) + 'b', st: 'todo', k: 'f' + i + 'b' }] })) };
+  const BD_5B = mut(BD_5, (d) => { d.cols[1].cards[0].st = 'done'; d.cols[3].cards[0].st = 'doing'; });
   const BD_2 = { cols: [BD_A.cols[0], BD_A.cols[1]] };
   const BD_2B = mut(BD_2, (d) => { d.cols[0].cards[0].st = 'done'; d.cols[1].cards[2].st = 'blocked'; d.cols[1].cards[1].st = 'doing'; });
 
@@ -155,6 +159,7 @@
     { k: 'e', label: 'Senza grafico', value: 'Alto', tone: 'warn', delta: 'in salita' },
     { k: 'f', label: 'Valore testuale lungo', value: 'Quarto trimestre consecutivo', tone: 'neutral', delta: '+1', spark: [1, 2, 3, 4] },
   ];
+  KP_X.push({ k: 'g', label: 'Oltre l’obiettivo', value: '250%', delta: '+120', tone: 'good', spark: [10, 100, 250], target: '100%' });
   const KP_XB = mut(KP_X, (d) => { d[1].value = '4'; d[1].delta = '+7'; d[1].tone = 'good'; d[1].spark.push(4); d[2].value = '100'; d[2].delta = '=' ; d[4].value = 'Medio'; d[4].tone = 'neutral'; });
 
   /* — CRM vs realtà — */
@@ -230,23 +235,32 @@
   /* ───────────── catalogo ───────────── */
   const TYPES = [
     { type: 'stakeholders', title: 'Mappa del potere', vars: [
-      ['Vuoto', [], SH_A], ['Tipico', SH_A, SH_B], ['Estremo', SH_X, SH_XB] ] },
+      ['Vuoto', [], SH_A], ['Tipico', SH_A, SH_B], ['Estremo', SH_X, SH_XB],
+      ['Malformato', [null, 'testo', 42, {}, { name: 'Solo nome' }, { who: 'x', stance: 'boh', role: 'Ruolo senza nome' }], null] ] },
     { type: 'clock', title: 'Fine trimestre', vars: [
-      ['Vuoto', null, CK_A], ['Tipico · ore', CK_A, CK_B], ['Estremo · ore', CK_XA, CK_XB], ['Giorni', CK_D, CK_D2], ['Giorni · 90', CK_L, CK_L2] ] },
+      ['Vuoto', null, CK_A], ['Tipico · ore', CK_A, CK_B], ['Estremo · ore', CK_XA, CK_XB], ['Giorni', CK_D, CK_D2], ['Giorni · 90', CK_L, CK_L2], ['Fuori scala', CK_O, CK_O2],
+      ['Malformato', { time: '99:99', deadline: 'domani', pct: 'molto', urgent: 'sì' }, { time: '99:99', deadline: 'domani', pct: 'molto', urgent: 'sì' }] ] },
     { type: 'termsheet', title: 'Foglio di negoziazione', vars: [
-      ['Vuoto', { cols: ['Richiesta', 'Nostra posizione', 'Stato'], rows: [] }, TS_A], ['Tipico', TS_A, TS_B], ['Estremo', TS_X, TS_XB] ] },
+      ['Vuoto', { cols: ['Richiesta', 'Nostra posizione', 'Stato'], rows: [] }, TS_A], ['Tipico', TS_A, TS_B], ['Estremo', TS_X, TS_XB],
+      ['Malformato', { rows: [null, {}, { k: 'Sconto' }, { k: 'Durata', ask: '60 mesi', st: 'boh' }] }, null] ] },
     { type: 'board', title: 'Avanzamento del processo', vars: [
-      ['Vuoto', { cols: [] }, BD_A], ['Tipico · 3 corsie', BD_A, BD_B], ['Due corsie', BD_2, BD_2B], ['Estremo · 4 corsie', BD_X, BD_XB] ] },
+      ['Vuoto', { cols: [] }, BD_A], ['Tipico · 3 corsie', BD_A, BD_B], ['Due corsie', BD_2, BD_2B], ['Estremo · 4 corsie', BD_X, BD_XB], ['Cinque corsie', BD_5, BD_5B],
+      ['Malformato', { cols: [null, { title: 'Senza carte' }, { title: 'Carte strane', cards: [null, {}, { t: 'Solo titolo' }, { t: 'Stato ignoto', st: 'boh' }] }] }, null] ] },
     { type: 'kpis', title: 'Indicatori', vars: [
-      ['Vuoto', [], KP_A], ['Tipico', KP_A, KP_B], ['Estremo', KP_X, KP_XB] ] },
+      ['Vuoto', [], KP_A], ['Tipico', KP_A, KP_B], ['Estremo', KP_X, KP_XB],
+      ['Malformato', [null, {}, { label: 'Solo etichetta' }, { value: '12', spark: ['x', null, 3] }], null] ] },
     { type: 'scorecard', title: 'CRM vs realtà', vars: [
-      ['Vuoto', [], SC_A], ['Tipico', SC_A, SC_B], ['Estremo', SC_X, SC_XB] ] },
+      ['Vuoto', [], SC_A], ['Tipico', SC_A, SC_B], ['Estremo', SC_X, SC_XB],
+      ['Malformato', [null, {}, { label: 'Solo etichetta' }, { label: 'Stato ignoto', crm: 'a', real: 'b', st: 'boh' }], null] ] },
     { type: 'timeline', title: 'Percorso verso la firma', vars: [
-      ['Vuoto', { items: [] }, TL_A], ['Tipico', TL_A, TL_B], ['Estremo', TL_X, TL_XB] ] },
+      ['Vuoto', { items: [] }, TL_A], ['Tipico', TL_A, TL_B], ['Estremo', TL_X, TL_XB],
+      ['Malformato', { items: [null, {}, { label: 'Solo etichetta' }, { t: 'Ora', label: 'Stato ignoto', st: 'boh' }] }, null] ] },
     { type: 'checklist', title: 'Requisiti di gara', vars: [
-      ['Vuoto', [], CL_A], ['Tipico', CL_A, CL_B], ['Estremo', CL_X, CL_XB] ] },
+      ['Vuoto', [], CL_A], ['Tipico', CL_A, CL_B], ['Estremo', CL_X, CL_XB],
+      ['Malformato', [null, {}, { t: 'Solo testo' }, { t: 'Stato ignoto', st: 'boh', note: 'Con nota' }], null] ] },
     { type: 'scoreboard', title: 'Punteggio stimato', vars: [
-      ['Vuoto', { rows: [] }, SB_A], ['Tipico', SB_A, SB_B], ['Estremo', SB_X, SB_XB] ] },
+      ['Vuoto', { rows: [] }, SB_A], ['Tipico', SB_A, SB_B], ['Estremo', SB_X, SB_XB],
+      ['Malformato', { rows: [null, {}, { label: 'Senza numeri' }, { label: 'Stringhe', max: '40', us: '31', them: 'boh' }], total: 'x' }, null] ] },
   ];
 
   /* ───────────── rendering ───────────── */

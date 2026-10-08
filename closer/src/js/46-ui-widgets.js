@@ -1,6 +1,6 @@
 /* CLOSER · widget firma del cruscotto (spec §10)
    CL.ui.widget(type, title, data, prevData) → HTMLElement
-   Dipende solo da CL.ui.h e CL.ui.initials. Stili in src/widgets.css.
+   Dipende solo da CL.ui.h. Stili in src/widgets.css.
    Le righe cambiate rispetto a prevData ricevono la classe .chg per 1,8 s. */
 (function (g) {
   'use strict';
@@ -9,11 +9,20 @@
   const CHG_MS = 1800;
 
   /* ───────────── utilità ───────────── */
-  const T = (x) => (x == null ? '' : String(x));
+  /* testo sicuro: solo stringhe e numeri finiti; oggetti, array, booleani e null diventano '' */
+  const T = (x) => (typeof x === 'string' ? x.trim() : typeof x === 'number' && isFinite(x) ? x.toLocaleString('it-IT', { maximumFractionDigits: 2, useGrouping: false }) : '');
   const A = (x) => (Array.isArray(x) ? x : []);
+  const isObj = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);
+  const has = (r, ...ks) => ks.some((k) => T(r[k]) !== '');
+  /* righe valide di un elenco: accetta l’array diretto oppure { [key]: array }; scarta tutto ciò che non è un oggetto con contenuto */
+  const rowsOf = (x, key, valid) => (Array.isArray(x) ? x : isObj(x) && Array.isArray(x[key]) ? x[key] : []).filter((r) => isObj(r) && (!valid || valid(r)));
+  /* come rowsOf, ma null se non c’è alcuna base di confronto (prevData assente o di altra forma) */
+  const prevOf = (x, key, valid) => (Array.isArray(x) || (isObj(x) && Array.isArray(x[key])) ? rowsOf(x, key, valid) : null);
   const clamp01 = (n) => (isFinite(n) ? Math.max(0, Math.min(1, n)) : 0);
   const pad2 = (n) => String(n).padStart(2, '0');
   const fmtN = (n) => n.toLocaleString('it-IT', { maximumFractionDigits: 1 });
+  /* numeri enormi in forma compatta ("988 Mln") per non rompere le colonne */
+  const fmtC = (n) => (Math.abs(n) >= 1e6 ? n.toLocaleString('it-IT', { notation: 'compact', maximumFractionDigits: 1 }) : fmtN(n));
   const plural = (n, one, many) => (n === 1 ? one : many);
   const cssVar = (el, name, val) => { el.style.setProperty(name, val); return el; };
 
@@ -37,6 +46,14 @@
   }
 
   const hashHue = (s) => { let x = 7; for (const c of T(s)) x = (x * 31 + c.charCodeAt(0)) % 360; return x; };
+  const hueOf = (v, fallbackKey) => { const n = typeof v === 'number' ? v : parseFloat(v); return isFinite(n) ? ((n % 360) + 360) % 360 : hashHue(fallbackKey); };
+  /* iniziali: salta i titoli (Ing., Dott., Avv.…), prende la prima lettera di ogni parola, sicuro con i caratteri a due unità */
+  const TITLE_RE = /^(dott|dr|dott\.ssa|dr\.ssa|ing|avv|prof|prof\.ssa|arch|geom|rag|sig|sig\.ra|sig\.na|sigra|on|cav|comm)\.?$/i;
+  const initialsOf = (name) => {
+    const words = T(name).split(/\s+/).filter(Boolean);
+    const real = words.filter((w) => !TITLE_RE.test(w));
+    return (real.length ? real : words).slice(0, 2).map((w) => Array.from(w).find((c) => /[\p{L}\p{N}]/u.test(c)) || '').join('').toUpperCase() || '?';
+  };
 
   /* ───────────── SVG ───────────── */
   const sv = (tag, attrs, ...kids) => {
@@ -75,10 +92,10 @@
   /* ───────────── confronto con prevData ───────────── */
   const keyOf = (r, i) => {
     if (r && typeof r === 'object') {
-      if (r.k != null) return 'k:' + r.k;
-      if (r.who != null) return 'w:' + r.who;
-      if (r.name != null) return 'n:' + r.name;
-      if (r.label != null) return 'l:' + r.label;
+      if (T(r.k) !== '') return 'k:' + T(r.k);
+      if (T(r.who) !== '') return 'w:' + T(r.who);
+      if (T(r.name) !== '') return 'n:' + T(r.name);
+      if (T(r.label) !== '') return 'l:' + T(r.label);
     }
     return 'i:' + i;
   };
@@ -90,17 +107,20 @@
     setTimeout(() => el.classList.remove('chg', 'chg-new'), CHG_MS);
   }
 
-  /* prevList: array di righe dell’ultimo data mostrato (o null). Senza base nessuna evidenziazione. */
+  /* prevList: array di righe dell’ultimo data mostrato, oppure null se non c’è base di confronto
+     (primo rendering o dati precedenti di altra forma): in quel caso nessuna evidenziazione.
+     Un array vuoto è una base valida: le righe che compaiono sono "nuove". */
   function tracker(prevList) {
     const m = new Map();
-    A(prevList).forEach((r, i) => m.set(keyOf(r, i), { sig: sig(r), row: r }));
+    const base = Array.isArray(prevList);
+    if (base) prevList.forEach((r, i) => m.set(keyOf(r, i), { sig: sig(r), row: r }));
     const names = [];
     return {
-      base: m.size > 0,
+      base,
       names,
       prevRow(r, i) { const e = m.get(keyOf(r, i)); return e ? e.row : null; },
       kind(r, i) {
-        if (!m.size) return null;
+        if (!base) return null;
         const e = m.get(keyOf(r, i));
         if (!e) return 'new';
         return e.sig === sig(r) ? null : 'chg';
@@ -117,7 +137,7 @@
   let uid = 0;
 
   function wrap(type, title, meta, body, cls) {
-    return h('section', { class: 'wg wg--' + type + (cls ? ' ' + cls : ''), 'data-wg': type, role: 'group', 'aria-label': title || null },
+    return h('section', { class: 'wg wg--' + type.replace(/[^\w-]/g, '') + (cls ? ' ' + cls : ''), 'data-wg': type.replace(/[^\w-]/g, ''), role: 'group', 'aria-label': title || null },
       title ? h('h4', { class: 'wg-h' }, h('span', { class: 't' }, title), meta ? h('span', { class: 'm' }, meta) : null) : null,
       body);
   }
@@ -189,15 +209,16 @@
   const shParts = (rows) => SH_GROUPS.map((g2) => ({ n: count(rows, (p) => g2.has(p && p.stance)), cls: g2.cls, ex: g2.ex, label: g2.label }));
 
   function avatar(p, st) {
-    const unknown = !p.name;
-    return h('span', { class: 'wg-av' + (st.ex ? ' is-dash' : ''), 'aria-hidden': 'true' }, unknown ? '?' : UI.initials(T(p.name)));
+    const unknown = !T(p.name);
+    return h('span', { class: 'wg-av' + (st.ex || unknown ? ' is-dash' : ''), 'aria-hidden': 'true' }, unknown ? '?' : initialsOf(p.name));
   }
 
   function stakeholders(data, prev) {
-    const rows = A(data).filter(Boolean);
+    const valid = (p) => has(p, 'name', 'role', 'note');
+    const rows = rowsOf(data, '', valid);
     if (!rows.length) return null;
-    const tr = tracker(prev);
-    const prevRows = A(prev).filter(Boolean);
+    const prevRows = prevOf(prev, '', valid);
+    const tr = tracker(prevRows);
     const list = h('ul', { class: 'wg-list' });
     rows.forEach((p, i) => {
       const st = stanceOf(p);
@@ -208,29 +229,38 @@
         dir = a >= 0 && b >= 0 ? (b > a ? 'up' : 'down') : null;
       }
       const av = avatar(p, st);
-      cssVar(av, '--h', String(p.hue != null ? p.hue : hashHue(p.who || p.name)));
+      cssVar(av, '--h', String(hueOf(p.hue, T(p.who) || T(p.name))));
       const li = h('li', { class: 'wg-row wg-c wg-sh is-' + st.cls + (st.ex ? ' is-' + st.ex : '') },
         av,
         h('div', { class: 'wg-sh-main' },
           h('div', { class: 'wg-sh-top' },
-            h('b', { class: 'wg-name' }, p.name ? T(p.name) : 'Persona da identificare'),
+            h('b', { class: 'wg-name' }, T(p.name) || 'Persona da identificare'),
             pill(st, dir ? ic(dir, 'wg-dir') : null)),
-          p.role ? h('div', { class: 'wg-role' }, T(p.role)) : null,
-          p.note ? h('p', { class: 'wg-note' }, T(p.note)) : null));
-      tr.mark(li, p, i, p.name || p.who || 'persona');
+          T(p.role) ? h('div', { class: 'wg-role' }, T(p.role)) : null,
+          T(p.note) ? h('p', { class: 'wg-note' }, T(p.note)) : null));
+      tr.mark(li, p, i, T(p.name) || T(p.who) || 'persona');
       list.appendChild(li);
     });
     const fav = count(rows, (p) => SH_GROUPS[0].has(p.stance));
     return {
       meta: `${fav}/${rows.length} a favore`,
-      body: [summary(shParts(rows), prevRows.length ? shParts(prevRows) : null), list],
+      body: [summary(shParts(rows), prevRows ? shParts(prevRows) : null), list],
       names: tr.names,
     };
   }
 
   /* ═════════════ 2 · clock · orologio / conto alla rovescia ═════════════ */
-  const hm = (s) => { const m = /^\s*(\d{1,2})\s*[:.h]\s*(\d{2})/.exec(T(s)); return m ? +m[1] * 60 + +m[2] : NaN; };
+  /* "17:42" / "17.42" / "17h42" → { h, m, rest } se valido (ore 0–24, minuti 0–59), altrimenti null */
+  const parseHM = (s) => {
+    const m = /^\s*(\d{1,2})\s*[:.h]\s*(\d{2})(?!\d)\s*(.*)$/.exec(T(s));
+    if (!m) return null;
+    const H = +m[1], M = +m[2];
+    return H > 24 || M > 59 || (H === 24 && M) ? null : { h: H, m: M, rest: m[3] };
+  };
+  const hm = (s) => { const t = parseHM(s); return t ? t.h * 60 + t.m : NaN; };
   const R_RING = 46, C_RING = 2 * Math.PI * R_RING;
+  const DAYS_MAX = 99999;
+  const dayN = (x) => { const n = Math.round(+x); return isFinite(n) ? Math.max(0, Math.min(DAYS_MAX, n)) : 0; };
 
   function dial(p, prevP) {
     const svg = sv('svg', { viewBox: '0 0 120 120', class: 'wg-dial', 'aria-hidden': 'true', focusable: 'false' });
@@ -268,47 +298,52 @@
   }
 
   function clock(d, prev) {
-    if (!d || typeof d !== 'object' || (d.time == null && d.days == null && d.pct == null)) return null;
-    const isDays = d.days != null;
+    if (!isObj(d) || (T(d.time) === '' && d.days == null && d.pct == null)) return null;
+    const isDays = d.days != null && d.days !== '';
     const pctOf = (x) => {
-      if (!x || typeof x !== 'object') return null;
-      if (x.days != null) { const of = +x.of > 0 ? +x.of : Math.max(+x.days, 1); return x.pct != null ? clamp01(+x.pct) : clamp01(1 - +x.days / of); }
-      return x.pct != null ? clamp01(+x.pct) : null;
+      if (!isObj(x)) return null;
+      const hasPct = x.pct != null && x.pct !== '' && typeof x.pct !== 'boolean';
+      if (x.days != null && x.days !== '') { const of = +x.of > 0 ? Math.min(+x.of, DAYS_MAX) : Math.max(dayN(x.days), 1); return hasPct ? clamp01(+x.pct) : clamp01(1 - dayN(x.days) / of); }
+      return hasPct ? clamp01(+x.pct) : null;
     };
     const p = pctOf(d) == null ? 0 : pctOf(d);
     const prevP = pctOf(prev);
-    const urgent = !!d.urgent;
+    const urgent = d.urgent === true;
     const tone = urgent ? 'bad' : p >= 0.8 ? 'warn' : 'acc';
 
     /* cifre al centro del quadrante */
     let digits;
     if (isDays) {
-      const n = Math.max(0, Math.round(+d.days) || 0);
-      digits = h('div', { class: 'wg-dig is-days' }, h('b', null, String(n)), h('small', null, plural(n, 'giorno', 'giorni')));
+      const n = dayN(d.days);
+      const txt = n > 999 ? '999+' : String(n);
+      digits = h('div', { class: 'wg-dig is-days d' + txt.length }, h('b', null, txt), h('small', null, plural(n, 'giorno', 'giorni')));
     } else {
-      const tm = /^\s*(\d{1,2})[:.](\d{2})\s*(.*)$/.exec(T(d.time));
+      const tm = parseHM(d.time);
       if (tm) {
         digits = h('div', { class: 'wg-dig' },
-          h('span', { class: 'hm' }, pad2(+tm[1]), h('span', { class: 'colon' }, ':'), tm[2]),
-          h('small', null, tm[3] || 'ora'));
-      } else {
+          h('span', { class: 'hm' }, pad2(tm.h), h('span', { class: 'colon' }, ':'), pad2(tm.m)),
+          h('small', null, tm.rest || 'ora'));
+      } else if (T(d.time)) {
         const raw = T(d.time);
-        digits = h('div', { class: 'wg-dig' + (raw.length > 5 ? ' is-long' : '') }, h('span', { class: 'hm' }, raw), h('small', null, 'ora'));
+        digits = h('div', { class: 'wg-dig' + (raw.length > 5 ? ' is-long' : '') }, h('span', { class: 'hm', title: raw }, raw), h('small', null, 'ora'));
+      } else {
+        digits = h('div', { class: 'wg-dig' }, h('span', { class: 'hm' }, Math.round(p * 100) + '%'), h('small', null, 'trascorso'));
       }
     }
 
     /* colonna destra */
-    const label = d.label ? T(d.label) : (isDays ? 'Giorni alla scadenza' : 'Alla scadenza');
+    const label = T(d.label) || (isDays ? 'Giorni alla scadenza' : 'Alla scadenza');
     const head = h('div', { class: 'wg-clk-lab' }, h('span', null, label), urgent ? pill({ cls: 'bad', label: 'Urgente', solid: true }) : null);
     let right;
     if (isDays) {
-      const of = +d.of > 0 ? Math.round(+d.of) : Math.max(Math.round(+d.days) || 1, 1);
-      const left = Math.max(0, Math.round(+d.days) || 0);
+      const left = dayN(d.days);
+      const of = +d.of > 0 ? Math.min(Math.round(+d.of) || 1, DAYS_MAX) : Math.max(left, 1);
       const done = Math.max(0, Math.min(of, of - left));
-      const prevDone = prev && prev.days != null ? Math.max(0, Math.min(of, of - Math.max(0, Math.round(+prev.days) || 0))) : null;
+      const prevDone = isObj(prev) && prev.days != null && prev.days !== '' ? Math.max(0, Math.min(of, of - dayN(prev.days))) : null;
+      const aria = `${done} ${plural(done, 'giorno trascorso', 'giorni trascorsi')} su ${of}`;
       let track;
       if (of <= 31) {
-        track = h('div', { class: 'wg-days', role: 'img', 'aria-label': `${done} giorni trascorsi su ${of}` });
+        track = h('div', { class: 'wg-days', role: 'img', 'aria-label': aria });
         for (let i = 0; i < of; i++) {
           const on = i < done;
           const cell = h('i', { class: on ? 'on' : (i === done ? 'cur' : null) });
@@ -316,30 +351,37 @@
           track.appendChild(cell);
         }
       } else {
-        track = h('div', { class: 'wg-bar', role: 'img', 'aria-label': `${done} giorni trascorsi su ${of}` }, meter(done / of, prevDone != null ? prevDone / of : null));
+        track = h('div', { class: 'wg-bar', role: 'img', 'aria-label': aria }, meter(done / of, prevDone != null ? prevDone / of : null));
       }
       right = h('div', { class: 'wg-clk-r' }, head, track,
-        h('div', { class: 'wg-clk-dl' }, h('b', null, String(done)), ` di ${of} giorni trascorsi`));
+        h('div', { class: 'wg-clk-dl' }, h('b', null, fmtN(done)), ` ${plural(done, 'giorno trascorso', 'giorni trascorsi')} su\u00a0${fmtN(of)}`));
     } else {
       const t1 = hm(d.time), t2 = hm(d.deadline);
+      const dline = T(d.deadline);
       const rem = isFinite(t1) && isFinite(t2) ? remFmt(t2 - t1) : null;
-      let big;
-      if (rem) big = h('div', { class: 'wg-clk-rem' + (rem.unit ? '' : ' is-word') }, h('b', null, rem.big), rem.unit ? h('u', null, rem.unit) : null);
-      else if (d.deadline) big = h('div', { class: 'wg-clk-rem is-word' }, h('b', null, T(d.deadline)));
-      else big = h('div', { class: 'wg-clk-rem' }, h('b', null, String(Math.round(p * 100))), h('u', null, '%'));
-      const cap = rem ? (rem.unit || rem.big.indexOf(' h ') > 0 ? 'Mancano' : 'Stato') : (d.deadline ? 'Scadenza' : 'Trascorso');
+      let big = null, cap = null;
+      if (rem) {
+        big = h('div', { class: 'wg-clk-rem' + (rem.unit ? '' : ' is-word') }, h('b', null, rem.big), rem.unit ? h('u', null, rem.unit) : null);
+        cap = rem.unit || rem.big.indexOf(' h ') > 0 ? 'Mancano' : 'Stato';
+      } else if (dline) {
+        big = h('div', { class: 'wg-clk-rem is-word' + (dline.length > 12 ? ' is-long' : '') }, h('b', { title: dline }, dline));
+        cap = 'Scadenza';
+      } else if (T(d.time)) {
+        big = h('div', { class: 'wg-clk-rem' }, h('b', null, String(Math.round(p * 100))), h('u', null, '%'));
+        cap = 'Trascorso';
+      }
       right = h('div', { class: 'wg-clk-r' }, head,
-        h('div', { class: 'wg-clk-cap' }, cap),
+        cap ? h('div', { class: 'wg-clk-cap' }, cap) : null,
         big,
-        rem && d.deadline ? h('div', { class: 'wg-clk-dl' }, 'Scadenza ', h('b', null, T(d.deadline))) : null);
+        rem && dline ? h('div', { class: 'wg-clk-dl' }, 'Scadenza ', h('b', null, dline)) : null);
     }
 
     const face = h('div', { class: 'wg-face' }, dial(p, prevP), digits);
     const el = h('div', { class: 'wg-clk wg-c is-' + tone + (urgent ? ' is-urgent' : '') + (isDays ? ' is-days' : '') },
-      face, right, d.sub ? h('p', { class: 'wg-clk-sub' }, T(d.sub)) : null);
+      face, right, T(d.sub) ? h('p', { class: 'wg-clk-sub' }, T(d.sub)) : null);
 
     const names = [];
-    if (prev && typeof prev === 'object' && sig(prev) !== sig(d)) { flash(el, 'chg'); names.push(label); }
+    if (isObj(prev) && sig(prev) !== sig(d)) { flash(el, 'chg'); names.push(label); }
     return { meta: '', body: el, names };
   }
 
@@ -352,34 +394,36 @@
     blocked: { cls: 'bad', label: 'Bloccato', ic: 'ban', ex: 'hatch' },
   };
   const TS_ORDER = ['won', 'traded', 'open', 'blocked', 'lost'];
-  const tsParts = (rows) => TS_ORDER.map((k) => ({ n: count(rows, (r) => r.st === k), cls: TS[k].cls, ex: TS[k].ex === 'hatch' ? 'dash' : null, label: TS[k].label }));
+  const tsSt = (r) => (TS[r.st] ? r.st : 'open');
+  const tsParts = (rows) => TS_ORDER.map((k) => ({ n: count(rows, (r) => tsSt(r) === k), cls: TS[k].cls, ex: TS[k].ex === 'hatch' ? 'dash' : null, label: TS[k].label }));
 
   function termsheet(d, prev) {
-    const rows = A(d && d.rows).filter(Boolean);
+    const valid = (r) => has(r, 'k', 'ask', 'ours');
+    const rows = rowsOf(d, 'rows', valid);
     if (!rows.length) return null;
-    const cols = A(d.cols).map(T);
+    const cols = A(isObj(d) ? d.cols : null).map(T);
     const c0 = cols[0] || 'Richiesta', c1 = cols[1] || 'Nostra posizione', c2 = cols[2] || 'Stato';
-    const prevRows = A(prev && prev.rows).filter(Boolean);
+    const prevRows = prevOf(prev, 'rows', valid);
     const tr = tracker(prevRows);
     const list = h('ul', { class: 'wg-list' });
     rows.forEach((r, i) => {
-      const st = TS[r.st] || TS.open;
+      const st = TS[tsSt(r)];
       let dt = diffText(r.ask, r.ours);
       if (dt.length > 8) dt = '';
       const li = h('li', { class: 'wg-row wg-c wg-ts is-' + st.cls + (st.ex ? ' is-' + st.ex : '') },
         h('b', { class: 'wg-ts-k' }, T(r.k)),
-        h('div', { class: 'wg-ts-ask' }, h('span', { class: 'wg-lbl' }, c0), h('span', { class: 'wg-ts-v' }, T(r.ask) || '—')),
+        h('div', { class: 'wg-ts-ask' }, h('span', { class: 'wg-lbl', title: c0 }, c0), h('span', { class: 'wg-ts-v' }, T(r.ask) || '—')),
         h('div', { class: 'wg-ts-gap', 'aria-hidden': 'true' }, ic('arrow'), dt ? h('span', null, dt) : null),
-        h('div', { class: 'wg-ts-ours' }, h('span', { class: 'wg-lbl' }, c1), h('span', { class: 'wg-ts-v' }, T(r.ours) || '—')),
+        h('div', { class: 'wg-ts-ours' }, h('span', { class: 'wg-lbl', title: c1 }, c1), h('span', { class: 'wg-ts-v' }, T(r.ours) || '—')),
         h('span', { class: 'wg-ts-st', title: c2 }, pill(st)));
-      tr.mark(li, r, i, r.k);
+      tr.mark(li, r, i, T(r.k) || T(r.ask) || T(r.ours));
       list.appendChild(li);
     });
-    const head = h('div', { class: 'wg-ts-head', 'aria-hidden': 'true' }, h('span'), h('span', null, c0), h('span'), h('span', null, c1), h('span', null, c2));
-    const open = count(rows, (r) => r.st === 'open' || r.st === 'blocked' || !TS[r.st]);
+    const head = h('div', { class: 'wg-ts-head', 'aria-hidden': 'true' }, h('span'), h('span', { title: c0 }, c0), h('span'), h('span', { title: c1 }, c1), h('span', { title: c2 }, c2));
+    const open = count(rows, (r) => tsSt(r) === 'open' || tsSt(r) === 'blocked');
     return {
       meta: open ? `${open} ${plural(open, 'aperta', 'aperte')}` : 'tutte chiuse',
-      body: [summary(tsParts(rows), prevRows.length ? tsParts(prevRows) : null), head, list],
+      body: [summary(tsParts(rows), prevRows ? tsParts(prevRows) : null), head, list],
       names: tr.names,
     };
   }
@@ -392,48 +436,57 @@
     blocked: { cls: 'bad', label: 'Bloccato', ic: 'ban', ex: 'hatch' },
   };
   const BD_ORDER = ['done', 'doing', 'blocked', 'todo'];
-  const bdParts = (cards) => BD_ORDER.map((k) => ({ n: count(cards, (c) => c.st === k), cls: BD[k].cls, ex: k === 'todo' ? 'dash' : null, label: BD[k].label }));
-  const flatBoard = (d) => A(d && d.cols).filter(Boolean).flatMap((l, li) => A(l.cards).filter(Boolean).map((c) => Object.assign({}, c, { k: c.k != null ? c.k : T(l.title) + '/' + T(c.t), _lane: li })));
+  const bdSt = (c) => (BD[c.st] ? c.st : 'todo');
+  const bdParts = (cards) => BD_ORDER.map((k) => ({ n: count(cards, (c) => bdSt(c) === k), cls: BD[k].cls, ex: k === 'todo' ? 'dash' : null, label: BD[k].label }));
+  /* corsie normalizzate: scarta corsie e carte senza contenuto, dà a ogni carta una chiave stabile */
+  function lanesOf(d) {
+    const src = Array.isArray(d) ? d : isObj(d) && Array.isArray(d.cols) ? d.cols : null;
+    if (!src) return null;
+    return src.filter(isObj).map((l) => ({
+      title: T(l.title),
+      cards: A(l.cards).filter((c) => isObj(c) && has(c, 't')).map((c) => ({ t: T(c.t), st: bdSt(c), k: T(c.k) || T(l.title) + '/' + T(c.t) })),
+    })).filter((l) => l.title || l.cards.length);
+  }
+  const flatLanes = (lanes) => lanes.flatMap((l, li) => l.cards.map((c) => Object.assign({ _lane: li }, c)));
 
   function board(d, prev) {
-    const lanes = A(d && d.cols).filter(Boolean);
-    if (!lanes.length) return null;
-    const flat = flatBoard(d), prevFlat = flatBoard(prev);
-    if (!flat.length && !lanes.length) return null;
+    const lanes = lanesOf(d);
+    if (!lanes || !lanes.length) return null;
+    const pl = lanesOf(prev);
+    const flat = flatLanes(lanes), prevFlat = pl ? flatLanes(pl) : null;
     const tr = tracker(prevFlat);
-    const wrapEl = h('div', { class: 'wg-bd', 'data-n': String(Math.min(lanes.length, 5)) });
+    const wrapEl = h('div', { class: 'wg-bd', 'data-n': String(Math.min(lanes.length, 6)) });
     let idx = 0;
     lanes.forEach((lane, li) => {
-      const cards = A(lane.cards).filter(Boolean);
+      const cards = lane.cards;
       const done = count(cards, (c) => c.st === 'done');
       const ul = h('ul', { class: 'wg-cards' });
       cards.forEach((c) => {
-        const st = BD[c.st] || BD.todo;
-        const item = flat[idx];
+        const st = BD[c.st];
         const li2 = h('li', { class: 'wg-card wg-c is-' + st.cls + (st.ex ? ' is-' + st.ex : ''), title: st.label },
-          ic(st.ic), h('span', { class: 'wg-card-t' }, T(c.t)), h('span', { class: 'wg-sr' }, ' (' + st.label.toLowerCase() + ')'));
-        tr.mark(li2, item, idx, c.t);
+          ic(st.ic), h('span', { class: 'wg-card-t' }, c.t), h('span', { class: 'wg-sr' }, ' (' + st.label.toLowerCase() + ')'));
+        tr.mark(li2, flat[idx], idx, c.t);
         idx++;
         ul.appendChild(li2);
       });
       if (!cards.length) ul.appendChild(h('li', { class: 'wg-lane-none' }, 'Nessuna attività'));
-      const prevCards = prevFlat.filter((c) => c._lane === li);
-      wrapEl.appendChild(h('section', { class: 'wg-lane', 'aria-label': T(lane.title) },
-        h('header', { class: 'wg-lane-h' }, h('b', null, T(lane.title)), h('span', null, `${done}/${cards.length}`)),
-        cards.length ? segbar(bdParts(cards), prevCards.length ? bdParts(prevCards) : null, true) : null,
+      const prevCards = prevFlat ? prevFlat.filter((c) => c._lane === li) : null;
+      wrapEl.appendChild(h('section', { class: 'wg-lane', 'aria-label': lane.title || null },
+        h('header', { class: 'wg-lane-h' }, h('b', null, lane.title), h('span', null, `${done}/${cards.length}`)),
+        cards.length ? segbar(bdParts(cards), prevCards && prevCards.length ? bdParts(prevCards) : null, true) : null,
         ul));
     });
     const doneAll = count(flat, (c) => c.st === 'done');
     return {
       meta: `${doneAll}/${flat.length} fatte`,
-      body: [summary(bdParts(flat), prevFlat.length ? bdParts(prevFlat) : null), wrapEl],
+      body: [summary(bdParts(flat), prevFlat ? bdParts(prevFlat) : null), wrapEl],
       names: tr.names,
     };
   }
 
   /* ═════════════ 5 · kpis · tessere con sparkline ═════════════ */
   function spark(vals, tone, target) {
-    const v = A(vals).map(Number).filter(isFinite);
+    const v = A(vals).filter((x) => (typeof x === 'number' || (typeof x === 'string' && x.trim() !== ''))).map(Number).filter(isFinite).slice(-60);
     if (!v.length) return null;
     let min = Math.min(...v), max = Math.max(...v);
     const last = v[v.length - 1];
@@ -441,6 +494,7 @@
     const useT = isFinite(tv) && Math.abs(tv - last) <= 3 * Math.max(max - min, Math.abs(last) * 0.5, 1);
     if (useT) { min = Math.min(min, tv); max = Math.max(max, tv); }
     const W = 100, H = 100, px = 3.5, py = 16, rng = max - min;
+    if (!isFinite(rng) || !isFinite(min) || !isFinite(max)) return null;   /* valori fuori portata: niente grafico, meglio che un tracciato rotto */
     const X = (i) => (v.length === 1 ? W - px : px + ((W - 2 * px) * i) / (v.length - 1));
     const Y = (x) => (rng === 0 ? H / 2 : H - py - ((H - 2 * py) * (x - min)) / rng);
     const pts = v.map((x, i) => `${X(i).toFixed(2)} ${Y(x).toFixed(2)}`);
@@ -461,23 +515,27 @@
 
   const TONE = { good: 'good', bad: 'bad', warn: 'warn' };
 
+  /* variazione: le stringhe restano come sono, i numeri ricevono il segno */
+  const deltaText = (x) => (typeof x === 'number' && isFinite(x) ? (x > 0 ? '+' : x < 0 ? '−' : '') + fmtN(Math.abs(x)) : T(x));
+
   function kpis(data, prev) {
-    const rows = A(data).filter(Boolean);
+    const valid = (r) => has(r, 'label', 'value');
+    const rows = rowsOf(data, '', valid);
     if (!rows.length) return null;
-    const tr = tracker(prev);
+    const tr = tracker(prevOf(prev, '', valid));
     const grid = h('div', { class: 'wg-kpis' });
     rows.forEach((r, i) => {
       const tone = TONE[r.tone] || 'acc';
-      const dl = T(r.delta).trim();
+      const dl = deltaText(r.delta);
       const dir = /^\+/.test(dl) ? 'up' : /^[-−–]/.test(dl) ? 'down' : null;
-      const value = T(r.value);
-      const vN = parseNum(r.value), tN = parseNum(r.target);
-      const bullet = isFinite(vN) && isFinite(tN) && tN > 0 && vN >= 0 && unitOf(r.value) === unitOf(r.target);
+      const value = T(r.value), target = T(r.target);
+      const vN = parseNum(value), tN = parseNum(target);
+      const bullet = isFinite(vN) && isFinite(tN) && tN > 0 && vN >= 0 && unitOf(value) === unitOf(target);
       const pr = tr.prevRow(r, i);
       let foot = null;
-      if (r.target != null && r.target !== '') {
+      if (target) {
         foot = h('div', { class: 'wg-kpi-foot' },
-          h('div', { class: 'wg-ft' }, h('span', { class: 'wg-lbl' }, 'Obiettivo'), h('b', null, T(r.target))));
+          h('div', { class: 'wg-ft' }, h('span', { class: 'wg-lbl' }, 'Obiettivo'), h('b', null, target)));
         if (bullet) {
           const mx = Math.max(vN, tN);
           const pv = pr ? parseNum(pr.value) : NaN;
@@ -489,11 +547,11 @@
       const art = h('article', { class: 'wg-kpi wg-c is-' + tone },
         h('span', { class: 'wg-lbl' }, T(r.label)),
         h('div', { class: 'wg-kpi-vr' },
-          h('div', { class: 'wg-kpi-v' + (value.length > 8 ? ' is-s' : '') }, value || '—'),
+          h('div', { class: 'wg-kpi-v' + (value.length > 14 ? ' is-xs' : value.length > 8 ? ' is-s' : '') }, value || '—'),
           dl ? h('span', { class: 'wg-delta is-' + tone }, dir ? ic(dir) : null, dl) : null),
-        spark(r.spark, tone, r.target),
+        spark(r.spark, tone, target),
         foot);
-      tr.mark(art, r, i, r.label || r.k);
+      tr.mark(art, r, i, T(r.label) || T(r.k));
       grid.appendChild(art);
     });
     return { meta: '', body: grid, names: tr.names };
@@ -509,9 +567,10 @@
   const scParts = (rows) => SC_ORDER.map((k) => ({ n: count(rows, (r) => (SC[r.st] ? r.st : 'warn') === k), cls: SC[k].cls, label: SC[k].label }));
 
   function scorecard(data, prev) {
-    const rows = A(data).filter(Boolean);
+    const valid = (r) => has(r, 'label', 'crm', 'real');
+    const rows = rowsOf(data, '', valid);
     if (!rows.length) return null;
-    const prevRows = A(prev).filter(Boolean);
+    const prevRows = prevOf(prev, '', valid);
     const tr = tracker(prevRows);
     const list = h('ul', { class: 'wg-list' });
     rows.forEach((r, i) => {
@@ -522,14 +581,14 @@
         h('div', { class: 'wg-sc-vs', 'aria-hidden': 'true' }, ic(st.glyph)),
         h('div', { class: 'wg-sc-real' }, h('span', { class: 'wg-sr' }, 'Nella realtà: '), h('span', { class: 'wg-sc-v' }, T(r.real) || '—')),
         h('span', { class: 'wg-sr' }, ' (' + st.label.toLowerCase() + ')'));
-      tr.mark(li, r, i, r.label);
+      tr.mark(li, r, i, T(r.label) || T(r.crm) || T(r.real));
       list.appendChild(li);
     });
     const head = h('div', { class: 'wg-sc-head', 'aria-hidden': 'true' }, h('span'), h('span', null, 'Nel CRM'), h('span'), h('span', null, 'Nella realtà'));
     const ok = count(rows, (r) => r.st === 'good');
     return {
       meta: `${ok}/${rows.length} confermati`,
-      body: [summary(scParts(rows), prevRows.length ? scParts(prevRows) : null), head, list],
+      body: [summary(scParts(rows), prevRows ? scParts(prevRows) : null), head, list],
       names: tr.names,
     };
   }
@@ -543,18 +602,19 @@
   };
 
   function timeline(d, prev) {
-    const items = A(d && d.items).filter(Boolean);
+    const valid = (r) => has(r, 't', 'label');
+    const items = rowsOf(d, 'items', valid);
     if (!items.length) return null;
-    const tr = tracker(A(prev && prev.items));
+    const tr = tracker(prevOf(prev, 'items', valid));
     const list = h('ol', { class: 'wg-tl' });
     items.forEach((it, i) => {
       const st = TL[it.st] || TL.todo, key = TL[it.st] ? it.st : 'todo';
       const node = h('span', { class: 'wg-node' }, key === 'done' ? ic('check') : key === 'late' ? ic('bang') : key === 'now' ? h('i') : null);
       const li = h('li', { class: 'wg-tli wg-c is-' + st.cls + ' st-' + key + (i === 0 ? ' is-first' : '') + (i === items.length - 1 ? ' is-last' : '') },
-        h('time', { class: 'wg-tl-t' }, T(it.t)),
+        h('time', { class: 'wg-tl-t', title: T(it.t) || null }, T(it.t)),
         h('span', { class: 'wg-tl-rail' }, node),
         h('div', { class: 'wg-tl-b' }, h('span', { class: 'wg-tl-l' }, T(it.label)), key === 'now' || key === 'late' ? pill(st) : null));
-      tr.mark(li, it, i, it.label);
+      tr.mark(li, it, i, T(it.label) || T(it.t));
       list.appendChild(li);
     });
     const done = count(items, (it) => it.st === 'done');
@@ -570,17 +630,18 @@
   };
 
   function checklist(data, prev) {
-    const rows = A(data).filter(Boolean);
+    const valid = (r) => has(r, 't', 'note');
+    const rows = rowsOf(data, '', valid);
     if (!rows.length) return null;
-    const tr = tracker(prev);
+    const tr = tracker(prevOf(prev, '', valid));
     const list = h('ul', { class: 'wg-list is-tight' });
     rows.forEach((r, i) => {
       const st = CK[r.st] || CK.todo;
       const li = h('li', { class: 'wg-row wg-c wg-ck is-' + st.cls + (r.st === 'done' ? ' is-done' : '') },
         h('span', { class: 'wg-box' }, st.ic ? ic(st.ic) : null),
-        h('div', { class: 'wg-ck-b' }, h('span', { class: 'wg-ck-t' }, T(r.t)), r.note ? h('span', { class: 'wg-ck-n' }, T(r.note)) : null),
+        h('div', { class: 'wg-ck-b' }, h('span', { class: 'wg-ck-t' }, T(r.t)), T(r.note) ? h('span', { class: 'wg-ck-n' }, T(r.note)) : null),
         h('span', { class: 'wg-sr' }, ' (' + st.label.toLowerCase() + ')'));
-      tr.mark(li, r, i, r.t);
+      tr.mark(li, r, i, T(r.t) || T(r.note));
       list.appendChild(li);
     });
     const done = count(rows, (r) => r.st === 'done');
@@ -589,55 +650,63 @@
   }
 
   /* ═════════════ 9 · scoreboard · barre contrapposte ═════════════ */
-  const num0 = (x) => { const n = parseFloat(x); return isFinite(n) ? n : 0; };
+  const num0 = (x) => { const n = typeof x === 'number' ? x : parseFloat(typeof x === 'string' ? x.replace(',', '.') : NaN); return isFinite(n) ? n : 0; };
 
   function pair(us, them, max, prevUs, prevThem, thick) {
     const fu = clamp01(us / max), ft = clamp01(them / max);
     const cell = (cls, f, pf) => h('div', { class: 'wg-trk is-' + cls }, meter(f, pf));
     const pu = prevUs != null ? clamp01(prevUs / max) : null, pt = prevThem != null ? clamp01(prevThem / max) : null;
-    const nUs = h('b', { class: 'wg-n is-us' + (us >= them ? ' lead' : '') }, fmtN(us));
-    const nTh = h('b', { class: 'wg-n is-them' + (them > us ? ' lead' : '') }, fmtN(them));
+    const nUs = h('b', { class: 'wg-n is-us' + (us >= them ? ' lead' : '') }, fmtC(us));
+    const nTh = h('b', { class: 'wg-n is-them' + (them > us ? ' lead' : '') }, fmtC(them));
     return h('div', { class: 'wg-pair' + (thick ? ' is-thick' : '') }, nUs, cell('us', fu, pu), cell('them', ft, pt), nTh);
   }
 
   function scoreboard(d, prev) {
-    const rows = A(d && d.rows).filter(Boolean);
+    const valid = (r) => has(r, 'label');
+    const rows = rowsOf(d, 'rows', valid);
     if (!rows.length) return null;
-    const lab = A(d.labels).map(T);
+    const dd = isObj(d) ? d : {};
+    const lab = A(dd.labels).map(T);
     const L = [lab[0] || 'Noi', lab[1] || 'Rivale'];
-    const tr = tracker(A(prev && prev.rows));
+    const tr = tracker(prevOf(prev, 'rows', valid));
     const list = h('ul', { class: 'wg-list' });
+    let nChars = 3;
     rows.forEach((r, i) => {
       const max = num0(r.max) > 0 ? num0(r.max) : 100, us = Math.max(0, num0(r.us)), them = Math.max(0, num0(r.them));
       const pr = tr.prevRow(r, i);
       const df = Math.round((us - them) * 10) / 10;
+      nChars = Math.max(nChars, fmtC(us).length, fmtC(them).length);
       const li = h('li', { class: 'wg-row wg-c wg-sb' },
         h('div', { class: 'wg-sb-top' },
-          h('span', { class: 'wg-sb-l' }, T(r.label), h('em', null, ' / ' + fmtN(max))),
-          h('span', { class: 'wg-gap ' + (df > 0 ? 'is-good' : df < 0 ? 'is-bad' : 'is-mute') }, df === 0 ? 'pari' : (df > 0 ? '+' : '−') + fmtN(Math.abs(df)))),
-        pair(us, them, max, pr ? num0(pr.us) : null, pr ? num0(pr.them) : null));
-      tr.mark(li, r, i, r.label);
+          h('span', { class: 'wg-sb-l' }, T(r.label), h('em', null, ' / ' + fmtC(max))),
+          h('span', { class: 'wg-gap ' + (df > 0 ? 'is-good' : df < 0 ? 'is-bad' : 'is-mute') }, df === 0 ? 'pari' : (df > 0 ? '+' : '−') + fmtC(Math.abs(df)))),
+        pair(us, them, max, pr ? Math.max(0, num0(pr.us)) : null, pr ? Math.max(0, num0(pr.them)) : null));
+      tr.mark(li, r, i, T(r.label));
       list.appendChild(li);
     });
+    /* le colonne dei numeri si adattano alla cifra più lunga, uguali per tutte le righe */
+    list.style.setProperty('--nw', Math.min(nChars, 9) + 'ch');
     /* totale */
     const sumMax = rows.reduce((a, r) => a + (num0(r.max) > 0 ? num0(r.max) : 100), 0);
-    const tt = d.total || {};
-    const tUs = tt.us != null ? num0(tt.us) : rows.reduce((a, r) => a + num0(r.us), 0);
-    const tTh = tt.them != null ? num0(tt.them) : rows.reduce((a, r) => a + num0(r.them), 0);
+    const tt = isObj(dd.total) ? dd.total : {};
+    const tUs = tt.us != null && T(tt.us) !== '' ? num0(tt.us) : rows.reduce((a, r) => a + num0(r.us), 0);
+    const tTh = tt.them != null && T(tt.them) !== '' ? num0(tt.them) : rows.reduce((a, r) => a + num0(r.them), 0);
     const tMax = num0(tt.max) > 0 ? num0(tt.max) : sumMax;
-    const pt = prev && prev.total ? prev.total : null;
+    const pt = isObj(prev) && isObj(prev.total) ? prev.total : null;
     const df = Math.round((tUs - tTh) * 10) / 10;
-    const verdict = df === 0 ? 'Parità' : `${L[0]} ${df > 0 ? 'avanti' : 'indietro'} di ${fmtN(Math.abs(df))} ${plural(Math.abs(df), 'punto', 'punti')}`;
+    const who = L[0].length > 18 ? 'Noi' : L[0];
+    const verdict = df === 0 ? 'Parità' : `${who} ${df > 0 ? 'avanti' : 'indietro'} di ${fmtC(Math.abs(df))} ${plural(Math.abs(df), 'punto', 'punti')}`;
+    const big = (v, cls, lead) => { const t = fmtC(v); return h('b', { class: cls + (lead ? ' lead' : '') + (t.length > 8 ? ' is-xs' : t.length > 5 ? ' is-s' : '') }, t); };
     const total = h('div', { class: 'wg-sb-total wg-c ' + (df > 0 ? 'is-good' : df < 0 ? 'is-bad' : 'is-mute') },
       h('div', { class: 'wg-sb-big' },
-        h('b', { class: 'is-us' + (tUs >= tTh ? ' lead' : '') }, fmtN(tUs)),
-        h('span', { class: 'wg-lbl' }, `Totale su ${fmtN(tMax)}`),
-        h('b', { class: 'is-them' + (tTh > tUs ? ' lead' : '') }, fmtN(tTh))),
+        big(tUs, 'is-us', tUs >= tTh),
+        h('span', { class: 'wg-lbl' }, `Totale su ${fmtC(tMax)}`),
+        big(tTh, 'is-them', tTh > tUs)),
       pair(tUs, tTh, tMax, pt ? num0(pt.us) : null, pt ? num0(pt.them) : null, true),
       h('p', { class: 'wg-sb-verdict' }, verdict),
-      d.caption ? h('p', { class: 'wg-sb-cap' }, T(d.caption)) : null);
-    if (pt && sig(pt) !== sig(d.total)) { flash(total, 'chg'); tr.names.push('Totale'); }
-    const legendEl = h('div', { class: 'wg-sb-leg', 'aria-hidden': 'true' }, h('span', { class: 'is-us' }, h('i'), L[0]), h('span', { class: 'is-them' }, L[1], h('i')));
+      T(dd.caption) ? h('p', { class: 'wg-sb-cap' }, T(dd.caption)) : null);
+    if (pt && sig(pt) !== sig(dd.total)) { flash(total, 'chg'); tr.names.push('Totale'); }
+    const legendEl = h('div', { class: 'wg-sb-leg', 'aria-hidden': 'true' }, h('span', { class: 'is-us', title: L[0] }, h('i'), h('em', null, L[0])), h('span', { class: 'is-them', title: L[1] }, h('em', null, L[1]), h('i')));
     return { meta: '', body: [legendEl, list, total], names: tr.names };
   }
 
@@ -647,12 +716,14 @@
   UI.widgetChgMs = CHG_MS;
 
   UI.widget = function widget(type, title, data, prevData) {
-    const fn = BUILD[type];
+    const ty = typeof type === 'string' ? type : '';
+    const ttl = T(title);
+    const fn = Object.prototype.hasOwnProperty.call(BUILD, ty) ? BUILD[ty] : null;
     let r = null;
     if (fn) {
-      try { r = fn(data == null ? null : data, prevData == null ? null : prevData); } catch (e) { if (g.console) g.console.error('[widget ' + type + ']', e); }
+      try { r = fn(data == null ? null : data, prevData == null ? null : prevData); } catch (e) { if (g.console) g.console.error('[widget ' + ty + ']', e); }
     }
-    const root = r ? wrap(type, title, r.meta, r.body, r.cls) : wrap(type, title, '', empty(type), 'is-empty');
+    const root = r ? wrap(ty, ttl, r.meta, r.body, r.cls) : wrap(ty, ttl, '', empty(ty), 'is-empty');
     if (r && r.names && r.names.length) root.appendChild(h('span', { class: 'wg-sr' }, 'Aggiornato: ' + r.names.join(', ') + '.'));
     return root;
   };

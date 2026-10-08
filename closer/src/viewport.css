@@ -11,8 +11,8 @@
   --sk0: color-mix(in srgb, #f6d6bb calc(100% - var(--dC)), var(--nt));
   --sk1: color-mix(in srgb, #efc29c calc(100% - var(--dC)), var(--nt));
   --sk2: color-mix(in srgb, #d8a176 calc(100% - var(--dC)), var(--nt));
-  --sk3: color-mix(in srgb, #b57850 calc(100% - var(--dC)), var(--nt));
-  --sk4: color-mix(in srgb, #86563a calc(100% - var(--dC)), var(--nt));
+  --sk3: color-mix(in srgb, #bd8258 calc(100% - var(--dC)), var(--nt));
+  --sk4: color-mix(in srgb, #a06f4c calc(100% - var(--dC)), var(--nt));
   --bk: color-mix(in srgb, #0c1018 calc(100% - var(--dC) * .5), var(--nt));
   --wh: color-mix(in srgb, #f6f8fb calc(100% - var(--dC)), var(--nt));
   --sf: var(--surface, #fff);
@@ -62,8 +62,8 @@
 /* token delle persone: ricalcolati sul gruppo di ogni persona (usa --h, --sk, --hr0 impostati inline) */
 .vp .vp-pers {
   --hr: color-mix(in srgb, var(--hr0) calc(100% - var(--dC)), var(--nt));
-  --ss: color-mix(in srgb, var(--sk) 80%, #5a2a18);
-  --mo: color-mix(in srgb, var(--sk) 50%, #a8423b);
+  --ss: color-mix(in srgb, var(--sk) 84%, #4e2616);
+  --mo: color-mix(in srgb, var(--sk) 38%, #b0443c);
   --hy: color-mix(in srgb, var(--hr) 70%, #ffffff);
   --cl: hsl(var(--h) var(--av-s, 52%) var(--av-l, 40%));
   --cb: hsl(var(--h) var(--av-s, 52%) calc(var(--av-l, 40%) + 17%));
@@ -258,11 +258,23 @@
 /* ── struttura ── */
 .vp-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .vp-svg text { font-family: var(--font-body, system-ui, sans-serif); }
-.vp-ov { position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-  --u: calc(100cqw / 960); --ox: 0px; --oy: calc(50cqh - 195 * var(--u)); }
-@container vp (max-aspect-ratio: 2.4615) {
-  .vp-ov { --u: calc(100cqh / 390); --ox: calc(50cqw - 480 * var(--u)); --oy: 0px; }
+.vp-ov { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+/* Taglio verticale intelligente: se il contenitore è più largo di 16:6.5 (per esempio quando il gioco limita l'altezza del viewport),
+   la scena non viene tagliata in modo simmetrico ma centrata sulla fascia che conta per ciascuna vista (--fy, in unità del viewBox):
+   mani, tavolo ed etichette in basso restano visibili, il soffitto passa in secondo piano. Se il contenitore è più stretto, si taglia ai lati. */
+@supports (width: 1cqw) {
+  .vp-svg, .vp-ov { --u: calc(100cqw / 960); --ox: 0px; --oy: clamp(calc(100cqh - 390 * var(--u)), calc(50cqh - var(--fy, 195) * var(--u)), 0px); }
+  .vp-svg { inset: auto; left: var(--ox); top: var(--oy); width: calc(960 * var(--u)); height: calc(390 * var(--u)); }
 }
+@container vp (max-aspect-ratio: 2.4615) {
+  .vp-svg, .vp-ov { --u: calc(100cqh / 390); --ox: calc(50cqw - 480 * var(--u)); --oy: 0px; }
+}
+.vp[data-view="meeting"] { --fy: 240; }
+.vp[data-view="walk"] { --fy: 255; }
+.vp[data-view="car"] { --fy: 235; }
+.vp[data-view="call"], .vp[data-view="mail"] { --fy: 200; }
+.vp[data-view="phone"] { --fy: 203; }
+.vp[data-view="desk"] { --fy: 165; }
 
 /* ── persone ── */
 .vp .vp-pp { transition: filter .2s ease, transform .2s ease; transform-box: fill-box; transform-origin: 50% 100%; }
@@ -282,7 +294,8 @@
 .vp.has-spk .vp-tl:not(.on) .vp-dim { fill-opacity: .16; }
 .vp .vp-pulse { transform-box: fill-box; transform-origin: center; }
 .vp .vp-tl.on .vp-pulse, .vp .vp-cd.on .vp-pulse { animation: vpPulse 1.4s ease-out infinite; }
-.vp .vp-you { opacity: 0; transition: opacity .2s; }
+.vp .vp-you { opacity: 0; transition: opacity .2s; position: absolute; left: 50%; bottom: 2px; width: clamp(64px, calc(var(--u) * 170), 180px); transform: translateX(-50%); pointer-events: none; }
+.vp .vp-you svg { display: block; width: 100%; height: auto; overflow: visible; }
 .vp.you .vp-you { opacity: 1; }
 .vp.you .vp-you path { animation: vpArc 1.5s ease-out infinite; transform-box: fill-box; transform-origin: center bottom; }
 .vp.you .vp-you path:nth-child(2) { animation-delay: .25s; }
@@ -332,8 +345,14 @@
 @container (min-width: 158px) { .vp-st { display: inline; } }
 @container (max-width: 88px) { .vp-n2 { display: none; } }
 @container (max-width: 74px) { .vp-r { display: none; } }
-@container (max-width: 66px) { .vp-sd { display: none !important; } }
+/* etichette strette: il puntino di posizione esce dal flusso e si appoggia all'angolo, così il nome non viene troncato */
+@container (max-width: 64px) { .vp-sd { position: absolute; left: -3px; top: -3px; width: 8px; height: 8px; outline: 1.5px solid var(--surface, #fff); } }
+@container (max-width: 26px) { .vp-sd { display: none !important; } }
 .vp-lb--1 .vp-r { display: none; }
+/* etichette con spazio sotto (riunione, visita): il ruolo può andare a capo su due righe invece di essere troncato */
+.vp-lb--w .vp-r { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: clip; overflow-wrap: anywhere; line-height: 1.15; }
+@container (max-width: 56px) { .vp-lb--w .vp-r { display: none; } }
+.vp-lb--w .vp-n b { overflow: hidden; }
 .vp-lb--card { background: transparent; border-color: transparent; padding: 0 3px; color: #1c2433; font-size: clamp(9.5px, calc(var(--u) * 11), 11.5px); }
 .vp-lb--card .vp-r { color: #4b5566; }
 .vp-lb--card.on { box-shadow: none; border-color: transparent; }
@@ -354,8 +373,15 @@
 .vp-tag { box-sizing: border-box; display: block; padding: 4px 8px 5px; border-radius: 6px; background: color-mix(in srgb, var(--surface, #fff) 82%, transparent); border: 1px solid color-mix(in srgb, var(--line, #d3dae6) 85%, transparent); color: var(--ink-2, #48546a);
   font: 500 10.5px/1.3 var(--font-mono, ui-monospace, monospace); text-transform: uppercase; letter-spacing: .06em; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); min-width: 0; }
 .vp-tag span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vp-tag span[hidden] { display: none; }
 .vp-tag b { font-weight: 600; color: var(--ink, #0f1728); }
 .vp-t1 { max-width: 64%; }
+/* contenitore basso e largo (il gioco limita l'altezza del viewport): quando e dove stanno su una riga sola, per non coprire le teste */
+@container vpw (min-width: 560px) {
+  .vp-root.vp-short .vp-t1 { display: flex; align-items: baseline; gap: 0 10px; }
+  .vp-root.vp-short .vp-t1 > span:first-child { flex: none; }
+  .vp-root.vp-short .vp-t1 > span:last-child { min-width: 0; }
+}
 .vp-t2 { max-width: 36%; margin-left: auto; text-align: right; display: flex; align-items: center; gap: 6px; }
 .vp-t2 i { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--bad, #c4352a); }
 .vp-t2 span { min-width: 0; }
@@ -384,7 +410,6 @@
   .vp-lb { padding: 2px 3px 3px; border-radius: 5px; font-size: clamp(9.5px, calc(var(--u) * 13), 12.5px); }
   .vp-n { gap: 3px; }
 }
-}
 
 /* etichette sullo schermo del telefono */
 .vp-lb--ph { background: transparent; border-color: transparent; color: #fff; padding: 1px 3px; font-size: clamp(9.5px, calc(var(--u) * 12), 12px); }
@@ -402,3 +427,9 @@
 .vp.has-spk .vp-lb--sp:not(.on) { display: none; }
 .vp:not(.has-spk) .vp-lb--sp:not(:first-child) { display: none; }
 @container (max-width: 46px) { .vp-lb--ph .vp-n, .vp-lb--ph .vp-r { display: none; } }
+/* schermi stretti: i riquadri della videochiamata sono piccoli, l'etichetta deve coprire solo il mento e non il volto */
+@container vp (max-width: 560px) {
+  .vp-lb--t { padding: 0 3px 1px; border-radius: 3px; font-size: 9px; line-height: 1.15; }
+  .vp-lb--t .vp-n { gap: 2px; }
+  .vp-lb--t .vp-sd { width: 5px; height: 5px; }
+}

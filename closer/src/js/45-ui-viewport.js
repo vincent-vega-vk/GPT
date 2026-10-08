@@ -25,7 +25,16 @@
   const f = (n) => Math.round(n * 10) / 10;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const hash = (s) => { let x = 2166136261; s = String(s); for (let i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 16777619); } return x >>> 0; };
-  const rng = (seed) => CL.rng(seed);
+  /* mulberry32 locale (stessa sequenza di CL.rng): il modulo dipende solo da CL.ui.h */
+  const rng = (seed) => {
+    let a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
   const BGS = ['lab', 'factory', 'night', 'public', 'retail', 'clinic', 'port', 'control', 'office'];
   const VIEWS = ['call', 'meeting', 'walk', 'desk', 'phone', 'mail', 'car'];
   const OWN = { call: 1, desk: 1, phone: 1, mail: 1 };      // viste che usano la TUA postazione (office/night) come ambiente
@@ -622,7 +631,7 @@
     o = o || {};
     const nm = String(p.name || p.key || ''), parts = nm.split(/\s+/), first = parts[0], rest = parts.slice(1).join(' ');
     const st = p.stance && STANCE_LABEL[p.stance] ? p.stance : '';
-    return `<div class="vp-lb${o.bottom ? ' vp-lb--b' : ''}${o.one ? ' vp-lb--1' : ''}${o.cls ? ' ' + o.cls : ''}" data-k="${esc(p.key)}"${st ? ` data-s="${st}"` : ''} style="--x:${f(x)};--y:${f(y)};--w:${f(w)}"><span class="vp-n"><i class="vp-sd"></i><b>${esc(first)}${rest ? ` <span class="vp-n2">${esc(rest)}</span>` : ''}</b>${st ? `<em class="vp-st">${STANCE_LABEL[st]}</em>` : ''}</span>${p.role ? `<span class="vp-r">${esc(p.role)}</span>` : ''}</div>`;
+    return `<div class="vp-lb${o.bottom ? ' vp-lb--b' : ''}${o.one ? ' vp-lb--1' : ''}${o.wrap ? ' vp-lb--w' : ''}${o.cls ? ' ' + o.cls : ''}" data-k="${esc(p.key)}"${st ? ` data-s="${st}"` : ''} style="--x:${f(x)};--y:${f(y)};--w:${f(w)}"><span class="vp-n"><i class="vp-sd"></i><b>${esc(first)}${rest ? ` <span class="vp-n2">${esc(rest)}</span>` : ''}</b>${st ? `<em class="vp-st">${STANCE_LABEL[st]}</em>` : ''}</span>${p.role ? `<span class="vp-r">${esc(p.role)}</span>` : ''}</div>`;
   }
   /* testo diegetico (HTML) ancorato nello spazio del viewBox */
   const tx = (x, y, w, html, cls) => `<div class="vp-tx${cls ? ' ' + cls : ''}" style="--x:${f(x)};--y:${f(y)};--w:${f(w)}">${html}</div>`;
@@ -737,7 +746,7 @@
         if (wide) lb += lbl(p, x + 6 + w * 0.24, y + h - 6, w * 0.48, { bottom: true, cls: 'vp-lb--t' });
         else lb += lbl(p, x + w / 2, y + h - 5, w - 10, { bottom: true, one: h < 130, cls: 'vp-lb--t' });
       });
-      return { ppl, fg: typing(480, 428, 1.5), lbl: lb };
+      return { ppl, fg: typing(480, 414, 1.5), lbl: lb };
     },
   };
 
@@ -773,8 +782,8 @@
       c.people.forEach((p, i) => {
         const a = attrs(p), x = 480 + (i - (n - 1) / 2) * sp + a.jit * 5;
         const stand = a.st && n > 1;
-        ppl += person(p, x, (stand ? 192 : 232) + a.jit * 5, sc * (stand ? 1.04 : 1));
-        lb += lbl(p, x, 318, n === 1 ? 190 : Math.min(158, sp - 6), { bottom: true });
+        ppl += person(p, x, (stand ? 210 : 232) + a.jit * 5, sc * (stand ? 1.04 : 1));
+        lb += lbl(p, x, 287, n === 1 ? 190 : Math.min(158, sp - 6), { wrap: true });
       });
       cups += mug(104, 330, 1.05, 'wc') + mug(866, 328, 0.95, 'wh');
       const [tt, te] = TABLE[c.bg] || TABLE.office;
@@ -1028,7 +1037,7 @@
         const fy = WLK.YH + F * WLK.EYE / q.Z;
         let wd = 150;
         if (n === 1) wd = 190; else { for (let j = 0; j < n; j++) if (j !== i) wd = Math.min(wd, Math.abs(xs[j] - xs[i]) - 8); }
-        lb += lbl(q.p, xs[i], fy + 5, Math.max(70, wd));
+        lb += lbl(q.p, xs[i], fy + 5, Math.max(70, wd), { wrap: true });
       });
       return { ppl, fg: tablet(c, 480, 366), lbl: lb };
     },
@@ -1066,21 +1075,29 @@
       return pal(c.own, o) + phoneFlat(792, 346, 1.55, -9, true);
     },
     dyn(c) {
-      const n = c.n, w = n <= 4 ? 130 : 128, h = 120, sp = n <= 3 ? 156 : n === 4 ? 152 : 144;
+      const n = c.n, w = n <= 4 ? 130 : 128, h = 108, sp = n <= 3 ? 156 : n === 4 ? 152 : 144;
       let lb = '', cards = '', str = '';
       const pts = [];
       c.people.forEach((p, i) => {
-        const a = attrs(p), x = 480 + (i - (n - 1) / 2) * sp - w / 2, y = 14 + (i % 2) * 4 + a.jit * 2, rot = a.jit * 1.4;
+        const a = attrs(p), x = 480 + (i - (n - 1) / 2) * sp - w / 2, y = 24 + (i % 2) * 4 + a.jit * 2, rot = a.jit * 1.4;
         pts.push([x + w / 2, y + 5]);
         cards += contactCard(c, p, x, y, w, h, rot.toFixed(1));
-        lb += lbl(p, x + w / 2, y + h * 0.62 + 11, w - 10, { cls: 'vp-lb--card' });
+        lb += lbl(p, x + w / 2, y + h * 0.62 + 5, w + 8, { cls: 'vp-lb--card' });
       });
       pts.forEach((p, i) => { if (i) str += ps(`M${f(pts[i - 1][0])} ${f(pts[i - 1][1])}Q${f((pts[i - 1][0] + p[0]) / 2)} ${f(Math.max(pts[i - 1][1], p[1]) + 24)} ${f(p[0])} ${f(p[1])}`, 'bd', 1.5, 0.75); });
-      if (!n) {
-        cards += rep(4, (i) => gp(rc(0, 0, 54, 54, ['la', 'hc', 'ha', 'wc'][i], 0.95, 1) + rc(7, 12, 40, 3, 'da', 0.35) + rc(7, 20, 30, 3, 'da', 0.3) + ci(27, 5, 3.3, 'bd'), T(190 + i * 150, 20 + (i % 2) * 20, 1, i * 3 - 4)));
-        cards += gp(rc(0, 0, 76, 88, 'pp', null, 2) + rc(0, 0, 76, 17, 'bd', 0.85, 2) + rep(3, (r) => rep(5, (cc) => rc(6 + cc * 13, 24 + r * 17, 9, 11, 'i3', 0.35, 1.5))), T(676, 16, 1, 2));
+      if (n) {
+        /* bacheca non vuota: appunti e un calendario negli spazi liberi accanto alle schede */
+        const le = 480 - (n - 1) / 2 * sp - w / 2, re = 480 + (n - 1) / 2 * sp + w / 2;
+        const note = (x, y, i) => gp(rc(0, 0, 54, 54, ['la', 'hc', 'ha', 'wc'][i % 4], 0.95, 1) + rc(7, 12, 40, 3, 'da', 0.35) + rc(7, 20, 30, 3, 'da', 0.3) + ci(27, 5, 3.3, 'bd'), T(x, y, 1, ((i * 5) % 7) - 3));
+        [[140, 38, 0], [208, 56, 1], [276, 34, 2]].forEach((q) => { if (q[0] + 56 < le - 8) cards += note(q[0], q[1], q[2]); });
+        [[788, 40, 3], [722, 58, 0]].forEach((q) => { if (q[0] > re + 8) cards += note(q[0], q[1], q[2]); });
+        if (656 > re + 8 && n <= 2) cards += gp(rc(0, 0, 76, 88, 'pp', null, 2) + rc(0, 0, 76, 17, 'bd', 0.85, 2) + rep(3, (r) => rep(5, (cc) => rc(6 + cc * 13, 24 + r * 17, 9, 11, 'i3', 0.35, 1.5))), T(646, 26, 1, 2));
       }
-      return { ppl: str + cards, fg: typing(454, 424, 1.45), lbl: lb };
+      if (!n) {
+        cards += rep(4, (i) => gp(rc(0, 0, 54, 54, ['la', 'hc', 'ha', 'wc'][i], 0.95, 1) + rc(7, 12, 40, 3, 'da', 0.35) + rc(7, 20, 30, 3, 'da', 0.3) + ci(27, 5, 3.3, 'bd'), T(190 + i * 150, 30 + (i % 2) * 20, 1, i * 3 - 4)));
+        cards += gp(rc(0, 0, 76, 88, 'pp', null, 2) + rc(0, 0, 76, 17, 'bd', 0.85, 2) + rep(3, (r) => rep(5, (cc) => rc(6 + cc * 13, 24 + r * 17, 9, 11, 'i3', 0.35, 1.5))), T(676, 26, 1, 2));
+      }
+      return { ppl: str + cards, fg: typing(454, 410, 1.45), lbl: lb };
     },
   };
 
@@ -1131,7 +1148,7 @@
         const bub = [[-1, 66, 0.9], [1, 54, 1], [-1, 80, 0.9], [1, 40, 1], [-1, 60, 0.9]];
         bub.forEach((b, i) => { const y = sy0 + 62 + i * 38, wd = b[1] + 24; ph += rc(b[0] < 0 ? sx0 + 10 : sx0 + sw - 10 - wd, y, wd, 28, b[0] < 0 ? 'sg' : 'ac', b[0] < 0 ? 1 : 0.9, 11) + rc(b[0] < 0 ? sx0 + 20 : sx0 + sw - 10 - wd + 10, y + 8, wd - 20, 4, b[0] < 0 ? 'i3' : 'wh', 0.7, 2) + rc(b[0] < 0 ? sx0 + 20 : sx0 + sw - 10 - wd + 10, y + 16, (wd - 20) * 0.6, 4, b[0] < 0 ? 'i3' : 'wh', 0.5, 2); });
         ph += rc(sx0 + 8, sy0 + sh - 38, sw - 16, 28, 'sg', null, 14) + rc(sx0 + 20, sy0 + sh - 28, 70, 4, 'i3', 0.5, 2) + ci(sx0 + sw - 26, sy0 + sh - 24, 9, 'ac');
-        if (who) lb += lbl(who, cx + sx0 + 70, cy + sy0 + 4, 100, { cls: 'vp-lb--ph', one: true });
+        if (who) lb += lbl(who, cx + sx0 + 100, cy + sy0 + 21, 92, { cls: 'vp-lb--ph', one: true });
       }
       ph += pg([sx0 + sw * 0.5, -PH / 2 + 2, sx0 + sw * 0.82, -PH / 2 + 2, sx0 + sw * 0.28, PH / 2 - 2, sx0 - 2, PH / 2 - 2], 'wh', 0.05);
       o += gp(ph, `translate(${cx} ${cy}) rotate(-4)`);
@@ -1184,7 +1201,7 @@
       [0.96, 0.9, 0.97, 0.62].forEach((k, i) => { ppl += rc(x0 + 12, sy + 162 + i * 11, (wp - 24) * k, 4, 'i3', 0.45, 2); });
       ppl += rc(x0 + 12, sy + sh - 34, 118, 22, 'sg', null, 5) + rc(x0 + 20, sy + sh - 27, 8, 9, 'i3', 0.6, 2) + rc(x0 + 34, sy + sh - 25, 84, 4, 'i3', 0.5, 2) + rc(x0 + 34, sy + sh - 19, 56, 3, 'i3', 0.35, 1.5);
       ppl += rc(x0 + wp - 70, sy + sh - 34, 58, 22, 'ac', 0.95, 5) + rc(x0 + wp - 60, sy + sh - 25, 38, 4, 'wh', 0.9, 2);
-      return { ppl, fg: typing(480, 428, 1.5), lbl: lb };
+      return { ppl, fg: typing(480, 414, 1.5), lbl: lb };
     },
   };
 
@@ -1280,9 +1297,11 @@
     svg.setAttribute('aria-label', 'Scena');
     svg.innerHTML = `<defs><linearGradient id="${uid}tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".13"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient></defs><g class="vp-g1"></g><g class="vp-g2"></g><g class="vp-g3"></g><g class="vp-g4"></g>`;
     const gEnv = svg.childNodes[1], gPpl = svg.childNodes[2], gFg = svg.childNodes[3], gFx = svg.childNodes[4];
-    gFx.innerHTML = `<g class="vp-you" transform="translate(480 384)"><path d="M-34 0C-28 -14 28 -14 34 0" class="s-ac" stroke-width="2.6" stroke-linecap="round"/><path d="M-58 0C-46 -24 46 -24 58 0" class="s-ac" stroke-width="2.6" stroke-linecap="round"/><path d="M-84 0C-66 -34 66 -34 84 0" class="s-ac" stroke-width="2.6" stroke-linecap="round"/></g>`;
     const lbBox = h('div', { class: 'vp-lbls' });
-    const ov = h('div', { class: 'vp-ov', 'aria-hidden': 'true' }, lbBox);
+    /* archi sonori di chi parla sei tu: elemento HTML ancorato al bordo inferiore, così restano visibili qualunque sia il taglio verticale */
+    const youEl = h('div', { class: 'vp-you' });
+    youEl.innerHTML = '<svg viewBox="-90 -38 180 40" aria-hidden="true"><path d="M-34 0C-28 -14 28 -14 34 0" class="s-ac" stroke-width="2.6" stroke-linecap="round"/><path d="M-58 0C-46 -24 46 -24 58 0" class="s-ac" stroke-width="2.6" stroke-linecap="round"/><path d="M-84 0C-66 -34 66 -34 84 0" class="s-ac" stroke-width="2.6" stroke-linecap="round"/></svg>';
+    const ov = h('div', { class: 'vp-ov', 'aria-hidden': 'true' }, lbBox, youEl);
     const tWhen = h('span'), tWhere = h('span');
     const t1 = h('div', { class: 'vp-tag vp-t1', hidden: '' }, tWhen, tWhere);
     const tCap = h('span');
@@ -1293,6 +1312,12 @@
 
     let spk = null, envKey = '', pplKey = '', first = true;
     const envCache = new Map();
+    /* contenitore molto largo rispetto all'altezza (viewport "appiccicoso" del gioco): le etichette quando/dove passano su una riga */
+    let ro = null;
+    if (g.ResizeObserver) {
+      ro = new g.ResizeObserver(() => { const r = root.getBoundingClientRect(); el.classList.toggle('vp-short', r.height > 0 && r.width / r.height > 2.75); });
+      ro.observe(root);
+    }
 
     function applySpeak() {
       let has = false;
@@ -1373,6 +1398,7 @@
       applySpeak();
     }
     function destroy() {
+      if (ro) { ro.disconnect(); ro = null; }
       if (el.parentNode) el.parentNode.removeChild(el);
       envCache.clear();
       gEnv.innerHTML = gPpl.innerHTML = gFg.innerHTML = '';
