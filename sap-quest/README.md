@@ -25,6 +25,11 @@ Il principio: **ogni dato che invecchia è un "fatto"**, non testo sparso nelle 
 
 Limite onesto: i job automatici scaricano notizie e **segnalano** cosa è scaduto, ma la **riverifica dei contenuti** richiede un agente o una persona (e fonti ufficiali). Senza quel passaggio i fatti scadono e il gioco lo dice, non li aggiorna da solo.
 
+### Routine settimanale (Claude)
+Una routine (`trig_01QKKC3hJD45aRyTbm4qJrDX`, ogni lunedì alle 06:47 ora di Roma) avvia una sessione che segue `tools/REFRESH_PROMPT.md`: riverifica i fatti scaduti con ricerche web, aggiorna `data/facts/*.json`, valida, committa sul branch di lavoro e ripubblica l'Artifact. Non tocca i fatti legati a eventi futuri prima che avvengano (es. risultati Q3 del 21 ottobre 2026).
+Per fermarla: elimina o disabilita la routine dalle impostazioni delle routine di Claude (oppure `update_trigger` con `enabled=false`).
+Limiti: dipende dai permessi della sessione automatica (accesso al repo, ricerca web) e dal budget di ricerche; se qualcosa manca non inventa e lo scrive nel riepilogo. Le modifiche ai contenuti non sono riviste da una persona prima della pubblicazione: controlla il riepilogo e il diff dei commit.
+
 Le date a partire dalle quali un fatto è sospetto sono scelte dagli autori: prossimo evento che lo cambia (es. i risultati Q3 del 21 ottobre 2026) oppure 90/180 giorni.
 
 ## Struttura
