@@ -492,6 +492,9 @@
       regions:[['Auckland & Isola del Nord',0.75,true],['Isola del Sud',0.25]] },
   ];
 
+  // ---- Profili aggiuntivi (capitale, carica, ISU, CO2 Mt/anno, disoccupazione %, età mediana) ----
+  GEO.PROFILES = {"USA":{"capital":"Washington","title":"Presidente","hdi":0.93,"co2":4800,"unemp":4.2,"medianAge":38.5},"CHN":{"capital":"Pechino","title":"Segretario generale","hdi":0.79,"co2":11900,"unemp":5.2,"medianAge":39.8},"RUS":{"capital":"Mosca","title":"Presidente","hdi":0.82,"co2":1800,"unemp":2.6,"medianAge":40.3},"IND":{"capital":"Nuova Delhi","title":"Primo ministro","hdi":0.64,"co2":2900,"unemp":7.8,"medianAge":28.4},"JPN":{"capital":"Tokyo","title":"Primo ministro","hdi":0.92,"co2":1000,"unemp":2.5,"medianAge":49.5},"DEU":{"capital":"Berlino","title":"Cancelliere","hdi":0.95,"co2":600,"unemp":3.4,"medianAge":46.8},"FRA":{"capital":"Parigi","title":"Presidente","hdi":0.91,"co2":290,"unemp":7.3,"medianAge":42.3},"GBR":{"capital":"Londra","title":"Primo ministro","hdi":0.94,"co2":320,"unemp":4.3,"medianAge":40.6},"ITA":{"capital":"Roma","title":"Presidente del Consiglio","hdi":0.91,"co2":310,"unemp":6.5,"medianAge":48.1},"ESP":{"capital":"Madrid","title":"Presidente del Governo","hdi":0.91,"co2":230,"unemp":11.5,"medianAge":45.1},"POL":{"capital":"Varsavia","title":"Primo ministro","hdi":0.88,"co2":300,"unemp":3.0,"medianAge":42.0},"UKR":{"capital":"Kiev","title":"Presidente","hdi":0.73,"co2":110,"unemp":15.0,"medianAge":44.3},"FIN":{"capital":"Helsinki","title":"Primo ministro","hdi":0.94,"co2":35,"unemp":7.5,"medianAge":43.5},"TUR":{"capital":"Ankara","title":"Presidente","hdi":0.86,"co2":440,"unemp":9.0,"medianAge":33.0},"SAU":{"capital":"Riad","title":"Principe ereditario","hdi":0.88,"co2":650,"unemp":4.0,"medianAge":30.8},"ARE":{"capital":"Abu Dhabi","title":"Presidente","hdi":0.94,"co2":220,"unemp":2.8,"medianAge":33.0},"IRN":{"capital":"Teheran","title":"Guida suprema","hdi":0.78,"co2":700,"unemp":9.0,"medianAge":33.0},"ISR":{"capital":"Gerusalemme","title":"Primo ministro","hdi":0.92,"co2":65,"unemp":3.5,"medianAge":30.1},"EGY":{"capital":"Il Cairo","title":"Presidente","hdi":0.73,"co2":270,"unemp":7.0,"medianAge":24.5},"NGA":{"capital":"Abuja","title":"Presidente","hdi":0.55,"co2":130,"unemp":5.0,"medianAge":18.1},"ZAF":{"capital":"Pretoria","title":"Presidente","hdi":0.72,"co2":440,"unemp":32.0,"medianAge":28.0},"BRA":{"capital":"Brasilia","title":"Presidente","hdi":0.76,"co2":480,"unemp":7.5,"medianAge":33.5},"ARG":{"capital":"Buenos Aires","title":"Presidente","hdi":0.85,"co2":190,"unemp":7.5,"medianAge":32.4},"MEX":{"capital":"Città del Messico","title":"Presidente","hdi":0.78,"co2":490,"unemp":2.8,"medianAge":29.3},"CAN":{"capital":"Ottawa","title":"Primo ministro","hdi":0.94,"co2":550,"unemp":6.3,"medianAge":41.1},"AUS":{"capital":"Canberra","title":"Primo ministro","hdi":0.95,"co2":390,"unemp":4.0,"medianAge":37.5},"IDN":{"capital":"Giacarta","title":"Presidente","hdi":0.71,"co2":700,"unemp":5.0,"medianAge":30.2},"VNM":{"capital":"Hanoi","title":"Segretario generale","hdi":0.73,"co2":350,"unemp":2.2,"medianAge":32.5},"KOR":{"capital":"Seul","title":"Presidente","hdi":0.93,"co2":600,"unemp":2.8,"medianAge":44.5},"PRK":{"capital":"Pyongyang","title":"Leader supremo","hdi":0.5,"co2":50,"unemp":25.0,"medianAge":35.0},"TWN":{"capital":"Taipei","title":"Presidente","hdi":0.92,"co2":270,"unemp":3.4,"medianAge":43.0},"PAK":{"capital":"Islamabad","title":"Primo ministro","hdi":0.54,"co2":230,"unemp":8.0,"medianAge":22.0},"KAZ":{"capital":"Astana","title":"Presidente","hdi":0.8,"co2":220,"unemp":4.8,"medianAge":31.0},"ETH":{"capital":"Addis Abeba","title":"Primo ministro","hdi":0.49,"co2":20,"unemp":3.5,"medianAge":19.5},"KEN":{"capital":"Nairobi","title":"Presidente","hdi":0.6,"co2":22,"unemp":5.7,"medianAge":20.0},"DZA":{"capital":"Algeri","title":"Presidente","hdi":0.75,"co2":180,"unemp":12.0,"medianAge":28.5},"MAR":{"capital":"Rabat","title":"Re","hdi":0.7,"co2":75,"unemp":12.5,"medianAge":29.0},"COD":{"capital":"Kinshasa","title":"Presidente","hdi":0.48,"co2":4,"unemp":5.0,"medianAge":16.7},"COL":{"capital":"Bogotá","title":"Presidente","hdi":0.76,"co2":95,"unemp":10.0,"medianAge":31.0},"VEN":{"capital":"Caracas","title":"Presidente","hdi":0.7,"co2":110,"unemp":7.0,"medianAge":29.0},"PER":{"capital":"Lima","title":"Presidente","hdi":0.76,"co2":55,"unemp":6.5,"medianAge":29.0},"CHL":{"capital":"Santiago","title":"Presidente","hdi":0.86,"co2":90,"unemp":8.5,"medianAge":35.5},"CUB":{"capital":"L'Avana","title":"Presidente","hdi":0.76,"co2":28,"unemp":3.0,"medianAge":42.0},"THA":{"capital":"Bangkok","title":"Primo ministro","hdi":0.8,"co2":270,"unemp":1.0,"medianAge":40.0},"PHL":{"capital":"Manila","title":"Presidente","hdi":0.71,"co2":150,"unemp":4.5,"medianAge":25.7},"MYS":{"capital":"Kuala Lumpur","title":"Primo ministro","hdi":0.81,"co2":270,"unemp":3.5,"medianAge":30.3},"BGD":{"capital":"Dacca","title":"Primo ministro","hdi":0.67,"co2":100,"unemp":5.0,"medianAge":27.0},"IRQ":{"capital":"Baghdad","title":"Primo ministro","hdi":0.69,"co2":190,"unemp":15.0,"medianAge":21.0},"QAT":{"capital":"Doha","title":"Emiro","hdi":0.87,"co2":110,"unemp":0.2,"medianAge":33.7},"GRC":{"capital":"Atene","title":"Primo ministro","hdi":0.89,"co2":55,"unemp":10.0,"medianAge":45.6},"SWE":{"capital":"Stoccolma","title":"Primo ministro","hdi":0.95,"co2":38,"unemp":8.0,"medianAge":41.1},"NOR":{"capital":"Oslo","title":"Primo ministro","hdi":0.96,"co2":42,"unemp":4.0,"medianAge":40.0},"NLD":{"capital":"Amsterdam","title":"Primo ministro","hdi":0.95,"co2":140,"unemp":3.7,"medianAge":42.8},"ROU":{"capital":"Bucarest","title":"Presidente","hdi":0.83,"co2":70,"unemp":5.5,"medianAge":43.0},"HUN":{"capital":"Budapest","title":"Primo ministro","hdi":0.85,"co2":45,"unemp":4.5,"medianAge":44.0},"BLR":{"capital":"Minsk","title":"Presidente","hdi":0.8,"co2":60,"unemp":3.5,"medianAge":40.9},"UZB":{"capital":"Tashkent","title":"Presidente","hdi":0.73,"co2":120,"unemp":5.0,"medianAge":29.0},"CHE":{"capital":"Berna","title":"Presidente della Confederazione","hdi":0.97,"co2":35,"unemp":2.5,"medianAge":43.0},"NZL":{"capital":"Wellington","title":"Primo ministro","hdi":0.94,"co2":33,"unemp":4.5,"medianAge":37.5}};
+
   // ---- Rivalità strutturali (relazione iniziale) -----------------------------
   GEO.RELATIONS_SEED = [
     ['USA','CHN',-55],['USA','RUS',-80],['USA','IRN',-85],['USA','PRK',-90],['USA','UKR',55],['USA','TWN',60],
@@ -717,6 +720,114 @@
       ]},
     { id:'default_estero', scope:'global', weight:1, title:'Default sovrano di un mercato emergente', text:'Un grande paese emergente sospende i pagamenti: contagio sui mercati obbligazionari.', global:{ sector:{FIN:-12}, debtShock:+4 } },
     { id:'ondata_calore', scope:'global', weight:1, title:'Estate record', text:'Ondate di calore e incendi su tre continenti: raccolti distrutti, consumi energetici alle stelle.', global:{ commodity:{grain:+30, gas:+15}, gdpPct:-0.4 } },
+  );
+
+
+  // ---- Politiche nazionali: 10 ambiti, opzioni mutuamente esclusive ----
+  // fx: growth (punti crescita annua), debt (deriva debito/turno), stab/appr/infl (target), popG (crescita pop %/anno),
+  //     research (molt.), milEff (molt. potenza), shock (molt. shock materie prime), sanct (molt. danno sanzioni),
+  //     co2 (molt. emissioni), relDem/relAut/relAll (deriva relazioni), press (deriva libertà stampa), loyalty, opposition,
+  //     soe (molt. dividendi), deter (molt. deterrenza vs invasioni IA), rep (deriva reputazione), chips (accesso chip autonomo)
+  GEO.POLICIES = {
+    fisco: { name:'Fisco', icon:'🧾', options:{
+      tasse_basse:{ name:'Tasse basse', desc:'Crescita +0,4, debito +1/turno, consenso +2, welfare meno efficace.', fx:{growth:0.4,debt:1.0,appr:2,opposition:2} },
+      equilibrio:{ name:'Equilibrio fiscale', desc:'Nessun effetto particolare.', fx:{} },
+      tasse_alte:{ name:'Tasse progressive alte', desc:'Crescita −0,3, debito −1,5/turno, stabilità +3, consenso −2.', fx:{growth:-0.3,debt:-1.5,stab:3,appr:-2} } } },
+    commercio: { name:'Commercio', icon:'🚢', options:{
+      libero_scambio:{ name:'Libero scambio', desc:'Crescita +0,4, accordi commerciali più facili, +1,3× esposizione agli shock.', fx:{growth:0.4,shock:1.3,relAll:1,trade:1} },
+      protezionismo:{ name:'Protezionismo', desc:'Crescita −0,3, stabilità +2, shock ×0,6, inflazione +1, partner commerciali −.', fx:{growth:-0.3,stab:2,shock:0.6,infl:1,relAll:-1} },
+      autarchia:{ name:'Autarchia', desc:'Crescita −0,8, sanzioni dimezzate, inflazione +2, chip solo se li produci.', fx:{growth:-0.8,sanct:0.5,infl:2,relAll:-2,chips:'self'} } } },
+    economia: { name:'Modello economico', icon:'🏭', options:{
+      mercato:{ name:'Libero mercato', desc:'Crescita +0,3, opposizione +3 (diseguaglianze), dividendi imprese di stato ×0,7.', fx:{growth:0.3,opposition:3,soe:0.7} },
+      misto:{ name:'Economia mista', desc:'Equilibrio tra stato e mercato.', fx:{} },
+      stato:{ name:'Economia di stato', desc:'Dividendi imprese di stato ×1,6, lealtà élite +5, crescita −0,4, ricerca ×0,95.', fx:{growth:-0.4,soe:1.6,loyalty:5,research:0.95} } } },
+    immigrazione: { name:'Immigrazione', icon:'🧳', options:{
+      aperta:{ name:'Frontiere aperte', desc:'Popolazione +0,3%/anno, ricerca ×1,05, stabilità −2, consenso −2.', fx:{popG:0.3,research:1.05,stab:-2,appr:-2,relDem:1} },
+      selettiva:{ name:'Immigrazione selettiva', desc:'Popolazione +0,1%, ricerca ×1,03.', fx:{popG:0.1,research:1.03} },
+      chiusa:{ name:'Frontiere chiuse', desc:'Popolazione −0,2%, stabilità +2, consenso +2, democrazie −1.', fx:{popG:-0.2,stab:2,appr:2,relDem:-1} } } },
+    welfare: { name:'Welfare', icon:'🏥', options:{
+      universale:{ name:'Welfare universale', desc:'Stabilità +4, consenso +4, debito +1/turno, crescita −0,2.', fx:{stab:4,appr:4,debt:1.0,growth:-0.2} },
+      base:{ name:'Rete di sicurezza di base', desc:'Equilibrio.', fx:{} },
+      minimo:{ name:'Stato minimo', desc:'Crescita +0,3, debito −1/turno, stabilità −4, opposizione +4.', fx:{growth:0.3,debt:-1.0,stab:-4,opposition:4} } } },
+    energia: { name:'Energia & clima', icon:'⚡', options:{
+      fossile:{ name:'Fossili a oltranza', desc:'Crescita +0,3 (+0,3 se produttore), emissioni ×1,2, UE e democrazie −1.', fx:{growth:0.3,co2:1.2,relDem:-1,fossilBonus:0.3} },
+      transizione:{ name:'Transizione verde', desc:'Emissioni ×0,7, +30 progresso Energia/turno, crescita −0,2, democrazie +1.', fx:{co2:0.7,growth:-0.2,techProg:{energy:30},relDem:1} },
+      nucleare:{ name:'Rinascimento nucleare', desc:'Richiede Energia ≥ 5. Emissioni ×0,5, immune a shock petrolio/gas, crescita +0,1.', req:n=>n.tech.energy>=5, fx:{co2:0.5,growth:0.1,energyShield:1} } } },
+    difesa: { name:'Dottrina militare', icon:'🪖', options:{
+      leva:{ name:'Leva obbligatoria', desc:'Esercito +0,8/turno fino al limite, consenso −2, costo ridotto.', fx:{armyGrow:0.8,appr:-2} },
+      professionale:{ name:'Esercito professionale', desc:'Potenza militare ×1,08.', fx:{milEff:1.08} },
+      neutralita:{ name:'Neutralità armata', desc:'Relazioni +2 con tutti, deterrenza ×1,2, dichiarare guerra senza casus belli costa 30 reputazione.', fx:{relAll:2,deter:1.2,warRep:-30} } } },
+    esteri: { name:'Dottrina estera', icon:'🌐', options:{
+      ovest:{ name:'Allineamento occidentale', desc:'Democrazie +2/turno, autocrazie −2, accesso facilitato a NATO/UE.', fx:{relDem:2,relAut:-2} },
+      est:{ name:'Allineamento con BRICS/SCO', desc:'Autocrazie +2, democrazie −2.', fx:{relDem:-2,relAut:2} },
+      non_allineato:{ name:'Non allineamento', desc:'Relazioni +1 con tutti, reputazione +0,5/turno.', fx:{relAll:1,rep:0.5} },
+      interventismo:{ name:'Interventismo', desc:'Le guerre costano meno reputazione, alleati più inclini a intervenire, spesa militare +.', fx:{warRep:6,allyBoost:0.2,appr:-1} },
+      isolazionismo:{ name:'Isolazionismo', desc:'Crescita −0,1, reputazione +1/turno, nessuna richiesta di intervento.', fx:{growth:-0.1,rep:1,noCalls:1} } } },
+    nucleare: { name:'Dottrina nucleare', icon:'☢️', options:{
+      no_first_use:{ name:'No first use', desc:'Relazioni +1 con tutti, reputazione +0,5; un tuo primo colpo costa doppia reputazione.', fx:{relAll:1,rep:0.5,firstStrikeRep:2} },
+      deterrenza:{ name:'Deterrenza', desc:'Equilibrio.', fx:{} },
+      primo_colpo:{ name:'Primo colpo', desc:'Relazioni −1/turno con tutti, deterrenza ×1,5 (se hai testate).', fx:{relAll:-1,deter:1.5} } } },
+    digitale: { name:'Tecnologia', icon:'💻', options:{
+      aperta:{ name:'Innovazione aperta', desc:'Ricerca ×1,10, spionaggio contro di te +15%.', fx:{research:1.10,spyVuln:0.15} },
+      sovranita:{ name:'Sovranità digitale', desc:'Difesa cyber +2, ricerca ×0,95, +20 progresso Semiconduttori/turno.', fx:{research:0.95,cyberDef:2,techProg:{semis:20}} },
+      regolata:{ name:'IA fortemente regolata', desc:'Stabilità +2, ricerca IA ×0,8, democrazie +1.', fx:{stab:2,aiResearch:0.8,relDem:1} } } },
+    istituzioni: { name:'Istituzioni', icon:'⚖️', options:{
+      diritto:{ name:'Stato di diritto', desc:'Crescita +0,2, libertà di stampa +1/turno, opposizione +2, democrazie +1.', fx:{growth:0.2,press:1,opposition:2,relDem:1} },
+      ordine:{ name:'Ordine e sicurezza', desc:'Stabilità +4, libertà di stampa −1/turno, lealtà +3, democrazie −1.', fx:{stab:4,press:-1,loyalty:3,relDem:-1} },
+      religione:{ name:'Religione di stato', desc:'Stabilità +3, consenso +2, ricerca ×0,95, relazioni −2 con chi ha regime diverso.', fx:{stab:3,appr:2,research:0.95,relDiff:-2} } } },
+  };
+  // Politiche iniziali per nazione (dedotte da regime/persona, con eccezioni)
+  GEO.defaultPolicies = (n) => {
+    const d = n.regime === 'democrazia';
+    const pol = { fisco:'equilibrio', commercio: d ? 'libero_scambio' : 'protezionismo', economia: n.regime === 'autocrazia' ? 'stato' : 'misto', immigrazione:'selettiva', welfare: d ? 'base' : 'minimo', energia: (n.res.oil >= 6 || n.res.gas >= 6) ? 'fossile' : 'transizione', difesa:'professionale', esteri:'non_allineato', nucleare:'deterrenza', digitale:'aperta', istituzioni: d ? 'diritto' : 'ordine' };
+    if (n.blocs.includes('NATO') || n.blocs.includes('EU') || n.blocs.includes('AUKUS') || (n.allies || []).includes('USA')) pol.esteri = 'ovest';
+    if (n.blocs.includes('SCO') || n.blocs.includes('CSTO')) pol.esteri = 'est';
+    if (n.persona === 'isolazionista') pol.esteri = n.blocs.includes('NATO') ? 'ovest' : 'isolazionismo';
+    if (n.persona === 'egemone') pol.esteri = 'interventismo';
+    if (['DEU','FRA','ITA','ESP','SWE','FIN','NOR','NLD','CHE','GBR','CAN','AUS','NZL','JPN','KOR'].includes(n.id)) { pol.welfare = 'universale'; pol.fisco = 'tasse_alte'; }
+    if (['USA','ARE','QAT','SAU','CHL'].includes(n.id)) { pol.fisco = 'tasse_basse'; pol.economia = 'mercato'; }
+    if (['FRA','CHE','SWE','FIN','KOR','JPN','ARE','HUN','CHN','RUS'].includes(n.id) && n.tech.energy >= 5) pol.energia = 'nucleare';
+    if (['KOR','ISR','FIN','TUR','IRN','EGY','PRK','VNM','RUS','UKR','GRC','CHE','BRA','MEX','THA'].includes(n.id)) pol.difesa = 'leva';
+    if (['CHE','FIN','SWE','AUT','NZL','IRL'].includes(n.id) && !n.blocs.includes('NATO')) pol.difesa = 'neutralita';
+    if (['CHN','IND'].includes(n.id)) pol.nucleare = 'no_first_use';
+    if (['RUS','PRK','PAK'].includes(n.id)) pol.nucleare = 'primo_colpo';
+    if (['CHN','RUS','IRN','PRK','VNM','CUB','BLR'].includes(n.id)) pol.digitale = 'sovranita';
+    if (['DEU','FRA','ITA','ESP','NLD','SWE','FIN','GRC','ROU','POL'].includes(n.id)) pol.digitale = 'regolata';
+    if (['IRN','SAU','ARE','QAT','PAK','ISR','MAR','DZA','EGY','IRQ'].includes(n.id)) pol.istituzioni = 'religione';
+    if (['USA','CAN','AUS','DEU','SWE','ARE','QAT','SAU'].includes(n.id)) pol.immigrazione = 'aperta';
+    if (['JPN','HUN','PRK','POL','KOR'].includes(n.id)) pol.immigrazione = 'chiusa';
+    if (['PRK','CUB','VEN'].includes(n.id)) pol.commercio = 'autarchia';
+    if (['IND','BRA','ZAF','IDN','ARG','MEX','ETH'].includes(n.id)) pol.esteri = 'non_allineato';
+    return pol;
+  };
+
+  // ---- Visioni nazionali: il futuro che scegli per il paese (cambiabile ogni 24 turni) ----
+  GEO.VISIONS = {
+    tech:     { name:'Superpotenza tecnologica', icon:'🧠', desc:'Ricerca ×1,15; indice nazionale +; vittoria tecnologica più vicina.', fx:{research:1.15}, goal:'Tutte le tecnologie ≥ 9' },
+    fortress: { name:'Fortezza inespugnabile', icon:'🏰', desc:'Difesa aerea +1 effettivo, esercito oltre il limite (+10), stabilità +2, crescita −0,2.', fx:{defense:1,armyCap:10,stab:2,growth:-0.2}, goal:'Mai perdere una regione' },
+    trade:    { name:'Impero commerciale', icon:'💱', desc:'Ogni accordo commerciale vale +0,25 crescita (invece di +0,15), dividendi ×1,3, mercanti +2/turno.', fx:{tradeBonus:0.1,soe:1.3,relMerchant:2}, goal:'Accordi commerciali con 15 nazioni' },
+    green:    { name:'Potenza verde', icon:'🌱', desc:'Emissioni ×0,6, +40 progresso Energia/turno, democrazie +1, disastri climatici dimezzati, crescita −0,1.', fx:{co2:0.6,techProg:{energy:40},relDem:1,climateShield:0.5,growth:-0.1}, goal:'Energia 10 e transizione verde' },
+    hegemon:  { name:'Egemonia regionale', icon:'🦅', desc:'Invasioni e ultimatum contro i vicini +15%, guerre costano metà reputazione, democrazie −1/turno.', fx:{invadeNeighbors:1.15,warRep:0.5,relDem:-1}, goal:'Controllare 6 regioni straniere' },
+    beacon:   { name:'Faro della democrazia', icon:'🗽', desc:'Democrazie +2/turno, libertà di stampa +1, proiezione elettorale +5%, alleanze più facili con le democrazie.', fx:{relDem:2,press:1,election:0.05,allyDem:1}, goal:'Alleanze con 8 democrazie' },
+    order:    { name:'Ordine e grandezza', icon:'👑', desc:'Stabilità +4, lealtà +5, consenso +2, libertà di stampa −1/turno, democrazie −1.', fx:{stab:4,loyalty:5,appr:2,press:-1,relDem:-1}, goal:'Stabilità ≥ 85 per 8 turni' },
+  };
+
+  GEO.EVENTS.push(
+    { id:'vertice_clima', scope:'global', weight:2, title:'Vertice mondiale sul clima', text:'Le grandi potenze si impegnano a tagliare le emissioni. Chi ha scelto la transizione verde guadagna prestigio.', global:{ climatePledge:true } },
+    { id:'disastro_clima', scope:'global', weight:2, cond:s=>s.climate&&s.climate.temp>1.6, title:'Catastrofe climatica', text:'Uragani, siccità e inondazioni su scala continentale: il riscaldamento presenta il conto.', global:{ gdpPct:-0.8, commodity:{grain:+25}, stabilityAll:-3 } },
+    { id:'ondata_democratica', scope:'global', weight:1, title:'Ondata democratica', text:'Proteste di massa scuotono diversi regimi autoritari.', global:{ autocracyStab:-8 } },
+    { id:'ondata_autoritaria', scope:'global', weight:1, title:'Ondata populista', text:'In molte democrazie avanzano forze che promettono mano forte.', global:{ democracyOpp:+10 } },
+    { id:'successione', scope:'player', weight:1, cond:n=>n.regime==='autocrazia', title:'Questione della successione', text:'Le fazioni del regime chiedono chiarezza sul futuro: chi erediterà il potere?',
+      options:[
+        { label:'Designare un erede fidato', fx:{loyalty:+10, stability:+3} },
+        { label:'Rinviare la questione', fx:{loyalty:-6} },
+        { label:'Aprire a elezioni controllate', fx:{loyalty:-8, relDem:+10, pressFreedom:+10} },
+      ]},
+    { id:'referendum', scope:'player', weight:1, cond:n=>n.regime==='democrazia', title:'Referendum popolare', text:'Una raccolta firme impone un referendum su una grande riforma.',
+      options:[
+        { label:'Sostenerlo: riforma delle istituzioni', fx:{stability:+3, pressFreedom:+5, opposition:-5} },
+        { label:'Osteggiarlo', fx:{approval:-4, opposition:+6} },
+      ]},
   );
 
   GEO.DIFFICULTY = {

@@ -24,7 +24,7 @@
     // Rapporto di forze con alleati probabili
     const myPow = E.milPower(n) + E.alliesOf(s, n.id).reduce((a, id) => a + E.milPower(s.nations[id]) * 0.25, 0);
     const allies = E.alliesOf(s, target);
-    let tgtPow = E.milPower(t) + allies.reduce((a, id) => a + E.milPower(s.nations[id]) * (s.nations[id].id === s.player ? 0.35 : 0.45), 0);
+    let tgtPow = (E.milPower(t) + allies.reduce((a, id) => a + E.milPower(s.nations[id]) * (s.nations[id].id === s.player ? 0.35 : 0.45), 0)) * (E.mods(t).deter || 1);
     let ratio = myPow * reach.mult / Math.max(1, tgtPow);
     if (t.nukes > 0 && n.nukes === 0 && n.persona !== 'imprevedibile') return 0;
     if (t.nukes > 0 && n.nukes > 0) ratio *= 0.6;
@@ -148,7 +148,7 @@
     const hostile = others.filter(o => rel(o) < -45);
     const threatened = others.some(o => AI.warIntent(s, s.nations[o], me) > 0.015) || E.warsOf(s, me).length > 0;
     const roll = R();
-    const target = (o) => (o === s.player);
+    const target = (o) => E.playerGoverns(s, o);
     if (roll < 0.35 && friendly.length) {
       const o = friendly[Math.floor(R() * Math.min(4, friendly.length))];
       if (!E.hasTreaty(s, me, o, 'commercio') && P.greed > 0.4) { if (target(o)) E.queueProposal(s, { from: me, type: 'commercio', terms: {}, text: `${n.flag} ${n.name} propone un accordo commerciale.` }); else E.propose(s, me, o, 'commercio'); }
@@ -172,12 +172,12 @@
       const o = hostile.filter(x => s.nations[x].tech[n.researchFocus] > n.tech[n.researchFocus])[0];
       if (o && R() < 0.3) E.espionage(s, me, o, n.researchFocus);
     }
-    if (rel(s.player) < -50 && !E.atWar(s, me, s.player) && n.treasury > 20 && R() < 0.08 * GEO.DIFFICULTY[s.difficulty].aiAggr) {
+    if (E.playerGoverns(s, s.player) && rel(s.player) < -50 && !E.atWar(s, me, s.player) && n.treasury > 20 && R() < 0.08 * GEO.DIFFICULTY[s.difficulty].aiAggr) {
       n.treasury -= 10; const r = E.destabilize(s, me, s.player);
       if (!r.caught && s.nations[s.player].perks.intel) E.news(s, `🕵️ I tuoi servizi segreti intercettano un'operazione di destabilizzazione di ${n.flag} ${n.name}.`, 'dip', [s.player, me]);
     }
     // Richiesta di aiuto al giocatore se amico e in difficoltà
-    if (E.warsOf(s, me).length && rel(s.player) > 40 && n.stability < 50 && R() < 0.15 && !s.pending.some(p => p.from === me && p.type === 'aiuti')) {
+    if (E.playerGoverns(s, s.player) && !E.mods(s.nations[s.player]).noCalls && E.warsOf(s, me).length && rel(s.player) > 40 && n.stability < 50 && R() < 0.15 && !s.pending.some(p => p.from === me && p.type === 'aiuti')) {
       E.queueProposal(s, { from: me, type: 'aiuti', terms: { amount: Math.max(10, Math.round(E.effGdp(s, s.nations[s.player]) * 0.004)), kind: 'militari' }, text: `${n.flag} ${n.name} è in guerra e chiede aiuti militari (${Math.max(10, Math.round(E.effGdp(s, s.nations[s.player]) * 0.004))} mld).` });
     }
   };

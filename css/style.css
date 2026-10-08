@@ -36,7 +36,7 @@ aside, #center { min-height: 0; display: flex; flex-direction: column; }
 aside { background: var(--bg2); border-right: 1px solid var(--line); }
 #right { border-right: 0; border-left: 1px solid var(--line); }
 .tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); flex-shrink: 0; }
-#leftTabs button { flex: 1 1 33%; }
+#leftTabs button { flex: 1 1 25%; }
 .tabs button { flex: 1; border: 0; border-radius: 0; background: transparent; padding: 9px 2px; color: var(--muted); border-bottom: 2px solid transparent; font-size: 12px; white-space: nowrap; }
 .tabs button.active { color: var(--text); border-bottom-color: var(--accent); background: rgba(255,255,255,.03); }
 .panel { overflow-y: auto; padding: 12px; flex: 1; }
@@ -121,3 +121,10 @@ kbd { background: var(--bg3); border: 1px solid var(--line); padding: 1px 5px; b
 .regime-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; }
 .regime-democrazia { background: #1c3a5e; color: #bfdbfe; } .regime-ibrido { background: #4a3a1c; color: #fde68a; } .regime-autocrazia { background: #4a1d1d; color: #fecaca; }
 .chip.danger { border-color: var(--red); color: #ffb3b3; }
+
+.policy { display: flex; gap: 8px; align-items: center; padding: 5px 0; border-top: 1px solid var(--line); }
+.policy .b { flex: 1; } .policy .t { font-size: 12.5px; font-weight: 600; } .policy .d { font-size: 11.5px; color: var(--muted); line-height: 1.3; }
+.policy.active { background: rgba(61,220,132,.06); margin: 0 -10px; padding: 5px 10px; } .policy.locked { opacity: .55; }
+#mapCtl select { background: rgba(10,15,30,.9); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; font-size: 12px; }
+#mapCtl { background: rgba(10,15,30,.6); padding: 4px; border-radius: 10px; }
+.news-item.policy { border-color: var(--purple); } .news-item.politics { border-color: var(--accent); } .news-item.achievement { border-color: #fff; background: rgba(245,185,66,.12); }

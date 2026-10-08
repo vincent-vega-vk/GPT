@@ -1,6 +1,6 @@
 # 🌐 Geopolitica 2026 — Grand Strategy a turni
 
-Un gioco di strategia geopolitica ispirato a *Diplomacy*, giocabile direttamente nel browser senza installazione. Governi una delle 59 nazioni del mondo partendo dallo stato (approssimato) dell'autunno 2026 e ti confronti con le altre, guidate da un'intelligenza artificiale con personalità diverse.
+Un gioco di strategia geopolitica ispirato a *Diplomacy*, giocabile direttamente nel browser senza installazione. Governi una delle 59 nazioni del mondo per decenni, partendo dallo stato (approssimato) dell'autunno 2026, scegli il futuro del paese con politiche e visioni di lungo periodo e ti confronti con le altre, guidate da un'intelligenza artificiale con personalità diverse.
 
 **Avvio:** apri `index.html` in un browser moderno (Chrome, Firefox, Edge, Safari). Nessun server né build necessari.
 
@@ -9,7 +9,10 @@ Un gioco di strategia geopolitica ispirato a *Diplomacy*, giocabile direttamente
 | Area | Meccaniche |
 |---|---|
 | 🏛️ Governo | Bilancio trimestrale ripartito tra Difesa, Ricerca, Welfare, Infrastrutture e Diplomazia. Deficit/surplus, debito, inflazione, stabilità, consenso, reputazione. |
-| 👑 Potere | Ogni partita segue i **mandati politici**: in democrazia si vota alla scadenza (consenso, crescita, inflazione, opposizione, media). Perdere le elezioni è fine partita. Stratagemmi per restare al potere: campagna elettorale, controllo dei media, rinvio del voto, stato di emergenza, riforma costituzionale, brogli, purga e partito unico (autocrazia). In autocrazia conta la **lealtà delle élite**: sotto 25 rischi il golpe. Richiami ed espulsione dall'UE, sanzioni delle democrazie. |
+| 🧭 Politiche | 11 ambiti (fisco, commercio, modello economico, immigrazione, welfare, energia e clima, dottrina militare, estera e nucleare, tecnologia, istituzioni) con opzioni esclusive, costi di riforma e effetti duraturi; definiscono l'ideologia che avvicina o allontana le altre nazioni. **Visione nazionale** di lungo periodo (tecnologica, fortezza, commerciale, verde, egemonica, democratica, ordine) con obiettivi e traguardi. |
+| 🌍 Ecosistema | Clima globale alimentato dalle emissioni di tutti (disastri, carestie, instabilità), blocchi fondati dal giocatore, uscita da NATO/UE, ondate democratiche e populiste, cronaca storica del regno. |
+| 🗺️ Mappa | Confini reali (Natural Earth 110m) con 176 paesi, 9 modalità (stato, relazioni, potenza, stabilità, regime, blocchi, PIL pro capite, emissioni, guerre), occupazioni a strisce, zone irradiate, zoom e trascinamento. |
+| 👑 Potere | Ogni partita segue i **mandati politici**: in democrazia si vota alla scadenza (consenso, crescita, inflazione, opposizione, media). Perdere le elezioni porta all'opposizione (campagna, mozioni, piazza, coalizioni per tornare); golpe e rivolte all'esilio (reti clandestine, pressioni, insurrezione). La partita continua per decenni, anche senza limite. Stratagemmi per restare al potere: campagna elettorale, controllo dei media, rinvio del voto, stato di emergenza, riforma costituzionale, brogli, purga e partito unico (autocrazia). In autocrazia conta la **lealtà delle élite**: sotto 25 rischi il golpe. Richiami ed espulsione dall'UE, sanzioni delle democrazie. |
 | 💰 Tesoro | Oltre alla borsa: ripaga il debito, finanzia progetti (infrastrutture, sanità, istruzione, riarmo, welfare, salvataggio bancario, ricostruzione, stretta monetaria, campagna elettorale, regalie alle élite), compra 15 **capacità nazionali** permanenti (servizi segreti, propaganda, forze speciali, guardia pretoriana, scudo cyber, flotta d'alto mare, banca centrale, polo tecnologico, riserve strategiche, scudo antimissile, triade nucleare, programma nucleare, stato di sorveglianza, fondo sovrano) e investe in **imprese di stato** settoriali con dividendi. |
 | 📈 Borsa | Indice mondiale, 33 indici nazionali, 6 settori (Tech, Energia, Difesa, Agro, Finanza, Oro) e 5 materie prime (petrolio, gas, grano, chip, terre rare). I prezzi reagiscono a guerre, sanzioni, shock, tecnologia. Investi il tesoro sapendo in anticipo cosa farai. |
 | 🔬 Tecnologia | 9 rami: IA, Semiconduttori, Energia, Spazio, Cyber, Ipersonici, Biotech, Quantistica, Difesa antimissile. Dipendenza dai chip ed embarghi tecnologici, spionaggio, intelligence satellitare. |
@@ -28,7 +31,8 @@ index.html        pagina e layout
 css/style.css     tema scuro, layout a tre colonne, modali
 js/data.js        nazioni, relazioni, trattati, eventi, tecnologie, mappa
 js/engine.js      motore: economia, mercati, ricerca, guerra, diplomazia, ONU, eventi
-js/politics.js    mandati, elezioni, regimi, lealtà, inflazione, tesoro: perk, progetti, imprese di stato
+js/politics.js    mandati, elezioni, regimi, opposizione/esilio, politiche, visioni, inflazione, tesoro
+js/world.js       confini reali dei paesi (Natural Earth 110m, dominio pubblico)
 js/ai.js          decisioni delle nazioni IA (bilancio, guerre, pace, proposte)
 js/ui.js          interfaccia, mappa su canvas con zoom, pannelli, modali
 test/sim.js       simulazione headless per verificare la stabilità del motore

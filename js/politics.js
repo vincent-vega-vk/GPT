@@ -16,7 +16,142 @@
     if (n.politics.mandateLen) n.politics.nextElection = (n.id === s.player ? 0 : 0) + (opts.stagger ? RI(2, n.politics.mandateLen) : n.politics.mandateLen) + 1;
     n.perks = {}; n.boosts = []; n.inflation = { USA: 2.8, ARG: 35, TUR: 30, VEN: 60, IRN: 35, EGY: 15, NGA: 20, PAK: 10, RUS: 8, GBR: 3, DEU: 2.4, ITA: 1.8, JPN: 2.5, CHN: 1 }[n.id] ?? 3.5;
     n.enterprises = {}; n.popPeak = n.pop; n.gdpPeak = n.gdp; n.popLossTurn = -99; n.lastDividends = 0;
+    n.policies = n.policies || GEO.defaultPolicies(n); n.policyCooldown = {}; n.vision = n.vision || null; n.visionSince = 0;
+    if (!n.vision && s.player !== n.id) n.vision = P.aiVision(n);
+    n.politics.mandateStart = P.snapshot(s, n);
   };
+  P.aiVision = (n) => ({ egemone: 'beacon', falco: 'fortress', paziente: 'tech', mercante: 'trade', opportunista: 'hegemon', isolazionista: 'green', difensivo: 'fortress', ambizioso: 'tech', imprevedibile: 'order' }[n.persona] || 'trade');
+  P.snapshot = (s, n) => ({ turn: s.turn, gdp: n.gdp, stab: n.stability, appr: n.approval, debt: n.debt, pop: n.pop, score: E.score(s, n), infl: n.inflation });
+
+  // ---------- Modificatori da politiche e visione ---------------------------
+  const MULT = ['research', 'milEff', 'shock', 'sanct', 'co2', 'soe', 'deter', 'aiResearch', 'invadeNeighbors', 'warRepMult'];
+  P.mods = (s, n) => {
+    const m = { research: 1, milEff: 1, shock: 1, sanct: 1, co2: 1, soe: 1, deter: 1, aiResearch: 1, invadeNeighbors: 1, warRepMult: 1, techProg: {} };
+    const apply = (fx) => { Object.entries(fx || {}).forEach(([k, v]) => { if (k === 'techProg') Object.entries(v).forEach(([t, x]) => m.techProg[t] = (m.techProg[t] || 0) + x); else if (MULT.includes(k)) m[k] *= v; else if (typeof v === 'number') m[k] = (m[k] || 0) + v; else m[k] = v; }); };
+    Object.entries(n.policies || {}).forEach(([cat, opt]) => { const d = GEO.POLICIES[cat] && GEO.POLICIES[cat].options[opt]; if (d) apply(d.fx); });
+    if (n.vision && GEO.VISIONS[n.vision]) { const fx = { ...GEO.VISIONS[n.vision].fx }; if (fx.warRep !== undefined) { fx.warRepMult = fx.warRep; delete fx.warRep; } apply(fx); }
+    if (n.nukes === 0 && m.deter > 1 && (n.policies || {}).nucleare === 'primo_colpo') m.deter = 1;
+    return m;
+  };
+  P.ideology = (n) => {
+    const p = n.policies || {}; let lib = { democrazia: 1, ibrido: 0, autocrazia: -1 }[n.regime] || 0, market = 0;
+    lib += { diritto: 1, ordine: -1, religione: -0.5 }[p.istituzioni] || 0; lib += p.digitale === 'aperta' ? 0.3 : p.digitale === 'sovranita' ? -0.3 : 0; lib += { aperta: 0.3, chiusa: -0.3 }[p.immigrazione] || 0;
+    market += { mercato: 1, stato: -1 }[p.economia] || 0; market += { tasse_basse: 0.5, tasse_alte: -0.5 }[p.fisco] || 0; market += { libero_scambio: 0.5, autarchia: -1 }[p.commercio] || 0;
+    return { lib, market };
+  };
+  P.setPolicy = (s, nid, cat, opt) => {
+    const n = s.nations[nid]; const C = GEO.POLICIES[cat]; const d = C && C.options[opt]; if (!d) return { ok: false, reason: 'Opzione sconosciuta.' };
+    if (n.policies[cat] === opt) return { ok: false, reason: 'Già in vigore.' };
+    if (d.req && !d.req(n, s)) return { ok: false, reason: 'Requisiti non soddisfatti.' };
+    if ((n.policyCooldown[cat] || 0) > s.turn) return { ok: false, reason: `Riforma possibile dal turno ${n.policyCooldown[cat]}.` };
+    const cost = nid === s.player ? Math.max(3, Math.round(E.effGdp(s, n) * 0.003)) : 0; if (n.treasury < cost) return { ok: false, reason: `Servono ${cost} mld.` };
+    n.treasury -= cost; const old = C.options[n.policies[cat]]; n.policies[cat] = opt; n.policyCooldown[cat] = s.turn + 8; n.mods = P.mods(s, n);
+    n.stability = clamp(n.stability - 3, 0, 100); n.approval = clamp(n.approval - 2, 0, 100);
+    E.news(s, `${C.icon} ${n.flag} ${n.name} cambia politica (${C.name}): da "${old ? old.name : '—'}" a "${d.name}".`, 'event', [nid]);
+    if (nid === s.player) E.history(s, `Riforma: ${C.name} → ${d.name}`, 'policy');
+    return { ok: true };
+  };
+  P.setVision = (s, nid, key) => {
+    const n = s.nations[nid]; if (!GEO.VISIONS[key]) return { ok: false, reason: 'Visione sconosciuta.' };
+    if (n.vision === key) return { ok: false, reason: 'Già in vigore.' };
+    if (n.vision && s.turn - n.visionSince < 24) return { ok: false, reason: `Potrai cambiare visione dal turno ${n.visionSince + 24}.` };
+    const cost = n.vision ? Math.max(5, Math.round(E.effGdp(s, n) * 0.01)) : 0; if (n.treasury < cost) return { ok: false, reason: `Servono ${cost} mld.` };
+    n.treasury -= cost; n.vision = key; n.visionSince = s.turn; n.mods = P.mods(s, n);
+    E.news(s, `${GEO.VISIONS[key].icon} ${n.flag} ${n.name} proclama la sua visione nazionale: ${GEO.VISIONS[key].name}.`, 'event', [nid]); E.history(s, `Visione nazionale: ${GEO.VISIONS[key].name}`, 'policy');
+    return { ok: true };
+  };
+
+  // ---------- Opposizione, esilio, rientro -----------------------------------
+  P.enterOpposition = (s, n) => {
+    const pol = n.politics; s.playerStatus = 'opposizione'; s.statusUntil = s.turn + Math.max(6, Math.round(pol.mandateLen / 2)); s.political = 2;
+    n.savedPersona = n.persona; n.persona = E.pick(['mercante', 'opportunista', 'egemone', 'difensivo', 'ambizioso']); n.rivalName = E.pick(['Fronte Nazionale', 'Alleanza Progressista', 'Partito del Popolo', 'Unione Democratica', 'Movimento Riformista', 'Coalizione Civica']);
+    n.budget = { ...GEO.AI_BUDGETS[n.persona] }; pol.opposition = 45; pol.mediaControl = false; pol.emergency = false; pol.rigged = false;
+    s.alerts.push({ title: '🗳️ Sei all’opposizione', text: `${n.rivalName} governa ora il paese. Per ${s.statusUntil - s.turn} turni non controlli bilancio, esercito e diplomazia: il nuovo governo segue la propria linea. Nel pannello Potere accumuli capitale politico e lavori per tornare: campagna, mozioni di sfiducia, piazza, coalizioni. Alle prossime elezioni servirà un sostegno superiore al consenso del governo.` });
+    E.history(s, `Il tuo partito passa all'opposizione: governa ${n.rivalName}`, 'politics');
+  };
+  P.enterExile = (s, n, reason) => {
+    const pol = n.politics; s.playerStatus = 'esilio'; s.statusUntil = s.turn + 8; s.political = 1;
+    n.savedPersona = n.persona; n.persona = 'falco'; n.budget = { ...GEO.AI_BUDGETS.falco }; n.rivalName = reason === 'golpe' ? 'Giunta militare' : 'Governo rivoluzionario';
+    if (reason === 'golpe') { n.regime = 'autocrazia'; pol.mandateLen = null; pol.nextElection = null; pol.loyalty = 60; pol.pressFreedom = 10; }
+    pol.opposition = 35;
+    s.alerts.push({ title: reason === 'golpe' ? '⚔️ Rovesciato da un colpo di stato' : '🔥 Rovesciato dalla rivolta', text: `Sei in esilio: ${n.rivalName} controlla il paese per almeno 8 turni. Dal pannello Potere puoi tessere una rete clandestina, chiedere pressioni internazionali e, quando il sostegno sarà alto, tentare l'insurrezione o aspettare che il regime crolli.` });
+    E.history(s, `${reason === 'golpe' ? 'Colpo di stato' : 'Rivolta'}: il tuo governo cade, vai in esilio`, 'politics');
+  };
+  P.returnToPower = (s, n, how) => {
+    const pol = n.politics; s.playerStatus = 'governo'; s.statusUntil = null;
+    if (n.savedPersona) { n.persona = n.savedPersona; n.savedPersona = null; }
+    n.budget = { military: 0.3, research: 0.22, welfare: 0.25, infra: 0.15, diplomacy: 0.08 };
+    if (how === 'insurrezione' || how === 'crollo') { n.regime = 'democrazia'; pol.mandateLen = pol.mandateLen || 16; pol.loyalty = 55; }
+    if (pol.mandateLen) pol.nextElection = s.turn + (how === 'coalizione' ? 8 : pol.mandateLen);
+    pol.terms++; n.approval = clamp(n.approval + 8, 0, 100); pol.opposition = 35; pol.mandateStart = P.snapshot(s, n); n.rivalName = null;
+    s.alerts.push({ title: '🎉 Di nuovo al potere', text: { elezioni: 'Hai vinto le elezioni e torni a guidare il paese.', coalizione: 'Un accordo di coalizione ti riporta al governo con un mandato ridotto di 8 turni.', insurrezione: 'L\'insurrezione ha rovesciato il regime: guidi la transizione.', crollo: 'Il regime è crollato sotto il suo stesso peso: il popolo ti richiama.' }[how] });
+    E.history(s, `Ritorno al potere (${how})`, 'politics');
+  };
+  P.OPP_ACTIONS = {
+    campagna_opp: { name: 'Campagna permanente', icon: '📣', pts: 2, desc: 'Sostegno +6.', status: 'opposizione' },
+    mozione: { name: 'Mozione di sfiducia', icon: '🗳️', pts: 3, desc: 'Se il consenso del governo è < 42: 45% di probabilità di elezioni anticipate immediate.', status: 'opposizione', req: (n) => n.approval < 42 },
+    piazza: { name: 'Mobilitazione di piazza', icon: '✊', pts: 2, desc: 'Sostegno +5, stabilità del paese −4, consenso del governo −3. Rischio di repressione.', status: 'opposizione' },
+    coalizione: { name: 'Accordo di coalizione', icon: '🤝', pts: 4, desc: 'Richiede sostegno ≥ 58: torni al governo subito con un mandato ridotto.', status: 'opposizione', req: (n) => n.politics.opposition >= 58 },
+    rete: { name: 'Rete clandestina', icon: '🕯️', pts: 2, desc: 'Sostegno +6, lealtà del regime −3.', status: 'esilio' },
+    appello: { name: 'Appello internazionale', icon: '🌍', pts: 2, desc: 'Le democrazie sanzionano il regime (50% ciascuna) e la sua stabilità cala di 3.', status: 'esilio' },
+    insurrezione: { name: 'Insurrezione', icon: '🔥', pts: 4, desc: 'Richiede sostegno ≥ 60. Successo = (sostegno − stabilità del regime)/100 + 0,3. Se fallisce: +8 turni di esilio e sostegno −20.', status: 'esilio', req: (n) => n.politics.opposition >= 60 },
+  };
+  P.doOppAction = (s, key) => {
+    const n = s.nations[s.player]; const pol = n.politics; const a = P.OPP_ACTIONS[key];
+    if (!a || a.status !== s.playerStatus) return { ok: false, reason: 'Azione non disponibile.' };
+    if (a.req && !a.req(n)) return { ok: false, reason: 'Requisiti non soddisfatti.' };
+    if (s.political < a.pts) return { ok: false, reason: `Servono ${a.pts} punti di capitale politico (ne hai ${s.political}).` };
+    s.political -= a.pts;
+    switch (key) {
+      case 'campagna_opp': pol.opposition = clamp(pol.opposition + 6, 0, 100); break;
+      case 'mozione': if (R() < 0.45) { E.news(s, `🗳️ Mozione di sfiducia approvata in ${n.flag} ${n.name}: elezioni anticipate!`, 'event', [n.id]); P.oppositionElection(s, n); } else E.news(s, `La mozione di sfiducia in ${n.flag} ${n.name} è respinta.`, 'event', [n.id]); break;
+      case 'piazza': pol.opposition = clamp(pol.opposition + 5, 0, 100); n.stability = clamp(n.stability - 4, 0, 100); n.approval = clamp(n.approval - 3, 0, 100); if (R() < 0.25) { pol.opposition = clamp(pol.opposition - 4, 0, 100); E.news(s, `La polizia reprime le manifestazioni in ${n.flag} ${n.name}.`, 'event', [n.id]); } break;
+      case 'coalizione': P.returnToPower(s, n, 'coalizione'); break;
+      case 'rete': pol.opposition = clamp(pol.opposition + 6, 0, 100); pol.loyalty = clamp(pol.loyalty - 3, 0, 100); break;
+      case 'appello': n.stability = clamp(n.stability - 3, 0, 100); E.ids(s).forEach(o => { if (o !== n.id && s.nations[o].regime === 'democrazia' && R() < 0.5) E.sanction(s, o, n.id); }); break;
+      case 'insurrezione': { const pr = (pol.opposition - n.stability) / 100 + 0.3; if (R() < pr) { n.stability = clamp(n.stability - 10, 0, 100); n.gdp *= 0.97; P.returnToPower(s, n, 'insurrezione'); } else { s.statusUntil = s.turn + 8; pol.opposition = clamp(pol.opposition - 20, 0, 100); n.stability = clamp(n.stability - 6, 0, 100); E.news(s, `L'insurrezione in ${n.flag} ${n.name} è schiacciata nel sangue.`, 'event', [n.id]); } break; }
+    }
+    return { ok: true };
+  };
+  P.oppositionElection = (s, n) => {
+    const pol = n.politics; const p = clamp(0.5 + (pol.opposition - 50) / 60 + (50 - n.approval) / 60, 0.05, 0.95);
+    if (R() < p) P.returnToPower(s, n, 'elezioni'); else { s.statusUntil = s.turn + 6; pol.opposition = clamp(pol.opposition - 8, 0, 100); n.approval = clamp(n.approval + 3, 0, 100); E.news(s, `🗳️ ${n.flag} ${n.name}: ${n.rivalName} vince le elezioni, resti all'opposizione.`, 'event', [n.id]); s.alerts.push({ title: '🗳️ Elezioni perse', text: `${n.rivalName} si conferma al governo. Nuova finestra elettorale tra 6 turni. Sostegno attuale: ${Math.round(pol.opposition)}.` }); }
+  };
+  P.statusStep = (s) => {
+    const n = s.nations[s.player]; const pol = n.politics; if (!pol) return;
+    if (s.playerStatus === 'governo') return;
+    s.political = Math.min(10, (s.political || 0) + 2);
+    if (s.playerStatus === 'opposizione') {
+      const oppT = 40 + (50 - n.approval) * 0.8 + Math.max(0, n.inflation - 3) * 1.2 + n.exhaustion * 0.2; pol.opposition = clamp(pol.opposition + (oppT - pol.opposition) * 0.15, 0, 100);
+      if (s.turn >= s.statusUntil) P.oppositionElection(s, n);
+    } else if (s.playerStatus === 'esilio') {
+      const supT = 35 + (45 - n.stability) * 0.8 + E.sanctionsOn(s, n.id).length * 1.5; pol.opposition = clamp(pol.opposition + (supT - pol.opposition) * 0.15, 0, 100);
+      if (s.turn >= s.statusUntil) { if (n.stability < 35 && R() < 0.5 || n.stability < 20) P.returnToPower(s, n, 'crollo'); else s.statusUntil = s.turn + 4; }
+    }
+  };
+  P.rebel = (s) => {
+    const n = s.nations[s.player]; if (!n.suzerain) return { ok: false, reason: 'Non sei uno stato satellite.' };
+    const suz = n.suzerain; const sz = s.nations[suz]; n.suzerain = null; n.tribute = null; s.treaties = s.treaties.filter(t => !((t.a === n.id && t.b === suz) || (t.a === suz && t.b === n.id)));
+    E.setRel(s, n.id, suz, -100); n.stability = clamp(n.stability + 8, 0, 100); n.approval = clamp(n.approval + 10, 0, 100); n.readiness = clamp(n.readiness + 20, 0, 100);
+    E.news(s, `✊ ${n.flag} ${n.name} si ribella alla tutela di ${sz.flag} ${sz.name}!`, 'war', [n.id, suz]); E.history(s, `Ribellione contro ${sz.name}`, 'war');
+    if (E.milPower(sz) > E.milPower(n) * 0.8 && R() < 0.7) E.declareWar(s, suz, n.id, { casus: true });
+    return { ok: true };
+  };
+
+  // ---------- Bilancio del mandato -------------------------------------------
+  P.mandateSummary = (s, n) => {
+    const a = n.politics.mandateStart || P.snapshot(s, n); const b = P.snapshot(s, n);
+    const d = (x, y, dec = 0, suf = '') => { const v = y - x; return `<span class="${v >= 0 ? 'pos' : 'neg'}">${v >= 0 ? '+' : ''}${v.toLocaleString('it-IT', { maximumFractionDigits: dec })}${suf}</span>`; };
+    return `<table><tr><th></th><th class="right">Inizio</th><th class="right">Ora</th><th class="right">Δ</th></tr>
+      <tr><td>PIL (mld)</td><td class="right">${Math.round(a.gdp)}</td><td class="right">${Math.round(b.gdp)}</td><td class="right">${d(a.gdp, b.gdp)}</td></tr>
+      <tr><td>Stabilità</td><td class="right">${Math.round(a.stab)}</td><td class="right">${Math.round(b.stab)}</td><td class="right">${d(a.stab, b.stab)}</td></tr>
+      <tr><td>Consenso</td><td class="right">${Math.round(a.appr)}</td><td class="right">${Math.round(b.appr)}</td><td class="right">${d(a.appr, b.appr)}</td></tr>
+      <tr><td>Debito %</td><td class="right">${Math.round(a.debt)}</td><td class="right">${Math.round(b.debt)}</td><td class="right">${d(a.debt, b.debt)}</td></tr>
+      <tr><td>Inflazione %</td><td class="right">${(a.infl || 0).toFixed(1)}</td><td class="right">${b.infl.toFixed(1)}</td><td class="right">${d(a.infl || 0, b.infl, 1)}</td></tr>
+      <tr><td>Popolazione (M)</td><td class="right">${a.pop.toFixed(1)}</td><td class="right">${b.pop.toFixed(1)}</td><td class="right">${d(a.pop, b.pop, 1)}</td></tr>
+      <tr><td>Punteggio</td><td class="right">${a.score}</td><td class="right">${b.score}</td><td class="right">${d(a.score, b.score)}</td></tr></table>`;
+  };
+
 
   // ---------- Costi e acquisti --------------------------------------------
   P.cost = (s, n, def) => Math.max(def.min || 5, Math.round(E.effGdp(s, n) * def.costPct / 100));
@@ -113,6 +248,7 @@
   P.winProb = (s, n) => {
     const pol = n.politics; const g = n.lastGrowth;
     let p = 0.5 + (n.approval - 50) / 60 + (g - 2) * 0.03 - (pol.opposition - 40) / 150 + (n.perks.propaganda ? 0.06 : 0) + (pol.mediaControl ? 0.18 : 0) + (n.regime === 'ibrido' ? 0.2 : 0) - (n.stability < 40 ? 0.1 : 0) - (n.inflation > 8 ? (n.inflation - 8) * 0.01 : 0) - (n.exhaustion > 30 ? 0.08 : 0);
+    p += (E.mods(n).election || 0);
     return clamp(p, 0.03, 0.97);
   };
   P.election = (s, n) => {
@@ -126,10 +262,11 @@
       else { won = false; n.stability = clamp(n.stability - 15, 0, 100); pol.pressFreedom = clamp(pol.pressFreedom - 20, 0, 100); E.ids(s).forEach(o => { if (o !== nid && s.nations[o].regime === 'democrazia') E.changeRel(s, nid, o, -25); }); rigNote = ' — i brogli sono stati SCOPERTI'; }
     }
     pol.lastElection = s.turn; pol.nextElection = s.turn + pol.mandateLen; pol.postponements = 0;
-    if (won) { pol.terms++; n.approval = clamp(n.approval + 4, 0, 100); pol.opposition = clamp(pol.opposition - 10, 0, 100); E.news(s, `🗳️ ${n.flag} ${n.name}: il governo vince le elezioni con il ${share}%${rigNote}. Inizia il mandato n. ${pol.terms}.`, 'event', [nid]); if (isP) s.alerts.push({ title: '🗳️ Elezioni vinte', text: `Hai vinto con il ${share}% dei voti${rigNote}. Nuovo mandato di ${pol.mandateLen} turni.` }); }
+    const summary = isP ? P.mandateSummary(s, n) : '';
+    if (won) { pol.terms++; n.approval = clamp(n.approval + 4, 0, 100); pol.opposition = clamp(pol.opposition - 10, 0, 100); E.news(s, `🗳️ ${n.flag} ${n.name}: il governo vince le elezioni con il ${share}%${rigNote}. Inizia il mandato n. ${pol.terms}.`, 'event', [nid]); if (isP) { s.alerts.push({ title: '🗳️ Elezioni vinte', text: `Hai vinto con il ${share}% dei voti${rigNote}. Nuovo mandato di ${pol.mandateLen} turni.<h4>Bilancio del mandato</h4>${summary}` }); E.history(s, `Elezioni vinte con il ${share}% — mandato n. ${pol.terms}`, 'politics'); pol.mandateStart = P.snapshot(s, n); } }
     else {
       E.news(s, `🗳️ ${n.flag} ${n.name}: il governo PERDE le elezioni (${share}%)${rigNote}. Cambio di guardia.`, 'event', [nid]);
-      if (isP) s.gameOver = { type: 'sconfitta', text: `Hai perso le elezioni con il ${share}% dei voti${rigNote}. L'opposizione forma il nuovo governo. Fine del tuo mandato.` };
+      if (isP) { s.alerts.push({ title: '🗳️ Elezioni perse', text: `Hai ottenuto il ${share}% dei voti${rigNote}.<h4>Bilancio del mandato</h4>${summary}` }); E.history(s, `Elezioni perse con il ${share}%`, 'politics'); P.enterOpposition(s, n); }
       else P.newGovernment(s, n);
     }
   };
@@ -148,27 +285,34 @@
     // inflazione
     const oilRatio = s.market.commodities.oil.price / GEO.COMMODITIES.oil.base;
     let target = 2.2 + (n.spendMult - 1) * 22 + Math.max(0, oilRatio - 1) * 5 * (n.perks.reserves ? 0.3 : 1) + Math.max(0, n.lastGrowth - 5) * 0.4 + E.warsOf(s, nid).length * 1.5 + (n.debt > 150 ? 2 : 0) + (n.lastGrowth < -2 ? 2 : 0);
+    target += (E.mods(n).infl || 0);
     if (n.perks.centralbank) target = 2 + (target - 2) * 0.5;
     n.inflation = clamp(n.inflation + (target - n.inflation) * 0.25, 0, 80);
     // stampa e media
     if (pol.mediaControl) { n.approval = clamp(n.approval + 3, 0, 100); pol.opposition = clamp(pol.opposition - 2, 0, 100); }
     if (pol.emergency) { n.approval = clamp(n.approval - 3, 0, 100); if (pol.nextElection) pol.nextElection = Math.max(pol.nextElection, s.turn + 1); }
-    pol.pressFreedom = clamp(pol.pressFreedom + ({ democrazia: 0.5, ibrido: 0, autocrazia: -0.3 }[n.regime]) - (pol.mediaControl ? 0.5 : 0), 0, 100);
+    pol.pressFreedom = clamp(pol.pressFreedom + ({ democrazia: 0.5, ibrido: 0, autocrazia: -0.3 }[n.regime]) - (pol.mediaControl ? 0.5 : 0) + (E.mods(n).press || 0), 0, 100);
     if (n.regime === 'democrazia') {
-      const oppT = 40 + (50 - n.approval) * 0.6 + Math.max(0, n.inflation - 3) * 1.2 + n.exhaustion * 0.2 - (n.perks.surveillance ? 10 : 0) - (pol.mediaControl ? 10 : 0) + (n.stability < 40 ? 8 : 0);
+      const oppT = 40 + (50 - n.approval) * 0.6 + Math.max(0, n.inflation - 3) * 1.2 + n.exhaustion * 0.2 - (n.perks.surveillance ? 10 : 0) - (pol.mediaControl ? 10 : 0) + (n.stability < 40 ? 8 : 0) + (E.mods(n).opposition || 0);
+      if (nid === s.player && s.playerStatus !== 'governo') return P.afterStep(s, n);
       pol.opposition = clamp(pol.opposition + (oppT - pol.opposition) * 0.2, 0, 100);
       if (pol.nextElection && s.turn >= pol.nextElection && !pol.emergency) P.election(s, n);
       // golpe militare in democrazie al collasso
-      if (n.stability < 20 && n.budget.military > 0.33 && R() < 0.1) { if (n.perks.guard) E.news(s, `${n.flag} ${n.name}: tentativo di golpe sventato dalla Guardia pretoriana.`, 'event', [nid]); else { if (isP) s.gameOver = { type: 'sconfitta', text: 'I militari hanno preso il potere con un colpo di stato: sei stato deposto.' }; else { P.becomeAutocracy(s, n, 'golpe'); n.persona = 'falco'; } } }
+      if (n.stability < 20 && n.budget.military > 0.33 && R() < 0.1) { if (n.perks.guard) E.news(s, `${n.flag} ${n.name}: tentativo di golpe sventato dalla Guardia pretoriana.`, 'event', [nid]); else { E.history(s, `Golpe militare in ${n.flag} ${n.name}`, 'event'); if (isP) P.enterExile(s, n, 'golpe'); else { P.becomeAutocracy(s, n, 'golpe'); n.persona = 'falco'; } } }
     } else {
       if (n.regime === 'ibrido' && pol.nextElection && s.turn >= pol.nextElection && !pol.emergency) P.election(s, n);
-      const loyT = 50 + (n.budget.military - 0.3) * 100 + (n.lastGrowth - 2) * 2 - Math.min(12, E.sanctionsOn(s, nid).length * 1.5) - n.exhaustion * 0.3 + (n.perks.guard ? 15 : 0) + (n.treasury > E.effGdp(s, n) * 0.05 ? 5 : 0) - (n.stability < 40 ? 10 : 0) - (n.inflation > 15 ? 8 : 0) + (E.occupiedShare(n) > 0.2 ? -15 : 0);
+      if (nid === s.player && s.playerStatus !== 'governo') return P.afterStep(s, n);
+      const loyT = 50 + (E.mods(n).loyalty || 0) + (n.budget.military - 0.3) * 100 + (n.lastGrowth - 2) * 2 - Math.min(12, E.sanctionsOn(s, nid).length * 1.5) - n.exhaustion * 0.3 + (n.perks.guard ? 15 : 0) + (n.treasury > E.effGdp(s, n) * 0.05 ? 5 : 0) - (n.stability < 40 ? 10 : 0) - (n.inflation > 15 ? 8 : 0) + (E.occupiedShare(n) > 0.2 ? -15 : 0);
       pol.loyalty = clamp(pol.loyalty + (loyT - pol.loyalty) * 0.2, 0, 100);
       if (pol.loyalty < 25 && R() < 0.25) {
         if (n.perks.guard) { pol.loyalty = clamp(pol.loyalty + 20, 0, 100); n.stability = clamp(n.stability - 5, 0, 100); E.news(s, `🛡️ ${n.flag} ${n.name}: un colpo di stato militare fallisce, la Guardia pretoriana resta fedele.`, 'event', [nid]); if (isP) s.alerts.push({ title: '🛡️ Golpe sventato', text: 'La Guardia pretoriana ha fermato i congiurati. Le élite restano inquiete: aumenta la spesa militare o compra la loro lealtà.' }); }
-        else { E.news(s, `⚔️ COLPO DI STATO in ${n.flag} ${n.name}: i generali rovesciano il governo.`, 'event', [nid]); if (isP) s.gameOver = { type: 'sconfitta', text: 'Le élite militari ti hanno rovesciato con un colpo di stato. La lealtà era scesa troppo in basso.' }; else { n.persona = E.pick(['falco', 'opportunista', 'paziente']); pol.loyalty = 60; n.stability = clamp(n.stability - 8, 0, 100); E.ids(s).forEach(o => { if (o !== nid) E.changeRel(s, nid, o, RI(-15, 10)); }); } }
+        else { E.news(s, `⚔️ COLPO DI STATO in ${n.flag} ${n.name}: i generali rovesciano il governo.`, 'event', [nid]); E.history(s, `Colpo di stato in ${n.flag} ${n.name}`, 'event'); if (isP) P.enterExile(s, n, 'golpe'); else { n.persona = E.pick(['falco', 'opportunista', 'paziente']); pol.loyalty = 60; n.stability = clamp(n.stability - 8, 0, 100); E.ids(s).forEach(o => { if (o !== nid) E.changeRel(s, nid, o, RI(-15, 10)); }); } }
       }
     }
+    P.afterStep(s, n);
+  };
+  P.afterStep = (s, n) => {
+    const isP = n.id === s.player;
     P.checkEU(s, n, false);
     P.soeStep(s, n);
     // Ripopolamento dopo 5 turni dalla perdita
@@ -190,6 +334,18 @@
       const pref = { egemone: ['missileshield', 'intel', 'navy', 'techhub'], falco: ['specialforces', 'missileshield', 'guard', 'triad'], paziente: ['techhub', 'surveillance', 'missileshield', 'navy'], mercante: ['techhub', 'centralbank', 'swf', 'reserves'], opportunista: ['guard', 'propaganda', 'intel', 'reserves'], isolazionista: ['centralbank', 'reserves', 'guard'], difensivo: ['missileshield', 'cybershield', 'intel', 'specialforces'], ambizioso: ['techhub', 'navy', 'intel', 'propaganda'], imprevedibile: ['guard', 'surveillance', 'triad', 'specialforces'] }[n.persona] || [];
       const want = (n.regime === 'autocrazia' ? ['guard', 'surveillance', 'propaganda'] : []).concat(pref).find(k => !n.perks[k] && P.canBuyPerk(s, n, k).ok && n.treasury > P.cost(s, n, GEO.PERKS[k]) * 2);
       if (want) P.buyPerk(s, n.id, want);
+    }
+    // Politiche IA: reazioni lente al contesto
+    if (s.turn % 6 === (n.id.charCodeAt(1) % 6)) {
+      const want = [];
+      if (E.warsOf(s, n.id).length && n.army < 60 && n.policies.difesa !== 'leva') want.push(['difesa', 'leva']);
+      if (n.inflation > 10 && n.policies.fisco !== 'tasse_alte') want.push(['fisco', 'tasse_alte']);
+      if (n.stability < 35) want.push(n.regime === 'democrazia' ? ['welfare', 'universale'] : ['istituzioni', 'ordine']);
+      if (E.sanctionsOn(s, n.id).length > 5 && n.policies.commercio === 'libero_scambio') want.push(['commercio', 'protezionismo']);
+      if (n.debt > 140 && n.policies.welfare === 'universale') want.push(['welfare', 'base']);
+      if (s.climate && s.climate.temp > 1.7 && n.policies.energia === 'fossile' && n.regime === 'democrazia') want.push(['energia', 'transizione']);
+      const w = want.find(([c, o]) => n.policies[c] !== o && (!GEO.POLICIES[c].options[o].req || GEO.POLICIES[c].options[o].req(n, s)));
+      if (w) P.setPolicy(s, n.id, w[0], w[1]);
     }
     // IA autoritaria: una democrazia con leader opportunista/falco e consenso in calo può derivare
     if (n.regime === 'democrazia' && ['falco', 'opportunista'].includes(n.persona) && n.politics.nextElection - s.turn <= 4 && P.winProb(s, n) < 0.4 && R() < 0.15) { if (n.perks.propaganda) { n.politics.rigged = true; } else if (n.stability > 35) { P.doAction(s, n.id, 'postpone'); } }

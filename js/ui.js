@@ -51,9 +51,10 @@
     openModal({
       wide: true, onClose: null,
       title: '🌐 Nuova partita — scegli la nazione da governare',
-      body: `<div class="hero"><h1>GEOPOLITICA 2026</h1><p>Un grand strategy a turni ispirato a Diplomacy: economia, borsa, tecnologia, alleanze, sanzioni, guerre convenzionali, missili balistici e deterrenza nucleare in un mondo che parte dallo stato reale dell'autunno 2026. Ogni turno è un trimestre.</p></div>
+      body: `<div class="hero"><h1>GEOPOLITICA 2026</h1><p>Un grand strategy a turni ispirato a Diplomacy: guida una nazione per decenni attraverso mandati, elezioni, riforme, alleanze, borsa, tecnologia, guerre e crisi. Perdere il potere non chiude la partita: si torna dall'opposizione o dall'esilio. Il mondo parte dallo stato reale dell'autunno 2026; ogni turno è un trimestre.</p></div>
         <div class="row"><label>Difficoltà <select id="setDiff">${Object.entries(GEO.DIFFICULTY).map(([k, v]) => `<option value="${k}" ${k === diff ? 'selected' : ''}>${v.label}</option>`).join('')}</select></label>
-        <label>Durata <select id="setLen"><option value="20">20 turni (5 anni)</option><option value="40" selected>40 turni (10 anni)</option><option value="80">80 turni (20 anni)</option></select></label>
+        <label>Durata <select id="setLen"><option value="40">40 turni (10 anni)</option><option value="80" selected>80 turni (20 anni)</option><option value="120">120 turni (30 anni)</option><option value="200">200 turni (50 anni)</option><option value="9999">Senza limite</option></select></label>
+        <label>Visione nazionale <select id="setVision"><option value="">Scegli dopo</option>${Object.entries(GEO.VISIONS).map(([k, v]) => `<option value="${k}">${v.icon} ${v.name}</option>`).join('')}</select></label>
         <label>Mandato politico <select id="setMandate"><option value="12">12 turni (3 anni)</option><option value="16" selected>16 turni (4 anni)</option><option value="20">20 turni (5 anni)</option></select></label>
         <label>Seed (opzionale) <input type="number" id="setSeed" placeholder="casuale" style="width:110px"></label></div>
         <div class="nation-grid" id="nationGrid">${cards}</div>`,
@@ -63,7 +64,7 @@
     $('setHelp').onclick = () => { showHelp(() => showSetup()); };
     $('setStart').onclick = () => {
       diff = $('setDiff').value; len = +$('setLen').value; const seedV = $('setSeed').value;
-      S = E.newGame({ player: chosen, difficulty: diff, length: len, seed: seedV ? +seedV : undefined, mandateLen: +$('setMandate').value });
+      S = E.newGame({ player: chosen, difficulty: diff, length: len, seed: seedV ? +seedV : undefined, mandateLen: +$('setMandate').value, vision: $('setVision').value || null });
       sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap();
       const pm = me(); toast(`Benvenuto, leader di ${flagName(S.player)}. ${pm.regime === 'democrazia' ? `Il tuo mandato dura ${pm.politics.mandateLen} turni: alle elezioni del T${pm.politics.nextElection} dovrai avere il consenso dalla tua parte.` : 'Governi un regime non democratico: la tua sopravvivenza dipende dalla lealtà delle élite.'} Premi <b>Fine turno</b> quando sei pronto.`);
     };
@@ -81,7 +82,9 @@
       <h3>🤝 Diplomazia</h3><p>Accordi commerciali, patti di non aggressione, alleanze difensive, ultimatum, aiuti, sanzioni, embargo sui chip, spionaggio, destabilizzazione, cyberattacchi. Le IA valutano relazioni, reputazione, interessi e paura. Violare un patto distrugge la reputazione. La NATO, il CSTO e l'AUKUS sono blocchi di difesa: attaccare un membro significa affrontare tutti. Le aggressioni senza <i>casus belli</i> (rivendicazione o sanzioni subite) provocano sanzioni e un voto all'ONU, dove i cinque membri permanenti hanno il veto.</p>
       <h3>📈 Borsa</h3><p>Investi il tesoro in indici nazionali, settori (Tech, Energia, Difesa, Agro, Finanza, Oro) e materie prime (petrolio, gas, grano, chip, terre rare). Le guerre gonfiano la Difesa e l'Oro, gli shock petroliferi l'Energia, le sanzioni ai produttori i prezzi delle materie prime. Sai in anticipo cosa farai: usalo.</p>
       <h3>📰 Eventi</h3><p>Elezioni, scandali, cyberattacchi, proteste, scoperte, pandemie, crisi finanziarie, colpi di stato: ogni scelta ha conseguenze. Le proposte delle altre nazioni arrivano a inizio turno.</p>
-      <h3>👑 Potere e mandato</h3><p>Ogni mandato dura un numero fisso di turni. In <b>democrazia</b> alla scadenza si vota: la probabilità di vittoria dipende da consenso, crescita, inflazione, opposizione e controllo dei media. Perdere le elezioni è <b>fine partita</b>. Puoi restare al potere con stratagemmi: campagna elettorale, controllo dei media, rinvio delle elezioni, stato di emergenza, riforma costituzionale, brogli, fino alla <b>purga</b> che instaura un'autocrazia. Ogni passo costa relazioni con l'Occidente, libertà di stampa e può farti espellere dall'UE. In <b>autocrazia</b> non si vota, ma conta la <b>lealtà delle élite</b>: se scende sotto 25 rischi un colpo di stato. La Guardia pretoriana ti protegge.</p>
+      <h3>🧭 Politiche e visione</h3><p>Nella tab <b>Politiche</b> scegli la linea del paese in 11 ambiti (fisco, commercio, modello economico, immigrazione, welfare, energia e clima, dottrina militare, dottrina estera, dottrina nucleare, tecnologia, istituzioni). Ogni riforma costa, richiede 8 turni prima di cambiare di nuovo e ha effetti duraturi su crescita, debito, stabilità, consenso, inflazione, ricerca, emissioni, relazioni e deterrenza. Le politiche definiscono la tua <b>ideologia</b>: i paesi affini si avvicinano, gli altri si allontanano. La <b>Visione nazionale</b> (cambiabile ogni 24 turni) orienta il lungo periodo: superpotenza tecnologica, fortezza, impero commerciale, potenza verde, egemonia regionale, faro della democrazia, ordine e grandezza.</p>
+      <h3>🌍 Ecosistema globale</h3><p>Il clima si riscalda con le emissioni di tutti: più disastri, raccolti peggiori, instabilità. Puoi <b>fondare blocchi</b> di difesa o commerciali, invitare nazioni, uscire da NATO o UE. Le ondate democratiche o populiste cambiano gli equilibri interni di decine di paesi.</p>
+      <h3>👑 Potere e mandato</h3><p>Ogni mandato dura un numero fisso di turni. In <b>democrazia</b> alla scadenza si vota: la probabilità di vittoria dipende da consenso, crescita, inflazione, opposizione e controllo dei media. Perdere le elezioni ti manda <b>all'opposizione</b>: il nuovo governo segue la sua linea, tu accumuli capitale politico e lavori per tornare (campagna, mozioni, piazza, coalizioni). Un golpe o una rivolta ti mandano in <b>esilio</b>, da cui si rientra con reti clandestine, pressioni internazionali o insurrezioni. Un attentato mortale passa il potere al tuo successore. La partita dura quanto scegli, anche senza limite. Puoi restare al potere con stratagemmi: campagna elettorale, controllo dei media, rinvio delle elezioni, stato di emergenza, riforma costituzionale, brogli, fino alla <b>purga</b> che instaura un'autocrazia. Ogni passo costa relazioni con l'Occidente, libertà di stampa e può farti espellere dall'UE. In <b>autocrazia</b> non si vota, ma conta la <b>lealtà delle élite</b>: se scende sotto 25 rischi un colpo di stato. La Guardia pretoriana ti protegge.</p>
       <h3>💰 Tesoro</h3><p>Il tesoro non serve solo alla borsa: ripaga il debito, finanzia progetti (infrastrutture, sanità, istruzione, riarmo, welfare, salvataggi bancari, ricostruzione, stretta monetaria), compra <b>capacità nazionali</b> permanenti (servizi segreti, propaganda, forze speciali, guardia pretoriana, scudo cyber, flotta, banca centrale, polo tecnologico, riserve strategiche, scudo antimissile, triade nucleare, programma nucleare, stato di sorveglianza, fondo sovrano) e investe in <b>imprese di stato</b> settoriali che pagano dividendi.</p>
       <h3>💀 Brutalità</h3><p>Inflazione, default sovrano, carestie, insurrezioni nei territori occupati, profughi dalle guerre vicine, attentati, terrorismo, scioperi, golpe. Un attacco nucleare stermina milioni di persone e irradia regioni per 5 turni: solo dopo inizia il ripopolamento. Le IA sono più aggressive, lanciano ultimatum, destabilizzano i nemici e colpiscono i deboli.</p>
       <p class="muted small">I dati iniziali sono approssimazioni dello stato del mondo nell'autunno 2026 a scopo ludico. Ogni partita è deterministica dato il seed.</p></div>`,
@@ -106,6 +109,8 @@
 
   function mandateChip(p) {
     const pol = p.politics; if (!pol) return '';
+    if (S.playerStatus === 'opposizione') return `<span class="chip danger">🪧 All'opposizione · governa ${p.rivalName} · voto tra ${Math.max(0, S.statusUntil - S.turn)} · sostegno ${fmt(pol.opposition)}</span>`;
+    if (S.playerStatus === 'esilio') return `<span class="chip danger">🕯️ In esilio · ${p.rivalName} · sostegno ${fmt(pol.opposition)}</span>`;
     if (p.regime === 'autocrazia') return `<span class="chip ${pol.loyalty < 35 ? 'danger' : ''}">👑 Lealtà élite <b>${fmt(pol.loyalty)}</b></span>`;
     const left = pol.nextElection - S.turn; const wp = Math.round(GEO.politics.winProb(S, p) * 100);
     return `<span class="chip ${left <= 3 && wp < 50 ? 'danger' : ''}">🗳️ ${pol.emergency ? 'Elezioni sospese' : `Elezioni tra <b>${left}</b> · vittoria ${wp}%`}</span>`;
@@ -116,6 +121,7 @@
     document.querySelectorAll('#leftTabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === leftTab));
     if (leftTab === 'governo') el.innerHTML = govPanel(p);
     else if (leftTab === 'potere') el.innerHTML = powerPanel(p);
+    else if (leftTab === 'politiche') el.innerHTML = policiesPanel(p);
     else if (leftTab === 'tesoro') el.innerHTML = treasuryPanel(p);
     else if (leftTab === 'tech') el.innerHTML = techPanel(p);
     else if (leftTab === 'mil') el.innerHTML = milPanel(p);
@@ -143,8 +149,9 @@
         <div class="stat"><div class="l">Regime</div><div class="v"><span class="regime-tag regime-${p.regime}">${p.regime}</span></div></div>
       </div>
       ${p.defaultUntil && p.defaultUntil > S.turn ? `<div class="box alert">In default: nessun deficit possibile fino al turno ${p.defaultUntil}.</div>` : ''}
+      ${E.playerGoverns(S, S.player) ? '' : `<div class="box alert">Non sei al governo: il bilancio è deciso da ${p.rivalName}.</div>`}
       <h4>Bilancio trimestrale: ${fmt(bq * p.spendMult)} mld</h4>
-      ${sliders.map(([k, l]) => `<div class="slider-row"><div class="lbl"><span>${l}</span><span><b id="bv_${k}">${Math.round(B[k] * 100)}%</b> · ${fmt(bq * p.spendMult * B[k])} mld</span></div><input type="range" min="2" max="70" value="${Math.round(B[k] * 100)}" data-budget="${k}"></div>`).join('')}
+      ${sliders.map(([k, l]) => `<div class="slider-row"><div class="lbl"><span>${l}</span><span><b id="bv_${k}">${Math.round(B[k] * 100)}%</b> · ${fmt(bq * p.spendMult * B[k])} mld</span></div><input type="range" min="2" max="70" value="${Math.round(B[k] * 100)}" data-budget="${k}" ${E.playerGoverns(S, S.player) ? '' : 'disabled'}></div>`).join('')}
       <div class="slider-row"><div class="lbl"><span>Moltiplicatore di spesa (deficit/surplus)</span><b id="smv">${p.spendMult.toFixed(2)}×</b></div><input type="range" min="70" max="140" value="${Math.round(p.spendMult * 100)}" id="spendMult"><div class="small muted">&gt;1,0: stimolo e debito ↑ · &lt;1,0: austerità, il risparmio va al tesoro</div></div>
       <div class="small muted">Export materie prime: +${fmt(p.lastExport || 0)} mld/trim · Blocchi: ${p.blocs.map(b => `<span class="tag">${GEO.BLOCS[b].name}</span>`).join('') || '—'}</div>
       <h4>Regioni</h4>
@@ -160,6 +167,13 @@
 
   function powerPanel(p) {
     const pol = p.politics; const PL = GEO.politics;
+    if (S.playerStatus !== 'governo') {
+      const opp = Object.entries(PL.OPP_ACTIONS).filter(([k, a]) => a.status === S.playerStatus).map(([k, a]) => { const ok = (!a.req || a.req(p)) && S.political >= a.pts; return `<div class="perk ${ok ? '' : 'locked'}"><div class="ic">${a.icon}</div><div class="b"><div class="t">${a.name}</div><div class="d">${a.desc}</div></div><button class="small" data-opp="${k}" ${ok ? '' : 'disabled'}>${a.pts} pt</button></div>`; }).join('');
+      return `<div class="box alert"><b>${S.playerStatus === 'opposizione' ? '🪧 Sei all’opposizione' : '🕯️ Sei in esilio'}</b> · governa <b>${p.rivalName}</b> (${GEO.PERSONAS[p.persona].label})<div class="small" style="margin-top:4px">${S.playerStatus === 'opposizione' ? `Prossima finestra elettorale al T${S.statusUntil} (tra ${Math.max(0, S.statusUntil - S.turn)} turni). Vinci se il tuo sostegno supera il consenso del governo.` : `Il regime può crollare dal T${S.statusUntil} se la stabilità è bassa; oppure organizza l'insurrezione.`}</div></div>
+        <div class="stat-grid"><div class="stat"><div class="l">Il tuo sostegno</div><div class="v">${fmt(pol.opposition)}</div>${bar(pol.opposition)}</div><div class="stat"><div class="l">Consenso del governo</div><div class="v">${fmt(p.approval)}</div>${bar(p.approval)}</div><div class="stat"><div class="l">Capitale politico</div><div class="v">${S.political} <span class="small muted">/10 (+2/turno)</span></div></div><div class="stat"><div class="l">Stabilità del paese</div><div class="v">${fmt(p.stability)}</div>${bar(p.stability)}</div></div>
+        <h4>Azioni</h4>${opp}
+        <div class="small muted">Il governo rivale decide bilancio, ricerca, guerre e diplomazia secondo la sua personalità. Puoi solo osservare e preparare il ritorno.</div>`;
+    }
     const dem = p.regime !== 'autocrazia';
     const elapsed = pol.mandateLen ? pol.mandateLen - (pol.nextElection - S.turn) : 0;
     const wp = dem ? Math.round(PL.winProb(S, p) * 100) : null;
@@ -176,7 +190,27 @@
       </div>
       <div class="small muted" style="margin:6px 0">${pol.mediaControl ? '<span class="tag sanc">media controllati</span>' : ''}${pol.emergency ? '<span class="tag war">stato di emergenza</span>' : ''}${pol.postponements ? `<span class="tag">${pol.postponements} rinvii</span>` : ''}${p.perks.guard ? '<span class="tag ally">guardia pretoriana</span>' : ''}${p.perks.surveillance ? '<span class="tag">sorveglianza</span>' : ''}${pol.euWarnings && p.blocs.includes('EU') ? `<span class="tag sanc">UE: ${pol.euWarnings} richiami</span>` : ''}</div>
       ${dem ? `<div class="small muted">Cosa pesa sul voto: consenso (${fmt(p.approval)}), crescita (${pct(p.lastGrowth)}), inflazione (${fmt(p.inflation, 1)}%), opposizione, controllo dei media, stabilità, esaurimento bellico. In regime ibrido +20 punti.</div>` : `<div class="small muted">Cosa pesa sulla lealtà: spesa militare (ora ${Math.round(p.budget.military * 100)}%), crescita, sanzioni subite, esaurimento bellico, inflazione, regalie, Guardia pretoriana. Sotto 25: rischio golpe ogni turno.</div>`}
+      ${p.suzerain ? `<div class="box alert">⛓️ Stato satellite di ${flagName(p.suzerain)}: tributo ${p.tribute ? p.tribute.pct * 100 + '% del PIL' : 'concluso'}. <button class="small danger" id="btnRebel">✊ Ribellati</button></div>` : ''}
       <h4>Stratagemmi di potere</h4>${actions}`;
+  }
+
+  function policiesPanel(p) {
+    const PL = GEO.politics; const gov = E.playerGoverns(S, S.player);
+    const v = p.vision ? GEO.VISIONS[p.vision] : null; const canChange = !p.vision || S.turn - p.visionSince >= 24;
+    const ideo = PL.ideology(p);
+    const cost = Math.max(3, Math.round(E.effGdp(S, p) * 0.003));
+    const cats = Object.entries(GEO.POLICIES).map(([ck, C]) => { const cur = p.policies[ck]; const cd = (p.policyCooldown || {})[ck] || 0; return `<div class="box" style="padding:8px 10px"><div style="display:flex;justify-content:space-between"><b>${C.icon} ${C.name}</b><span class="small muted">${cd > S.turn ? `riforma dal T${cd}` : `riforma: ${cost} mld`}</span></div>
+      ${Object.entries(C.options).map(([ok, o]) => { const active = ok === cur; const req = o.req && !o.req(p, S); return `<div class="policy ${active ? 'active' : ''} ${req ? 'locked' : ''}"><div class="b"><div class="t">${o.name}${active ? ' <span class="good">● in vigore</span>' : ''}</div><div class="d">${o.desc}</div></div>${active ? '' : `<button class="small" data-policy="${ck}:${ok}" ${(!gov || req || cd > S.turn) ? 'disabled' : ''}>Adotta</button>`}</div>`; }).join('')}</div>`; }).join('');
+    return `<div class="box info"><h4 style="margin-top:0">🧭 Visione nazionale</h4>${v ? `<div><b>${v.icon} ${v.name}</b> <span class="small muted">dal T${p.visionSince}</span><div class="small">${v.desc}</div><div class="small muted">Obiettivo: ${v.goal}</div></div>` : '<div class="small warn">Nessuna visione scelta: il paese naviga a vista.</div>'}
+      <button class="small primary" id="btnVision" style="margin-top:6px" ${gov && canChange ? '' : 'disabled'}>${v ? (canChange ? 'Cambia visione (1% PIL)' : `Cambiabile dal T${p.visionSince + 24}`) : 'Scegli la visione (gratis)'}</button></div>
+      <div class="small muted" style="margin-bottom:8px">Ideologia: ${ideo.lib > 0.8 ? 'liberale' : ideo.lib < -0.8 ? 'autoritaria' : 'intermedia'} · ${ideo.market > 0.5 ? 'pro-mercato' : ideo.market < -0.5 ? 'statalista' : 'mista'}. Le nazioni ideologicamente affini si avvicinano da sole.${gov ? '' : ' <b class="warn">Non sei al governo: le riforme sono bloccate.</b>'}</div>
+      ${cats}`;
+  }
+  function showVisionPicker() {
+    const p = me();
+    openModal({ title: '🧭 Scegli il futuro della nazione', body: Object.entries(GEO.VISIONS).map(([k, v]) => `<button class="option" data-vis="${k}" ${p.vision === k ? 'disabled' : ''}><b>${v.icon} ${v.name}</b><span class="fx">${v.desc}<br>Obiettivo di lungo periodo: ${v.goal}</span></button>`).join(''), foot: '<button id="visNo">Annulla</button>' });
+    $('visNo').onclick = closeModal;
+    document.querySelectorAll('[data-vis]').forEach(b => b.onclick = () => { const r = GEO.politics.setVision(S, S.player, b.dataset.vis); closeModal(); renderAll(); if (!r.ok) toast('⚠️ ' + r.reason); });
   }
 
   function treasuryPanel(p) {
@@ -267,6 +301,10 @@
     const PL = GEO.politics;
     const act = (fn) => { const r = fn(); renderAll(); if (!r.ok) toast(`⚠️ ${r.reason}`); };
     const pd = $('payDebt'); if (pd) pd.onclick = () => act(() => PL.payDebt(S, S.player, +$('debtAmt').value));
+    const bv = $('btnVision'); if (bv) bv.onclick = showVisionPicker;
+    document.querySelectorAll('[data-policy]').forEach(b => b.onclick = () => { const [c, o] = b.dataset.policy.split(':'); const C = GEO.POLICIES[c]; confirmDlg(`${C.icon} ${C.name}: ${C.options[o].name}`, `${C.options[o].desc}<br><br>Costo ${Math.max(3, Math.round(E.effGdp(S, me()) * 0.003))} mld, stabilità −3 e consenso −2 per la transizione, nessun'altra riforma in questo ambito per 8 turni.`, 'Adotta', () => act(() => PL.setPolicy(S, S.player, c, o))); });
+    document.querySelectorAll('[data-opp]').forEach(b => b.onclick = () => act(() => PL.doOppAction(S, b.dataset.opp)));
+    const rb = $('btnRebel'); if (rb) rb.onclick = () => confirmDlg('✊ Ribellione', `Rompi la tutela di ${flagName(me().suzerain)}: niente più tributo, ma è probabile che il suzerain ti dichiari guerra.`, 'Ribellati', () => act(() => PL.rebel(S)), true);
     document.querySelectorAll('[data-perk]').forEach(b => b.onclick = () => { const d = GEO.PERKS[b.dataset.perk]; confirmDlg(`${d.icon} ${d.name}`, `${d.desc}<br><br>Costo: <b>${PL.cost(S, me(), d)} mld</b>. Acquisto permanente.`, 'Acquista', () => act(() => PL.buyPerk(S, S.player, b.dataset.perk))); });
     document.querySelectorAll('[data-project]').forEach(b => b.onclick = () => act(() => PL.runProject(S, S.player, b.dataset.project)));
     document.querySelectorAll('[data-soe-in]').forEach(b => b.onclick = () => act(() => PL.investSOE(S, S.player, b.dataset.soeIn, +$('soeAmt').value)));
@@ -328,6 +366,8 @@
     return `<div style="display:flex;gap:10px;align-items:center"><div style="font-size:40px">${n.flag}</div><div><h3 style="margin:0">${n.name}</h3><div class="small muted">${n.regime} · ${P.label} · ${n.continent}</div><div class="small muted">${P.desc}</div></div></div>
       <div style="margin:8px 0">${n.blocs.map(b => `<span class="tag">${GEO.BLOCS[b].name}</span>`).join('')} ${war ? '<span class="tag war">IN GUERRA CON TE</span>' : ''} ${treaties.map(t => `<span class="tag ${t.type === 'difesa' ? 'ally' : t.type === 'commercio' ? 'trade' : ''}">${t.type}${t.expires ? ' (fino T' + t.expires + ')' : ''}</span>`).join('')} ${iSanc ? '<span class="tag sanc">tu la sanzioni</span>' : ''} ${theySanc ? '<span class="tag sanc">ti sanziona</span>' : ''} ${n.suzerain ? `<span class="tag">satellite di ${N(n.suzerain).flag}</span>` : ''}</div>
       <div class="row"><label>Relazioni con te: <b style="color:${relColor(rel)}">${rel} · ${relLabel(rel)}</b></label></div>${bar(rel + 100, 200, 'rel')}
+      ${(() => { const pr = GEO.PROFILES[id] || {}; return `<div class="small muted" style="margin:4px 0">🏛️ ${pr.capital || '—'} · ${pr.title || ''} · ISU ${pr.hdi ?? '—'} · PIL pro capite ${fmt(E.effGdp(S, n) / n.pop * 1000)} $ · disoccupazione ${pr.unemp ?? '—'}% · età mediana ${pr.medianAge ?? '—'} · CO₂ ${fmt((pr.co2 || 0) * (E.mods(n).co2 || 1))} Mt</div>`; })()}
+      <div class="small" style="margin:4px 0">${n.vision ? `${GEO.VISIONS[n.vision].icon} ${GEO.VISIONS[n.vision].name} · ` : ''}${['esteri', 'difesa', 'nucleare', 'energia'].map(c => GEO.POLICIES[c].options[n.policies[c]].name).join(' · ')}</div>
       <div class="small" style="margin:6px 0"><span class="regime-tag regime-${n.regime}">${n.regime}</span> ${n.politics && n.politics.nextElection ? `· elezioni al T${n.politics.nextElection}` : n.politics ? `· lealtà élite ${fmt(n.politics.loyalty)}` : ''} · inflazione ${fmt(n.inflation, 1)}% · capacità: ${Object.keys(n.perks).map(k => GEO.PERKS[k].icon).join(' ') || '—'}</div>
       <div class="small" style="margin:6px 0">Reputazione ${fmt(n.reputation)} · Alleati: ${allies.length ? allies.map(a => N(a).flag).join(' ') : '—'} · Nemici: ${enemies.length ? enemies.map(a => N(a).flag).join(' ') : '—'} · Sanzionata da ${sancOn.length} paesi</div>
       <table class="compare"><tr><th></th><th>${n.flag} loro</th><th>${p.flag} tu</th></tr>
@@ -365,13 +405,23 @@
     const un = S.un.slice(0, 6).map(u => `<div class="small" style="margin-bottom:4px">T${u.turn}: contro ${N(u.aggressor).flag} ${N(u.aggressor).name} (${u.kind}) — ${u.yes}/${u.no}${u.veto.length ? ', veto ' + u.veto.map(v => N(v).flag).join('') : ''} → <b>${u.passed ? 'approvata' : 'respinta'}</b></div>`).join('') || '<div class="small muted">Nessuna risoluzione.</div>';
     const mySanc = S.sanctions.filter(x => x.to === S.player).map(x => `<span class="tag sanc">${N(x.from).flag} ${x.type}</span>`).join('') || '<span class="muted">nessuna</span>';
     const treaties = E.treatiesOf(S, S.player).map(t => `<span class="tag ${t.type === 'difesa' ? 'ally' : t.type === 'commercio' ? 'trade' : ''}">${N(t.a === S.player ? t.b : t.a).flag} ${t.type}</span>`).join('') || '<span class="muted">nessuno</span>';
-    const blocs = Object.entries(GEO.BLOCS).map(([k, b]) => { const mem = E.alive(S).filter(id => N(id).blocs.includes(k)); return mem.length ? `<div class="small"><b style="color:${b.color}">${b.name}</b>${b.defense ? ' 🛡️' : ''}: ${mem.map(id => N(id).flag).join(' ')}</div>` : ''; }).join('');
+    const blocs = Object.entries(GEO.BLOCS).concat(Object.entries(S.customBlocs || {})).map(([k, b]) => { const mem = E.alive(S).filter(id => N(id).blocs.includes(k)); return mem.length ? `<div class="small"><b style="color:${b.color}">${b.name}</b>${b.defense ? ' 🛡️' : ''}: ${mem.map(id => N(id).flag).join(' ')}</div>` : ''; }).join('');
     const com = Object.entries(GEO.COMMODITIES).map(([k, c]) => { const prod = E.alive(S).filter(id => (N(id).res[k] || 0) >= 6).map(id => N(id).flag).join(''); return `<div class="small">${c.icon} ${c.name}: <b>${fmt(S.market.commodities[k].price, 0)}</b> ${c.unit} · produttori ${prod}</div>`; }).join('');
-    return `<h4>Guerre (${S.wars.length})</h4>${wars}<h4>Sanzioni contro di te</h4><div>${mySanc}</div><h4>I tuoi trattati</h4><div>${treaties}</div><h4>ONU — Consiglio di Sicurezza</h4>${un}<h4>Blocchi</h4>${blocs}<h4>Materie prime</h4>${com}`;
+    const cl = S.climate || { temp: 1.3, co2: 0, hist: [] };
+    const climate = `<div class="box ${cl.temp > 1.8 ? 'alert' : 'info'}" style="padding:8px 10px">🌡️ Riscaldamento globale: <b>+${cl.temp.toFixed(2)} °C</b> · emissioni ${fmt(cl.co2 / 1000, 1)} Gt/anno ${spark(cl.hist, 90, 22, '#ff9f43')}<div class="small muted">Sopra +1,6 °C aumentano disastri e carestie; sopra +1,8 °C catastrofi continentali. Le tue emissioni: ${fmt((GEO.PROFILES[S.player] || { co2: 0 }).co2 * (E.mods(me()).co2 || 1) * Math.sqrt(me().gdp / me().gdp0))} Mt (politica energetica: ${GEO.POLICIES.energia.options[me().policies.energia].name}).</div></div>`;
+    const custom = Object.entries(S.customBlocs || {}).map(([k, b]) => { const mem = E.alive(S).filter(id => N(id).blocs.includes(k)); const cands = E.alive(S).filter(id => !N(id).blocs.includes(k) && id !== S.player); return `<div class="box" style="padding:8px 10px"><b style="color:${b.color}">${b.name}</b> <span class="small muted">${b.defense ? 'difesa' : ''}${b.defense && b.trade ? ' + ' : ''}${b.trade ? 'commercio' : ''} · fondato da ${N(b.founder).flag}</span><div class="small">Membri: ${mem.map(id => N(id).flag).join(' ')}</div>${b.founder === S.player ? `<div class="row" style="margin-top:4px"><select data-invsel="${k}">${cands.map(id => `<option value="${id}">${N(id).flag} ${N(id).name} (${E.getRel(S, S.player, id)})</option>`).join('')}</select><button class="small ok" data-invite="${k}">Invita</button></div>` : ''}</div>`; }).join('');
+    const found = E.playerGoverns(S, S.player) ? `<div class="row"><input type="text" id="blocName" placeholder="Nome del blocco" style="flex:1"><select id="blocType"><option value="difesa">Difesa</option><option value="commercio">Commercio</option><option value="entrambi">Entrambi</option></select><button class="small primary" id="btnFound">Fonda</button></div>` : '';
+    const mine = me().blocs.map(k => `<span class="tag">${E.bloc(S, k).name} <button class="small danger" data-leave="${k}" title="Esci" ${E.playerGoverns(S, S.player) ? '' : 'disabled'}>✕</button></span>`).join(' ') || '<span class="muted">nessuno</span>';
+    const hist = (S.history || []).slice(0, 40).map(h => `<div class="news-item ${h.kind}"><span class="d">${h.date}</span>${esc(h.text)}</div>`).join('') || '<div class="small muted">Ancora nulla da raccontare.</div>';
+    const ach = Object.entries(S.achievements || {}).map(([k, t]) => `<span class="tag ally">🏆 ${k} (T${t})</span>`).join(' ');
+    return `<h4>Clima</h4>${climate}<h4>Guerre (${S.wars.length})</h4>${wars}<h4>I tuoi blocchi</h4><div>${mine}</div>${found}${custom}<h4>Sanzioni contro di te</h4><div>${mySanc}</div><h4>I tuoi trattati</h4><div>${treaties}</div><h4>ONU — Consiglio di Sicurezza</h4>${un}<h4>Blocchi mondiali</h4>${blocs}<h4>Materie prime</h4>${com}<h4>Cronaca del tuo regno</h4>${ach ? `<div style="margin-bottom:6px">${ach}</div>` : ''}${hist}`;
   }
 
   function bindRight() {
     document.querySelectorAll('[data-sel]').forEach(r => r.onclick = () => { sel = r.dataset.sel; rightTab = 'nazione'; renderRight(); drawMap(); });
+    const bf = $('btnFound'); if (bf) bf.onclick = () => { const name = ($('blocName').value || '').trim(); if (!name) return toast('Dai un nome al blocco.'); if (me().treasury < 20) return toast('Servono 20 mld per fondare un blocco.'); me().treasury -= 20; E.foundBloc(S, S.player, name, $('blocType').value); renderAll(); };
+    document.querySelectorAll('[data-invite]').forEach(b => b.onclick = () => { const k = b.dataset.invite; const to = document.querySelector(`[data-invsel="${k}"]`).value; const r = E.inviteBloc(S, S.player, to, k); renderAll(); toast(r.ok ? `${flagName(to)} aderisce al blocco.` : `${flagName(to)} rifiuta: ${r.reason}`); });
+    document.querySelectorAll('[data-leave]').forEach(b => b.onclick = () => confirmDlg('Uscita dal blocco', `Uscire da ${E.bloc(S, b.dataset.leave).name}? Relazioni −20 con i membri${b.dataset.leave === 'EU' ? ', PIL −4%' : ''}.`, 'Esci', () => { E.leaveBloc(S, S.player, b.dataset.leave); renderAll(); }, true));
     document.querySelectorAll('[data-act]').forEach(b => b.onclick = () => doAction(b.dataset.act));
   }
 
@@ -458,7 +508,7 @@
   function showAlerts(then) {
     if (!S.alerts || !S.alerts.length) { if (then) then(); return; }
     const a = S.alerts.shift();
-    openModal({ title: a.title, onClose: null, body: `<p>${a.text}</p>`, foot: `<button id="alOk" class="primary">Continua</button>` });
+    openModal({ title: a.title, onClose: null, body: `<div>${a.text}</div>`, foot: `<button id="alOk" class="primary">Continua</button>` });
     $('alOk').onclick = () => { closeModal(); showAlerts(then); };
   }
   function showTurnReport(then) {
@@ -486,7 +536,7 @@
   }
   function showGameOver() {
     const g = S.gameOver; const rank = E.ranking(S); const p = me();
-    openModal({ title: g.type === 'vittoria' ? '🏆 VITTORIA' : g.type === 'sconfitta' ? '💀 SCONFITTA' : '🏁 Fine della partita', onClose: null, body: `<div class="score-big">${E.score(S, p)} punti</div><p class="center">${g.text}</p><table><tr><th>#</th><th>Nazione</th><th class="right">Punti</th></tr>${rank.slice(0, 10).map((r, i) => `<tr class="${r.id === S.player ? 'me' : ''}"><td>${i + 1}</td><td>${flagName(r.id)}</td><td class="right">${r.score}</td></tr>`).join('')}</table>`, foot: `<button id="goCont">Continua a osservare</button><button id="goNew" class="primary">Nuova partita</button>` });
+    openModal({ title: g.type === 'vittoria' ? '🏆 VITTORIA' : g.type === 'sconfitta' ? '💀 SCONFITTA' : '🏁 Fine della partita', onClose: null, body: `<div class="score-big">${E.score(S, p)} punti</div><p class="center">${g.text}</p><div class="small muted">Traguardi: ${Object.keys(S.achievements || {}).join(', ') || 'nessuno'} · Mandati: ${p.politics.terms} · Riforme e svolte: ${(S.history || []).filter(h => h.kind === 'policy').length}</div><table><tr><th>#</th><th>Nazione</th><th class="right">Punti</th></tr>${rank.slice(0, 10).map((r, i) => `<tr class="${r.id === S.player ? 'me' : ''}"><td>${i + 1}</td><td>${flagName(r.id)}</td><td class="right">${r.score}</td></tr>`).join('')}</table>`, foot: `<button id="goCont">Continua a osservare</button><button id="goNew" class="primary">Nuova partita</button>` });
     $('goCont').onclick = () => { closeModal(); S.gameOver = null; S.maxTurns += 1000; };
     $('goNew').onclick = () => { closeModal(); showSetup(); };
   }
@@ -500,73 +550,128 @@
     $('news').innerHTML = list.slice(0, 120).map(n => `<div class="news-item ${n.kind} ${n.actors && n.actors.includes(S.player) ? 'me' : ''}"><span class="d">${n.date}</span>${n.kind === 'sys' ? n.text : esc(n.text)}</div>`).join('');
   }
 
-  // ---------- Mappa ------------------------------------------------------------
+  // ---------- Mappa (confini reali Natural Earth) ----------------------------
   const canvas = $('map'); const ctx = canvas.getContext('2d');
-  let mapW = 0, mapH = 0, hover = null;
+  let mapW = 0, mapH = 0, hover = null, mapMode = 'stato';
   const view = { k: 1, tx: 0, ty: 0 };
   let base = { s: 1, ox: 0, oy: 0 };
   const proj = (lon, lat) => [(base.ox + (lon + 180) * base.s) * view.k + view.tx, (base.oy + (84 - lat) * base.s) * view.k + view.ty];
+  const invProj = (x, y) => [((x - view.tx) / view.k - base.ox) / base.s - 180, 84 - ((y - view.ty) / view.k - base.oy) / base.s];
+  const WORLD = GEO.WORLD || {}; const labelPt = {}, bboxes = {}, areas = {};
+  const ringArea = (r) => { let a = 0; for (let i = 0; i < r.length; i++) { const [x1, y1] = r[i], [x2, y2] = r[(i + 1) % r.length]; a += x1 * y2 - x2 * y1; } return a / 2; };
+  const ringCentroid = (r) => { let cx = 0, cy = 0, a = 0; for (let i = 0; i < r.length; i++) { const [x1, y1] = r[i], [x2, y2] = r[(i + 1) % r.length]; const f = x1 * y2 - x2 * y1; cx += (x1 + x2) * f; cy += (y1 + y2) * f; a += f; } a *= 0.5; return a ? [cx / (6 * a), cy / (6 * a)] : r[0]; };
+  Object.entries(WORLD).forEach(([iso, polys]) => { let best = null, minx = 999, miny = 999, maxx = -999, maxy = -999, tot = 0; polys.forEach(r => { const a = Math.abs(ringArea(r)); tot += a; if (!best || a > best.a) best = { a, r }; r.forEach(([x, y]) => { if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y; }); }); labelPt[iso] = best ? ringCentroid(best.r) : [0, 0]; bboxes[iso] = [minx, miny, maxx, maxy]; areas[iso] = tot; });
+  Object.assign(labelPt, { USA: [-98, 39.5], CAN: [-105, 60], RUS: [95, 62], FRA: [2.5, 46.5], NOR: [9, 61.5], CHL: [-70.5, -27], ARG: [-64, -37], IDN: [113, -1], PHL: [122, 12], MYS: [102, 4], NZL: [172, -42], JPN: [138, 36.5], GBR: [-2, 53.5], ITA: [12.5, 42.5], VNM: [106, 16], GRC: [22, 39.5], HRV: [16, 45] });
+  const pointInRing = (x, y, r) => { let inside = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside; } return inside; };
+  const isoAt = (lon, lat) => { for (const iso of Object.keys(WORLD)) { const b = bboxes[iso]; if (lon < b[0] || lon > b[2] || lat < b[1] || lat > b[3]) continue; if (WORLD[iso].some(r => pointInRing(lon, lat, r))) return iso; } return null; };
   function resizeMap() { const r = $('mapWrap').getBoundingClientRect(); const dpr = window.devicePixelRatio || 1; mapW = r.width; mapH = r.height; canvas.width = mapW * dpr; canvas.height = mapH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); const sc = Math.min(mapW / 360, mapH / 144) * 1.04; base = { s: sc, ox: (mapW - 360 * sc) / 2, oy: (mapH - 144 * sc) / 2 }; drawMap(); }
-  function zoomAt(mx, my, factor) { const k2 = Math.max(1, Math.min(6, view.k * factor)); const f = k2 / view.k; view.tx = mx - (mx - view.tx) * f; view.ty = my - (my - view.ty) * f; view.k = k2; clampView(); drawMap(); }
+  function zoomAt(mx, my, factor) { const k2 = Math.max(1, Math.min(8, view.k * factor)); const f = k2 / view.k; view.tx = mx - (mx - view.tx) * f; view.ty = my - (my - view.ty) * f; view.k = k2; clampView(); drawMap(); }
   function clampView() { if (view.k === 1) { view.tx = 0; view.ty = 0; return; } view.tx = Math.min(0, Math.max(mapW - mapW * view.k, view.tx)); view.ty = Math.min(0, Math.max(mapH - mapH * view.k, view.ty)); }
   let drag = null;
   canvas.addEventListener('wheel', (e) => { if (!S) return; e.preventDefault(); const r = canvas.getBoundingClientRect(); zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.25 : 0.8); }, { passive: false });
   canvas.addEventListener('mousedown', (e) => { drag = { x: e.clientX, y: e.clientY, tx: view.tx, ty: view.ty, moved: false }; });
   window.addEventListener('mouseup', () => { if (drag) setTimeout(() => { drag = null; }, 0); });
   canvas.addEventListener('dblclick', () => { view.k = 1; view.tx = 0; view.ty = 0; drawMap(); });
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const hex2 = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const mix = (c1, c2, t) => { const a = hex2(c1), b = hex2(c2); t = Math.max(0, Math.min(1, t)); return `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(lerp(a[2], b[2], t))})`; };
+  const seq = (t) => t < 0.5 ? mix('#24304f', '#3b82f6', t * 2) : mix('#3b82f6', '#f5b942', (t - 0.5) * 2);
+  const div = (t) => t < 0.5 ? mix('#ff5c5c', '#39415c', t * 2) : mix('#39415c', '#3ddc84', (t - 0.5) * 2);
   function nationStatus(id) {
     if (id === S.player) return { c: '#f5b942', l: 'Tu' };
     if (E.atWar(S, S.player, id)) return { c: '#ff5c5c', l: 'Nemico' };
     if (E.alliesOf(S, S.player).includes(id)) return { c: '#4f8cff', l: 'Alleato' };
     if (E.isSanctioning(S, S.player, id) || E.isSanctioning(S, id, S.player)) return { c: '#ff9f43', l: 'Sanzioni' };
     if (E.hasTreaty(S, S.player, id, 'commercio') || E.hasTreaty(S, S.player, id, 'nonaggressione')) return { c: '#3ddc84', l: 'Partner' };
-    return { c: '#8f9bb8', l: 'Neutrale' };
+    return { c: '#4b5a7e', l: 'Neutrale' };
   }
+  const MODES = { stato: 'Stato', relazioni: 'Relazioni', potenza: 'Potenza', stabilita: 'Stabilità', regime: 'Regime', blocchi: 'Blocchi', pil: 'PIL pro capite', clima: 'Emissioni', guerre: 'Guerre' };
+  function modeColor(id, ctxData) {
+    const n = N(id); if (!n) return null;
+    switch (mapMode) {
+      case 'stato': return nationStatus(id).c;
+      case 'relazioni': return id === S.player ? '#f5b942' : div((E.getRel(S, S.player, id) + 100) / 200);
+      case 'potenza': return seq(Math.sqrt(E.score(S, n) / ctxData.maxScore));
+      case 'stabilita': return n.stability < 50 ? mix('#ff5c5c', '#39415c', n.stability / 50) : mix('#39415c', '#3ddc84', (n.stability - 50) / 50);
+      case 'regime': return { democrazia: '#3b82f6', ibrido: '#f59e0b', autocrazia: '#dc2626' }[n.regime];
+      case 'blocchi': { const d = n.blocs.find(b => E.bloc(S, b).defense) || n.blocs.find(b => E.bloc(S, b).trade) || n.blocs[0]; return d ? E.bloc(S, d).color : '#39415c'; }
+      case 'pil': return seq(Math.log(Math.max(1, E.effGdp(S, n) / n.pop * 1000)) / Math.log(90000));
+      case 'clima': { const pr = GEO.PROFILES[id]; const t = pr ? Math.sqrt(pr.co2 * (E.mods(n).co2 || 1) / n.pop / 20) : 0; return mix('#3ddc84', '#ff5c5c', t); }
+      case 'guerre': return E.warsOf(S, id).length ? (E.warsOf(S, id).some(w => w.attackers.includes(id)) ? '#ff5c5c' : '#ff9f43') : '#39415c';
+    }
+    return '#39415c';
+  }
+  function pathOf(iso) { ctx.beginPath(); WORLD[iso].forEach(r => { r.forEach(([lon, lat], i) => { const [x, y] = proj(lon, lat); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); }); }
   function drawMap() {
     if (!S || !mapW) return;
     ctx.clearRect(0, 0, mapW, mapH);
-    // griglia
-    ctx.strokeStyle = 'rgba(255,255,255,.04)'; ctx.lineWidth = 1;
+    const g = ctx.createLinearGradient(0, 0, 0, mapH); g.addColorStop(0, '#0b1326'); g.addColorStop(1, '#060a14'); ctx.fillStyle = g; ctx.fillRect(0, 0, mapW, mapH);
+    ctx.strokeStyle = 'rgba(255,255,255,.035)'; ctx.lineWidth = 1;
     for (let lon = -180; lon <= 180; lon += 30) { const [x] = proj(lon, 0); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, mapH); ctx.stroke(); }
     for (let lat = -60; lat <= 80; lat += 20) { const [, y] = proj(0, lat); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(mapW, y); ctx.stroke(); }
-    // continenti
-    Object.values(GEO.CONTINENTS).forEach(poly => { ctx.beginPath(); poly.forEach(([lon, lat], i) => { const [x, y] = proj(lon, lat); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); ctx.fillStyle = '#1b2742'; ctx.fill(); ctx.strokeStyle = '#2f3f66'; ctx.lineWidth = 1; ctx.stroke(); });
-    const pos = {}; E.alive(S).forEach(id => { const n = N(id); pos[id] = proj(n.lon, n.lat); });
-    // linee
-    const line = (a, b, color, dash, w = 1.5) => { if (!pos[a] || !pos[b]) return; ctx.beginPath(); ctx.setLineDash(dash || []); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.moveTo(...pos[a]); ctx.lineTo(...pos[b]); ctx.stroke(); ctx.setLineDash([]); };
-    if (lineMode !== 2) S.wars.forEach(w => w.attackers.forEach(a => w.defenders.forEach(d => line(a, d, 'rgba(255,92,92,.7)', [], 2))));
-    if (lineMode === 0) { S.treaties.filter(t => t.type === 'difesa' && (t.a === S.player || t.b === S.player || lineMode === 0)).forEach(t => line(t.a, t.b, 'rgba(79,140,255,.35)', [4, 4], 1)); }
-    if (lineMode === 1) { S.treaties.filter(t => t.a === S.player || t.b === S.player).forEach(t => line(t.a, t.b, t.type === 'difesa' ? 'rgba(79,140,255,.8)' : 'rgba(61,220,132,.6)', t.type === 'difesa' ? [] : [4, 4], 1.5)); S.sanctions.filter(x => x.from === S.player || x.to === S.player).forEach(x => line(x.from, x.to, 'rgba(255,159,67,.5)', [2, 4], 1)); }
-    // nazioni
-    const rank = E.ranking(S); const maxScore = rank[0].score;
+    const rank = E.ranking(S); const ctxData = { maxScore: rank[0].score };
+    // paesi
+    Object.keys(WORLD).forEach(iso => {
+      const playable = !!S.nations[iso]; pathOf(iso);
+      ctx.fillStyle = playable ? modeColor(iso, ctxData) : '#1b2338'; ctx.fill();
+      ctx.strokeStyle = playable ? 'rgba(10,14,28,.9)' : 'rgba(40,50,80,.8)'; ctx.lineWidth = playable ? 0.9 : 0.6; ctx.stroke();
+    });
+    // occupazioni (strisce nel colore dell'occupante) e irradiazioni
     E.alive(S).forEach(id => {
-      const n = N(id); const [x, y] = pos[id]; const sc = E.score(S, n); const r = (4 + Math.sqrt(sc / maxScore) * 13) * (0.85 + view.k * 0.15);
-      const st = nationStatus(id);
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = n.color + 'cc'; ctx.fill();
-      ctx.lineWidth = id === S.player || id === sel ? 3 : 2; ctx.strokeStyle = id === sel ? '#ffffff' : st.c; ctx.stroke();
-      // occupazione
-      const occ = E.occupiedShare(n); if (occ > 0) { ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, r, -Math.PI / 2, -Math.PI / 2 + occ * Math.PI * 2); ctx.closePath(); ctx.fillStyle = 'rgba(255,60,60,.75)'; ctx.fill(); }
-      if (E.warsOf(S, id).length) { ctx.font = `${Math.max(9, r)}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('⚔️', x, y - r - 3); }
-      if (n.nukes > 0) { ctx.beginPath(); ctx.arc(x + r * 0.7, y + r * 0.7, 3, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); }
-      ctx.font = `${r > 12 ? 11 : 10}px sans-serif`; ctx.textAlign = 'center'; ctx.fillStyle = '#e6ebf5'; ctx.fillText(n.name, x, y + r + 11);
-      n._r = r;
+      const n = N(id); if (!WORLD[id]) return;
+      const occ = n.regions.filter(r => r.controller && r.controller !== id);
+      if (occ.length) { const by = occ.sort((a, b) => b.share - a.share)[0].controller; const share = E.occupiedShare(n); ctx.save(); pathOf(id); ctx.clip(); const b = bboxes[id]; const [x0, y0] = proj(b[0], b[3]), [x1, y1] = proj(b[2], b[1]); ctx.strokeStyle = N(by).color; ctx.lineWidth = 2; const step = 7; for (let x = x0 - (y1 - y0); x < x1; x += step) { ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + (y1 - y0), y1); ctx.stroke(); } ctx.restore(); ctx.save(); pathOf(id); ctx.clip(); ctx.fillStyle = `rgba(255,60,60,${0.15 + share * 0.3})`; ctx.fillRect(0, 0, mapW, mapH); ctx.restore(); }
+      if (n.regions.some(r => r.irradiatedUntil && r.irradiatedUntil > S.turn)) { ctx.save(); pathOf(id); ctx.clip(); ctx.fillStyle = 'rgba(200,255,80,.18)'; ctx.fillRect(0, 0, mapW, mapH); ctx.restore(); }
+    });
+    // evidenziazioni
+    if (hover && WORLD[hover]) { pathOf(hover); ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 1.5; ctx.stroke(); }
+    if (sel && WORLD[sel]) { pathOf(sel); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.5; ctx.stroke(); }
+    if (WORLD[S.player]) { pathOf(S.player); ctx.strokeStyle = '#f5b942'; ctx.lineWidth = 2; ctx.stroke(); }
+    // linee
+    const pos = {}; E.alive(S).forEach(id => { const lp = labelPt[id] || [N(id).lon, N(id).lat]; pos[id] = proj(lp[0], lp[1]); });
+    const line = (a, b, color, dash, w = 1.5) => { if (!pos[a] || !pos[b]) return; ctx.beginPath(); ctx.setLineDash(dash || []); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.moveTo(...pos[a]); ctx.lineTo(...pos[b]); ctx.stroke(); ctx.setLineDash([]); };
+    const arrow = (a, b, color) => { if (!pos[a] || !pos[b]) return; const [x1, y1] = pos[a], [x2, y2] = pos[b]; const ang = Math.atan2(y2 - y1, x2 - x1); line(a, b, color, [], 2); ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - 9 * Math.cos(ang - 0.4), y2 - 9 * Math.sin(ang - 0.4)); ctx.lineTo(x2 - 9 * Math.cos(ang + 0.4), y2 - 9 * Math.sin(ang + 0.4)); ctx.closePath(); ctx.fill(); };
+    if (lineMode !== 2) S.wars.forEach(w => w.attackers.forEach(a => w.defenders.forEach(d => arrow(a, d, 'rgba(255,92,92,.85)'))));
+    if (lineMode === 0) S.treaties.filter(t => t.type === 'difesa').forEach(t => line(t.a, t.b, 'rgba(79,140,255,.3)', [4, 4], 1));
+    if (lineMode === 1) { S.treaties.filter(t => t.a === S.player || t.b === S.player).forEach(t => line(t.a, t.b, t.type === 'difesa' ? 'rgba(79,140,255,.8)' : 'rgba(61,220,132,.6)', t.type === 'difesa' ? [] : [4, 4], 1.5)); S.sanctions.filter(x => x.from === S.player || x.to === S.player).forEach(x => line(x.from, x.to, 'rgba(255,159,67,.5)', [2, 4], 1)); }
+    // etichette e icone
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    E.alive(S).forEach(id => {
+      const n = N(id); const [x, y] = pos[id]; const big = (areas[id] || 0) > 60 || view.k >= 2.2 || id === sel || id === S.player || (areas[id] || 0) > 15 && view.k >= 1.5;
+      if (!big) return;
+      const fs = Math.min(13, 9 + Math.sqrt(areas[id] || 1) / 8 + view.k); ctx.font = `${id === S.player ? 'bold ' : ''}${fs}px Segoe UI, sans-serif`;
+      const label = `${n.name}`; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(5,8,16,.85)'; ctx.strokeText(label, x, y); ctx.fillStyle = id === S.player ? '#ffe08a' : '#e6ebf5'; ctx.fillText(label, x, y);
+      const icons = (E.warsOf(S, id).length ? '⚔️' : '') + (n.nukes > 0 ? '☢' : '') + (n.suzerain ? '⛓' : '') + (n.regions.some(r => r.irradiatedUntil > S.turn) ? '☣' : '');
+      if (icons) { ctx.font = `${Math.max(9, fs - 1)}px sans-serif`; ctx.fillStyle = '#fff'; ctx.fillText(icons, x, y + fs); }
     });
     if (view.k > 1) { ctx.font = '11px sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillText(`zoom ${view.k.toFixed(1)}× · doppio clic per resettare`, mapW - 10, mapH - 36); }
-    $('mapLegend').innerHTML = [['#f5b942', 'Tu'], ['#4f8cff', 'Alleati'], ['#ff5c5c', 'Nemici'], ['#ff9f43', 'Sanzioni'], ['#3ddc84', 'Partner'], ['#8f9bb8', 'Neutrali']].map(([c, l]) => `<span style="--c:${c}">${l}</span>`).join('') + '<span style="--c:#fff">● nucleare</span>';
+    renderLegend();
   }
-  function hitNation(mx, my) { let best = null; E.alive(S).forEach(id => { const n = N(id); const [x, y] = proj(n.lon, n.lat); const d = Math.hypot(mx - x, my - y); if (d < (n._r || 8) + 4 && (!best || d < best.d)) best = { id, d }; }); return best ? best.id : null; }
+  function renderLegend() {
+    const L = { stato: [['#f5b942', 'Tu'], ['#4f8cff', 'Alleati'], ['#ff5c5c', 'Nemici'], ['#ff9f43', 'Sanzioni'], ['#3ddc84', 'Partner'], ['#4b5a7e', 'Neutrali'], ['#1b2338', 'Stati minori']],
+      relazioni: [['#ff5c5c', 'Ostile'], ['#39415c', 'Neutrale'], ['#3ddc84', 'Amichevole']], potenza: [['#24304f', 'Bassa'], ['#3b82f6', 'Media'], ['#f5b942', 'Alta']], stabilita: [['#ff5c5c', 'Instabile'], ['#39415c', 'Media'], ['#3ddc84', 'Solida']],
+      regime: [['#3b82f6', 'Democrazia'], ['#f59e0b', 'Ibrido'], ['#dc2626', 'Autocrazia']], blocchi: Object.entries(GEO.BLOCS).filter(([k, b]) => b.defense || b.trade).map(([k, b]) => [b.color, b.name]).concat(Object.values(S.customBlocs || {}).map(b => [b.color, b.name])),
+      pil: [['#24304f', 'Povero'], ['#3b82f6', 'Medio'], ['#f5b942', 'Ricco']], clima: [['#3ddc84', 'Basse'], ['#ff5c5c', 'Alte (pro capite)']], guerre: [['#ff5c5c', 'Aggressore'], ['#ff9f43', 'Difensore'], ['#39415c', 'In pace']] }[mapMode] || [];
+    $('mapLegend').innerHTML = L.map(([c, l]) => `<span style="--c:${c}">${l}</span>`).join('') + '<span style="--c:#ff5c5c">▨ occupazione</span><span style="--c:#c8ff50">☣ irradiata</span>';
+  }
+  function hitNation(mx, my) { const [lon, lat] = invProj(mx, my); return isoAt(lon, lat); }
   canvas.addEventListener('mousemove', (e) => {
     if (!S) return; const r = canvas.getBoundingClientRect(); const tt = $('tooltip');
     if (drag && e.buttons === 1) { const dx = e.clientX - drag.x, dy = e.clientY - drag.y; if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true; if (drag.moved) { view.tx = drag.tx + dx; view.ty = drag.ty + dy; clampView(); drawMap(); tt.classList.add('hidden'); return; } }
-    const id = hitNation(e.clientX - r.left, e.clientY - r.top);
-    if (!id) { tt.classList.add('hidden'); hover = null; return; }
-    hover = id; const n = N(id); const rel = E.getRel(S, S.player, id); const st = nationStatus(id);
-    tt.innerHTML = `<b>${n.flag} ${n.name}</b> <span class="muted">#${E.rankOf(S, id)} · ${st.l}</span><br>PIL ${fmt(E.effGdp(S, n))} mld (${pct(n.lastGrowth)}) · Stab. ${fmt(n.stability)}<br>Mil. ${fmt(E.milPower(n))} · ☢️ ${n.nukes} · Tech ${E.avgTech(n).toFixed(1)}<br>${id !== S.player ? `Relazioni: <span style="color:${relColor(rel)}">${rel} (${relLabel(rel)})</span>` : `Punteggio ${E.score(S, n)}`}${E.warsOf(S, id).length ? `<br><span class="bad">In guerra: ${E.enemiesOf(S, id).map(x => N(x).flag).join(' ')}</span>` : ''}`;
-    tt.classList.remove('hidden'); tt.style.left = Math.min(e.clientX - r.left + 14, mapW - 270) + 'px'; tt.style.top = Math.min(e.clientY - r.top + 14, mapH - 90) + 'px';
+    const iso = hitNation(e.clientX - r.left, e.clientY - r.top);
+    if (iso !== hover) { hover = iso; drawMap(); }
+    if (!iso) { tt.classList.add('hidden'); return; }
+    const n = N(iso);
+    if (!n) { tt.innerHTML = `<b>${GEO.WORLD_NAMES[iso] || iso}</b> <span class="muted">stato minore</span>`; }
+    else { const rel = E.getRel(S, S.player, iso); const st = nationStatus(iso); const pr = GEO.PROFILES[iso] || {};
+      tt.innerHTML = `<b>${n.flag} ${n.name}</b> <span class="muted">#${E.rankOf(S, iso)} · ${st.l}</span><br><span class="muted">${pr.capital || ''} · ${n.regime}${n.vision ? ' · ' + GEO.VISIONS[n.vision].icon : ''}</span><br>PIL ${fmt(E.effGdp(S, n))} mld (${pct(n.lastGrowth)}) · Stab. ${fmt(n.stability)} · Infl. ${fmt(n.inflation, 1)}%<br>Mil. ${fmt(E.milPower(n))} · ☢️ ${n.nukes} · Tech ${E.avgTech(n).toFixed(1)}<br>${iso !== S.player ? `Relazioni: <span style="color:${relColor(rel)}">${rel} (${relLabel(rel)})</span>` : `Punteggio ${E.score(S, n)}`}${E.warsOf(S, iso).length ? `<br><span class="bad">In guerra: ${E.enemiesOf(S, iso).map(x => N(x).flag).join(' ')}</span>` : ''}`; }
+    tt.classList.remove('hidden'); tt.style.left = Math.min(e.clientX - r.left + 14, mapW - 270) + 'px'; tt.style.top = Math.min(e.clientY - r.top + 14, mapH - 110) + 'px';
   });
-  canvas.addEventListener('mouseleave', () => $('tooltip').classList.add('hidden'));
-  canvas.addEventListener('click', (e) => { if (!S || (drag && drag.moved)) return; const r = canvas.getBoundingClientRect(); const id = hitNation(e.clientX - r.left, e.clientY - r.top); if (id) { sel = id; rightTab = 'nazione'; renderRight(); drawMap(); } });
-  const ctl = document.createElement('div'); ctl.id = 'mapCtl'; ctl.innerHTML = '<button class="small" id="btnLines">Linee: tutte</button><button class="small zb" id="btnZoomIn" title="Zoom avanti">+</button><button class="small zb" id="btnZoomOut" title="Zoom indietro">&minus;</button>'; $('mapWrap').appendChild(ctl);
+  canvas.addEventListener('mouseleave', () => { $('tooltip').classList.add('hidden'); hover = null; drawMap(); });
+  canvas.addEventListener('click', (e) => { if (!S || (drag && drag.moved)) return; const r = canvas.getBoundingClientRect(); const id = hitNation(e.clientX - r.left, e.clientY - r.top); if (id && S.nations[id]) { sel = id; rightTab = 'nazione'; renderRight(); drawMap(); } });
+  const ctl = document.createElement('div'); ctl.id = 'mapCtl'; ctl.innerHTML = `<select id="mapMode">${Object.entries(MODES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select><button class="small" id="btnLines">Linee: tutte</button><button class="small zb" id="btnZoomIn" title="Zoom avanti">+</button><button class="small zb" id="btnZoomOut" title="Zoom indietro">&minus;</button>`; $('mapWrap').appendChild(ctl);
+  $('mapMode').onchange = () => { mapMode = $('mapMode').value; drawMap(); };
   $('btnZoomIn').onclick = () => zoomAt(mapW / 2, mapH / 2, 1.3); $('btnZoomOut').onclick = () => zoomAt(mapW / 2, mapH / 2, 0.75);
   $('btnLines').onclick = () => { lineMode = (lineMode + 1) % 3; $('btnLines').textContent = ['Linee: tutte', 'Linee: le mie', 'Linee: nessuna'][lineMode]; drawMap(); };
   window.addEventListener('resize', () => { if (S) resizeMap(); });
@@ -592,7 +697,7 @@
   $('fileImport').onchange = (e) => { const f = e.target.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => { try { S = E.deserialize(rd.result); sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap(); toast('Salvataggio importato.'); } catch (err) { toast('File non valido.'); } }; rd.readAsText(f); e.target.value = ''; };
   document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.ctrlKey && S && $('modal').classList.contains('hidden')) endTurn(); if (e.key === 'Escape' && !$('modal').classList.contains('hidden') && $('modalX')) closeModal(); });
 
-  window.GEO_UI = { proj: (lon, lat) => proj(lon, lat), state: () => S };
+  window.GEO_UI = { proj: (lon, lat) => proj(lon, lat), state: () => S, labelPt: (id) => labelPt[id], setMode: (m) => { mapMode = m; $('mapMode').value = m; drawMap(); } };
   // Avvio
   if (localStorage.getItem(KEY)) {
     openModal({ title: '🌐 Geopolitica 2026', onClose: null, body: '<p>È presente una partita salvata nel browser.</p>', foot: '<button id="stNew">Nuova partita</button><button id="stLoad" class="primary">Continua la partita</button>' });
