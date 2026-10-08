@@ -550,10 +550,10 @@
      "o": [
       "UDI",
       "AIC",
-      "GTIN farmaco"
+      "codice ATC"
      ],
      "a": 0,
-     "exp": "UDI (Unique Device Identification) identifica il dispositivo. L'AIC è il codice di autorizzazione dei medicinali in Italia, non dei dispositivi.",
+     "exp": "UDI (Unique Device Identification) identifica il dispositivo. L'AIC è il codice di autorizzazione dei medicinali in Italia e l'ATC una classificazione dei farmaci: nessuno dei due identifica un dispositivo.",
      "diff": 1
     }
    ]

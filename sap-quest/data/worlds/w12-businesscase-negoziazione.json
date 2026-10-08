@@ -235,7 +235,7 @@
      "exp": "Un confronto che omette costi interni dell'on-premise penalizza il cloud in modo ingiusto. Allargare il perimetro con dati del cliente è più forte di un'affermazione generale o di uno sconto.",
      "ctx": {
       "who": "CFO di un'azienda farma",
-      "say": "Il vostro TCO cloud sembra più alto dell'on-premise: io vedo solo la subscription."
+      "say": "La vostra subscription costa più di quello che paghiamo oggi tra licenze e manutenzione: non vedo il vantaggio."
      }
     },
     {
@@ -368,7 +368,7 @@
    "lesson": {
     "points": [
      "Il team Value Advisory di SAP {{w12.value_advisors}}. Verifica internamente come ingaggiarlo e per quali deal: di solito serve su progetti grandi o complessi.",
-     "Strumenti pubblici di esempio: {{w12.value_case_agent}}. Lo stato di disponibilità cambia: verifica con il tuo team prima di proporlo al cliente.",
+     "Esempio di strumento pubblico: {{w12.value_case_agent}}. Lo stato di disponibilità cambia: verifica con il tuo team prima di proporlo al cliente.",
      "Il SAP Value Lifecycle Manager {{w12.vlm}}. Nome e modalità di accesso vanno confermati con il tuo team.",
      "Strumenti e benchmark danno bozze e ordini di grandezza, non sostituiscono i dati del cliente: ogni output va validato con Finance e ogni ipotesi ha una fonte dichiarata.",
      "Se un tool lavora su dati del cliente (es. process mining) chiarisci prima privacy, sicurezza e permessi (ruoli e DPA). Non portare dati del cliente in strumenti non autorizzati."
@@ -543,9 +543,9 @@
      "t": "fill",
      "q": "Il passaggio da licenza perpetual a subscription sposta spesa dal capex all'___, con effetti sul flusso di cassa.",
      "o": [
-      "roi",
-      "ebit",
-      "tco",
+      "EBIT",
+      "ROI",
+      "TCO",
       "opex"
      ],
      "a": 3,
@@ -767,7 +767,7 @@
      "BATNA (Best Alternative To a Negotiated Agreement, dal libro Getting to Yes di Fisher e Ury): la tua migliore alternativa se non si trova un accordo. Chi ha una BATNA forte negozia meglio: definisci la tua e stima quella del cliente.",
      "Per il cliente la BATNA può essere un altro vendor, restare sul sistema attuale con supporto esteso, rimandare o gestire in house. Per te: un altro cliente, un deal in pipeline, o non chiudere a condizioni cattive.",
      "ZOPA (zona di possibile accordo): intervallo in cui entrambi preferiscono un accordo al non-accordo. Se la tua soglia minima supera la soglia massima del cliente, non c'è ZOPA e conviene non chiudere.",
-     "Ancoraggio: la prima cifra orienta la trattativa. Ancora con un'offerta motivata dal valore, non arbitraria. Se il cliente ancora basso, non rispondere con una cifra: riporta la conversazione su perimetro e valore.",
+     "Ancoraggio: la prima cifra orienta la trattativa. Proponi un'ancora motivata dal valore, non arbitraria. Se è il cliente a partire molto in basso, non rispondere con una cifra: riporta la conversazione su perimetro e valore.",
      "Concessioni piccole, decrescenti e condizionate («se tu... allora io...») mostrano che ti avvicini al limite. Ogni concessione senza contropartita cambia la percezione del tuo prezzo."
     ],
     "ae": "Scrivi prima della trattativa: la mia BATNA, la mia soglia minima, cosa posso dare in cambio di cosa. Chi entra senza una soglia scritta cede sotto pressione."
@@ -1095,15 +1095,15 @@
     },
     {
      "t": "mcq",
-     "q": "Una limitazione di responsabilità è nelle condizioni generali predisposte dal fornitore. Cosa prevede l'art. 1341 c.c.?",
+     "q": "Una limitazione di responsabilità è nelle condizioni generali del fornitore. Cosa richiede l'art. 1341 c.c. perché sia efficace?",
      "o": [
-      "Approvazione specifica per iscritto del cliente (la cosiddetta doppia firma)",
+      "Che il cliente la approvi per iscritto con firma specifica (la «doppia firma»)",
       "Che sia valida anche senza approvazione specifica, se il cliente è un'impresa strutturata",
       "Che sia efficace solo se il contratto supera una soglia di valore stabilita dalla legge",
       "Che il giudice la convalidi prima che il contratto produca i suoi effetti tra le parti"
      ],
      "a": 0,
-     "exp": "Per le condizioni generali, le clausole che limitano la responsabilità del predisponente richiedono approvazione specifica per iscritto, anche tra imprese. Ne discute il legale: tu devi saperlo per non promettere tempi."
+     "exp": "Per le condizioni generali predisposte da una parte, le clausole che limitano la responsabilità richiedono approvazione specifica per iscritto, anche tra imprese. Il testo lo cura il legale; tu devi conoscerlo per non promettere tempi irrealistici sul paper process."
     },
     {
      "t": "multi",

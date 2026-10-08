@@ -1,92 +1,92 @@
 {
- "w10.pnrr_deadline": {
-  "label": "Scadenze finali del PNRR (dispositivo europeo RRF)",
-  "value": "target e milestone da completare entro il 31 agosto 2026, richieste di pagamento finali entro il 30 settembre 2026 e pagamenti della Commissione entro il 31 dicembre 2026",
-  "asOf": "2026-10-08",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://commission.europa.eu/business-economy-euro/economic-recovery/recovery-and-resilience-facility_en",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso. Lo stato di avanzamento reale del PNRR italiano a ottobre 2026 non è stato verificato."
- },
- "w10.nis2_italy": {
-  "label": "Recepimento italiano della direttiva NIS2",
-  "value": "la direttiva NIS2 (UE 2022/2555) è recepita in Italia dal D.Lgs. 4 settembre 2024, n. 138, in vigore dal 16 ottobre 2024, con l'Agenzia per la Cybersicurezza Nazionale (ACN) come autorità competente",
-  "asOf": "2024-10-16",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://www.acn.gov.it/",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso."
- },
- "w10.mdr_ivdr_transition": {
-  "label": "Proroghe dei periodi transitori MDR e IVDR",
-  "value": "per l'MDR i dispositivi legacy hanno tempi prorogati fino al 31 dicembre 2027 (classe III e IIb impiantabili) o al 31 dicembre 2028 (altre classi); per l'IVDR fino al 31 dicembre 2027 (classe D), 2028 (classe C) e 2029 (classe B e A sterili), a condizioni precise",
-  "asOf": "2026-10-08",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://eur-lex.europa.eu/eli/reg/2023/607/oj",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso. Riferimenti: Reg. (UE) 2023/607 per l'MDR e Reg. (UE) 2024/1860 per l'IVDR; verificare eventuali modifiche successive."
- },
- "w10.ppwr_application": {
-  "label": "Regolamento europeo sugli imballaggi (PPWR)",
-  "value": "il Regolamento (UE) 2025/40 sugli imballaggi (PPWR) è in vigore dall'11 febbraio 2025 e si applica in generale dal 12 agosto 2026",
-  "asOf": "2026-08-12",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://eur-lex.europa.eu/eli/reg/2025/40/oj",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso."
- },
- "w10.ppwr_application_date": {
-  "label": "Data di applicazione generale del PPWR",
-  "value": "12 agosto 2026",
-  "asOf": "2026-08-12",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://eur-lex.europa.eu/eli/reg/2025/40/oj",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso."
- },
- "w10.annex11_revision": {
-  "label": "Revisione dell'Annex 11 e nuovo Annex 22 sull'AI",
-  "value": "nel 2025 EMA e PIC/S hanno messo in consultazione bozze di revisione dell'Annex 11 (sistemi computerizzati) e di un nuovo Annex 22 sull'intelligenza artificiale nelle GMP",
-  "asOf": "2025-07-07",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://www.ema.europa.eu/",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso. Lo stato di adozione finale a ottobre 2026 è sconosciuto: non affermare che le bozze siano già in vigore."
- },
- "w10.sap_serialization_solutions": {
-  "label": "Soluzioni SAP storiche per serializzazione e tracciabilità farma",
-  "value": "SAP Advanced Track and Trace for Pharmaceuticals (ATTP) e SAP Information Collaboration Hub for Life Sciences",
-  "asOf": "2026-10-08",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://www.sap.com/",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso. Nomi commerciali e ciclo di vita dei prodotti (manutenzione, successori) da verificare sul sito SAP o con il solution advisor di industria."
- },
- "w10.sap_batch_release": {
-  "label": "Soluzione SAP per il rilascio lotti nelle Life Sciences",
-  "value": "SAP Batch Release Hub for Life Sciences",
-  "asOf": "2026-10-08",
-  "checked": "2026-10-08",
-  "staleAfter": "2026-11-08",
-  "source": "https://www.sap.com/",
-  "confidence": "low",
-  "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso."
- },
- "w10.autonomous_rgm": {
-  "label": "Scenario AI di industria per il consumer products (Sapphire 2026)",
-  "value": "tra gli scenari AI di industria presentati a Sapphire 2026 compare l'«autonomous revenue growth management» per il consumer products, insieme al «unified commerce»",
-  "asOf": "2026-05-12",
-  "checked": "2026-10-08",
-  "staleAfter": "2027-01-08",
-  "source": "https://customerthink.com/sapphire-2026-what-sap-actually-did-for-cx/",
-  "confidence": "secondary",
-  "note": "Commento di analista su Sapphire 2026: perimetro, disponibilità e nome commerciale esatti da verificare con SAP prima di citarli al cliente."
- }
+  "w10.pnrr_deadline": {
+    "label": "Scadenze finali del PNRR (dispositivo europeo RRF)",
+    "value": "target e milestone da completare entro il 31 agosto 2026, richieste di pagamento finali entro il 30 settembre 2026 e pagamenti della Commissione entro il 31 dicembre 2026",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://lentepubblica.it/buone-pratiche/stato-di-avanzamento-del-pnrr-il-dossier-di-camera-e-senato/",
+    "confidence": "secondary",
+    "note": "Verificato l'8/10/2026 su più fonti italiane (dossier Camera/Senato, ANCE, linee guida ANCI): dopo il 31 agosto 2026 la Commissione non considera più risultati o integrazioni; la decima richiesta di pagamento va presentata entro il 30 settembre 2026; valutazioni e pagamenti entro il 31 dicembre 2026. La rendicontazione su ReGiS prosegue anche nel 2027. L'esito finale dei target italiani (a luglio 70 su 159 rendicontati) non è verificato."
+  },
+  "w10.nis2_italy": {
+    "label": "Recepimento italiano della direttiva NIS2",
+    "value": "la direttiva NIS2 (UE 2022/2555) è recepita in Italia dal D.Lgs. 4 settembre 2024, n. 138, in vigore dal 16 ottobre 2024, con l'Agenzia per la Cybersicurezza Nazionale (ACN) come autorità competente",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.ictsecuritymagazine.com/articoli/nis2-e-d-lgs-138-2024/",
+    "confidence": "secondary",
+    "note": "Verificato l'8/10/2026 su fonti di settore: decreto in vigore dal 16/10/2024. Nel 2026 la finestra ACN di categorizzazione di attività e servizi era dal 1 maggio al 30 giugno (passata); gli obblighi decorrono dalla comunicazione individuale di inserimento nell'elenco dei soggetti NIS (le fonti non concordano al 100%); verifiche ACN possibili da ottobre 2026. Farma: l'Allegato I (sanità) copre i produttori di prodotti farmaceutici; chi fa solo distribuzione potrebbe restare fuori (lettura di DLA Piper, non certezza normativa). Far verificare al cliente il proprio allegato."
+  },
+  "w10.mdr_ivdr_transition": {
+    "label": "Proroghe dei periodi transitori MDR e IVDR",
+    "value": "per l'MDR i dispositivi legacy hanno tempi prorogati fino al 31 dicembre 2027 (classe III e IIb impiantabili) o al 31 dicembre 2028 (altre classi); per l'IVDR fino al 31 dicembre 2027 (classe D), 2028 (classe C) e 2029 (classe B e A sterili), a condizioni precise",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.osborneclarke.com/insights/eu-progresses-targeted-revision-medical-device-rules-amid-industry-pressure",
+    "confidence": "secondary",
+    "note": "Le scadenze legacy (2027/2028/2029) derivano dai Reg. (UE) 2023/607 e 2024/1860 e sono riportate coerentemente da fonti secondarie. La revisione mirata COM(2025) 1023 (16/12/2025) è in esame al Parlamento (progetto di relazione del 1/7/2026) e non risulta adottata a ottobre 2026: potrebbe cambiare certificati e scadenze. Verificare nel testo ufficiale."
+  },
+  "w10.ppwr_application": {
+    "label": "Regolamento europeo sugli imballaggi (PPWR)",
+    "value": "il Regolamento (UE) 2025/40 sugli imballaggi (PPWR) è in vigore dall'11 febbraio 2025 e si applica in generale dal 12 agosto 2026",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.assolombarda.it/servizi/ambiente/informazioni/ppwr-dal-12-agosto-in-applicazione-il-nuovo-regolamento-ue-sugli-imballaggi",
+    "confidence": "secondary",
+    "note": "Verificato l'8/10/2026: il 12 agosto 2026 è passato, il regolamento è applicabile; nessun rinvio trovato (fact check del 22/7/2026). Sanzioni italiane non ancora definite a metà agosto; i tempi di registrazione EPR divergono tra le fonti (12/8/2026 o 2027): verificare su EUR-Lex, Ministero dell'Ambiente e CONAI."
+  },
+  "w10.ppwr_application_date": {
+    "label": "Data di applicazione generale del PPWR",
+    "value": "12 agosto 2026",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.assolombarda.it/servizi/ambiente/informazioni/ppwr-dal-12-agosto-in-applicazione-il-nuovo-regolamento-ue-sugli-imballaggi",
+    "confidence": "secondary",
+    "note": "Verificato l'8/10/2026: il 12 agosto 2026 è passato, il regolamento è applicabile; nessun rinvio trovato (fact check del 22/7/2026). Sanzioni italiane non ancora definite a metà agosto; i tempi di registrazione EPR divergono tra le fonti (12/8/2026 o 2027): verificare su EUR-Lex, Ministero dell'Ambiente e CONAI."
+  },
+  "w10.annex11_revision": {
+    "label": "Revisione dell'Annex 11 e nuovo Annex 22 sull'AI",
+    "value": "nel 2025 EMA e PIC/S hanno messo in consultazione bozze di revisione dell'Annex 11 (sistemi computerizzati) e di un nuovo Annex 22 sull'intelligenza artificiale nelle GMP",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.pharmtech.com/view/stakeholders-consultation-on-gmp-annex-11-chapter-4-and-new-annex-22",
+    "confidence": "secondary",
+    "note": "Consultazione EMA/PIC/S dal 7 luglio al 7 ottobre 2025. Annex 22 ha ricevuto circa 1.300 commenti ed è in revisione; il piano di lavoro EMA 2026-2028 prevede i testi finali alla Commissione entro fine 2026. Nessuna adozione, data di efficacia o periodo transitorio annunciati a ottobre 2026: non affermare che siano in vigore."
+  },
+  "w10.sap_serialization_solutions": {
+    "label": "Soluzioni SAP storiche per serializzazione e tracciabilità farma",
+    "value": "SAP Advanced Track and Trace for Pharmaceuticals (ATTP) e SAP Information Collaboration Hub for Life Sciences",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.sap.com/products/scm/information-collaboration-hub-for-life-sciences.html",
+    "confidence": "low",
+    "note": "ICH for Life Sciences esiste ed è un prodotto SAP su BTP (pagina SAP vista nei risultati). Per ATTP un post della community SAP (non datato) dice che la versione 2.0 è fuori manutenzione standard; compare anche un «SAP Traceability Hub». Le fonti descrivono ATTP e ICH come complementari, non come successore. Chiedere al solution advisor di industria qual è il percorso attuale prima di citare un prodotto al cliente."
+  },
+  "w10.sap_batch_release": {
+    "label": "Soluzione SAP per il rilascio lotti nelle Life Sciences",
+    "value": "SAP Batch Release Hub for Life Sciences",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-11-08",
+    "source": "https://www.sap.com/",
+    "confidence": "low",
+    "note": "Non verificato in questa sessione: ricerca web esaurita e domini ufficiali non raggiungibili dal sandbox. Valore da conoscenza di base, URL canonico/generico dell'ente non aperto. Riverificare su fonte ufficiale prima dell'uso."
+  },
+  "w10.autonomous_rgm": {
+    "label": "Scenario AI di industria per il consumer products (Sapphire 2026)",
+    "value": "tra gli scenari AI di industria presentati a Sapphire 2026 compare l'«autonomous revenue growth management» per il consumer products, insieme al «unified commerce»",
+    "asOf": "2026-05-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://customerthink.com/sapphire-2026-what-sap-actually-did-for-cx/",
+    "confidence": "secondary",
+    "note": "Commento di analista su Sapphire 2026: perimetro, disponibilità e nome commerciale esatti da verificare con SAP prima di citarli al cliente."
+  }
 }

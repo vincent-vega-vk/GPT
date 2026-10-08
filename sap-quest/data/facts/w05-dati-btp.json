@@ -61,7 +61,7 @@
   },
   "w05.bdc_connect_athena": {
     "label": "BDC Connect per Amazon Athena",
-    "value": "Amazon Athena: connettore annunciato a Sapphire 2026, disponibilità generale pianificata per la seconda metà del 2026 (stato attuale da verificare)",
+    "value": "per Amazon Athena il connettore è stato annunciato a Sapphire 2026, con disponibilità generale pianificata per la seconda metà del 2026 (stato attuale da verificare)",
     "asOf": "2026-05-13",
     "checked": "2026-10-08",
     "staleAfter": "2026-12-31",

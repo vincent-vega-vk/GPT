@@ -1,0 +1,938 @@
+{
+ "sap.acq.dremio": [
+  "w01-l10#lesson",
+  "w01-l10-2b86a7",
+  "w04-l07#lesson",
+  "w05-as5",
+  "w05-l12-484855",
+  "w05-l13#lesson",
+  "w05-l16-d11ff5"
+ ],
+ "sap.acq.prior_labs": [
+  "w01-l10#lesson",
+  "w01-l10-2b86a7",
+  "w04-l07#lesson",
+  "w04-l08#lesson",
+  "w05-as5",
+  "w05-l12-484855",
+  "w05-l13#lesson",
+  "w05-l16-d11ff5"
+ ],
+ "sap.acq.reltio": [
+  "w01-l10#lesson",
+  "w01-l10-2b86a7",
+  "w04-l07#lesson",
+  "w05-as5",
+  "w05-l13#lesson",
+  "w05-l16-d11ff5",
+  "w09-l06#lesson",
+  "w09-l06-3f336b"
+ ],
+ "sap.acq.smartrecruiters": [
+  "w01-l10#lesson",
+  "w01-l10-2b86a7",
+  "w04-l10#lesson",
+  "w07-l02#lesson",
+  "w07-l02-87c1ae",
+  "w07-l04#lesson",
+  "w07-l04-6624cc"
+ ],
+ "sap.ceo": [
+  "w01-l13#lesson",
+  "w01-l13-12e23d"
+ ],
+ "sap.cfo": [
+  "w01-l13#lesson",
+  "w01-l13-12e23d"
+ ],
+ "sap.ecc.extended_end": [
+  "w02-as4",
+  "w02-l14#lesson",
+  "w02-l14-05cbba",
+  "w02-l14-69dac4",
+  "w02-l16-20cfb1",
+  "w03-l13#lesson",
+  "w03-l13-d9d881",
+  "w03-l14#lesson",
+  "w03-l14-5ad0c3",
+  "w03-l16#lesson",
+  "w06-l07-70e871",
+  "w07-as3",
+  "w07-l11#lesson",
+  "w07-l11-12573b",
+  "w07-l11-36b106",
+  "w07-l14-efcd77",
+  "w10-l08-78b338",
+  "w11-l04#lesson",
+  "w11-l04-7d91de",
+  "w12-l14#lesson",
+  "w12-l14-f63e3a",
+  "w13-as3",
+  "w13-l12#lesson"
+ ],
+ "sap.ecc.mainstream_end": [
+  "w02-as4",
+  "w02-l14#lesson",
+  "w02-l14-05cbba",
+  "w02-l14-69dac4",
+  "w02-l16-20cfb1",
+  "w03-l13#lesson",
+  "w03-l13-69dac4",
+  "w03-l13-d9d881",
+  "w03-l16#lesson",
+  "w06-l07#lesson",
+  "w07-as3",
+  "w07-l11#lesson",
+  "w07-l11-36b106",
+  "w07-l14-efcd77",
+  "w10-l08-78b338",
+  "w10-l16-04cf40",
+  "w11-l04#lesson",
+  "w12-l14#lesson",
+  "w12-l14-f63e3a",
+  "w13-as3",
+  "w13-l12#lesson",
+  "w13-l12-69dac4"
+ ],
+ "sap.ecc.transition_option": [
+  "w02-l14#lesson",
+  "w02-l14-05cbba",
+  "w02-l14-55c499",
+  "w03-as5",
+  "w03-l13#lesson",
+  "w07-l11-63dd97",
+  "w12-as6",
+  "w12-l14#lesson",
+  "w12-l14-fa6562",
+  "w12-l16-1e03b1",
+  "w13-l12#lesson"
+ ],
+ "sap.fy26.cloud_revenue_outlook": [
+  "w01-l09#lesson"
+ ],
+ "sap.fy26.fcf_outlook": [
+  "w01-l09#lesson"
+ ],
+ "sap.fy26.op_profit_outlook": [
+  "w01-l09#lesson",
+  "w01-l09-2fb947"
+ ],
+ "sap.naming.cloud_erp": [
+  "w01-l04#lesson",
+  "w02-l08#lesson",
+  "w03-l05#lesson",
+  "w09-l07#lesson",
+  "w10-l08#lesson",
+  "w12-l06#lesson"
+ ],
+ "sap.q2_26.ai_in_top_deals": [
+  "w01-l08#lesson",
+  "w01-l08-241c9e",
+  "w04-l01#lesson",
+  "w05-l09#lesson",
+  "w13-l13#lesson"
+ ],
+ "sap.q2_26.ccb": [
+  "w01-l07#lesson",
+  "w01-l07-a5eb9d",
+  "w01-l08#lesson",
+  "w01-l14-a0b240"
+ ],
+ "sap.q2_26.cloud_erp_suite": [
+  "w01-l04#lesson",
+  "w01-l04-8d8395",
+  "w01-l08#lesson",
+  "w01-l14-1ebc1f"
+ ],
+ "sap.q2_26.cloud_revenue": [
+  "w01-l04-8d8395",
+  "w01-l06#lesson",
+  "w01-l06-75f433",
+  "w01-l08#lesson",
+  "w01-l08-579db0"
+ ],
+ "sap.q2_26.date": [
+  "w01-l08#lesson",
+  "w01-l08-1ba352",
+  "w01-l09-9e7361",
+  "w01-l12-4db239",
+  "w01-l12-fdb031",
+  "w01-l14-a0b240"
+ ],
+ "sap.q2_26.fcf": [
+  "w01-l05#lesson",
+  "w01-l05-6d0f02",
+  "w01-l08#lesson"
+ ],
+ "sap.q2_26.total_revenue": [
+  "w01-l08#lesson",
+  "w01-l08-579db0"
+ ],
+ "sap.q3_26.date": [
+  "w01-l07#lesson",
+  "w01-l08-1ba352",
+  "w01-l09#lesson",
+  "w01-l09-9e7361",
+  "w01-l12#lesson",
+  "w01-l12-4db239",
+  "w01-l12-fdb031",
+  "w01-l14-a17a09",
+  "w04-l15#lesson",
+  "w14-l14#lesson"
+ ],
+ "sap.sapphire26": [
+  "w01-l12#lesson",
+  "w01-l12-2dc10a",
+  "w01-l12-fdb031"
+ ],
+ "sap.sapphire26.platform": [
+  "w01-l03#lesson",
+  "w04-l01#lesson",
+  "w04-l06#lesson",
+  "w05-l01#lesson",
+  "w05-l01-7d9924",
+  "w05-l16-791446",
+  "w09-l07#lesson",
+  "w10-l08#lesson",
+  "w13-l13#lesson"
+ ],
+ "sap.sapphire27": [
+  "w01-l12#lesson"
+ ],
+ "sap.teched26": [
+  "w01-l09-9e7361",
+  "w01-l12#lesson",
+  "w01-l12-bdf212",
+  "w01-l12-fdb031",
+  "w01-l14-a17a09",
+  "w04-l15#lesson",
+  "w14-l14#lesson"
+ ],
+ "w01.acq.walkme": [
+  "w01-l10#lesson",
+  "w01-l10-2b86a7"
+ ],
+ "w01.autonomous_enterprise": [
+  "w01-l03#lesson"
+ ],
+ "w01.cloud_erp_suite_scope": [
+  "w01-l04#lesson"
+ ],
+ "w01.customer_sme_share": [
+  "w01-l02#lesson",
+  "w01-l02-79c497"
+ ],
+ "w01.employees": [
+  "w01-l01#lesson"
+ ],
+ "w01.eu_ai_cloud": [
+  "w01-l13#lesson"
+ ],
+ "w01.fy25_results": [
+  "w01-l06#lesson",
+  "w01-l06-1af552"
+ ],
+ "w01.indirect_q2": [
+  "w01-l11#lesson",
+  "w01-l11-a7cde6"
+ ],
+ "w01.net_zero": [
+  "w01-l13#lesson",
+  "w01-l13-4d9973"
+ ],
+ "w01.non_ifrs_definition": [
+  "w01-l05#lesson"
+ ],
+ "w01.partner_share": [
+  "w01-l11#lesson"
+ ],
+ "w01.partneredge": [
+  "w01-l11#lesson"
+ ],
+ "w01.sap_now_milan": [
+  "w01-l09-9e7361",
+  "w01-l12#lesson",
+  "w01-l12-fdb031",
+  "w01-l14-a17a09"
+ ],
+ "w01.supervisory_board": [
+  "w01-l13#lesson"
+ ],
+ "w01.top100_customers": [
+  "w01-l02#lesson"
+ ],
+ "w02.activate_phases": [
+  "w02-l12#lesson"
+ ],
+ "w02.bsr_process_discovery": [
+  "w02-l13#lesson"
+ ],
+ "w02.cloud_erp_public_cadence": [
+  "w02-l08#lesson",
+  "w02-l08-7998ad",
+  "w02-l15#lesson"
+ ],
+ "w02.s4_current_release": [
+  "w02-l15#lesson"
+ ],
+ "w02.s4_fps": [
+  "w02-l15#lesson"
+ ],
+ "w02.s4_release_model": [
+  "w02-as5",
+  "w02-l15#lesson"
+ ],
+ "w02.tool.btc": [
+  "w02-l11#lesson",
+  "w02-l13#lesson",
+  "w02-l13-b93bea",
+  "w02-l16-6ecfa4"
+ ],
+ "w02.tool.readiness_check": [
+  "w02-as6",
+  "w02-l13#lesson",
+  "w02-l13-b93bea",
+  "w02-l13-f98319",
+  "w02-l16-6ecfa4"
+ ],
+ "w02.tool.transformation_navigator": [
+  "w02-as6",
+  "w02-l13#lesson",
+  "w02-l13-b93bea",
+  "w02-l13-f98319"
+ ],
+ "w03.aws_sovereign": [
+  "w03-l10#lesson"
+ ],
+ "w03.grow_fast_finance": [
+  "w03-l04#lesson"
+ ],
+ "w03.grow_offer": [
+  "w03-l04#lesson"
+ ],
+ "w03.hosting_options": [
+  "w03-l09#lesson"
+ ],
+ "w03.packaging_2025": [
+  "w03-l02#lesson"
+ ],
+ "w03.private_package_2025": [
+  "w03-l02#lesson"
+ ],
+ "w03.rise_commercial": [
+  "w03-l11#lesson"
+ ],
+ "w03.rise_definition": [
+  "w03-l01#lesson"
+ ],
+ "w03.rise_grow_2026_ai": [
+  "w03-l12#lesson"
+ ],
+ "w03.rise_scope": [
+  "w03-l02#lesson"
+ ],
+ "w03.rise_toolchain_2026": [
+  "w03-l15#lesson"
+ ],
+ "w03.stackit_rise": [
+  "w03-l10#lesson",
+  "w03-l10-178a8c"
+ ],
+ "w04.a2a": [
+  "w04-l05#lesson"
+ ],
+ "w04.agent_hub": [
+  "w04-l05#lesson",
+  "w04-l12#lesson"
+ ],
+ "w04.ai_ecc_link": [
+  "w03-l12#lesson",
+  "w04-l14#lesson"
+ ],
+ "w04.ai_partners": [
+  "w04-l08#lesson"
+ ],
+ "w04.ai_pricing_shift": [
+  "w04-as5",
+  "w04-l11#lesson"
+ ],
+ "w04.ai_units": [
+  "w04-l11#lesson"
+ ],
+ "w04.ai_units_expiry": [
+  "w04-l11-bbb0ad"
+ ],
+ "w04.anthropic": [
+  "w04-l08#lesson"
+ ],
+ "w04.autonomous_suite_scale": [
+  "w04-l03#lesson"
+ ],
+ "w04.chronology_2025": [
+  "w04-l15#lesson"
+ ],
+ "w04.connect26": [
+  "w04-l15#lesson"
+ ],
+ "w04.cx_assistants_ga": [
+  "w04-l10#lesson",
+  "w04-l10-9bcda6"
+ ],
+ "w04.ga_roadmap": [
+  "w04-l03#lesson"
+ ],
+ "w04.guardrails": [
+  "w04-l12#lesson"
+ ],
+ "w04.hr_plan": [
+  "w04-l10#lesson"
+ ],
+ "w04.joule_base": [
+  "w04-l11#lesson"
+ ],
+ "w04.joule_studio": [
+  "w04-l05#lesson"
+ ],
+ "w04.joule_work_internal": [
+  "w04-l04#lesson",
+  "w04-l14#lesson"
+ ],
+ "w04.joule_work_status": [
+  "w04-as3",
+  "w04-l04#lesson"
+ ],
+ "w04.knowledge_graph": [
+  "w04-l04#lesson",
+  "w04-l06#lesson"
+ ],
+ "w04.procurement_plan": [
+  "w04-l09#lesson"
+ ],
+ "w04.release_cadence": [
+  "w04-l15#lesson"
+ ],
+ "w04.sc_agents_ga": [
+  "w04-l03-333cf6",
+  "w04-l10#lesson"
+ ],
+ "w05.ai_platform_pricing": [
+  "w05-l08#lesson"
+ ],
+ "w05.bdc_components": [
+  "w05-l09#lesson",
+  "w05-l09-0de747"
+ ],
+ "w05.bdc_connect_athena": [
+  "w05-l12#lesson"
+ ],
+ "w05.bdc_connect_bigquery": [
+  "w05-l12#lesson",
+  "w05-l12-9e6d70",
+  "w05-l15-3a421a"
+ ],
+ "w05.bdc_connect_databricks": [
+  "w05-l12#lesson"
+ ],
+ "w05.bdc_connect_snowflake": [
+  "w05-as3",
+  "w05-l12#lesson",
+  "w05-l12-584d95",
+  "w05-l12-9e6d70",
+  "w05-l15-3a421a"
+ ],
+ "w05.bdc_launch": [
+  "w05-l09#lesson"
+ ],
+ "w05.bdc_pricing_unit": [
+  "w05-l08#lesson"
+ ],
+ "w05.btc": [
+  "w05-l14#lesson"
+ ],
+ "w05.btm_portfolio": [
+  "w05-l14#lesson"
+ ],
+ "w05.btp_commercial_models": [
+  "w05-l08#lesson"
+ ],
+ "w05.datasphere_status": [
+  "w05-l09-60d3ed",
+  "w05-l11#lesson",
+  "w05-l11-84cb00"
+ ],
+ "w05.integration_enhanced": [
+  "w05-l04#lesson"
+ ],
+ "w05.intelligent_apps": [
+  "w05-l10#lesson"
+ ],
+ "w05.knowledge_graph": [
+  "w05-l13#lesson"
+ ],
+ "w05.mdg_vs_reltio": [
+  "w05-as6",
+  "w05-l13#lesson",
+  "w05-l13-e32b24"
+ ],
+ "w05.reltio_role": [
+  "w05-l13#lesson",
+  "w05-l13-1ff022"
+ ],
+ "w05.sac_in_bdc": [
+  "w05-l11#lesson",
+  "w05-l11-d07681",
+  "w06-l06#lesson"
+ ],
+ "w05.sap_rpt1": [
+  "w05-l13#lesson"
+ ],
+ "w06.ariba_spend_analysis": [
+  "w06-l08#lesson",
+  "w06-l09#lesson"
+ ],
+ "w06.autonomous_finance": [
+  "w06-l14#lesson"
+ ],
+ "w06.autonomous_spend": [
+  "w06-l09#lesson",
+  "w06-l14#lesson"
+ ],
+ "w06.csrd_first_year": [
+  "w06-as5",
+  "w06-l13#lesson"
+ ],
+ "w06.csrd_italy_status": [
+  "w06-l13#lesson"
+ ],
+ "w06.csrd_omnibus_directive": [
+  "w06-l13#lesson"
+ ],
+ "w06.csrd_scope": [
+  "w06-l13#lesson",
+  "w06-l13-537ebe",
+  "w06-l15-129adc"
+ ],
+ "w06.csrd_stop_clock": [
+  "w06-l13#lesson"
+ ],
+ "w06.enterprise_planning": [
+  "w06-l06#lesson"
+ ],
+ "w06.nso_peppol": [
+  "w06-l11#lesson"
+ ],
+ "w06.sdi_derogation": [
+  "w06-l11#lesson"
+ ],
+ "w06.taulia_ai": [
+  "w06-l10#lesson"
+ ],
+ "w06.vida_b2b_date": [
+  "w06-as6",
+  "w06-l12#lesson",
+  "w06-l12-85d690"
+ ],
+ "w06.vida_legacy_date": [
+  "w06-l12#lesson",
+  "w06-l12-ff516e",
+  "w06-l15-40d6cf"
+ ],
+ "w06.vida_reference": [
+  "w06-l12#lesson"
+ ],
+ "w07.ecp_agents": [
+  "w07-l10#lesson"
+ ],
+ "w07.ecp_italy": [
+  "w07-l12#lesson",
+  "w07-l14-5e12ff"
+ ],
+ "w07.h4s4": [
+  "w07-l11#lesson",
+  "w07-l11-37db90"
+ ],
+ "w07.hcm_in_bs7": [
+  "w07-l11#lesson"
+ ],
+ "w07.it_all_employers": [
+  "w07-l13#lesson",
+  "w07-l13-3e4572"
+ ],
+ "w07.it_decree": [
+  "w07-l07#lesson",
+  "w07-l13#lesson",
+  "w07-l13-f86dda"
+ ],
+ "w07.it_decrees_pending": [
+  "w07-l13#lesson"
+ ],
+ "w07.it_first_report_100": [
+  "w07-l13-cc1a5a"
+ ],
+ "w07.it_first_report_250": [
+  "w07-l13-cc1a5a"
+ ],
+ "w07.it_gap_5pct": [
+  "w07-l13#lesson"
+ ],
+ "w07.it_in_force": [
+  "w07-l13#lesson",
+  "w07-l13-f86dda"
+ ],
+ "w07.it_reporting": [
+  "w07-as4",
+  "w07-l13#lesson",
+  "w07-l13-cc1a5a",
+  "w07-l13-d028bf",
+  "w07-l14-fa3587"
+ ],
+ "w07.joule_hr_agents": [
+  "w07-l06#lesson",
+  "w07-l10#lesson",
+  "w07-l10-e9aeef"
+ ],
+ "w07.people_intelligence": [
+  "w07-l02-705118",
+  "w07-l09#lesson"
+ ],
+ "w07.recruiting_direction": [
+  "w07-l04#lesson",
+  "w07-l04-5c5d58",
+  "w07-l04-9e8a95"
+ ],
+ "w07.sap_paytransp": [
+  "w07-l13#lesson",
+  "w07-l13-a1316b"
+ ],
+ "w07.smartrecruiters_phase1": [
+  "w07-l04#lesson",
+  "w07-l04-9b2e7b"
+ ],
+ "w07.talent_intelligence_hub": [
+  "w07-l08#lesson",
+  "w07-l08-d30906"
+ ],
+ "w07.walkme_deal": [
+  "w07-as2",
+  "w07-l10#lesson"
+ ],
+ "w07.walkme_role": [
+  "w07-l10#lesson",
+  "w07-l10-a6f886"
+ ],
+ "w08.battery_passport": [
+  "w08-l14#lesson"
+ ],
+ "w08.dpp_delegated": [
+  "w08-as5",
+  "w08-l14#lesson",
+  "w08-l14-510b33",
+  "w08-l15-c1171a"
+ ],
+ "w08.dpp_registry": [
+  "w08-l14#lesson",
+  "w08-l14-d2d33f"
+ ],
+ "w08.dpp_registry_live": [
+  "w08-as5",
+  "w08-l14#lesson",
+  "w08-l14-e03a2d"
+ ],
+ "w08.espr_basics": [
+  "w08-l14#lesson"
+ ],
+ "w08.it_hyper_cloud": [
+  "w08-l13#lesson",
+  "w08-l13-19cb2b"
+ ],
+ "w08.it_hyper_erp": [
+  "w08-l13#lesson",
+  "w08-l13-d6b098"
+ ],
+ "w08.it_hyper_rates": [
+  "w08-l13#lesson",
+  "w08-l13-01c64b"
+ ],
+ "w08.it_hyper_window": [
+  "w08-l13#lesson",
+  "w08-l13-2492bb"
+ ],
+ "w08.it_incentive_regime": [
+  "w08-as3",
+  "w08-l13#lesson",
+  "w08-l13-1ffb07"
+ ],
+ "w08.me_mii_sunset": [
+  "w08-as6",
+  "w08-l07#lesson",
+  "w08-l07-69ce96",
+  "w08-l07-de7770"
+ ],
+ "w09.ai_licensing_models": [
+  "w09-l08#lesson"
+ ],
+ "w09.autonomous_cx": [
+  "w09-l01#lesson",
+  "w09-l08#lesson"
+ ],
+ "w09.autonomous_cx_availability": [
+  "w09-l08#lesson",
+  "w09-l08-293e93"
+ ],
+ "w09.commerce_cloud_erp_edition": [
+  "w09-as6",
+  "w09-l04#lesson",
+  "w09-l04-bedae9"
+ ],
+ "w09.commerce_onprem_eomm": [
+  "w09-l04#lesson"
+ ],
+ "w09.cx_portfolio_names": [
+  "w09-l01#lesson"
+ ],
+ "w09.engagement_cloud_name": [
+  "w09-l01-0f9617",
+  "w09-l01-b902d5",
+  "w09-l02#lesson",
+  "w09-l02-9397f7",
+  "w09-l02-a2b63b",
+  "w09-l14-7148ff",
+  "w09-l14-81dc39"
+ ],
+ "w09.engagement_cloud_rename": [
+  "w09-l01-b902d5",
+  "w09-l02#lesson",
+  "w09-l02-9397f7",
+  "w09-l05#lesson",
+  "w09-l14-7148ff"
+ ],
+ "w09.gartner_digital_commerce_2025": [
+  "w09-l04#lesson"
+ ],
+ "w09.gartner_personalization_2026": [
+  "w09-l05#lesson",
+  "w09-l05-b2e78c"
+ ],
+ "w09.hubspot_outcome_pricing": [
+  "w09-l12#lesson",
+  "w09-l12-6acacf"
+ ],
+ "w09.microsoft_agents": [
+  "w09-l12#lesson"
+ ],
+ "w09.parloa": [
+  "w09-l08#lesson",
+  "w09-l11#lesson"
+ ],
+ "w09.salesforce_data360": [
+  "w09-l12#lesson",
+  "w09-l12-610c54"
+ ],
+ "w09.salesforce_informatica": [
+  "w09-l12#lesson"
+ ],
+ "w09.v1_to_v2": [
+  "w09-l02-518901",
+  "w09-l03#lesson",
+  "w09-l03-dff44f",
+  "w09-l14-b87437"
+ ],
+ "w10.annex11_revision": [
+  "w10-as5",
+  "w10-l02#lesson"
+ ],
+ "w10.autonomous_rgm": [
+  "w10-l09#lesson"
+ ],
+ "w10.mdr_ivdr_transition": [
+  "w10-l06#lesson",
+  "w10-l06-d168e3"
+ ],
+ "w10.nis2_italy": [
+  "w10-l14#lesson"
+ ],
+ "w10.pnrr_deadline": [
+  "w10-l13#lesson",
+  "w10-l13-25ee1e",
+  "w10-l16-bfc587"
+ ],
+ "w10.ppwr_application": [
+  "w10-as6",
+  "w10-l11#lesson"
+ ],
+ "w10.ppwr_application_date": [
+  "w10-as6"
+ ],
+ "w10.sap_batch_release": [
+  "w10-l08#lesson",
+  "w10-l08-8935e0"
+ ],
+ "w10.sap_serialization_solutions": [
+  "w10-l03#lesson",
+  "w10-l08#lesson",
+  "w10-l08-8935e0"
+ ],
+ "w11.nis2_italia": [
+  "w11-l04#lesson"
+ ],
+ "w11.sap_btc": [
+  "w11-l12#lesson"
+ ],
+ "w12.data_act_ban_date": [
+  "w12-as5"
+ ],
+ "w12.data_act_charges": [
+  "w12-l13#lesson",
+  "w12-l13-50826d"
+ ],
+ "w12.data_act_omnibus": [
+  "w12-l13#lesson",
+  "w12-l13-0b30a9"
+ ],
+ "w12.data_act_start_date": [
+  "w12-l13#lesson"
+ ],
+ "w12.data_act_switching": [
+  "w12-l13#lesson"
+ ],
+ "w12.data_act_transition": [
+  "w12-l13#lesson"
+ ],
+ "w12.dpf_status": [
+  "w12-l13#lesson"
+ ],
+ "w12.sap_eu_ai_cloud": [
+  "w12-l13#lesson"
+ ],
+ "w12.value_advisors": [
+  "w12-l05#lesson"
+ ],
+ "w12.value_case_agent": [
+  "w12-l05#lesson"
+ ],
+ "w12.vlm": [
+  "w12-l05#lesson"
+ ],
+ "w13.clean_core_levels": [
+  "w13-l09#lesson"
+ ],
+ "w13.forrester_wave_erp_2024": [
+  "w13-l03#lesson"
+ ],
+ "w13.gartner_mq_cloud_erp_2025": [
+  "w13-l03#lesson"
+ ],
+ "w13.gartner_usage_policy": [
+  "w13-l03#lesson"
+ ],
+ "w13.idc_marketscape_midsize_erp_2024": [
+  "w13-l03#lesson"
+ ],
+ "w13.ifs_nexus_black": [
+  "w13-l07#lesson"
+ ],
+ "w13.infor_koch": [
+  "w13-l07#lesson"
+ ],
+ "w13.microsoft_dynamics_roadmap": [
+  "w13-l05#lesson"
+ ],
+ "w13.odoo_profile": [
+  "w13-l07#lesson"
+ ],
+ "w13.oracle_analyst_summit_forrester": [
+  "w13-l04#lesson"
+ ],
+ "w13.oracle_fusion_agents": [
+  "w13-l04#lesson"
+ ],
+ "w13.rimini_2040": [
+  "w13-l12#lesson"
+ ],
+ "w13.salesforce_agentforce_q2fy27": [
+  "w13-l06#lesson"
+ ],
+ "w13.sap_eu_ai_cloud": [
+  "w13-l14#lesson",
+  "w14-l13#lesson"
+ ],
+ "w13.servicenow_acquisitions": [
+  "w13-l06#lesson"
+ ],
+ "w13.teamsystem_profile": [
+  "w13-l07#lesson"
+ ],
+ "w13.veeva_vault_crm": [
+  "w13-l08#lesson"
+ ],
+ "w13.workday_ai_acquisitions": [
+  "w13-l05#lesson"
+ ],
+ "w13.workday_rising_2026": [
+  "w13-l05#lesson"
+ ],
+ "w13.zucchetti_profile": [
+  "w13-l07#lesson"
+ ],
+ "w14.appalti_correttivo": [
+  "w14-as5",
+  "w14-l10#lesson"
+ ],
+ "w14.chief_customer_officer": [
+  "w14-l04#lesson",
+  "w14-l04-38d29b"
+ ],
+ "w14.customer_value_group": [
+  "w14-l04#lesson"
+ ],
+ "w14.digital_omnibus_gdpr": [
+  "w14-l11#lesson"
+ ],
+ "w14.dlgs231_reform_2026": [
+  "w14-l08#lesson"
+ ],
+ "w14.endorsed_apps_store": [
+  "w14-l01#lesson",
+  "w14-l02#lesson"
+ ],
+ "w14.eu_ai_act_annex3_date": [
+  "w14-l12-cc7f59"
+ ],
+ "w14.eu_ai_act_omnibus": [
+  "w14-l12#lesson"
+ ],
+ "w14.fcpa_enforcement_2026": [
+  "w14-l08#lesson"
+ ],
+ "w14.partner_summit_emea_2026": [
+  "w14-l02#lesson",
+  "w14-l02-cebfa5"
+ ],
+ "w14.partneredge_2025": [
+  "w14-l02#lesson"
+ ],
+ "w14.partneredge_2026_direction": [
+  "w14-l02#lesson"
+ ],
+ "w14.partneredge_engagement": [
+  "w14-l02#lesson"
+ ],
+ "w14.preferred_success_status": [
+  "w14-l04#lesson"
+ ],
+ "w14.sap_fcpa_2024": [
+  "w14-l08#lesson"
+ ],
+ "w14.success_plans_2026": [
+  "w14-l04#lesson"
+ ],
+ "w14.sugen": [
+  "w14-l07#lesson"
+ ],
+ "w14.uk_bribery_ecca": [
+  "w14-l08#lesson"
+ ],
+ "w14.user_groups_overview": [
+  "w14-l07#lesson"
+ ]
+}

@@ -463,9 +463,9 @@
       "say": "Quanti giorni perdo ogni mese a riconciliare contabilità e controlling?"
      },
      "o": [
-      "Il Universal Journal elimina la riconciliazione strutturale: FI e CO leggono la stessa riga",
-      "Il Universal Journal elimina la chiusura mensile: i conti si aggiornano ogni sera",
-      "Riduce il numero di conti contabili, quindi la riconciliazione tra moduli diventa opzionale",
+      "Elimina la riconciliazione strutturale tra moduli: FI e CO leggono la stessa riga",
+      "Elimina la chiusura mensile: i conti vengono aggiornati a fine giornata, senza controlli",
+      "Riduce il numero dei conti, quindi la riconciliazione tra moduli diventa opzionale",
       "Sposta il controlling in un sistema separato: le riconciliazioni restano tra i due sistemi"
      ],
      "a": 0,
@@ -529,9 +529,9 @@
       "say": "Abbiamo 40.000 anagrafiche fornitori e molti duplicati."
      },
      "o": [
-      "Pulire e deduplicare prima di convertire, e cogliere l'occasione per governare i master data",
-      "Convertire così come sono: il sistema deduplica da solo durante la sincronizzazione CVI",
-      "Ricreare a mano tutti i fornitori nel nuovo sistema, abbandonando lo storico dei dati",
+      "Pulire e deduplicare prima di convertire, e governare i master data da subito",
+      "Convertire così come sono: la sincronizzazione CVI deduplica in automatico",
+      "Ricreare a mano i fornitori nel nuovo sistema, abbandonando lo storico dei dati",
       "Rimandare il tema a dopo il go-live, quando i duplicati daranno meno problemi"
      ],
      "a": 0,
@@ -585,7 +585,7 @@
       "say": "Cosa cambia per i miei utenti e per me, concretamente?"
      },
      "o": [
-      "Esperienza per ruolo con Fiori e dati contabili unificati: ti mostro una demo sul tuo ruolo",
+      "Esperienza per ruolo con Fiori e dati unificati: ti mostro una demo sul tuo ruolo",
       "Cambia soprattutto il nome del prodotto: processi e interfaccia restano identici a ECC",
       "Cambia tutto: conviene ripartire da zero con nuovi processi, senza considerare lo storico",
       "Cambia il database sotto l'ERP, mentre gli utenti non noteranno alcuna differenza pratica"
@@ -673,7 +673,7 @@
     "points": [
      "Tre modi di consumare S/4HANA: Cloud ERP (public edition, SaaS multi-tenant), Cloud ERP Private (single-tenant gestito da SAP, di solito via RISE) e on-premise (licenza; il cliente gestisce o affida a un hosting partner).",
      "Nomi attuali: {{sap.naming.cloud_erp}}",
-     "Public: standard e best practice, aggiornamenti frequenti inclusi, estensibilità controllata. Private: più personalizzazione e controllo dei tempi di upgrade, con più responsabilità nel progetto. On-premise: massimo controllo e massimo carico operativo.",
+     "Public: standard e best practice, aggiornamenti frequenti inclusi. Private: più personalizzazione e controllo dei tempi di upgrade, con più responsabilità nel progetto. On-premise: massimo controllo e massimo carico operativo.",
      "Cadenza: la public edition riceve {{w02.cloud_erp_public_cadence}}. Private e on-premise seguono un ciclo diverso, che vedremo più avanti."
     ],
     "ae": "Non chiedere «public o private?» all'inizio: chiedi quanta personalizzazione hanno oggi e quanto sono disposti a cambiare processo. La risposta decide il modello."
@@ -718,10 +718,10 @@
      "t": "mcq",
      "q": "Qual è la differenza principale tra Cloud ERP (public) e Cloud ERP Private?",
      "o": [
-      "La public è multi-tenant e standardizzata; la Private è single-tenant, con più personalizzazione",
-      "La public è on-premise e gestita dal cliente; la Private è ospitata da SAP in un ambiente condiviso",
-      "La public ha un ciclo di rilascio biennale; la Private riceve una nuova release ogni mese",
-      "La public è per le grandi imprese; la Private è riservata alle PMI con pochi utenti"
+      "Public: multi-tenant e standard; Private: single-tenant, con più personalizzazione",
+      "Public: on-premise gestita dal cliente; Private: ospitata da SAP in ambiente condiviso",
+      "Public: ciclo di rilascio biennale; Private: una nuova release mensile",
+      "Public: per le grandi imprese; Private: riservata alle PMI con pochi utenti"
      ],
      "a": 0,
      "diff": 2,
@@ -876,7 +876,7 @@
    "lesson": {
     "points": [
      "Clean core = tenere il nucleo ERP il più vicino possibile allo standard SAP e mettere le differenze fuori dal core, tramite interfacce rilasciate e stabili. Obiettivo: aggiornamenti senza riscrivere le estensioni.",
-     "Tre vie di estensione: key user (in-app) per campi, logiche e UI semplici, senza codice; developer extensibility on-stack con ABAP Cloud per logica più complessa dentro il sistema, solo con API rilasciate; side-by-side su BTP per app e integrazioni esterne.",
+     "Tre vie di estensione: key user (in-app) per campi, logiche e UI semplici, senza codice; ABAP Cloud on-stack per logica più complessa dentro il sistema, solo con API rilasciate; side-by-side su BTP per app e integrazioni esterne.",
      "ABAP Cloud è il modello di sviluppo ABAP per estensioni cloud-ready e stabili negli upgrade: usa solo oggetti e API rilasciati da SAP.",
      "Perché conta per il cliente: meno costi di upgrade, meno debito tecnico, più facilità di adottare nuove release e AI. Per te: nei progetti brownfield è il discorso sul custom code da ripulire."
     ],
@@ -887,9 +887,9 @@
      "t": "mcq",
      "q": "Che cosa significa «clean core»?",
      "o": [
-      "Core vicino allo standard SAP, con le differenze fuori dal core tramite interfacce rilasciate",
+      "Core vicino allo standard, con le differenze fuori dal core via interfacce rilasciate",
       "Core ripulito dai dati storici prima della migrazione, per ridurre il volume del database",
-      "Core installato in cloud, separato dalle estensioni che restano nel data center del cliente",
+      "Core installato in cloud, con le estensioni che restano nel data center del cliente",
       "Core senza interfacce verso altri sistemi, per ridurre i rischi di sicurezza"
      ],
      "a": 0,
@@ -969,10 +969,10 @@
       "say": "Perché dovrei spendere per il clean core, se oggi tutto funziona?"
      },
      "o": [
-      "Ogni modifica allo standard moltiplica costo e rischio dei prossimi upgrade; il clean core abbassa il costo di possesso",
-      "Perché SAP lo impone e senza clean core il supporto sull'ERP viene sospeso dal prossimo anno",
-      "Perché l'on-premise sta per spegnersi e tutte le personalizzazioni andranno rifatte in cloud",
-      "Perché il clean core garantisce che l'ERP non richieda più nessuna manutenzione tecnica"
+      "Ogni modifica allo standard fa salire il costo degli upgrade; il clean core lo abbassa",
+      "Perché SAP lo impone: senza clean core il supporto sull'ERP viene sospeso l'anno prossimo",
+      "Perché l'on-premise sta per spegnersi e le personalizzazioni andranno rifatte in cloud",
+      "Perché il clean core elimina la manutenzione tecnica dell'ERP e riduce il personale IT"
      ],
      "a": 0,
      "diff": 2,
@@ -1142,7 +1142,7 @@
       "say": "Saltiamo i workshop e andiamo direttamente alla configurazione, così risparmiamo tempo."
      },
      "o": [
-      "Spiego che lì si decide quanto standard accettare; saltarli sposta le discussioni in Realize",
+      "Spiego che lì si decide quanto standard accettare: saltarli sposta i dubbi in Realize",
       "Accetto: i workshop sono facoltativi e i requisiti si possono raccogliere durante il test",
       "Chiedo di sostituirli con una lunga raccolta di requisiti scritti prima dell'avvio",
       "Accetto solo se il cliente firma subito il piano di progetto senza ulteriori verifiche"
@@ -1235,7 +1235,7 @@
       "A indicare, dall'uso reale dell'ERP, gli scenari di business con più valore in S/4HANA",
       "A calcolare il prezzo del progetto di migrazione in base al numero di utenti del sistema",
       "A migrare i dati in automatico dal vecchio sistema al nuovo, senza intervento dei partner",
-      "A monitorare le prestazioni dei server durante il cutover e sino alla chiusura del progetto"
+      "A monitorare le prestazioni dei server durante il cutover e la chiusura del progetto"
      ],
      "a": 0,
      "diff": 2,
@@ -1296,10 +1296,10 @@
       "say": "Compro la manutenzione estesa e rimando tutto alla sua scadenza, no?"
      },
      "o": [
-      "È un'opzione, ma costa di più e sposta il rischio: valutiamo costo totale e capacità di innovare",
+      "È un'opzione, ma costa di più e sposta il rischio: valutiamo il costo totale",
       "Non è possibile: la manutenzione estesa è stata cancellata e non è più acquistabile",
-      "È gratuita, quindi conviene sempre rimandare e guadagnare tempo sull'investimento",
-      "È obbligatoria per tutti i clienti ECC e quindi non c'è altra scelta pratica"
+      "È gratuita, quindi conviene rimandare e guadagnare tempo sull'investimento",
+      "È obbligatoria per i clienti ECC e quindi non c'è altra scelta pratica"
      ],
      "a": 0,
      "diff": 3,
@@ -1549,8 +1549,8 @@
       "say": "Dopo la manutenzione estesa cosa succede, e quanto costa la transition option?"
      },
      "o": [
-      "Date note: la transition option richiede RISE, ma condizioni e prezzi arriveranno più avanti",
-      "Ti confermo che la transition option costa come la manutenzione estesa e copre l'intero perimetro ECC",
+      "Date note: la transition option richiede RISE, condizioni e prezzi arrivano più avanti",
+      "Ti confermo che la transition option costa come la manutenzione estesa e copre ECC",
       "Dopo la manutenzione estesa ECC non è più utilizzabile e non esistono opzioni di copertura",
       "Ti garantisco prezzo e perimetro della transition option, perché sono già pubblici da SAP"
      ],

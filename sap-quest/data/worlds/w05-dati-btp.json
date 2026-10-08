@@ -664,7 +664,7 @@
           "Tre forme concettuali: {{w05.btp_commercial_models}}.",
           "CPEA: il cliente si impegna su un importo e lo consuma nel tempo sui servizi del catalogo, con flessibilità tra servizi. Di norma i crediti non usati non si riportano oltre il termine contrattuale.",
           "Pay-As-You-Go: nessun impegno iniziale, pagamento a consumo. Ottimo per pilot e proof of value, ma il prezzo unitario è di norma più alto del consumo impegnato.",
-          "Subscription: capacità fissa a canone per un servizio. Prevedibile, ma meno flessibile se i bisogni cambiano. Per Business Data Cloud l'unità è la capacità ({{w05.bdc_pricing_unit}}).",
+          "Subscription: capacità fissa a canone per un servizio. Prevedibile, ma meno flessibile se i bisogni cambiano. Per Business Data Cloud: {{w05.bdc_pricing_unit}}.",
           "Sulla nuova piattaforma unificata: {{w05.ai_platform_pricing}}."
         ],
         "ae": "Parti dal caso d'uso e dal consumo atteso, non dal listino: un pilot a consumo può diventare un impegno annuale quando il valore è dimostrato."
@@ -792,7 +792,7 @@
             1,
             2
           ],
-          "exp": "Nel core di BDC rientrano Datasphere, Analytics Cloud e SAP Databricks, oltre ad altri servizi: {{w05.bdc_components}}. Concur e Fieldglass sono soluzioni di spesa e non fanno parte del perimetro dati.",
+          "exp": "Datasphere, Analytics Cloud e SAP Databricks sono nel perimetro di BDC. Elenco completo: {{w05.bdc_components}}. Concur e Fieldglass sono soluzioni di spesa e non fanno parte del perimetro dati.",
           "diff": 2
         },
         {
@@ -937,7 +937,7 @@
         "points": [
           "{{w05.datasphere_status}}.",
           "{{w05.sac_in_bdc}}.",
-          "SAP BW e BW/4HANA restano supportati, ma l'innovazione si concentra su Datasphere e BDC. Per i clienti BW esiste un percorso: i modelli BW possono diventare data product (BW Data Product Generator).",
+          "SAP BW e BW/4HANA restano supportati come linea di prodotto (verifica versione e date di manutenzione del cliente), ma l'innovazione si concentra su Datasphere e BDC. I modelli BW possono diventare data product (BW Data Product Generator).",
           "Domande da AE: quanti report e modelli BW esistono, chi li usa, quanti sono davvero critici? Migrare tutto in un colpo è raramente la risposta giusta."
         ],
         "ae": "Non dire «BW è finito»: dì che il percorso più sicuro è convivere (BW più data product) e spostare i casi d'uso a maggior valore, non ricostruire tutto."
@@ -1065,7 +1065,7 @@
             1,
             2
           ],
-          "exp": "Databricks, Snowflake e BigQuery sono collegati con connettori zero-copy: {{w05.bdc_connect_snowflake}} per Snowflake, {{w05.bdc_connect_bigquery}} per BigQuery. Non c'è obbligo di spostare i dati.",
+          "exp": "Databricks, Snowflake e BigQuery sono collegati con connettori zero-copy. Snowflake: connettore {{w05.bdc_connect_snowflake}}. BigQuery: connettore {{w05.bdc_connect_bigquery}}. Non c'è obbligo di spostare i dati.",
           "diff": 3
         },
         {
@@ -1102,7 +1102,7 @@
             "Per ora un connettore non è disponibile: conviene attendere il prossimo anno"
           ],
           "a": 0,
-          "exp": "{{w05.bdc_connect_snowflake}}: il cliente non deve cambiare piattaforma. Le altre risposte descrivono situazioni superate o inesatte.",
+          "exp": "Per Snowflake il connettore è {{w05.bdc_connect_snowflake}}: il cliente non deve cambiare piattaforma. Le altre risposte descrivono situazioni superate o inesatte.",
           "diff": 2
         }
       ]
@@ -1168,14 +1168,14 @@
               0
             ]
           ],
-          "exp": "{{w05.mdg_vs_reltio}}. Sono complementari: il cliente con master data in più sistemi può affiancare Reltio a MDG.",
+          "exp": "Posizionamento: {{w05.mdg_vs_reltio}}. Sono complementari: il cliente con master data in più sistemi può affiancare Reltio a MDG.",
           "diff": 3
         },
         {
           "t": "tf",
           "q": "Dopo l'acquisizione, Reltio sparisce come prodotto e può essere usato soltanto dentro BDC.",
           "a": false,
-          "exp": "{{w05.reltio_role}}. Il fatto che sia ancora acquistabile da solo è indicato «per ora»: non promettere condizioni future al cliente.",
+          "exp": "Reltio: {{w05.reltio_role}}. Il fatto che sia acquistabile da solo vale «per ora»: non promettere condizioni future al cliente.",
           "diff": 2
         },
         {
@@ -1216,7 +1216,7 @@
       "kind": "lesson",
       "lesson": {
         "points": [
-          "SAP Signavio è la suite per la trasformazione dei processi: modellazione, process mining (process intelligence) e gestione di rischi e controlli. Mostra come i processi funzionano davvero, a partire dai log dei sistemi.",
+          "SAP Signavio è la suite per la trasformazione dei processi: modellazione, process mining (process intelligence) e governance dei processi. Mostra come i processi funzionano davvero, a partire dai log dei sistemi.",
           "Nei progetti di migrazione al cloud ERP aiuta a capire quali varianti di processo servono davvero: meno complessità, meno custom code, scelte basate sui dati.",
           "In SAP: {{w05.btm_portfolio}}.",
           "Business Transformation Center: {{w05.btc}}.",
@@ -1398,7 +1398,7 @@
             "L'apertura non è un tema rilevante per i dati: conta la velocità delle interrogazioni"
           ],
           "a": 0,
-          "exp": "L'argomento si regge su fatti: {{w05.bdc_connect_snowflake}} per Snowflake e {{w05.bdc_connect_bigquery}} per BigQuery, oltre a Databricks. Dire che le integrazioni mancano o che l'apertura non conta è sbagliato.",
+          "exp": "L'argomento si regge su fatti: per Snowflake il connettore è {{w05.bdc_connect_snowflake}}, per BigQuery {{w05.bdc_connect_bigquery}}, e c'è anche Databricks. Dire che le integrazioni mancano o che l'apertura non conta è sbagliato.",
           "diff": 2
         }
       ]

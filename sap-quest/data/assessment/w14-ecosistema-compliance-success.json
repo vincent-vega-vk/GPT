@@ -1,0 +1,82 @@
+{
+  "id": "w14",
+  "items": [
+    {
+      "t": "mcq",
+      "q": "Cosa significa «co-sell» nell'ecosistema SAP?",
+      "o": [
+        "SAP e partner vendono insieme, con ruoli, perimetro e responsabilità concordati prima",
+        "SAP vende alle aziende già clienti con sconti incrociati su prodotti di partner",
+        "Il partner vende i prodotti SAP in autonomia, senza coinvolgere il team SAP nel deal",
+        "Il cliente acquista da due vendor diversi, con un unico contratto quadro firmato"
+      ],
+      "a": 0,
+      "exp": "Il co-sell è una vendita congiunta con ruoli chiari tra SAP e partner. Non è un sistema di sconti incrociati né una vendita in autonomia del partner.",
+      "diff": 1
+    },
+    {
+      "t": "tf",
+      "q": "In B2B l'indirizzo email aziendale nominativo di una persona è un dato personale ai fini del GDPR.",
+      "a": true,
+      "exp": "Se identifica una persona fisica (per esempio nome.cognome@azienda) è un dato personale anche in ambito B2B, con le relative tutele e obblighi.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "Come si chiamano i tre Success Plan del portafoglio Services & Support SAP del 2026?",
+      "o": [
+        "Foundational, Advanced e Max",
+        "Bronze, Silver e Gold",
+        "Basic, Plus e Premium",
+        "Standard, Preferred ed Elite"
+      ],
+      "a": 0,
+      "exp": "Dal 2026 il portafoglio è organizzato su Foundational, Advanced e Max. Le altre terminologie non corrispondono alla struttura attuale.",
+      "diff": 2
+    },
+    {
+      "t": "multi",
+      "q": "Quali affermazioni su ISO/IEC 27001 e sui report SOC sono corrette?",
+      "o": [
+        "ISO/IEC 27001 certifica un sistema di gestione della sicurezza per un perimetro definito",
+        "Un report SOC 2 Type II descrive l'efficacia dei controlli su un periodo di tempo",
+        "Una certificazione ISO vale per tutti i servizi del fornitore senza verificarne lo scope",
+        "Un report SOC 2 sostituisce la necessità di un DPA con il fornitore",
+        "Certificati e report hanno una validità: vanno richiesti nella versione corrente"
+      ],
+      "a": [
+        0,
+        1,
+        4
+      ],
+      "exp": "ISO certifica un sistema di gestione con scope definito; SOC 2 Type II copre un periodo; entrambi hanno una validità. Né la ISO vale per tutto, né un SOC sostituisce l'accordo sul trattamento dei dati.",
+      "diff": 2
+    },
+    {
+      "t": "mcq",
+      "q": "Quale atto ha modificato il D.Lgs. 36/2023 con effetto dal 31 dicembre 2024?",
+      "o": [
+        "{{w14.appalti_correttivo}}",
+        "D.Lgs. 50/2016 (Codice dei contratti pubblici previgente)",
+        "D.Lgs. 231/2001 (responsabilità amministrativa degli enti)",
+        "Legge 190/2012 (disposizioni anticorruzione nella PA)"
+      ],
+      "a": 0,
+      "exp": "Il correttivo al Codice dei contratti pubblici è il D.Lgs. 209/2024. Il 50/2016 è il codice precedente, il 231/2001 riguarda la responsabilità degli enti e la L. 190/2012 l'anticorruzione nella PA.",
+      "diff": 3
+    },
+    {
+      "t": "mcq",
+      "q": "Come si descrive correttamente l'enforcement dell'FCPA da parte del DOJ dopo giugno 2025?",
+      "o": [
+        "Riavviato con le linee guida di giugno 2025 e priorità più selettive; la legge resta",
+        "Sospeso a tempo indeterminato dopo l'ordine esecutivo di febbraio 2025, senza ripresa",
+        "Abrogato dal Congresso nel 2025 e sostituito da norme penali federali più generali",
+        "Esteso ai casi di corruzione tra privati, anche senza alcun collegamento con gli USA"
+      ],
+      "a": 0,
+      "exp": "Dopo la pausa di febbraio 2025 le linee guida di giugno 2025 hanno riavviato l'applicazione con priorità diverse. La legge non è stata abrogata né estesa ai privati.",
+      "diff": 3
+    }
+  ]
+}

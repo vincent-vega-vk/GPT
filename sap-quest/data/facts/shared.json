@@ -66,16 +66,17 @@
   },
   "sap.fy26.cloud_revenue_outlook": {
     "label": "Outlook FY2026 cloud revenue",
-    "value": "€25,8–26,2 mld (+23–25%)",
+    "value": "€25,8–26,2 mld a cambi costanti (+23–25%)",
     "asOf": "2026-07-23",
     "checked": "2026-10-08",
     "staleAfter": "2026-10-21",
     "source": "https://news.sap.com/2026/07/sap-announces-q2-and-half-year-2026-results/",
-    "confidence": "secondary"
+    "confidence": "secondary",
+    "note": "SAP formula l'outlook a cambi costanti (il free cash flow è a cambi effettivi): precisazione segnalata dall'autore del mondo 1, coerente con la prassi di SAP; non riscontrata nel testo ufficiale."
   },
   "sap.fy26.op_profit_outlook": {
     "label": "Outlook FY2026 non-IFRS operating profit",
-    "value": "€11,8–12,2 mld (ridotto da €11,9–12,3 mld per l'effetto delle acquisizioni)",
+    "value": "€11,8–12,2 mld a cambi costanti (ridotto da €11,9–12,3 mld per l'effetto delle acquisizioni)",
     "asOf": "2026-07-23",
     "checked": "2026-10-08",
     "staleAfter": "2026-10-21",
@@ -183,7 +184,7 @@
     "staleAfter": "2027-01-08",
     "source": "https://www.timetoact-group.com/content-share/wca/blog/sap-simplifies-the-naming-of-its-cloud-erp-offering-144257",
     "confidence": "secondary",
-    "note": "Fonti terze (consulenze). Verificare il wording esatto sul sito SAP prima di usarlo in proposte."
+    "note": "Fonti terze (consulenze). Non è chiaro se il nome ufficiale della edizione public sia «SAP Cloud ERP» o «SAP Cloud ERP Public»: verificare sul sito SAP prima di usarlo in proposte."
   },
   "sap.acq.reltio": {
     "label": "Acquisizione Reltio (master data management)",
@@ -231,13 +232,13 @@
     "confidence": "secondary"
   },
   "sap.sapphire26.joule_work": {
-    "label": "Joule Work (Sapphire 2026)",
-    "value": "client web (con app mobile e desktop) in cui l'utente esprime l'obiettivo e Joule coordina assistenti e agenti SAP e non-SAP; disponibile per i clienti Early Adopter Care",
-    "asOf": "2026-05-13",
+    "label": "Joule Work: stato di disponibilità",
+    "value": "a Sapphire 2026 (maggio) era riservato ai clienti Early Adopter Care; a SAP Connect (ottobre 2026) SAP ha avviato il rollout ai clienti e, secondo la guida Innovation News, la disponibilità generale parte da ottobre 2026 per Joule Work, Joule Studio e gli agenti della Autonomous Suite (SAP-managed, attivabili da SAP for Me), mentre assistenti e integrazioni arrivano a tappe fino al primo trimestre 2027",
+    "asOf": "2026-10-07",
     "checked": "2026-10-08",
-    "staleAfter": "2026-12-31",
-    "source": "https://sapinsider.org/articles/joule-is-now-the-front-door-to-your-business-what-sap-sapphire-2026-means-for-customers-vendors-and-partners/",
-    "confidence": "secondary",
-    "note": "Stato di disponibilità generale da riverificare: potrebbe essere cambiato dopo maggio 2026."
+    "staleAfter": "2026-11-30",
+    "source": "https://www.sap.com/topics/events/connect/innovation-news-guide-2026",
+    "confidence": "primary",
+    "note": "Fonte ufficiale SAP, letta solo tramite sintesi di ricerca (la pagina non è apribile dal sandbox). Fonti secondarie discordano su cosa sia già GA: app mobile già disponibile, parti agentiche a tappe tra Q4 2026 e Q1 2027. Le date sono piani, non impegni."
   }
 }

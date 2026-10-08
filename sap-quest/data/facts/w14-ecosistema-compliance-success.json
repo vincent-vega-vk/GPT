@@ -1,0 +1,191 @@
+{
+  "w14.partneredge_2025": {
+    "label": "SAP PartnerEdge: rinnovo del 2025",
+    "value": "Con il rinnovo del 2025 SAP ha reso PartnerEdge un programma interamente orientato al cloud: competenze e specializzazioni cloud pesano di più nel determinare i livelli dei partner e l'adozione dell'AI è una priorità dichiarata.",
+    "asOf": "2025-01-15",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2025/01/sap-partneredge-cloud-driven-business-in-ai-era/",
+    "confidence": "secondary",
+    "note": "Pagina SAP News letta tramite sintesi di ricerca insieme a stampa di settore; i dettagli dei livelli non sono riportati qui. Il programma evolve ancora nel 2026."
+  },
+  "w14.partneredge_2026_direction": {
+    "label": "SAP PartnerEdge: direzione 2026 (SAP Italia)",
+    "value": "Dal PKOM di SAP Italia (febbraio 2026): estensione dei Partner-Led Territories, evoluzione di PartnerEdge con un nuovo framework di livelli basato sulla performance cloud e nuovi modelli commerciali per i software partner che integrano le loro soluzioni in SAP Business Suite. I dettagli non sono pubblici.",
+    "asOf": "2026-02-15",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/italy/2026/02/al-pkom-2026-sap-italia-premia-i-partner-piu-performanti-del-2025/",
+    "confidence": "secondary",
+    "note": "Pagina ufficiale SAP Italia letta solo tramite sintesi di ricerca (elenco di tre punti). Non promettere ai partner condizioni di programma."
+  },
+  "w14.partneredge_engagement": {
+    "label": "SAP PartnerEdge: modalità di ingaggio (fonti non datate)",
+    "value": "Fonti di stampa specializzata, non datate, descrivono PartnerEdge organizzato per modalità di ingaggio Build, Sell, Service e Run; la struttura attuale va verificata nel portale partner SAP.",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.channelfutures.com/channel-business/sap-brings-new-tiers-engagement-models-to-partneredge-program",
+    "confidence": "low",
+    "note": "Articolo non datato e relativo a una revisione precedente del programma. Verificare nella documentazione ufficiale per i partner."
+  },
+  "w14.endorsed_apps_store": {
+    "label": "SAP Store ed Endorsed Apps",
+    "value": "SAP Store riunisce i marketplace SAP. Le SAP Endorsed Apps sono soluzioni di partner con una certificazione premium di SAP (sicurezza, test approfonditi e benchmark) acquistabili online sullo Store; esempio recente: Parloa, dichiarata Endorsed App il 15 luglio 2026 (comunicato del partner).",
+    "asOf": "2026-07-15",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.parloa.com/parloa-in-the-press/parloa-sap-endorsed-app/",
+    "confidence": "secondary",
+    "note": "Descrizione dei criteri da comunicati di partner e da Techzine (https://www.techzine.eu/news/cloud/55270/sap-brings-together-its-marketplaces-into-sap-store/); non da pagina SAP letta direttamente."
+  },
+  "w14.partner_summit_emea_2026": {
+    "label": "SAP Partner Summit EMEA & MEE 2026",
+    "value": "19-21 ottobre 2026, RAI Amsterdam",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-22",
+    "source": "https://events.sap.com/partnersummits/en_us/emeamee.html",
+    "confidence": "primary",
+    "note": "Agenda e quote di partecipazione da verificare su events.sap.com."
+  },
+  "w14.success_plans_2026": {
+    "label": "SAP Success Plan 2026: Foundational, Advanced, Max",
+    "value": "Da marzo 2026 il portafoglio Services & Support di SAP è organizzato in tre Success Plan: Foundational (incluso con ogni soluzione cloud: onboarding, operations tecniche cloud e supporto preventivo; estende Enterprise Support), Advanced (competenze specialistiche e guida proattiva con insight AI) e Max (piano strategico con success plan manager dedicato e SLA premium). I clienti possono combinare i livelli nel loro landscape.",
+    "asOf": "2026-03-05",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/germany/2026/03/fuer-schnelleren-kundenerfolg-sap-entwickelt-service-und-supportportfolio-weiter/",
+    "confidence": "primary",
+    "note": "Annuncio di marzo 2026 (giorno esatto non verificato); riscontri concordi in Silicon Saxony e Dutch IT Channel. Funzioni dei piani soggette a modifica; prezzi e condizioni non pubblici: nessun importo riportato."
+  },
+  "w14.customer_value_group": {
+    "label": "SAP Customer Value Group",
+    "value": "Dal 1° aprile 2026 SAP ha riunito Customer Success e Customer Services & Delivery nel Customer Value Group (annuncio del 2 marzo 2026), che copre l'intero percorso del cliente: vendita, delivery, servizi e supporto.",
+    "asOf": "2026-04-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/2026/03/thomas-saueressig-appointed-sap-chief-customer-officer/",
+    "confidence": "primary"
+  },
+  "w14.chief_customer_officer": {
+    "label": "Chief Customer Officer di SAP",
+    "value": "Thomas Saueressig, Chief Customer Officer di SAP",
+    "asOf": "2026-04-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/2026/03/thomas-saueressig-appointed-sap-chief-customer-officer/",
+    "confidence": "primary",
+    "note": "Persona in un ruolo: riverificare in caso di cambi nel Vorstand."
+  },
+  "w14.preferred_success_status": {
+    "label": "SAP Preferred Success: stato nel 2026",
+    "value": "SAP Preferred Success, piano a pagamento costruito su Enterprise Support, compare ancora in alcune pagine regionali di soluzioni SAP (per esempio HCM); non è chiaro come si mappi sui nuovi Foundational, Advanced e Max.",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.sap.com/italy/products/hcm/recruiting-software/get-started.html",
+    "confidence": "low",
+    "note": "Nessuna fonte ufficiale trovata sulla mappatura tra il vecchio piano e i tre nuovi. Chiedere conferma al team Customer Success; non citare prezzi di annunci precedenti."
+  },
+  "w14.user_groups_overview": {
+    "label": "User group SAP: DSAG, ASUG, UKISUG",
+    "value": "DSAG (Germania, Austria, Svizzera) conta oltre 4.000 aziende associate; ASUG (USA e Canada) è stata fondata nel 1991 ed è descritta come il maggiore user group indipendente SAP; UKISUG (Regno Unito e Irlanda) è nato nel 1988.",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.sap.com/about/user-groups.html",
+    "confidence": "secondary",
+    "note": "Numeri e anni da sintesi di fonti non ufficiali dei singoli gruppi: verificare sui siti dei user group prima di citarli. Nessun user group nazionale italiano verificato."
+  },
+  "w14.sugen": {
+    "label": "SUGEN: SAP User Group Executive Network",
+    "value": "SUGEN, costituito nel 2007, favorisce lo scambio di buone pratiche tra i user group e il coordinamento con SAP su temi strategici; il numero dei gruppi membri è riportato in modo discordante (circa 20-22 in alcune fonti, oltre 40 in altre).",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.sapusers.org/sugen",
+    "confidence": "secondary",
+    "note": "Elenco dei membri non verificato: non è confermato se un gruppo italiano ne faccia parte."
+  },
+  "w14.sap_fcpa_2024": {
+    "label": "SAP: accordi FCPA con DOJ e SEC (gennaio 2024)",
+    "value": "Il 10 gennaio 2024 SAP ha concordato con DOJ e SEC il pagamento di oltre 220 milioni di dollari per violazioni dell'FCPA legate a schemi di corruzione tramite intermediari (Sudafrica e Indonesia nel caso DOJ, con un deferred prosecution agreement triennale); le somme di DOJ e SEC si compensano in parte.",
+    "asOf": "2024-01-10",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.cnbc.com/2024/01/10/sap-to-pay-more-than-220-million-to-settle-bribery-charges-doj-sec.html",
+    "confidence": "secondary",
+    "note": "Fonti: CNBC e Compliance Week. Comunicati DOJ/SEC non aperti. Non verificato lo stato attuale dell'accordo."
+  },
+  "w14.fcpa_enforcement_2026": {
+    "label": "FCPA: stato dell'enforcement nel 2026",
+    "value": "Dopo la pausa di febbraio 2025, le linee guida DOJ del 9 giugno 2025 hanno riavviato l'applicazione dell'FCPA con priorità più selettive; nel 2026 il DOJ continua a trattare casi (anche con accordi societari) ma più lentamente e con alcune archiviazioni. La legge FCPA non è stata abrogata.",
+    "asOf": "2026-08-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.millerchevalier.com/publication/fcpa-summer-review-2026",
+    "confidence": "secondary",
+    "note": "Studi legali (Miller & Chevalier, O'Melveny, Morrison Foerster). Non trovata notizia di revoca delle linee guida di giugno 2025; nessuna fonte oltre agosto 2026."
+  },
+  "w14.uk_bribery_ecca": {
+    "label": "Regno Unito: Bribery Act (sezione 7) e failure to prevent fraud",
+    "value": "Il Bribery Act 2010 (sezione 7) prevede il reato, per un'organizzazione, di non aver prevenuto la corruzione senza «adequate procedures»; dal 1° settembre 2025 l'Economic Crime and Corporate Transparency Act 2023 aggiunge il reato di failure to prevent fraud per le grandi organizzazioni (almeno due criteri su tre: fatturato oltre 36 milioni di sterline, attivo oltre 18 milioni, oltre 250 dipendenti), con difesa basata su «reasonable procedures».",
+    "asOf": "2025-09-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.mayerbrown.com/en/insights/publications/2025/09/eye-on-economic-crime-new-strict-liability-corporate-criminal-offence-of-failure-to-prevent-fraud-comes-into-effect",
+    "confidence": "secondary",
+    "note": "Studi legali (Mayer Brown, Doyle Clayton, Kennedys). Testo di legge e guida Home Office non consultati direttamente."
+  },
+  "w14.dlgs231_reform_2026": {
+    "label": "D.Lgs. 231/2001: disegno di legge di revisione (agosto 2026)",
+    "value": "Ad agosto 2026 il Consiglio dei ministri ha approvato un disegno di legge di revisione del D.Lgs. 231/2001 (colpa di organizzazione al centro della responsabilità dell'ente, requisiti del modello organizzativo rivisti, procedure semplificate per le PMI); non è ancora legge e deve passare dal Parlamento.",
+    "asOf": "2026-08-05",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.mysolution.it/fisco/informazioni/news/2026/08/05/responsabilita-231-assetti-organizzativi-e-ia-dal-cdm-novita-per-imprese-e-professionisti/",
+    "confidence": "secondary",
+    "note": "Altre fonti: lcalex.it (agosto 2026) e IPSOA. Testo del ddl non consultato; stato dell'iter parlamentare dopo agosto 2026 non verificato."
+  },
+  "w14.appalti_correttivo": {
+    "label": "Codice dei contratti pubblici: correttivo",
+    "value": "D.Lgs. 209/2024 (in vigore dal 31 dicembre 2024)",
+    "asOf": "2024-12-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.lavoripubblici.it/news/stampa/34726",
+    "confidence": "secondary",
+    "note": "Correttivo del D.Lgs. 36/2023, pubblicato nel S.O. 45/L alla GU n. 305 del 30 dicembre 2024. Altri interventi nel 2025 (es. L. 105/2025). Modifiche 2026 non verificate: controllare il testo vigente su Normattiva."
+  },
+  "w14.eu_ai_act_omnibus": {
+    "label": "EU AI Act: Digital Omnibus on AI (Regolamento 2026/1744)",
+    "value": "Il Regolamento (UE) 2026/1744 (Digital Omnibus on AI), pubblicato in Gazzetta ufficiale UE il 24 luglio 2026 e in vigore dal 27 luglio 2026, ha rinviato gli obblighi per i sistemi ad alto rischio: Allegato III (sistemi autonomi) al 2 dicembre 2027, Allegato I (prodotti regolamentati) al 2 agosto 2028.",
+    "asOf": "2026-07-27",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.whitecase.com/insight-alert/eu-ai-omnibus-enters-force-amending-ai-act",
+    "confidence": "secondary",
+    "note": "Studi legali concordi (White & Case, Law and Technology, Acompli). EUR-Lex non consultabile. Altre parti dell'AI Act restano applicabili: verificare con Legal obblighi e date."
+  },
+  "w14.eu_ai_act_annex3_date": {
+    "label": "AI Act: data per i sistemi ad alto rischio dell'Allegato III",
+    "value": "2 dicembre 2027",
+    "asOf": "2026-07-27",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.whitecase.com/insight-alert/eu-ai-omnibus-enters-force-amending-ai-act",
+    "confidence": "secondary",
+    "note": "Vedi w14.eu_ai_act_omnibus."
+  },
+  "w14.digital_omnibus_gdpr": {
+    "label": "Digital Omnibus: parte dati e GDPR",
+    "value": "La parte dati e cybersecurity del Digital Omnibus, comprese le modifiche proposte al GDPR, segue un percorso separato ed è ancora in negoziazione; un accordo è atteso nel primo semestre 2027. Finché non sono adottate, le regole GDPR attuali restano quelle da applicare.",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.theaienterprise.io/p/eu-ai-act-omnibus-reprieve-strategy",
+    "confidence": "low",
+    "note": "Una sola fonte di commento. Verificare lo stato su fonti istituzionali UE e con Legal prima di citarlo."
+  }
+}

@@ -4,8 +4,12 @@
   "assessmentPerWorld": 6,
   "worlds": [
     {
-      "id": "w01", "slug": "sap-101", "title": "Benvenuto in SAP", "subtitle": "Azienda, strategia, numeri e linguaggio",
-      "icon": "🏢", "levels": 14,
+      "id": "w01",
+      "slug": "sap-101",
+      "title": "Benvenuto in SAP",
+      "subtitle": "Azienda, strategia, numeri e linguaggio",
+      "icon": "🏢",
+      "levels": 14,
       "scope": [
         "Chi è SAP: storia, sede, mission, dimensioni, ecosistema clienti; SAP Italia",
         "Strategia attuale: Business Suite + Business Data Cloud + Business AI + BTP; cloud-first; Cloud ERP Suite",
@@ -18,8 +22,12 @@
       ]
     },
     {
-      "id": "w02", "slug": "erp-s4hana", "title": "ERP e S/4HANA", "subtitle": "Dal vecchio ECC al cloud ERP",
-      "icon": "🧱", "levels": 16,
+      "id": "w02",
+      "slug": "erp-s4hana",
+      "title": "ERP e S/4HANA",
+      "subtitle": "Dal vecchio ECC al cloud ERP",
+      "icon": "🧱",
+      "levels": 16,
       "scope": [
         "Cos'è un ERP, mappa dei processi end-to-end (order-to-cash, procure-to-pay, record-to-report, plan-to-produce, hire-to-retire)",
         "ECC vs S/4HANA: HANA in-memory, Universal Journal (ACDOCA), Business Partner, modello dati semplificato, Fiori",
@@ -27,13 +35,17 @@
         "Clean core ed estensibilità (key user, side-by-side su BTP, ABAP Cloud)",
         "Approcci di migrazione: greenfield, brownfield, selective data transition / bluefield; fit-to-standard; SAP Activate",
         "Strumenti di assessment: Readiness Check, Transformation Navigator, Signavio, Business Transformation Center",
-        "Cronologia manutenzione ECC (2027/2030/transition option 2033) e rilascio annuale S/4HANA - usa fatti condivisi sap.ecc.*",
+        "Cronologia manutenzione ECC (2027/2030/transition option 2033) e cadenza di rilascio S/4HANA (release base ogni due anni, feature pack ogni sei mesi; public edition con due release l'anno) - usa fatti condivisi sap.ecc.*",
         "Soluzioni di settore e Business Scenario Recommendations"
       ]
     },
     {
-      "id": "w03", "slug": "rise-grow", "title": "RISE e GROW", "subtitle": "Le offerte per portare il cliente nel cloud",
-      "icon": "🚀", "levels": 16,
+      "id": "w03",
+      "slug": "rise-grow",
+      "title": "RISE e GROW",
+      "subtitle": "Le offerte per portare il cliente nel cloud",
+      "icon": "🚀",
+      "levels": 16,
       "scope": [
         "Cos'è RISE with SAP e cosa include (S/4HANA Cloud Private, servizi tecnici gestiti, BTP, Signavio, Business Network...) - verifica il perimetro ATTUALE",
         "Cos'è GROW with SAP, per chi, cosa include, adoption services",
@@ -46,8 +58,12 @@
       ]
     },
     {
-      "id": "w04", "slug": "business-ai-joule", "title": "Business AI e Joule", "subtitle": "Agenti, dati e AI di business",
-      "icon": "🤖", "levels": 16,
+      "id": "w04",
+      "slug": "business-ai-joule",
+      "title": "Business AI e Joule",
+      "subtitle": "Agenti, dati e AI di business",
+      "icon": "🤖",
+      "levels": 16,
       "scope": [
         "Joule: da assistente ad agenti; Joule Work, Joule Studio, Autonomous Suite - verifica stato e disponibilità ATTUALI",
         "SAP Business AI Platform (BTP + Business Data Cloud + Business AI), Knowledge Graph",
@@ -60,8 +76,12 @@
       ]
     },
     {
-      "id": "w05", "slug": "dati-btp", "title": "Dati e BTP", "subtitle": "Business Data Cloud e piattaforma tecnologica",
-      "icon": "🧩", "levels": 16,
+      "id": "w05",
+      "slug": "dati-btp",
+      "title": "Dati e BTP",
+      "subtitle": "Business Data Cloud e piattaforma tecnologica",
+      "icon": "🧩",
+      "levels": 16,
       "scope": [
         "SAP Business Technology Platform: pilastri e quando serve davvero",
         "SAP Business Data Cloud, data products, Datasphere, Analytics Cloud, Databricks, Snowflake, BigQuery, Dremio, Reltio",
@@ -74,8 +94,12 @@
       ]
     },
     {
-      "id": "w06", "slug": "finanza-spend", "title": "Finanza e Spend", "subtitle": "Il mondo del CFO e del Procurement",
-      "icon": "💶", "levels": 15,
+      "id": "w06",
+      "slug": "finanza-spend",
+      "title": "Finanza e Spend",
+      "subtitle": "Il mondo del CFO e del Procurement",
+      "icon": "💶",
+      "levels": 15,
       "scope": [
         "Finance in S/4HANA: Universal Journal, Group Reporting, Advanced Financial Closing, Cash Management, Treasury, Billing e Revenue Innovation Management",
         "SAP Enterprise Planning / Analytics Cloud / pianificazione",
@@ -86,8 +110,12 @@
       ]
     },
     {
-      "id": "w07", "slug": "hr-persone", "title": "HR e Persone", "subtitle": "SuccessFactors e il CHRO",
-      "icon": "👥", "levels": 14,
+      "id": "w07",
+      "slug": "hr-persone",
+      "title": "HR e Persone",
+      "subtitle": "SuccessFactors e il CHRO",
+      "icon": "👥",
+      "levels": 14,
       "scope": [
         "SAP SuccessFactors: Employee Central, Recruiting (SmartRecruiters), Onboarding, Performance & Goals, Succession, Learning, Compensation, Payroll, People Analytics",
         "Skills / Talent Intelligence, Joule per HR, WalkMe e digital adoption",
@@ -97,8 +125,12 @@
       ]
     },
     {
-      "id": "w08", "slug": "supply-chain", "title": "Supply Chain e Manufacturing", "subtitle": "Dalla pianificazione alla produzione",
-      "icon": "🏭", "levels": 15,
+      "id": "w08",
+      "slug": "supply-chain",
+      "title": "Supply Chain e Manufacturing",
+      "subtitle": "Dalla pianificazione alla produzione",
+      "icon": "🏭",
+      "levels": 15,
       "scope": [
         "Integrated Business Planning, EWM, Transportation Management, Digital Manufacturing, Asset Management, Business Network for logistics",
         "S/4HANA per produzione, acquisti, qualità, manutenzione",
@@ -108,8 +140,12 @@
       ]
     },
     {
-      "id": "w09", "slug": "customer-experience", "title": "Customer Experience", "subtitle": "Vendita, servizio, commerce e marketing",
-      "icon": "🛍️", "levels": 14,
+      "id": "w09",
+      "slug": "customer-experience",
+      "title": "Customer Experience",
+      "subtitle": "Vendita, servizio, commerce e marketing",
+      "icon": "🛍️",
+      "levels": 14,
       "scope": [
         "Portafoglio SAP Customer Experience ATTUALE (Sales Cloud, Service Cloud, Commerce Cloud, Emarsys, Customer Data...) e rinominazioni recenti",
         "Integrazione con S/4HANA e Business Data Cloud; AI in CX / Joule per vendite e servizio",
@@ -119,8 +155,12 @@
       ]
     },
     {
-      "id": "w10", "slug": "lifesciences-cpg-italia", "title": "Life Sciences, CPG e Italia", "subtitle": "Il tuo mercato: farma, consumer e Italia",
-      "icon": "💊", "levels": 16,
+      "id": "w10",
+      "slug": "lifesciences-cpg-italia",
+      "title": "Life Sciences, CPG e Italia",
+      "subtitle": "Il tuo mercato: farma, consumer e Italia",
+      "icon": "💊",
+      "levels": 16,
       "scope": [
         "Farma/Life Sciences: GxP, Annex 11, 21 CFR Part 11, serializzazione e tracciabilità, gestione lotti, cold chain, MDR/IVDR per il medtech, AIFA, payback",
         "Soluzioni SAP per Life Sciences (batch, QM, track & trace, clinical supply, regulatory) - verifica nomi ATTUALI",
@@ -131,8 +171,12 @@
       ]
     },
     {
-      "id": "w11", "slug": "discovery-qualificazione", "title": "Discovery e Qualificazione", "subtitle": "Il mestiere: capire e qualificare",
-      "icon": "🔍", "levels": 16,
+      "id": "w11",
+      "slug": "discovery-qualificazione",
+      "title": "Discovery e Qualificazione",
+      "subtitle": "Il mestiere: capire e qualificare",
+      "icon": "🔍",
+      "levels": 16,
       "scope": [
         "Account planning, ICP, whitespace, buying center, ruoli (economic buyer, champion, blocker)",
         "Framework: MEDDPICC, BANT/CHAMP, SPIN, Challenger, Sandler pain funnel - quando usare cosa",
@@ -144,8 +188,12 @@
       ]
     },
     {
-      "id": "w12", "slug": "businesscase-negoziazione", "title": "Business Case e Negoziazione", "subtitle": "Valore, prezzo, contratto, chiusura",
-      "icon": "🤝", "levels": 16,
+      "id": "w12",
+      "slug": "businesscase-negoziazione",
+      "title": "Business Case e Negoziazione",
+      "subtitle": "Valore, prezzo, contratto, chiusura",
+      "icon": "🤝",
+      "levels": 16,
       "scope": [
         "Value selling: baseline, costi/rischi/ricavi, TCO 5 anni, NPV/payback/IRR, linguaggio del CFO",
         "Struttura di un business case e come costruirlo con il cliente; Value Advisory / strumenti di valore (pubblici)",
@@ -157,8 +205,12 @@
       ]
     },
     {
-      "id": "w13", "slug": "competizione-obiezioni", "title": "Competizione e Obiezioni", "subtitle": "Battlecard e risposte a prova di cliente",
-      "icon": "🥊", "levels": 15,
+      "id": "w13",
+      "slug": "competizione-obiezioni",
+      "title": "Competizione e Obiezioni",
+      "subtitle": "Battlecard e risposte a prova di cliente",
+      "icon": "🥊",
+      "levels": 15,
       "scope": [
         "Mappa competitiva ATTUALE: Oracle (Fusion, NetSuite), Microsoft Dynamics 365, Workday, Salesforce, ServiceNow, Infor, IFS, Odoo e vendor italiani (Zucchetti, TeamSystem...), Veeva per Life Sciences",
         "Best-of-breed vs suite; integrazione; clean core",
@@ -169,8 +221,12 @@
       ]
     },
     {
-      "id": "w14", "slug": "ecosistema-compliance-success", "title": "Partner, Compliance e Success", "subtitle": "Ecosistema, regole del gioco, post-vendita",
-      "icon": "🌐", "levels": 15,
+      "id": "w14",
+      "slug": "ecosistema-compliance-success",
+      "title": "Partner, Compliance e Success",
+      "subtitle": "Ecosistema, regole del gioco, post-vendita",
+      "icon": "🌐",
+      "levels": 15,
       "scope": [
         "Ecosistema partner: SI, ISV, hyperscaler, SAP Store, co-sell, canale mid-market; programmi partner ATTUALI",
         "Customer Success: success plans, adoption, value realization, renewal e expansion (land & expand), reference",

@@ -1,0 +1,87 @@
+{
+  "id": "w06",
+  "items": [
+    {
+      "t": "tf",
+      "q": "Un DSO più alto, a parità di vendite, indica che i crediti verso i clienti vengono incassati più lentamente.",
+      "a": true,
+      "exp": "Il DSO misura i giorni medi di incasso: più è alto, più a lungo la cassa resta bloccata nei crediti.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "Quale sistema usa un'azienda italiana per trasmettere le fatture elettroniche B2B nazionali?",
+      "o": [
+        "Il Sistema di Interscambio gestito dall'Agenzia delle Entrate",
+        "La rete Peppol, tramite un access point accreditato",
+        "Un portale web di ciascun cliente, con caricamento manuale",
+        "La posta elettronica ordinaria con allegato PDF firmato"
+      ],
+      "a": 0,
+      "exp": "Le fatture domestiche passano dallo SDI in formato XML FatturaPA. Peppol non è il canale domestico e un PDF non è una fattura elettronica valida a fini fiscali.",
+      "diff": 1
+    },
+    {
+      "t": "multi",
+      "q": "Quali indicatori misurano la velocità con cui il capitale circolante si trasforma in cassa?",
+      "o": [
+        "DSO, giorni medi di incasso dei crediti",
+        "DPO, giorni medi di pagamento dei fornitori",
+        "DIO, giorni medi di giacenza delle scorte",
+        "Numero di ticket di assistenza IT aperti",
+        "Quota di fatture archiviate in formato PDF"
+      ],
+      "a": [
+        0,
+        1,
+        2
+      ],
+      "exp": "DSO, DPO e DIO compongono il ciclo di cassa. I ticket IT e il formato di archiviazione non misurano la rotazione del capitale circolante.",
+      "diff": 2
+    },
+    {
+      "t": "mcq",
+      "q": "Un fornitore strategico vuole incassare prima e l'acquirente vuole estendere il DPO. Quale area SAP è rilevante?",
+      "o": [
+        "SAP Taulia, con pagamento anticipato e supply chain finance",
+        "SAP Fieldglass, con gestione della forza lavoro esterna",
+        "SAP Concur, con gestione di viaggi e note spese",
+        "SAP Group Reporting, con consolidamento di gruppo"
+      ],
+      "a": 0,
+      "exp": "Taulia è la soluzione SAP per il working capital: sconto dinamico, pagamento anticipato ai fornitori e supply chain finance.",
+      "diff": 2
+    },
+    {
+      "t": "fill",
+      "q": "Per le imprese che entrano per la prima volta nel perimetro CSRD post-Omnibus, la rendicontazione riguarda gli ___.",
+      "o": [
+        "{{w06.csrd_first_year}}",
+        "esercizi con inizio dal 1° gennaio 2025 (prima relazione nel 2026)",
+        "esercizi con inizio dal 1° gennaio 2026 (prima relazione nel 2027)",
+        "esercizi con inizio dal 1° gennaio 2030 (prima relazione nel 2031)"
+      ],
+      "a": 0,
+      "exp": "Per le nuove imprese in perimetro: {{w06.csrd_first_year}}. Le date 2025 e 2026 erano quelle delle ondate originarie, poi rinviate dallo Stop-the-clock e ridimensionate da Omnibus I.",
+      "diff": 3
+    },
+    {
+      "t": "multi",
+      "q": "Quali affermazioni su e-fattura in Italia e in Europa sono corrette?",
+      "o": [
+        "Lo SDI è un modello di clearance: una fattura scartata non è considerata emessa",
+        "Per le fatture B2B domestiche italiane il canale resta lo SDI, non Peppol",
+        "ViDA introduce l'e-fattura strutturata B2B intra-UE dal {{w06.vida_b2b_date}}",
+        "ViDA ha abolito lo SDI con effetto immediato",
+        "Peppol è obbligatoria per tutte le fatture B2B domestiche italiane"
+      ],
+      "a": [
+        0,
+        1,
+        2
+      ],
+      "exp": "Lo SDI resta il canale domestico e funziona in clearance; ViDA fissa il {{w06.vida_b2b_date}} per le operazioni intra-UE. Non ha abolito lo SDI e Peppol non è obbligatoria per le fatture domestiche.",
+      "diff": 3
+    }
+  ]
+}

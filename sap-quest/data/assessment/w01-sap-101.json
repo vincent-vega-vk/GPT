@@ -7,7 +7,7 @@
  "exp":"Il current cloud backlog conta solo ricavi cloud coperti da contratti firmati (committed), non fatture emesse, incassi o opportunità non ancora chiuse."},
 {"t":"mcq","q":"Il dollaro si indebolisce verso l'euro. A parità di volumi, che effetto ha sui ricavi di SAP riportati in euro?","o":["Riduce la crescita misurata in euro rispetto ai cambi costanti","Aumenta la crescita misurata in euro rispetto ai cambi costanti","Non ha effetto, perché SAP fattura in euro ai clienti di tutto il mondo","Riduce il volume dei contratti firmati, non i ricavi riportati in euro"],"a":0,"diff":2,
  "exp":"I ricavi in dollari valgono meno euro, quindi la crescita in euro risulta inferiore a quella a cambi costanti. Per questo SAP riporta sempre entrambi i tassi."},
-{"t":"tf","q":"Dal 2024 il non-IFRS operating profit di SAP include i costi di share-based compensation.","a":true,"diff":3,
+{"t":"tf","q":"Con la ridefinizione annunciata a gennaio 2024, il non-IFRS operating profit di SAP include i costi di share-based compensation.","a":true,"diff":3,
  "exp":"Vero: con la ridefinizione annunciata a gennaio 2024 questi costi sono inclusi, mentre restano esclusi gli effetti diretti di acquisizioni e ristrutturazioni. Chi cita vecchi confronti senza tenerne conto sbaglia di molto."},
 {"t":"mcq","q":"Quale di queste acquisizioni SAP è stata completata per ultima, per data di closing?","o":["Prior Labs","Dremio","Reltio","SmartRecruiters"],"a":0,"diff":3,
  "exp":"Prior Labs si è chiusa il 17 luglio 2026, dopo Dremio (6 luglio 2026), Reltio (maggio 2026) e SmartRecruiters (settembre 2025). Il ritmo recente punta su dati e AI."}

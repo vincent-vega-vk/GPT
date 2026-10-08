@@ -10,8 +10,8 @@
     "note": "Studi legali e tracker del Parlamento UE (EUR-Lex non apribile dal sandbox). Una fonte indica solo l'entrata in vigore; la data di pubblicazione è coerente tra più fonti."
   },
   "w06.csrd_scope": {
-    "label": "Perimetro CSRD per le imprese UE dopo Omnibus I",
-    "value": "imprese UE con più di 1.000 dipendenti e più di 450 milioni di euro di fatturato netto (entrambe le soglie)",
+    "label": "Soglie CSRD per le imprese UE dopo Omnibus I",
+    "value": "più di 1.000 dipendenti e più di 450 milioni di euro di fatturato netto (entrambe le soglie)",
     "asOf": "2026-03-18",
     "checked": "2026-10-08",
     "staleAfter": "2027-01-06",
@@ -31,7 +31,7 @@
   },
   "w06.csrd_stop_clock": {
     "label": "Direttiva «Stop-the-clock» sulla CSRD",
-    "value": "la Direttiva (UE) 2025/794 «Stop-the-clock» ha rinviato di due anni la rendicontazione per le imprese di seconda e terza ondata, senza toccare chi già rendicontava dall'esercizio 2024",
+    "value": "rinvio di due anni della rendicontazione per le imprese di seconda e terza ondata (Direttiva (UE) 2025/794), senza toccare chi già rendicontava dall'esercizio 2024",
     "asOf": "2025-04-17",
     "checked": "2026-10-08",
     "staleAfter": "2027-04-06",
@@ -41,7 +41,7 @@
   },
   "w06.csrd_italy_status": {
     "label": "Italia: stato del recepimento CSRD e Omnibus",
-    "value": "in Italia la CSRD è recepita dal D.Lgs. 125/2024 e lo Stop-the-clock dalla Legge 118/2025; l'adeguamento del D.Lgs. 125/2024 a Omnibus I è da completare entro il 19 marzo 2027",
+    "value": "la CSRD è recepita dal D.Lgs. 125/2024 e lo Stop-the-clock dalla Legge 118/2025; l'adeguamento a Omnibus I è da completare entro il 19 marzo 2027",
     "asOf": "2026-08-01",
     "checked": "2026-10-08",
     "staleAfter": "2026-12-31",
@@ -71,7 +71,7 @@
   },
   "w06.vida_reference": {
     "label": "ViDA: atto di riferimento",
-    "value": "la Direttiva (UE) 2025/516 (ViDA), adottata dal Consiglio l'11 marzo 2025 e pubblicata nella Gazzetta Ufficiale UE il 25 marzo 2025",
+    "value": "Direttiva (UE) 2025/516 (ViDA), adottata dal Consiglio l'11 marzo 2025 e pubblicata nella Gazzetta Ufficiale UE il 25 marzo 2025",
     "asOf": "2025-03-25",
     "checked": "2026-10-08",
     "staleAfter": "2027-04-06",

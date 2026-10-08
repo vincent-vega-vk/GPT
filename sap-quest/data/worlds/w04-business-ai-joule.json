@@ -1137,7 +1137,7 @@
       "lesson": {
         "points": [
           "L'AI Act UE regola l'AI per livelli di rischio: pratiche vietate, sistemi ad alto rischio (es. selezione e gestione del personale), obblighi di trasparenza (es. chatbot, contenuti generati) e rischio minimo.",
-          "Ruoli: provider (chi sviluppa o immette sul mercato) e deployer (chi lo usa nella propria attività). Il cliente è quasi sempre deployer: uso conforme, supervisione umana, informazione e alfabetizzazione AI del personale.",
+          "Ruoli: provider (chi sviluppa o immette sul mercato) e deployer (chi lo usa nella propria attività). Il cliente è quasi sempre deployer: uso conforme, supervisione umana, monitoraggio e informazione delle persone coinvolte.",
           "Il calendario di applicazione e le semplificazioni sono in evoluzione a livello UE: prima di citare una data a un cliente, verifica il testo e il calendario vigenti (es. sul sito della Commissione) e coinvolgi il suo legale.",
           "Il GDPR resta valido in parallelo: base giuridica, minimizzazione, DPIA dove serve, DPO. La sovranità (residenza, controllo operativo, giurisdizione) si tratta come nel mondo RISE."
         ],

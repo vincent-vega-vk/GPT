@@ -31,7 +31,7 @@
         "SAP Build Process Automation, che sposta i dati tra i due sistemi"
       ],
       "a": 0,
-      "exp": "{{w05.bdc_connect_snowflake}} per il connettore Snowflake. Un export notturno è una replica, quindi l'opposto dello zero-copy.",
+      "exp": "Il connettore Snowflake è {{w05.bdc_connect_snowflake}}. Un export notturno è una replica, quindi l'opposto dello zero-copy.",
       "diff": 2
     },
     {
@@ -74,7 +74,7 @@
         "MDG gestisce i master data dei clienti e Reltio quelli dei fornitori, separati"
       ],
       "a": 0,
-      "exp": "{{w05.mdg_vs_reltio}}. Sono complementari: non è un caso di sostituzione, e la divisione per dominio (clienti o fornitori) non è il criterio.",
+      "exp": "Posizionamento: {{w05.mdg_vs_reltio}}. Sono complementari: non è un caso di sostituzione, e la divisione per dominio (clienti o fornitori) non è il criterio.",
       "diff": 3
     }
   ]

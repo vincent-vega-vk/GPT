@@ -1,0 +1,1483 @@
+{
+  "id": "w06",
+  "levels": [
+    {
+      "id": "w06-l01",
+      "title": "Il CFO in 5 numeri",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "DSO (Days Sales Outstanding): in media quanti giorni servono per incassare dopo una vendita. Più è alto, più cassa resta bloccata nei crediti verso i clienti.",
+          "DPO (Days Payable Outstanding): giorni medi per pagare i fornitori. DIO: giorni medi di giacenza delle scorte. Il ciclo di cassa (CCC) è DIO più DSO meno DPO.",
+          "Working capital: capitale circolante operativo, in sintesi crediti più scorte meno debiti verso i fornitori. Liberarne una parte genera cassa senza nuovo debito.",
+          "Giorni di chiusura: giorni lavorativi per chiudere i conti a fine mese o trimestre. Un fast close sposta il lavoro del team dalle riconciliazioni all'analisi.",
+          "Qui niente benchmark: i valori cambiano per settore e azienda. Chiedi al cliente i numeri di oggi e l'obiettivo, non citare medie."
+        ],
+        "ae": "Il CFO ragiona in cassa, rischio, velocità e controllo. Traduci ogni funzione SAP in uno di questi quattro: «riduce i giorni di chiusura», «libera cassa»."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il KPI alla sua definizione",
+          "pairs": [
+            [
+              "DSO",
+              "Giorni medi per incassare i crediti verso i clienti"
+            ],
+            [
+              "DPO",
+              "Giorni medi per pagare i fornitori"
+            ],
+            [
+              "DIO",
+              "Giorni medi di giacenza del magazzino"
+            ],
+            [
+              "Giorni di chiusura",
+              "Giorni lavorativi per chiudere i conti del periodo"
+            ],
+            [
+              "Working capital",
+              "Capitale impegnato nella gestione corrente: crediti, scorte, debiti"
+            ]
+          ],
+          "exp": "Sono i cinque numeri con cui il CFO misura velocità e cassa. Prima di proporre qualunque cosa, fatti dire i valori di oggi e quelli obiettivo.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CFO vuole liberare cassa senza indebitarsi. Quale KPI è più direttamente collegato?",
+          "o": [
+            "Il working capital e il ciclo di cassa (DIO, DSO, DPO)",
+            "Il numero di centri di costo configurati nel controllo di gestione",
+            "Il tasso di turnover del personale amministrativo dell'ultimo anno",
+            "Il numero di report mensili prodotti dal team di controllo"
+          ],
+          "a": 0,
+          "exp": "La cassa si libera accorciando il ciclo di cassa: incassare prima, pagare con termini sostenibili, ridurre le scorte. Gli altri indicatori non toccano la liquidità.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "A parità di vendite, un DSO più basso significa incassare prima e liberare cassa.",
+          "a": true,
+          "exp": "Meno giorni per incassare vuol dire crediti più bassi nello stato patrimoniale e più liquidità disponibile. È la leva più immediata sul working capital lato clienti.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "Il ciclo di cassa si calcola come DIO + DSO − ___.",
+          "o": [
+            "DPO",
+            "DIO",
+            "Ricavi",
+            "Capex"
+          ],
+          "a": 0,
+          "exp": "Il ciclo di cassa somma i giorni in cui la cassa è immobilizzata in scorte e crediti e sottrae i giorni di dilazione concessa dai fornitori (DPO).",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è la domanda di discovery più utile con questo CFO?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Voglio chiudere prima, ma il team passa metà del tempo a riconciliare."
+          },
+          "o": [
+            "Quanti giorni di chiusura sono riconciliazioni manuali tra sistemi, e dove nascono?",
+            "Quante persone lavorano nel team amministrativo e quanto costa ciascuna?",
+            "Avete valutato un fornitore di outsourcing per le attività di riconciliazione?",
+            "Quale versione del sistema contabile usate e quando è stata installata?"
+          ],
+          "a": 0,
+          "exp": "Il problema è il tempo perso in riconciliazioni: quantificarlo e capire l'origine apre al valore di un journal unico e di una chiusura orchestrata. Le altre domande portano su costo del personale o su tecnica.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l02",
+      "title": "Universal Journal",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Universal Journal: in S/4HANA contabilità (FI), controllo di gestione (CO), asset e material ledger scrivono in un'unica tabella di partite (ACDOCA), invece che in tabelle separate da riconciliare.",
+          "Benefici: una sola fonte di verità, meno riconciliazioni tra FI e CO, reporting in tempo reale con il livello di dettaglio che serve.",
+          "I ledger paralleli (per esempio principi contabili diversi come OIC e IFRS) convivono nello stesso journal: lo stesso fatto si vede con regole contabili diverse.",
+          "Per il CFO non è tecnologia fine a sé stessa: significa meno lavoro di riconciliazione e meno differenze tra contabilità e controllo di gestione."
+        ],
+        "ae": "Chiedi quante ore o giorni il team spende a riconciliare contabilità e controllo a ogni chiusura: è il costo che il Universal Journal elimina alla radice."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che cos'è il Universal Journal di S/4HANA?",
+          "o": [
+            "Un'unica fonte di partite per FI, CO, asset e material ledger",
+            "Un report di bilancio standard che aggrega i saldi dei conti a fine mese",
+            "Un database separato per il controllo di gestione, alimentato ogni notte",
+            "Un registro dei documenti fiscali da inviare all'Agenzia delle Entrate"
+          ],
+          "a": 0,
+          "exp": "È il modello dati in cui le diverse viste contabili condividono le stesse partite. Non è un report, non è un database a parte e non è un registro fiscale.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Con il Universal Journal contabilità e controllo di gestione vanno riconciliati come prima, con gli stessi tempi.",
+          "a": false,
+          "exp": "Scrivendo nelle stesse partite, FI e CO partono dallo stesso dato e gran parte della riconciliazione manuale scompare.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "In S/4HANA principi contabili diversi (per esempio OIC e IFRS) convivono in ___.",
+          "o": [
+            "ledger paralleli dello stesso journal",
+            "tabelle separate riconciliate di notte",
+            "due sistemi ERP affiancati",
+            "file di consolidamento esterni"
+          ],
+          "a": 0,
+          "exp": "I ledger paralleli permettono di tenere, nello stesso journal, la contabilità secondo principi diversi. Utile per gruppi che redigono bilanci locali e di gruppo.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono vantaggi tipici del Universal Journal?",
+          "o": [
+            "Meno riconciliazioni tra contabilità e controllo di gestione",
+            "Una sola fonte di verità con dettaglio a livello di partita",
+            "Reporting più rapido, senza aggregati da ricostruire",
+            "Eliminazione della necessità di un piano dei conti",
+            "Nessun bisogno di controlli interni sui dati contabili"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Meno riconciliazioni, una fonte unica e reporting più veloce. Il piano dei conti e i controlli interni restano necessari.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CFO sul perché interessarsi del modello dati?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Perché dovrei interessarmi di come SAP memorizza le partite contabili?"
+          },
+          "o": [
+            "Meno tabelle da riconciliare significa chiusure più rapide e numeri che tornano",
+            "È un dettaglio tecnico che non cambia i tempi di chiusura né il lavoro del team",
+            "Serve agli auditor per ricostruire i documenti, ma non incide sulla contabilità",
+            "Riduce i controlli interni, perché i dati sono memorizzati in un solo posto"
+          ],
+          "a": 0,
+          "exp": "Collega il tema tecnico a un beneficio che il CFO sente: tempo di chiusura e affidabilità dei numeri. Non promettere meno controlli: restano indispensabili.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l03",
+      "title": "Chiusura e consolidato",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Advanced Financial Closing: orchestrazione del processo di chiusura (task, dipendenze, responsabili, scadenze, monitoraggio), così il close non vive su Excel e mail.",
+          "Group Reporting: consolidamento di gruppo in S/4HANA (eliminazioni intercompany, conversione delle valute, partecipazioni) a partire dai dati del journal.",
+          "Il tempo di chiusura si perde spesso in riconciliazioni intercompany, accruals manuali, correzioni tardive e raccolta dati dalle controllate.",
+          "Con più ERP nel gruppo il consolidato diventa il punto dolente: più sistemi significano più riconciliazioni e più passaggi manuali.",
+          "A Sapphire 2026 SAP ha presentato un assistente Joule per la chiusura che coordina agenti su accruals, intercompany ed errori."
+        ],
+        "ae": "Chiedi: «quanti giorni lavorativi servono per il consolidato, e quanti ERP alimentano il gruppo?». Con molte controllate su sistemi diversi, parlane insieme all'architettura finance."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il termine al suo significato",
+          "pairs": [
+            [
+              "Advanced Financial Closing",
+              "Orchestra task, scadenze e responsabili della chiusura"
+            ],
+            [
+              "Group Reporting",
+              "Consolidamento di gruppo, eliminazioni e conversione valute"
+            ],
+            [
+              "Riconciliazione intercompany",
+              "Allineare saldi e transazioni tra società dello stesso gruppo"
+            ],
+            [
+              "Accruals",
+              "Stanziamenti di competenza non ancora fatturati"
+            ],
+            [
+              "Universal Journal",
+              "Unica fonte di partite per FI, CO, asset e material ledger"
+            ]
+          ],
+          "exp": "Sono i pezzi che determinano la velocità della chiusura: il processo, il consolidato, l'intercompany, la competenza e la base dati comune.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Quale funzione coordina il processo di chiusura con task, scadenze e responsabili?",
+          "o": [
+            "Advanced Financial Closing, che orchestra le attività di chiusura",
+            "Group Reporting, che prepara il consolidato dei conti di gruppo",
+            "Cash Management, che prevede la liquidità sui conti bancari",
+            "Billing and Revenue Innovation Management, per la fatturazione ricorrente"
+          ],
+          "a": 0,
+          "exp": "Advanced Financial Closing gestisce il calendario e le dipendenze della chiusura. Group Reporting si occupa del consolidato, cash e billing sono altri processi.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Ordina le fasi tipiche di una chiusura di gruppo",
+          "items": [
+            "Chiusura contabile delle singole società",
+            "Riconciliazione ed eliminazione intercompany",
+            "Conversione delle valute e consolidamento",
+            "Revisione dei risultati e delle rettifiche",
+            "Reporting finale al management"
+          ],
+          "exp": "Si chiude prima a livello di società, poi si riconcilia l'intercompany, si consolida e si rivedono i risultati prima di riferire al management.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Group Reporting serve a consolidare i risultati di più società di un gruppo, incluse le eliminazioni intercompany.",
+          "a": true,
+          "exp": "È il componente di S/4HANA per il consolidato: eliminazioni, conversione valute e partecipazioni a partire dai dati del journal.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la conversazione con questo CFO sul consolidato?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Le controllate usano ERP diversi e il consolidato è sempre l'ultima cosa che chiude."
+          },
+          "o": [
+            "Mappiamo dove si perde tempo (dati, intercompany, correzioni) e come ridurre i passaggi",
+            "Proponiamo di consolidare in Excel con più frequenza, così le controllate chiudono prima",
+            "Standardizziamo il piano dei conti delle controllate prima di fare qualsiasi altra analisi",
+            "Chiediamo alle controllate di anticipare la propria chiusura di una settimana"
+          ],
+          "a": 0,
+          "exp": "Prima si misura dove il tempo si perde, poi si valuta se un'architettura finance più unificata riduce i passaggi. Le altre risposte scaricano il problema sulle controllate o rimandano l'analisi.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l04",
+      "title": "Cassa, Treasury e liquidità",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Cash Management: visibilità e previsione della liquidità, con posizioni di cassa dai conti bancari e flussi attesi, per sapere quanta cassa c'è e ci sarà.",
+          "Treasury e Risk Management: gestione di strumenti finanziari, rischi di cambio e di tasso, liquidità di gruppo (per esempio con l'in-house cash).",
+          "Il legame con i KPI: previsioni di cassa migliori e incassi più rapidi riducono il bisogno di finanziamento e migliorano il working capital.",
+          "Pain point tipici: saldi bancari in file e portali diversi, previsioni in Excel, tesorerie locali scollegate, riconciliazioni bancarie manuali.",
+          "A Sapphire 2026 SAP ha presentato un Cash Management Agent che analizza gli estratti conto e segnala possibili carenze o eccedenze di liquidità."
+        ],
+        "ae": "Domanda d'oro per CFO o tesoriere: «quanto è affidabile la previsione di cassa di oggi e quanto tempo costa produrla?»."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è l'obiettivo principale di Cash Management?",
+          "o": [
+            "Dare visibilità e previsione sulla liquidità: cassa di oggi e flussi attesi",
+            "Calcolare le paghe del personale e gestire i relativi adempimenti contributivi",
+            "Gestire i contratti con i fornitori e monitorare i livelli di servizio concordati",
+            "Consolidare i bilanci di gruppo, comprese le eliminazioni intercompany e le valute"
+          ],
+          "a": 0,
+          "exp": "Cash Management risponde a «quanta cassa ho e quanta ne avrò». Paghe, contratti fornitori e consolidato appartengono ad altri processi.",
+          "diff": 1
+        },
+        {
+          "t": "bucket",
+          "q": "Cash Management o Treasury e Risk?",
+          "buckets": [
+            "Cash Management",
+            "Treasury e Risk"
+          ],
+          "items": [
+            [
+              "Previsione di liquidità e posizione di cassa",
+              0
+            ],
+            [
+              "Elaborazione degli estratti conto bancari",
+              0
+            ],
+            [
+              "Gestione dei rischi di cambio e di tasso",
+              1
+            ],
+            [
+              "Gestione di strumenti finanziari e derivati",
+              1
+            ],
+            [
+              "Visibilità sui saldi dei conti bancari",
+              0
+            ],
+            [
+              "Liquidità di gruppo con in-house cash",
+              1
+            ]
+          ],
+          "exp": "Cash Management guarda alla liquidità operativa quotidiana; Treasury e Risk Management copre strumenti, rischi finanziari e liquidità di gruppo.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Migliorare la previsione di cassa e accelerare gli incassi può ridurre il bisogno di finanziamento esterno.",
+          "a": true,
+          "exp": "Sapere prima quanta cassa servirà e incassare prima riduce il ricorso a linee di credito. È il collegamento tra tesoreria e working capital.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono pain point tipici di una tesoreria senza visibilità integrata?",
+          "o": [
+            "Saldi bancari spezzettati in file e portali diversi",
+            "Previsioni di cassa prodotte a mano in Excel",
+            "Tesorerie locali non allineate al gruppo",
+            "Troppi pochi conti bancari da gestire",
+            "Nessuna esigenza di prevedere la cassa"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Dati frammentati, previsioni manuali e tesorerie locali scollegate sono i problemi classici. La carenza di conti o l'assenza di esigenza non sono pain point.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è la risposta più efficace al tesoriere?",
+          "ctx": {
+            "who": "Tesoriere",
+            "say": "Il mio team passa i primi giorni del mese a riconciliare i saldi bancari."
+          },
+          "o": [
+            "Quantifichiamo ore e ritardi della riconciliazione per costruire il business case",
+            "Aggiungiamo risorse temporanee nei primi giorni del mese, per smaltire il lavoro",
+            "Riduciamo il numero di conti bancari, così la riconciliazione richiede meno tempo",
+            "Portiamo le riconciliazioni a fine mese, quando il team ha meno scadenze"
+          ],
+          "a": 0,
+          "exp": "Quantificare il costo del lavoro manuale apre al caso per l'automazione e la visibilità integrata. Le altre risposte rimandano o spostano il problema.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l05",
+      "title": "Billing e ricavi (BRIM)",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "BRIM (Billing and Revenue Innovation Management): suite SAP per il billing complesso, con abbonamenti, consumo, grandi volumi di transazioni e più servizi fatturati allo stesso cliente.",
+          "Serve dove il modello di business non è «una fattura per ordine»: contratti ricorrenti, pagamento a consumo, bundle, ricavi condivisi tra più parti.",
+          "È collegata alla rilevazione dei ricavi (per esempio IFRS 15): quando e quanto riconoscere dei ricavi di un contratto con più obbligazioni.",
+          "Per Life Sciences e CPG è tipicamente rilevante dove ci sono servizi ricorrenti, dispositivi con contratti di assistenza o modelli a consumo; meno per la sola vendita a ordine.",
+          "A Sapphire 2026 SAP ha presentato anche un assistente Joule per la fatturazione (Billing Assistant)."
+        ],
+        "ae": "Qualifica prima: il cliente ha davvero billing ricorrente o a consumo? Se la fatturazione è una riga per ordine, BRIM probabilmente non è il tema."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Quando ha senso aprire una conversazione su BRIM?",
+          "o": [
+            "Quando il cliente fattura abbonamenti, consumi o grandi volumi",
+            "Quando il cliente emette una fattura per ordine e poche righe per documento",
+            "Quando il cliente deve gestire soprattutto trasferte e note spese dei dipendenti",
+            "Quando il cliente cerca uno strumento per il consolidamento del bilancio di gruppo"
+          ],
+          "a": 0,
+          "exp": "BRIM è per modelli di ricavo ricorrenti, a consumo o ad alto volume. Per una fattura per ordine basta la fatturazione standard dell'ERP.",
+          "diff": 1
+        },
+        {
+          "t": "match",
+          "q": "Abbina il concetto di billing alla sua definizione",
+          "pairs": [
+            [
+              "Subscription billing",
+              "Fatturazione di contratti ricorrenti e abbonamenti"
+            ],
+            [
+              "Usage-based billing",
+              "Fatturazione basata sul consumo effettivo"
+            ],
+            [
+              "Rilevazione dei ricavi (IFRS 15)",
+              "Quando e quanto riconoscere i ricavi di un contratto"
+            ],
+            [
+              "Convergent invoicing",
+              "Una sola fattura per più servizi dello stesso cliente"
+            ]
+          ],
+          "exp": "Sono i concetti con cui si descrive un billing non standard. Se il cliente li riconosce nel proprio business, vale la pena approfondire.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "BRIM è pensato soprattutto per aziende con una fattura per ordine e poche righe per documento.",
+          "a": false,
+          "exp": "Succede il contrario: BRIM serve quando il billing è ricorrente, a consumo o ad alti volumi. Una fattura per ordine è un caso per la fatturazione standard.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CFO che descrive questo modello di ricavo?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Vendiamo un dispositivo con un contratto di assistenza annuale e un servizio digitale a consumo."
+          },
+          "o": [
+            "Può essere un caso BRIM: ricavi ricorrenti e a consumo. Quante regole di fatturazione?",
+            "È un caso di Cash Management: i contratti annuali richiedono previsioni di liquidità",
+            "È un caso di consolidamento: i servizi vanno separati per società e per paese",
+            "Non serve nulla di specifico: la fatturazione standard del cloud ERP copre questi casi"
+          ],
+          "a": 0,
+          "exp": "Ricavi ricorrenti e a consumo con riconoscimento complesso sono il terreno di BRIM. Prima di proporre, qualifica volumi e regole di fatturazione.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "BRIM sta per Billing and Revenue ___ Management.",
+          "o": [
+            "Innovation",
+            "Integration",
+            "Insight",
+            "Intelligence"
+          ],
+          "a": 0,
+          "exp": "Billing and Revenue Innovation Management è il nome completo della suite SAP per billing e gestione dei ricavi complessi.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l06",
+      "title": "Pianificazione e forecast",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Analytics Cloud (SAC) è il front-end SAP per BI e planning: budget, forecast e scenari, integrati con i dati del cloud ERP.",
+          "{{w06.enterprise_planning}}.",
+          "Planning integrato: la pianificazione è collegata ai consuntivi e ai driver operativi. Riduce gli Excel scollegati e i cicli lunghi di consolidamento del budget.",
+          "Sul fronte dati: {{w05.sac_in_bdc}}.",
+          "Pain point: budget in Excel con versioni multiple, consolidamento lento, forecast che invecchia in fretta, poca collaborazione tra finance e business."
+        ],
+        "ae": "Chiedi: «quanto tempo passa tra il consuntivo e un forecast aggiornato?». Se la risposta è «settimane», c'è spazio per il planning integrato."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che problema risolve la pianificazione integrata?",
+          "o": [
+            "Collega budget, forecast e consuntivi in un ambiente solo, riducendo gli Excel",
+            "Sostituisce il budget annuale con un solo controllo mensile dei costi",
+            "Automatizza la contabilizzazione delle fatture fornitori nel libro giornale",
+            "Rende superfluo il controllo di gestione, perché i numeri si aggiornano da soli"
+          ],
+          "a": 0,
+          "exp": "Il valore è avere un unico ambiente in cui piano e consuntivo dialogano. Non sostituisce il budget né il controllo di gestione.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "SAP Analytics Cloud serve solo per report statici e non gestisce la pianificazione.",
+          "a": false,
+          "exp": "SAC copre sia BI e analytics sia planning, con budget, forecast e scenari. È la ragione per cui compare nel mondo finance.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono pain point tipici della pianificazione basata su Excel?",
+          "o": [
+            "Versioni multiple dello stesso budget in circolazione",
+            "Consolidamento lento dei piani delle diverse funzioni",
+            "Forecast che invecchia rapidamente rispetto ai consuntivi",
+            "Eccesso di integrazione con i dati dell'ERP",
+            "Cicli di budget troppo rapidi e poco discussi"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Versioni, consolidamento e obsolescenza sono i problemi classici. Il fatto che i dati ERP siano integrati è un vantaggio, non un pain point.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Un forecast che si aggiorna spesso con i consuntivi si chiama ___ forecast.",
+          "o": [
+            "rolling",
+            "statico",
+            "cartaceo",
+            "annuale-fisso"
+          ],
+          "a": 0,
+          "exp": "Il rolling forecast viene riportato in avanti a ogni periodo con gli ultimi consuntivi, e mantiene un orizzonte costante.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CFO sul budget che invecchia?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Il budget lo facciamo una volta all'anno e dopo tre mesi non vale più."
+          },
+          "o": [
+            "Parliamo di forecast rolling e planning integrato con i consuntivi: quanto tempo serve?",
+            "Facciamo il budget due volte l'anno in Excel, così resta più vicino ai numeri",
+            "Il budget annuale è corretto così: i numeri si confrontano a fine anno",
+            "Eliminiamo il budget e lasciamo ai responsabili la scelta degli obiettivi"
+          ],
+          "a": 0,
+          "exp": "Il forecast rolling collegato ai consuntivi risolve il problema dell'obsolescenza. Le altre risposte o peggiorano il lavoro manuale o eliminano il controllo.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l07",
+      "title": "Roleplay: «Il mio ECC funziona»",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Il CFO raramente vuole «migrare»: vuole chiusure più rapide, numeri affidabili, controllo e cassa. Collega il cambiamento a un costo che sente già.",
+          "Leva temporale: la manutenzione standard di ECC 6.0 EHP6-8 termina il {{sap.ecc.mainstream_end}}. Ma usare solo la scadenza è vendita per paura e invita all'obiezione.",
+          "Struttura della risposta: ascolta, quantifica il costo attuale (giorni di chiusura, riconciliazioni, errori), collega a una capacità specifica del nuovo, proponi un passo piccolo.",
+          "Evita promesse di ROI senza dati del cliente, benchmark non fontati e critiche al sistema attuale."
+        ],
+        "ae": "La domanda chiave: «che cosa ti costa oggi, in giorni e in persone, chiudere i conti?». Il numero lo dà il cliente, non tu."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la risposta più efficace?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Il nostro ECC funziona. Perché dovrei toccarlo?"
+          },
+          "o": [
+            "Quanto costa oggi chiudere i conti? Colleghiamo il cambiamento a quel costo",
+            "Perché la manutenzione standard finisce e non esistono alternative per restare in supporto",
+            "Perché gli analisti indicano il passaggio al cloud ERP come scelta obbligata nel settore",
+            "Perché abbiamo una brochure che mostra i vantaggi del nuovo sistema rispetto a ECC"
+          ],
+          "a": 0,
+          "exp": "Prima il problema del cliente, poi la leva temporale. Usare solo la scadenza di manutenzione è vendita per paura, e non è nemmeno corretto dire che non esistono alternative.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi alla promessa sentita dal CFO?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Mi hanno detto che con S/4HANA chiudo in metà tempo."
+          },
+          "o": [
+            "Niente percentuali: partiamo dai tuoi giorni di chiusura e dai passaggi eliminabili",
+            "Esatto, il dimezzamento è tipico dei progetti in cloud e lo possiamo mettere a contratto",
+            "Dipende dal numero di società: con poche entità il tempo di chiusura si dimezza di norma",
+            "Non cambia nulla: i tempi di chiusura dipendono dal team e non dal sistema"
+          ],
+          "a": 0,
+          "exp": "Promettere percentuali senza dati del cliente è un rischio. Meglio misurare i giorni attuali e individuare i passaggi che si possono eliminare. Negare qualsiasi effetto sarebbe altrettanto scorretto.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Per rispondere a un CFO scettico conviene citare un benchmark di riduzione dei giorni di chiusura anche se la fonte non è verificata.",
+          "a": false,
+          "exp": "Un numero senza fonte danneggia la credibilità e può diventare una promessa implicita. Meglio usare i dati del cliente e le referenze verificabili.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Ordina una risposta efficace all'obiezione «il mio ECC funziona»",
+          "items": [
+            "Riconosci che il sistema attuale funziona",
+            "Chiedi dove oggi si perde tempo o si riconcilia a mano",
+            "Quantifica il costo con i numeri del cliente",
+            "Collega il costo a una capacità specifica del nuovo",
+            "Proponi un passo piccolo, come un workshop o un assessment"
+          ],
+          "exp": "Si parte dal riconoscimento, poi si scava, si quantifica e si collega a una capacità. Il passo piccolo finale riduce la resistenza.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi sulla manutenzione estesa?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Posso restare su ECC con la manutenzione estesa, no?"
+          },
+          "o": [
+            "Sì, con scadenza e costo: {{sap.ecc.extended_end}}. Valutiamo se conviene.",
+            "No, la manutenzione estesa non è disponibile per le versioni ECC ancora in uso",
+            "Sì, senza costi aggiuntivi e senza una data di fine, quindi non c'è urgenza",
+            "Sì, ma dura pochi mesi e va rinnovata ogni anno con una nuova trattativa"
+          ],
+          "a": 0,
+          "exp": "La manutenzione estesa esiste, ma ha una data di fine e un sovrapprezzo. Confronta il costo di restare con il valore di cambiare, senza promettere condizioni che SAP non ha pubblicato.",
+          "diff": 3
+        }
+      ]
+    },
+    {
+      "id": "w06-l08",
+      "title": "Procurement e source-to-pay",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Source-to-pay (S2P): dal sourcing e dal contratto fino all'ordine, alla ricezione, alla fattura e al pagamento. Procure-to-pay (P2P) è la parte operativa: ordine, fattura, pagamento.",
+          "SAP Ariba: soluzioni per sourcing, contratti, ciclo di vita e performance dei fornitori, acquisti guidati, fatturazione e collaborazione con la supply chain.",
+          "KPI del Procurement: spend under management (quota di spesa gestita con processi e contratti), maverick spend (acquisti fuori processo), tempo di ciclo, fatture elaborate senza intervento manuale.",
+          "Pain point: spesa frammentata e poco visibile, acquisti fuori contratto, onboarding fornitori lento, rischio fornitore, fatture riconciliate a mano.",
+          "Novità: {{w06.ariba_spend_analysis}}."
+        ],
+        "ae": "Chiedi quanta spesa è davvero «sotto gestione» e come lo misurano: se non lo sanno, il problema di visibilità è già emerso."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il termine del procurement alla sua definizione",
+          "pairs": [
+            [
+              "Spend under management",
+              "Quota della spesa gestita con processi e contratti"
+            ],
+            [
+              "Maverick spend",
+              "Acquisti fuori processo o fuori contratto"
+            ],
+            [
+              "Touchless invoice",
+              "Fattura elaborata senza intervento manuale"
+            ],
+            [
+              "Source-to-pay",
+              "Dal sourcing al pagamento del fornitore"
+            ],
+            [
+              "Tail spend",
+              "Lunga coda di acquisti piccoli e frammentati"
+            ]
+          ],
+          "exp": "Sono i termini con cui un Head of Procurement descrive il proprio lavoro. Usarli correttamente ti rende credibile in discovery.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Che cosa misura lo «spend under management»?",
+          "o": [
+            "Quanta spesa totale passa da processi e contratti governati da Procurement",
+            "Quanto budget complessivo è assegnato al reparto Procurement nell'esercizio",
+            "Quanti fornitori attivi sono registrati nell'anagrafica acquisti dell'azienda",
+            "Quanto risparmio è stato ottenuto negoziando l'ultimo contratto quadro"
+          ],
+          "a": 0,
+          "exp": "È la quota di spesa effettivamente governata: più è alta, maggiore è il controllo su prezzi, condizioni e rischi. Non è un budget, un numero di fornitori o un risparmio.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Maverick spend indica acquisti effettuati rispettando contratti e processi aziendali.",
+          "a": false,
+          "exp": "È l'opposto: sono acquisti fuori processo o fuori contratto, che sfuggono al controllo e riducono il potere negoziale.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Ordina il flusso procure-to-pay",
+          "items": [
+            "Richiesta d'acquisto",
+            "Ordine di acquisto",
+            "Ricezione di beni o servizi",
+            "Fattura del fornitore e matching",
+            "Pagamento"
+          ],
+          "exp": "Dalla richiesta si passa all'ordine, alla ricezione e al matching con la fattura, e solo dopo si paga. Ogni passaggio manuale è un'occasione di errore.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è il primo passo con questo responsabile acquisti?",
+          "ctx": {
+            "who": "Head of Procurement",
+            "say": "Non so quanta della nostra spesa è davvero sotto contratto."
+          },
+          "o": [
+            "Una spend analysis: classificare la spesa e vedere quanta è coperta da contratti",
+            "Ridurre il numero di fornitori, partendo da quelli con meno ordini nell'anno",
+            "Rinegoziare i contratti con i primi dieci fornitori, senza analisi preliminari",
+            "Introdurre un limite di spesa per richiedente e bloccare le richieste oltre soglia"
+          ],
+          "a": 0,
+          "exp": "Senza visibilità non si scelgono le leve. La spend analysis classifica la spesa e mostra dove i contratti mancano; solo dopo si decide cosa fare.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l09",
+      "title": "Network, Fieldglass, Concur",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Business Network: la rete in cui aziende e fornitori si scambiano ordini, fatture e documenti in formato digitale; include ciò che storicamente era la Ariba Network.",
+          "SAP Fieldglass: gestione della forza lavoro esterna e dei servizi (lavoratori a contratto, SOW, consulenti): ordini, timesheet, costi. Temi tipici: visibilità e conformità.",
+          "SAP Concur: viaggi e note spese (T&E) e gestione delle fatture. Pain point: note spese manuali, policy non rispettate, poca visibilità sulla spesa viaggi.",
+          "Insieme coprono la spesa indiretta: beni e servizi, personale esterno, trasferte. Il valore è la visibilità integrata: {{w06.ariba_spend_analysis}}.",
+          "Agenti Joule nella spesa: {{w06.autonomous_spend}}."
+        ],
+        "ae": "Chiedi chi governa oggi la spesa per consulenti e collaboratori esterni: spesso è dispersa tra HR, IT e acquisti. Lì Fieldglass e Business Network portano visibilità."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina la soluzione al suo ambito",
+          "pairs": [
+            [
+              "SAP Business Network",
+              "Rete di scambio digitale tra aziende e fornitori"
+            ],
+            [
+              "SAP Fieldglass",
+              "Forza lavoro esterna e acquisto di servizi"
+            ],
+            [
+              "SAP Concur",
+              "Viaggi, note spese e fatture"
+            ],
+            [
+              "SAP Ariba",
+              "Sourcing, contratti e procure-to-pay"
+            ],
+            [
+              "SAP Taulia",
+              "Working capital: pagamenti anticipati e supply chain finance"
+            ]
+          ],
+          "exp": "Cinque nomi, cinque ambiti diversi della spesa e del working capital. Saperli distinguere evita gaffe in discovery.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Quale soluzione citi per gestire consulenti e lavoratori a contratto?",
+          "o": [
+            "SAP Fieldglass, per forza lavoro esterna e servizi",
+            "SAP Concur, per viaggi, note spese e rimborsi",
+            "SAP Taulia, per pagamenti anticipati ai fornitori",
+            "SAP Group Reporting, per il consolidato di gruppo"
+          ],
+          "a": 0,
+          "exp": "Fieldglass gestisce l'intero ciclo del lavoratore esterno: richiesta, SOW, timesheet, costi e conformità.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "SAP Concur si occupa principalmente di viaggi e note spese.",
+          "a": true,
+          "exp": "Concur è la soluzione T&E di SAP: prenotazioni, note spese e gestione delle spese di trasferta, con funzioni anche per le fatture.",
+          "diff": 1
+        },
+        {
+          "t": "bucket",
+          "q": "A quale tipo di spesa appartiene ciascun caso?",
+          "buckets": [
+            "Beni e servizi indiretti",
+            "Forza lavoro esterna",
+            "Viaggi e spese"
+          ],
+          "items": [
+            [
+              "Acquisto di materiali di consumo e servizi generali",
+              0
+            ],
+            [
+              "Gestione dei SOW dei consulenti",
+              1
+            ],
+            [
+              "Note spese dei dipendenti",
+              2
+            ],
+            [
+              "Timesheet dei collaboratori a contratto",
+              1
+            ],
+            [
+              "Prenotazione delle trasferte",
+              2
+            ],
+            [
+              "Contratti quadro con i fornitori",
+              0
+            ]
+          ],
+          "exp": "Procurement indiretto in Ariba, forza lavoro esterna in Fieldglass, viaggi e spese in Concur. La visibilità sul totale richiede di unire i tre mondi.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la risposta al responsabile acquisti?",
+          "ctx": {
+            "who": "CPO",
+            "say": "Ho tre sistemi diversi per acquisti, consulenti e trasferte: non vedo la spesa totale."
+          },
+          "o": [
+            "Visibilità integrata: uniamo e classifichiamo i dati di spesa, poi scegliamo le leve",
+            "Il problema sono i troppi fornitori: riduciamoli prima di unire i sistemi",
+            "Un unico sistema non cambia la visibilità: meglio rafforzare i report dei tre sistemi",
+            "La spesa su consulenti e trasferte è marginale: concentriamoci sui beni diretti"
+          ],
+          "a": 0,
+          "exp": "Il primo valore è vedere la spesa totale in modo coerente. Poi si scelgono le leve per categoria. Le altre risposte rimandano o minimizzano il problema.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l10",
+      "title": "Taulia e working capital",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Taulia: soluzioni di working capital, con sconto dinamico, pagamento anticipato ai fornitori e supply chain finance. SAP ha annunciato l'acquisizione nel 2022.",
+          "Per l'acquirente: sconti o termini di pagamento più lunghi. Per il fornitore: incasso anticipato. Per il CFO: DPO, DSO e ciclo di cassa cambiano.",
+          "È collegata a SAP Business Network e alle soluzioni finanziarie SAP; i prodotti restano disponibili anche per clienti non SAP.",
+          "Novità AI: {{w06.taulia_ai}}.",
+          "Attenzione: la finanza della supply chain dipende da fonti di funding di terzi. Chiedi da dove nasce il funding e quali rischi di controparte esistono."
+        ],
+        "ae": "Parlane al CFO come di una leva di cassa: «quanti giorni di DPO potresti guadagnare senza penalizzare i fornitori?». Il valore sta nel win-win."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che cosa fa tipicamente una soluzione di dynamic discounting?",
+          "o": [
+            "Offre ai fornitori il pagamento anticipato in cambio di uno sconto",
+            "Riduce automaticamente l'imponibile IVA sulle fatture pagate in anticipo",
+            "Assegna ai fornitori uno sconto fisso annuale sulla base del volume acquistato",
+            "Anticipa all'azienda gli incassi dai clienti attraverso un finanziamento bancario"
+          ],
+          "a": 0,
+          "exp": "Il fornitore sceglie quando farsi pagare e rinuncia a una parte della fattura; l'acquirente ottiene sconto. Non tocca l'IVA e non è factoring sui crediti verso i clienti.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Il ciclo di cassa migliora se aumenta il DPO oppure se ___ il DSO.",
+          "o": [
+            "si riduce",
+            "si allunga",
+            "resta fermo",
+            "si azzera di colpo"
+          ],
+          "a": 0,
+          "exp": "Pagare più tardi i fornitori (DPO più alto) e incassare prima dai clienti (DSO più basso) accorciano il ciclo di cassa.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "SAP ha annunciato l'acquisizione di Taulia nel 2022.",
+          "a": true,
+          "exp": "L'annuncio è del 2022: SAP ha inserito Taulia nel proprio portafoglio per il working capital, mantenendo i prodotti disponibili anche per clienti non SAP.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali benefici può dare a un acquirente un programma di working capital?",
+          "o": [
+            "Sconti sui pagamenti anticipati",
+            "Flessibilità sui termini di pagamento",
+            "Fornitori più solidi grazie a liquidità tempestiva",
+            "Eliminazione dell'obbligo di pagare le fatture",
+            "Azzeramento del DSO verso i clienti"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Sconti, flessibilità e fornitori più solidi sono i benefici classici. Le fatture vanno comunque pagate e il DSO riguarda i clienti.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Che soluzione proponi al CFO che deve gestire i fornitori strategici?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Voglio allungare i termini di pagamento ma i fornitori strategici si lamentano."
+          },
+          "o": [
+            "Bilanciamo: chi vuole incassa prima con pagamento anticipato, tu allunghi il DPO",
+            "Allunga i termini con una comunicazione formale: i fornitori si adatteranno",
+            "Passa ai pagamenti anticipati per l'intera base fornitori senza analisi preliminari",
+            "Rinuncia ad allungare i termini: il DPO non incide sulla cassa dell'acquirente"
+          ],
+          "a": 0,
+          "exp": "Un programma di pagamento anticipato finanziato da terzi permette ai fornitori di incassare subito mentre l'acquirente allunga il DPO. Il DPO incide sulla cassa, e imporre i termini senza compensazioni danneggia i rapporti.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l11",
+      "title": "Italia: SDI e fatturazione",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "In Italia la fattura elettronica passa dal Sistema di Interscambio (SDI) dell'Agenzia delle Entrate, in formato XML FatturaPA. Obbligo B2B e B2C dal 1° gennaio 2019; la PA era già obbligata prima.",
+          "Modello clearance: lo SDI controlla formato e consegna; una fattura scartata è come non emessa e va corretta e reinviata.",
+          "Deroga UE: {{w06.sdi_derogation}}.",
+          "Peppol è la rete europea di scambio (modello a quattro angoli con access point). In Italia per le fatture domestiche il canale resta SDI; Peppol compare in altri ambiti: {{w06.nso_peppol}}.",
+          "Per l'AE: la gestione dell'SDI è spesso affidata a un ecosistema di partner, soluzioni di compliance e intermediari. Chiedi come il cliente la gestisce oggi."
+        ],
+        "ae": "Nel Life Sciences ricorda anche gli ordini elettronici NSO verso il SSN: chi vende a strutture pubbliche vive di compliance su fatture e ordini."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Quale canale usa un'azienda italiana per emettere fatture B2B domestiche?",
+          "o": [
+            "Il Sistema di Interscambio (SDI), con file XML in formato FatturaPA",
+            "La rete Peppol, che è il canale obbligatorio per le fatture B2B domestiche",
+            "La posta elettronica certificata, con fattura in PDF firmato digitalmente",
+            "Il portale del cliente, con fattura in PDF caricata dal fornitore"
+          ],
+          "a": 0,
+          "exp": "Le fatture domestiche passano dallo SDI in formato XML FatturaPA. Peppol non è il canale domestico, e un PDF non è una fattura elettronica valida a fini fiscali.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "In Italia una fattura scartata dallo SDI è considerata comunque emessa se il fornitore l'ha inviata.",
+          "a": false,
+          "exp": "Con il modello clearance una fattura scartata non è considerata emessa: va corretta e reinviata. Per questo la qualità dei dati di fatturazione è critica.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Il formato standard della fattura elettronica italiana è l'XML ___.",
+          "o": [
+            "FatturaPA",
+            "EDIFACT ORDERS",
+            "PDF/A firmato",
+            "CSV strutturato"
+          ],
+          "a": 0,
+          "exp": "FatturaPA è il formato XML definito dall'Agenzia delle Entrate per le fatture elettroniche trasmesse tramite SDI.",
+          "diff": 1
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine alla sua definizione",
+          "pairs": [
+            [
+              "SDI",
+              "Piattaforma centrale dell'Agenzia delle Entrate per le fatture"
+            ],
+            [
+              "FatturaPA",
+              "Formato XML della fattura elettronica italiana"
+            ],
+            [
+              "Peppol",
+              "Rete europea di scambio basata su access point"
+            ],
+            [
+              "NSO",
+              "Canale per gli ordini elettronici degli enti del SSN"
+            ],
+            [
+              "AgID",
+              "Agenzia che funge da Peppol Authority italiana"
+            ]
+          ],
+          "exp": "SDI e FatturaPA riguardano le fatture; Peppol, NSO e AgID riguardano gli ordini e la rete europea. Per chi vende alla sanità pubblica i due piani convivono.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la risposta sui canali di fatturazione del gruppo?",
+          "ctx": {
+            "who": "CFO, gruppo farmaceutico",
+            "say": "Esportiamo in Europa e abbiamo canali di fatturazione diversi in ogni Paese."
+          },
+          "o": [
+            "Mappiamo i requisiti per Paese e valutiamo una compliance unificata; SDI per l'Italia",
+            "Peppol sostituisce l'SDI in Italia, quindi conviene una sola rete per i Paesi UE",
+            "L'e-invoicing non riguarda l'export: basta il canale italiano per le vendite estere",
+            "Aspettiamo il 2030 per intervenire: fino ad allora i requisiti locali non cambiano"
+          ],
+          "a": 0,
+          "exp": "Ogni Paese ha requisiti propri, alcuni già in vigore: serve una strategia unica con configurazioni locali. L'SDI resta il canale domestico italiano.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l12",
+      "title": "ViDA e Peppol in Europa",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "ViDA (VAT in the Digital Age) è la riforma IVA UE, contenuta nella {{w06.vida_reference}}.",
+          "Date chiave: e-fattura strutturata e reporting digitale per le operazioni B2B intra-UE dal {{w06.vida_b2b_date}}; i sistemi nazionali preesistenti, come l'SDI, vanno allineati entro il {{w06.vida_legacy_date}}.",
+          "EN 16931 è lo standard europeo del modello semantico della fattura elettronica: serve all'interoperabilità tra Paesi.",
+          "Reporting digitale: non solo la fattura, ma i dati delle transazioni trasmessi alle autorità fiscali in tempi molto più rapidi, per ridurre frodi e ritardi.",
+          "Attenzione alle date: la Commissione può proporre rinvii dopo la valutazione intermedia. Riverifica prima di promettere scadenze al cliente."
+        ],
+        "ae": "Non vendere paura: per l'Italia il 2030 non è una rivoluzione, perché l'SDI esiste già. Il tema è la coerenza multi-Paese e il reporting."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Da quando ViDA prevede l'e-fattura strutturata EN 16931 per le operazioni B2B intra-UE?",
+          "o": [
+            "{{w06.vida_b2b_date}}",
+            "1° gennaio 2026",
+            "1° luglio 2027",
+            "1° gennaio 2035"
+          ],
+          "a": 0,
+          "exp": "La data è {{w06.vida_b2b_date}}. Il 2035 è invece il termine per allineare i sistemi nazionali preesistenti, non per l'obbligo intra-UE.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Entro quando i sistemi nazionali preesistenti, come lo SDI, devono allinearsi al modello ViDA?",
+          "o": [
+            "{{w06.vida_legacy_date}}",
+            "31 dicembre 2027",
+            "1° luglio 2030",
+            "1° gennaio 2026"
+          ],
+          "a": 0,
+          "exp": "L'allineamento dei sistemi preesistenti è previsto entro il {{w06.vida_legacy_date}}. Il 31 dicembre 2027 è la data della deroga UE per l'SDI, non il termine di ViDA.",
+          "diff": 3
+        },
+        {
+          "t": "tf",
+          "q": "ViDA elimina l'obbligo di fattura elettronica in Italia perché lo SDI è già un sistema nazionale.",
+          "a": false,
+          "exp": "L'obbligo non sparisce: i sistemi nazionali come l'SDI devono allinearsi al modello ViDA. Per l'Italia il cambiamento è un adeguamento, non una novità.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi fanno parte della direzione indicata da ViDA?",
+          "o": [
+            "Fattura strutturata EN 16931 per le operazioni B2B intra-UE",
+            "Reporting digitale dei dati di transazione alle autorità",
+            "Allineamento dei sistemi nazionali preesistenti",
+            "Ritorno alla fattura cartacea per gli importi piccoli",
+            "Divieto di usare reti di scambio come Peppol"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "ViDA spinge su formato strutturato, reporting digitale e allineamento dei sistemi nazionali. Non reintroduce la carta e non vieta Peppol.",
+          "diff": 3
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la risposta al CFO con filiali in più Paesi UE?",
+          "ctx": {
+            "who": "CFO, gruppo di beni di consumo",
+            "say": "Abbiamo filiali in cinque Paesi UE. Dobbiamo seguire cinque progetti e-invoicing diversi?"
+          },
+          "o": [
+            "Una strategia unica di compliance e-invoicing, con i requisiti locali come configurazioni",
+            "Un progetto separato per Paese, senza coordinamento, perché i requisiti sono diversi",
+            "Nessun progetto: ViDA ha unificato i requisiti e non esistono più regole locali",
+            "Aspettare il 2035 per iniziare, perché fino ad allora i requisiti non cambiano"
+          ],
+          "a": 0,
+          "exp": "Un'architettura comune con configurazioni locali evita di rifare il lavoro Paese per Paese. ViDA non ha cancellato le regole locali e diversi Paesi hanno già obblighi attivi.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l13",
+      "title": "Roleplay: CSRD dopo Omnibus",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Omnibus I ha ridotto molto il perimetro della CSRD: {{w06.csrd_omnibus_directive}}. Imprese UE in perimetro: {{w06.csrd_scope}}.",
+          "Per le imprese che entrano nel nuovo perimetro la rendicontazione riguarda gli {{w06.csrd_first_year}}.",
+          "Stop-the-clock 2025: {{w06.csrd_stop_clock}}.",
+          "Stato in Italia (da riverificare): {{w06.csrd_italy_status}}.",
+          "Catena del valore: le imprese con meno di 1.000 dipendenti, se un cliente più grande chiede dati ESG, possono rifiutare informazioni oltre lo standard volontario per le PMI (VSME)."
+        ],
+        "ae": "Non spegnere la conversazione: meno obblighi non significa niente dati ESG. Banche, clienti e standard volontari li chiedono ancora. Chiedi come raccolgono oggi i dati e con che audit trail."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CFO sull'effetto dell'Omnibus?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Con l'Omnibus la CSRD non ci riguarda più, giusto?"
+          },
+          "o": [
+            "Dipende dal perimetro: verifichiamo soglie e gruppo, e le richieste di banche e clienti",
+            "Giusto: dopo Omnibus I le imprese italiane sono uscite dal perimetro",
+            "Cambia la scadenza, ma il perimetro resta quello originario della CSRD",
+            "Dovete rendicontare comunque dal 2025, perché l'Omnibus non cambia le scadenze"
+          ],
+          "a": 0,
+          "exp": "Il perimetro si è ridotto, ma ogni gruppo va verificato su soglie e struttura. Le richieste di banche e clienti possono restare anche fuori dal perimetro.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Quali sono le soglie cumulative per le imprese UE dopo Omnibus I?",
+          "o": [
+            "{{w06.csrd_scope}}",
+            "più di 250 dipendenti e più di 50 milioni di euro di fatturato netto (entrambe le soglie)",
+            "più di 500 dipendenti e più di 150 milioni di euro di fatturato netto (entrambe le soglie)",
+            "più di 5.000 dipendenti e più di 1,5 miliardi di euro di fatturato netto (entrambe)"
+          ],
+          "a": 0,
+          "exp": "Le soglie sono {{w06.csrd_scope}}. I valori di 250 dipendenti e 50 milioni richiamano le vecchie soglie dimensionali, mentre 5.000 dipendenti e 1,5 miliardi sono quelle della direttiva sulla due diligence (CSDDD).",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Dopo Omnibus I un'impresa con meno di 1.000 dipendenti può rifiutare richieste di dati ESG oltre lo standard volontario per le PMI.",
+          "ctx": {
+            "who": "Fornitore PMI",
+            "say": "Un grande cliente ci chiede decine di datapoint ESG: dobbiamo rispondere a tutto?"
+          },
+          "a": true,
+          "exp": "Il tetto alle richieste lungo la catena del valore protegge le imprese più piccole: possono limitarsi allo standard volontario per le PMI. Un cliente grande non può imporre l'intero ESRS.",
+          "diff": 3
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi alla responsabile sostenibilità sul destino dei dati ESG?",
+          "ctx": {
+            "who": "Head of Sustainability",
+            "say": "Se usciamo dal perimetro possiamo smettere di raccogliere i dati?"
+          },
+          "o": [
+            "Potete ridurre l'ambito, ma banche e clienti chiedono dati: serve una base governata",
+            "Sì, potete fermare la raccolta: senza obbligo di legge i dati ESG non servono più",
+            "No, dovete comunque pubblicare il report completo secondo gli standard ESRS originali",
+            "Sì, ma conviene conservare i dati in fogli Excel separati, senza un processo comune"
+          ],
+          "a": 0,
+          "exp": "Fuori perimetro non c'è l'obbligo di report completo, ma investitori, banche e clienti possono chiedere dati. Una base governata costa meno di rincorrere ogni richiesta.",
+          "diff": 2
+        },
+        {
+          "t": "order",
+          "q": "Ordina una discovery sul tema CSRD ed ESG",
+          "items": [
+            "Verificare se e quando l'azienda rientra nel perimetro",
+            "Mappare dati ESG, fonti e responsabili",
+            "Valutare qualità, tracciabilità e controlli sui dati",
+            "Capire le richieste di clienti, banche e catena del valore",
+            "Concordare un passo successivo proporzionato"
+          ],
+          "exp": "Prima il perimetro, poi i dati, poi la qualità, poi la pressione esterna. Il passo successivo deve essere proporzionato alla situazione del cliente.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l14",
+      "title": "AI per CFO e Procurement",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Finance (Sapphire 2026): {{w06.autonomous_finance}}.",
+          "Casi d'uso finance concreti: coordinamento della chiusura, riconciliazione intercompany, proposte di accrual, riconciliazione bancaria e previsione della liquidità, gestione dei crediti.",
+          "Spesa: {{w06.autonomous_spend}}.",
+          "Casi d'uso procurement: intake delle richieste d'acquisto, redazione di contratti da linguaggio naturale, valutazione dei fornitori, classificazione della spesa, working capital.",
+          "Governance: l'AI in finance richiede controllo, con approvazione umana, audit trail, ruoli e dati affidabili. Senza questi la risposta del CFO sarà «interessante, ma come lo certifico?»."
+        ],
+        "ae": "Evita promesse di risparmio in percentuale: chiedi quale processo ripetitivo brucia più ore (riconciliazioni, matching, solleciti) e proponi un pilot con una metrica."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina l'agente o assistente al suo compito",
+          "pairs": [
+            [
+              "Financial Closing Assistant",
+              "Coordina agenti su accruals, intercompany ed errori di chiusura"
+            ],
+            [
+              "Cash Management Agent",
+              "Analizza gli estratti conto e segnala carenze o eccedenze di cassa"
+            ],
+            [
+              "Ariba Intake Management",
+              "Raccoglie e instrada le richieste d'acquisto"
+            ],
+            [
+              "Spend Analysis and Insights",
+              "Unifica e classifica la spesa di più sistemi"
+            ],
+            [
+              "Working Capital Agent (Taulia)",
+              "Analizza la posizione di working capital e propone azioni"
+            ]
+          ],
+          "exp": "Sono esempi presentati da SAP nel 2026 per finance e spesa. Non promettere date: lo stato di rilascio varia per componente e va verificato.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono casi d'uso AI realistici per il procurement?",
+          "o": [
+            "Instradare le richieste d'acquisto verso il processo corretto",
+            "Redigere bozze di contratto da istruzioni in linguaggio naturale",
+            "Classificare la spesa secondo una tassonomia come UNSPSC",
+            "Approvare pagamenti senza alcun controllo umano",
+            "Eliminare la necessità di avere contratti con i fornitori"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Intake, contratti e classificazione sono casi concreti presentati da SAP. Approvare pagamenti senza controllo o eliminare i contratti non è né realistico né desiderabile.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Per il CFO l'AI nei processi finanziari non richiede audit trail né approvazione umana, perché l'automazione è affidabile.",
+          "a": false,
+          "exp": "In finance servono tracciabilità e responsabilità: l'agente propone e coordina, l'approvazione e l'audit trail restano. È anche la domanda che un CFO farà subito.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è il modo migliore di proporre l'AI a un CFO?",
+          "o": [
+            "Partire da un processo ripetitivo ad alto volume, con una metrica chiara e un pilot",
+            "Promettere una riduzione fissa dei costi in percentuale, da inserire nel business case",
+            "Mostrare il catalogo completo degli agenti disponibili e lasciare la scelta al cliente",
+            "Presentare i benefici e rimandare il tema dei controlli a dopo la firma"
+          ],
+          "a": 0,
+          "exp": "Un pilot su un processo ripetitivo e misurabile dimostra valore e prepara l'estensione. Percentuali promesse, cataloghi senza focus e controlli rimandati indeboliscono la proposta.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi alla domanda sulla revisione?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Mi dite che gli agenti chiudono i conti da soli. E la revisione?"
+          },
+          "o": [
+            "Gli agenti propongono; l'approvazione resta umana, con audit trail",
+            "Con gli agenti la revisione non serve più, perché le registrazioni sono automatiche",
+            "Gli agenti sono black box: meglio non usarli finché la normativa non li regola",
+            "Dipende dal revisore: conviene non affrontare il tema finché non ne parla lui"
+          ],
+          "a": 0,
+          "exp": "Rispondere sui controlli prima che li chieda il CFO rafforza la credibilità. Gli agenti supportano il processo, ma ruoli, approvazioni e tracciabilità restano responsabilità dell'azienda.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w06-l15",
+      "title": "Boss: il tavolo del CFO",
+      "kind": "boss",
+      "lesson": {
+        "points": [
+          "KPI del CFO: DSO, DPO, working capital, giorni di chiusura. Prima i numeri del cliente, poi la funzione SAP: Universal Journal, Advanced Financial Closing, Group Reporting, Cash Management.",
+          "Spesa: Ariba per source-to-pay, Business Network per lo scambio con i fornitori, Fieldglass per la forza lavoro esterna, Concur per viaggi e spese, Taulia per il working capital.",
+          "Italia ed Europa: SDI come canale domestico, ViDA come direzione europea, Peppol come rete di scambio. CSRD dopo Omnibus: perimetro ristretto, ma richieste di dati ancora presenti.",
+          "AI in finance e procurement: casi d'uso concreti con pilot, metriche e controlli. Nessuna promessa senza dati."
+        ]
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la proposta più efficace per questo CFO?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Il mio team passa una settimana a riconciliare e consolidare. Cosa mi proponi?"
+          },
+          "o": [
+            "Misuriamo i giorni di chiusura e dove si riconcilia a mano, poi vediamo come ridurli",
+            "Un nuovo ERP per le società del gruppo: la chiusura veloce arriva con la migrazione",
+            "Aggiungere persone al team nelle settimane di chiusura per smaltire il carico",
+            "Spostare il consolidato a un fornitore esterno, che lo gestirà nei tempi richiesti"
+          ],
+          "a": 0,
+          "exp": "Prima si misura e si capisce dove si perde tempo, poi si collega al Universal Journal, a Advanced Financial Closing e a Group Reporting. Le altre risposte spostano il problema senza risolverlo.",
+          "diff": 2
+        },
+        {
+          "t": "bucket",
+          "q": "Chi se ne occupa di più: il CFO o il Procurement?",
+          "buckets": [
+            "Finance (CFO)",
+            "Procurement e spesa"
+          ],
+          "items": [
+            [
+              "DSO e giorni di chiusura",
+              0
+            ],
+            [
+              "Maverick spend e tail spend",
+              1
+            ],
+            [
+              "Consolidamento di gruppo",
+              0
+            ],
+            [
+              "Gestione dei lavoratori a contratto",
+              1
+            ],
+            [
+              "Previsione di cassa",
+              0
+            ],
+            [
+              "Sourcing e contratti con i fornitori",
+              1
+            ]
+          ],
+          "exp": "Il CFO guarda a chiusura, consolidato e cassa; il Procurement a spesa, fornitori e contratti. Il working capital è il punto di incontro dei due mondi.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Quale affermazione su SDI e ViDA è corretta?",
+          "o": [
+            "L'SDI resta il canale domestico, ma va allineato a ViDA entro il {{w06.vida_legacy_date}}",
+            "L'SDI viene sostituito da Peppol entro il 2030 per le fatture domestiche",
+            "ViDA vieta ai Paesi con sistemi di clearance di mantenerli oltre il 2030",
+            "ViDA non riguarda l'Italia, perché l'e-fattura nazionale esiste dal 2019"
+          ],
+          "a": 0,
+          "exp": "ViDA chiede l'allineamento dei sistemi nazionali preesistenti entro il {{w06.vida_legacy_date}}. L'SDI non sparisce e Peppol non lo sostituisce per le fatture domestiche.",
+          "diff": 3
+        },
+        {
+          "t": "tf",
+          "q": "Dopo Omnibus I il perimetro CSRD per le imprese UE richiede il rispetto di entrambe le soglie, dipendenti e fatturato.",
+          "a": true,
+          "exp": "Il perimetro è: {{w06.csrd_scope}}. Se una sola soglia è superata, l'impresa non rientra automaticamente.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Da dove parti con il CPO che non vede la spesa?",
+          "ctx": {
+            "who": "CPO",
+            "say": "Voglio ridurre il maverick spend ma non vedo la spesa."
+          },
+          "o": [
+            "Spend analysis con classificazione, poi acquisti guidati e contratti sulle categorie",
+            "Bloccare gli acquisti fuori contratto da subito, prima di avere i dati di spesa",
+            "Introdurre sanzioni per i richiedenti che acquistano fuori processo",
+            "Ridurre il numero di categorie di spesa per semplificare il controllo"
+          ],
+          "a": 0,
+          "exp": "Senza visibilità non si sa dove nasce il maverick spend. La classificazione della spesa precede le leve (acquisti guidati, contratti sulle categorie).",
+          "diff": 2
+        },
+        {
+          "t": "order",
+          "q": "Ordina un percorso credibile per introdurre l'AI con un CFO",
+          "items": [
+            "Individua un processo ripetitivo ad alto volume",
+            "Verifica qualità dei dati e responsabilità",
+            "Definisci metrica e controlli (approvazione, audit trail)",
+            "Avvia un pilot circoscritto",
+            "Misura e decidi se estendere"
+          ],
+          "exp": "Dati affidabili e controlli precedono il pilot. La misura finale decide se scalare, senza promettere risultati prima.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "SAP Taulia lavora sul working capital offrendo ai fornitori il pagamento ___ rispetto alla scadenza.",
+          "o": [
+            "anticipato",
+            "posticipato",
+            "annullato",
+            "frazionato"
+          ],
+          "a": 0,
+          "exp": "Il pagamento anticipato (spesso con sconto) è il cuore di dynamic discounting e supply chain finance: il fornitore incassa prima, l'acquirente ottiene un vantaggio.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali domande di discovery sono adatte a un CFO?",
+          "o": [
+            "Quanti giorni lavorativi servono oggi per chiudere i conti?",
+            "Dove si riconcilia ancora a mano tra sistemi?",
+            "Quanto è affidabile e tempestiva la previsione di cassa?",
+            "Quanti server fisici avete nel data center?",
+            "Quale versione di ABAP usano i vostri sviluppatori?"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Chiusura, riconciliazioni e previsione di cassa sono temi da CFO. Server e versioni ABAP sono domande da CIO e non aprono il dialogo sul valore finanziario.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la risposta al direttore amministrativo?",
+          "ctx": {
+            "who": "Direttore Amministrativo, pharma",
+            "say": "Vendiamo a ASL e ospedali: ordini e fatture passano da canali diversi, è un caos."
+          },
+          "o": [
+            "Mappiamo i flussi: fatture via SDI, ordini SSN via NSO, poi li gestiamo in modo integrato",
+            "Peppol sostituisce l'SDI per le fatture alla PA, quindi si usa un solo canale",
+            "Gli ordini elettronici non riguardano il SSN: basta gestire le fatture via SDI",
+            "Conviene inviare PDF via email agli ospedali per evitare i vincoli dei canali"
+          ],
+          "a": 0,
+          "exp": "Le fatture passano dall'SDI e gli ordini elettronici degli enti del SSN dal NSO. Mappare i flussi e integrarli nel processo è il primo passo. Un PDF via email non è una fattura valida.",
+          "diff": 3
+        }
+      ]
+    }
+  ]
+}
