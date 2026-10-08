@@ -1,0 +1,200 @@
+{
+  "w13.gartner_mq_cloud_erp_2025": {
+    "label": "Gartner Magic Quadrant Cloud ERP for Product-Centric Enterprises, edizione 2025",
+    "value": "Edizione del 13 ottobre 2025 del Magic Quadrant for Cloud ERP for Product-Centric Enterprises: SAP la cita come Leader per SAP Cloud ERP; Oracle riporta un posizionamento Leader nella stessa edizione e sintesi di terzi indicano Leader anche Epicor, IFS, Infor e Microsoft. Le edizioni passate sono uscite tra ottobre e novembre.",
+    "asOf": "2025-10-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-11-30",
+    "source": "https://www.sap.com/cmp/dg/gartner-mq-for-product-centric-erp/index.html",
+    "confidence": "secondary",
+    "note": "Report completo a pagamento, non consultato: l'elenco dei Leader non-SAP viene da pagine Oracle e sintesi di terzi. Una nuova edizione potrebbe uscire a ottobre/novembre 2026: riverificare."
+  },
+  "w13.idc_marketscape_midsize_erp_2024": {
+    "label": "IDC MarketScape ERP cloud per la media impresa, edizione 2024",
+    "value": "SAP ha annunciato di essere Leader nell'IDC MarketScape Worldwide SaaS and Cloud-Enabled Medium-Sized Business ERP Applications (vendor assessment 2024, annunciato a luglio 2024).",
+    "asOf": "2024-07-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2024/07/sap-a-leader-idc-marketscape-worldwide-saas-and-cloud-enabled-medium-sized-business-erp-applications/",
+    "confidence": "primary",
+    "note": "Giorno esatto non verificato (luglio 2024 dall'URL del comunicato). Non è stata trovata una edizione IDC ERP più recente: va citata con l'anno 2024."
+  },
+  "w13.forrester_wave_erp_2024": {
+    "label": "Forrester Wave ERP: ultime edizioni verificate",
+    "value": "Le ultime edizioni verificate sono le due Forrester Wave sull'Enterprise Resource Planning, per industrie product-centric e per industrie service-centric, pubblicate nel secondo trimestre 2024; non è stata trovata una edizione 2026. Il posizionamento dei singoli vendor è nel report a pagamento.",
+    "asOf": "2024-06-04",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.forrester.com/blogs/two-erp-waves-now-live-the-forrester-wave-enterprise-resource-planning-solutions-for-product-centric-industries-and-for-service-centric-industries-q2-2024",
+    "confidence": "primary",
+    "note": "Esistono blog di terzi che parlano di una 'Forrester Wave ERP 2026': non sono pubblicazioni Forrester e non vanno citati come tali."
+  },
+  "w13.gartner_usage_policy": {
+    "label": "Policy Gartner sull'uso esterno dei contenuti",
+    "value": "Secondo la policy Gartner, condividere contenuti Gartner fuori dalla propria azienda richiede in genere un'approvazione scritta o una licenza di reprint; l'uso interno va etichettato «For internal use only». Gartner può cambiare la policy senza preavviso.",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.gartner.com/en/about/policies/research-docsex",
+    "confidence": "secondary",
+    "note": "Pagina letta tramite sintesi di ricerca: rileggere la policy corrente (e le regole SAP sui reprint) prima di condividere un contenuto Gartner con un cliente."
+  },
+  "w13.oracle_fusion_agents": {
+    "label": "Oracle: agenti AI in Fusion Cloud Applications",
+    "value": "Oracle ha presentato agenti AI dentro Fusion Cloud Applications a Oracle AI World (ottobre 2025) e li ha ampliati nel 2026; per gli agenti supply chain di febbraio 2026 Oracle dichiara l'esecuzione su OCI senza costi aggiuntivi per i clienti Fusion esistenti.",
+    "asOf": "2026-02-10",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-11-15",
+    "source": "https://www.nasdaq.com/articles/oracle-unveils-ai-agents-fusion-apps-will-it-boost-prospects",
+    "confidence": "secondary",
+    "note": "Dichiarazioni di Oracle riportate da stampa e analisti, non da un comunicato letto direttamente. Oracle AI World 2026 potrebbe portare nuovi annunci: riverificare i termini attuali."
+  },
+  "w13.oracle_analyst_summit_forrester": {
+    "label": "Oracle: lettura di Forrester sull'Applications Analyst Summit (aprile 2026)",
+    "value": "Nel commento di Forrester all'Applications Analyst Summit di Oracle (aprile 2026), Oracle passa da agenti generici ad applicazioni agentiche pacchettizzate; secondo Forrester, Oracle afferma che il futuro agentico è costruito per Fusion SaaS e non per E-Business Suite, JD Edwards, PeopleSoft o Hyperion.",
+    "asOf": "2026-04-30",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.forrester.com/blogs/oracle-applications-analyst-summit-fusion-agents-are-shifting-from-assist-to-decide/",
+    "confidence": "secondary",
+    "note": "Interpretazione di un analista di dichiarazioni di Oracle; data esatta del post non verificata (summit di aprile 2026). Da citare con fonte, mai come posizione ufficiale di Oracle."
+  },
+  "w13.microsoft_dynamics_roadmap": {
+    "label": "Microsoft Dynamics 365: roadmap e funzioni agentiche (fonti di terzi)",
+    "value": "Secondo ERP Today, da settembre 2026 Microsoft passa dalle release wave semestrali di Dynamics 365 a una roadmap continua; altre fonti partner descrivono ancora un Wave 2 (ottobre 2026-marzo 2027). Le funzioni agentiche di Finance e Supply Chain sono descritte da fonti partner come a consumo e in parte in preview.",
+    "asOf": "2026-09-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-11-15",
+    "source": "https://erp.today/microsoft-dynamics-365-release-waves-continuous-roadmap/",
+    "confidence": "low",
+    "note": "Fonti discordanti e non Microsoft (le pagine Microsoft Learn non erano consultabili). Verificare sulla documentazione ufficiale Microsoft prima di citarlo a un cliente."
+  },
+  "w13.workday_rising_2026": {
+    "label": "Workday Rising 2026",
+    "value": "12-15 ottobre 2026 a Las Vegas, con focus su HR e Finance agentici e oltre 400 sessioni.",
+    "asOf": "2026-07-21",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-16",
+    "source": "https://investor.workday.com/news-and-events/press-releases/news-details/2026/Workday-Announces-Rising-2026-Where-Agentic-HR-and-Agentic-Finance-Take-Center-Stage-October-12-15-in-Las-Vegas/default.aspx",
+    "confidence": "primary"
+  },
+  "w13.workday_ai_acquisitions": {
+    "label": "Workday: acquisizioni per AI e agenti",
+    "value": "Workday ha acquisito Paradox (recruiting conversazionale, chiusa il 1° ottobre 2025), Sana (ricerca, agenti e learning, chiusa a novembre 2025 per circa 1 miliardo di dollari secondo il filing 10-Q) e Pipedream (connettori per far operare gli agenti su app esterne, chiusa entro l'inizio del 2026).",
+    "asOf": "2026-02-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.sec.gov/Archives/edgar/data/1327811/000132781125000198/wday-20251031.htm",
+    "confidence": "secondary",
+    "note": "Fonti miste (10-Q per Sana, sito Workday e tracker di terzi per Paradox e Pipedream). Importo di Sana riportato tra 1,0 e 1,1 miliardi di dollari."
+  },
+  "w13.salesforce_agentforce_q2fy27": {
+    "label": "Salesforce: Agentforce ARR nel Q2 dell'esercizio 2027",
+    "value": "Nel Q2 dell'esercizio fiscale 2027 (risultati del 26 agosto 2026) Salesforce riporta un ARR di Agentforce superiore a 1,5 miliardi di dollari (+240% annuo) e, insieme a Data 360, di circa 3,9 miliardi; dal trimestre la definizione include più offerte AI, quindi il dato non è confrontabile con i trimestri precedenti.",
+    "asOf": "2026-08-26",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-05",
+    "source": "https://investor.salesforce.com/news/news-details/2026/Salesforce-Delivers-Record-Second-Quarter-Fiscal-2027-Results/default.aspx",
+    "confidence": "secondary",
+    "note": "Cifre lette in sintesi del comunicato (stampa e analisti); il comunicato ufficiale non è stato aperto. Il Q3 FY27 è atteso a fine novembre/inizio dicembre 2026."
+  },
+  "w13.servicenow_acquisitions": {
+    "label": "ServiceNow: acquisizioni Moveworks e Armis",
+    "value": "ServiceNow ha chiuso l'acquisizione di Moveworks il 15 dicembre 2025 (circa 2,85 miliardi di dollari) e quella di Armis il 20 aprile 2026 (circa 7,75 miliardi di dollari).",
+    "asOf": "2026-04-20",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.verdict.co.uk/servicenow-completes-armis-deal/",
+    "confidence": "secondary",
+    "note": "Una fonte riporta per Armis 7,6 miliardi di dollari. ServiceNow ha chiuso anche Veza a marzo 2026 (non usata nei contenuti)."
+  },
+  "w13.veeva_vault_crm": {
+    "label": "Veeva: Vault CRM e migrazione dalla piattaforma Salesforce",
+    "value": "Veeva sta portando la propria offerta CRM per le life sciences sulla piattaforma proprietaria Vault CRM e migrando la base clienti dal CRM basato su piattaforma Salesforce; le date di fine supporto della versione precedente sono riportate in modo discordante (2029 o 2030).",
+    "asOf": "2026-03-04",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.nasdaq.com/articles/veeva-systems-lifts-outlook-crm-wins",
+    "confidence": "low",
+    "note": "Fonti secondarie, in parte di una società che vende servizi di migrazione. Il comunicato Veeva non era raggiungibile: riverificare su earnings e comunicati ufficiali Veeva."
+  },
+  "w13.rimini_2040": {
+    "label": "Rimini Street: supporto SAP ECC fino al 2040 (dichiarazione del fornitore)",
+    "value": "Rimini Street dichiara di offrire supporto per SAP ECC 6.0 fino al 2040 (annuncio di giugno 2025, ribadito in una scheda tecnica di febbraio 2026): è una dichiarazione del fornitore terzo, non una data di SAP.",
+    "asOf": "2025-06-20",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.theregister.com/2025/06/20/rimini_street_sap_ecc/",
+    "confidence": "secondary",
+    "note": "Fonte: stampa di settore; la scheda tecnica Rimini del febbraio 2026 è citata nei risultati. Nessun dato verificato su Spinnaker Support oltre al fatto che offre supporto terzi SAP."
+  },
+  "w13.infor_koch": {
+    "label": "Infor: proprietà e offerta",
+    "value": "Infor è controllata da Koch Industries, che ne ha rilevato il controllo completo nel 2020, e propone suite cloud per industria (CloudSuite).",
+    "asOf": "2020-06-30",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.computing.co.uk/news/3085261/koch-buys-infor",
+    "confidence": "secondary",
+    "note": "Data esatta dell'operazione non verificata (anno 2020). Infor è citata tra i Leader nelle edizioni 2023-2025 del Magic Quadrant cloud ERP product-centric secondo vendor e sintesi di terzi."
+  },
+  "w13.ifs_nexus_black": {
+    "label": "IFS Nexus Black",
+    "value": "IFS ha lanciato Nexus Black il 23 aprile 2025: un programma di innovazione per accelerare l'adozione di AI industriale, costruito sulle basi di IFS.ai.",
+    "asOf": "2025-04-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.ifs.com/en/insights/news/ifs-launches-nexus-black",
+    "confidence": "primary"
+  },
+  "w13.odoo_profile": {
+    "label": "Odoo: profilo e dati di mercato",
+    "value": "Odoo (Belgio) è un ERP modulare con un'edizione Community open source e una Enterprise a pagamento; secondo Forbes Belgio ha chiuso il 2025 con circa 620 milioni di euro di ricavi e ne prevede circa 900 milioni nel 2026; a gennaio 2026 una transazione secondaria ha dato liquidità agli azionisti, con valutazioni stimate tra 7 e 8 miliardi.",
+    "asOf": "2026-01-16",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.forbes.be/nl/odoo-is-10-miljard-euro-waard-en-mikt-op-10-000-medewerkers/",
+    "confidence": "low",
+    "note": "Ricavi da una sola fonte di stampa; valutazioni da aggregatori e molto variabili (stime). La distinzione Community/Enterprise è informazione generale non confermata dai risultati di ricerca."
+  },
+  "w13.teamsystem_profile": {
+    "label": "TeamSystem: profilo e operazioni",
+    "value": "TeamSystem (gestionali italiani per PMI e studi professionali) indica ricavi di gruppo di circa 851 milioni di euro nel 2023 e oltre 2 milioni di clienti (presentazione di maggio 2025); ad aprile 2026 la stampa riporta l'acquisizione della francese ACD.",
+    "asOf": "2026-04-10",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.este.it/wp-content/uploads/2025/06/Presentazione-TeamSystem-ESTE-23-06-2025_2.pdf",
+    "confidence": "secondary",
+    "note": "Ricavi riferiti al 2023: controllare l'ultimo bilancio. Acquisizione ACD riportata da Tom's Hardware Italia (10 aprile 2026): https://www.tomshw.it/business/teamsystem-acd-software-europeo-linee-esterne"
+  },
+  "w13.zucchetti_profile": {
+    "label": "Zucchetti: posizionamento dichiarato",
+    "value": "Zucchetti si descrive come la prima software house italiana per fatturato: è una dichiarazione aziendale, per la quale non è stata trovata una conferma indipendente.",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://it.indeed.com/cmp/Zucchetti",
+    "confidence": "low",
+    "note": "Fonte debole (profilo aziendale su Indeed). Nessun dato di ricavi 2025/2026 né operazioni 2026 trovati: usare il bilancio depositato per cifre aggiornate."
+  },
+  "w13.clean_core_levels": {
+    "label": "SAP clean core: livelli di estensibilità A-D",
+    "value": "SAP ha evoluto il modello a tre livelli di estensibilità in quattro livelli clean core: A (estensioni conformi: API rilasciate, side-by-side su BTP o on-stack con ABAP Cloud), B (classic ABAP con API classiche stabili), C (accesso a oggetti interni SAP, rischio gestibile), D (modifiche e oggetti non raccomandati, rischio massimo).",
+    "asOf": "2025-08-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/2025/08/extend-sap-s4hana-cloud-right-way-clean-clear/",
+    "confidence": "secondary",
+    "note": "Descrizione ricavata da più sintesi (SAP News, ASUG, SAPinsider); la classificazione dei singoli oggetti è aggiornata da SAP in una nota dedicata: verificare lì prima di classificare un caso reale."
+  },
+  "w13.sap_eu_ai_cloud": {
+    "label": "SAP EU AI Cloud: opzioni di sovranità",
+    "value": "SAP EU AI Cloud (annunciato a novembre 2025) raggruppa le opzioni di sovranità di SAP: SAP Sovereign Cloud con infrastruttura in data center europei, esecuzione on-site nel data center scelto dal cliente, hyperscaler selezionati con funzioni di sovranità e Delos Cloud in Germania per il settore pubblico.",
+    "asOf": "2025-11-25",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.sap.com/products/artificial-intelligence/eu-ai-cloud.html",
+    "confidence": "secondary",
+    "note": "Dettagli delle quattro opzioni da stampa di settore. Non è stata trovata una posizione pubblica di SAP sull'applicabilità del CLOUD Act: chiedere una dichiarazione scritta a SAP Legal."
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "id": "w08",
+  "items": [
+    {
+      "t": "mcq",
+      "q": "Che cosa misura l'OEE di una linea di produzione?",
+      "o": [
+        "La quota di ordini consegnati nei tempi e nelle quantità concordati",
+        "Quota del tempo pianificato in cui la linea produce buon prodotto",
+        "Quante volte la scorta media viene rinnovata nel corso di un anno",
+        "Il costo di manutenzione rapportato al valore dell'impianto"
+      ],
+      "a": 1,
+      "diff": 1,
+      "exp": "L'OEE combina disponibilità, prestazione e qualità. La quota di ordini consegnati correttamente è l'OTIF, mentre il rinnovo della scorta è la rotazione (inventory turns)."
+    },
+    {
+      "t": "tf",
+      "q": "SAP IBP è la soluzione SAP per la pianificazione integrata di domanda, supply e S&OP.",
+      "a": true,
+      "diff": 1,
+      "exp": "IBP copre demand planning, supply planning, inventory optimization e S&OP su più orizzonti e siti. Il calcolo operativo dei fabbisogni resta in S/4HANA con MRP Live e PP/DS."
+    },
+    {
+      "t": "mcq",
+      "q": "Quale affermazione sull'incentivo italiano per gli investimenti 4.0 del 2026 è corretta?",
+      "o": [
+        "È un credito d'imposta compensabile in F24 con un tetto annuo",
+        "È un contributo a fondo perduto assegnato tramite click day",
+        "È una maggiorazione del costo ammortizzabile, non un credito",
+        "È un finanziamento agevolato erogato dal GSE alle imprese"
+      ],
+      "a": 2,
+      "diff": 2,
+      "exp": "Lo strumento in vigore: {{w08.it_incentive_regime}}. Agisce su ammortamenti e canoni di leasing, quindi giova a chi ha reddito imponibile. Il GSE gestisce le comunicazioni, non eroga finanziamenti."
+    },
+    {
+      "t": "mcq",
+      "q": "Un cliente vuole confrontare le fatture dei vettori con le tariffe contrattuali. Quale area SAP copre il tema?",
+      "o": [
+        "Gestione delle ondate di prelievo nel magazzino con EWM",
+        "Freight settlement in Transportation Management",
+        "Demand sensing e previsione di breve periodo in IBP",
+        "Decisione d'impiego del lotto nel modulo qualità"
+      ],
+      "a": 1,
+      "diff": 2,
+      "exp": "Il freight settlement in TM verifica e liquida le fatture dei vettori rispetto a ordini di trasporto e tariffe. Le altre aree riguardano magazzino, previsione e qualità."
+    },
+    {
+      "t": "mcq",
+      "q": "Quale affermazione sul registro UE dei Digital Product Passport è corretta a ottobre 2026?",
+      "o": [
+        "È un indice di identificativi e link: i dati restano presso gli operatori",
+        "Raccoglie i dati completi di sostenibilità dei prodotti venduti nell'UE",
+        "Sarà attivato nel 2027, in coincidenza con il passaporto delle batterie",
+        "Sostituisce gli atti delegati per gruppo di prodotto con un obbligo generale"
+      ],
+      "a": 0,
+      "diff": 3,
+      "exp": "Il registro è operativo dal {{w08.dpp_registry_live}} e funziona come indice. Gli obblighi per prodotto arrivano con atti delegati dedicati. Stato: {{w08.dpp_delegated}}."
+    },
+    {
+      "t": "multi",
+      "q": "Quali affermazioni sulla migrazione da SAP ME/MII a Digital Manufacturing sono prudenti?",
+      "o": [
+        "Richiede di ridisegnare workflow, integrazioni e connettività di linea",
+        "Le date di fine manutenzione vanno verificate nel contratto e nella roadmap SAP",
+        "Conviene pianificarla a ondate partendo da un sito pilota",
+        "È un semplice upgrade tecnico che non coinvolge gli stabilimenti",
+        "I vecchi MES restano supportati a tempo indefinito"
+      ],
+      "a": [0, 1, 2],
+      "diff": 3,
+      "exp": "Il passaggio è una riprogettazione, con date da verificare e un approccio a ondate. Presentarlo come upgrade o promettere supporto illimitato è l'errore da evitare: {{w08.me_mii_sunset}}."
+    }
+  ]
+}

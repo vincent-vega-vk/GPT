@@ -5,9 +5,9 @@
    "t": "fill",
    "q": "SAP Commerce Cloud serve soprattutto a gestire ___.",
    "o": [
-    "l'e-commerce B2B e B2C",
-    "la contabilità generale",
-    "le buste paga dei dipendenti"
+    "la vendita online B2B e B2C",
+    "la gestione del personale",
+    "il bilancio consolidato di gruppo"
    ],
    "a": 0,
    "exp": "Commerce Cloud è la piattaforma di vendita online (B2B e B2C) del portafoglio CX. Contabilità e paghe appartengono rispettivamente a finanza ed HR.",
@@ -26,7 +26,7 @@
    "o": [
     "First Contact Resolution",
     "Accuratezza del forecast",
-    "Ritorno delle campagne (ROAS)",
+    "Ritorno delle campagne",
     "Copertura della pipeline"
    ],
    "a": 0,
@@ -56,7 +56,7 @@
    "q": "Quale frase NON andrebbe detta a un cliente sulle novità AI di Autonomous CX?",
    "o": [
     "Tutti gli assistenti sono già disponibili ovunque con la stessa licenza",
-    "Gli assistenti coordinano più agenti su un obiettivo",
+    "Gli assistenti coordinano più agenti su un obiettivo comune",
     "La disponibilità dei singoli assistenti va verificata caso per caso",
     "L'AI richiede dati puliti e consenso per funzionare bene"
    ],
@@ -73,9 +73,9 @@
    },
    "o": [
     "SAP Commerce Cloud, cloud ERP edition",
-    "SAP Commerce on-premise release 2205",
-    "SAP Customer Data Cloud",
-    "SAP Cloud for Customer"
+    "SAP Commerce on-premise, release 2205 attuale",
+    "SAP Customer Data Cloud con consenso e identità",
+    "SAP Cloud for Customer, versione V1 storica"
    ],
    "a": 0,
    "exp": "{{w09.commerce_cloud_erp_edition}}. L'on-premise 2205 è fuori manutenzione standard, mentre Customer Data Cloud e Cloud for Customer sono prodotti di altro tipo.",

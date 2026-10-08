@@ -1,0 +1,1508 @@
+{
+  "id": "w07",
+  "levels": [
+    {
+      "id": "w07-l01",
+      "title": "Parla come un CHRO",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Il CHRO risponde a tre pressioni: costo del lavoro, talenti scarsi (attrarli e trattenerli) e rischio/compliance. Parla di persone e di risultati di business, non di moduli software.",
+          "KPI tipici: turnover (volontario e non), time-to-hire, engagement, costo per assunzione, copertura dei piani di successione e delle skill critiche. Chiedi sempre come li misura oggi e con quali dati.",
+          "Pain point ricorrenti: dati HR sparsi in più sistemi, processi manuali (onboarding, cambi contrattuali), payroll scollegato dal Core HR, difficoltà a capire dove sono le competenze.",
+          "Il CHRO raramente compra da solo: coinvolgi il CFO (costo del lavoro, headcount) e il CIO (integrazioni, sicurezza, dati personali). La vendita HR è quasi sempre congiunta."
+        ],
+        "ae": "Apri con il risultato che il CHRO deve consegnare quest'anno (retention, riorganizzazione, integrazione post-M&A), non con la demo di Employee Central."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CHRO ti descrive un problema di competenze introvabili. Qual è la prima mossa migliore?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Perdiamo tecnici di processo e, quando serve una persona specifica, non so nemmeno chi in azienda abbia quella competenza."
+          },
+          "o": [
+            "Suggerire un piano di assunzioni esterne per coprire subito le posizioni scoperte",
+            "Chiedere come mappano oggi le competenze e quanto ci mettono a trovare una persona",
+            "Proporre una demo di Employee Central per mostrare organigramma e anagrafiche",
+            "Spiegare che la retention dipende soprattutto da stipendi e benefit competitivi"
+          ],
+          "a": 1,
+          "diff": 1,
+          "exp": "Il CHRO ha descritto un problema di visibilità sulle competenze, non di software. Una domanda aperta su come lo gestisce oggi ne quantifica il costo e prepara il tema skills, prima di qualsiasi demo."
+        },
+        {
+          "t": "multi",
+          "q": "Quali di questi sono KPI tipici del mondo CHRO?",
+          "o": [
+            "Turnover volontario e retention dei ruoli critici",
+            "Time-to-hire",
+            "Copertura dei piani di successione",
+            "OEE di linea",
+            "Giorni di incasso dei crediti (DSO)"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 1,
+          "exp": "Turnover, time-to-hire e successione sono metriche di persone. L'OEE appartiene a operations e il DSO alla finanza: riconoscere il linguaggio dell'interlocutore evita figuracce."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il KPI HR a ciò che misura",
+          "pairs": [
+            [
+              "Time-to-hire",
+              "Tempo necessario per coprire una posizione aperta"
+            ],
+            [
+              "Turnover",
+              "Uscite di personale rispetto all'organico medio del periodo"
+            ],
+            [
+              "Engagement",
+              "Coinvolgimento e motivazione, di solito misurati con survey"
+            ],
+            [
+              "Costo per assunzione",
+              "Spesa totale di recruiting divisa per le assunzioni effettuate"
+            ],
+            [
+              "Copertura della successione",
+              "Quota di ruoli critici con almeno un successore identificato"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Conoscere le definizioni ti permette di chiedere «come lo calcolate?»: spesso scopri che ogni funzione o sito usa una formula diversa, ed è lì che nasce il caso per un dato unico."
+        },
+        {
+          "t": "bucket",
+          "q": "Chi è l'interlocutore giusto per questo tema?",
+          "buckets": [
+            "CHRO",
+            "CFO",
+            "CIO"
+          ],
+          "items": [
+            [
+              "Piani di successione e sviluppo dei talenti",
+              0
+            ],
+            [
+              "Budget headcount e costo del lavoro",
+              1
+            ],
+            [
+              "Sicurezza dei dati personali e integrazioni",
+              2
+            ],
+            [
+              "Esperienza del dipendente e employer branding",
+              0
+            ],
+            [
+              "Business case e ritorno dell'investimento",
+              1
+            ],
+            [
+              "Architettura, API e roadmap tecnologica",
+              2
+            ]
+          ],
+          "diff": 2,
+          "exp": "Un progetto HR tocca tre decisori con criteri diversi: il CHRO guarda a persone e processi, il CFO a costi e ritorno, il CIO a integrazione e sicurezza. Prepara un messaggio per ciascuno."
+        },
+        {
+          "t": "tf",
+          "q": "Per un progetto di Core HR e payroll il CHRO è di norma l'unico decisore.",
+          "a": false,
+          "diff": 1,
+          "exp": "Costo del lavoro, integrazione con i sistemi finanziari e sicurezza dei dati personali coinvolgono CFO e CIO. Mappare presto tutti gli stakeholder evita sorprese in fase di approvazione."
+        }
+      ]
+    },
+    {
+      "id": "w07-l02",
+      "title": "La mappa di SuccessFactors",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SuccessFactors è la suite cloud HR di SAP: parte da Core HR (Employee Central) e Payroll e copre recruiting, onboarding, performance e goals, learning, succession, compensation e analytics.",
+          "Employee Central è il sistema di record dei dati del dipendente: gli altri moduli ci leggono e ci scrivono. Employee Central Payroll è il payroll in cloud, integrato con il Core HR.",
+          "Recruiting: SAP punta su SmartRecruiters. Acquisizione di SmartRecruiters: {{sap.acq.smartrecruiters}}.",
+          "L'analytics HR evoluta è People Intelligence su SAP Business Data Cloud; sopra ai processi c'è Joule, con agenti dedicati all'HR."
+        ],
+        "ae": "Disegna la mappa su un foglio: dati al centro (Employee Central), processi di talento intorno, analytics e AI sopra. Poi chiedi al cliente dove la catena si spezza oggi."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il modulo SuccessFactors alla sua funzione",
+          "pairs": [
+            [
+              "Employee Central",
+              "Sistema di record dei dati del dipendente (Core HR)"
+            ],
+            [
+              "Employee Central Payroll",
+              "Payroll in cloud integrato con il Core HR"
+            ],
+            [
+              "Succession & Development",
+              "Ruoli critici, successori e piani di crescita"
+            ],
+            [
+              "Learning",
+              "Corsi, formazione obbligatoria e certificazioni"
+            ],
+            [
+              "Compensation",
+              "Cicli di merit, bonus e budget retributivi"
+            ]
+          ],
+          "diff": 1,
+          "exp": "È la mappa base della suite. Quando un cliente nomina un processo (bonus, corsi, successori), devi saper dire in un secondo quale modulo lo copre e che tutti poggiano sullo stesso dato."
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente vuole un'unica fonte per organigramma, contratti e cambi di posizione, su cui poggino gli altri processi HR. Da quale modulo parti?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Ho più file Excel e due sistemi con organigrammi diversi: ogni riunione parte con numeri che non tornano."
+          },
+          "o": [
+            "Employee Central",
+            "Learning",
+            "Compensation",
+            "People Intelligence"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "Il Core HR è il sistema di record: senza un organigramma e anagrafiche affidabili, anche compensation, succession e analytics lavorano su dati incoerenti. People Intelligence analizza, non governa il dato."
+        },
+        {
+          "t": "fill",
+          "q": "L'app di analytics HR di SAP che gira su Business Data Cloud si chiama ___.",
+          "o": [
+            "HR Insight Cloud",
+            "Talent Pulse Analytics",
+            "People Intelligence",
+            "Workforce Studio"
+          ],
+          "a": 2,
+          "diff": 1,
+          "exp": "People Intelligence collega i dati HR di SuccessFactors e di altre fonti su Business Data Cloud: {{w07.people_intelligence}}."
+        },
+        {
+          "t": "bucket",
+          "q": "Dove si colloca nella pila HR di SAP?",
+          "buckets": [
+            "Core HR e Payroll",
+            "Processi di talento",
+            "Analytics e AI"
+          ],
+          "items": [
+            [
+              "Employee Central",
+              0
+            ],
+            [
+              "Employee Central Payroll",
+              0
+            ],
+            [
+              "Performance & Goals",
+              1
+            ],
+            [
+              "Succession & Development",
+              1
+            ],
+            [
+              "People Intelligence",
+              2
+            ],
+            [
+              "Agenti Joule per l'HR",
+              2
+            ]
+          ],
+          "diff": 2,
+          "exp": "Dati e payroll alla base, processi di talento sopra, analytics e AI in cima. Questa lettura a strati aiuta a spiegare perché conviene partire dal dato prima di inseguire gli agenti."
+        },
+        {
+          "t": "multi",
+          "q": "Quali affermazioni su SmartRecruiters sono corrette?",
+          "o": [
+            "È stato acquisito da SAP ed è integrato con SuccessFactors",
+            "Resta disponibile anche come prodotto standalone",
+            "Sostituisce Employee Central come sistema di record",
+            "È il modulo payroll di SuccessFactors per l'Italia"
+          ],
+          "a": [
+            0,
+            1
+          ],
+          "diff": 2,
+          "exp": "Acquisizione di SmartRecruiters: {{sap.acq.smartrecruiters}}. È un prodotto di recruiting, non un Core HR né un payroll: confonderlo con Employee Central è un errore tipico."
+        }
+      ]
+    },
+    {
+      "id": "w07-l03",
+      "title": "Employee Central al centro",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Employee Central (EC) è il Core HR: anagrafica, struttura organizzativa, posizioni, contratti e storico, con date di validità («effective dating»): puoi ricostruire com'era un dipendente in qualunque data.",
+          "Workflow e regole (business rules) governano approvazioni, trasferimenti e cambi di ruolo; la configurazione standard riduce lo sviluppo custom.",
+          "EC alimenta gli altri moduli e si integra con S/4HANA (centri di costo, struttura aziendale) e con il payroll: l'integrazione è un tema da condividere con Finance e IT fin dall'inizio.",
+          "SuccessFactors rilascia aggiornamenti due volte l'anno (release 1H e 2H): le novità arrivano senza upgrade tradizionali, ma vanno testate in sandbox prima di andare in produzione."
+        ],
+        "ae": "Se il cliente dice «abbiamo già un sistema HR», chiedi quante fonti ha per l'organigramma. Se sono due, ogni analisi nasce già con numeri diversi."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Dopo molte riorganizzazioni, il CFO vuole ricostruire il costo del personale alla data di chiusura di un trimestre passato. Quale caratteristica di Employee Central aiuta?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Ogni volta che ricostruiamo il costo del personale di un trimestre vecchio, tra riorganizzazioni e trasferimenti, i numeri cambiano."
+          },
+          "o": [
+            "Le regole di business che validano i dati inseriti dagli utenti",
+            "I workflow di approvazione per trasferimenti e cambi di ruolo",
+            "La vista unificata del profilo del dipendente su web e mobile",
+            "Lo storico con date di validità dei dati (effective dating)"
+          ],
+          "a": 3,
+          "diff": 1,
+          "exp": "Con l'effective dating ogni modifica ha una data di validità: puoi vedere organico, posizione e costo centro per centro com'erano a una data passata, senza ricostruzioni manuali."
+        },
+        {
+          "t": "tf",
+          "q": "Employee Central consente di configurare workflow di approvazione per eventi come trasferimenti e cambi di posizione.",
+          "a": true,
+          "diff": 1,
+          "exp": "I workflow e le business rules sono il modo standard per governare approvazioni e passaggi. Per l'AE è un argomento di governance: meno email e meno eccezioni gestite a mano."
+        },
+        {
+          "t": "fill",
+          "q": "Quando Employee Central deve condividere centri di costo e struttura aziendale con S/4HANA, il tema va portato fin dall'inizio anche a ___.",
+          "o": [
+            "Finance",
+            "Brand marketing",
+            "Facility management"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "Centri di costo e struttura aziendale sono dati di Finance: se HR e Finance non concordano le regole, ogni integrazione diventa un progetto di riconciliazione. Coinvolgi il CFO e l'IT dall'inizio."
+        },
+        {
+          "t": "mcq",
+          "q": "Il CIO teme un nuovo silos. Come rispondi sul rapporto tra Employee Central e S/4HANA?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Non voglio un altro silos: come parla Employee Central con il nostro S/4HANA?"
+          },
+          "o": [
+            "Li colleghiamo con un export mensile gestito da HR e caricato a mano in finance",
+            "Partiamo dai dati da condividere e usiamo prima le integrazioni standard, poi il custom",
+            "Costruiamo da zero interfacce su misura, perché le aziende sono diverse tra loro",
+            "Teniamo i due sistemi separati e riconciliamo i centri di costo a fine trimestre"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Rispondi con un metodo: quali dati servono (struttura, centri di costo, dipendenti), integrazioni standard prima del custom, owner chiari. È la risposta che il CIO può portare in comitato."
+        },
+        {
+          "t": "order",
+          "q": "Ordina il flusso di un trasferimento interno gestito con un workflow",
+          "items": [
+            "Il manager avvia la richiesta di trasferimento",
+            "Il workflow instrada l'approvazione",
+            "HR verifica e conferma il cambio",
+            "Il dato viene registrato con la sua data di validità",
+            "I processi collegati (payroll, organigramma, accessi) ricevono l'aggiornamento"
+          ],
+          "diff": 2,
+          "exp": "Un workflow standard garantisce che l'approvazione preceda la registrazione e che i processi a valle ricevano il dato aggiornato. È il tipo di sequenza che oggi spesso passa per email e fogli di calcolo."
+        }
+      ]
+    },
+    {
+      "id": "w07-l04",
+      "title": "Recruiting e SmartRecruiters",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Acquisizione di SmartRecruiters: {{sap.acq.smartrecruiters}}.",
+          "Direzione: {{w07.recruiting_direction}}.",
+          "Integrazione: la prima fase è stata {{w07.smartrecruiters_phase1}}.",
+          "Per l'AE: chi usa già il Recruiting nativo non deve cambiare subito; sui nuovi progetti di talent acquisition il posizionamento SAP è SmartRecruiters. Non promettere date né condizioni di licenza: la roadmap si verifica col team prodotto."
+        ],
+        "ae": "Se il recruiting del cliente è vecchio o frammentato, proponi SmartRecruiters come tema di talent acquisition, ma ammetti che tempi e licenze vanno verificati: la fiducia vale più di una data promessa."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è il ruolo di SmartRecruiters nell'offerta HR di SAP?",
+          "o": [
+            "Sistema di record per anagrafica, contratti e organigramma dei dipendenti",
+            "Piattaforma di digital adoption che guida gli utenti dentro le applicazioni",
+            "Recruiting che SAP posiziona come futuro del modulo nativo di SuccessFactors",
+            "Applicazione di analytics HR su Business Data Cloud per KPI e previsioni"
+          ],
+          "a": 2,
+          "diff": 1,
+          "exp": "SmartRecruiters copre il talent acquisition. Direzione: {{w07.recruiting_direction}}. Non è il Core HR né un payroll."
+        },
+        {
+          "t": "tf",
+          "q": "SmartRecruiters resta disponibile anche come prodotto standalone, utilizzabile con altri sistemi HR.",
+          "a": true,
+          "diff": 1,
+          "exp": "Acquisizione di SmartRecruiters: {{sap.acq.smartrecruiters}}. Per l'AE significa poterlo proporre anche a clienti con un Core HR non SAP, senza forzare una migrazione di tutto."
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi sono compresi nella prima fase dell'integrazione tra SmartRecruiters e SuccessFactors?",
+          "o": [
+            "Single sign-on e navigazione condivisa",
+            "Sincronizzazione di job family, centri di costo e sedi da SuccessFactors",
+            "Assistente AI Winston nei flussi di assunzione",
+            "Migrazione automatica di tutte le configurazioni del vecchio Recruiting",
+            "Calcolo delle buste paga per i neoassunti"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "Prima fase: {{w07.smartrecruiters_phase1}}. Strumenti di migrazione dal vecchio Recruiting sono un tema distinto, non una funzione della prima fase."
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente con SuccessFactors Recruiting da anni chiede se deve migrare subito a SmartRecruiters. Cosa rispondi?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Abbiamo SuccessFactors Recruiting da anni e funziona. Devo migrare subito a SmartRecruiters?"
+          },
+          "o": [
+            "Sì, conviene migrare entro fine anno perché il vecchio modulo verrà spento",
+            "No, SmartRecruiters resta un prodotto separato e non è collegato a SuccessFactors",
+            "Direzione chiara, nessun obbligo immediato: definiamo insieme tempi e perimetro",
+            "Dipende dal prezzo: aspettiamo di vedere quale sconto riesce a darci SAP"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "Onestà e metodo: {{w07.recruiting_direction}}. Non inventare scadenze e non negare la direzione; proponi un assessment dei processi di recruiting attuali e chiedi la roadmap al team prodotto."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine del recruiting al suo significato",
+          "pairs": [
+            [
+              "Requisition",
+              "Richiesta di apertura di una posizione da coprire"
+            ],
+            [
+              "ATS",
+              "Sistema che gestisce candidature, pipeline e colloqui"
+            ],
+            [
+              "Pre-boarding",
+              "Attività tra accettazione dell'offerta e primo giorno"
+            ],
+            [
+              "Time-to-hire",
+              "Tempo necessario per coprire una posizione aperta"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Parlare con precisione il linguaggio del recruiting mostra credibilità. In discovery, le tre misure più utili sono il tempo per coprire le posizioni, il tasso di accettazione e il costo per assunzione."
+        }
+      ]
+    },
+    {
+      "id": "w07-l05",
+      "title": "Onboarding e performance",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Onboarding: accompagna nuovo assunto, manager e HR dall'accettazione al primo giorno e oltre (documenti, attività, accessi IT, logistica). Un buon onboarding accorcia il tempo alla piena produttività.",
+          "La stessa logica vale per i trasferimenti interni: il valore sta nei compiti che coinvolgono IT, facility e finance, orchestrati in un unico flusso con scadenze e responsabili.",
+          "Performance & Goals: obiettivi allineati alla strategia, feedback continuo, valutazioni e calibrazione. Non si vende un modulo di valutazione: si vendono dati affidabili per decidere su compensation e successione.",
+          "I confini tra pre-boarding in SmartRecruiters e onboarding in SuccessFactors sono in evoluzione: verifica col team prodotto chi copre cosa prima di disegnare la soluzione."
+        ],
+        "ae": "Se il cliente lamenta un onboarding lento, fatti mostrare la checklist: quanti passi richiedono IT e HR in parallelo? Lì c'è il caso d'uso."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un nuovo assunto aspetta due settimane per avere portatile e accessi. Quale risposta porta al caso d'uso corretto?",
+          "ctx": {
+            "who": "HR Director",
+            "say": "Il nuovo assunto sta due settimane senza portatile e senza accessi: ognuno ha la sua email di richiesta."
+          },
+          "o": [
+            "Acceleriamo gli ordini d'acquisto dei portatili con un contratto quadro più rapido",
+            "Chiediamo al manager di avvisare l'IT con un promemoria prima dell'arrivo",
+            "Anticipiamo la firma del contratto per avere più tempo prima dell'ingresso",
+            "Orchestriamo HR, IT e facility in un unico flusso con scadenze condivise"
+          ],
+          "a": 3,
+          "diff": 1,
+          "exp": "Il problema è di coordinamento tra funzioni: un onboarding orchestrato con compiti, responsabili e scadenze lo risolve. Quantifica i giorni persi per assunto e il numero di richieste manuali."
+        },
+        {
+          "t": "tf",
+          "q": "Performance & Goals comprende obiettivi allineati, feedback continuo e calibrazione delle valutazioni.",
+          "a": true,
+          "diff": 1,
+          "exp": "Oltre al form annuale, il processo moderno collega obiettivi, feedback ricorrente e calibrazione. I dati che ne escono alimentano compensation e succession: questo è il valore da raccontare al CHRO."
+        },
+        {
+          "t": "order",
+          "q": "Ordina le fasi dell'esperienza di un nuovo assunto",
+          "items": [
+            "Offerta accettata",
+            "Pre-boarding: documenti e accessi",
+            "Primo giorno in azienda",
+            "Primi 90 giorni: obiettivi e feedback",
+            "Valutazione e ingresso nei cicli di performance"
+          ],
+          "diff": 1,
+          "exp": "Pensare al processo end-to-end, dall'accettazione ai primi mesi, aiuta a individuare dove si perdono tempo e motivazione. Ogni fase ha compiti, responsabili e dati diversi."
+        },
+        {
+          "t": "fill",
+          "q": "Un onboarding efficace coinvolge anche IT e ___ per accessi, dotazioni e logistica del posto di lavoro.",
+          "o": [
+            "investor relations",
+            "ufficio stampa aziendale",
+            "facility management"
+          ],
+          "a": 2,
+          "diff": 1,
+          "exp": "Postazione, badge e dotazioni dipendono dal facility management. Se questi compiti restano fuori dal flusso, l'onboarding si rompe proprio dove il dipendente se ne accorge di più."
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono obiettivi tipici di un processo di Performance & Goals?",
+          "o": [
+            "Allineare gli obiettivi individuali a quelli aziendali",
+            "Favorire feedback continuo tra manager e collaboratori",
+            "Fornire dati affidabili per calibrazione e decisioni su compensation e successione",
+            "Sostituire il calcolo del payroll",
+            "Gestire le fatture dei fornitori"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "Performance & Goals riguarda obiettivi, feedback e dati per decisioni di talento. Payroll e fatture fornitori sono altri processi: tenere separati i confini evita proposte confuse."
+        }
+      ]
+    },
+    {
+      "id": "w07-l06",
+      "title": "Learning, succession, carriera",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Learning gestisce cataloghi, assegnazioni obbligatorie (sicurezza, qualità, compliance), tracciamento e certificazioni. In Life Sciences e CPG la formazione obbligatoria tracciata è spesso oggetto di audit.",
+          "Succession & Development individua ruoli critici, successori e piani di sviluppo; i talent pool rendono visibile chi è pronto per quale ruolo e con quali gap.",
+          "Joule porta agenti anche sul talento: {{w07.joule_hr_agents}}. L'agente Career and Talent Development è pensato per alleggerire il lavoro manuale su succession e crescita, non per decidere al posto del manager.",
+          "Messaggio per il CHRO: dalla formazione a catalogo alla crescita guidata dalle skill, con un modello di competenze condiviso tra learning, succession e performance."
+        ],
+        "ae": "Chiedi: «Se domani il responsabile di produzione si dimette, chi lo sostituisce e in quanto tempo?». Se la risposta è «dipende», hai il caso per Succession."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un direttore HR di un'azienda farmaceutica deve dimostrare in audit che ogni operatore è formato sulle procedure aggiornate. Quale risposta è più centrata?",
+          "ctx": {
+            "who": "Direttore HR",
+            "say": "In audit ci chiedono evidenza che ogni operatore sia stato formato sulle procedure aggiornate, e oggi la raccogliamo a mano."
+          },
+          "o": [
+            "Compensation, con budget e linee guida per i cicli di merit annuali",
+            "Succession & Development, con talent pool e piani di sviluppo individuali",
+            "Learning, con assegnazioni obbligatorie e storico delle certificazioni",
+            "Performance & Goals, con obiettivi e calibrazione delle valutazioni annuali"
+          ],
+          "a": 2,
+          "diff": 1,
+          "exp": "Assegnazioni obbligatorie, scadenze e storico tracciabile sono il cuore di Learning per la formazione regolata. Quantifica quanto tempo costa oggi preparare un audit: è il tuo business case."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine di talent management al suo significato",
+          "pairs": [
+            [
+              "Ruolo critico",
+              "Posizione la cui scopertura avrebbe un forte impatto sul business"
+            ],
+            [
+              "Talent pool",
+              "Gruppo di persone in crescita verso ruoli futuri"
+            ],
+            [
+              "Piano di sviluppo",
+              "Azioni per colmare i gap rispetto a un ruolo target"
+            ],
+            [
+              "Successore «ready now»",
+              "Candidato che può coprire il ruolo senza ulteriore sviluppo"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Sono i termini che il CHRO usa nei comitati talenti. Saperli usare correttamente ti permette di fare domande precise, per esempio quanti ruoli critici hanno almeno un successore «ready now»."
+        },
+        {
+          "t": "tf",
+          "q": "L'agente Joule Career and Talent Development sostituisce il manager nelle decisioni di carriera.",
+          "a": false,
+          "diff": 2,
+          "exp": "Gli agenti assistono: alleggeriscono il lavoro manuale e aiutano a individuare e far crescere i talenti, ma la decisione resta di manager e HR. Con il CHRO parla di supporto e controllo umano."
+        },
+        {
+          "t": "bucket",
+          "q": "Learning o Succession?",
+          "buckets": [
+            "Learning",
+            "Succession & Development"
+          ],
+          "items": [
+            [
+              "Assegnare corsi obbligatori a una popolazione",
+              0
+            ],
+            [
+              "Tracciare scadenze e certificazioni",
+              0
+            ],
+            [
+              "Identificare successori per i ruoli chiave",
+              1
+            ],
+            [
+              "Costruire talent pool per ruoli futuri",
+              1
+            ],
+            [
+              "Gestire cataloghi di corsi e contenuti",
+              0
+            ],
+            [
+              "Definire piani di sviluppo verso un ruolo target",
+              1
+            ]
+          ],
+          "diff": 2,
+          "exp": "Learning risponde a «chi ha fatto quale formazione», Succession a «chi può coprire quale ruolo». Si incontrano nei piani di sviluppo, dove la formazione colma i gap emersi."
+        },
+        {
+          "t": "mcq",
+          "q": "Quale domanda di discovery fa emergere meglio il caso per Succession?",
+          "o": [
+            "Quante ore di formazione obbligatoria eroga oggi un dipendente medio in un anno?",
+            "Se un ruolo chiave si libera domani, in quanto tempo lo copri con una persona interna?",
+            "Come vengono approvati oggi i budget di merit e bonus tra HR e finance?",
+            "Quanto tempo serve oggi per far partire un nuovo assunto dal primo giorno?"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "La domanda sul tempo di copertura di un ruolo chiave fa parlare del rischio di business e misura il gap di successione. Le altre sono buone domande di discovery, ma portano su Learning, Compensation e Onboarding."
+        }
+      ]
+    },
+    {
+      "id": "w07-l07",
+      "title": "Compensation: CFO e CHRO",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Compensation gestisce cicli di merit, bonus e incentivi, budget e regole di eligibilità, con linee guida basate sui range retributivi per ruolo.",
+          "Il CFO guarda a costo del lavoro e budget; il CHRO a equità interna e retention. Un progetto di compensation serve entrambi se parte dalla stessa base dati, cioè da Employee Central.",
+          "Due concetti da padroneggiare: range retributivo (minimo e massimo per ruolo) e compa-ratio (retribuzione rapportata al punto medio del range). Sono anche la base della trasparenza retributiva.",
+          "La retribuzione è un tema di compliance in crescita: in Italia è in vigore il {{w07.it_decree}}. Lo approfondiamo in un livello dedicato."
+        ],
+        "ae": "Porta CFO e CHRO allo stesso tavolo con una sola domanda: quanto vale un punto percentuale di merit budget e chi ne possiede il dato?"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Il CFO lamenta un budget di merit gestito su Excel. Qual è la risposta migliore?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Il merit budget lo decidiamo su Excel e non so mai quanto vale il totale finché non lo consolidano a mano."
+          },
+          "o": [
+            "Proponiamo un modulo di calcolo del budget con regole e simulazioni, già in demo",
+            "Quante versioni del file circolano e chi le consolida? Così misuriamo il rischio",
+            "Spostiamo la discussione sul prezzo, così capiamo se c'è un budget per il progetto",
+            "Il budget di merit è materia di HR: coinvolgiamo il CHRO e basta nelle prossime call"
+          ],
+          "a": 1,
+          "diff": 1,
+          "exp": "Domande sul processo attuale (versioni, consolidamento, tempi) trasformano una lamentela in un rischio quantificabile e coinvolgono la finanza, che è parte della decisione."
+        },
+        {
+          "t": "mcq",
+          "q": "CFO e CHRO sono in conflitto sul budget di merit. Come ti posizioni?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Il CFO vuole tagliare il budget di merit, io temo di perdere i talenti migliori."
+          },
+          "o": [
+            "Sosteniamo la posizione del CHRO: il rischio di perdere talenti pesa più dei costi",
+            "Sosteniamo il CFO: con budget stretti il merit va ridotto in modo uniforme",
+            "Simuliamo scenari su dati condivisi: costo, rischio di uscita e ruoli critici",
+            "Rimandiamo il tema a dopo la demo, quando entrambi avranno visto il prodotto"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "Non scegli un campo: porti un metodo che rende il conflitto una decisione informata. Dati condivisi di costo e rischio permettono a CFO e CHRO di discutere sugli stessi numeri."
+        },
+        {
+          "t": "tf",
+          "q": "Un progetto di compensation serve sia al CFO sia al CHRO se parte dalla stessa base dati.",
+          "a": true,
+          "diff": 1,
+          "exp": "Il CFO ottiene costo e budget affidabili, il CHRO equità e retention su un'unica fonte. Per questo la base dati comune (Employee Central) è parte del business case, non un dettaglio tecnico."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine retributivo al suo significato",
+          "pairs": [
+            [
+              "Merit increase",
+              "Aumento legato alla performance individuale"
+            ],
+            [
+              "Bonus / MBO",
+              "Premio variabile legato al raggiungimento di obiettivi"
+            ],
+            [
+              "Range retributivo",
+              "Retribuzione minima e massima prevista per un ruolo"
+            ],
+            [
+              "Compa-ratio",
+              "Retribuzione rapportata al punto medio del range"
+            ]
+          ],
+          "diff": 2,
+          "exp": "Range e compa-ratio sono gli strumenti per ragionare sull'equità interna. Sono anche i dati su cui si appoggia la trasparenza retributiva: con range chiari, annunci e risposte ai dipendenti diventano più semplici."
+        },
+        {
+          "t": "fill",
+          "q": "Per un progetto di compensation, la base dati comune a CFO e CHRO è ___.",
+          "ctx": {
+            "who": "CFO",
+            "say": "HR mi manda un numero, il controllo di gestione ne ha un altro: non so quale usare per il budget."
+          },
+          "o": [
+            "SmartRecruiters",
+            "Employee Central",
+            "People Intelligence"
+          ],
+          "a": 1,
+          "diff": 1,
+          "exp": "Compensation legge i dati di organico, ruoli e costo da Employee Central: è la base comune su cui CFO e CHRO possono discutere gli stessi numeri. Se HR e controllo di gestione hanno fonti diverse, nessun budget è condiviso."
+        }
+      ]
+    },
+    {
+      "id": "w07-l08",
+      "title": "Skills e Talent Intelligence",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Organizzazione basata sulle skill: pianifichi, assumi, formi e muovi le persone partendo dalle competenze, non solo da ruoli e titoli.",
+          "Talent Intelligence Hub: {{w07.talent_intelligence_hub}}.",
+          "Un modello di skills condiviso tra recruiting, onboarding, learning, performance e succession evita che ogni modulo parli un linguaggio diverso: SAP lo posiziona come modello unico.",
+          "Il valore dipende dai dati: senza una tassonomia coerente e profili aggiornati i suggerimenti dell'AI sono deboli. Spesso il primo passo è un assessment dei dati, non una licenza."
+        ],
+        "ae": "Domanda chiave: «Se ti chiedessi quanti chimici analitici con una tecnica specifica hai in Italia, in quanto tempo risponderesti?»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che cosa distingue un'organizzazione basata sulle skill?",
+          "o": [
+            "Assegna i ruoli in base alle certificazioni formali possedute dai candidati",
+            "Usa un algoritmo per decidere promozioni e trasferimenti al posto dei manager",
+            "Parte dalle competenze, oltre che da ruoli e titoli, per assumere e formare",
+            "Rimuove i livelli gerarchici e organizza il lavoro in team autogestiti"
+          ],
+          "a": 2,
+          "diff": 1,
+          "exp": "Le skill diventano l'unità con cui si ragiona su persone e lavoro, senza abolire ruoli e organigrammi. È un cambio di metodo, non un cambio di organizzazione da un giorno all'altro."
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la conversazione sulle skill con questo CHRO?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Dobbiamo spostare 200 persone in un nuovo impianto e non so chi ha le competenze giuste."
+          },
+          "o": [
+            "Piano di assunzioni esterne per le nuove posizioni, con selezione tramite agenzie",
+            "Inventario delle competenze, gap rispetto al nuovo impianto e mobilità interna",
+            "Trasferimento delle persone secondo l'anzianità di servizio e le preferenze dei capi",
+            "Analisi delle competenze rinviata a dopo l'avvio, quando i gap saranno evidenti"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Un'esigenza concreta (nuovo impianto) giustifica un inventario delle skill e un'analisi dei gap, con la mobilità interna come prima leva prima di assumere. Il progetto parte da un caso d'uso, non dal software."
+        },
+        {
+          "t": "tf",
+          "q": "Un modello di skills condiviso tra recruiting, learning e succession riduce il rischio che ogni modulo usi un vocabolario diverso.",
+          "a": true,
+          "diff": 1,
+          "exp": "Un unico modello di competenze rende confrontabili i dati tra moduli e processi. SAP lo posiziona nel Talent Intelligence Hub: {{w07.talent_intelligence_hub}}."
+        },
+        {
+          "t": "bucket",
+          "q": "Approccio per ruoli o per skill?",
+          "buckets": [
+            "Per ruoli e titoli",
+            "Per skill"
+          ],
+          "items": [
+            [
+              "Pianificazione basata solo sull'organigramma",
+              0
+            ],
+            [
+              "Posizione aperta coperta cercando solo il titolo identico",
+              0
+            ],
+            [
+              "Mobilità interna proposta in base alle competenze possedute",
+              1
+            ],
+            [
+              "Formazione assegnata sui gap di skill rilevati",
+              1
+            ],
+            [
+              "Carriere definite solo dagli scatti di anzianità",
+              0
+            ],
+            [
+              "Team di progetto composti per competenze necessarie",
+              1
+            ]
+          ],
+          "diff": 2,
+          "exp": "L'approccio per skill sposta l'attenzione da «che titolo ha» a «che cosa sa fare». Nella pratica convivono: i ruoli restano utili, ma non bastano a trovare e far crescere le competenze."
+        },
+        {
+          "t": "order",
+          "q": "Ordina i passi di un progetto skills realistico",
+          "items": [
+            "Definire casi d'uso e ruoli critici da presidiare",
+            "Valutare qualità e fonti dei dati sulle competenze",
+            "Adottare o costruire una tassonomia di skill",
+            "Arricchire i profili con suggerimenti AI confermati dai dipendenti",
+            "Collegare le skill a recruiting, learning e mobilità interna"
+          ],
+          "diff": 3,
+          "exp": "Si parte dal problema di business e dai dati, poi dalla tassonomia; l'AI arricchisce i profili e le skill si collegano ai processi. Saltare la fase dati produce suggerimenti poco credibili."
+        }
+      ]
+    },
+    {
+      "id": "w07-l09",
+      "title": "People Intelligence e dati HR",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "People Intelligence: {{w07.people_intelligence}}.",
+          "Perché Business Data Cloud: i dati HR si possono combinare con finance e operations per rispondere a domande trasversali, per esempio costo del lavoro e produttività per stabilimento.",
+          "Parti dai KPI: headcount, FTE, turnover, assunzioni, costo del lavoro, divario retributivo, copertura skills. Concorda prima definizioni uniche (che cos'è un FTE? cosa conta come uscita volontaria?).",
+          "Governance: i dati HR sono personali (GDPR) e a volte sensibili; in Italia lo Statuto dei lavoratori limita il controllo a distanza. Coinvolgi privacy/DPO e IT e non promettere «monitoraggio» individuale."
+        ],
+        "ae": "Chiedi quante definizioni di «turnover» esistono in azienda. Se sono due, la prima fase del progetto è mettere d'accordo i numeri, non scegliere lo strumento."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Su quale piattaforma SAP gira l'applicazione People Intelligence?",
+          "o": [
+            "SAP Integration Suite",
+            "SAP Build Work Zone",
+            "SAP Cloud Identity Services",
+            "SAP Business Data Cloud"
+          ],
+          "a": 3,
+          "diff": 1,
+          "exp": "People Intelligence vive su Business Data Cloud, quindi può combinare i dati HR con altre fonti. Per alcuni clienti questo comporta una licenza aggiuntiva: va chiarito presto nella conversazione commerciale."
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono buone pratiche prima di avviare un progetto di people analytics?",
+          "o": [
+            "Concordare definizioni uniche dei KPI (FTE, turnover, uscita volontaria)",
+            "Coinvolgere privacy/DPO e IT fin dall'inizio",
+            "Partire da poche domande di business prioritarie",
+            "Raccogliere ogni dato disponibile e decidere dopo a cosa serve",
+            "Escludere IT e privacy per andare più veloci"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "Definizioni condivise, governance dei dati personali e domande mirate evitano progetti di analytics che producono numeri contestati. Raccogliere tutto «per sicurezza» è un rischio privacy, non una strategia."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi alla richiesta di previsioni di dimissioni persona per persona?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Voglio un cruscotto che mi dica, persona per persona, chi sta per dimettersi."
+          },
+          "o": [
+            "Attiviamo la previsione individuale e informiamo i dipendenti con un'informativa generica",
+            "Rinunciamo all'analisi delle dimissioni: in Italia i dati HR non sono analizzabili",
+            "Partiamo da indicatori aggregati e definiamo con privacy e relazioni industriali i limiti",
+            "Costruiamo il modello individuale in modo riservato e lo mostriamo al CHRO"
+          ],
+          "a": 2,
+          "diff": 3,
+          "exp": "L'analisi aggregata dà valore (dove e perché si perde personale) con rischi minori. Le previsioni individuali richiedono valutazioni legali, di privacy e di relazioni industriali: non promettere nulla senza passare da lì."
+        },
+        {
+          "t": "tf",
+          "q": "In Italia i dati HR possono essere usati senza limiti per controllare a distanza l'attività dei lavoratori, purché siano nello stesso sistema.",
+          "a": false,
+          "diff": 2,
+          "exp": "Lo Statuto dei lavoratori pone limiti al controllo a distanza e il GDPR regola il trattamento dei dati personali. Un fornitore di software non può garantire la liceità d'uso: serve governance del cliente."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il KPI HR alla sua definizione",
+          "pairs": [
+            [
+              "Headcount",
+              "Numero di persone in organico"
+            ],
+            [
+              "FTE",
+              "Carico di lavoro equivalente a un dipendente a tempo pieno"
+            ],
+            [
+              "Turnover",
+              "Uscite rispetto all'organico medio del periodo"
+            ],
+            [
+              "Tasso di assenteismo",
+              "Giorni di assenza rispetto ai giorni lavorabili"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Headcount e FTE non coincidono (part-time, contratti ridotti): è uno dei motivi per cui i numeri HR e finance divergono. Chiedere le definizioni usate è sempre un buon inizio."
+        }
+      ]
+    },
+    {
+      "id": "w07-l10",
+      "title": "Joule e WalkMe per l'HR",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Joule è l'interfaccia AI di SAP; nell'HR offre agenti come {{w07.joule_hr_agents}}.",
+          "L'HR Service Agent è il primo punto di contatto per domande su policy e benefit; se non trova la risposta apre un caso per HR. Il valore è meno richieste ripetitive, non «HR senza persone».",
+          "Employee Central Payroll nella 1H 2026 aggiunge agenti dedicati: {{w07.ecp_agents}}.",
+          "WalkMe: {{w07.walkme_role}}. Acquisizione: {{w07.walkme_deal}}. Si vende come adozione e ritorno del progetto, non come tutorial."
+        ],
+        "ae": "Non vendere l'agente: vendi un caso d'uso misurabile. Quante richieste ripetitive arrivano oggi a HR e quanto tempo costano?"
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina l'agente Joule per l'HR al suo compito",
+          "pairs": [
+            [
+              "Career and Talent Development",
+              "Alleggerisce succession planning e crescita dei talenti"
+            ],
+            [
+              "HR Service",
+              "Prima risposta ai dipendenti su policy e benefit"
+            ],
+            [
+              "People Intelligence",
+              "Insight sulla forza lavoro in linguaggio naturale"
+            ],
+            [
+              "Payroll",
+              "Aiuta a capire il cedolino e i risultati del payroll"
+            ]
+          ],
+          "diff": 2,
+          "exp": "Gli agenti sono specializzati per processo. Elenco della release 1H 2026: {{w07.joule_hr_agents}}. Lo stato di disponibilità per ciascun agente va riverificato prima di promettere date."
+        },
+        {
+          "t": "mcq",
+          "q": "A che cosa serve una piattaforma di digital adoption come WalkMe?",
+          "o": [
+            "A estrarre dati dalle applicazioni per costruire dashboard di people analytics",
+            "A configurare i workflow di approvazione di Employee Central senza sviluppo",
+            "A integrare le applicazioni HR con S/4HANA tramite interfacce standard",
+            "A guidare gli utenti dentro le applicazioni, con istruzioni contestuali ai processi"
+          ],
+          "a": 3,
+          "diff": 1,
+          "exp": "Un progetto HR fallisce spesso per scarsa adozione, non per mancanza di funzioni. WalkMe: {{w07.walkme_role}}. Collega l'adozione al ritorno del progetto."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi alla paura di risposte sbagliate dell'agente?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Ho paura che Joule risponda cose sbagliate ai miei dipendenti sulle policy."
+          },
+          "o": [
+            "Lo attiviamo su una vasta gamma di temi HR dal primo giorno, per avere feedback",
+            "Affidiamo all'agente anche le decisioni su casi disciplinari, per uniformare le risposte",
+            "Pilota su policy approvate, con passaggio a HR dei casi dubbi e monitoraggio",
+            "Rinviamo il progetto finché i modelli non producono risposte prive di errori"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "Riconosci il rischio e proponi controlli: perimetro limitato, contenuti approvati, escalation a HR, misurazione. Dire che l'AI non sbaglia è falso e distrugge la fiducia."
+        },
+        {
+          "t": "tf",
+          "q": "Un HR Service Agent può passare il caso a una persona di HR quando non sa rispondere.",
+          "a": true,
+          "diff": 1,
+          "exp": "L'agente fa da primo punto di contatto e, se non trova la risposta, apre un caso per HR. Il messaggio giusto è affiancamento: riduce le richieste ripetitive e libera tempo per i casi complessi."
+        },
+        {
+          "t": "multi",
+          "q": "Quali metriche usi per valutare un caso d'uso di HR Service Agent?",
+          "o": [
+            "Volume di richieste ripetitive gestite",
+            "Tempo di risposta ai dipendenti",
+            "Quota di casi risolti senza passaggio a HR",
+            "Numero di slide nella presentazione",
+            "Numero di utenti Joule nel mondo"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 3,
+          "exp": "Un caso d'uso AI va misurato con indicatori operativi del cliente: volumi, tempi e quota di risoluzione autonoma. Metriche di marketing o numeri globali non dimostrano valore per quell'azienda."
+        }
+      ]
+    },
+    {
+      "id": "w07-l11",
+      "title": "HCM on-premise: la scadenza",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "ERP HCM e Payroll on-premise {{w07.hcm_in_bs7}}.",
+          "Date: manutenzione standard fino al {{sap.ecc.mainstream_end}}; manutenzione estesa fino al {{sap.ecc.extended_end}}.",
+          "Percorsi: (a) Employee Central + Employee Central Payroll in cloud; (b) ibrido, con Core HR in cloud e payroll on-premise per un periodo; (c) SAP HCM for S/4HANA on-premise: {{w07.h4s4}}.",
+          "Non esiste un tasto «migra»: il passaggio a Employee Central è una trasformazione (mappatura degli infotype, carico dati, processi, payroll). Più tardi si parte, meno margine resta."
+        ],
+        "ae": "Mappa con il cliente cosa gira davvero su HCM on-premise (payroll, time, organigramma) e cosa è già in cloud: la data è un vincolo, il perimetro è la conversazione."
+      },
+      "ex": [
+        {
+          "t": "fill",
+          "q": "La manutenzione standard di ERP HCM on-premise, come quella di ECC, termina il ___.",
+          "o": [
+            "{{sap.ecc.mainstream_end}}",
+            "31 dicembre 2025",
+            "30 giugno 2028",
+            "31 dicembre 2035"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "ERP HCM fa parte di Business Suite 7: standard fino al {{sap.ecc.mainstream_end}}, estesa fino al {{sap.ecc.extended_end}}. Il 2035 circola solo come ipotesi o offerta di terze parti, non come impegno SAP."
+        },
+        {
+          "t": "mcq",
+          "q": "Il CFO chiede perché toccare un HCM che funziona. Qual è la risposta migliore a ottobre 2026?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Il nostro HCM funziona. Perché dovrei toccarlo adesso e spendere soldi?"
+          },
+          "o": [
+            "Spiego che dopo la manutenzione standard il supporto SAP cessa del tutto",
+            "Chiedo quali processi HR e payroll pesano di più e collego a quelli le date",
+            "Rassicuro il cliente: SAP estenderà ancora le date, quindi non c'è fretta",
+            "Consiglio di rinviare la decisione al 2030, quando scade la manutenzione estesa"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Prima il problema del cliente, poi la leva temporale. Dopo la fine della manutenzione standard esiste l'estesa (a pagamento, fino al {{sap.ecc.extended_end}}): la paura da sola invita l'obiezione, e promettere nuove proroghe è una speculazione."
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono percorsi realistici per un cliente con ERP HCM on-premise?",
+          "o": [
+            "SuccessFactors Employee Central con Employee Central Payroll in cloud",
+            "Ibrido: Core HR in Employee Central e payroll ancora on-premise per un periodo",
+            "SAP HCM for SAP S/4HANA on-premise come opzione ponte",
+            "Attivare una licenza SuccessFactors e convertire HCM con un comando standard",
+            "Restare su ERP HCM senza limiti di tempo perché la manutenzione non scade"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "I tre percorsi reali sono cloud pieno, ibrido e opzione ponte on-premise ({{w07.h4s4}}). Non esistono una conversione con un solo comando né una manutenzione senza scadenza."
+        },
+        {
+          "t": "tf",
+          "q": "Il passaggio da ERP HCM a Employee Central è una conversione tecnica automatica, senza bisogno di mappare i dati.",
+          "a": false,
+          "diff": 1,
+          "exp": "I dati in infotype vanno mappati negli oggetti di Employee Central e caricati; processi e payroll vanno ridisegnati. Presentarlo come un upgrade tecnico fa sottostimare tempi e budget."
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente con payroll on-premise cita la «transition option» di ECC. Cosa rispondi in modo prudente?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Ho sentito che SAP ha una transition option fino al 2033. Vale anche per il nostro HCM, vero?"
+          },
+          "o": [
+            "È una proroga della manutenzione HCM fino al 2033 alle stesse condizioni attuali",
+            "Copre anche ERP HCM e Payroll, quindi non servono altre verifiche",
+            "Sostituisce la migrazione a SuccessFactors per i clienti con payroll on-premise",
+            "Richiede RISE e ha perimetro più stretto di Business Suite 7: verifico il caso HCM"
+          ],
+          "a": 3,
+          "diff": 3,
+          "exp": "Fatto condiviso: {{sap.ecc.transition_option}}. Per HCM l'ambito non è confermato nelle fonti consultate: verifica con SAP e non promettere condizioni, soprattutto prima del 2028."
+        }
+      ]
+    },
+    {
+      "id": "w07-l12",
+      "title": "Payroll all'italiana",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Payroll Italia significa regole nazionali più CCNL: minimi tabellari, livelli di inquadramento, mensilità aggiuntive (13ª, a volte 14ª), straordinari e indennità variano per contratto collettivo.",
+          "Adempimenti ricorrenti: cedolino mensile, flusso UniEmens a INPS, versamenti con F24, Certificazione Unica annuale, TFR. Chi parla di payroll deve usare questo vocabolario.",
+          "Employee Central Payroll è il payroll cloud SAP integrato al Core HR. {{w07.ecp_italy}}: il perimetro Italia (CCNL, flussi, adempimenti) va comunque verificato con SAP e partner.",
+          "Nel mercato italiano esistono software payroll locali e service bureau: cambiare payroll è un progetto delicato. Un percorso possibile è partire dal Core HR e integrare il payroll esistente, rivedendolo in una seconda fase."
+        ],
+        "ae": "Non promettere «copertura Italia completa»: elenca col cliente i CCNL applicati (es. chimico-farmaceutico, alimentare) e le integrazioni con consulente del lavoro e INPS, poi verifica con SAP."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un responsabile payroll applica più CCNL con mensilità e indennità diverse e chiede se il vostro payroll li gestisce. Cosa rispondi?",
+          "ctx": {
+            "who": "Responsabile payroll",
+            "say": "Applichiamo tre CCNL diversi, con mensilità e indennità diverse. Il vostro payroll li gestisce?"
+          },
+          "o": [
+            "Sì, i CCNL italiani seguono regole analoghe e si configurano con un template",
+            "Mappiamo CCNL, voci variabili e accordi aziendali, poi verifico il perimetro con SAP",
+            "Il tema spetta al vostro consulente del lavoro: noi vendiamo il Core HR",
+            "Possiamo partire con un foglio di calcolo per le voci variabili e rivedere i CCNL dopo"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Non promettere copertura senza aver mappato CCNL, voci variabili e accordi aziendali. Poi verifica il perimetro con SAP e partner: è l'approccio che un responsabile payroll rispetta."
+        },
+        {
+          "t": "match",
+          "q": "Abbina l'adempimento del payroll italiano al suo significato",
+          "pairs": [
+            [
+              "Cedolino",
+              "Prospetto paga mensile del dipendente"
+            ],
+            [
+              "UniEmens",
+              "Flusso mensile telematico dei dati contributivi verso INPS"
+            ],
+            [
+              "F24",
+              "Modello per versare imposte e contributi"
+            ],
+            [
+              "Certificazione Unica",
+              "Riepilogo annuale di redditi e ritenute del dipendente"
+            ],
+            [
+              "TFR",
+              "Trattamento di fine rapporto accantonato dal datore"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Sono i termini quotidiani di un ufficio payroll italiano. Usarli correttamente in discovery ti distingue da chi propone un «payroll globale» senza conoscere gli adempimenti locali."
+        },
+        {
+          "t": "tf",
+          "q": "Il CCNL applicato è irrilevante per la configurazione del payroll: basta conoscere la retribuzione lorda.",
+          "ctx": {
+            "who": "Responsabile payroll",
+            "say": "Per noi il CCNL è un dettaglio: quello che conta è la retribuzione lorda di ogni persona."
+          },
+          "a": false,
+          "diff": 1,
+          "exp": "Il CCNL determina minimi, livelli, mensilità, maggiorazioni e indennità: cambia il calcolo del cedolino. Ignorarlo in fase di discovery è la causa tipica di sorprese a metà progetto."
+        },
+        {
+          "t": "mcq",
+          "q": "Il CHRO vuole passare a Employee Central ma lasciare il payroll dov'è per ora. Cosa rispondi?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Voglio passare a Employee Central, ma il payroll deve restare dov'è per ora. Si può fare?"
+          },
+          "o": [
+            "Non è possibile: Employee Central richiede di migrare insieme anche il payroll",
+            "Possibile se il payroll attuale è già in cloud sullo stesso fornitore SAP",
+            "Possibile: Core HR in cloud e payroll esistente integrato, da rivedere più avanti",
+            "Conviene attendere la fine della manutenzione per decidere in blocco"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "L'ibrido è un percorso reale: Core HR in Employee Central, payroll esistente integrato e rivisto in una seconda fase. Va pianificato il flusso dati e l'impatto sui processi, non dato per scontato."
+        },
+        {
+          "t": "order",
+          "q": "Ordina le attività payroll di un mese tipico",
+          "items": [
+            "Raccolta di presenze, assenze e voci variabili del mese",
+            "Calcolo dei cedolini",
+            "Controllo e quadratura dei risultati",
+            "Pagamento degli stipendi",
+            "Flusso UniEmens e versamenti con F24 il mese successivo"
+          ],
+          "diff": 2,
+          "exp": "Le variabili alimentano il calcolo, i controlli precedono il pagamento e gli adempimenti verso INPS e Fisco chiudono il ciclo. È la sequenza su cui disegnare le integrazioni con Core HR e time management."
+        }
+      ]
+    },
+    {
+      "id": "w07-l13",
+      "title": "Trasparenza retributiva in Italia",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "L'Italia ha recepito la direttiva UE 2023/970 con il {{w07.it_decree}}, in vigore dal {{w07.it_in_force}}.",
+          "Obblighi senza soglia di dimensione: {{w07.it_all_employers}}.",
+          "Report sul divario di genere: {{w07.it_reporting}}.",
+          "Se emerge un divario: {{w07.it_gap_5pct}}.",
+          "SAP: {{w07.sap_paytransp}}. SAP non fornisce consulenza legale: le regole di conformità le valida il cliente col suo legale."
+        ],
+        "ae": "Annunci e storico retributivo valgono già oggi, il primo report nel 2027: parti da job architecture, range e dati puliti. Decreti attuativi: {{w07.it_decrees_pending}}."
+      },
+      "ex": [
+        {
+          "t": "fill",
+          "q": "L'Italia ha recepito la direttiva UE sulla trasparenza retributiva con il D.Lgs. n. ___ del 2026.",
+          "o": [
+            "96",
+            "69",
+            "196",
+            "126"
+          ],
+          "a": 0,
+          "diff": 2,
+          "exp": "Recepimento: {{w07.it_decree}}, in vigore dal {{w07.it_in_force}}, cioè in coincidenza con la scadenza di recepimento della direttiva."
+        },
+        {
+          "t": "mcq",
+          "q": "Un'azienda italiana con 180 dipendenti: quando scade il suo primo report sul divario retributivo di genere?",
+          "o": [
+            "{{w07.it_first_report_100}}",
+            "{{w07.it_first_report_250}}",
+            "7 giugno 2026",
+            "1° gennaio 2027"
+          ],
+          "a": 1,
+          "diff": 3,
+          "exp": "La fascia 150-249 ha prima scadenza al {{w07.it_first_report_250}}, poi cadenza triennale; la fascia 100-149 parte dal {{w07.it_first_report_100}}. Schema completo: {{w07.it_reporting}}."
+        },
+        {
+          "t": "tf",
+          "q": "Dal 7 giugno 2026 anche un'azienda con 40 dipendenti deve indicare retribuzione iniziale o fascia negli annunci di lavoro.",
+          "a": true,
+          "diff": 2,
+          "exp": "Gli obblighi su annunci, divieto di chiedere lo storico retributivo e diritto di informazione non hanno soglia dimensionale: {{w07.it_all_employers}}. La soglia dei 100 dipendenti riguarda il reporting periodico."
+        },
+        {
+          "t": "mcq",
+          "q": "Il CHRO pubblica annunci senza range perché «la RAL dipende dal candidato». Come rispondi?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Pubblichiamo annunci senza range, perché la RAL dipende dal candidato e dall'esperienza."
+          },
+          "o": [
+            "L'obbligo riguarda le aziende sopra i 250 dipendenti, quindi per voi non cambia nulla",
+            "SuccessFactors pubblica il range nell'annuncio dopo l'attivazione, senza altre attività",
+            "Dal 7 giugno 2026 serve indicare la fascia: partiamo da range e job architecture",
+            "Possiamo risolvere con una nota legale generica nell'annuncio, senza indicare la fascia"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "L'obbligo sugli annunci vale per tutti i datori. Il software aiuta (range negli annunci di Recruiting e SmartRecruiters), ma servono range e job architecture definiti dal cliente, e la verifica legale è sua."
+        },
+        {
+          "t": "bucket",
+          "q": "Tutti i datori di lavoro o solo sopra una soglia di dipendenti?",
+          "buckets": [
+            "Tutti i datori",
+            "Solo sopra soglia"
+          ],
+          "items": [
+            [
+              "Retribuzione o fascia negli annunci di lavoro",
+              0
+            ],
+            [
+              "Divieto di chiedere lo storico retributivo ai candidati",
+              0
+            ],
+            [
+              "Report periodico sul divario retributivo di genere",
+              1
+            ],
+            [
+              "Diritto del lavoratore di chiedere le retribuzioni medie per sesso",
+              0
+            ],
+            [
+              "Prima scadenza di reporting nel 2031 (fascia 100-149)",
+              1
+            ]
+          ],
+          "diff": 2,
+          "exp": "Annunci, storico retributivo e diritto di informazione valgono per tutti; il reporting periodico scatta da 100 dipendenti, con scadenze diverse per fascia. Schema: {{w07.it_reporting}}."
+        },
+        {
+          "t": "multi",
+          "q": "Quali capacità ha annunciato SAP a supporto della direttiva sulla trasparenza retributiva?",
+          "o": [
+            "Range retributivi negli annunci di SuccessFactors Recruiting e SmartRecruiters",
+            "Dichiarazioni retributive individuali con confronto per sesso in Employee Central",
+            "Insight dedicati in People Intelligence su Business Data Cloud",
+            "Certificazione di conformità legale automatica per le aziende clienti",
+            "Sostituzione del consulente legale con un agente Joule"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 3,
+          "exp": "Capacità annunciate: {{w07.sap_paytransp}}. Nessun software certifica la conformità legale: il cliente deve comunque configurare processi e range e farli validare dal proprio legale."
+        }
+      ]
+    },
+    {
+      "id": "w07-l14",
+      "title": "Boss: il comitato HR",
+      "kind": "boss",
+      "lesson": {
+        "points": [
+          "Riepilogo: Core HR (Employee Central) al centro, processi di talento intorno, analytics e AI sopra. Parti sempre da un problema del CHRO e coinvolgi CFO e CIO.",
+          "Dati volatili da riverificare prima di ogni incontro: date di manutenzione HCM, stato di SmartRecruiters e degli agenti Joule, scadenze e decreti attuativi sulla trasparenza retributiva.",
+          "In Italia ricorda CCNL, adempimenti payroll, privacy e Statuto dei lavoratori: non promettere copertura Italia o controllo dei lavoratori senza verifiche."
+        ]
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Il comitato vuole una piattaforma HR unica ma teme costi e integrazione. Quale proposta è più solida?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Se CHRO e CIO sono d'accordo, io voglio un business case con numeri nostri, non slide generiche."
+          },
+          "o": [
+            "Un confronto funzionale tra moduli, con l'elenco delle funzioni di ciascuno",
+            "Un caso d'uso su dati propri: costo del lavoro, tempi di processo, integrazioni",
+            "Una demo guidata dai casi d'uso di altri clienti dello stesso settore",
+            "Un piano di rollout in 12 mesi, con date e perimetro definiti prima dell'assessment"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Il CFO chiede numeri del cliente: un caso d'uso su dati propri (costo, tempi, integrazioni) risponde a CFO e CIO. Elenchi di funzioni e piani con date prima dell'assessment non lo fanno."
+        },
+        {
+          "t": "mcq",
+          "q": "Il CIO cita la manutenzione di ERP HCM. Quale risposta è corretta e prudente a ottobre 2026?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Il nostro ERP HCM è in manutenzione, ma fino a quando esattamente? E dopo che si fa?"
+          },
+          "o": [
+            "Standard fino al 31 dicembre 2030, poi estesa a pagamento da verificare",
+            "Standard fino al 31 dicembre 2025, poi estesa a pagamento da verificare",
+            "Standard fino al {{sap.ecc.mainstream_end}}, poi estesa a pagamento da verificare",
+            "Standard fino al 31 dicembre 2027, poi estesa gratuita fino al 2030"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "ERP HCM è nel perimetro Business Suite 7: standard fino al {{sap.ecc.mainstream_end}}, estesa fino al {{sap.ecc.extended_end}}. L'estesa non è gratuita; date e perimetro vanno sempre verificati sul contratto."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il prodotto o la soluzione alla descrizione corretta",
+          "pairs": [
+            [
+              "SmartRecruiters",
+              "Recruiting che SAP posiziona come futuro del modulo nativo"
+            ],
+            [
+              "WalkMe",
+              "Piattaforma di digital adoption con guida in-app"
+            ],
+            [
+              "People Intelligence",
+              "Analytics HR su SAP Business Data Cloud"
+            ],
+            [
+              "SAP HCM for S/4HANA",
+              "Opzione on-premise ponte per chi resta su HCM"
+            ],
+            [
+              "Talent Intelligence Hub",
+              "Framework di skills integrato nella suite SuccessFactors"
+            ]
+          ],
+          "diff": 2,
+          "exp": "Cinque tessere del portafoglio HR che l'AE deve saper collocare senza esitare: recruiting, adozione, analytics, opzione on-premise e skills."
+        },
+        {
+          "t": "order",
+          "q": "Ordina i passi di una discovery efficace con il CHRO",
+          "items": [
+            "Chiedi quali risultati su persone gli sono richiesti quest'anno",
+            "Mappa dove si rompono processi e dati",
+            "Quantifica l'impatto in tempo, rischio e costo",
+            "Coinvolgi CFO e CIO su business case e integrazione",
+            "Concorda un caso d'uso pilota e i prossimi passi"
+          ],
+          "diff": 2,
+          "exp": "Si parte dal risultato atteso, poi dal problema e dal suo impatto; solo dopo si allargano gli stakeholder e si concorda un pilota. Invertire l'ordine porta a demo senza mandato."
+        },
+        {
+          "t": "tf",
+          "q": "Un'azienda italiana con 90 dipendenti ha l'obbligo di un report periodico sul divario retributivo di genere secondo il D.Lgs. 96/2026.",
+          "a": false,
+          "diff": 2,
+          "exp": "Il reporting periodico parte da 100 dipendenti: {{w07.it_reporting}}. Restano però gli obblighi senza soglia su annunci, storico retributivo e diritto di informazione."
+        },
+        {
+          "t": "mcq",
+          "q": "Il CHRO chiede se il payroll cloud di SAP copre l'Italia. Quale risposta è la più corretta?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Voglio chiudere il tema payroll Italia: voi coprite CCNL, UniEmens e Certificazione Unica, sì o no?"
+          },
+          "o": [
+            "Sì, Employee Central Payroll copre l'Italia in modo completo e non servono verifiche",
+            "Per il payroll italiano conviene partire da un software locale, senza valutare SAP",
+            "Dipende dal numero di dipendenti: sotto i 250 il payroll cloud non è disponibile",
+            "Verifico con SAP e partner il perimetro Italia: CCNL, UniEmens, Certificazione Unica"
+          ],
+          "a": 3,
+          "diff": 3,
+          "exp": "{{w07.ecp_italy}}, ma il perimetro attuale su CCNL e adempimenti va confermato con SAP e partner. Promettere «copertura completa» senza verifica è l'errore che costa più caro."
+        },
+        {
+          "t": "multi",
+          "q": "Quali cautele sono corrette nel proporre agenti AI per l'HR?",
+          "o": [
+            "Partire da un perimetro limitato di contenuti approvati",
+            "Prevedere il passaggio a una persona di HR per i casi dubbi",
+            "Valutare privacy e relazioni industriali prima di usare dati dei lavoratori",
+            "Promettere che le risposte dell'agente saranno corrette in ogni caso",
+            "Attivare l'agente senza informare i dipendenti per evitare resistenze"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 3,
+          "exp": "Pilota, escalation umana e governance di privacy e relazioni industriali sono le cautele reali. Promettere correttezza assoluta o nascondere l'uso ai dipendenti minano fiducia e conformità."
+        },
+        {
+          "t": "bucket",
+          "q": "Da riverificare ogni volta o concetto stabile?",
+          "buckets": [
+            "Da riverificare ogni volta",
+            "Concetto stabile"
+          ],
+          "items": [
+            [
+              "Data di fine manutenzione standard di ERP HCM",
+              0
+            ],
+            [
+              "Significato di compa-ratio",
+              1
+            ],
+            [
+              "Elenco degli agenti Joule per l'HR disponibili",
+              0
+            ],
+            [
+              "Funzione di un workflow di approvazione in Employee Central",
+              1
+            ],
+            [
+              "Prima scadenza di reporting per la fascia 100-149 dipendenti",
+              0
+            ],
+            [
+              "Differenza tra headcount e FTE",
+              1
+            ]
+          ],
+          "diff": 2,
+          "exp": "Date, stati di disponibilità e scadenze normative cambiano e vanno riverificati prima di ogni incontro; definizioni e concetti restano. Distinguere i due ti protegge dal promettere dati vecchi."
+        },
+        {
+          "t": "mcq",
+          "q": "Il progetto HR è partito ma i manager non usano i flussi previsti. Qual è la proposta più adatta?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Abbiamo attivato i nuovi flussi, ma i manager continuano a mandarmi email e a usare i vecchi file."
+          },
+          "o": [
+            "Aggiungiamo un'ora di formazione in aula per i manager e un manuale scritto di processo",
+            "Rendiamo obbligatorio l'uso con una circolare del CHRO e controlliamo i log di accesso",
+            "Misuriamo dove gli utenti si bloccano e aggiungiamo guida contestuale in-app con WalkMe",
+            "Sostituiamo il modulo con un altro prodotto, perché l'adozione dipende dal software"
+          ],
+          "a": 2,
+          "diff": 3,
+          "exp": "Il problema è di adozione: misurare dove gli utenti si bloccano e guidarli nel flusso è la risposta di una piattaforma di digital adoption. Formazione in aula e circolari non risolvono il punto di blocco; il controllo dei log pone anche limiti legali."
+        }
+      ]
+    }
+  ]
+}

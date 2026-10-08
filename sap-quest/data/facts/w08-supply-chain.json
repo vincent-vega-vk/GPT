@@ -1,0 +1,112 @@
+{
+  "w08.me_mii_sunset": {
+    "label": "Fine vita dei vecchi MES SAP ME e SAP MII",
+    "value": "SAP Digital Manufacturing è indicato come successore cloud di SAP ME e SAP MII; fonti di consulenza (non SAP) riportano manutenzione standard fino a fine 2027 ed estesa fino a fine 2030, con date discordanti tra le fonti",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.andea.com/resources/blog/sap-mii-end-of-life-what-manufacturers-need-to-plan-before-2030/",
+    "confidence": "low",
+    "note": "Nessuna fonte SAP aperta. Fonti di consulenza, alcune di vendor concorrenti; un articolo di stampa del 2023-2024 riportava un rinvio a fine 2030 ottenuto dal gruppo utenti DSAG. Data di pubblicazione delle fonti non verificata. Riverificare date e perimetro nel contratto e nella roadmap SAP."
+  },
+  "w08.it_incentive_regime": {
+    "label": "Incentivo 4.0 vigente in Italia dal 2026",
+    "value": "l'iperammortamento della Legge di bilancio 2026 (L. 199/2025, art. 1, commi 427-436)",
+    "asOf": "2026-01-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://leyton.com/it/insights/articles/legge-di-bilancio-2026-ritorno-delliperammortamento-e-agevolazioni-per-le-imprese/",
+    "confidence": "secondary",
+    "note": "Le fonti lo descrivono come sostitutivo dei crediti d'imposta Industria 4.0 e Transizione 5.0. È una maggiorazione del costo ammortizzabile, non un credito d'imposta, e giova soprattutto a chi ha reddito imponibile. Possibili novità con la prossima legge di bilancio: da riverificare a fine anno."
+  },
+  "w08.it_hyper_window": {
+    "label": "Iperammortamento 2026: finestra e procedura GSE",
+    "value": "investimenti dal 1° gennaio 2026 al 30 settembre 2028, con comunicazione preventiva al GSE (piattaforma aperta dal 12 giugno 2026) e successive comunicazioni di conferma e di completamento",
+    "asOf": "2026-07-21",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.agendadigitale.eu/industry-4-0/iperammortamento-2026-la-guida-cose-e-come-fare-le-comunicazioni-al-gse/",
+    "confidence": "secondary",
+    "note": "Decreto interministeriale MIMIT-MEF di maggio 2026 (firme del 4 e 7 maggio secondo le fonti). Le fonti più recenti sono di fine luglio 2026: stato delle comunicazioni di conferma e completamento da verificare sul portale GSE. Un termine al 15 novembre 2028 per il completamento è citato da una sola fonte."
+  },
+  "w08.it_hyper_rates": {
+    "label": "Iperammortamento 2026: maggiorazioni",
+    "value": "maggiorazione del 180% fino a 2,5 mln di euro di investimenti, 100% tra 2,5 e 10 mln, 50% tra 10 e 20 mln, calcolata per ciascun anno",
+    "asOf": "2026-01-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.partitaiva.it/iperammortamento-2026-aliquote-scaglioni/",
+    "confidence": "secondary",
+    "note": "Scaglioni concordi in più fonti (partitaiva, agendadigitale, pmi.it). Un'aliquota al 220% circolata online è stata soppressa nel testo definitivo secondo le fonti."
+  },
+  "w08.it_hyper_cloud": {
+    "label": "Iperammortamento 2026: software in cloud",
+    "value": "i software fruiti in cloud (SaaS) restano esclusi dal perimetro agevolabile; sono ammessi i software acquisiti in proprietà o con licenza d'uso pluriennale, se interconnessi ai sistemi di produzione o gestionali",
+    "asOf": "2026-07-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.ecnews.it/fiscale/fisco-e-patrimonio/agevolazioni/iperammortamento-no-ai-saas-si-alle-licenze-duso/",
+    "confidence": "secondary",
+    "note": "Una bozza prevedeva il beneficio sui canoni; non è nel testo definitivo. Un'interrogazione parlamentare (giugno 2026) segnala una possibile futura estensione al cloud, non adottata nelle fonti consultate. Non dare pareri fiscali."
+  },
+  "w08.it_hyper_erp": {
+    "label": "Iperammortamento 2026: ERP",
+    "value": "secondo i chiarimenti MIMIT-GSE riportati dalla stampa, gli ERP rientrano solo per i moduli produttivi, con esclusione delle componenti amministrative e contabili",
+    "asOf": "2026-07-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.agendadigitale.eu/industry-4-0/software-ai-e-iperammortamento-2026-come-funziona-lagevolazione/",
+    "confidence": "low",
+    "note": "Dato riportato da una sola fonte tra quelle consultate; testo dei chiarimenti non letto. Il perimetro lo valida il cliente con consulente fiscale e perito."
+  },
+  "w08.espr_basics": {
+    "label": "ESPR: base normativa e piano di lavoro",
+    "value": "Regolamento (UE) 2024/1781, in vigore dal 18 luglio 2024; il primo piano di lavoro è stato adottato il 16 aprile 2025",
+    "asOf": "2025-04-16",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://psqr.eu/publications-resources/espr-updates-april25/",
+    "confidence": "secondary",
+    "note": "Data di entrata in vigore da conoscenza della norma, da riverificare su EUR-Lex; piano di lavoro COM(2025) 187 riportato da più tracker."
+  },
+  "w08.dpp_registry": {
+    "label": "Registro UE dei Digital Product Passport",
+    "value": "regolato dal Regolamento di esecuzione (UE) 2026/1778 del 16 luglio 2026, è un indice che associa l'identificativo unico del prodotto al link del passaporto, ospitato dall'operatore: non contiene i dati completi",
+    "asOf": "2026-07-20",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.lexisnexis.co.uk/legal/news/commission-launches-digital-product-passport-registry-under-ecodesign-regulation",
+    "confidence": "secondary",
+    "note": "Testo del regolamento di esecuzione indicizzato su afec.es e notizie della Commissione riprese da stampa di settore; non aperti direttamente."
+  },
+  "w08.dpp_registry_live": {
+    "label": "Data di avvio del registro UE dei DPP",
+    "value": "20 luglio 2026",
+    "asOf": "2026-07-20",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.lexisnexis.co.uk/legal/news/commission-launches-digital-product-passport-registry-under-ecodesign-regulation",
+    "confidence": "secondary",
+    "note": "Alcune fonti indicano il 19 luglio, che era il termine entro cui la Commissione doveva predisporre l'infrastruttura."
+  },
+  "w08.dpp_delegated": {
+    "label": "Atti delegati per prodotto con obblighi DPP",
+    "value": "alla data di verifica non risultava adottato alcun atto delegato di prodotto con obblighi DPP; il primo in preparazione è quello su ferro e acciaio (consultazione chiusa il 12 agosto 2026); date indicative di terzi: tessili, alluminio e pneumatici nel 2027, mobili nel 2028, materassi nel 2029",
+    "asOf": "2026-08-26",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-11-30",
+    "source": "https://www.renoon.com/blog/delegated-acts-for-digital-product-passport-explainer-and-current-status",
+    "confidence": "secondary",
+    "note": "Tracker di terzi con date indicative; fonti più recenti di fine agosto 2026. Atto su ferro e acciaio atteso nel quarto trimestre 2026: riverificare su EUR-Lex e sul sito della Commissione."
+  },
+  "w08.battery_passport": {
+    "label": "Passaporto digitale delle batterie",
+    "value": "previsto dal 18 febbraio 2027 per le batterie per veicoli elettrici, per mezzi di trasporto leggeri e industriali sopra i 2 kWh (Reg. UE 2023/1542); associazioni di settore hanno chiesto rinvii, ma nelle fonti consultate non risulta alcuna modifica adottata",
+    "asOf": "2026-07-20",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://cullen-international.com/news/2023/09/Battery-passports-become-mandatory-from-2027-for-EV-and-industrial-batteries.html",
+    "confidence": "secondary",
+    "note": "La Commissione ha ribadito la data il 20 luglio 2026 secondo le fonti; richieste di rinvio di CECE ed EUROBAT sono proposte, non diritto vigente. Contenuti del passaporto discordanti tra le fonti: controllare l'Allegato XIII."
+  }
+}

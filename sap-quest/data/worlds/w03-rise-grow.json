@@ -1,0 +1,1639 @@
+{
+  "id": "w03",
+  "levels": [
+    {
+      "id": "w03-l01",
+      "title": "RISE e GROW: due strade",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "RISE with SAP e GROW with SAP sono percorsi e pacchetti commerciali, non prodotti ERP: mettono insieme software, servizi, strumenti e supporto. L'ERP vero e proprio è SAP Cloud ERP o la sua versione Private.",
+          "Secondo SAP, {{w03.rise_definition}}.",
+          "GROW è pensato soprattutto per chi parte da zero o cresce in fretta: si comincia dai processi core (finance, supply chain, HR) in public cloud e si estende nello stesso ERP, con AI integrata.",
+          "Regola pratica: RISE = «porto il mio SAP esistente nel cloud» (di solito da ECC); GROW = «adotto un ERP cloud standard» (nuovi clienti, filiali, aziende in crescita)."
+        ],
+        "ae": "Non chiedere «RISE o GROW?»: chiedi «Hai già un ERP SAP da modernizzare, o stai scegliendo un ERP per la prima volta o per una filiale?»"
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina ogni nome alla sua descrizione",
+          "pairs": [
+            [
+              "RISE with SAP",
+              "Percorso per modernizzare un SAP esistente (core: Cloud ERP Private)"
+            ],
+            [
+              "GROW with SAP",
+              "Percorso verso un ERP cloud standard (core: Cloud ERP public)"
+            ],
+            [
+              "SAP Cloud ERP",
+              "ERP in public cloud, multi-tenant"
+            ],
+            [
+              "SAP Cloud ERP Private",
+              "ERP in private cloud, single-tenant e gestito"
+            ]
+          ],
+          "exp": "RISE e GROW sono i percorsi commerciali; SAP Cloud ERP e SAP Cloud ERP Private sono le edizioni ERP che li sostengono. Tenere separati i due piani evita il 90% della confusione con i clienti.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "RISE with SAP è un percorso e pacchetto commerciale, non un prodotto ERP a sé stante.",
+          "a": true,
+          "exp": "L'ERP al centro di RISE è tipicamente SAP Cloud ERP Private. RISE è il modo in cui SAP lo impacchetta con infrastruttura gestita, servizi e strumenti di trasformazione.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Il CIO di un'azienda farmaceutica con ECC ti chiede la differenza tra RISE e GROW. Qual è la risposta migliore?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Mi hanno detto che devo scegliere tra RISE e GROW. Qual è la differenza?"
+          },
+          "o": [
+            "Dipende dal punto di partenza: RISE modernizza un SAP esistente, GROW adotta lo standard.",
+            "Dipende dalla dimensione: RISE per le grandi imprese, GROW per le piccole e medie.",
+            "Dipende dalle funzioni: GROW è la versione ridotta di RISE, con meno moduli e servizi.",
+            "Non cambia nulla: sono lo stesso pacchetto venduto con due etichette commerciali."
+          ],
+          "a": 0,
+          "exp": "Il criterio è il punto di partenza e l'approccio (modernizzare l'esistente vs adottare lo standard), non la sola dimensione. Una grande azienda può usare GROW per una filiale e RISE per la sede.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "GROW with SAP si basa su SAP Cloud ERP in edizione ___.",
+          "o": [
+            "public (multi-tenant)",
+            "private (single-tenant)",
+            "hybrid cloud (misto)",
+            "on-premise (installata dal cliente)"
+          ],
+          "a": 0,
+          "exp": "GROW poggia sulla edizione public, multi-tenant, con processi standard preconfigurati. La edizione Private è tipica di RISE.",
+          "diff": 1
+        },
+        {
+          "t": "bucket",
+          "q": "Qual è il percorso più naturale in ciascuno di questi casi?",
+          "buckets": [
+            "RISE with SAP",
+            "GROW with SAP"
+          ],
+          "items": [
+            [
+              "Cliente ECC con vent'anni di personalizzazioni",
+              0
+            ],
+            [
+              "Nuova filiale estera che deve partire in fretta con processi standard",
+              1
+            ],
+            [
+              "Obiettivo: portare nel cloud il SAP esistente mantenendo flessibilità",
+              0
+            ],
+            [
+              "Azienda in crescita che adotta un ERP per la prima volta",
+              1
+            ],
+            [
+              "ERP al centro del percorso: SAP Cloud ERP Private",
+              0
+            ],
+            [
+              "ERP al centro del percorso: SAP Cloud ERP (public)",
+              1
+            ]
+          ],
+          "exp": "RISE accompagna chi ha già un patrimonio SAP da modernizzare; GROW chi vuole partire dallo standard. I casi misti esistono (sede su Private, filiali su public), ma la domanda di partenza resta la stessa.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l02",
+      "title": "Cosa c'è dentro RISE",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "RISE non è una singola licenza: è una subscription che impacchetta più blocchi. Secondo SAP (aprile 2025), {{w03.private_package_2025}}.",
+          "In pratica il perimetro tipico include: {{w03.rise_scope}}.",
+          "Di norma resta fuori: il progetto di implementazione e migrazione del partner SI, la remediation del codice custom e le soluzioni di linea di business (es. Ariba, SuccessFactors), che hanno contratti e perimetri propri.",
+          "I pacchetti cambiano: {{w03.packaging_2025}}. Prima di promettere un'inclusione, verifica service description e order form."
+        ],
+        "ae": "Mai «RISE include tutto». Meglio: «RISE include ERP, infrastruttura gestita e strumenti; il progetto e le soluzioni LoB hanno un perimetro a parte»."
+      },
+      "ex": [
+        {
+          "t": "multi",
+          "q": "Quali elementi fanno parte del perimetro tipico di RISE / SAP Cloud ERP Private?",
+          "o": [
+            "Infrastruttura e servizi tecnici cloud gestiti",
+            "Crediti per SAP BTP",
+            "Strumenti di trasformazione come SAP Signavio e SAP LeanIX",
+            "Il progetto completo di implementazione svolto dal partner SI",
+            "Le licenze di SAP Ariba e SAP SuccessFactors"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Infrastruttura gestita, crediti BTP e strumenti di trasformazione sono nel pacchetto tipico. Il progetto del partner SI e le soluzioni LoB si contrattano a parte. Il dettaglio dipende sempre dal contratto.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Il progetto di implementazione del partner SI è, di norma, già compreso nel canone RISE.",
+          "a": false,
+          "exp": "RISE include onboarding e strumenti, non il progetto di migrazione: quello è un contratto separato con il partner SI. Dirlo chiaramente evita sorprese di budget.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CFO ti chiede se RISE è «tutto incluso». Cosa rispondi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "RISE è tutto incluso, giusto? Non avrò altri costi?"
+          },
+          "o": [
+            "Include ERP, infrastruttura e strumenti; progetto SI e soluzioni LoB sono a parte.",
+            "Include ERP, infrastruttura, progetto del partner e soluzioni LoB; senza costi extra.",
+            "Include licenza ERP e progetto del partner SI; infrastruttura e strumenti sono a parte.",
+            "Include infrastruttura e servizi tecnici; la licenza ERP è un contratto separato."
+          ],
+          "a": 0,
+          "exp": "Promettere «tutto incluso» è il modo più rapido di perdere fiducia a metà progetto. Delimita il perimetro e rimanda al documento contrattuale.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Il pacchetto SAP Cloud ERP Private ha tre blocchi: applicazioni di business, strumenti e servizi di trasformazione, e servizi di ottimizzazione e ___.",
+          "o": [
+            "estensibilità verso il clean core",
+            "migrazione dei dati dei clienti",
+            "hosting on-premise del cliente",
+            "formazione degli utenti finali"
+          ],
+          "a": 0,
+          "exp": "È la descrizione data da SAP nell'aprile 2025: il terzo blocco serve a mantenere un core pulito eliminando silos di dati e tenendo il codice custom conforme alle regole cloud.",
+          "diff": 2
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni componente al suo scopo",
+          "pairs": [
+            [
+              "Infrastruttura gestita",
+              "Server, storage e rete operati per conto del cliente"
+            ],
+            [
+              "Crediti SAP BTP",
+              "Estendere e integrare senza toccare il core"
+            ],
+            [
+              "SAP Signavio",
+              "Mappare e analizzare i processi prima di migrare"
+            ],
+            [
+              "SAP LeanIX",
+              "Mappare architettura applicativa e landscape IT"
+            ],
+            [
+              "Servizi di onboarding",
+              "Kick-off, workshop e piano di adozione iniziali"
+            ]
+          ],
+          "exp": "Ogni blocco risponde a una fase: capire il landscape (LeanIX, Signavio), partire (onboarding), far funzionare (infrastruttura) ed estendere senza toccare il core (BTP).",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l03",
+      "title": "Private edition: servizi gestiti",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Cloud ERP Private è un ERP single-tenant: ogni cliente ha il proprio sistema, ospitato su un hyperscaler o in data center SAP e fornito come servizio gestito.",
+          "SAP (con il provider di infrastruttura) opera la parte tecnica: infrastruttura, database, Basis, backup, monitoraggio, patch. Il cliente o il partner resta responsabile di processi, configurazione, codice custom e dati.",
+          "Valore commerciale: un unico contratto con SAP per software, infrastruttura e servizi tecnici, invece di tre contratti separati (licenza, hosting, Basis).",
+          "«Gestito» non significa «senza lavoro»: test, change management, qualità dei dati e allineamento dei processi restano del cliente."
+        ],
+        "ae": "Spiega la divisione delle responsabilità in una riga: «SAP gestisce il motore, tu e il partner guidate il business»."
+      },
+      "ex": [
+        {
+          "t": "bucket",
+          "q": "Chi se ne occupa in un servizio Private gestito?",
+          "buckets": [
+            "SAP / provider infrastruttura",
+            "Cliente / partner SI"
+          ],
+          "items": [
+            [
+              "Patch e monitoraggio tecnico dell'infrastruttura",
+              0
+            ],
+            [
+              "Configurazione dei processi di business",
+              1
+            ],
+            [
+              "Backup e gestione del database",
+              0
+            ],
+            [
+              "Qualità e pulizia dei dati master",
+              1
+            ],
+            [
+              "Test di accettazione utente (UAT)",
+              1
+            ],
+            [
+              "Operations di Basis e ciclo di vita dei sistemi tecnici",
+              0
+            ]
+          ],
+          "exp": "La parte tecnica è del servizio gestito; il business, i dati e i test restano al cliente. Chiarirlo in avvio evita il classico «ma pensavamo che se ne occupasse SAP».",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "In SAP Cloud ERP Private ogni cliente ha un sistema ERP dedicato (single-tenant).",
+          "a": true,
+          "exp": "È la differenza architetturale chiave rispetto alla public edition, multi-tenant. Il sistema dedicato dà più margine su estensioni e tempi di upgrade, entro i limiti del servizio.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO teme di non servire più. Come rispondi?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Se SAP gestisce tutto, il mio team IT cosa fa?"
+          },
+          "o": [
+            "Passa da infrastruttura e Basis a governance, integrazioni, dati e innovazione.",
+            "Passa da governance e integrazioni a server e database, che SAP affida al cliente.",
+            "Resta responsabile di infrastruttura e Basis; SAP si limita a licenze e aggiornamenti.",
+            "Si concentra sul supporto agli utenti di primo livello e sul controllo delle fatture SAP."
+          ],
+          "a": 0,
+          "exp": "Il servizio gestito sposta il lavoro IT verso attività a più valore. Presentarlo così trasforma un timore sul ruolo in una storia di crescita del team.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Con RISE il cliente ha di norma ___ per software, infrastruttura e servizi tecnici.",
+          "o": [
+            "un unico contratto con SAP",
+            "contratti separati con SAP, hosting e Basis",
+            "una licenza perpetua senza canone",
+            "il controllo diretto dei data center"
+          ],
+          "a": 0,
+          "exp": "Un unico contratto con SAP semplifica la governance e la responsabilità del servizio. L'infrastruttura è operata dal provider (hyperscaler o SAP) nel perimetro del servizio.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali attività restano al cliente o al partner anche con il servizio gestito?",
+          "o": [
+            "Definire e testare i processi di business",
+            "Pulire e migrare i dati",
+            "Gestire il cambiamento con gli utenti",
+            "Sostituire i server fisici nel data center",
+            "Applicare le patch del sistema operativo"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Server e patch di sistema sono del servizio; processi, dati e adozione sono del cliente. Nessuna tecnologia gestita sostituisce il lavoro sul cambiamento organizzativo.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l04",
+      "title": "GROW: il public cloud che parte",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "{{w03.grow_offer}}.",
+          "È il percorso per partire da processi standard: si adotta la best practice preconfigurata (fit-to-standard) invece di ricostruire i processi vecchi. Poi si estende lo stesso ERP con nuove aree e AI.",
+          "Adoption services: strumenti, metodologie, attivazione guidata e advisory, più community e formazione. SAP li propone come strada più rapida e prevedibile al go-live.",
+          "Esempio 2026: {{w03.grow_fast_finance}}.",
+          "Limiti da dichiarare: in public edition non si modifica il core né si usa ABAP classico; le estensioni passano da key user, ABAP Cloud e SAP BTP."
+        ],
+        "ae": "GROW si vende a chi accetta lo standard: chiedi «Quanto sei disposto a cambiare il processo pur di adottare la best practice?»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la caratteristica chiave del modello GROW?",
+          "o": [
+            "Partire da best practice preconfigurate e servizi di adozione, non da processi rifatti.",
+            "Migrare l'ECC così com'è, con il suo codice custom, in un ambiente cloud gestito da SAP.",
+            "Avere un sistema dedicato single-tenant con upgrade decisi dal cliente e custom profondo.",
+            "Mantenere la licenza on-premise e aggiungere servizi di hosting e manutenzione annuale."
+          ],
+          "a": 0,
+          "exp": "GROW punta a velocità e prevedibilità partendo dallo standard. Il resto descrive RISE/Private o il vecchio modello on-premise.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "In SAP Cloud ERP public edition si possono modificare i programmi standard SAP con ABAP classico.",
+          "a": false,
+          "exp": "La public edition non ammette modifiche al core né ABAP classico: le estensioni usano key user, ABAP Cloud e SAP BTP. È il prezzo (e il vantaggio) di aggiornamenti semplici.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "GROW Fast è un'implementazione strutturata a perimetro ___ e prezzi trasparenti.",
+          "o": [
+            "predefinito",
+            "illimitato",
+            "definito caso per caso",
+            "variabile a consumo"
+          ],
+          "a": 0,
+          "exp": "Perimetro predefinito significa meno variabili e più prevedibilità di tempi e costi. Va presentato come claim di SAP, non come garanzia: dipende dal fit con lo standard.",
+          "diff": 2
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni elemento di GROW alla sua funzione",
+          "pairs": [
+            [
+              "Best practice preconfigurate",
+              "Processi pronti per finance, supply chain e HR"
+            ],
+            [
+              "Servizi di adozione",
+              "Strumenti, metodologie e attivazione guidata"
+            ],
+            [
+              "SAP BTP",
+              "Estensioni e integrazioni side-by-side"
+            ],
+            [
+              "Community e learning",
+              "Risorse di formazione e scambio tra esperti"
+            ],
+            [
+              "Joule",
+              "Assistente AI integrato nei processi"
+            ]
+          ],
+          "exp": "GROW non è solo software: è un insieme di processi, servizi e risorse pensato per ridurre il tempo al go-live e rendere l'adozione ripetibile.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Il COO di una filiale CPG vuole partire in pochi mesi con processi semplici. Cosa proponi?",
+          "ctx": {
+            "who": "COO",
+            "say": "Voglio andare live in pochi mesi. Devo rifare tutta la personalizzazione del vecchio sistema?"
+          },
+          "o": [
+            "Partiamo dallo standard: best practice preconfigurate e differenze reali su estensioni.",
+            "Sì, in public cloud puoi replicare le personalizzazioni modificando i programmi standard.",
+            "No, la public è pensata per le sedi centrali: per una filiale serve la Private dedicata.",
+            "Prima migri la sede a RISE, poi valuti la filiale su GROW con un secondo progetto."
+          ],
+          "a": 0,
+          "exp": "È il caso tipico di GROW: filiale, processi semplici, velocità. Le vere differenze di business si trattano con estensioni; il resto si allinea allo standard.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l05",
+      "title": "Naming: SAP Cloud ERP",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Dal 2025 SAP semplifica i nomi: {{sap.naming.cloud_erp}}.",
+          "I clienti (e molti partner) usano ancora i vecchi nomi, «S/4HANA Cloud Public/Private Edition»: tienili entrambi in testa e traduci con naturalezza, senza correggere il cliente.",
+          "RISE e GROW sono nomi di percorso, non di prodotto: «RISE» non indica un ERP diverso e GROW non è «un altro S/4HANA».",
+          "Prima di scrivere un nome in una proposta, verifica il wording esatto su sap.com e sui documenti contrattuali: il nuovo naming è documentato soprattutto da fonti terze."
+        ],
+        "ae": "Se il cliente dice «Public Edition», usa il suo termine la prima volta, poi introduci «SAP Cloud ERP» come se fosse la stessa cosa (lo è)."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina vecchio nome o concetto al nome attuale",
+          "pairs": [
+            [
+              "S/4HANA Cloud Public Edition",
+              "SAP Cloud ERP"
+            ],
+            [
+              "S/4HANA Cloud Private Edition",
+              "SAP Cloud ERP Private"
+            ],
+            [
+              "Percorso per clienti SAP esistenti",
+              "RISE with SAP"
+            ],
+            [
+              "Percorso verso l'ERP cloud standard",
+              "GROW with SAP"
+            ]
+          ],
+          "exp": "Il rename ha toccato i nomi dell'ERP, non i percorsi commerciali. Tradurre al volo tra vecchio e nuovo nome è una competenza base per un AE nel 2026.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Con il nuovo naming, RISE e GROW non esistono più come nomi di percorso.",
+          "a": false,
+          "exp": "RISE e GROW restano come nomi di percorso e pacchetto: SAP li usa ancora nel 2026, anche per i programmi di AI. Sono i nomi dei prodotti ERP a essere stati semplificati.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un procurement manager nota il cambio di nome sulle slide. Come rispondi?",
+          "ctx": {
+            "who": "Procurement",
+            "say": "Prima era S/4HANA Cloud Private Edition, ora sento SAP Cloud ERP Private. Sono prodotti diversi?"
+          },
+          "o": [
+            "SAP ha semplificato i nomi dal 2025: stessa offerta. Confermo il wording in contratto.",
+            "Sono prodotti diversi: SAP ha lanciato una nuova edizione e va rifatta la valutazione.",
+            "Il prodotto è stato sostituito da un ERP nuovo e la migrazione resta a carico del cliente.",
+            "È un errore delle slide: il nome corretto resta Private Edition, come nel contratto."
+          ],
+          "a": 0,
+          "exp": "È un rename di naming, non un cambio tecnologico. Rassicura il cliente, ma rimanda ai documenti contrattuali per il wording esatto.",
+          "diff": 2
+        },
+        {
+          "t": "bucket",
+          "q": "Quale nome usi per ciascuna descrizione?",
+          "buckets": [
+            "SAP Cloud ERP",
+            "SAP Cloud ERP Private"
+          ],
+          "items": [
+            [
+              "Ex S/4HANA Cloud Public Edition",
+              0
+            ],
+            [
+              "Ex S/4HANA Cloud Private Edition",
+              1
+            ],
+            [
+              "Tipicamente venduto con GROW",
+              0
+            ],
+            [
+              "Tipicamente venduto con RISE",
+              1
+            ],
+            [
+              "Architettura multi-tenant",
+              0
+            ],
+            [
+              "Architettura single-tenant",
+              1
+            ]
+          ],
+          "exp": "Nome, percorso tipico e architettura vanno a coppie: Cloud ERP = public, multi-tenant, GROW; Cloud ERP Private = private, single-tenant, RISE.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "RISE e GROW sono nomi di ___, non di prodotti ERP.",
+          "o": [
+            "percorso e pacchetto",
+            "modulo funzionale ERP",
+            "release semestrali",
+            "soluzioni di settore"
+          ],
+          "a": 0,
+          "exp": "Sono pacchetti e percorsi commerciali che impacchettano ERP, servizi e strumenti. Chiamarli «prodotti ERP» alimenta la confusione con SAP Cloud ERP.",
+          "diff": 1
+        }
+      ]
+    },
+    {
+      "id": "w03-l06",
+      "title": "Public edition: quando sì",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Cloud ERP (public) è multi-tenant: tutti i clienti sono sulla stessa versione, con aggiornamenti periodici e standardizzati, e il cliente non decide la data degli upgrade.",
+          "Funziona bene quando i processi si possono portare allo standard (fit-to-standard), c'è appetito per il cambiamento, serve velocità e il perimetro è definito: nuovo ERP, filiali, aziende in crescita.",
+          "Per arrivarci da un ECC si va in greenfield: non esiste la conversione tecnica di un ECC in public edition, si ridisegnano i processi e si migrano i dati selezionati.",
+          "Trade-off: meno margine di personalizzazione e tempi di aggiornamento imposti (da pianificare con i test), in cambio di meno debito tecnico e innovazione continua."
+        ],
+        "ae": "Domanda chiave: «Quali tuoi processi sono davvero differenzianti e quali sono solo abitudini?» Le abitudini vanno bene nello standard."
+      },
+      "ex": [
+        {
+          "t": "bucket",
+          "q": "Segnale a favore di quale edizione?",
+          "buckets": [
+            "Public (Cloud ERP)",
+            "Private (Cloud ERP Private)"
+          ],
+          "items": [
+            [
+              "Processi vicini allo standard di settore",
+              0
+            ],
+            [
+              "Centinaia di oggetti custom da conservare",
+              1
+            ],
+            [
+              "Nuova filiale da attivare in pochi mesi",
+              0
+            ],
+            [
+              "Conversione tecnica del sistema ECC esistente",
+              1
+            ],
+            [
+              "Appetito per aggiornamenti frequenti e standard",
+              0
+            ],
+            [
+              "Controllo sulla data dell'upgrade per validazione",
+              1
+            ]
+          ],
+          "exp": "Standard, velocità e aggiornamenti continui vanno verso la public; custom pesante, conversione e controllo dei tempi verso la Private. Nessuna delle due è «migliore» in assoluto.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Un sistema ECC può essere convertito tecnicamente in SAP Cloud ERP public edition mantenendo dati e codice custom.",
+          "a": false,
+          "exp": "Verso la public edition si procede con una nuova implementazione (greenfield) e migrazione dei dati selezionati. La conversione di sistema porta invece alla edizione Private.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Il COO di un'azienda CPG in crescita vuole attivare in fretta l'ERP nei nuovi stabilimenti. Cosa esplori?",
+          "ctx": {
+            "who": "COO",
+            "say": "Abbiamo processi semplici e vogliamo partire in fretta con l'ERP in tutti i nuovi stabilimenti."
+          },
+          "o": [
+            "La public è candidata naturale: verifico fit-to-standard sui processi core e il settore.",
+            "La Private è la scelta per più stabilimenti: verifico subito i requisiti di single-tenant.",
+            "Restare su ECC è prudente: il cloud rende più costosi da gestire i processi semplici.",
+            "RISE a prescindere, perché SAP lo raccomanda ai clienti con un ECC esistente."
+          ],
+          "a": 0,
+          "exp": "Processi semplici, velocità e crescita sono il terreno della public edition. Il passo giusto è verificare fit-to-standard e copertura funzionale, non decidere per abitudine.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Per passare a SAP Cloud ERP public edition da un ECC si segue di norma un approccio ___.",
+          "o": [
+            "greenfield (nuova implementazione)",
+            "brownfield (conversione del sistema esistente)",
+            "bluefield (migrazione selettiva)",
+            "lift-and-shift (stesso sistema)"
+          ],
+          "a": 0,
+          "exp": "Si riparte da processi standard e si migrano i dati necessari. È anche l'occasione per eliminare debito tecnico, ma richiede appetito per il cambiamento.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono trade-off tipici della public edition?",
+          "o": [
+            "Meno margine per personalizzazioni profonde",
+            "Aggiornamenti periodici da pianificare e testare",
+            "Obbligo di mantenere il codice ABAP classico",
+            "Meno debito tecnico grazie allo standard",
+            "Ogni cliente decide la data di rilascio"
+          ],
+          "a": [
+            0,
+            1,
+            3
+          ],
+          "exp": "Lo standard riduce il debito tecnico ma limita la personalizzazione e impone un ritmo di aggiornamento comune. L'ABAP classico non è ammesso e la data di rilascio non è scelta dal singolo cliente.",
+          "diff": 3
+        }
+      ]
+    },
+    {
+      "id": "w03-l07",
+      "title": "Private edition: quando sì",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Cloud ERP Private è single-tenant: sistema dedicato, più flessibilità su estensioni e integrazioni, più controllo sui tempi di upgrade (entro i limiti di supporto del servizio).",
+          "È la strada naturale per convertire un ECC esistente (brownfield o system conversion) e per landscape complessi con molte varianti di processo, soluzioni di settore e integrazioni.",
+          "Funziona bene quando serve conservare funzioni specifiche, pianificare gli upgrade con validazione (ambienti regolati come il pharma GxP) o procedere per fasi.",
+          "Non è un permesso di fare custom a piacere: SAP e i partner spingono il clean core anche qui, perché il debito tecnico rende gli upgrade lenti e costosi."
+        ],
+        "ae": "Quando il cliente dice «non possiamo cambiare», chiedi cosa significa: obbligo normativo o abitudine? Solo il primo giustifica davvero la Private."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un responsabile IT di un'azienda farmaceutica ha sistemi validati GxP e molte interfacce con MES e LIMS. Cosa suggerisci?",
+          "ctx": {
+            "who": "Head of IT",
+            "say": "Abbiamo sistemi validati GxP e molte interfacce con MES e LIMS. Possiamo permetterci aggiornamenti obbligatori frequenti?"
+          },
+          "o": [
+            "Valuto la Private: controlli finestra di upgrade e validazione, con conversione dall'ECC.",
+            "Valuto la public: gli aggiornamenti sono obbligatori ma la validazione GxP non serve.",
+            "Valuto una soluzione on-premise: il cloud non è compatibile con sistemi validati GxP.",
+            "Valuto l'hosting dell'ECC attuale: le interfacce con MES e LIMS non permettono altro."
+          ],
+          "a": 0,
+          "exp": "Controllo sulla finestra di upgrade e sulla validazione è un criterio tipico per la Private in ambienti regolati. Non è una regola assoluta: va verificato caso per caso con il team qualità.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Anche in Private edition vale il principio clean core: conviene limitare il codice custom e usare estensioni side-by-side.",
+          "a": true,
+          "exp": "Il sistema è dedicato, ma ogni modifica al core pesa sugli upgrade futuri. SAP e i partner raccomandano il clean core in entrambe le edizioni.",
+          "diff": 1
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni esigenza all'edizione più coerente",
+          "pairs": [
+            [
+              "Conversione tecnica di un ECC",
+              "Private (system conversion)"
+            ],
+            [
+              "Nuova filiale con processi standard",
+              "Public (nuova implementazione)"
+            ],
+            [
+              "Più controllo sulla data di upgrade",
+              "Private (finestra concordata)"
+            ],
+            [
+              "Rilasci uniformi per tutti i clienti",
+              "Public (multi-tenant)"
+            ]
+          ],
+          "exp": "La edizione segue l'esigenza dominante: continuità e controllo (Private) oppure standard e velocità (public). Una stessa azienda può usarle entrambe in punti diversi del gruppo.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "La conversione tecnica di un sistema ECC esistente (system conversion) porta a SAP Cloud ERP ___.",
+          "o": [
+            "Private (single-tenant)",
+            "public (multi-tenant)",
+            "entrambe le edizioni (a scelta)"
+          ],
+          "a": 0,
+          "exp": "La system conversion è il percorso brownfield verso la Private edition. Verso la public si passa da una nuova implementazione.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente vuole la Private «per poter fare tutto come prima». Qual è l'approccio corretto?",
+          "o": [
+            "Accolgo l'esigenza, distinguo custom necessario da abitudine e punto a un core più pulito.",
+            "Prometto di poter personalizzare liberamente la Private, visto che il sistema è dedicato.",
+            "Gli spiego che dovrà passare alla public, perché la Private non ammette più custom code.",
+            "Passo subito al prezzo del canone, rimandando il tema del custom a dopo la firma."
+          ],
+          "a": 0,
+          "exp": "Il custom pesante è il primo nemico degli upgrade. Il tuo ruolo è aiutare il cliente a separare ciò che differenzia il business da ciò che è solo storia del sistema.",
+          "diff": 3
+        }
+      ]
+    },
+    {
+      "id": "w03-l08",
+      "title": "Public o private? Le domande",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Non scegli tu per il cliente: lo guidi con domande. Obiettivo: capire quanto il suo business è differenziante e quanto può adattarsi allo standard.",
+          "Sui processi: quali sono un vantaggio competitivo? Quante varianti per entità e Paese? Quanti oggetti custom usa davvero oggi?",
+          "Sui vincoli: validazioni regolatorie (es. GxP), residenza dei dati, finestre di fermo, integrazioni con sistemi di stabilimento, tempi del progetto.",
+          "Sull'organizzazione: chi decide? Quanta capacità di cambiamento c'è? Che ruolo avrà il partner SI? Ha senso un modello a due livelli (sede su Private, filiali su public)?"
+        ],
+        "ae": "Chiudi con una sintesi in una frase: «Per il core finanziario serve controllo, per le filiali serve velocità: ha senso valutare due livelli?»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CFO ti chiede una risposta secca su public o private. Qual è la mossa migliore?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Voglio solo sapere: public o private? Dammi una risposta."
+          },
+          "o": [
+            "Ti rispondo con due domande: quanto sono differenzianti i tuoi processi e che vincoli hai?",
+            "Ti consiglio la Private, perché è l'edizione più completa e flessibile per un gruppo.",
+            "Ti consiglio la public, perché è l'edizione più moderna e aggiornata per il futuro.",
+            "Dipende dal canone: confronto i prezzi delle due edizioni con il partner e ti dico."
+          ],
+          "a": 0,
+          "exp": "Una risposta secca senza capire il contesto è un'ipotesi, non una raccomandazione. Due domande ben scelte mostrano metodo e portano la conversazione sul business.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono buone domande di qualificazione per scegliere l'edizione?",
+          "o": [
+            "Quanti oggetti custom usate davvero oggi?",
+            "Avete vincoli di validazione (es. GxP) sugli aggiornamenti?",
+            "Quali processi sono davvero differenzianti?",
+            "Quanto sconto si aspetta il cliente sul listino?",
+            "Quale versione di Windows usano gli utenti?"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Custom, vincoli regolatori e differenziazione dei processi sono i tre assi che decidono l'edizione. Sconto e dettagli del posto di lavoro non influenzano la scelta.",
+          "diff": 2,
+          "ctx": {
+            "who": "Head of IT",
+            "say": "Come decidiamo quale edizione è giusta per noi?"
+          }
+        },
+        {
+          "t": "mcq",
+          "q": "Un COO ha filiali asiatiche con processi molto diversi dalla sede italiana. Cosa proponi?",
+          "ctx": {
+            "who": "COO",
+            "say": "Le nostre filiali asiatiche e la sede italiana hanno processi molto diversi."
+          },
+          "o": [
+            "Due livelli: sede su Private per il controllo, filiali su public per la velocità.",
+            "Un'unica edizione per tutto il gruppo: le filiali si adeguano ai processi della sede.",
+            "Nessuna migrazione delle filiali: restano sui sistemi locali e si consolida la sede.",
+            "Conviene rimandare la scelta: le due edizioni non possono convivere nello stesso gruppo."
+          ],
+          "a": 0,
+          "exp": "Il modello a due livelli (two-tier ERP) è una strategia riconosciuta: la sede mantiene controllo, le filiali ottengono velocità e standard. Va verificato su integrazioni e governance dei dati.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Se il cliente ha pochi oggetti custom e processi vicini allo standard, la public edition merita comunque di essere valutata.",
+          "a": true,
+          "exp": "Pochi custom e processi standard sono esattamente il profilo in cui la public edition rende di più. Escluderla per principio sarebbe una scorciatoia mentale.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine una conversazione di qualificazione sull'edizione",
+          "items": [
+            "Capisci i processi differenzianti",
+            "Mappa vincoli normativi e di integrazione",
+            "Valuta appetito al cambiamento e capacità del team",
+            "Proponi un'ipotesi (Private, public o due livelli)",
+            "Concorda i prossimi passi (fit-to-standard, assessment)"
+          ],
+          "exp": "Prima ascolti (processi, vincoli, organizzazione), poi proponi un'ipotesi e solo dopo definisci i prossimi passi. Invertire l'ordine trasforma la discovery in una presentazione.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l09",
+      "title": "Hyperscaler e hosting",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "In sintesi: {{w03.hosting_options}}.",
+          "Chi sceglie? Il cliente, di solito in base alla strategia cloud esistente, alla regione, alle competenze interne e ai requisiti di resilienza e SLA.",
+          "SAP resta il contraente: il provider di infrastruttura opera la parte hardware nel perimetro del servizio. Un SLA più alto o un disaster recovery diverso possono richiedere opzioni aggiuntive: chiedi cosa è nel pacchetto.",
+          "Non entrare nella guerra tra hyperscaler: il tuo valore è l'applicazione. Coinvolgi lo specialista SAP e il partner quando si parla di regioni, reti e connettività."
+        ],
+        "ae": "Chiedi: «Avete già una scelta strategica di hyperscaler per gli altri workload? Ci sono vincoli di regione per i dati?»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Chi, di norma, sceglie l'hyperscaler su cui ospitare RISE?",
+          "o": [
+            "Il cliente, tra le opzioni supportate da SAP, in base a strategia cloud e regione.",
+            "SAP, in base al contratto quadro con un hyperscaler preferito e alla regione.",
+            "Il partner SI, in base alla propria esperienza di progetto e alla regione del team.",
+            "L'hyperscaler, che assegna il cliente alla propria regione in base alla disponibilità."
+          ],
+          "a": 0,
+          "exp": "La scelta è del cliente nel perimetro delle opzioni supportate; SAP resta il contraente. Per questo conviene capire presto strategia cloud e vincoli di regione.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "RISE può essere ospitato esclusivamente nei data center di SAP.",
+          "a": false,
+          "exp": "RISE può girare su AWS, Microsoft Azure e Google Cloud oltre che nei data center SAP. Il cliente sceglie tra le opzioni disponibili per la propria regione.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali fattori contano nella scelta dell'hosting?",
+          "o": [
+            "Regione e residenza dei dati",
+            "Strategia cloud e competenze esistenti del cliente",
+            "Requisiti di SLA e disaster recovery",
+            "Il tipo di sistema operativo dei PC degli utenti",
+            "Il nome del partner SI che vincerà il progetto"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Regione, strategia e resilienza guidano la scelta dell'infrastruttura. Il PC dell'utente e il nome del partner non c'entrano con dove gira il sistema.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "In RISE il contratto del servizio rimane con ___, anche se l'infrastruttura è operata da un hyperscaler.",
+          "o": [
+            "SAP, come unico fornitore del servizio",
+            "l'hyperscaler, come fornitore diretto",
+            "il partner SI, come contraente principale",
+            "il cliente, che gestisce i subappalti"
+          ],
+          "a": 0,
+          "exp": "SAP è il contraente e ha la responsabilità del servizio; l'hyperscaler opera l'infrastruttura nel perimetro concordato. È uno dei vantaggi pratici di RISE rispetto a contratti separati.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO usa già Azure per tutti i workload. Come rispondi alla sua preoccupazione?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Siamo un'azienda «tutta Azure». RISE ci obbliga a spostarci su un altro cloud?"
+          },
+          "o": [
+            "No: puoi scegliere tra gli hyperscaler supportati e restare sul tuo, se c'è la regione.",
+            "Sì: RISE gira su un cloud scelto da SAP, quindi dovrai spostare i workload in quello.",
+            "Sì: serve prima consolidare i workload su AWS, che è l'ambiente di riferimento di RISE.",
+            "No, ma serve che il contratto Azure sia stato firmato prima di quello con SAP."
+          ],
+          "a": 0,
+          "exp": "Il cliente può restare sul proprio hyperscaler se supportato nella regione che gli serve. Verifica sempre disponibilità regionale e SLA con lo specialista.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l10",
+      "title": "Sovranità: dove stanno i dati?",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Sovranità non è sinonimo di residenza dei dati. Almeno tre livelli: dove stanno i dati (residenza), chi opera e può accedere (controllo operativo), quale giurisdizione si applica al fornitore (livello legale).",
+          "Un data center in UE di un provider con casa madre extra-UE risolve la residenza, ma non risolve da sola il tema della giurisdizione: dipende dai requisiti del cliente.",
+          "Opzioni in evoluzione: {{w03.aws_sovereign}}. Inoltre {{w03.stackit_rise}}.",
+          "Non promettere la disponibilità senza verifica: regioni, perimetro (BTP, Cloud ERP, RISE) e date cambiano. Coinvolgi lo specialista sovereign cloud di SAP."
+        ],
+        "ae": "Chiedi quale requisito guida davvero: normativa di settore, policy del board o timore generico? Cambia la soluzione."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CISO vuole i dati in UE. Come imposti la risposta?",
+          "ctx": {
+            "who": "CISO",
+            "say": "Voglio i dati in UE. Mi basta un data center in Europa?"
+          },
+          "o": [
+            "Dipende dal requisito: la residenza è un livello, poi ci sono controllo e giurisdizione.",
+            "Sì: con la residenza in UE sono coperti anche controllo operativo e giurisdizione.",
+            "No: in Europa non esistono opzioni cloud per SAP, quindi serve un data center proprio.",
+            "Non è un tema per l'ERP: la sovranità riguarda la posta elettronica e i documenti."
+          ],
+          "a": 0,
+          "exp": "Residenza, controllo operativo e giurisdizione sono livelli distinti: la domanda utile è quale serve davvero al cliente. Evita promesse assolute prima di capire il requisito.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono livelli distinti del tema sovranità?",
+          "o": [
+            "Residenza dei dati",
+            "Controllo operativo (chi accede e gestisce)",
+            "Giurisdizione legale del fornitore",
+            "Lingua dell'interfaccia utente",
+            "Numero di moduli SAP attivati"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Dove stanno i dati, chi li gestisce e quale legge si applica al fornitore sono i tre assi. Lingua e numero di moduli non riguardano la sovranità.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un responsabile IT cerca alternative europee agli hyperscaler americani. Come rispondi?",
+          "ctx": {
+            "who": "IT Director",
+            "say": "Avete un'alternativa agli hyperscaler americani per RISE?"
+          },
+          "o": [
+            "Ci sono opzioni europee in evoluzione, come STACKIT: verifico con SAP perimetro e regioni.",
+            "RISE è disponibile sui tre hyperscaler americani e sui data center SAP, senza alternative.",
+            "Sì: qualsiasi cloud europeo è certificato per RISE se ha un data center in UE.",
+            "Sì, ma il cliente deve costruire un proprio data center e farlo certificare da SAP."
+          ],
+          "a": 0,
+          "exp": "Secondo il fornitore, {{w03.stackit_rise}}. Prima di impegnarti, verifica con SAP regioni, perimetro e tempi: oggi è un'opzione in evoluzione, non una certezza.",
+          "diff": 3
+        },
+        {
+          "t": "mcq",
+          "q": "Un membro del board dichiara che la sovranità è prioritaria. Qual è la mossa migliore?",
+          "ctx": {
+            "who": "Board",
+            "say": "Per noi la sovranità dei dati è una priorità assoluta."
+          },
+          "o": [
+            "Chiedo quale requisito guida la richiesta e coinvolgo lo specialista sovereign cloud SAP.",
+            "Confermo per iscritto che SAP garantisce la sovranità totale su qualunque configurazione.",
+            "Rimando il tema a dopo la firma: la sovranità si definisce in fase di implementazione.",
+            "Spiego che la sovranità non riguarda SAP ma l'hyperscaler, quindi non è un mio tema."
+          ],
+          "a": 0,
+          "exp": "Priorità dichiarata non significa requisito definito. Capire cosa guida la richiesta (norma, contratto, policy) permette di proporre l'opzione giusta senza promesse non verificabili.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Un data center in UE risolve la residenza dei dati, ma non decide da solo la ___ applicabile al fornitore.",
+          "o": [
+            "giurisdizione legale",
+            "versione del software",
+            "lingua dell'interfaccia",
+            "valuta di fatturazione"
+          ],
+          "a": 0,
+          "exp": "La giurisdizione dipende dalla struttura societaria del fornitore e dai contratti, non solo dalla posizione del data center. È il punto sottile che separa residenza e sovranità.",
+          "diff": 3
+        }
+      ]
+    },
+    {
+      "id": "w03-l11",
+      "title": "Come si compra: subscription",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "RISE è una subscription: il cliente paga un canone ricorrente per usare il servizio, non una licenza perpetua più manutenzione annuale. Software, infrastruttura e servizi tecnici stanno nello stesso canone.",
+          "Sulla struttura (solo concetti pubblici): {{w03.rise_commercial}}.",
+          "Per chi ha licenze on-premise esistenti ci sono meccanismi commerciali per tener conto dell'investimento pregresso: se ne parla solo con il supporto del deal desk, mai promessi in discovery.",
+          "Passi da CapEx (licenza più hardware) a OpEx (canone): effetto su bilancio e budget IT da chiarire presto con il CFO."
+        ],
+        "ae": "Parla di valore del servizio, non di listino: «Quali costi di oggi non vedi nel TCO — hosting, DR, Basis, upgrade?»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la differenza di fondo tra licenza perpetua con manutenzione e RISE?",
+          "o": [
+            "RISE è una subscription pluriennale con software, infrastruttura e servizi nel canone.",
+            "RISE è una licenza perpetua venduta insieme a un servizio di hosting scontato.",
+            "RISE è un canone per la sola infrastruttura, mentre il software resta una licenza a parte.",
+            "RISE si paga a consumo orario, senza impegno di durata e senza canone ricorrente."
+          ],
+          "a": 0,
+          "exp": "Nel modello subscription software e servizio sono un unico canone ricorrente. Il vecchio modello separa licenza, manutenzione, hosting e servizi.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Con RISE il cliente paga di norma la licenza una volta e poi solo la manutenzione annuale.",
+          "a": false,
+          "exp": "È il modello on-premise. RISE è una subscription: il canone ricorrente copre il diritto di uso e i servizi inclusi per tutta la durata contrattuale.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "RISE è venduto come ___ pluriennale.",
+          "o": [
+            "subscription di servizio",
+            "licenza perpetua scontata",
+            "progetto a corpo fisso",
+            "contratto di manutenzione"
+          ],
+          "a": 0,
+          "exp": "Una subscription di servizio: canone ricorrente, durata pluriennale, perimetro che comprende software e servizi tecnici. I dettagli di durata e metriche sono commerciali.",
+          "diff": 1
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni concetto commerciale al suo significato",
+          "pairs": [
+            [
+              "Subscription",
+              "Canone ricorrente per l'uso del servizio"
+            ],
+            [
+              "Durata contrattuale",
+              "Periodo pluriennale dell'impegno"
+            ],
+            [
+              "FUE",
+              "Utenti pesati per tipo di utilizzo (metrica tipica)"
+            ],
+            [
+              "OpEx",
+              "Spesa ricorrente al posto di un investimento iniziale"
+            ]
+          ],
+          "exp": "Sono i quattro concetti da padroneggiare senza entrare nei numeri: modello, durata, metrica di utilizzo e impatto contabile. I valori restano al deal desk.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CFO confronta il canone con la sola manutenzione. Come imposti il confronto?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Oggi pago solo la manutenzione annuale. Perché dovrei passare a un canone più alto?"
+          },
+          "o": [
+            "Il confronto giusto è sul TCO: oggi paghi anche hosting, DR, Basis e upgrade.",
+            "Il canone è più basso della manutenzione, quindi il passaggio riduce subito la spesa.",
+            "La manutenzione standard sta per finire, quindi non ci sono alternative al canone.",
+            "Il costo non conta: il passaggio al canone è una scelta puramente tecnologica."
+          ],
+          "a": 0,
+          "exp": "Confrontare canone e manutenzione è una mela con una pera: il canone include voci che oggi il cliente paga altrove. Costruisci il TCO insieme, senza vendere per paura né promettere risparmi.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l12",
+      "title": "Il valore oltre il prezzo",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Il confronto onesto è sul TCO, non su canone contro manutenzione: includi hosting, DR, Basis, sicurezza, upgrade, personale tecnico e progetti di patching.",
+          "Leve di valore: innovazione continua, meno debito tecnico (clean core), sicurezza e resilienza gestite, upgrade più rapidi e accesso più veloce all'AI.",
+          "Sull'AI: {{w04.ai_ecc_link}}. Spiegalo come vincolo di architettura, non come leva di pressione.",
+          "Cosa è cambiato nel 2026: {{w03.rise_grow_2026_ai}}. Presentalo come valore da adottare, non come sconto."
+        ],
+        "ae": "Prima di parlare di canone, costruisci con il cliente il costo totale di oggi su un foglio: spesso è la prima volta che il CFO lo vede."
+      },
+      "ex": [
+        {
+          "t": "multi",
+          "q": "Quali voci devono entrare in un confronto TCO onesto tra ECC on-premise e RISE?",
+          "o": [
+            "Hosting e disaster recovery",
+            "Costo del personale Basis e infrastruttura",
+            "Costi degli upgrade e dei patch",
+            "Il listino pubblico SAP, senza altre voci",
+            "Costo dell'implementazione e della migrazione"
+          ],
+          "a": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "exp": "Un TCO onesto include infrastruttura, persone, upgrade e progetto. Limitarsi al listino falsa il confronto e il cliente se ne accorge.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Spiegare che molte capacità AI SAP sono pensate per il cloud, e che da ECC passano da un percorso di modernizzazione, è un argomento di architettura da trattare con trasparenza.",
+          "a": true,
+          "exp": "È un fatto di prodotto riportato dalla stampa di settore. La trasparenza vuol dire anche dire cosa non si sa ancora: perimetro e tempi precisi vanno verificati con SAP.",
+          "diff": 2
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine i passi per costruire un business case TCO",
+          "items": [
+            "Mappa i costi attuali (infrastruttura, Basis, upgrade, personale)",
+            "Identifica costi nascosti e debito tecnico",
+            "Stima perimetro e canone del servizio con SAP e partner",
+            "Confronta a parità di perimetro e orizzonte temporale",
+            "Aggiungi i benefici non di costo (agilità, sicurezza, AI)"
+          ],
+          "exp": "Prima misuri il presente, poi stimi il futuro, poi confronti a parità di condizioni. I benefici qualitativi vanno in coda, così non gonfiano il confronto di costo.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO ti chiede cosa cambia con le novità RISE del 2026. Come le presenti?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Cosa mi cambia concretamente con le novità RISE di quest'anno?"
+          },
+          "o": [
+            "Valore da adottare: serve un piano per attivare davvero gli assistenti inclusi nell'anno.",
+            "Sconto sul canone: l'AI abbassa il prezzo del contratto in base all'uso degli assistenti.",
+            "Garanzia di risultato: gli assistenti riducono i costi operativi di una quota fissata.",
+            "Funzione opzionale: gli assistenti si attivano da soli e non richiedono alcun piano."
+          ],
+          "a": 0,
+          "exp": "L'impegno su Joule Assistants nel primo anno è un'opportunità di valore se c'è un piano di adozione. Non è uno sconto né una garanzia di risultato; i termini vanno verificati nel contratto.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Il confronto corretto con la manutenzione on-premise è sul ___, non sul solo canone.",
+          "o": [
+            "costo totale di possesso",
+            "costo di listino complessivo",
+            "costo del canone annuale",
+            "costo del solo hosting"
+          ],
+          "a": 0,
+          "exp": "Il costo totale di possesso (TCO) comprende tutto ciò che il cliente paga per far funzionare l'ERP. È l'unico terreno su cui il confronto con RISE è onesto.",
+          "diff": 1
+        }
+      ]
+    },
+    {
+      "id": "w03-l13",
+      "title": "Il clock ECC: i fatti",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "La manutenzione standard di ECC 6.0 EHP6-8 termina il {{sap.ecc.mainstream_end}}; la manutenzione estesa arriva fino al {{sap.ecc.extended_end}}.",
+          "SAP ERP, private edition, transition option: {{sap.ecc.transition_option}}.",
+          "Le condizioni della transition option saranno dettagliate da SAP più avanti: non promettere termini o prezzi al cliente.",
+          "Sono date comunicate da SAP e verificate a ottobre 2026: citale sempre come «secondo le comunicazioni SAP» e controlla la fonte ufficiale prima di una proposta."
+        ],
+        "ae": "Il clock è un vincolo di pianificazione, non un argomento di vendita: usalo per dire «quando devi iniziare», non «cosa succede se non compri»."
+      },
+      "ex": [
+        {
+          "t": "fill",
+          "q": "La manutenzione standard di ECC 6.0 EHP6-8 termina il ___.",
+          "o": [
+            "{{sap.ecc.mainstream_end}}",
+            "31 dicembre 2025",
+            "30 giugno 2028",
+            "31 dicembre 2030"
+          ],
+          "a": 0,
+          "exp": "È la scadenza della manutenzione standard comunicata da SAP. Il 2030 è invece la fine della manutenzione estesa, a pagamento.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Alla fine della manutenzione standard un sistema ECC smette di funzionare.",
+          "a": false,
+          "exp": "Il sistema continua a girare: cambia il livello di supporto e di aggiornamenti. Dire il contrario è vendita per paura e il cliente lo sa.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine le tappe del clock ECC",
+          "items": [
+            "Fine manutenzione standard: {{sap.ecc.mainstream_end}}",
+            "Fine manutenzione estesa: {{sap.ecc.extended_end}}",
+            "Fine della copertura della transition option (solo con un contratto RISE)"
+          ],
+          "exp": "Prima termina la standard, poi l'estesa (con sovrapprezzo), infine la copertura della transition option, che richiede un contratto RISE e le cui condizioni non sono ancora dettagliate.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Cos'è la «transition option» per i clienti ECC?",
+          "o": [
+            "Una copertura aggiuntiva per ECC oltre la manutenzione estesa, legata a un contratto RISE.",
+            "Una licenza S/4HANA on-premise gratuita per i clienti ECC con manutenzione estesa.",
+            "Un'estensione della manutenzione standard ECC con le stesse condizioni economiche attuali.",
+            "Una garanzia SAP sul fatto che le date della manutenzione ECC non verranno più modificate."
+          ],
+          "a": 0,
+          "exp": "È una copertura con perimetro più stretto, acquistabile più avanti e legata a RISE. Dettagli e prezzi non sono ancora annunciati, quindi non vanno promessi.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente vuole aspettare la transition option invece di migrare ora. Come rispondi?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Aspetto la transition option invece di migrare ora, no?"
+          },
+          "o": [
+            "È un'opzione, ma condizioni e prezzi non sono dettagliati e serve RISE: valutiamo i tempi.",
+            "Sì, equivale alla manutenzione standard e costa uguale, quindi puoi aspettare con calma.",
+            "No, dopo la manutenzione standard non esiste alcuna copertura per chi resta su ECC.",
+            "Sì, SAP ha già garantito condizioni e prezzi fino alla fine della copertura prevista."
+          ],
+          "a": 0,
+          "exp": "La transition option esiste ma non è una scorciatoia certa: perimetro più stretto, condizioni da definire, requisito RISE. Aiuta il cliente a stimare quanto tempo serve alla migrazione.",
+          "diff": 3
+        }
+      ]
+    },
+    {
+      "id": "w03-l14",
+      "title": "ECC: usare la scadenza con etica",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "La scadenza è un fatto vero, ma non è il motivo per cui un cliente compra: compra per risolvere un problema di business. La data serve a stabilire quando iniziare.",
+          "Evita la vendita per paura: toni catastrofici, «rischio compliance» generico, scadenze inventate. Il cliente conosce manutenzione estesa e transition option: se esageri perdi credibilità.",
+          "Metodo: parti dal problema (chiusure lente, debito tecnico, sicurezza, AI) e calcola a ritroso: durata del progetto più selezione del partner più contratto, per capire entro quando decidere.",
+          "Sii trasparente sulle alternative: restare su ECC con manutenzione estesa ({{sap.ecc.extended_end}}), la transition option, la migrazione per fasi. Aiutare a decidere bene costruisce fiducia."
+        ],
+        "ae": "Frase tipo: «Non ti dico di correre: ti aiuto a capire entro quando devi decidere per non dover correre.»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CFO dubita della necessità di migrare. Qual è la risposta migliore?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Il nostro ECC funziona benissimo. Perché dovrei migrare adesso?"
+          },
+          "o": [
+            "Parto dai processi di chiusura che oggi ti costano di più e collego la data a quel costo.",
+            "Ti ricordo che la manutenzione standard finisce: senza migrazione resti fuori supporto.",
+            "Ti porto un caso di un cliente simile che ha già migrato, così vedi quanto è semplice.",
+            "Ti invio la documentazione di RISE, così valuti con calma i vantaggi del passaggio."
+          ],
+          "a": 0,
+          "exp": "Prima il problema del cliente, poi la leva temporale. Usare solo la scadenza è vendita per paura e invita all'obiezione sulla manutenzione estesa.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO chiede conferma sulla manutenzione estesa. Come rispondi?",
+          "ctx": {
+            "who": "CIO",
+            "say": "La manutenzione estesa mi copre fino al {{sap.ecc.extended_end}}, giusto?"
+          },
+          "o": [
+            "Sì, con sovrapprezzo: è un'alternativa reale. Confrontiamo costi, rischi e tempi.",
+            "No, dopo la manutenzione standard non c'è alcun supporto: devi migrare entro quella data.",
+            "Sì, senza costi aggiuntivi: la manutenzione estesa ha le stesse condizioni della standard.",
+            "Sì, ma il prezzo dell'estesa è già garantito, quindi puoi decidere con tranquillità."
+          ],
+          "a": 0,
+          "exp": "Riconoscere l'alternativa rafforza la credibilità. L'estesa ha un sovrapprezzo e un orizzonte: il tuo ruolo è aiutare a confrontare costo, rischio e tempi di progetto.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali comportamenti rendono etico l'uso della scadenza ECC?",
+          "o": [
+            "Spiegare anche le alternative (manutenzione estesa, transition option)",
+            "Collegare la data al problema di business del cliente",
+            "Calcolare a ritroso quando serve iniziare il progetto",
+            "Insinuare che dopo la scadenza il sistema sarà illegale",
+            "Promettere condizioni della transition option non ancora pubblicate"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Trasparenza sulle alternative, legame con il business e pianificazione a ritroso sono corretti. Insinuazioni legali e promesse su condizioni non pubbliche tradiscono la fiducia.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Una trattativa basata soltanto sulla scadenza ECC, senza legarla a un problema del cliente, tende a spostare la discussione su prezzo e alternative.",
+          "a": true,
+          "exp": "Senza un problema di business da risolvere, il cliente confronta il costo del cambiamento con quello di restare. Collegare la data a un beneficio concreto cambia la conversazione.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CEO riporta ciò che gli ha detto un altro fornitore. Come rispondi?",
+          "ctx": {
+            "who": "CEO",
+            "say": "Un altro fornitore mi ha detto che dopo la scadenza saremo fuori norma con le autorità. È vero?"
+          },
+          "o": [
+            "Non confondiamo supporto e conformità: vediamo con il tuo team compliance cosa cambia.",
+            "Sì: dopo la scadenza il sistema non è più a norma e le autorità lo hanno già chiarito.",
+            "Dipende dal fatturato dell'azienda: sotto una certa soglia non si applica alcun obbligo.",
+            "Sì, ma per i settori regolati: per gli altri la scadenza non ha effetti sulla conformità."
+          ],
+          "a": 0,
+          "exp": "La scadenza riguarda il supporto SAP, non è di per sé un obbligo normativo. Non dare pareri legali: porta il tema al team compliance del cliente e lavora su fatti verificabili.",
+          "diff": 3
+        }
+      ]
+    },
+    {
+      "id": "w03-l15",
+      "title": "Migrare con RISE: percorsi e SI",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Tre percorsi tipici verso S/4HANA: greenfield (nuova implementazione: si ridisegna), brownfield (system conversion: si converte il sistema esistente) e selective data transition (si portano solo dati e processi scelti).",
+          "Con RISE (Private) sono possibili conversione e nuova implementazione; verso la public edition si va in greenfield. Scegli in base a custom code, qualità dei dati, appetito al cambiamento e tempi.",
+          "Il partner SI guida il progetto: assessment, design, remediation del codice, migrazione dati, test, cutover. SAP porta strumenti e servizi: {{w03.rise_toolchain_2026}}.",
+          "In discovery chiedi: quanto codice custom è davvero usato? Quante istanze ECC? Quali dati storici servono? Integrazioni critiche? Chi è il partner SI? Quali vincoli di validazione?"
+        ],
+        "ae": "Non entrare da solo nel dettaglio tecnico: porta al cliente un assessment con SAP e partner invece di un'opinione."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina ogni termine di migrazione al suo significato",
+          "pairs": [
+            [
+              "Greenfield",
+              "Nuova implementazione: si ridisegnano i processi"
+            ],
+            [
+              "Brownfield",
+              "Conversione del sistema esistente (system conversion)"
+            ],
+            [
+              "Selective data transition",
+              "Si portano solo dati e processi selezionati"
+            ],
+            [
+              "Fit-to-standard",
+              "Workshop per adottare le best practice SAP"
+            ],
+            [
+              "Cutover",
+              "Passaggio finale dal vecchio al nuovo sistema"
+            ]
+          ],
+          "exp": "Sono i termini che il partner SI userà dal primo workshop. Conoscerli ti permette di orientare la conversazione senza fingerti architetto.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine le fasi di un progetto di migrazione",
+          "items": [
+            "Assessment del landscape e del codice custom",
+            "Scelta del percorso e disegno della soluzione",
+            "Realizzazione, migrazione dati e test",
+            "Cutover e go-live",
+            "Stabilizzazione e adozione"
+          ],
+          "exp": "Prima capire cosa c'è, poi scegliere e progettare, poi costruire e testare, infine passare in produzione e stabilizzare. Saltare l'assessment è la causa classica di sorprese.",
+          "diff": 2
+        },
+        {
+          "t": "bucket",
+          "q": "Chi fa cosa in un progetto RISE?",
+          "buckets": [
+            "Partner SI",
+            "SAP"
+          ],
+          "items": [
+            [
+              "Disegno della soluzione e migrazione dei dati",
+              0
+            ],
+            [
+              "Remediation del codice custom",
+              0
+            ],
+            [
+              "Operazione tecnica del sistema in cloud",
+              1
+            ],
+            [
+              "Strumenti di trasformazione (Signavio, LeanIX)",
+              1
+            ],
+            [
+              "Piano di test e cutover con il business",
+              0
+            ],
+            [
+              "Onboarding iniziale e kick-off del servizio",
+              1
+            ]
+          ],
+          "exp": "SAP fornisce servizio, strumenti e onboarding; il partner SI esegue il progetto. Il cliente sta in mezzo con dati, processi e adozione. Chiarirlo evita lacune di responsabilità.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un IT director ha molto codice custom e più istanze ECC. Da dove parti?",
+          "ctx": {
+            "who": "IT Director",
+            "say": "Abbiamo quindici anni di codice custom e tre istanze ECC. Per dove iniziamo?"
+          },
+          "o": [
+            "Da un assessment: codice usato, istanze da unire e processi da portare allo standard.",
+            "Da un brownfield su tutte e tre le istanze, convertendole in parallelo senza consolidare.",
+            "Da un greenfield su tutto il perimetro, scartando il custom code senza analizzarlo prima.",
+            "Da una pulizia del codice custom fatta internamente, prima di parlare con SAP o partner."
+          ],
+          "a": 0,
+          "exp": "Senza dati su codice usato, istanze e processi, qualunque percorso è un'ipotesi. L'assessment (con strumenti SAP e partner) trasforma l'opinione in un piano.",
+          "diff": 3
+        },
+        {
+          "t": "multi",
+          "q": "Quali domande sono utili in discovery su una migrazione?",
+          "o": [
+            "Quanto codice custom è realmente utilizzato?",
+            "Quante istanze ECC esistono e come sono integrate?",
+            "Quali dati storici servono nel nuovo sistema?",
+            "Quale sconto vuole ottenere il cliente?",
+            "Quale versione di Windows usano gli utenti?"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Codice custom, istanze e dati storici determinano percorso, tempi e costi. Sconto e dettagli del posto di lavoro non guidano la scelta del percorso di migrazione.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w03-l16",
+      "title": "Boss: portare un cliente su RISE",
+      "kind": "boss",
+      "lesson": {
+        "points": [
+          "Naming: RISE e GROW sono percorsi; SAP Cloud ERP (public) e SAP Cloud ERP Private sono le edizioni ERP. Usa i nomi del cliente e traduci.",
+          "Edizione: custom, validazione, velocità e appetito al cambiamento decidono; il modello a due livelli esiste. La conversione di un ECC porta alla Private.",
+          "Clock ECC: standard {{sap.ecc.mainstream_end}}, estesa {{sap.ecc.extended_end}}; la transition option non va promessa. Parti dal problema del cliente, non dalla paura.",
+          "Commerciale e sovranità: subscription e TCO, niente prezzi in discovery; sovranità = residenza, controllo operativo e giurisdizione."
+        ],
+        "ae": "Un buon AE su RISE fa tre cose: ascolta il problema, delimita il perimetro, non promette ciò che SAP non ha ancora comunicato."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CIO è confuso tra RISE, GROW e «SAP Cloud ERP Private». Cosa chiarisci?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Non ho capito la differenza tra RISE e GROW, e ora vedo anche «SAP Cloud ERP Private». Chiariscimi."
+          },
+          "o": [
+            "RISE e GROW sono i percorsi; Cloud ERP e Cloud ERP Private sono le edizioni sottostanti.",
+            "RISE e GROW sono edizioni ERP; Cloud ERP e Cloud ERP Private sono i percorsi commerciali.",
+            "RISE è l'edizione private e GROW è l'edizione public; Cloud ERP è un terzo prodotto.",
+            "Sono quattro prodotti ERP diversi, ciascuno con un proprio modello di licenza e hosting."
+          ],
+          "a": 0,
+          "exp": "Percorso e pacchetto da una parte, edizione ERP dall'altra. RISE poggia di solito su Cloud ERP Private, GROW su Cloud ERP (public).",
+          "diff": 2
+        },
+        {
+          "t": "bucket",
+          "q": "Cosa c'è di norma nel pacchetto e cosa è a parte?",
+          "buckets": [
+            "Di norma nel pacchetto",
+            "Di norma a parte"
+          ],
+          "items": [
+            [
+              "Infrastruttura e servizi tecnici gestiti",
+              0
+            ],
+            [
+              "Crediti SAP BTP",
+              0
+            ],
+            [
+              "Progetto di migrazione del partner SI",
+              1
+            ],
+            [
+              "Remediation del codice custom",
+              1
+            ],
+            [
+              "Strumenti di trasformazione (Signavio, LeanIX)",
+              0
+            ],
+            [
+              "Licenze delle soluzioni LoB (es. Ariba)",
+              1
+            ]
+          ],
+          "exp": "Il pacchetto copre servizio, infrastruttura e strumenti; progetto SI, codice custom e soluzioni LoB hanno perimetri propri. Il dettaglio dipende sempre dal contratto.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un responsabile IT pharma elenca vincoli di validazione, interfacce e istanze multiple. Cosa proponi?",
+          "ctx": {
+            "who": "Head of IT",
+            "say": "Vogliamo il cloud, ma abbiamo validazione GxP, interfacce con MES e LIMS e tre istanze ECC. Da dove partiamo?"
+          },
+          "o": [
+            "Da un assessment su custom, validazione e interfacce; poi valutiamo Private o due livelli.",
+            "Da un greenfield sulla public per tutte le istanze, validando ogni rilascio a posteriori.",
+            "Da una conversione brownfield di tutte le istanze, senza una fase di assessment.",
+            "Da un contratto RISE firmato subito, rimandando le domande sui vincoli al kick-off."
+          ],
+          "a": 0,
+          "exp": "Validazione e interfacce spingono verso più controllo (Private o due livelli), ma la scelta nasce da un assessment. Firmare prima di capire è il contrario della discovery.",
+          "diff": 3
+        },
+        {
+          "t": "tf",
+          "q": "In Private edition si può personalizzare senza limiti perché il sistema è dedicato al cliente.",
+          "a": false,
+          "exp": "Il sistema è dedicato, ma il principio clean core vale anche qui: ogni modifica al core pesa sugli upgrade futuri e sul costo del servizio.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CISO chiede la sovranità dei dati per un ERP in cloud. Come imposti la risposta?",
+          "ctx": {
+            "who": "CISO",
+            "say": "Per noi la sovranità non è negoziabile. Cosa mi garantite?"
+          },
+          "o": [
+            "Distinguo residenza, controllo operativo e giurisdizione, poi verifico le opzioni con SAP.",
+            "Ti garantisco la sovranità completa su qualsiasi regione scelta, già dal contratto.",
+            "Ti propongo la regione UE più vicina: la sovranità è risolta dal data center in Europa.",
+            "Ti confermo che esiste un'unica opzione sovrana e che la attiviamo in fase di go-live."
+          ],
+          "a": 0,
+          "exp": "Sovranità ha tre livelli e le opzioni cambiano nel tempo. Non garantire nulla prima di aver capito il requisito e verificato disponibilità e perimetro con gli specialisti SAP.",
+          "diff": 3
+        },
+        {
+          "t": "multi",
+          "q": "Quali affermazioni sul clock ECC sono corrette e usabili in modo etico?",
+          "o": [
+            "Le date vanno citate come comunicazioni SAP, con la fonte",
+            "La manutenzione estesa è un'alternativa, con sovrapprezzo",
+            "La transition option richiede RISE e ha condizioni da dettagliare",
+            "Dopo la scadenza il sistema diventa illegale da usare",
+            "I prezzi della transition option sono già garantiti"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Fonte, alternative e prudenza sulla transition option sono il minimo di correttezza. Illegalità e prezzi garantiti sono affermazioni non supportate da SAP.",
+          "diff": 2
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine una conversazione responsabile sul clock ECC",
+          "items": [
+            "Capisci il problema di business del cliente",
+            "Condividi le date ufficiali citando la fonte",
+            "Mostra le alternative (estesa, transition option, per fasi)",
+            "Calcola a ritroso quando deve iniziare il progetto",
+            "Concorda un assessment come prossimo passo"
+          ],
+          "exp": "Si parte dal problema, si danno i fatti, si mostrano le alternative, si pianifica a ritroso e si chiude con un passo concreto. La scadenza è un vincolo, non una leva di pressione.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "GROW with SAP è il percorso più naturale per una filiale che deve partire in fretta con processi standard.",
+          "a": true,
+          "exp": "Public edition, best practice preconfigurate e servizi di adozione sono pensati proprio per velocità e standard. La sede può restare su Private in un modello a due livelli.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CFO chiede una data certa e un prezzo per la transition option. Come rispondi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Dammi una data certa e il prezzo della transition option, così pianifico il budget."
+          },
+          "o": [
+            "Ti dico cosa ha comunicato SAP: condizioni e prezzi non sono definiti, non prometto.",
+            "Te li fisso ora: la transition option ha prezzi già pubblicati e validi fino alla fine.",
+            "Ti consiglio di aspettare: la transition option costerà meno della manutenzione estesa.",
+            "Ti faccio un'offerta con un prezzo indicativo, da confermare quando SAP lo comunica."
+          ],
+          "a": 0,
+          "exp": "Dettagli e prezzi arriveranno da SAP più avanti. Prometterli o stimarli espone te e il cliente: meglio condividere solo ciò che è pubblico e pianificare con alternative.",
+          "diff": 3
+        }
+      ]
+    }
+  ]
+}

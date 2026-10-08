@@ -1,0 +1,1575 @@
+{
+  "id": "w05",
+  "levels": [
+    {
+      "id": "w05-l01",
+      "title": "BTP in una frase",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP BTP (Business Technology Platform) è la piattaforma cloud di SAP per integrare, estendere e automatizzare le applicazioni SAP e non-SAP e per costruire app e AI sopra i dati di business.",
+          "I pilastri classici: dati e analytics, sviluppo applicativo, integrazione, automazione e AI. Non sono prodotti da vendere uno per uno: sono mattoni per risolvere un problema concreto del cliente.",
+          "BTP non è un'alternativa al cloud ERP: l'ERP esegue i processi standard, BTP serve dove il cliente vuole collegare, estendere o differenziarsi senza toccare il cuore dell'ERP.",
+          "Da Sapphire 2026 BTP è inquadrata in uno stack più ampio: {{sap.sapphire26.platform}}."
+        ],
+        "ae": "Non aprire con «vendiamo BTP»: chiedi quali integrazioni, estensioni o app custom oggi frenano il cliente, poi mappa i servizi BTP su quel problema."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il pilastro di BTP alla sua funzione",
+          "pairs": [
+            [
+              "Integrazione",
+              "Collega applicazioni SAP e non-SAP con API e flussi B2B"
+            ],
+            [
+              "Sviluppo applicativo",
+              "Costruisce app ed estensioni, low-code e pro-code"
+            ],
+            [
+              "Dati e analytics",
+              "Gestisce, modella e analizza i dati di business"
+            ],
+            [
+              "Automazione",
+              "Automatizza processi e workflow, anche con agenti"
+            ],
+            [
+              "AI",
+              "Base per modelli e agenti che lavorano sui dati aziendali"
+            ]
+          ],
+          "exp": "Sono le cinque aree con cui si descrive BTP. Nel colloquio non elencarle: scegli quella che risponde al problema emerso in discovery.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è il ruolo di SAP BTP rispetto alle applicazioni SAP come il cloud ERP?",
+          "o": [
+            "Integra ed estende le applicazioni, mantenendo il core ERP il più possibile standard",
+            "Sostituisce il cloud ERP per le aziende che desiderano più personalizzazione dei processi",
+            "Sostituisce la gestione del magazzino standard con servizi sviluppati dal cliente",
+            "Replica i processi dell'ERP in un ambiente di test, senza collegarsi ai sistemi reali"
+          ],
+          "a": 0,
+          "exp": "BTP è lo strato su cui si integra, si estende e si costruisce attorno all'ERP. Non lo sostituisce e non è un modulo applicativo come la finanza.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Da Sapphire 2026 BTP non sparisce: diventa uno degli elementi di uno stack unificato insieme a Business Data Cloud e Business AI.",
+          "a": true,
+          "exp": "Secondo la sintesi di Sapphire 2026: {{sap.sapphire26.platform}}. Per il cliente significa un'unica architettura da leggere insieme, anche se i prodotti restano distinti.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "BTP è un'alternativa al cloud ERP: il cliente deve scegliere l'uno o l'altra.",
+          "a": false,
+          "exp": "Sono complementari. Il cloud ERP copre i processi standard, BTP serve per integrazioni, estensioni e innovazione attorno all'ERP. Presentarli come alternativi è un errore di posizionamento.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO ti chiede cos'è BTP rispetto al suo hyperscaler. Qual è la risposta più corretta?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Ho già il mio ERP e un hyperscaler. BTP cos'è, un altro cloud?"
+          },
+          "o": [
+            "È la piattaforma SAP per integrare ed estendere le app: gira anche su hyperscaler",
+            "È un secondo cloud generico, che compete con AWS e Azure su calcolo e storage",
+            "È uno strumento per sviluppatori, che non cambia l'architettura né il business",
+            "È un componente richiesto per attivare le applicazioni cloud SAP e incluso nei contratti"
+          ],
+          "a": 0,
+          "exp": "BTP si appoggia a infrastrutture di hyperscaler e non compete sul calcolo generico: il suo valore è integrare ed estendere SAP con i servizi che parlano il linguaggio dei processi SAP.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l02",
+      "title": "Clean core: la regola d'oro",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Clean core = tenere il core ERP il più possibile standard e portare le personalizzazioni fuori, tramite API e punti di estensione rilasciati e supportati da SAP.",
+          "Perché conta: un core pulito si aggiorna con meno test e meno rischi, soprattutto nel cloud dove gli aggiornamenti sono frequenti. Le personalizzazioni non devono rompere gli upgrade.",
+          "ABAP Cloud è il modello di sviluppo ABAP per estensioni a prova di upgrade, che usano solo API rilasciate. Le estensioni side-by-side, invece, girano su BTP e parlano con l'ERP via API.",
+          "In Cloud ERP (public) i margini di modifica sono limitati per progetto; in Cloud ERP Private c'è più libertà, ma SAP raccomanda comunque un approccio clean core."
+        ],
+        "ae": "Traduci «clean core» in business: meno costi di test a ogni upgrade, meno debito tecnico, più rapidità nell'adottare le novità, AI inclusa."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che cosa significa «clean core»?",
+          "o": [
+            "Core ERP vicino allo standard, con le personalizzazioni fuori, su API rilasciate",
+            "Ripulire periodicamente il core ERP dai dati storici per renderlo più leggero e veloce",
+            "Limitare il core ERP ai moduli finance e spostare gli altri processi fuori dal sistema",
+            "Sospendere le integrazioni verso sistemi non-SAP, così il core dialoga con prodotti SAP"
+          ],
+          "a": 0,
+          "exp": "Il clean core riguarda dove vive la logica custom: fuori dal core, tramite punti di estensione supportati. Non riguarda l'archiviazione dei dati né i moduli usati.",
+          "diff": 1
+        },
+        {
+          "t": "bucket",
+          "q": "Dove vive questa funzione in una logica clean core?",
+          "buckets": [
+            "Nel core ERP (standard)",
+            "Estensione su BTP"
+          ],
+          "items": [
+            [
+              "Registrazione dell'ordine di vendita standard",
+              0
+            ],
+            [
+              "Portale fornitori con logica propria del cliente",
+              1
+            ],
+            [
+              "Contabilità generale e chiusura standard",
+              0
+            ],
+            [
+              "App mobile per i rappresentanti collegata via API",
+              1
+            ],
+            [
+              "Workflow di approvazione che coinvolge anche sistemi non-SAP",
+              1
+            ],
+            [
+              "Gestione standard degli acquisti",
+              0
+            ]
+          ],
+          "exp": "Ciò che è processo standard resta nel core. Ciò che è specifico del cliente o attraversa più sistemi si costruisce come estensione, collegata al core tramite API.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "In una strategia clean core le estensioni dovrebbero usare API e punti di estensione rilasciati e supportati da SAP.",
+          "a": true,
+          "exp": "È la regola di fondo: usare solo interfacce supportate permette a SAP di evolvere il core senza rompere le estensioni del cliente.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine un approccio sensato a una richiesta di personalizzazione",
+          "items": [
+            "Capire il requisito di business",
+            "Verificare se lo standard lo copre già",
+            "Valutare un'estensione in-app con punti di estensione rilasciati",
+            "Se non basta, costruire un'estensione side-by-side su BTP",
+            "Documentare e testare l'estensione sugli upgrade"
+          ],
+          "exp": "Si parte dal requisito e dalla soluzione più vicina allo standard; l'estensione su BTP arriva solo quando le opzioni più semplici non bastano.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a questo CIO?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Il nostro ECC ha anni di codice custom. Dobbiamo portarci dietro tutto?"
+          },
+          "o": [
+            "Inventario del custom code: l'obsoleto si dismette, il resto diventa estensione pulita",
+            "Portiamo tutto uguale nel nuovo sistema: è la via più rapida e riduce le regressioni",
+            "Riscriviamo i programmi custom come estensioni su BTP partendo dai più complessi",
+            "Lo lasciamo nel core e lo analizziamo dopo il go-live, quando emergeranno i problemi"
+          ],
+          "a": 0,
+          "exp": "Il custom code è un'opportunità di pulizia: spesso una parte non è più usata o è coperta dallo standard. Il resto si riscrive come estensione pulita, con criterio.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l03",
+      "title": "HANA Cloud, ABAP, CAP, Kyma",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP HANA Cloud: database cloud di SAP, relazionale e multi-modello, con funzioni come il vector engine per l'AI. Sta sotto molte soluzioni e servizi SAP.",
+          "ABAP Cloud: il modello di sviluppo ABAP per estensioni cloud-ready e a prova di upgrade, con API rilasciate. È il ponte per chi ha già competenze ABAP.",
+          "CAP (Cloud Application Programming Model): framework SAP per costruire servizi e app cloud-native su BTP, in Node.js o Java.",
+          "Kyma: ambiente runtime basato su Kubernetes per microservizi ed estensioni su BTP, per chi lavora con container e vuole più flessibilità.",
+          "Per un AE sono tecnologie da riconoscere, non da spiegare nel dettaglio: la domanda giusta è «che team di sviluppo avete e con quali skill?»."
+        ],
+        "ae": "Non entrare nel dettaglio tecnico: chiedi al CIO quali skill ha (ABAP, Java/Node, container) e lascia al solution architect la scelta tra ABAP Cloud, CAP e Kyma."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina la tecnologia al suo ruolo",
+          "pairs": [
+            [
+              "SAP HANA Cloud",
+              "Database cloud SAP, base per dati e AI (anche vector engine)"
+            ],
+            [
+              "ABAP Cloud",
+              "Sviluppo di estensioni a prova di upgrade con API rilasciate"
+            ],
+            [
+              "CAP",
+              "Framework per servizi e app cloud-native (Node.js o Java)"
+            ],
+            [
+              "Kyma",
+              "Runtime basato su Kubernetes per microservizi ed estensioni"
+            ]
+          ],
+          "exp": "Quattro pezzi diversi: un database, un modello di sviluppo ABAP, un framework applicativo e un runtime a container. Riconoscerli ti basta per orientare la conversazione.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente ha un team forte in ABAP e vuole estendere il core in modo pulito. Che cosa citi per primo?",
+          "o": [
+            "ABAP Cloud, che valorizza le skill ABAP con estensioni a prova di upgrade",
+            "Kyma, perché le estensioni richiedono un ambiente Kubernetes gestito dal cliente",
+            "CAP, perché ABAP non è più utilizzabile per sviluppare estensioni nel cloud",
+            "SAP HANA Cloud, che include un ambiente di sviluppo ABAP per la logica applicativa"
+          ],
+          "a": 0,
+          "exp": "ABAP Cloud permette di riusare competenze ABAP in un modello supportato per il cloud. Non è vero che ABAP sia escluso, né che Kyma sia obbligatorio.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "CAP è un database in-memory alternativo a SAP HANA Cloud.",
+          "a": false,
+          "exp": "CAP è un framework di sviluppo, non un database. Spesso lavora proprio sopra HANA Cloud, ma sono due cose distinte.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "Per eseguire microservizi in container su BTP, SAP offre un ambiente basato su Kubernetes chiamato ___.",
+          "o": [
+            "Kyma",
+            "CAP",
+            "Mesh",
+            "Studio"
+          ],
+          "a": 0,
+          "exp": "Kyma è il runtime Kubernetes di BTP. CAP è un framework, Datasphere è dati, Ariba è procurement.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come orienti la conversazione con questo CIO?",
+          "ctx": {
+            "who": "CIO",
+            "say": "I miei sviluppatori conoscono Java e i container, non ABAP."
+          },
+          "o": [
+            "Con quelle skill CAP e Kyma sono percorsi naturali: lo verifichiamo con un architect",
+            "Serve formare il team su ABAP, perché le estensioni su BTP si scrivono in quel linguaggio",
+            "Con quelle skill conviene il low-code, perché Java e container non sono supportati",
+            "Con quelle skill conviene personalizzare il core ed evitare un nuovo ambiente"
+          ],
+          "a": 0,
+          "exp": "BTP supporta stack diversi: il punto è allineare il percorso alle competenze del cliente. Modificare il core per evitare BTP va contro il clean core.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l04",
+      "title": "Integration Suite e API",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Integration Suite è la piattaforma di integrazione (iPaaS) di SAP su BTP: flussi di integrazione, API Management, scambio B2B e pacchetti di integrazione prebuilt per collegare applicazioni SAP e non-SAP.",
+          "Ogni progetto cloud ERP richiede integrazioni: con produzione, magazzino, banche, e-commerce, partner. Senza una strategia nascono interfacce punto-punto difficili da mantenere.",
+          "Novità 2026: {{w05.integration_enhanced}}.",
+          "Chi usa SAP Process Orchestration (PI/PO) trova in Integration Suite il percorso di modernizzazione indicato da SAP verso il cloud."
+        ],
+        "ae": "Chiedi quante interfacce ha il cliente e chi le mantiene: il costo nascosto delle integrazioni è spesso il miglior argomento per una piattaforma di integrazione."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è il ruolo principale di SAP Integration Suite?",
+          "o": [
+            "Collegare applicazioni SAP e non-SAP con flussi, API e scambio B2B su BTP",
+            "Archiviare a norma i documenti contabili e di fatturazione collegati ai processi ERP",
+            "Gestire in tempo reale le giacenze di magazzino e i movimenti di materiale",
+            "Fornire il database su cui le applicazioni SAP conservano i dati transazionali"
+          ],
+          "a": 0,
+          "exp": "È la piattaforma di integrazione di SAP su BTP. Non archivia documenti, non gestisce il magazzino e non sostituisce il database.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono motivi tipici per usare una piattaforma di integrazione invece di collegamenti punto-punto?",
+          "o": [
+            "Riutilizzare API e flussi tra più progetti",
+            "Avere monitoraggio e governance centrale delle interfacce",
+            "Evitare qualunque interfaccia verso sistemi non-SAP",
+            "Ridurre le dipendenze quando un sistema viene sostituito",
+            "Eliminare la necessità di definire i dati scambiati"
+          ],
+          "a": [
+            0,
+            1,
+            3
+          ],
+          "exp": "Riuso, governance e disaccoppiamento sono i vantaggi veri. Le integrazioni verso sistemi non-SAP restano necessarie, e i dati scambiati vanno comunque definiti.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Chi usa SAP PI/PO può considerare SAP Integration Suite come percorso di modernizzazione verso il cloud.",
+          "a": true,
+          "exp": "SAP indica Integration Suite come destinazione naturale per chi viene da Process Orchestration. I tempi dipendono dall'inventario delle interfacce del cliente.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Il componente dell'Integration Suite che pubblica, protegge e monitora le API si chiama API ___.",
+          "o": [
+            "Management",
+            "Marketplace",
+            "Portfolio",
+            "Workbench"
+          ],
+          "a": 0,
+          "exp": "API Management gestisce il ciclo di vita delle API: pubblicazione, sicurezza, limiti di utilizzo e monitoraggio.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è il primo passo più sensato con questo cliente?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Abbiamo centinaia di interfacce custom punto-punto e nessuno sa più com'è fatta metà di esse."
+          },
+          "o": [
+            "Mappiamo le interfacce per criticità e portiamo le strategiche su una piattaforma",
+            "Le lasciamo come sono: se funzionano non vanno toccate prima del go-live del nuovo ERP",
+            "Le sostituiamo con un'interfaccia universale, da realizzare in un fine settimana",
+            "Le spostiamo in blocco su BTP senza analizzarle: la piattaforma le riordinerà"
+          ],
+          "a": 0,
+          "exp": "Si parte dall'inventario e dalla priorità. Migrare tutto in blocco senza analisi trasferisce il debito tecnico invece di ridurlo.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l05",
+      "title": "API contro eventi",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "API: un sistema chiede e riceve una risposta (richiesta-risposta, sincrono). Eventi: un sistema pubblica «è successo X» e chi è interessato reagisce (publish-subscribe, asincrono).",
+          "Gli eventi disaccoppiano i sistemi: chi pubblica non conosce chi ascolta. Sono utili per notifiche in tempo reale (ordine bloccato, lotto in quarantena) e per architetture che devono scalare.",
+          "In SAP Integration Suite esiste un event mesh di base per scenari semplici. SAP Integration Suite, advanced event mesh è la soluzione più completa per eventi su larga scala e distribuiti, basata su tecnologia Solace.",
+          "Non sono alternative: un'architettura moderna usa le API per le interrogazioni puntuali e gli eventi per reagire ai cambiamenti."
+        ],
+        "ae": "Fai un esempio del suo mondo: «quando un lotto va in quarantena, chi deve saperlo subito?». Se la risposta è «molti sistemi», stai parlando di eventi."
+      },
+      "ex": [
+        {
+          "t": "bucket",
+          "q": "API o evento? Classifica i casi",
+          "buckets": [
+            "API (richiesta-risposta)",
+            "Evento (publish-subscribe)"
+          ],
+          "items": [
+            [
+              "Il portale chiede lo stato di un ordine e attende la risposta",
+              0
+            ],
+            [
+              "Un lotto va in quarantena e più sistemi vengono avvisati",
+              1
+            ],
+            [
+              "L'app mobile legge il listino prezzi aggiornato",
+              0
+            ],
+            [
+              "Un pagamento arriva e il sistema logistico sblocca la spedizione",
+              1
+            ],
+            [
+              "Un sistema segnala «ordine bloccato» senza sapere chi ascolta",
+              1
+            ],
+            [
+              "Un servizio calcola subito uno sconto su richiesta",
+              0
+            ]
+          ],
+          "exp": "Le API servono quando qualcuno chiede un'informazione e aspetta la risposta. Gli eventi servono quando qualcosa accade e più sistemi devono reagire senza essere chiamati uno a uno.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è il vantaggio chiave di un'architettura a eventi?",
+          "o": [
+            "Chi pubblica non deve conoscere i sistemi che reagiscono: più disaccoppiamento",
+            "Il chiamante riceve la risposta in pochi millisecondi dal sistema che riceve l'evento",
+            "Gli eventi sostituiscono le API e rendono superflua la gestione delle interfacce",
+            "Gli eventi servono per archiviare lo storico dei dati e alimentare i report periodici"
+          ],
+          "a": 0,
+          "exp": "Il disaccoppiamento permette di aggiungere o sostituire sistemi senza toccare chi pubblica. Gli eventi non eliminano le API e non sono un archivio.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "SAP Integration Suite, advanced event mesh si basa su tecnologia Solace.",
+          "a": true,
+          "exp": "Secondo i materiali di formazione SAP, l'advanced event mesh è basato su Solace PubSub+. L'event mesh di base nell'Integration Suite è invece uno sviluppo interno di SAP.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Quando ha senso proporre l'advanced event mesh invece dell'event mesh di base?",
+          "o": [
+            "Eventi su larga scala, distribuiti su più regioni o cloud, con governance avanzata",
+            "Un singolo scenario di notifica interna con pochi eventi al giorno e un solo consumatore",
+            "Un'integrazione sincrona tra ERP e portale, dove serve una risposta immediata",
+            "Un progetto di analisi storica dei dati, senza eventi pubblicati in tempo reale"
+          ],
+          "a": 0,
+          "exp": "L'event mesh di base ha un ingresso più leggero ed è pensato per scenari semplici. L'advanced event mesh serve quando scala, distribuzione e governance diventano requisiti.",
+          "diff": 3
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è l'approccio più adatto per questo caso?",
+          "ctx": {
+            "who": "Head of IT, azienda farmaceutica",
+            "say": "Quando un lotto viene bloccato per qualità devo avvisare subito logistica, vendite e il portale dei distributori."
+          },
+          "o": [
+            "Un evento di blocco lotto: logistica, vendite e portale si sottoscrivono senza punto-punto",
+            "Ogni sistema interroga l'ERP via API ogni minuto, per scoprire eventuali nuovi blocchi",
+            "Una mail al team qualità, che aggiorna i sistemi interessati a mano dopo la verifica",
+            "Un report settimanale sui lotti bloccati: il tempo reale non è necessario qui"
+          ],
+          "a": 0,
+          "exp": "Un blocco che deve raggiungere molti sistemi in tempo reale è il caso classico per un evento. Interrogare di continuo le API sprecherebbe risorse e darebbe comunque un ritardo.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l06",
+      "title": "SAP Build: low-code e agenti",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Build è la famiglia di strumenti SAP per costruire con poco o nessun codice: app, automazione dei processi e siti o portali. Si appoggia a BTP.",
+          "SAP Build Process Automation: workflow, regole decisionali e automazione (anche RPA) per digitalizzare processi che attraversano più sistemi, con approvazioni e task.",
+          "SAP Build Work Zone: punto di accesso unico per ruolo, che riunisce app, processi e contenuti anche da sistemi diversi, con Joule integrato.",
+          "SAP Build Code: sviluppo professionale assistito da AI (Joule) per estensioni in Java e JavaScript. Joule Studio permette invece di creare skill e agenti Joule personalizzati."
+        ],
+        "ae": "Il low-code non è «app gratis per tutti»: chiedi chi governa le app costruite dai reparti (sicurezza, ciclo di vita). La governance è il tema che il CIO capisce subito."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina lo strumento SAP Build al suo uso",
+          "pairs": [
+            [
+              "Build Process Automation",
+              "Workflow, regole e automazione di processi tra più sistemi"
+            ],
+            [
+              "Build Work Zone",
+              "Punto di accesso unico per ruolo ad app, processi e contenuti"
+            ],
+            [
+              "Build Code",
+              "Sviluppo pro-code assistito da AI per estensioni"
+            ],
+            [
+              "Joule Studio",
+              "Creazione di skill e agenti Joule personalizzati"
+            ]
+          ],
+          "exp": "Ognuno copre un bisogno diverso: processo, esperienza utente, sviluppo professionale, agenti. Parti dal problema del cliente, non dal catalogo.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un reparto Acquisti vuole digitalizzare un'approvazione che coinvolge ERP, email e un sistema legacy. Quale strumento citi per primo?",
+          "o": [
+            "SAP Build Process Automation, per il workflow di approvazione",
+            "SAP Build Work Zone, per costruire un portale unico per ruolo",
+            "SAP HANA Cloud, per archiviare i dati delle approvazioni",
+            "Kyma, per eseguire il workflow in microservizi su Kubernetes"
+          ],
+          "a": 0,
+          "exp": "Un workflow di approvazione cross-sistema è il caso tipico di Process Automation. Work Zone dà un punto di accesso, ma non orchestra il processo.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "SAP Build è pensato solo per sviluppatori professionisti: il low-code non è previsto.",
+          "a": false,
+          "exp": "SAP Build copre sia il low-code per sviluppatori di reparto sia il pro-code assistito da AI (Build Code). Lo spettro è il punto di forza.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono rischi tipici di un low-code senza governance?",
+          "o": [
+            "App duplicate o non documentate costruite dai reparti",
+            "Problemi di sicurezza e accessi non controllati",
+            "Dipendenze nascoste da dati e API che cambiano",
+            "Aumento automatico delle prestazioni del core ERP",
+            "Sparizione della necessità di fare test"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Senza regole nascono shadow IT, buchi di sicurezza e dipendenze fragili. Il low-code non migliora le prestazioni dell'ERP e non elimina i test.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a questa affermazione del CIO?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Lasciamo che i reparti costruiscano le app da soli: più velocità!"
+          },
+          "o": [
+            "Ottimo, ma definiamo ambiti, ruoli, sicurezza e ciclo di vita: niente shadow IT",
+            "Ottimo, ma limitiamo il low-code agli sviluppatori IT, così resta sotto controllo",
+            "Ottimo, purché i reparti usino strumenti esterni a SAP, senza regole di sicurezza",
+            "Meglio di no: il low-code non funziona con i dati SAP e crea dipendenze fragili"
+          ],
+          "a": 0,
+          "exp": "Condividere l'obiettivo e proporre governance è la risposta di un partner. Vietare tutto o ignorare le regole sono entrambe posizioni fragili.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l07",
+      "title": "Roleplay: CIO e hyperscaler",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Il CIO spesso ha già una strategia cloud (Azure, AWS o Google). BTP non compete sul calcolo generico: è lo strato che parla i processi e i dati SAP.",
+          "BTP gira su infrastrutture di hyperscaler: non devi far scegliere tra i due. La domanda è dove vivono integrazione, estensioni e dati SAP.",
+          "Serve davvero quando: integrazioni complesse con SAP, estensioni clean core, app che usano API e dati SAP, automazione di processi SAP, AI sui dati di business.",
+          "Non spingerlo se lo standard copre il requisito o se non c'è esigenza di estensione o integrazione. Vendere BTP «a prescindere» brucia credibilità."
+        ],
+        "ae": "Posiziona BTP come strato di business sopra l'hyperscaler. Se il CIO ha già uno standard di integrazione non-SAP, chiedi dove e perché si ferma."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la risposta più efficace al CIO che usa già Azure?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Siamo una company Azure. Perché dovrei pagare anche BTP?"
+          },
+          "o": [
+            "BTP gira anche su Azure e non lo sostituisce: integra ed estende SAP, core pulito",
+            "BTP è l'alternativa SAP ad Azure: conviene spostare gradualmente i carichi",
+            "Le applicazioni SAP richiedono BTP per funzionare su Azure, quindi il costo è dovuto",
+            "BTP offre le stesse funzioni di Azure a un costo minore, quindi conviene consolidare lì"
+          ],
+          "a": 0,
+          "exp": "Non si compete con l'hyperscaler: si posiziona un valore diverso. Le altre risposte sono false o aggressive e danneggiano la credibilità.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a questa provocazione sull'acquisto di BTP?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Quindi mi fai comprare BTP per qualunque cosa?"
+          },
+          "o": [
+            "No: se standard e API coprono il requisito non serve; partiamo dai casi necessari",
+            "Sì: le estensioni vanno comunque costruite su BTP, e questo semplifica l'architettura",
+            "Sì: BTP è incluso nei contratti cloud, quindi il caso d'uso incide poco sull'offerta",
+            "No: con un cloud ERP BTP non è necessario, perché lo standard copre i requisiti"
+          ],
+          "a": 0,
+          "exp": "Ammettere dove BTP non serve costruisce fiducia e rende credibili i casi in cui lo proponi.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Dire al cliente che BTP serve «per qualsiasi cosa» è una buona strategia: allarga il perimetro dell'offerta.",
+          "a": false,
+          "exp": "Un perimetro troppo ampio e generico fa perdere credibilità. Meglio pochi casi d'uso chiari, collegati a un problema di business misurabile.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Per un'azienda con cloud ERP, quali casi giustificano davvero BTP?",
+          "o": [
+            "Integrare l'ERP con sistemi di produzione e di partner",
+            "Estendere un processo senza modificare il core",
+            "Costruire app e agenti che usano API e dati SAP",
+            "Rimpiazzare la contabilità generale standard",
+            "Sostituire il sistema operativo dei client"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Integrazione, estensione clean core e app sui dati SAP sono i tre casi tipici. La contabilità generale è un processo standard dell'ERP e il sistema operativo non c'entra.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Con un CIO senza budget per una piattaforma, conviene partire da un caso d'uso ___ con un risultato misurabile.",
+          "ctx": {
+            "who": "CIO",
+            "say": "Non ho budget per un grande progetto di piattaforma."
+          },
+          "o": [
+            "circoscritto",
+            "il più ampio possibile",
+            "privo di metriche",
+            "ancora da definire"
+          ],
+          "a": 0,
+          "exp": "Un caso piccolo e misurabile dimostra valore e prepara l'estensione. I grandi progetti di piattaforma partono dopo le prime prove.",
+          "diff": 1
+        }
+      ]
+    },
+    {
+      "id": "w05-l08",
+      "title": "Come si compra BTP",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Tre forme concettuali: {{w05.btp_commercial_models}}.",
+          "CPEA: il cliente si impegna su un importo e lo consuma nel tempo sui servizi del catalogo, con flessibilità tra servizi. Di norma i crediti non usati non si riportano oltre il termine contrattuale.",
+          "Pay-As-You-Go: nessun impegno iniziale, pagamento a consumo. Ottimo per pilot e proof of value, ma il prezzo unitario è di norma più alto del consumo impegnato.",
+          "Subscription: capacità fissa a canone per un servizio. Prevedibile, ma meno flessibile se i bisogni cambiano. Per Business Data Cloud l'unità è la capacità ({{w05.bdc_pricing_unit}}).",
+          "Sulla nuova piattaforma unificata: {{w05.ai_platform_pricing}}."
+        ],
+        "ae": "Parti dal caso d'uso e dal consumo atteso, non dal listino: un pilot a consumo può diventare un impegno annuale quando il valore è dimostrato."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il modello commerciale alla sua logica",
+          "pairs": [
+            [
+              "CPEA",
+              "Crediti prepagati da consumare sui servizi del catalogo"
+            ],
+            [
+              "Pay-As-You-Go",
+              "Consumo fatturato ogni mese, senza impegno iniziale"
+            ],
+            [
+              "Subscription",
+              "Canone fisso per una capacità definita di un servizio"
+            ],
+            [
+              "Capacity Units (BDC)",
+              "Unità con cui si acquista il core di Business Data Cloud"
+            ],
+            [
+              "Intelligent Packages",
+              "Data product curati, acquistati a parte dai servizi a capacità"
+            ]
+          ],
+          "exp": "Ogni modello risponde a un diverso bisogno di flessibilità e prevedibilità. Per BDC la logica è la capacità, con i contenuti curati venduti separatamente.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente vuole testare un caso d'uso BTP senza impegnarsi. Quale forma è più naturale?",
+          "o": [
+            "Pay-As-You-Go, a consumo e senza impegno iniziale",
+            "Subscription triennale su un servizio, con capacità definita",
+            "CPEA pluriennale con un importo iniziale elevato di crediti",
+            "Un contratto annuale a canone fisso sui servizi del catalogo"
+          ],
+          "a": 0,
+          "exp": "Per pilot e proof of value il consumo senza impegno riduce il rischio del cliente. Se il valore si dimostra, si passa a un impegno.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "In una prima call con un CIO conviene discutere prezzi e sconti prima di aver capito il caso d'uso.",
+          "a": false,
+          "exp": "Parlare di prezzo prima del problema riduce la conversazione a un confronto di costo. Prima il valore e il consumo atteso, poi il modello commerciale.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è il limite tipico di una subscription rispetto a un modello a consumo?",
+          "o": [
+            "Meno flessibilità se il fabbisogno cambia: la capacità è definita in anticipo",
+            "Non consente l'uso in produzione, perché è pensata per i soli ambienti di prova",
+            "Costa di più del consumo a parità di uso, perché include una quota di supporto",
+            "Richiede il pagamento a fine anno, perché la fatturazione non è prevista a rate"
+          ],
+          "a": 0,
+          "exp": "La subscription dà prevedibilità, ma la capacità è fissata a monte. Se il cliente consuma meno o più del previsto, la flessibilità è minore.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Che cosa proponi a questo cliente?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Non so quanto consumerò: potrei sbagliare la stima dell'impegno."
+          },
+          "o": [
+            "Partiamo con un pilot a consumo per misurare l'uso reale, poi dimensioniamo l'impegno",
+            "Impegniamo subito la capacità massima: se consumi meno, i crediti restano a disposizione",
+            "Scegliamo la subscription più alta, così hai la certezza di non superare la capacità",
+            "Stimiamo il consumo in un workshop e firmiamo l'impegno annuale, senza prove"
+          ],
+          "a": 0,
+          "exp": "Misurare prima di impegnarsi riduce il rischio di sovradimensionare. Impegnare il massimo può portare a crediti non utilizzati e a una cattiva esperienza al rinnovo.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l09",
+      "title": "Business Data Cloud: la mappa",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Business Data Cloud (BDC) è la piattaforma dati SaaS di SAP, annunciata il {{w05.bdc_launch}}. Obiettivo: dati di business con il loro significato, pronti per analytics e AI, dentro e fuori SAP.",
+          "Nel perimetro commerciale di BDC rientrano: {{w05.bdc_components}}.",
+          "I mattoni concettuali: data product (dati curati con significato di business), Intelligent Applications costruite sui data product, SAP Databricks per la data science pro-code e Datasphere per il data management.",
+          "Segnale di mercato: nei 50 maggiori deal di Q2 2026 la quota con AI e Business Data Cloud è stata {{sap.q2_26.ai_in_top_deals}} (dichiarazione del CEO in earnings call, riportata dalla stampa)."
+        ],
+        "ae": "BDC non si vende come «un altro data warehouse»: si vende come il modo per usare i dati SAP con il loro contesto di business, anche per l'AI, senza ricostruirli ogni volta."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la definizione più corretta di Business Data Cloud?",
+          "o": [
+            "Piattaforma dati SaaS di SAP che unisce data management, analytics e AI e data product",
+            "Servizio SAP di data warehouse on-premise che replica le tabelle dell'ERP in un archivio",
+            "Suite SAP per la contabilità di gruppo che consolida i bilanci delle società controllate",
+            "Marketplace SAP in cui i partner vendono applicazioni verticali costruite sopra l'ERP"
+          ],
+          "a": 0,
+          "exp": "BDC è una piattaforma dati in cloud (SaaS) che mette insieme data management, analytics e AI. Non è un warehouse on-premise, non è una suite di consolidamento e non è un marketplace.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali servizi rientrano nel perimetro commerciale di BDC (servizi a capacità)?",
+          "o": [
+            "SAP Datasphere",
+            "SAP Analytics Cloud",
+            "SAP Databricks",
+            "SAP Concur",
+            "SAP Fieldglass"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Nel core di BDC rientrano Datasphere, Analytics Cloud e SAP Databricks, oltre ad altri servizi: {{w05.bdc_components}}. Concur e Fieldglass sono soluzioni di spesa e non fanno parte del perimetro dati.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "In BDC un data product è un insieme di dati curato, con metadati di business e una ___ di accesso.",
+          "o": [
+            "interfaccia (API)",
+            "esportazione periodica",
+            "licenza d'uso",
+            "chiave condivisa"
+          ],
+          "a": 0,
+          "exp": "Un data product combina dataset raffinato, metadati che spiegano i campi e un punto di accesso (API) governato. Non è un file statico da copiare.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Con l'arrivo di BDC, SAP ha rinominato Datasphere: il nome Datasphere non esiste più.",
+          "a": false,
+          "exp": "{{w05.datasphere_status}}. Non confondere la piattaforma (BDC) con uno dei suoi componenti (Datasphere).",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a questo Head of Data?",
+          "ctx": {
+            "who": "Head of Data",
+            "say": "Abbiamo già un data warehouse: BDC cosa aggiunge?"
+          },
+          "o": [
+            "Il contesto di business dei dati SAP, con data product e semantica, per analytics e AI",
+            "Un motore di storage più veloce, che rende superflui il vostro warehouse e la BI",
+            "Un livello di replica automatica verso il warehouse, che sincronizza le tabelle SAP",
+            "Un catalogo di report standard già pronti, da usare al posto dei vostri modelli dati"
+          ],
+          "a": 0,
+          "exp": "Il valore sta nel significato di business che viaggia con il dato e nell'apertura verso analytics e AI, non nel sostituire il warehouse esistente né nel replicarlo.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l10",
+      "title": "Data product e zero-copy",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Un data product è un dataset curato per un tema di business (per esempio le fatture di vendita), con metadati che spiegano i campi e un punto di accesso governato. Non è una tabella grezza.",
+          "SAP fornisce data product pronti per le proprie applicazioni; i clienti possono crearne di propri. Il valore: il significato di business viaggia con il dato.",
+          "Zero-copy: i dati si condividono e si interrogano dove stanno, senza replicarli fisicamente. Meno copie significa meno costi, ritardi e rischi di governance. Esistono protocolli aperti, come Delta Sharing.",
+          "Zero-copy non vuol dire che una copia non serva in nessun caso: è un principio di default, non un dogma. Alcuni scenari richiedono ancora replica o trasformazione.",
+          "Sopra i data product nascono le Intelligent Applications: {{w05.intelligent_apps}}."
+        ],
+        "ae": "Quando il cliente dice «abbiamo un data lake con tutto», chiedi: «chi mantiene il significato dei campi SAP a ogni release?». Il data product risponde a quella domanda."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il termine alla sua definizione",
+          "pairs": [
+            [
+              "Data product",
+              "Dataset curato con metadati di business e accesso governato"
+            ],
+            [
+              "Zero-copy",
+              "Condivisione dei dati senza replica fisica"
+            ],
+            [
+              "Delta Sharing",
+              "Protocollo aperto per condividere dati tra piattaforme"
+            ],
+            [
+              "Intelligent Application",
+              "App AI su BDC: data product, contenuto di dominio e applicazione"
+            ],
+            [
+              "Replica (ETL)",
+              "Copia dei dati in un altro sistema, con costi e ritardi"
+            ]
+          ],
+          "exp": "Il data product è l'unità di valore, lo zero-copy il modo di condividerlo, Delta Sharing uno standard aperto, l'Intelligent Application il consumo. La replica resta l'alternativa tradizionale.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Perché un data product è più utile di una tabella estratta in un data lake?",
+          "o": [
+            "Porta con sé semantica di business, metadati e governance dell'accesso",
+            "È più compatto, quindi le interrogazioni risultano più veloci su qualunque piattaforma",
+            "È salvato in un formato proprietario SAP, quindi più sicuro da condividere",
+            "Non richiede un modello dati, perché i campi vengono dedotti dai nomi delle colonne"
+          ],
+          "a": 0,
+          "exp": "Una tabella grezza perde il significato di business: il data product lo conserva insieme a metadati e regole di accesso. La compattezza e il formato proprietario non sono il punto.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Zero-copy significa che nessun dato viene replicato in nessuno scenario.",
+          "a": false,
+          "exp": "Zero-copy è un principio di default: dove possibile si condivide senza copiare. Alcuni scenari richiedono ancora replica o trasformazione, e va detto al cliente.",
+          "diff": 2
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine il flusso di valore di un data product",
+          "items": [
+            "Dati sorgente dalle applicazioni di business",
+            "Armonizzazione e arricchimento con contesto di business",
+            "Pubblicazione come data product con metadati",
+            "Condivisione governata alle piattaforme (zero-copy)",
+            "Consumo in analytics, planning o AI"
+          ],
+          "exp": "Dal dato grezzo si arriva al data product e da lì alla condivisione e all'uso: il significato di business si costruisce a monte, una volta sola.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi senza attaccare l'architettura del cliente?",
+          "ctx": {
+            "who": "Head of Data",
+            "say": "Copiamo ogni notte le tabelle SAP nel nostro lake. Funziona."
+          },
+          "o": [
+            "Chi mantiene il significato dei campi a ogni release? Un data product riduce le copie",
+            "Va bene così: una copia notturna delle tabelle è la soluzione più stabile, non cambierei",
+            "Passerei a copie orarie: una frequenza maggiore risolve il problema del significato",
+            "Il vero problema è la velocità delle copie: aumentiamo la banda tra SAP e il lake"
+          ],
+          "a": 0,
+          "exp": "Riconosci che funziona e sposta la conversazione sul costo nascosto: mantenere la semantica. Attaccare il lake o la frequenza delle copie non affronta il problema.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l11",
+      "title": "Datasphere, SAC e BW: che fine?",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "{{w05.datasphere_status}}.",
+          "{{w05.sac_in_bdc}}.",
+          "SAP BW e BW/4HANA restano supportati, ma l'innovazione si concentra su Datasphere e BDC. Per i clienti BW esiste un percorso: i modelli BW possono diventare data product (BW Data Product Generator).",
+          "Domande da AE: quanti report e modelli BW esistono, chi li usa, quanti sono davvero critici? Migrare tutto in un colpo è raramente la risposta giusta."
+        ],
+        "ae": "Non dire «BW è finito»: dì che il percorso più sicuro è convivere (BW più data product) e spostare i casi d'uso a maggior valore, non ricostruire tutto."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che fine ha fatto SAP Datasphere con l'arrivo di BDC?",
+          "o": [
+            "È rimasto un componente strategico di BDC, senza essere rinominato né dismesso",
+            "È stato rinominato Business Data Cloud, con lo stesso perimetro funzionale di prima",
+            "È stato dismesso e il suo ruolo è passato a SAP Databricks come motore unico",
+            "È confluito in SAP Analytics Cloud, che ne ha assorbito catalogo e modellazione"
+          ],
+          "a": 0,
+          "exp": "{{w05.datasphere_status}}. Le altre ipotesi mescolano ruoli: BDC è la piattaforma, Datasphere un componente, Databricks e SAC servono ad altro.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "SAP Analytics Cloud rientra nell'offerta Business Data Cloud e si acquista tramite la core capacity di BDC.",
+          "a": true,
+          "exp": "{{w05.sac_in_bdc}}. Resta il livello di reporting e planning per gli utenti di business.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Per portare modelli BW esistenti in BDC come data product SAP ha introdotto il BW Data Product ___.",
+          "o": [
+            "Generator",
+            "Repository",
+            "Scheduler",
+            "Monitor"
+          ],
+          "a": 0,
+          "exp": "Il BW Data Product Generator trasforma oggetti BW in data product, permettendo la convivenza e una migrazione graduale.",
+          "diff": 3
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente ha centinaia di report BW. Qual è l'approccio più sensato?",
+          "o": [
+            "Classificare i report per valore e uso, spostare prima i più importanti, convivere con BW",
+            "Ricostruire tutto in BDC prima di avviare qualunque altro progetto, per evitare doppioni",
+            "Spegnere BW subito, perché il prodotto non è più supportato da SAP e quindi rischioso",
+            "Lasciare BW com'è e rimandare qualsiasi ragionamento su BDC fino a data da definire"
+          ],
+          "a": 0,
+          "exp": "La convivenza è la via realistica: si parte dai casi d'uso a più alto valore. Ricostruire tutto è costoso e BW non è fuori supporto.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CIO che ha investito anni in BW/4HANA?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Abbiamo investito anni in BW/4HANA. Mi dici che è tutto da buttare?"
+          },
+          "o": [
+            "No: BW resta supportato e può convivere; partiamo da casi nuovi e modelli di valore",
+            "Sì: BW è stato sostituito da Datasphere, quindi conviene fermare gli investimenti",
+            "No: BW sparisce se aderite a BDC, quindi rinviate la decisione il più possibile",
+            "Sì: l'innovazione è tutta in BDC, quindi i nuovi modelli BW vanno rifatti da zero"
+          ],
+          "a": 0,
+          "exp": "Rispetta l'investimento: BW/4HANA resta supportato, l'innovazione si concentra su BDC e Datasphere, e i modelli possono diventare data product.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l12",
+      "title": "Databricks, Snowflake, Google",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Databricks è un componente nativo di BDC per data science e ML pro-code. Il Databricks che il cliente può già avere è un'altra cosa: BDC Connect collega i due mondi con condivisione bidirezionale.",
+          "BDC Connect for Databricks è disponibile da {{w05.bdc_connect_databricks}}. Snowflake: {{w05.bdc_connect_snowflake}}. Google BigQuery: {{w05.bdc_connect_bigquery}}.",
+          "In roadmap: {{w05.bdc_connect_athena}}.",
+          "Il messaggio: SAP non pretende che tutti i dati finiscano in BDC; punta a rendere i dati SAP utilizzabili, con il loro significato, nella piattaforma scelta dal cliente."
+        ],
+        "ae": "Prima di parlare di Databricks contro Snowflake chiedi: «dove vogliono lavorare i tuoi data scientist?». Poi mostra che i dati SAP con semantica ci arrivano senza ETL."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il nome al suo ruolo nei dati SAP",
+          "pairs": [
+            [
+              "SAP Databricks",
+              "Componente nativo di BDC per data science e ML"
+            ],
+            [
+              "BDC Connect",
+              "Collegamento zero-copy bidirezionale con piattaforme esterne"
+            ],
+            [
+              "Dremio",
+              "Lakehouse su Apache Iceberg acquisito da SAP"
+            ],
+            [
+              "Reltio",
+              "Master data management con entity resolution basata su AI"
+            ],
+            [
+              "Prior Labs",
+              "Modelli foundation per dati tabellari, acquisiti da SAP"
+            ]
+          ],
+          "exp": "Sono i pezzi con cui SAP costruisce la propria offerta dati e AI: un ambiente nativo, i connettori, un lakehouse aperto, il master data e i modelli per dati tabellari. Acquisizioni: Dremio {{sap.acq.dremio}}, Prior Labs {{sap.acq.prior_labs}}.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali affermazioni su BDC Connect sono corrette?",
+          "o": [
+            "Permette di condividere data product anche da piattaforme come Databricks verso BDC",
+            "Esiste un connettore zero-copy generalmente disponibile per Snowflake",
+            "Esiste un connettore generalmente disponibile per Google BigQuery",
+            "Obbliga il cliente a spostare i dati dentro BDC prima di poterli usare",
+            "Funziona con piattaforme di proprietà SAP e con nessun altro ambiente"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Databricks, Snowflake e BigQuery sono collegati con connettori zero-copy: {{w05.bdc_connect_snowflake}} per Snowflake, {{w05.bdc_connect_bigquery}} per BigQuery. Non c'è obbligo di spostare i dati.",
+          "diff": 3
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente usa già Databricks. Qual è il messaggio giusto?",
+          "o": [
+            "BDC Connect porta i data product SAP con semantica nel suo Databricks, senza ETL su misura",
+            "Può continuare a usare il suo Databricks, ma dovrà ricostruire a mano i modelli SAP",
+            "Conviene spostare i carichi su SAP Databricks, perché i due ambienti non dialogano",
+            "SAP Databricks e il suo ambiente sono la stessa istanza: non serve alcun collegamento"
+          ],
+          "a": 0,
+          "exp": "SAP Databricks è inglobato in BDC, il Databricks del cliente è un altro ambiente: BDC Connect li collega e i data product SAP arrivano con la loro semantica.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Il connettore BDC Connect permette di condividere dati anche dal lato del cliente verso BDC, non solo da SAP verso l'esterno.",
+          "a": true,
+          "exp": "La condivisione è bidirezionale: i data product SAP possono andare verso la piattaforma del cliente e i risultati di data science possono tornare in BDC.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al cliente che usa già Snowflake?",
+          "ctx": {
+            "who": "Head of Data",
+            "say": "Siamo un cliente Snowflake. Non voglio un'altra piattaforma."
+          },
+          "o": [
+            "Non serve: c'è un connettore zero-copy tra BDC e Snowflake, con la semantica dei dati SAP",
+            "Serve migrare su Databricks, perché è il partner scelto da SAP per l'integrazione dati",
+            "Snowflake può leggere dati SAP con estrazioni notturne, quindi serve un progetto ETL",
+            "Per ora un connettore non è disponibile: conviene attendere il prossimo anno"
+          ],
+          "a": 0,
+          "exp": "{{w05.bdc_connect_snowflake}}: il cliente non deve cambiare piattaforma. Le altre risposte descrivono situazioni superate o inesatte.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l13",
+      "title": "Dati affidabili per l'AI",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Un agente AI sbaglia se i dati sono incoerenti: clienti duplicati, fornitori con anagrafiche diverse, unità di misura non allineate. La qualità dei master data è un prerequisito, non un dettaglio.",
+          "Reltio: {{w05.reltio_role}}. Acquisizione di Reltio: {{sap.acq.reltio}}.",
+          "MDG e Reltio non sono la stessa cosa: {{w05.mdg_vs_reltio}}.",
+          "Dremio (lakehouse su Apache Iceberg): acquisizione {{sap.acq.dremio}}. Prior Labs (tabular foundation models): acquisizione {{sap.acq.prior_labs}}.",
+          "Contesto per l'AI, SAP Knowledge Graph: {{w05.knowledge_graph}}. Per i dati tabellari: {{w05.sap_rpt1}}."
+        ],
+        "ae": "Quando senti «vogliamo agenti AI», chiedi: «quanti codici cliente o fornitore duplicati avete oggi e chi ne è responsabile?». La risposta (di solito: nessuno) apre il tema governance."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Perché la qualità dei master data è un prerequisito per l'AI?",
+          "o": [
+            "Perché agenti e modelli decidono sui dati: duplicati e incoerenze danno azioni sbagliate",
+            "Perché i modelli AI funzionano su dati di pochi giorni, da aggiornare di continuo",
+            "Perché l'AI corregge i duplicati in fase di elaborazione e risolve le incoerenze",
+            "Perché gli agenti usano dati transazionali e i master data pesano poco nelle decisioni"
+          ],
+          "a": 0,
+          "exp": "Un agente agisce sulle informazioni che trova: se un fornitore esiste in tre versioni, può scegliere quella sbagliata. L'AI non ripulisce da sola i master data.",
+          "diff": 1
+        },
+        {
+          "t": "bucket",
+          "q": "Secondo il posizionamento SAP: governance alla creazione o unificazione cross-sistema?",
+          "buckets": [
+            "Alla creazione (MDG)",
+            "Cross-sistema (Reltio)"
+          ],
+          "items": [
+            [
+              "Workflow di approvazione per un nuovo fornitore nell'ERP",
+              0
+            ],
+            [
+              "Regole di validazione quando il dato viene creato",
+              0
+            ],
+            [
+              "Match e merge di clienti duplicati da più CRM ed ERP",
+              1
+            ],
+            [
+              "Golden record di un'entità presente in sistemi diversi",
+              1
+            ],
+            [
+              "Monitoraggio continuo della qualità su dati di qualunque origine",
+              1
+            ],
+            [
+              "Change request auditabile sul master data SAP",
+              0
+            ]
+          ],
+          "exp": "{{w05.mdg_vs_reltio}}. Sono complementari: il cliente con master data in più sistemi può affiancare Reltio a MDG.",
+          "diff": 3
+        },
+        {
+          "t": "tf",
+          "q": "Dopo l'acquisizione, Reltio sparisce come prodotto e può essere usato soltanto dentro BDC.",
+          "a": false,
+          "exp": "{{w05.reltio_role}}. Il fatto che sia ancora acquistabile da solo è indicato «per ora»: non promettere condizioni future al cliente.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Dremio porta in SAP un lakehouse basato sullo standard aperto Apache ___.",
+          "o": [
+            "Iceberg",
+            "Kafka",
+            "Cassandra",
+            "Airflow"
+          ],
+          "a": 0,
+          "exp": "Dremio è un lakehouse costruito su Apache Iceberg. Il piano di SAP è usare Iceberg come livello di base aperto di BDC: è una roadmap, da presentare come tale.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CIO del gruppo farmaceutico sulle anagrafiche fornitori?",
+          "ctx": {
+            "who": "CIO, gruppo farmaceutico",
+            "say": "Vogliamo agenti AI per gli acquisti, ma abbiamo tre anagrafiche fornitori diverse."
+          },
+          "o": [
+            "Prima ordine nelle anagrafiche con governance e unificazione, poi gli agenti lavorano",
+            "Partiamo subito con gli agenti: lavoreranno sulle anagrafiche e segnaleranno i duplicati",
+            "Le anagrafiche contano poco per gli agenti: scegliamo il modello e poi adattiamo i dati",
+            "Aspettiamo che l'AI sia più matura: su dati frammentati un progetto non ha senso"
+          ],
+          "a": 0,
+          "exp": "Non si tratta di rimandare l'AI, ma di preparare il terreno in parallelo. Dati unificati e governati rendono gli agenti più affidabili e il risultato misurabile.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l14",
+      "title": "Signavio, BTC e processi",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Signavio è la suite per la trasformazione dei processi: modellazione, process mining (process intelligence) e gestione di rischi e controlli. Mostra come i processi funzionano davvero, a partire dai log dei sistemi.",
+          "Nei progetti di migrazione al cloud ERP aiuta a capire quali varianti di processo servono davvero: meno complessità, meno custom code, scelte basate sui dati.",
+          "In SAP: {{w05.btm_portfolio}}.",
+          "Business Transformation Center: {{w05.btc}}.",
+          "Differenze utili: Signavio guarda il processo, LeanIX l'architettura applicativa, WalkMe l'adozione, Business Transformation Center i dati nella trasformazione, Cloud ALM il ciclo di vita dei progetti."
+        ],
+        "ae": "Proponi una process discovery breve sul processo che fa più male (per esempio order-to-cash o procure-to-pay): è un ingresso leggero che produce numeri reali per il business case."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina lo strumento al suo scopo",
+          "pairs": [
+            [
+              "SAP Signavio",
+              "Modellazione e process mining basato sui log di sistema"
+            ],
+            [
+              "SAP LeanIX",
+              "Enterprise architecture: mappa di applicazioni e dipendenze"
+            ],
+            [
+              "WalkMe",
+              "Adozione digitale: guida in-app per gli utenti"
+            ],
+            [
+              "Business Transformation Center",
+              "Trasformazione dei dati nei progetti di migrazione ERP"
+            ],
+            [
+              "Cloud ALM",
+              "Gestione del ciclo di vita di progetti e operations in cloud"
+            ]
+          ],
+          "exp": "Cinque strumenti, cinque angoli sulla trasformazione: processo, architettura, adozione, dati e ciclo di vita del progetto. Insieme formano la parte di governance della trasformazione.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è il valore principale del process mining prima di una migrazione ERP?",
+          "o": [
+            "Vedere le varianti reali dei processi per standardizzare e ridurre il custom code",
+            "Misurare le prestazioni dei server per dimensionare l'infrastruttura del nuovo sistema",
+            "Generare la documentazione di test che i fornitori consegneranno col nuovo sistema",
+            "Confrontare i prezzi dei fornitori per scegliere il partner di implementazione migliore"
+          ],
+          "a": 0,
+          "exp": "Il process mining ricostruisce come i processi funzionano davvero, varianti incluse. È la base per decidere cosa standardizzare e cosa merita ancora una personalizzazione.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Il process mining di Signavio ricostruisce i processi reali partendo dai log degli eventi dei sistemi.",
+          "a": true,
+          "exp": "I log di sistema (per esempio gli eventi di un ERP) mostrano passaggi, ritardi e varianti effettivi, che spesso differiscono dal processo documentato.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è la differenza giusta tra Signavio e LeanIX?",
+          "o": [
+            "Signavio analizza e modella i processi; LeanIX mappa applicazioni e architettura",
+            "LeanIX analizza i processi con il process mining; Signavio mappa le applicazioni",
+            "Sono lo stesso prodotto con due nomi: cambia l'interfaccia ma non le funzioni disponibili",
+            "Signavio gestisce l'adozione degli utenti nelle app; LeanIX gestisce i processi finanziari"
+          ],
+          "a": 0,
+          "exp": "Signavio è il lato processo, LeanIX il lato architettura applicativa. Sono due prodotti distinti dello stesso portafoglio di Business Transformation Management.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a questa richiesta del CFO?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Prima di migrare vorrei sapere quanti passaggi manuali ci sono nell'order-to-cash."
+          },
+          "o": [
+            "Process discovery con process mining sull'order-to-cash: varianti e colli di bottiglia",
+            "Una stima in workshop con i key user, perché i log dei sistemi aggiungono poco",
+            "Una misura dopo il go-live del nuovo ERP, quando i processi saranno standardizzati",
+            "Un conteggio manuale su un campione di ordini, fermando per un mese le attività"
+          ],
+          "a": 0,
+          "exp": "Il process mining misura senza fermare l'operatività e produce numeri utili per il business case. Aspettare il go-live o contare a mano toglie valore alla decisione.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l15",
+      "title": "Roleplay: il Head of Data",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Discovery sui dati: parti dal business (decisioni prese su dati in ritardo, report che non tornano, AI che non parte), non dal tool. Poi scendi su fonti, qualità, governance e skill.",
+          "Domande utili: quali decisioni oggi si basano su dati in ritardo? Quanti sistemi alimentano il reporting? Chi è l'owner dei master data? Dove girano già i carichi AI?",
+          "Segnali di fit per BDC: dati SAP replicati in più lake o warehouse, definizioni di KPI diverse, progetti AI bloccati da dati non affidabili, migrazione verso il cloud ERP in corso.",
+          "Segnali di cautela: nessuno sponsor di business, nessun owner dei dati, aspettative di «AI magica». In questi casi si parte da governance e da un caso d'uso piccolo."
+        ],
+        "ae": "Chiudi con un prossimo passo concreto: un workshop di mezza giornata per mappare uno o due casi d'uso e le fonti coinvolte, non una proposta di piattaforma."
+      },
+      "ex": [
+        {
+          "t": "order",
+          "q": "Ordina una discovery sui dati efficace",
+          "items": [
+            "Capire le decisioni di business che oggi mancano di dati affidabili",
+            "Mappare fonti, sistemi e flussi che alimentano il reporting",
+            "Valutare qualità dei dati, ownership e governance",
+            "Verificare skill, piattaforme esistenti e vincoli di cloud e sicurezza",
+            "Concordare uno o due casi d'uso e il prossimo passo"
+          ],
+          "exp": "Si va dal business verso la tecnica: prima le decisioni, poi i sistemi, poi la qualità, poi le skill. Il prossimo passo concreto chiude la conversazione.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Quale domanda di follow-up fai?",
+          "ctx": {
+            "who": "Head of Data",
+            "say": "Nel nostro data lake i KPI cambiano a seconda di chi li calcola."
+          },
+          "o": [
+            "Quali KPI e quali definizioni sono in conflitto, e quali decisioni ne soffrono di più?",
+            "Quanti terabyte contiene il lake e quanto costa ogni mese lo storage di quei dati?",
+            "Avete valutato di sostituire il lake con BDC? Possiamo preparare una proposta?",
+            "Chi ha scelto la tecnologia del lake e quando è stato avviato il progetto?"
+          ],
+          "a": 0,
+          "exp": "Una buona domanda di discovery porta il problema dal lato del business: KPI in conflitto e decisioni a rischio. Le altre portano su costi, storia o proposta prematura.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CIO?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Il board vuole l'AI entro l'anno."
+          },
+          "o": [
+            "Capiamo quali decisioni migliorare e se i dati sono affidabili, poi un caso circoscritto",
+            "Allora conviene attivare Joule per l'intera popolazione utenti e raccogliere i casi dopo",
+            "Meglio rimandare: pochi clienti hanno dati abbastanza pronti per un risultato utile",
+            "I dati contano poco: per partire basta scegliere il modello e addestrarlo sui documenti"
+          ],
+          "a": 0,
+          "exp": "L'urgenza del board è un'opportunità se la incanali su un caso d'uso concreto e su dati affidabili. Le altre risposte promettono troppo, rimandano o ignorano i dati.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono segnali di buon fit per una conversazione su BDC?",
+          "o": [
+            "Dati SAP replicati in più lake o warehouse con definizioni diverse",
+            "Progetti AI fermi per dati non affidabili o frammentati",
+            "Migrazione verso il cloud ERP in corso o pianificata",
+            "Nessun dato SAP in azienda e nessun progetto di analytics",
+            "Un unico sistema perfettamente governato e senza esigenze nuove"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Replica diffusa, AI bloccata e migrazione ERP sono i tre segnali tipici. Senza dati SAP o senza esigenze, non c'è una conversazione da avere.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a questa preoccupazione?",
+          "ctx": {
+            "who": "Head of Data",
+            "say": "Non voglio dipendere da un solo vendor per i dati."
+          },
+          "o": [
+            "BDC ha connettori zero-copy verso Databricks, Snowflake e BigQuery: scegliete voi",
+            "Le integrazioni con altre piattaforme sono in sviluppo: per ora meglio restare in SAP",
+            "I dati escono da BDC con estrazioni batch: pianificate le finestre di export con l'IT",
+            "L'apertura non è un tema rilevante per i dati: conta la velocità delle interrogazioni"
+          ],
+          "a": 0,
+          "exp": "L'argomento si regge su fatti: {{w05.bdc_connect_snowflake}} per Snowflake e {{w05.bdc_connect_bigquery}} per BigQuery, oltre a Databricks. Dire che le integrazioni mancano o che l'apertura non conta è sbagliato.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w05-l16",
+      "title": "Boss: l'architetto dei dati",
+      "kind": "boss",
+      "lesson": {
+        "points": [
+          "Clean core: logica custom fuori dal core, tramite API e punti di estensione rilasciati; BTP è il luogo delle estensioni side-by-side.",
+          "Integration Suite per API e flussi, eventi per reagire ai cambiamenti, Build per app e processi, BDC per i data product con significato di business.",
+          "BDC non sostituisce Datasphere né SAC: li contiene. Connettori zero-copy verso Databricks, Snowflake e Google BigQuery.",
+          "Dati affidabili prima dell'AI: governance dei master data (MDG), unificazione cross-sistema (Reltio), process intelligence (Signavio).",
+          "Si compra a consumo o a impegno: prima il pilot e la misura, poi l'impegno. Prima il problema del cliente, poi il prodotto."
+        ]
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è il primo passo giusto?",
+          "ctx": {
+            "who": "Head of IT",
+            "say": "Un consulente propone di modificare il codice standard del cloud ERP per un requisito specifico."
+          },
+          "o": [
+            "Verifichiamo se standard o estensioni rilasciate coprono il requisito, poi valutiamo BTP",
+            "Va bene modificare il core se il consulente è certificato: l'upgrade verrà adattato",
+            "Meglio duplicare il processo standard nel core: l'upgrade non tocca la parte modificata",
+            "Conviene rifiutare l'estensione e chiedere al business di cambiare il requisito"
+          ],
+          "a": 0,
+          "exp": "Il clean core chiede di esplorare prima standard e punti di estensione rilasciati. Modificare il core o duplicare processi crea debito tecnico, ma rifiutare a priori ogni requisito non è un approccio da partner.",
+          "diff": 2
+        },
+        {
+          "t": "bucket",
+          "q": "Quale area di BTP e dati SAP serve per ogni caso?",
+          "buckets": [
+            "Integration Suite",
+            "SAP Build",
+            "Business Data Cloud"
+          ],
+          "items": [
+            [
+              "Flussi e API tra ERP e sistemi di produzione",
+              0
+            ],
+            [
+              "Workflow di approvazione cross-sistema",
+              1
+            ],
+            [
+              "Data product con significato di business",
+              2
+            ],
+            [
+              "Portale per ruolo con app e contenuti",
+              1
+            ],
+            [
+              "Condivisione zero-copy con Snowflake",
+              2
+            ],
+            [
+              "Event mesh per eventi di blocco lotto",
+              0
+            ]
+          ],
+          "exp": "Integrazione e eventi vivono nell'Integration Suite, app e workflow in Build, data product e connettori zero-copy in BDC.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Quando lo standard copre già il requisito del cliente, la scelta migliore è comunque un'estensione su BTP.",
+          "a": false,
+          "exp": "Se lo standard copre il requisito, l'estensione aggiunge costo e complessità senza valore. È anche una questione di credibilità: BTP si propone dove serve.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Come posizioni SAP rispetto all'hyperscaler?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Il nostro hyperscaler fa già integrazione, dati e AI. Perché SAP?"
+          },
+          "o": [
+            "Gli strumenti restano: SAP aggiunge il contesto di business, cioè data product e semantica",
+            "Gli strumenti vanno sostituiti: SAP offre un'alternativa completa all'hyperscaler",
+            "Gli strumenti restano: SAP aggiunge una licenza dati più economica dell'hyperscaler",
+            "Gli strumenti restano: SAP aggiunge i connettori fisici verso macchine e sensori"
+          ],
+          "a": 0,
+          "exp": "Il valore di SAP sta nel contesto dei processi e dei dati di business, non nel competere sul calcolo generico né sul prezzo.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "BTP, Business Data Cloud e Business AI formano l'architettura chiamata SAP Business ___ Platform.",
+          "o": [
+            "AI",
+            "Cloud",
+            "ERP",
+            "Finance"
+          ],
+          "a": 0,
+          "exp": "È la SAP Business AI Platform di Sapphire 2026. {{sap.sapphire26.platform}}.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Ordina un percorso sensato per un nuovo caso d'uso BTP",
+          "items": [
+            "Definisci il caso d'uso e il valore atteso",
+            "Parti con un pilot a consumo (pay-as-you-go)",
+            "Misura il consumo reale e il valore ottenuto",
+            "Dimensiona un impegno sui dati misurati",
+            "Estendi ad altri casi d'uso"
+          ],
+          "exp": "Si dimostra il valore prima di impegnarsi. Il consumo reale guida il dimensionamento e riduce il rischio per il cliente.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi allo sponsor tecnico?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Lo sponsor di business non c'è ancora, ma l'IT vuole partire con BDC."
+          },
+          "o": [
+            "Cerchiamo uno sponsor e un caso d'uso con un KPI misurabile prima di dimensionare",
+            "Partiamo con la capacità massima: lo sponsor arriverà con i primi data product",
+            "Costruiamo prima i data product possibili e poi cerchiamo i casi d'uso che li usino",
+            "Rinviamo il progetto finché il board non avvia un programma di AI di gruppo"
+          ],
+          "a": 0,
+          "exp": "Un progetto dati senza sponsor e senza KPI rischia di restare un esercizio tecnico. Il caso d'uso misurabile giustifica la capacità da acquistare.",
+          "diff": 3
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono buone pratiche di discovery con un Head of Data?",
+          "o": [
+            "Partire dalle decisioni di business che mancano di dati affidabili",
+            "Chiedere chi è l'owner dei master data",
+            "Concordare un prossimo passo con uno o due casi d'uso",
+            "Iniziare presentando il listino di BDC",
+            "Evitare di parlare di qualità dei dati per non rallentare la vendita"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Business prima, ownership dei dati e prossimo passo concreto. Il listino in apertura e il silenzio sulla qualità sono errori tipici.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Quale abbinamento tra acquisizione e ruolo è corretto?",
+          "o": [
+            "Reltio: master data management; Dremio: lakehouse su Apache Iceberg",
+            "Reltio: lakehouse su Apache Iceberg; Dremio: master data management",
+            "Prior Labs: master data management; Dremio: modelli per dati tabellari",
+            "Reltio: modelli per dati tabellari; Prior Labs: lakehouse su Apache Iceberg"
+          ],
+          "a": 0,
+          "exp": "Reltio: acquisizione {{sap.acq.reltio}}. Dremio: {{sap.acq.dremio}}. Prior Labs: {{sap.acq.prior_labs}}. Reltio è master data, Dremio è lakehouse, Prior Labs sono modelli per dati tabellari.",
+          "diff": 3
+        }
+      ]
+    }
+  ]
+}

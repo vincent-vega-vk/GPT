@@ -1,0 +1,1603 @@
+{
+  "id": "w04",
+  "levels": [
+    {
+      "id": "w04-l01",
+      "title": "Business AI: cos'è davvero",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Business AI è l'AI incorporata nei processi di business: funzioni AI dentro le applicazioni, l'assistente Joule, agenti che eseguono compiti e una piattaforma per costruirne di propri.",
+          "Differenza chiave rispetto a un chatbot generico: lavora su dati e processi aziendali veri, con permessi, contesto (oggetti e relazioni) e tracciabilità.",
+          "Lo stack unificato presentato a Sapphire 2026: {{sap.sapphire26.platform}}.",
+          "Contesto di mercato: {{sap.q2_26.ai_in_top_deals}} dei 50 maggiori deal di Q2 2026 includeva AI e Business Data Cloud (dichiarazione del CEO riportata dalla stampa). Non confonderlo con il valore per il tuo cliente."
+        ],
+        "ae": "Apri con il processo, non con la tecnologia: «Quale decisione o compito ripetitivo vorresti vedere eseguito meglio?»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Cosa distingue SAP Business AI da un chatbot generico?",
+          "o": [
+            "Lavora su dati e processi aziendali con contesto, permessi e tracciabilità.",
+            "Usa un modello linguistico proprietario SAP addestrato sulla documentazione pubblica.",
+            "Funziona in modalità offline sui server del cliente, senza connessione ai sistemi SAP.",
+            "Sostituisce l'ERP: le transazioni vengono gestite dal modello al posto delle applicazioni."
+          ],
+          "a": 0,
+          "exp": "Il valore di Business AI sta nel lavorare dentro i processi, con i dati e i permessi dell'azienda. Un chatbot generico non conosce oggetti, relazioni e controlli del cliente.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "La SAP Business AI Platform unisce SAP BTP, Business Data Cloud e ___.",
+          "o": [
+            "Business AI",
+            "SAP Concur",
+            "Ariba Network",
+            "SuccessFactors"
+          ],
+          "a": 0,
+          "exp": "Secondo la presentazione di Sapphire 2026 la piattaforma è la somma di BTP (base tecnica), Business Data Cloud (dati) e Business AI (funzioni, assistenti, agenti), con Joule come interfaccia principale.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Per SAP un assistente AI efficace in azienda deve basarsi su dati e contesto di processo, non solo su un modello linguistico.",
+          "a": true,
+          "exp": "È il filo conduttore dell'offerta: dati, Knowledge Graph e permessi accompagnano il modello. Un LLM senza contesto di business sbaglia più facilmente e non rispetta i controlli.",
+          "diff": 1
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni componente al suo ruolo",
+          "pairs": [
+            [
+              "Funzioni AI embedded",
+              "AI incorporata nelle app (suggerimenti, estrazione dati)"
+            ],
+            [
+              "Joule",
+              "Interfaccia conversazionale e assistente SAP"
+            ],
+            [
+              "Agenti",
+              "Software AI che eseguono compiti verso un obiettivo"
+            ],
+            [
+              "Business AI Platform",
+              "Stack per costruire e governare AI di business"
+            ]
+          ],
+          "exp": "Quattro livelli da distinguere: AI nelle app, interfaccia (Joule), agenti che agiscono e piattaforma sottostante. Confonderli porta a promettere ciò che appartiene a un altro livello.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Il CIO di un'azienda CPG usa già strumenti AI generici. Come rispondi alla sua domanda?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Abbiamo già Copilot e ChatGPT in azienda. Perché ci serve l'AI di SAP?"
+          },
+          "o": [
+            "Non in alternativa: serve dove contano dati ERP, permessi e audit.",
+            "Perché gli strumenti generici sono vietati dal GDPR quando trattano dati aziendali.",
+            "Perché l'AI di SAP costa meno degli strumenti generici e li sostituisce in tempi brevi.",
+            "Perché SAP dispone di modelli linguistici più adatti ai processi di business."
+          ],
+          "a": 0,
+          "exp": "Complementare, non sostitutiva: gli strumenti generici vanno bene per attività generali, l'AI SAP dove servono dati e processi ERP con controlli. Il passo giusto è scegliere insieme i casi d'uso.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l02",
+      "title": "Joule: da assistente ad agenti",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Joule è nato come assistente conversazionale generativo di SAP, presentato nel settembre 2023: risponde a domande, naviga le applicazioni ed esegue semplici operazioni.",
+          "Oggi Joule è l'interfaccia principale: oltre alle risposte, coordina Joule Assistants (per ruolo o area) che orchestrano agenti specializzati, capaci di eseguire passaggi di un processo.",
+          "Assistente = dialoga con l'utente e coordina; agente = software AI con un obiettivo che pianifica ed esegue azioni su sistemi e dati; skill = capacità o azione specifica richiamabile.",
+          "L'autonomia è graduata: l'agente propone, un umano approva, oppure esegue entro regole. Lo decide il cliente, e i permessi esistenti restano validi."
+        ],
+        "ae": "Non dire «Joule fa tutto da solo»: spiega a quale livello di autonomia (suggerisce, esegue con approvazione, esegue entro soglie) è il caso d'uso."
+      },
+      "ex": [
+        {
+          "t": "order",
+          "q": "Metti in ordine l'evoluzione di Joule",
+          "items": [
+            "Settembre 2023: debutto di Joule come assistente generativo",
+            "Joule Agents: agenti specializzati che eseguono compiti",
+            "Sapphire 2026: presentata la Autonomous Suite di assistenti e agenti",
+            "Ottobre 2026: avvio del rollout di Joule Work ai clienti"
+          ],
+          "exp": "Da assistente che risponde, a agenti che eseguono, a una suite di assistenti e agenti, a un punto d'accesso unico (Joule Work) in rollout. Ogni tappa aumenta il perimetro di ciò che l'AI può fare.",
+          "diff": 2
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni termine alla sua definizione",
+          "pairs": [
+            [
+              "Assistente (Joule Assistant)",
+              "Dialoga con l'utente e coordina agenti e skill"
+            ],
+            [
+              "Agente",
+              "Software AI che pianifica ed esegue azioni verso un obiettivo"
+            ],
+            [
+              "Skill",
+              "Capacità o azione specifica richiamabile da Joule"
+            ],
+            [
+              "Human-in-the-loop",
+              "Un umano approva o corregge prima dell'esecuzione"
+            ]
+          ],
+          "exp": "Usare il lessico giusto evita fraintendimenti nelle demo: gli assistenti coordinano, gli agenti eseguono, le skill sono i mattoni, l'umano nel loop è il controllo.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Un agente AI può operare con diversi livelli di autonomia, dal semplice suggerimento all'esecuzione entro soglie definite.",
+          "a": true,
+          "exp": "L'autonomia è una scelta del cliente, caso per caso: suggerire, eseguire con approvazione, eseguire entro regole. Più è alto l'impatto del processo, più umano serve nel loop.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CFO teme che l'AI agisca da sola sulla contabilità. Come rispondi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Joule mi registra le scritture da solo? Non voglio sorprese."
+          },
+          "o": [
+            "Dipende dall'autonomia che decidi: suggerisce, oppure esegue con approvazione o soglie.",
+            "Sì, registra in autonomia le scritture contabili, con i controlli dei revisori.",
+            "No, Joule può rispondere a domande ma non è in grado di eseguire azioni sui sistemi.",
+            "Dipende dal fornitore del modello linguistico, che determina cosa può eseguire Joule."
+          ],
+          "a": 0,
+          "exp": "L'autonomia è configurabile e i permessi esistenti restano validi. Mostra al CFO i livelli possibili e proponi di partire dal più prudente per le scritture.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Joule è stato presentato nel settembre ___ come assistente generativo di SAP.",
+          "o": [
+            "2023",
+            "2021",
+            "2025",
+            "2019"
+          ],
+          "a": 0,
+          "exp": "Joule è stato annunciato nel settembre 2023. Da allora l'evoluzione è stata: più integrazioni nelle app, agenti, assistenti per ruolo e, nel 2026, Joule Work.",
+          "diff": 1
+        }
+      ]
+    },
+    {
+      "id": "w04-l03",
+      "title": "Autonomous Enterprise e Suite",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "A Sapphire 2026 SAP ha presentato la visione «Autonomous Enterprise»: l'AI non si limita ad assistere ma esegue processi di business, entro le regole e i controlli dell'azienda.",
+          "La SAP Autonomous Suite è il pacchetto applicativo di questa visione: {{w04.autonomous_suite_scale}}.",
+          "Poggia sulla SAP Business AI Platform, con Joule come interfaccia. Alcuni analisti la leggono come riconfezionamento di applicazioni e servizi dati esistenti: mostra valore sui casi d'uso, non sul brand.",
+          "Non tutto è già disponibile: {{w04.ga_roadmap}}."
+        ],
+        "ae": "Se il cliente chiede «cosa posso usare oggi?», distingui sempre: disponibile, a tappe, Early Adopter Care. Non vendere una slide come prodotto."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Cosa significa «Autonomous Enterprise» nella visione SAP?",
+          "o": [
+            "Processi in cui agenti AI eseguono compiti entro regole definite dall'azienda.",
+            "Un'azienda senza dipendenti, in cui l'AI prende le decisioni di business al loro posto.",
+            "Un ERP che si aggiorna da solo e non richiede più contratti, implementazioni o partner.",
+            "Un modello di AI che non richiede dati aziendali e usa la conoscenza pubblica del web."
+          ],
+          "a": 0,
+          "exp": "Autonomia non significa assenza di controllo: gli agenti eseguono dentro regole, permessi e audit definiti dal cliente. È la parte della visione che si può difendere in un colloquio con un CFO.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Tutte le Joule Assistants e gli agenti della Autonomous Suite sono disponibili in produzione per ogni cliente dal giorno dell'annuncio di Sapphire 2026.",
+          "a": false,
+          "exp": "La disponibilità è a tappe: alcune funzioni sono in rollout da ottobre 2026, altre pianificate più avanti, alcune in Early Adopter Care. Distinguere lo stato è parte della tua credibilità.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un responsabile supply chain di un'azienda farmaceutica vuole gli agenti subito. Cosa rispondi?",
+          "ctx": {
+            "who": "Supply Chain",
+            "say": "Voglio gli agenti supply chain della Autonomous Suite. Posso attivarli subito?"
+          },
+          "o": [
+            "Roadmap SAP: previsti nel {{w04.sc_agents_ga}}. Verifico lo stato, non prometto date.",
+            "Sì, sono attivabili oggi da SAP for Me, con una configurazione guidata in giornata.",
+            "No, non sono previsti nella roadmap: le funzioni supply chain restano gestite dal planner.",
+            "Sì, ma devi acquistare prima un nuovo ERP, perché gli agenti lo richiedono come base."
+          ],
+          "a": 0,
+          "exp": "Secondo la roadmap di SAP Connect 2026 gli agenti supply chain sono pianificati in una finestra futura. Una data pianificata non è un impegno: verifica lo stato su SAP for Me e nella Innovation News Guide.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali affermazioni sulla Autonomous Suite sono prudenti e corrette?",
+          "o": [
+            "Comprende assistenti Joule che orchestrano agenti specializzati",
+            "Va verificata funzione per funzione la disponibilità effettiva",
+            "È già in produzione e include tutti gli agenti in ogni Paese",
+            "Si appoggia alla SAP Business AI Platform"
+          ],
+          "a": [
+            0,
+            1,
+            3
+          ],
+          "exp": "La suite è un insieme di assistenti e agenti sulla Business AI Platform, ma la disponibilità varia per funzione e Paese. Dire che è tutto in produzione ovunque è un'esagerazione.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Un agente non è «disponibile» solo perché annunciato: va verificato se è GA, in Early Adopter Care o ___.",
+          "o": [
+            "ancora pianificato per il futuro",
+            "certificato dalle autorità europee",
+            "incluso nella licenza di base SAP",
+            "installato in anticipo dal partner"
+          ],
+          "a": 0,
+          "exp": "Tre stati da distinguere: disponibilità generale, accesso anticipato (Early Adopter Care) e pianificato. Il terzo non è un prodotto utilizzabile: presentalo come roadmap.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l04",
+      "title": "Joule Work: cosa c'è oggi",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Joule Work è il nuovo modo di lavorare con SAP: l'utente descrive in linguaggio naturale l'obiettivo e Joule coordina flussi, dati e agenti SAP e non-SAP, con client web, mobile e desktop.",
+          "Stato a ottobre 2026: {{w04.joule_work_status}}.",
+          "SAP riporta risultati interni: {{w04.joule_work_internal}}. Sono dati del fornitore: contesto, non promessa di risultato per il cliente.",
+          "Il contesto di business arriva dallo SAP Knowledge Graph: {{w04.knowledge_graph}}."
+        ],
+        "ae": "Se il cliente chiede una demo di Joule Work, chiedi prima il ruolo (team CFO, buyer, planner) e l'obiettivo che vuole vedere raggiunto."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CIO ha letto che Joule Work era riservato all'Early Adopter Care. Cosa rispondi?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Ho letto che Joule Work è in Early Adopter Care, quindi non posso usarlo."
+          },
+          "o": [
+            "Lo stato è cambiato: il rollout è partito a tappe; verifichiamo cosa puoi attivare ora.",
+            "Corretto: resta limitato ai clienti selezionati e non esiste una data di rilascio.",
+            "Joule Work non è un prodotto: è una demo mostrata agli eventi senza clienti reali.",
+            "Il rollout è partito, ma è riservato ai dipendenti SAP e ai partner, non ai clienti."
+          ],
+          "a": 0,
+          "exp": "A maggio 2026 Joule Work era in Early Adopter Care; a SAP Connect (ottobre 2026) è partito il rollout verso i clienti, con disponibilità a tappe. Verifica sempre cosa è attivabile nel contratto del cliente.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Con Joule Work l'utente descrive un obiettivo e lascia a Joule il compito di coordinare flussi, dati e agenti, anche non-SAP.",
+          "a": true,
+          "exp": "È la proposta di Joule Work: obiettivo in linguaggio naturale e orchestrazione di workflow, dati e agenti SAP e non-SAP. Il livello di autonomia resta definito dal cliente.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CFO vuole usare il +20% di produttività dichiarato da SAP nel proprio business case. Cosa rispondi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "SAP dice +20% di produttività con Joule Work. Posso metterlo nel mio business case?"
+          },
+          "o": [
+            "È un dato interno SAP: lo uso come riferimento, il business case parte dai tuoi processi.",
+            "Sì, è il risultato che otterrai adottando Joule Work nei processi finance e HR.",
+            "Sì, ma applicabile alle sole aziende farmaceutiche, che hanno processi più regolati.",
+            "No, perché SAP non ha dati propri sull'uso di Joule Work e non può citare risultati."
+          ],
+          "a": 0,
+          "exp": "Il dato viene dall'uso interno SAP e non è verificato in modo indipendente. Un business case credibile parte da una baseline del cliente e da un pilota misurabile, non da percentuali di un altro contesto.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Joule Work usa lo SAP ___ per avere il contesto di business su oggetti e relazioni.",
+          "o": [
+            "Knowledge Graph",
+            "Cloud Connector",
+            "Fiori Launchpad",
+            "Business Network"
+          ],
+          "a": 0,
+          "exp": "Lo SAP Knowledge Graph è il livello semantico che dà a Joule il significato degli oggetti di business e delle loro relazioni. Senza contesto, un agente rischia di sbagliare o di inventare.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un direttore commerciale ti chiede una demo di Joule Work. Come ti prepari?",
+          "ctx": {
+            "who": "Sales Director",
+            "say": "Fammi una demo di Joule Work."
+          },
+          "o": [
+            "Chiedo ruolo e obiettivo (es. chiusura mensile) e preparo la demo su quel flusso.",
+            "Mostro le funzioni principali in ordine di menu: il cliente sceglie quelle che servono.",
+            "Rimando la demo finché Joule Work non è attivabile per i clienti dei vari Paesi.",
+            "Faccio vedere una slide con i numeri degli assistenti e degli agenti disponibili."
+          ],
+          "a": 0,
+          "exp": "Una demo efficace parte da un ruolo e da un obiettivo concreto, con dati realistici. Elenchi di funzioni e slide con numeri non mostrano valore e alimentano l'hype.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l05",
+      "title": "Joule Studio e Agent Hub",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "{{w04.joule_studio}}.",
+          "Interoperabilità: {{w04.a2a}}. Così il processo non resta chiuso nell'ecosistema SAP.",
+          "Governance: {{w04.agent_hub}}.",
+          "Costi: parti gratuite fino a fine 2026, ma il prezzo successivo non è stato comunicato. Non costruire un business case sul «gratis»."
+        ],
+        "ae": "Se il cliente vuole costruire agenti propri, chiedi: quale processo, quali dati, chi lo governa dopo il pilota? Lo strumento è la parte facile."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "A cosa serve Joule Studio?",
+          "o": [
+            "Costruire, distribuire ed eseguire agenti e skill Joule su processi SAP e non-SAP.",
+            "Configurare le autorizzazioni degli utenti SAP e gestire i ruoli aziendali del cliente.",
+            "Monitorare l'infrastruttura cloud e i costi di hosting dei sistemi RISE per il cliente.",
+            "Convertire il codice ABAP classico in ABAP Cloud nei sistemi ECC prima della migrazione."
+          ],
+          "a": 0,
+          "exp": "Joule Studio è l'ambiente (ora in versione gestita) per creare e far girare agenti e skill. Non è uno strumento di autorizzazioni, di monitoraggio infrastrutturale o di conversione del codice.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Il prezzo di Joule Studio, del runtime degli agenti e dell'interoperabilità agent-to-agent dopo il 2026 è già stato definito e pubblicato da SAP.",
+          "a": false,
+          "exp": "Questi elementi sono gratuiti fino a fine 2026, ma il prezzo successivo non è stato comunicato. Chi costruisce un business case oggi deve tenere conto di questa incertezza.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO vuole costruire agenti con strumenti di sviluppo moderni. Cosa rispondi?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Il mio team vuole costruire agenti con Claude Code e Python. SAP lo permette?"
+          },
+          "o": [
+            "Sì: Joule Studio supporta Python, TypeScript, Claude Code e Cursor, con deploy gestito.",
+            "No: gli agenti si costruiscono con linguaggi proprietari SAP e strumenti interni.",
+            "Sì, ma devi completare prima la migrazione dei sistemi ECC verso RISE nel tuo gruppo.",
+            "Sì, e non serve alcuna governance: gli agenti costruiti con Python sono autorizzati."
+          ],
+          "a": 0,
+          "exp": "Joule Studio è aperto a linguaggi e strumenti moderni. La governance (permessi, ownership, monitoraggio) resta necessaria: il tool è la parte facile, il processo no.",
+          "diff": 2
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni strumento alla sua funzione",
+          "pairs": [
+            [
+              "Joule Studio",
+              "Costruire e far girare agenti e skill"
+            ],
+            [
+              "AI Agent Hub",
+              "Governare agenti SAP e di terze parti"
+            ],
+            [
+              "Agent-to-agent (A2A)",
+              "Comunicazione tra agenti di fornitori diversi"
+            ],
+            [
+              "Joule Work",
+              "Punto d'accesso per gli obiettivi di lavoro dell'utente"
+            ]
+          ],
+          "exp": "Quattro tasselli complementari: costruire (Studio), governare (Agent Hub), far dialogare (A2A) e usare (Joule Work). Sapere dove si colloca ciascuno aiuta a rispondere con precisione.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali domande poni a un cliente che vuole costruire agenti propri?",
+          "o": [
+            "Quale processo e quali dati coinvolge?",
+            "Chi governa e monitora l'agente dopo il pilota?",
+            "Quale livello di autonomia è accettabile?",
+            "Quanti agenti ha costruito il concorrente?",
+            "Possiamo contare sul fatto che resterà gratuito?"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Processo e dati, governance e autonomia determinano il successo di un agente. Il confronto con i concorrenti e l'assunzione che resti gratuito sono ragionamenti da hype.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l06",
+      "title": "Platform e Knowledge Graph",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "{{sap.sapphire26.platform}}.",
+          "SAP BTP è la base tecnica (integrazione, sviluppo, servizi AI); Business Data Cloud è lo strato dati; Business AI è il livello di funzioni, assistenti e agenti. Insieme danno agli agenti dati e contesto affidabili.",
+          "SAP Knowledge Graph: {{w04.knowledge_graph}}.",
+          "Perché conta: un agente senza contesto sbaglia o inventa; il grafo riduce l'ambiguità (cos'è un «ordine», chi può vederlo, come si collega a consegne e fatture)."
+        ],
+        "ae": "Spiega il Knowledge Graph con un esempio del cliente: «Un ordine collegato a consegne, fatture e credito: l'agente sa dove guardare e cosa può vedere»."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina ogni componente al suo ruolo nella piattaforma",
+          "pairs": [
+            [
+              "SAP BTP",
+              "Base tecnica: integrazione, sviluppo, servizi AI"
+            ],
+            [
+              "Business Data Cloud",
+              "Strato dati: data product e analytics"
+            ],
+            [
+              "Business AI",
+              "Funzioni, assistenti e agenti per i processi"
+            ],
+            [
+              "Knowledge Graph",
+              "Contesto semantico di oggetti e relazioni di business"
+            ]
+          ],
+          "exp": "La piattaforma ha tre strati (tecnico, dati, AI) più il livello semantico che li tiene insieme. Raccontarla così evita di ridurla a un elenco di sigle.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "A cosa serve lo SAP Knowledge Graph per gli agenti?",
+          "o": [
+            "Dà contesto di business (oggetti, relazioni, permessi) per ridurre errori e ambiguità.",
+            "Sostituisce il database dell'ERP, archiviando i dati transazionali come grafo.",
+            "Genera in automatico il codice ABAP per le estensioni richieste dagli agenti AI.",
+            "Traduce l'interfaccia utente in più lingue, per agevolare l'adozione."
+          ],
+          "a": 0,
+          "exp": "Il Knowledge Graph è un livello semantico: dice agli agenti cosa sono gli oggetti, come si collegano e cosa è lecito vedere. Non sostituisce database né genera codice.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Lo SAP Knowledge Graph fornisce a Joule il contesto di business su oggetti e relazioni dei dati.",
+          "a": true,
+          "exp": "È il suo scopo dichiarato: fornire significato e relazioni dei dati di business a Joule e agli agenti. Senza questo livello l'AI lavora su tabelle senza semantica.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CTO chiede perché non collegare direttamente un LLM al database. Cosa rispondi?",
+          "ctx": {
+            "who": "CTO",
+            "say": "Perché dovrei pagare SAP e non collegare un LLM generico direttamente al mio database?"
+          },
+          "o": [
+            "Perché un LLM sul solo database fatica con significato, relazioni e permessi dei dati.",
+            "Perché gli LLM generici non riescono a leggere i dati di business in formato tabellare.",
+            "Perché SAP vieta le connessioni a LLM esterni nei contratti di licenza della piattaforma.",
+            "Perché il database SAP non è accessibile da applicazioni esterne alla piattaforma SAP."
+          ],
+          "a": 0,
+          "exp": "Il punto non è vietare, ma portare significato e controlli. Evita il FUD: un LLM può essere collegato, ma senza contesto semantico e permessi i risultati sono meno affidabili.",
+          "diff": 3
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine il flusso di una richiesta in Joule Work",
+          "items": [
+            "L'utente esprime un obiettivo in Joule Work",
+            "Joule individua il contesto di business (Knowledge Graph)",
+            "Joule attiva gli agenti adatti",
+            "Gli agenti agiscono entro permessi e audit",
+            "L'utente verifica o approva il risultato"
+          ],
+          "exp": "Obiettivo, contesto, agenti, esecuzione controllata, verifica umana: è la sequenza concettuale con cui SAP descrive il lavoro con agenti. L'ultimo passo cambia con il livello di autonomia scelto.",
+          "diff": 3
+        }
+      ]
+    },
+    {
+      "id": "w04-l07",
+      "title": "I dati prima dell'AI",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "L'AI di business vale quanto i dati: master data duplicati, processi frammentati e silos producono risposte sbagliate, più in fretta.",
+          "SAP Business Data Cloud riunisce dati SAP e non-SAP in data product governati; nasce in partnership con Databricks, per condividere i dati senza duplicarli inutilmente.",
+          "Dati e acquisizioni 2026: Reltio (master data) {{sap.acq.reltio}}; Dremio (lakehouse) {{sap.acq.dremio}}; Prior Labs (modelli tabulari) {{sap.acq.prior_labs}}.",
+          "Prerequisiti pratici: ownership dei dati, master data di qualità, processi standardizzati (clean core) e una base cloud su cui agganciare gli agenti."
+        ],
+        "ae": "Chiedi: «Di quali dati ti fidi oggi nelle chiusure o nei piani di produzione? Dove riconcili ancora a mano?» È lì che l'AI funziona, o fallisce."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CFO vuole gli agenti per la chiusura, ma i dati master sono in disordine. Cosa suggerisci?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Voglio gli agenti per la chiusura, ma i nostri dati master sono un disastro."
+          },
+          "o": [
+            "Si parte dalla qualità del master data: senza dati affidabili gli agenti sbagliano.",
+            "Gli agenti correggono in autonomia i dati sporchi, quindi si può partire subito.",
+            "Conviene rimandare master data e governance a dopo il go-live degli agenti AI.",
+            "L'AI generativa non usa i dati master, quindi la qualità non incide sul risultato."
+          ],
+          "a": 0,
+          "exp": "Agenti su dati sporchi amplificano gli errori. Partire dal master data (spesso con strumenti di master data management) è il percorso più rapido verso risultati credibili.",
+          "diff": 2
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni nome al suo ruolo nei dati",
+          "pairs": [
+            [
+              "Business Data Cloud",
+              "Dati SAP e non-SAP come data product governati"
+            ],
+            [
+              "Reltio",
+              "Master data management (acquisizione SAP 2026)"
+            ],
+            [
+              "Dremio",
+              "Data lakehouse su Apache Iceberg"
+            ],
+            [
+              "Databricks",
+              "Partner di Business Data Cloud per dati e AI"
+            ],
+            [
+              "Prior Labs",
+              "Foundation model tabulari (acquisizione SAP 2026)"
+            ]
+          ],
+          "exp": "SAP sta rafforzando il livello dati con acquisizioni (Reltio, Dremio, Prior Labs) e partnership (Databricks). Il messaggio per il cliente: l'AI affidabile parte dal dato governato.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Un agente AI ben progettato può compensare dati master incompleti e duplicati senza che serva alcun intervento sui dati.",
+          "a": false,
+          "exp": "L'AI non risolve la qualità del dato: la eredita. Master data, ownership e governance sono prerequisiti, non optional da rimandare.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "Prima di lanciare agenti di business, il prerequisito è avere dati ___ e processi standardizzati.",
+          "o": [
+            "affidabili e governati",
+            "il più possibile duplicati",
+            "archiviati in locale nei reparti",
+            "convertiti in PDF"
+          ],
+          "a": 0,
+          "exp": "Dati affidabili e governati e processi vicini allo standard (clean core) sono la base per far agire gli agenti. Senza, il pilota funziona in demo e fallisce in produzione.",
+          "diff": 1
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono prerequisiti sensati per un progetto con agenti AI?",
+          "o": [
+            "Ownership chiara dei dati",
+            "Master data di qualità",
+            "Processi vicini allo standard (clean core)",
+            "Un modello linguistico più grande",
+            "Nessun controllo di accesso per velocizzare"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Ownership, qualità e processi standard determinano il successo. Un modello più grande non risolve problemi di dato e togliere i controlli di accesso è un rischio, non un acceleratore.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l08",
+      "title": "Partner, LLM e Prior Labs",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP non punta su un solo modello: usa un approccio multi-modello con più provider, accessibili dalla sua piattaforma, e partner strategici. {{w04.ai_partners}}.",
+          "{{w04.anthropic}}.",
+          "Modelli tabulari: gli LLM sono ottimi sul testo, ma i dati di business sono per lo più tabelle (ordini, fatture, giacenze). I tabular foundation model sono pre-addestrati su dati tabellari e prevedono con pochi dati di training.",
+          "Prior Labs (specialista di tabular foundation model): {{sap.acq.prior_labs}}. Casi tipici: previsioni e classificazioni su dati ERP, come rischio di ritardo nei pagamenti o domanda."
+        ],
+        "ae": "Evita il tifo per un modello: «quale compito, quali dati, quale accuratezza e quale controllo» viene prima di «quale LLM»."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Perché i tabular foundation model sono rilevanti per i dati ERP?",
+          "o": [
+            "Sono pre-addestrati su dati tabellari e prevedono su ordini o fatture con pochi dati.",
+            "Sostituiscono la contabilità generale, registrando le scritture direttamente nel ledger.",
+            "Scrivono contratti e email in linguaggio naturale partendo dai dati delle tabelle.",
+            "Funzionano su immagini e documenti scansionati, sostituendo l'OCR nei processi AP."
+          ],
+          "a": 0,
+          "exp": "I dati ERP sono tabellari: i tabular foundation model fanno previsioni e classificazioni su di essi con pochi dati di addestramento. Non sono motori contabili né modelli di testo o immagini.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "SAP ha completato l'acquisizione di Prior Labs, specialista di foundation model ___.",
+          "o": [
+            "tabulari",
+            "per immagini",
+            "per audio",
+            "per codice"
+          ],
+          "a": 0,
+          "exp": "Prior Labs lavora su modelli fondazionali per dati tabellari, adatti ai dati strutturati dell'ERP. Per i dettagli dell'operazione vedi il fatto condiviso sull'acquisizione.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Tra i partner AI messi in evidenza da SAP a Sapphire 2026 compare Anthropic.",
+          "a": true,
+          "exp": "SAP e Anthropic hanno annunciato l'intenzione di integrare le capacità agentiche di Claude nella Business AI Platform tramite MCP; con loro SAP ha citato anche altri partner come AWS, Google Cloud, Microsoft, NVIDIA e Palantir.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO teme di dipendere da un solo fornitore di modelli. Come rispondi?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Quale LLM usa Joule? Voglio sapere se dipendo da un solo fornitore."
+          },
+          "o": [
+            "Approccio multi-modello: più provider e partner, come Claude per gli agenti.",
+            "Un modello proprietario SAP, senza alternative né accesso a provider esterni.",
+            "Un provider, OpenAI su Azure, per i prodotti e gli agenti SAP.",
+            "SAP non usa modelli di terze parti, perché li sviluppa internamente."
+          ],
+          "a": 0,
+          "exp": "L'approccio SAP è multi-modello, con partner come Anthropic annunciati per i compiti agentici. Dettagli per prodotto e concentrazione del rischio vanno verificati e discussi apertamente.",
+          "diff": 3
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni nome al suo ruolo nell'ecosistema AI",
+          "pairs": [
+            [
+              "Anthropic",
+              "Claude nella Business AI Platform, via MCP"
+            ],
+            [
+              "Databricks",
+              "Partner di Business Data Cloud"
+            ],
+            [
+              "NVIDIA",
+              "Partner AI evidenziato a Sapphire 2026"
+            ],
+            [
+              "Prior Labs",
+              "Modelli tabulari (acquisizione SAP)"
+            ]
+          ],
+          "exp": "Alleanze (Anthropic, Databricks, NVIDIA) e acquisizioni (Prior Labs) disegnano l'ecosistema. Non attribuire ai partner funzioni specifiche senza verificare la fonte SAP.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l09",
+      "title": "Casi d'uso: Finance e Procurement",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Finance: il caso più maturo è la chiusura. Il Financial Closing Assistant coordina agenti su registrazioni, ratei, validazione scritture, errori e riconciliazioni intercompany; alcuni assistenti finance sono ancora in Early Adopter Care.",
+          "Altri casi finance: riconciliazione conti, incassi e crediti, previsioni di cassa, anomalie nei pagamenti. Prima di proporli verifica lo stato (GA, EAC o pianificato).",
+          "Procurement: {{w04.procurement_plan}}.",
+          "Come qualificare: dove si perde tempo (chiusure, eccezioni, riconciliazioni)? Quanto è standardizzato il processo? Chi approva? Quali controlli interni restano?"
+        ],
+        "ae": "In finance parti dai giorni di chiusura e dalle eccezioni: «Quanti giorni servono oggi per chiudere? Dove si ferma il processo?»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CFO chiede cosa può fare l'AI nella chiusura mensile. Come rispondi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Che cosa può fare per me l'AI nella chiusura mensile?"
+          },
+          "o": [
+            "Coordinare agenti su ratei, validazione ed eccezioni, con approvazioni e audit trail.",
+            "Chiudere il bilancio in autonomia, senza approvazioni umane né revisione dei conti.",
+            "Sostituire il revisore legale, che riceve i risultati già validati dall'agente.",
+            "Generare i grafici per il board, senza intervenire sui processi di chiusura mensile."
+          ],
+          "a": 0,
+          "exp": "L'AI coordina i passaggi ripetitivi della chiusura (ratei, validazioni, riconciliazioni) mantenendo approvazioni e tracciabilità. Non sostituisce il revisore né il controllo interno.",
+          "diff": 2
+        },
+        {
+          "t": "bucket",
+          "q": "Finance o procurement?",
+          "buckets": [
+            "Finance",
+            "Procurement"
+          ],
+          "items": [
+            [
+              "Riconciliazione intercompany",
+              0
+            ],
+            [
+              "Validazione delle scritture contabili",
+              0
+            ],
+            [
+              "Rischio finanziario dei fornitori (es. dati Moody's in Ariba)",
+              1
+            ],
+            [
+              "Agenti per SAP Fieldglass (forza lavoro esterna)",
+              1
+            ],
+            [
+              "Ratei e accantonamenti di chiusura",
+              0
+            ],
+            [
+              "Gestione del ciclo di vita dei fornitori",
+              1
+            ]
+          ],
+          "exp": "La chiusura appartiene alla finance; il rischio e il ciclo di vita dei fornitori e Fieldglass al procurement. I confini nella pratica si sovrappongono, ma i casi d'uso vanno assegnati a un owner.",
+          "diff": 1
+        },
+        {
+          "t": "tf",
+          "q": "Tutti gli assistenti finance della Autonomous Suite sono già in disponibilità generale per i clienti.",
+          "a": false,
+          "exp": "Secondo la roadmap di SAP Connect 2026 alcuni assistenti finance sono ancora solo in Early Adopter Care. Verifica sempre lo stato del singolo assistente prima di includerlo in una proposta.",
+          "diff": 2
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine una conversazione su un caso d'uso AI in finance",
+          "items": [
+            "Individua il processo che fa perdere più tempo",
+            "Misura la baseline (giorni di chiusura, eccezioni)",
+            "Verifica dati, controlli e stato di disponibilità",
+            "Definisci il livello di autonomia e le approvazioni",
+            "Concorda un pilota con KPI chiari"
+          ],
+          "exp": "Dal problema alla baseline, poi fattibilità e controlli, infine pilota. Chi parte dalla tecnologia salta la baseline e non potrà dimostrare il valore.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali KPI descrivono bene il valore di un caso d'uso AI in chiusura?",
+          "o": [
+            "Giorni di chiusura",
+            "Numero di eccezioni da correggere a mano",
+            "Ore di riconciliazione manuale",
+            "Numero di slide sulla strategia AI",
+            "Numero di agenti attivati"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Giorni, eccezioni e ore manuali misurano il processo. Il numero di agenti attivati è una metrica di vanità: dice quanta AI c'è, non quanto valore produce.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l10",
+      "title": "Casi d'uso: HR, SC, Sales, CX",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "HR: {{w04.hr_plan}}. Per il recruiting, SmartRecruiters: {{sap.acq.smartrecruiters}}.",
+          "Attenzione in HR: i sistemi AI usati per selezione e gestione dei lavoratori sono tipicamente considerati ad alto rischio dall'AI Act. Governance, trasparenza e supervisione umana fanno parte del progetto.",
+          "Supply chain: agenti che rilevano e gestiscono interruzioni (ritardi dei fornitori, scorte). La disponibilità generale degli agenti supply chain è pianificata nel {{w04.sc_agents_ga}}.",
+          "Sales e service: assistenti per vendite, servizio e commerce. Per gli assistenti Customer Experience la disponibilità generale è pianificata nel {{w04.cx_assistants_ga}}."
+        ],
+        "ae": "In ogni funzione un caso d'uso è: un processo, un dato, un KPI, un owner. Se ne manca uno, è ancora una demo."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina ogni funzione a un esempio di uso dell'AI",
+          "pairs": [
+            [
+              "HR",
+              "Assistenti per payroll, recruiting, onboarding e learning"
+            ],
+            [
+              "Supply chain",
+              "Agenti che rilevano e gestiscono interruzioni di fornitura"
+            ],
+            [
+              "Procurement",
+              "Rischio fornitori e agenti su Ariba e Fieldglass"
+            ],
+            [
+              "Customer Experience",
+              "Assistenti per vendite e servizio clienti"
+            ]
+          ],
+          "exp": "Ogni funzione ha un tipo di assistente o agente tipico. Conoscere l'esempio principale ti aiuta a proporre un caso d'uso senza elencare cataloghi.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Una HR director vuole usare l'AI per la prima selezione dei CV. Cosa rispondi?",
+          "ctx": {
+            "who": "HR Director",
+            "say": "Posso usare l'AI per fare la prima selezione dei CV?"
+          },
+          "o": [
+            "Possibile, ma è ad alto rischio per l'AI Act: servono governance e supervisione umana.",
+            "Sì, per l'AI Act la selezione dei CV non prevede requisiti specifici di governance.",
+            "No, SAP non consente alcun uso dell'AI nei processi HR e di selezione del personale.",
+            "Sì, purché i candidati si trovino fuori dall'UE, dove l'AI Act non si applica ai CV."
+          ],
+          "a": 0,
+          "exp": "Selezione e gestione del personale sono tipicamente classificate ad alto rischio: l'uso è possibile ma con obblighi di governance, trasparenza e supervisione umana. Coinvolgi legale e DPO del cliente.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "In supply chain, un caso d'uso tipico di agenti è rilevare un'interruzione di fornitura e proporre o avviare azioni di risposta.",
+          "a": true,
+          "exp": "È l'esempio che SAP porta per gli agenti supply chain: detect and respond sulle interruzioni. La disponibilità effettiva va verificata, ma il caso d'uso è coerente con la direzione del prodotto.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "Un buon caso d'uso AI ha un processo, un dato, un KPI e un ___.",
+          "o": [
+            "owner di business",
+            "fornitore di LLM",
+            "hyperscaler dedicato",
+            "budget illimitato"
+          ],
+          "a": 0,
+          "exp": "Senza un owner di business che risponda del risultato, il caso resta un esperimento tecnico. Processo, dato e KPI senza owner non producono decisioni.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un direttore commerciale CPG vuole un assistente per vendite e servizio da usare già questo trimestre. Cosa rispondi?",
+          "ctx": {
+            "who": "Sales Director",
+            "say": "Voglio un assistente per vendite e servizio da usare già questo trimestre."
+          },
+          "o": [
+            "Gli assistenti CX sono previsti nel {{w04.cx_assistants_ga}}: intanto valutiamo un pilota.",
+            "Sono già disponibili nei vari Paesi: li attiviamo da SAP for Me entro la settimana.",
+            "Non sono nella roadmap SAP: conviene valutare strumenti di altri fornitori per ora.",
+            "Li può attivare il partner in un giorno, perché sono già inclusi nella licenza base SAP."
+          ],
+          "a": 0,
+          "exp": "Dire che sono pianificati e proporre un pilota con le funzioni oggi disponibili è onesto e utile. Promettere attivazioni immediate di ciò che è pianificato brucia credibilità.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l11",
+      "title": "Quanto costa l'AI?",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "{{w04.joule_base}}.",
+          "Accesso a consumo: {{w04.ai_units}}.",
+          "Direzione 2026: {{w04.ai_pricing_shift}}.",
+          "Per l'AE: non citare tariffe non pubbliche. Il messaggio onesto è: la base è inclusa, il valore avanzato è a pacchetti o a consumo, e per gli agenti il consumo dipende dalle azioni eseguite. Serve un modello d'uso e un tetto di spesa."
+        ],
+        "ae": "Proponi di mappare ogni scenario della demo come «incluso» o «consuma AI Units» prima dell'offerta: eviti sorprese e sembri affidabile."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CFO ha sentito versioni diverse sul costo dell'AI SAP. Come rispondi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "L'AI è gratis o no? Ho sentito versioni diverse."
+          },
+          "o": [
+            "La base di Joule è inclusa; funzioni avanzate e agenti sono a pacchetti o AI Units.",
+            "L'AI di SAP è gratuita nel tempo, agenti inclusi, senza alcun consumo di crediti.",
+            "L'AI di SAP si paga a parte, comprese le funzioni di base di Joule nel cloud.",
+            "Non si può sapere prima della firma: i prezzi AI sono noti a progetto avviato."
+          ],
+          "a": 0,
+          "exp": "Joule Base è incluso nelle sottoscrizioni cloud; le capacità avanzate e gli agenti passano da pacchetti Premium e AI Units. Mappa ogni scenario come incluso o a consumo prima della proposta.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Le AI Units acquistate possono essere accumulate senza scadenza per usarle in qualsiasi anno futuro.",
+          "a": false,
+          "exp": "Le AI Units si acquistano su base annuale e scadono dopo 12 mesi se non usate. Va dimensionato il fabbisogno, non accumulato un magazzino di crediti.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un responsabile procurement chiede quanto costa un agente che lavora di notte. Cosa rispondi?",
+          "ctx": {
+            "who": "Procurement",
+            "say": "Se un agente gira di notte da solo, quanto mi costa?"
+          },
+          "o": [
+            "Dipende dalle azioni eseguite: serve un modello d'uso, un tetto e il monitoraggio.",
+            "Niente: gli agenti non consumano AI Units quando lavorano fuori dall'orario d'ufficio.",
+            "Un canone fisso uguale per gli agenti, indipendentemente dal numero di azioni.",
+            "Dipende dal numero di utenti collegati, perché gli agenti non hanno una misura propria."
+          ],
+          "a": 0,
+          "exp": "Per gli agenti il consumo segue le azioni eseguite, quindi agenti schedulati o event-driven senza tetto possono sorprendere. Modello d'uso, tetto con avvisi e monitoraggio in SAP for Me sono le tre protezioni.",
+          "diff": 3
+        },
+        {
+          "t": "fill",
+          "q": "Le AI Units non usate scadono dopo ___ dall'acquisto.",
+          "o": [
+            "{{w04.ai_units_expiry}}",
+            "3 mesi",
+            "24 mesi",
+            "36 mesi"
+          ],
+          "a": 0,
+          "exp": "È la regola riportata nella pagina prezzi SAP: acquisto annuale e scadenza dopo 12 mesi. Verifica le condizioni del contratto del cliente.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali pratiche proteggono il cliente da sorprese di consumo?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Non voglio un conto a sorpresa a fine anno."
+          },
+          "o": [
+            "Mappare ogni scenario come incluso o a consumo",
+            "Fissare un tetto di consumo con avvisi",
+            "Monitorare il saldo in SAP for Me",
+            "Basare il budget solo sul numero di utenti",
+            "Ignorare gli agenti schedulati nel modello"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Mappatura, tetto e monitoraggio rendono il consumo prevedibile. Il budget per utente non cattura gli agenti, e ignorare quelli schedulati è l'errore tipico.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l12",
+      "title": "AI responsabile e governance",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "AI responsabile significa AI che si può spiegare, controllare e correggere: permessi rispettati, tracciabilità (audit trail), supervisione umana, qualità dei dati e gestione dei rischi.",
+          "In pratica: {{w04.guardrails}}. Governance degli agenti: {{w04.agent_hub}}.",
+          "Protezione dei dati: i dati di business sono dell'azienda. Chiedi dove vengono elaborati (regione), se servono ad addestrare modelli di terzi e come sono trattati i dati personali (base giuridica, minimizzazione, DPO).",
+          "L'autonomia si decide per caso d'uso: suggerisce, esegue con approvazione, esegue entro soglie. Più è alto l'impatto (pagamenti, HR), più umano nel loop."
+        ],
+        "ae": "Porta la governance prima che la chieda l'audit: «Chi approva, cosa viene registrato, cosa succede se l'agente sbaglia?»"
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina ogni concetto di governance al suo significato",
+          "pairs": [
+            [
+              "Audit trail",
+              "Registro di cosa ha fatto l'AI e perché"
+            ],
+            [
+              "Human-in-the-loop",
+              "Approvazione umana prima di azioni critiche"
+            ],
+            [
+              "Permessi esistenti",
+              "Gli agenti operano entro le autorizzazioni già configurate"
+            ],
+            [
+              "Minimizzazione dei dati",
+              "Usare solo i dati personali strettamente necessari"
+            ]
+          ],
+          "exp": "Sono i quattro pilastri pratici di un'AI governabile. Quando li citi, collegali sempre a un esempio del cliente (pagamenti, HR, ordini).",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Un CISO chiede chi risponde di un errore dell'agente e come ricostruirlo. Cosa rispondi?",
+          "ctx": {
+            "who": "CISO",
+            "say": "Se un agente sbaglia un'azione, chi ne risponde e come lo ricostruisco?"
+          },
+          "o": [
+            "Si fissano owner e livello di autonomia; permessi e audit trail ricostruiscono l'azione.",
+            "Risponde SAP, in quanto fornitore del modello: il cliente non ha alcuna responsabilità.",
+            "Non si può ricostruire: gli agenti AI non lasciano tracce dei passaggi eseguiti.",
+            "Risponde il modello linguistico, con un registro interno non accessibile al cliente."
+          ],
+          "a": 0,
+          "exp": "La responsabilità resta organizzativa: owner chiaro, autonomia definita e tracciabilità. Per questo audit trail e permessi vanno discussi prima del pilota.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Secondo SAP, i Joule Assistants operano con permessi e tracce di audit esistenti e il cliente decide quanta autonomia concedere.",
+          "a": true,
+          "exp": "È il posizionamento dichiarato da SAP a SAP Connect. Come tutte le affermazioni di un fornitore va verificato per prodotto nei dettagli tecnici dei controlli.",
+          "diff": 1
+        },
+        {
+          "t": "bucket",
+          "q": "Che livello di autonomia suggerisci?",
+          "buckets": [
+            "Con approvazione umana",
+            "Entro soglie o automatico"
+          ],
+          "items": [
+            [
+              "Pagamenti di importo elevato",
+              0
+            ],
+            [
+              "Modifica dei dati bancari di un fornitore",
+              0
+            ],
+            [
+              "Selezione di candidati",
+              0
+            ],
+            [
+              "Classificazione di ticket a basso rischio",
+              1
+            ],
+            [
+              "Riconciliazione di partite con match certo",
+              1
+            ],
+            [
+              "Promemoria di scadenze ai buyer",
+              1
+            ]
+          ],
+          "exp": "Alto impatto e rischio frode o discriminazione richiedono approvazione umana; attività ripetitive a basso rischio possono essere automatiche entro soglie. Definisci i criteri con il cliente, caso per caso.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "Il livello di autonomia di un agente si decide per ___, in base all'impatto del processo.",
+          "o": [
+            "caso d'uso",
+            "tipo di licenza",
+            "hyperscaler scelto",
+            "anno fiscale"
+          ],
+          "a": 0,
+          "exp": "Non esiste un livello di autonomia valido per tutta l'azienda: un agente su ticket a basso rischio non è un agente sui pagamenti. La decisione si prende caso d'uso per caso d'uso.",
+          "diff": 1
+        }
+      ]
+    },
+    {
+      "id": "w04-l13",
+      "title": "EU AI Act, GDPR e sovranità",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "L'AI Act UE regola l'AI per livelli di rischio: pratiche vietate, sistemi ad alto rischio (es. selezione e gestione del personale), obblighi di trasparenza (es. chatbot, contenuti generati) e rischio minimo.",
+          "Ruoli: provider (chi sviluppa o immette sul mercato) e deployer (chi lo usa nella propria attività). Il cliente è quasi sempre deployer: uso conforme, supervisione umana, informazione e alfabetizzazione AI del personale.",
+          "Il calendario di applicazione e le semplificazioni sono in evoluzione a livello UE: prima di citare una data a un cliente, verifica il testo e il calendario vigenti (es. sul sito della Commissione) e coinvolgi il suo legale.",
+          "Il GDPR resta valido in parallelo: base giuridica, minimizzazione, DPIA dove serve, DPO. La sovranità (residenza, controllo operativo, giurisdizione) si tratta come nel mondo RISE."
+        ],
+        "ae": "Non dare pareri legali: «Per l'AI Act mappiamo insieme i casi d'uso per livello di rischio; l'inquadramento giuridico lo conferma il tuo legale»."
+      },
+      "ex": [
+        {
+          "t": "bucket",
+          "q": "A quale livello di rischio dell'AI Act appartiene?",
+          "buckets": [
+            "Alto rischio",
+            "Obbligo di trasparenza",
+            "Rischio minimo"
+          ],
+          "items": [
+            [
+              "Sistema AI per selezionare candidati",
+              0
+            ],
+            [
+              "Chatbot che dialoga con i clienti",
+              1
+            ],
+            [
+              "Filtro antispam o suggerimenti di ordinamento",
+              2
+            ],
+            [
+              "AI per valutare le prestazioni dei lavoratori",
+              0
+            ],
+            [
+              "Contenuti generati dall'AI da dichiarare come tali",
+              1
+            ],
+            [
+              "Ottimizzazione della pianificazione di magazzino",
+              2
+            ]
+          ],
+          "exp": "HR e gestione dei lavoratori sono tipicamente ad alto rischio; chatbot e contenuti generati richiedono trasparenza; ottimizzazioni operative e filtri sono rischio minimo. L'inquadramento finale spetta al legale del cliente.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Nell'AI Act, che ruolo ha di solito un'azienda che usa un agente SAP nei propri processi?",
+          "o": [
+            "Deployer: ha obblighi di uso conforme, supervisione umana e informazione.",
+            "Provider dei modelli che usa: ha gli stessi obblighi di chi li sviluppa.",
+            "Ruolo marginale: gli obblighi dell'AI Act riguardano il fornitore del software.",
+            "Autorità di vigilanza: controlla la conformità dei sistemi AI nel proprio settore."
+          ],
+          "a": 0,
+          "exp": "Chi usa un sistema AI nella propria attività è deployer e ha obblighi propri; il fornitore (provider) ne ha altri. Capire il ruolo evita di scaricare tutto su SAP.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Le date di applicazione dell'AI Act sono fisse e non possono cambiare: puoi citarle a memoria ai clienti con sicurezza.",
+          "a": false,
+          "exp": "Il calendario e le semplificazioni sono in evoluzione a livello UE. Verifica sempre il testo e il calendario vigenti e rimanda il cliente al proprio legale per l'applicabilità.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Il DPO di un cliente chiede se si possono usare agenti con dati dei dipendenti. Cosa rispondi?",
+          "ctx": {
+            "who": "DPO",
+            "say": "Possiamo usare agenti AI con i dati dei nostri dipendenti?"
+          },
+          "o": [
+            "Serve una valutazione: base giuridica, minimizzazione, DPIA e AI Act per l'HR.",
+            "Sì, con SAP i dati personali non sono un tema: la protezione è già garantita.",
+            "No, il GDPR vieta l'uso dell'AI sui dati dei dipendenti, anche con valutazione preventiva.",
+            "Basta un'informativa generica sul sito, senza valutazioni specifiche sul caso."
+          ],
+          "a": 0,
+          "exp": "Né sì né no a priori: dipende da finalità, base giuridica, minimizzazione e valutazione d'impatto, più gli obblighi AI Act per l'HR. Prepara le informazioni tecniche su dati, permessi e audit per il DPO.",
+          "diff": 3
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi aiutano a rispondere a una richiesta di compliance sull'AI?",
+          "o": [
+            "Mappa dei casi d'uso per livello di rischio",
+            "Evidenza di supervisione umana e audit trail",
+            "Chiarezza su dove sono elaborati i dati",
+            "Una dichiarazione che «l'AI è sempre conforme»",
+            "Un parere legale firmato dall'AE"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Mappa del rischio, controlli verificabili e trasparenza sull'elaborazione dei dati sono le basi. Dichiarazioni generiche di conformità e pareri legali dell'AE non reggono a un audit.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l14",
+      "title": "AI senza hype",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Posizionamento senza hype: parti da un problema e da un KPI, mostra un caso concreto con dati reali, dichiara lo stato (GA, EAC, pianificato) e i prerequisiti.",
+          "Errori classici: vendere la visione come prodotto, citare numeri SAP come garanzie, ignorare i dati, nascondere i costi a consumo, dimenticare la governance. Esempio di numero da non promettere: {{w04.joule_work_internal}}.",
+          "Clean core: l'AI rende più importanti un core standard e dati puliti. {{w04.ai_ecc_link}}: spiegalo come vincolo di architettura, non come leva di pressione.",
+          "Meglio un piccolo pilota con KPI misurabili, owner di business e governance dall'inizio che un grande programma «AI» senza un caso d'uso."
+        ],
+        "ae": "Frase onesta: «Non ti prometto il 20%. Ti propongo un pilota con una baseline misurabile: se non muove il KPI, lo fermiamo.»"
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CEO cita un concorrente che promette -30% di costi con l'AI. Cosa rispondi?",
+          "ctx": {
+            "who": "CEO",
+            "say": "Il mio concorrente dice che con l'AI ridurrà i costi del 30%. Voi cosa garantite?"
+          },
+          "o": [
+            "Non garantisco percentuali: partiamo da un caso d'uso, una baseline e un pilota reale.",
+            "Garantiamo il 20% di produttività, come misurato da SAP sui propri dipendenti.",
+            "Ti cito il risultato di un altro cliente del tuo settore, come benchmark sicuro.",
+            "L'AI non porta risparmi misurabili, quindi non conviene avviare alcun pilota."
+          ],
+          "a": 0,
+          "exp": "Percentuali promesse prima di una baseline sono hype. Un pilota con KPI misurabili ti permette di stimare il valore con i dati del cliente, senza garanzie che non puoi dare.",
+          "diff": 2
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi rendono credibile una proposta AI?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Mostrami perché dovrei fidarmi di questa proposta."
+          },
+          "o": [
+            "Un problema di business con un KPI",
+            "Stato di disponibilità dichiarato per ogni funzione",
+            "Prerequisiti su dati e processi esplicitati",
+            "Slide con il numero di assistenti disponibili",
+            "Promessa di risultati identici per tutti i clienti"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Problema e KPI, trasparenza sullo stato e prerequisiti rendono la proposta verificabile. Numeri di catalogo e risultati uguali per tutti sono segnali tipici di hype.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CIO con ECC pieno di custom code e dati duplicati vuole gli agenti. Come imposti la risposta?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Voglio gli agenti, ma il mio ECC è pieno di custom code e dati duplicati."
+          },
+          "o": [
+            "Serve un core più pulito e dati affidabili: pilota su un processo, poi modernizzazione.",
+            "Gli agenti risolvono custom code e duplicati in autonomia, quindi si parte subito.",
+            "Rinviamo la discussione sull'AI fino alla scadenza della manutenzione estesa ECC.",
+            "Acquista subito un blocco ampio di AI Units: gli agenti partono sull'intero landscape."
+          ],
+          "a": 0,
+          "exp": "I prerequisiti (core pulito, dati affidabili) vengono prima degli agenti. Un pilota su un processo limitato dimostra valore e prepara il percorso di modernizzazione senza vendere per paura.",
+          "diff": 3
+        },
+        {
+          "t": "tf",
+          "q": "Citare un risultato interno SAP (es. +20% di produttività) come garanzia contrattuale per il cliente è una buona pratica.",
+          "a": false,
+          "exp": "Un dato interno di SAP non è una garanzia per il cliente. Va usato come contesto, dichiarando la fonte, mentre il valore si stima con baseline e pilota del cliente.",
+          "diff": 1
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine una proposta AI senza hype",
+          "items": [
+            "Individua problema e KPI con il cliente",
+            "Verifica dati, processi e stato di disponibilità",
+            "Proponi un pilota con baseline e owner",
+            "Definisci governance e livello di autonomia",
+            "Decidi se scalare in base ai risultati misurati"
+          ],
+          "exp": "Problema, fattibilità, pilota, governance, decisione sui risultati: è l'ordine che evita di scalare ciò che non è stato dimostrato. Saltare la baseline rende impossibile la decisione finale.",
+          "diff": 2
+        }
+      ]
+    },
+    {
+      "id": "w04-l15",
+      "title": "Cronologia e restare aggiornati",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Cronologia: Joule debutta nel settembre 2023; {{w04.chronology_2025}}.",
+          "Sapphire 2026 (maggio) lancia Autonomous Enterprise, Business AI Platform, Autonomous Suite, Joule Work e Joule Studio. Poi, {{w04.connect26}}.",
+          "Prossimi appuntamenti: risultati Q3 2026 il {{sap.q3_26.date}}; TechEd 2026: {{sap.teched26}}.",
+          "Dove restare aggiornato: {{w04.release_cadence}}. In più SAP for Me per lo stato di attivazione, SAP Roadmap Explorer per le roadmap e i solution advisor per i dettagli.",
+          "Regola d'oro: ogni volta che citi una data o uno stato, di' da dove viene e quando l'hai verificato. L'AI di SAP cambia ogni trimestre."
+        ],
+        "ae": "Metti un promemoria dopo ogni Sapphire, Connect e TechEd: rileggi roadmap e Innovation News Guide prima di parlare con i clienti."
+      },
+      "ex": [
+        {
+          "t": "order",
+          "q": "Metti in ordine cronologico questi eventi dell'AI SAP",
+          "items": [
+            "Settembre 2023: debutto di Joule",
+            "Maggio 2026: Sapphire presenta Autonomous Enterprise e Business AI Platform",
+            "Luglio 2026: completata l'acquisizione di Prior Labs",
+            "Ottobre 2026: SAP Connect avvia il rollout di Joule Work",
+            "Prossimo: TechEd 2026 a Berlino"
+          ],
+          "exp": "Dal debutto di Joule alla visione Autonomous Enterprise, all'acquisizione dei modelli tabulari, al rollout di Joule Work, fino al prossimo evento tecnico. Questa linea ti aiuta a collocare qualsiasi annuncio.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente ti chiede se una funzione AI è disponibile oggi. Come verifichi?",
+          "ctx": {
+            "who": "Cliente",
+            "say": "Questa funzione AI è disponibile oggi o è ancora una promessa?"
+          },
+          "o": [
+            "Verifico lo stato su Innovation News Guide, roadmap e SAP for Me, non sulle slide.",
+            "Mi fido dell'ultima slide vista a un evento SAP, che riassume gli annunci più recenti.",
+            "Chiedo a un collega che ricorda bene l'annuncio e conferma la data di disponibilità.",
+            "Leggo i titoli della stampa di settore e deduco la disponibilità dai comunicati SAP."
+          ],
+          "a": 0,
+          "exp": "Lo stato vero sta nelle fonti SAP (Innovation News Guide, roadmap, SAP for Me). Slide, ricordi e titoli di stampa invecchiano in fretta e confondono annuncio e disponibilità.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "Dopo un evento come Sapphire o SAP Connect basta aggiornare le slide una volta all'anno.",
+          "a": false,
+          "exp": "L'AI SAP cambia ogni trimestre: roadmap, disponibilità e prezzi si aggiornano dopo ogni evento. Un promemoria post-evento è la pratica più semplice per non citare dati superati.",
+          "diff": 1
+        },
+        {
+          "t": "fill",
+          "q": "SAP pubblica sintesi periodiche delle novità, come i «Business AI release highlights», con cadenza ___.",
+          "o": [
+            "trimestrale",
+            "bimestrale",
+            "annuale",
+            "quinquennale"
+          ],
+          "a": 0,
+          "exp": "Le sintesi di novità Business AI seguono un ritmo trimestrale (ad esempio il Q1 2026 uscito ad aprile). Segnarsi le uscite aiuta a restare allineati sui cambi di stato.",
+          "diff": 1
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni appuntamento al suo contenuto tipico",
+          "pairs": [
+            [
+              "Sapphire 2026 (maggio)",
+              "Autonomous Enterprise, Business AI Platform, Joule Work"
+            ],
+            [
+              "SAP Connect 2026 (ottobre)",
+              "Avvio del rollout di Joule Work e nuovi assistenti"
+            ],
+            [
+              "TechEd",
+              "Evento tecnico per sviluppatori e architetti"
+            ],
+            [
+              "Risultati trimestrali",
+              "Numeri e outlook finanziari di SAP"
+            ]
+          ],
+          "exp": "Ogni appuntamento ha un pubblico e un tipo di notizie: visione (Sapphire), rollout (Connect), tecnica (TechEd), numeri (risultati). Sapere cosa aspettarti da ciascuno ti aiuta a filtrare il rumore.",
+          "diff": 1
+        }
+      ]
+    },
+    {
+      "id": "w04-l16",
+      "title": "Boss: AI da AE affidabile",
+      "kind": "boss",
+      "lesson": {
+        "points": [
+          "Tre livelli da distinguere: assistente (coordina), agente (esegue), piattaforma (dati e controlli). Stato sempre dichiarato: GA, Early Adopter Care o pianificato.",
+          "Dati e governance prima degli agenti: master data, Knowledge Graph, permessi, audit trail e livello di autonomia per caso d'uso.",
+          "Accesso e costi: base inclusa, funzioni avanzate e agenti a pacchetti o AI Units; nessuna tariffa non pubblica; prezzo successivo al 2026 non comunicato.",
+          "AI Act e GDPR: mappa il rischio dei casi d'uso, il cliente è di solito deployer; date e calendario sempre da verificare con il legale."
+        ],
+        "ae": "Un buon AE sull'AI fa tre cose: parte dal problema, dichiara lo stato e propone un pilota misurabile, senza promettere ciò che SAP non ha ancora reso disponibile."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CFO pensa che Joule faccia tutto da solo e porti il 20%. Cosa chiarisci?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Quindi Joule fa tutto da solo e io risparmio il 20%?"
+          },
+          "o": [
+            "Opera entro autonomia e permessi decisi da te; il 20% è un dato SAP, non una promessa.",
+            "Opera in autonomia completa; il 20% è la media dei clienti e va in contratto.",
+            "Opera con approvazione a ciascun passo; il 20% si ottiene dopo un anno di utilizzo.",
+            "Opera su richieste di navigazione; il 20% vale per la produttività del reparto IT."
+          ],
+          "a": 0,
+          "exp": "Autonomia e permessi li decide il cliente, e il 20% è un dato interno SAP non verificato in modo indipendente. Il valore si stima con una baseline e un pilota.",
+          "diff": 2
+        },
+        {
+          "t": "tf",
+          "q": "La SAP Business AI Platform combina SAP BTP, Business Data Cloud e Business AI, con Joule come interfaccia principale.",
+          "a": true,
+          "exp": "È la descrizione data a Sapphire 2026: base tecnica, dati e AI in uno stack unico, con Joule come punto d'accesso. Alcuni analisti la leggono come riconfezionamento di componenti esistenti.",
+          "diff": 1
+        },
+        {
+          "t": "match",
+          "q": "Abbina ogni concetto al suo significato",
+          "pairs": [
+            [
+              "AI Units",
+              "Crediti a consumo condivisi tra le soluzioni SAP"
+            ],
+            [
+              "Joule Base",
+              "Funzioni AI di base incluse nelle sottoscrizioni cloud"
+            ],
+            [
+              "Early Adopter Care",
+              "Programma di accesso anticipato, non ancora GA"
+            ],
+            [
+              "Deployer (AI Act)",
+              "Chi usa il sistema AI nella propria attività"
+            ]
+          ],
+          "exp": "Quattro termini che separano un AE preparato da uno improvvisato: come si paga, cosa è incluso, cosa non è ancora GA, qual è il ruolo del cliente nell'AI Act.",
+          "diff": 2
+        },
+        {
+          "t": "bucket",
+          "q": "Prerequisito o risultato atteso?",
+          "buckets": [
+            "Prerequisito",
+            "Risultato atteso"
+          ],
+          "items": [
+            [
+              "Master data affidabili",
+              0
+            ],
+            [
+              "Ownership dei dati",
+              0
+            ],
+            [
+              "Processi vicini allo standard",
+              0
+            ],
+            [
+              "Meno giorni di chiusura",
+              1
+            ],
+            [
+              "Meno eccezioni manuali",
+              1
+            ],
+            [
+              "Più decisioni prese con dati aggiornati",
+              1
+            ]
+          ],
+          "exp": "I prerequisiti si preparano prima di attivare gli agenti; i risultati si misurano dopo, rispetto a una baseline. Confonderli porta a promettere risultati senza costruire la base.",
+          "diff": 1
+        },
+        {
+          "t": "mcq",
+          "q": "Una CHRO vuole un agente che segnali i dipendenti a rischio dimissioni. Cosa rispondi?",
+          "ctx": {
+            "who": "CHRO",
+            "say": "Voglio un agente che segnali i dipendenti a rischio dimissioni."
+          },
+          "o": [
+            "Prima valutiamo base giuridica, trasparenza e supervisione umana con legale e DPO.",
+            "Procediamo: gli agenti HR sono già conformi, quindi non servono valutazioni del cliente.",
+            "Procediamo dopo aver ottenuto da SAP un certificato di conformità all'AI Act.",
+            "Evitiamo l'uso: l'AI Act vieta le valutazioni automatizzate dei dipendenti."
+          ],
+          "a": 0,
+          "exp": "Profilare dipendenti tocca GDPR e AI Act (HR tipicamente ad alto rischio). Non è un divieto assoluto né un via libera: serve una valutazione con legale e DPO del cliente.",
+          "diff": 3
+        },
+        {
+          "t": "multi",
+          "q": "Quali pratiche sono corrette quando citi la disponibilità di una funzione AI?",
+          "o": [
+            "Indicare se è GA, in Early Adopter Care o pianificata",
+            "Citare la fonte e la data di verifica",
+            "Distinguere ciò che è incluso da ciò che consuma AI Units",
+            "Presentare la demo come prodotto già in produzione",
+            "Promettere per iscritto le date di disponibilità"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Stato, fonte e perimetro economico sono la base di una comunicazione onesta. Una demo non è un prodotto in produzione e le date di roadmap non si promettono per iscritto.",
+          "diff": 2
+        },
+        {
+          "t": "mcq",
+          "q": "Un CEO con ECC teme di restare senza AI. Cosa gli dici?",
+          "ctx": {
+            "who": "CEO",
+            "say": "Ho sentito che con la scadenza di ECC resterò senza AI. È vero?"
+          },
+          "o": [
+            "Molte capacità AI sono pensate per il cloud; da ECC passano da una modernizzazione.",
+            "Su ECC non è possibile usare funzioni AI SAP, neppure con un percorso di modernizzazione.",
+            "Le funzioni AI SAP funzionano su ECC senza cambiamenti, appena si acquistano AI Units.",
+            "L'accesso dipende dal numero di utenti ECC e non dall'architettura del sistema."
+          ],
+          "a": 0,
+          "exp": "È un vincolo di architettura: molte funzioni sono progettate per il cloud e per ECC l'accesso passa da un percorso di modernizzazione. Spiegalo come fatto, non come pressione, e verifica il perimetro esatto.",
+          "diff": 3
+        },
+        {
+          "t": "order",
+          "q": "Metti in ordine la risposta a un'obiezione sul costo dell'AI",
+          "items": [
+            "Riconosci la preoccupazione del cliente",
+            "Chiarisci cosa è incluso e cosa consuma AI Units",
+            "Mappa gli scenari della demo come inclusi o a consumo",
+            "Proponi un tetto di consumo con avvisi",
+            "Concorda un pilota con KPI chiari"
+          ],
+          "exp": "Ascolto, chiarezza sul modello, mappa degli scenari, protezione da sorprese e pilota: l'ordine che trasforma un'obiezione sul costo in un piano.",
+          "diff": 2
+        },
+        {
+          "t": "fill",
+          "q": "In Joule Work l'utente descrive in linguaggio naturale il proprio ___ e Joule coordina flussi, dati e agenti.",
+          "o": [
+            "obiettivo di lavoro",
+            "budget di progetto",
+            "profilo di accesso",
+            "ruolo organizzativo"
+          ],
+          "a": 0,
+          "exp": "Joule Work parte dall'obiettivo dell'utente e orchestra workflow, dati e agenti SAP e non-SAP. È il cambio di paradigma rispetto alla navigazione per transazioni.",
+          "diff": 1
+        }
+      ]
+    }
+  ]
+}

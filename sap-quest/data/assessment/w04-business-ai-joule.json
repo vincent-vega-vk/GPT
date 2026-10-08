@@ -1,0 +1,85 @@
+{
+  "id": "w04",
+  "items": [
+    {
+      "t": "mcq",
+      "q": "Come si chiama l'assistente AI di SAP integrato nelle sue applicazioni?",
+      "o": [
+        "Joule",
+        "Watson",
+        "Copilot",
+        "Einstein"
+      ],
+      "a": 0,
+      "exp": "Joule è l'assistente AI di SAP, presentato nel 2023 e oggi interfaccia principale della SAP Business AI Platform. Gli altri nomi appartengono ad altri fornitori.",
+      "diff": 1
+    },
+    {
+      "t": "tf",
+      "q": "Un agente AI di business può eseguire compiti su sistemi e dati, non solo rispondere a domande.",
+      "a": true,
+      "exp": "La differenza tra assistente e agente è proprio questa: l'agente pianifica ed esegue azioni verso un obiettivo, entro permessi e livelli di autonomia definiti dal cliente.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "Quale affermazione sullo stato di Joule Work a ottobre 2026 è la più corretta?",
+      "o": [
+        "Il rollout verso i clienti è iniziato, con disponibilità generale a tappe.",
+        "È ancora un concept presentato agli eventi, senza clienti che lo usino.",
+        "È disponibile solo ai dipendenti SAP e non è prevista l'apertura ai clienti.",
+        "È stato ritirato a favore di Joule Studio, che ne assorbe tutte le funzioni."
+      ],
+      "a": 0,
+      "exp": "A SAP Connect (ottobre 2026) SAP ha avviato il rollout di Joule Work verso i clienti. La disponibilità è a tappe: verifica sempre cosa è attivabile caso per caso. Stato: {{w04.joule_work_status}}.",
+      "diff": 2
+    },
+    {
+      "t": "multi",
+      "q": "Quali elementi fanno parte della governance di un agente AI di business?",
+      "o": [
+        "Livello di autonomia definito per caso d'uso",
+        "Permessi esistenti e audit trail",
+        "Approvazione umana per le azioni critiche",
+        "Rimozione dei controlli di accesso per velocizzare"
+      ],
+      "a": [
+        0,
+        1,
+        2
+      ],
+      "exp": "Autonomia per caso d'uso, permessi con audit trail e approvazione umana sulle azioni critiche sono la base. Togliere i controlli di accesso è l'opposto della governance.",
+      "diff": 2
+    },
+    {
+      "t": "mcq",
+      "q": "Quale affermazione sul pricing degli strumenti agentici SAP a fine 2026 è corretta?",
+      "o": [
+        "Alcuni strumenti agentici sono gratuiti per un periodo; il prezzo successivo non è noto.",
+        "I prezzi dal 2027 per runtime e agenti sono già pubblicati nel listino SAP.",
+        "Gli agenti non consumano AI Units: sono inclusi nel canone base del cloud.",
+        "Joule Studio resterà gratuito per sempre, come parte della Business AI Platform."
+      ],
+      "a": 0,
+      "exp": "Studio, runtime e interoperabilità agent-to-agent sono gratuiti per un periodo limitato; dal 2027 il prezzo non è stato comunicato. Per i dettagli: {{w04.ai_pricing_shift}}.",
+      "diff": 3
+    },
+    {
+      "t": "multi",
+      "q": "Quali affermazioni sull'AI Act sono corrette per un'azienda cliente?",
+      "o": [
+        "Di solito è deployer dei sistemi AI che usa",
+        "I sistemi per selezione e gestione del personale sono tipicamente ad alto rischio",
+        "Il calendario di applicazione va verificato sul testo vigente",
+        "Gli obblighi riguardano soltanto il fornitore del software"
+      ],
+      "a": [
+        0,
+        1,
+        2
+      ],
+      "exp": "Il cliente ha obblighi propri come deployer, l'HR è un'area tipicamente ad alto rischio e le date vanno sempre verificate. Dire che gli obblighi sono solo del fornitore è un errore comune.",
+      "diff": 3
+    }
+  ]
+}

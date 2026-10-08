@@ -1,0 +1,1365 @@
+{
+ "id": "w01",
+ "levels": [
+  {
+   "id": "w01-l01",
+   "title": "Walldorf, 1972",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SAP nasce nel 1972 da cinque ex ingegneri IBM con un'idea precisa: software standard per i processi aziendali, al posto di programmi scritti su misura per ogni cliente.",
+     "La sede centrale è a Walldorf, in Germania (dal 1977). SAP è quotata in borsa dal 1988 e oggi ha titoli scambiati sia a Francoforte (Xetra) sia a New York (NYSE: SAP).",
+     "Le tappe da ricordare: R/2 (1979), R/3 client-server (1992), database in-memory HANA (2010), S/4HANA (2015), RISE with SAP (2021). Ogni salto ha spostato i clienti verso un nuovo modello tecnico.",
+     "Dimensione: {{w01.employees}}. Il purpose dichiarato è aiutare il mondo a funzionare meglio e migliorare la vita delle persone (help the world run better and improve people's lives)."
+    ],
+    "ae": "Se un CFO chiede «ma SAP c'è ancora tra dieci anni?», rispondi con fatti pubblici: oltre cinquant'anni di storia, quotazione in borsa, oltre 100.000 persone e bilanci consultabili."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Dove ha sede centrale SAP?",
+     "o": [
+      "Walldorf, in Germania",
+      "Monaco di Baviera, in Germania",
+      "Zurigo, in Svizzera",
+      "Amsterdam, nei Paesi Bassi"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "La sede centrale è a Walldorf, nel Baden-Württemberg, dal 1977. Monaco è sede di altri colossi tedeschi, non di SAP. Conoscere dove nasce il fornitore aiuta a capire perché molte scelte di governance e sovranità del dato seguono il modello europeo."
+    },
+    {
+     "t": "tf",
+     "q": "SAP è stata fondata nel 1972 da cinque ex dipendenti di IBM.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: nel 1972 cinque ex ingegneri IBM fondarono l'azienda per sviluppare software standard per i processi aziendali in tempo reale. L'idea di fondo, il software standard al posto di quello su misura, è ancora il cuore del discorso su clean core e fit-to-standard."
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine cronologico le tappe tecnologiche di SAP, dalla più antica alla più recente.",
+     "items": [
+      "SAP R/2",
+      "SAP R/3 (architettura client-server)",
+      "SAP HANA (database in-memory)",
+      "SAP S/4HANA",
+      "RISE with SAP"
+     ],
+     "exp": "R/2 è del 1979, R/3 del 1992, HANA del 2010, S/4HANA del 2015 e RISE with SAP del 2021. Questa sequenza ti serve per spiegare al cliente da quale generazione parte (ECC è figlio di R/3) e verso quale va."
+    },
+    {
+     "t": "match",
+     "q": "Abbina la tecnologia al suo ruolo.",
+     "pairs": [
+      [
+       "SAP R/3",
+       "Architettura client-server degli anni Novanta"
+      ],
+      [
+       "SAP HANA",
+       "Database in-memory lanciato nel 2010"
+      ],
+      [
+       "SAP S/4HANA",
+       "ERP di nuova generazione, lanciato nel 2015"
+      ],
+      [
+       "RISE with SAP",
+       "Offerta di transizione al cloud ERP, dal 2021"
+      ]
+     ],
+     "exp": "R/3 ha reso SAP uno standard mondiale, HANA ha cambiato il modo di trattare i dati, S/4HANA è l'ERP costruito su HANA e RISE è il pacchetto con cui SAP accompagna la transizione al cloud. Quattro generazioni, quattro conversazioni diverse con il cliente."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO ti chiede perché dovrebbe affidare i prossimi dieci anni a questo fornitore. Qual è la risposta migliore?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Siete un fornitore enorme, ma perché dovrei fidarmi per i prossimi dieci anni?"
+     },
+     "o": [
+      "Ti porto fatti pubblici: storia, bilanci consultabili e dimensione dell'azienda",
+      "Ti assicuro che in dieci anni non cambierà nulla nella nostra offerta o nei prezzi",
+      "Ti consiglio di chiedere un parere agli analisti e di tornare da me a fine anno",
+      "Ti propongo una demo del prodotto, perché la solidità del fornitore è un tema da IT"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Un CFO valuta il rischio fornitore: cifre pubbliche e verificabili (bilanci, dimensione, storia) battono promesse e slogan. Evita garanzie sul futuro, che non puoi dare, e non spostare una domanda legittima su altri interlocutori."
+    }
+   ]
+  },
+  {
+   "id": "w01-l02",
+   "title": "Chi compra SAP",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Secondo la scheda aziendale SAP, {{w01.top100_customers}}. Non significa «99% del mercato»: conta quante grandi aziende hanno almeno una relazione con SAP.",
+     "Sempre secondo la scheda aziendale, {{w01.customer_sme_share}}: la stessa offerta deve servire il gruppo multinazionale e la mid-market.",
+     "Il numero totale di clienti circola in stime diverse (da 400.000 a 440.000, a seconda di fonte e anno) e nessuna è un dato SAP recente: in trattativa dì «centinaia di migliaia di clienti».",
+     "SAP non vende e implementa da sola: intorno ci sono partner (system integrator, reseller, fornitori di tecnologia), community di sviluppatori e user group dei clienti."
+    ],
+    "ae": "Non dare per scontato che il cliente sia «piccolo» o «grande» solo dal nome: chiedi complessità, numero di società e sistemi, poi scegli il percorso."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Secondo la scheda aziendale SAP, {{w01.customer_sme_share}}. Cosa implica per la tua prospezione?",
+     "o": [
+      "Il mid-market è centrale: servono percorsi standard-first, non solo grandi progetti",
+      "Le PMI sono marginali: conviene concentrare la prospezione sui grandi gruppi già clienti",
+      "Le PMI hanno bisogni identici ai grandi gruppi, quindi basta un'unica proposta standard",
+      "Le PMI non richiedono discovery: basta una demo generica e un preventivo rapido"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Se la maggioranza dei clienti è mid-market, devi saper proporre percorsi standard-first e tempi brevi, oltre ai grandi programmi di trasformazione. Trattare ogni PMI come un mini-gruppo multinazionale, o come un cliente da demo generica, fa perdere opportunità."
+    },
+    {
+     "t": "fill",
+     "q": "Intorno a SAP, ___ vendono e implementano le soluzioni insieme a SAP o al posto suo.",
+     "o": [
+      "system integrator e reseller",
+      "concorrenti dello stesso mercato",
+      "azionisti di riferimento",
+      "analisti di mercato"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "L'ecosistema di partner (system integrator, reseller, fornitori di tecnologia) porta SAP al cliente: molti progetti sono eseguiti da loro. Coinvolgili presto in trattativa e chiarisci chi firma il contratto e chi implementa."
+    },
+    {
+     "t": "bucket",
+     "q": "Come tratti queste fonti in una conversazione con il cliente?",
+     "buckets": [
+      "Usabile con il cliente",
+      "Da evitare o verificare"
+     ],
+     "items": [
+      [
+       "Dipendenti a fine 2025 dal report integrato SAP",
+       0
+      ],
+      [
+       "Quota PMI dalla scheda aziendale SAP, con «circa»",
+       0
+      ],
+      [
+       "Risultati trimestrali dal quarterly statement SAP",
+       0
+      ],
+      [
+       "Totale clienti da un sito di statistiche aziendali",
+       1
+      ],
+      [
+       "Dipendenti stimati da un fornitore di dati sul lavoro",
+       1
+      ],
+      [
+       "Quota di mercato ERP da un blog senza fonte",
+       1
+      ]
+     ],
+     "exp": "Un dato è citabile se arriva da un documento SAP o da un ente verificabile e porta data e fonte. Stime di siti di statistiche o di fornitori di dati sul lavoro divergono tra loro e non sono dati dell'azienda: meglio un ordine di grandezza dichiarato come tale."
+    },
+    {
+     "t": "mcq",
+     "q": "Un prospect ti chiede quanti clienti ha SAP. Qual è la risposta più corretta?",
+     "ctx": {
+      "who": "Direttore IT",
+      "say": "Ma alla fine, quanti clienti ha SAP nel mondo?"
+     },
+     "o": [
+      "Centinaia di migliaia, di ogni dimensione; il numero esatto varia per fonte e data",
+      "Esattamente 440.000: è il dato ufficiale che SAP pubblica ogni anno nel bilancio",
+      "Poche migliaia, in gran parte multinazionali con soluzioni sviluppate su misura",
+      "Non è un'informazione pubblica, quindi preferisco non darti un ordine di grandezza"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Le stime sul totale clienti vanno da 400.000 a 440.000 a seconda di fonte e anno, senza un dato SAP recente: l'ordine di grandezza («centinaia di migliaia») è onesto e difendibile. Una cifra precisa non verificabile mina la credibilità; rifiutarsi di rispondere sembra evasivo."
+    },
+    {
+     "t": "tf",
+     "q": "«99 delle 100 maggiori aziende al mondo sono clienti SAP» significa che SAP ha circa il 99% del mercato ERP.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: il dato dice quante delle cento maggiori aziende hanno almeno una relazione con SAP, non quanta parte del mercato o dei processi di quelle aziende giri su SAP. Usarlo come quota di mercato è un errore che un CFO attento noterà."
+    }
+   ]
+  },
+  {
+   "id": "w01-l03",
+   "title": "Suite, dati, AI, piattaforma",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "La storia che SAP racconta oggi ha quattro pezzi: applicazioni (Business Suite, Cloud ERP Suite), dati (Business Data Cloud), intelligenza artificiale (Business AI, con l'assistente Joule) e piattaforma (BTP).",
+     "Business Data Cloud (BDC): livello dati gestito che porta dati SAP e non-SAP con il loro significato di business, così AI e analytics lavorano su dati affidabili e non su copie scollegate.",
+     "BTP (Business Technology Platform): piattaforma per integrare, estendere e costruire applicazioni e agenti. Dal 2026 SAP la presenta insieme al resto: {{sap.sapphire26.platform}}.",
+     "Il racconto di Sapphire 2026 è la visione {{w01.autonomous_enterprise}}: l'AI non è un prodotto a parte, vive dentro processi, dati e piattaforma."
+    ],
+    "ae": "Quando parli di AI, aggancia sempre dati e processi: il messaggio di SAP è che senza applicazioni e dati di business l'AI generica non basta."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina il pezzo dello stack al suo ruolo.",
+     "pairs": [
+      [
+       "Cloud ERP Suite",
+       "Applicazioni di business: finanza, spend, persone, supply chain"
+      ],
+      [
+       "Business Data Cloud",
+       "Dati SAP e non-SAP gestiti, con significato di business"
+      ],
+      [
+       "Business AI e Joule",
+       "Assistenti e agenti AI dentro i processi"
+      ],
+      [
+       "BTP",
+       "Piattaforma per integrare, estendere e costruire"
+      ]
+     ],
+     "exp": "Applicazioni, dati, AI e piattaforma sono i quattro pezzi che SAP vende come insieme. Se un cliente vuole solo un pezzo (per esempio l'AI), la domanda utile è su quali dati e processi dovrà lavorare."
+    },
+    {
+     "t": "fill",
+     "q": "BTP è la piattaforma con cui integrare, ___ e costruire applicazioni e processi attorno al core.",
+     "o": [
+      "estendere",
+      "monitorare",
+      "certificare",
+      "fatturare"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "BTP serve a integrare sistemi, estendere il core senza toccarlo (side-by-side) e costruire nuove applicazioni e agenti. È la base del discorso clean core che incontrerai nel mondo su ERP e S/4HANA."
+    },
+    {
+     "t": "tf",
+     "q": "Nel racconto attuale di SAP, applicazioni, dati e AI vanno insieme sulla stessa piattaforma.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: a Sapphire 2026 SAP ha presentato BTP, Business Data Cloud e Business AI come un unico insieme governato, con Joule come interfaccia. L'AI non si compra come prodotto isolato: dipende da dati e processi di business."
+    },
+    {
+     "t": "multi",
+     "q": "Quali di questi sono pilastri dello stack che SAP racconta oggi?",
+     "o": [
+      "Applicazioni di business (Cloud ERP Suite)",
+      "Business Data Cloud",
+      "Business AI e Joule",
+      "BTP (Business Technology Platform)",
+      "Produzione di hardware server proprietari"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "diff": 2,
+     "exp": "I quattro pilastri sono applicazioni, dati, AI e piattaforma. SAP non produce hardware server proprietari: l'infrastruttura è propria nei data center SAP o su hyperscaler partner, ma non è un pilastro dell'offerta."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CIO obietta che ha già un data lake e uno strumento di AI generica. Come motivi Business Data Cloud?",
+     "ctx": {
+      "who": "CIO",
+      "say": "Abbiamo già un data lake e un tool di AI generica: perché mi serve Business Data Cloud?"
+     },
+     "o": [
+      "Non sostituisce il lake: dà ai dati SAP il loro contesto e li apre a dati esterni",
+      "Lo sostituisce: conviene spegnere il lake e spostare l'intero patrimonio dati in SAP",
+      "È un nuovo nome per il database HANA, già presente nel tuo ERP e quindi ridondante",
+      "Non serve: l'AI generica legge direttamente le tabelle dell'ERP senza perdere significato"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "BDC non nasce per cancellare i lake esistenti: porta i dati SAP con il loro significato di business (non solo tabelle) e li rende utilizzabili insieme a dati non-SAP. Il valore è nel contesto: senza di esso l'AI generica interpreta male le tabelle dell'ERP."
+    }
+   ]
+  },
+  {
+   "id": "w01-l04",
+   "title": "Cloud-first e Cloud ERP Suite",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Cloud-first: SAP fa crescere soprattutto l'abbonamento cloud (subscription): il cliente paga un canone per usare il servizio, invece di acquistare una licenza perpetua più manutenzione annua.",
+     "Nel reporting la Cloud ERP Suite è una voce che raggruppa il nucleo del cloud: {{w01.cloud_erp_suite_scope}}.",
+     "Nel Q2 2026 la Cloud ERP Suite vale {{sap.q2_26.cloud_erp_suite}}: è il motore della crescita cloud di SAP.",
+     "Nomi attuali: {{sap.naming.cloud_erp}}",
+     "Un ricavo da subscription è ricorrente e più prevedibile, ma si costruisce nel tempo: per questo si guarda anche il backlog contrattualizzato."
+    ],
+    "ae": "Usa i nomi attuali ma ascolta quelli del cliente: molti dicono ancora «S/4 Cloud», RISE o GROW. Chiedi cosa intende prima di correggerlo."
+   },
+   "ex": [
+    {
+     "t": "tf",
+     "q": "Nel reporting SAP la Cloud ERP Suite coincide con la sola S/4HANA Cloud.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: la voce raggruppa più cose, tra cui BTP e le soluzioni core per persone, spend, commerce e altro; il resto di SaaS e PaaS sta in una voce separata (Cloud Extension Suite). Prima di citare l'elenco a un CFO, verifica la nota di definizione nel quarterly statement."
+    },
+    {
+     "t": "mcq",
+     "q": "Nel Q2 2026 la Cloud ERP Suite vale {{sap.q2_26.cloud_erp_suite}} su una cloud revenue di {{sap.q2_26.cloud_revenue}}. Quale lettura è corretta?",
+     "o": [
+      "È la componente prevalente della cloud revenue e guida la crescita cloud di SAP",
+      "È una componente secondaria della cloud revenue, dominata da altre soluzioni SaaS",
+      "È un sottoinsieme delle licenze on-premise, riclassificato nel reporting cloud",
+      "È la stima SAP dei ricavi futuri, non i ricavi già riconosciuti nel trimestre"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Con {{sap.q2_26.cloud_erp_suite}}, la Cloud ERP Suite è il cuore del business cloud di SAP. Non è un dato di backlog né una stima: sono ricavi riconosciuti nel trimestre. Per un AE significa che la conversazione cloud ERP è quella che muove i numeri."
+    },
+    {
+     "t": "match",
+     "q": "Abbina il termine commerciale alla sua definizione.",
+     "pairs": [
+      [
+       "Subscription cloud",
+       "Canone periodico per usare il servizio"
+      ],
+      [
+       "Licenza perpetua",
+       "Diritto d'uso senza scadenza più manutenzione annua"
+      ],
+      [
+       "RISE with SAP",
+       "Percorso tipico verso Cloud ERP Private"
+      ],
+      [
+       "GROW with SAP",
+       "Percorso tipico verso Cloud ERP (public)"
+      ]
+     ],
+     "exp": "Subscription e licenza perpetua sono modelli commerciali; RISE e GROW sono nomi di percorso che tipicamente accompagnano Cloud ERP Private e Cloud ERP (public). Nel dubbio, chiedi al cliente quale edizione ha in mente."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO chiede perché dovrebbe passare a un canone dopo aver comprato le licenze. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Voi parlate sempre di cloud, ma noi abbiamo comprato le licenze: perché dovrei passare a un canone?"
+     },
+     "o": [
+      "Confrontiamo il costo totale su più anni, con infrastruttura, upgrade e manutenzione",
+      "La licenza una tantum non esiste più: il canone è la forma commerciale disponibile",
+      "Il canone costa meno della licenza e risparmierai già dal primo anno",
+      "Perché è la strategia di SAP e le novità arriveranno prima ai clienti in abbonamento"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il confronto onesto è sul costo totale di possesso su più anni, includendo infrastruttura, upgrade e manutenzione. Promettere risparmi dal primo anno o dire che la licenza è sparita sono affermazioni che non puoi sostenere; l'argomento «lo vuole SAP» non risponde alla domanda del CFO."
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine il percorso di un contratto cloud, dalla firma al rinnovo.",
+     "items": [
+      "Il cliente firma un contratto cloud pluriennale",
+      "L'impegno contrattuale entra nel backlog cloud",
+      "Il ricavo viene riconosciuto nel tempo mentre il servizio è erogato",
+      "Alla scadenza il contratto si rinnova oppure si perde"
+     ],
+     "exp": "Il ricavo da subscription non arriva tutto alla firma: l'impegno entra nel backlog e il ricavo si riconosce nel tempo. Per questo rinnovi e adozione contano quanto il new business."
+    }
+   ]
+  },
+  {
+   "id": "w01-l05",
+   "title": "Conto economico a prova di AE",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SAP riporta i ricavi per tipo: cloud (abbonamenti e servizi cloud), licenze software, support e services. Il cloud è la parte che cresce; licenze e support riflettono soprattutto la base installata on-premise.",
+     "L'IFRS è il bilancio ufficiale. Il non-IFRS toglie alcune voci per confrontare meglio un periodo con l'altro: {{w01.non_ifrs_definition}}.",
+     "L'operating profit è ciò che resta dopo i costi operativi: SAP lo guida nell'outlook nella versione non-IFRS e a cambi costanti.",
+     "Free cash flow (FCF): cassa generata dalle attività operative, al netto di investimenti in immobilizzazioni e pagamenti di leasing. Nel Q2 2026: {{sap.q2_26.fcf}}."
+    ],
+    "ae": "Quando il cliente cita «i risultati di SAP», chiedi quale metrica: ricavi (riconosciuti), backlog (contrattualizzato), utile o cassa. Sono quattro storie diverse."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina la metrica al suo significato.",
+     "pairs": [
+      [
+       "Cloud revenue",
+       "Ricavi da abbonamenti e servizi cloud riconosciuti nel periodo"
+      ],
+      [
+       "Operating profit",
+       "Utile dopo i costi operativi, prima di interessi e imposte"
+      ],
+      [
+       "Free cash flow",
+       "Cassa operativa al netto di investimenti e leasing"
+      ],
+      [
+       "Misura non-IFRS",
+       "Dato rettificato per confrontare i periodi senza alcuni effetti"
+      ]
+     ],
+     "exp": "Ricavi, utile operativo e cassa raccontano tre cose diverse: ciò che è stato riconosciuto, ciò che resta dopo i costi e ciò che è entrato davvero in cassa. Il non-IFRS è una lente aggiuntiva, sempre accompagnata dalla riconciliazione con l'IFRS."
+    },
+    {
+     "t": "tf",
+     "q": "Il non-IFRS operating profit è una misura rettificata che SAP pubblica insieme alla riconciliazione con il dato IFRS.",
+     "a": true,
+     "diff": 2,
+     "exp": "Vero: il dato ufficiale resta l'IFRS; il non-IFRS è una lettura rettificata per facilitare i confronti, e SAP pubblica la tabella di riconciliazione. Chi cita solo il non-IFRS senza dire cosa esclude sta semplificando troppo."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale metrica mostra la cassa generata dopo investimenti e pagamenti di leasing?",
+     "o": [
+      "Il free cash flow del trimestre",
+      "L'operating profit non-IFRS",
+      "Il current cloud backlog",
+      "La cloud revenue totale"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Il free cash flow parte dalla cassa delle attività operative e sottrae investimenti e leasing. L'operating profit è un risultato contabile, il backlog è un impegno contrattuale e la cloud revenue è un ricavo: nessuno dei tre misura la cassa."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO ti sfida sul non-IFRS. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "SAP parla di utile non-IFRS: è l'utile vero o un numero truccato?"
+     },
+     "o": [
+      "Due viste: l'IFRS è ufficiale, il non-IFRS aiuta i confronti con la riconciliazione",
+      "Conta il non-IFRS, perché toglie le voci straordinarie ed è più vicino alla realtà",
+      "Conta l'IFRS: il non-IFRS è marketing e SAP non pubblica alcuna riconciliazione",
+      "Sono lo stesso numero con nomi diversi: non cambia nulla scegliere l'uno o l'altro"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "IFRS e non-IFRS sono due viste dello stesso conto economico: la prima è ufficiale, la seconda serve a confrontare i periodi e si legge con la riconciliazione. Sminuire una delle due, o dire che coincidono, è impreciso."
+    },
+    {
+     "t": "fill",
+     "q": "Il free cash flow di Q2 2026 è {{sap.q2_26.fcf}}; misura ___ dopo investimenti e leasing.",
+     "o": [
+      "la cassa generata",
+      "l'utile contabile",
+      "il backlog cloud",
+      "la crescita organica"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "L'FCF misura la cassa generata: è la lente di chi vuole sapere quanto SAP può investire e restituire agli azionisti. Non va confuso con l'utile (contabile) né con il backlog (contrattuale)."
+    }
+   ]
+  },
+  {
+   "id": "w01-l06",
+   "title": "Cambi costanti, senza paura",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SAP riporta in euro ma vende in dollari, yen, sterline e molte altre valute. Se il dollaro si indebolisce, i ricavi in euro sembrano crescere meno di quanto crescano davvero i volumi.",
+     "I «cambi costanti» ricalcolano il periodo corrente ai tassi di cambio del periodo di confronto: isolano la crescita in volume dall'effetto valuta.",
+     "Esempio reale: {{w01.fy25_results}}. Il CCB è cresciuto molto più di quanto mostri il dato in euro: la valuta ha frenato la crescita misurata in euro.",
+     "Q2 2026: cloud revenue {{sap.q2_26.cloud_revenue}}. Quando il tasso a cambi costanti supera quello in euro, la valuta ha pesato sul numero riportato; quando accade il contrario, l'ha aiutato."
+    ],
+    "ae": "Non devi fare conversioni valutarie: devi capire la frase «+X% a cambi costanti», che significa crescita in volume al netto dell'effetto valuta."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Che cosa fa un confronto «a cambi costanti»?",
+     "o": [
+      "Ricalcola il periodo corrente con i cambi di confronto, così isola l'effetto valuta",
+      "Esclude le acquisizioni dal confronto, così isola la crescita organica del periodo",
+      "Corregge l'inflazione dell'anno, così mostra la crescita in termini reali",
+      "Converte tutti i ricavi in dollari, così rende confrontabili le aree geografiche"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "I cambi costanti applicano al periodo corrente i tassi del periodo di confronto, così l'effetto valuta sparisce e resta la crescita in volume. Non toglie le acquisizioni (quella è la crescita organica), né l'inflazione, né converte in dollari."
+    },
+    {
+     "t": "tf",
+     "q": "Se i ricavi crescono +10% in euro e +14% a cambi costanti, la valuta ha ridotto la crescita misurata in euro.",
+     "a": true,
+     "diff": 2,
+     "exp": "Vero: a cambi costanti la crescita è maggiore, quindi la valuta ha frenato il dato in euro. È lo stesso schema che si osserva quando il dollaro si indebolisce e i ricavi in dollari valgono meno euro."
+    },
+    {
+     "t": "fill",
+     "q": "Una società cresce +8% in euro ma +3% a cambi costanti: la valuta ha ___ la crescita riportata.",
+     "o": [
+      "gonfiato",
+      "ridotto",
+      "lasciato invariata",
+      "annullato"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Se il dato in euro è più alto di quello a cambi costanti, la valuta ha dato una spinta alla crescita riportata (+5 punti di aiuto). Attenzione a non presentare il +8% come crescita in volume."
+    },
+    {
+     "t": "mcq",
+     "q": "{{w01.fy25_results}}. Come leggi la differenza tra +16% e +25%?",
+     "o": [
+      "La valuta ha frenato la crescita in euro: il volume cloud sottostante è cresciuto di più",
+      "Il +25% è gonfiato dalle acquisizioni: la crescita vera è quella del +16% in euro",
+      "Il +16% è un errore di calcolo, perché la crescita non dipende dalla valuta usata",
+      "La valuta ha aiutato il dato in euro: il volume cloud è cresciuto meno di quanto sembra"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "{{w01.fy25_results}}: la differenza tra i due tassi è l'effetto valuta, non acquisizioni. Quando commenti i numeri SAP, nomina sempre entrambi i tassi."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO nota che la cloud revenue di Q2 2026 è {{sap.q2_26.cloud_revenue}} e chiede quale crescita sia «quella vera». Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il giornale parla di una crescita, SAP di un'altra. Qual è quella vera?"
+     },
+     "o": [
+      "Entrambe: una include l'effetto cambio, l'altra lo toglie per misurare il volume",
+      "Vale quella a cambi costanti, perché l'effetto valuta non ha alcun impatto reale",
+      "Vale quella in euro, perché i cambi costanti sono una stima che SAP non verifica",
+      "Non sono confrontabili: la seconda riguarda il cloud ERP, la prima l'intero cloud"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "I due tassi misurano cose diverse e sono entrambi veri: quello in euro include l'effetto valuta, quello a cambi costanti lo isola. L'effetto valuta ha un impatto reale sui ricavi in euro, ma non dice nulla sui volumi."
+    }
+   ]
+  },
+  {
+   "id": "w01-l07",
+   "title": "CCB, la bussola dell'AE",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "CCB (current cloud backlog) = ricavi cloud già contrattualizzati che SAP prevede di riconoscere nei prossimi 12 mesi, misurati a una data precisa (la «key date»).",
+     "Conta solo ciò che è impegnato (committed): restano fuori i consumi senza impegno minimo e i contratti firmati dopo la data chiave. Per questo è un limite inferiore, non una previsione, dei ricavi cloud dei 12 mesi successivi.",
+     "SAP lo riporta dal 2020 al posto dei «new cloud bookings»: la variazione tra due date misura il volume cloud netto aggiunto (nuovo business e rinnovi, meno le perdite).",
+     "Ultimo dato: CCB Q2 2026 = {{sap.q2_26.ccb}}. Il Q3 arriva il {{sap.q3_26.date}}.",
+     "Un deal enorme con ricavi che salgono solo negli anni successivi pesa poco sul CCB: conta la fetta dei prossimi 12 mesi, non il valore totale del contratto."
+    ],
+    "ae": "Nel CCB contano nuovi contratti, rinnovi e perdite: anche adozione e rinnovo sono lavoro da AE, non solo il new business."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Che cosa misura il current cloud backlog (CCB)?",
+     "o": [
+      "I ricavi cloud contrattualizzati che SAP prevede di riconoscere nei prossimi 12 mesi",
+      "I ricavi cloud già incassati nell'anno, al netto di rinnovi e disdette del periodo",
+      "Il valore complessivo dei contratti cloud firmati, qualunque sia la loro durata",
+      "Le opportunità cloud in pipeline con probabilità di chiusura superiore al 50%"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Il CCB guarda avanti di 12 mesi e conta solo impegni contrattuali. Il valore di tutti i contratti a qualunque durata è il total cloud backlog; la pipeline non è contrattualizzata; gli incassi sono già nel passato."
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi rientrano nel CCB?",
+     "o": [
+      "Ricavi cloud contrattualizzati attesi nei prossimi 12 mesi dalla data chiave",
+      "Rinnovi già firmati prima della data chiave",
+      "Consumi a utilizzo senza alcun impegno minimo",
+      "Contratti firmati dopo la data chiave",
+      "Opportunità in pipeline non ancora firmate"
+     ],
+     "a": [
+      0,
+      1
+     ],
+     "diff": 2,
+     "exp": "Nel CCB entrano solo impegni firmati prima della data chiave, nuovi o rinnovi. Restano fuori i consumi senza impegno minimo, i contratti firmati dopo la data chiave e tutto ciò che è ancora pipeline."
+    },
+    {
+     "t": "tf",
+     "q": "Il CCB è una previsione ufficiale dei ricavi cloud dei prossimi 12 mesi.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: è un limite inferiore, perché esclude consumi non impegnati e contratti firmati dopo la data chiave. I ricavi effettivi dei 12 mesi successivi possono superarlo; per questo non si presenta mai come previsione o garanzia."
+    },
+    {
+     "t": "fill",
+     "q": "Il CCB di Q2 2026 è {{sap.q2_26.ccb}}; la variazione tra due date misura il volume cloud ___ aggiunto.",
+     "o": [
+      "netto",
+      "lordo",
+      "stimato",
+      "non ricorrente"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Tra due date il CCB cambia per nuovi contratti, rinnovi e perdite: il risultato è il volume cloud netto aggiunto. Non è un lordo e non è una stima, perché parte da contratti firmati."
+    },
+    {
+     "t": "mcq",
+     "q": "Un collega dice di aver chiuso un mega deal cloud su cinque anni, ma il CCB non è salito come previsto. Perché?",
+     "ctx": {
+      "who": "Collega",
+      "say": "Il deal è enorme e pluriennale, eppure il CCB non è salito come mi aspettavo."
+     },
+     "o": [
+      "Il CCB conta la quota attesa nei 12 mesi dalla data chiave; una ramp lenta pesa poco",
+      "Il CCB esclude i contratti pluriennali e considera gli abbonamenti con durata annuale",
+      "Il CCB si aggiorna a fine anno, quindi i deal firmati durante l'esercizio non compaiono",
+      "Il CCB conteggia il valore totale a vita del contratto, ma con un ritardo di sei mesi"
+     ],
+     "a": 0,
+     "diff": 3,
+     "exp": "Il CCB è una finestra di 12 mesi: se i ricavi del contratto salgono con una ramp lenta, solo la parte attesa nella finestra conta. Un contratto firmato dopo la data chiave resta fuori fino alla misurazione successiva."
+    }
+   ]
+  },
+  {
+   "id": "w01-l08",
+   "title": "Q2 2026 in cinque numeri",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SAP ha pubblicato i risultati del secondo trimestre il {{sap.q2_26.date}}.",
+     "Cloud revenue: {{sap.q2_26.cloud_revenue}}. Ricavi totali: {{sap.q2_26.total_revenue}}.",
+     "CCB: {{sap.q2_26.ccb}}. Cloud ERP Suite: {{sap.q2_26.cloud_erp_suite}}.",
+     "Free cash flow: {{sap.q2_26.fcf}}. Nei 50 maggiori deal del trimestre, AI e Business Data Cloud erano elementi chiave in {{sap.q2_26.ai_in_top_deals}} dei casi (dichiarazione del CEO).",
+     "Come leggerli: il cloud cresce molto più dei ricavi totali, perché licenze e support on-premise pesano ancora sul totale. Sono numeri datati: citali sempre con trimestre e fonte."
+    ],
+    "ae": "Cita i numeri con data e fonte («nel Q2 2026, secondo il quarterly statement»): con un CFO la credibilità nasce dalla precisione."
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "SAP ha pubblicato i risultati del Q2 2026 il ___.",
+     "o": [
+      "{{sap.q2_26.date}}",
+      "21 ottobre 2026",
+      "23 aprile 2026",
+      "fine gennaio 2026"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "I risultati Q2 sono usciti il {{sap.q2_26.date}}. Il Q3 è atteso il {{sap.q3_26.date}}; il Q1 è uscito ad aprile e i risultati annuali escono a fine gennaio: conoscere il ritmo ti evita figuracce."
+    },
+    {
+     "t": "mcq",
+     "q": "Nel Q2 2026 la cloud revenue è {{sap.q2_26.cloud_revenue}} e i ricavi totali {{sap.q2_26.total_revenue}}. Cosa dice la differenza tra le due crescite?",
+     "o": [
+      "Il cloud cresce più dell'insieme del business: il mix si sposta verso l'abbonamento",
+      "Il cloud rallenta rispetto al totale: licenze e support spingono la crescita complessiva",
+      "I due tassi coincidono: il mix dei ricavi non è cambiato rispetto all'anno scorso",
+      "Il totale cresce più del cloud perché i servizi professionali accelerano nel trimestre"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Se il cloud cresce molto più del totale, il peso del cloud sul totale aumenta: il business si sposta verso l'abbonamento, mentre licenze e support on-premise pesano meno. Questa è la storia strategica di SAP in un confronto."
+    },
+    {
+     "t": "tf",
+     "q": "Nel Q2 2026 AI e Business Data Cloud erano elementi chiave in {{sap.q2_26.ai_in_top_deals}} dei 50 maggiori deal: è una minoranza.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: secondo il CEO erano presenti in una larga maggioranza dei 50 maggiori deal. È una dichiarazione del management, riportata dalla stampa finanziaria, non un dato di bilancio: citala come tale."
+    },
+    {
+     "t": "bucket",
+     "q": "Dove colloci queste metriche?",
+     "buckets": [
+      "Ricavi riconosciuti",
+      "Backlog (contratti)",
+      "Cassa"
+     ],
+     "items": [
+      [
+       "Cloud revenue",
+       0
+      ],
+      [
+       "Ricavi totali",
+       0
+      ],
+      [
+       "Cloud ERP Suite revenue",
+       0
+      ],
+      [
+       "Current cloud backlog",
+       1
+      ],
+      [
+       "Total cloud backlog",
+       1
+      ],
+      [
+       "Free cash flow",
+       2
+      ]
+     ],
+     "exp": "Cloud revenue, ricavi totali e Cloud ERP Suite sono ricavi già riconosciuti; i due backlog sono contratti firmati (12 mesi il primo, tutti gli anni il secondo); il free cash flow è la cassa. Mescolarli è l'errore più comune."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO ti chiede tre numeri per capire come sta andando SAP. Quali scegli?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Non ho tempo: dammi tre numeri per capire come va SAP."
+     },
+     "o": [
+      "Cloud revenue, CCB e free cash flow: ricavi, visibilità futura e cassa",
+      "Ricavi totali, dipendenti e prezzo dell'azione: dimensione, struttura e mercato",
+      "Utile IFRS, dividendo e numero di clienti: redditività, rendimento e base installata",
+      "Cloud revenue, numero di partner e quota di mercato ERP: crescita, ecosistema e posizione"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Cloud revenue, CCB e free cash flow coprono ricavi riconosciuti, visibilità sul futuro e cassa: tre dimensioni complementari con fonte verificabile. Prezzo dell'azione e quote di mercato non sono metriche aziendali che tu possa difendere in trattativa."
+    }
+   ]
+  },
+  {
+   "id": "w01-l09",
+   "title": "Outlook, Q3 e il CFO curioso",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Outlook FY2026 aggiornato al Q2: cloud revenue {{sap.fy26.cloud_revenue_outlook}}; non-IFRS operating profit {{sap.fy26.op_profit_outlook}}; free cash flow {{sap.fy26.fcf_outlook}}.",
+     "Cloud revenue e utile operativo sono guidati a cambi costanti; il free cash flow a cambi effettivi. Controlla sempre la base valutaria prima di confrontare un numero con la guida.",
+     "A luglio SAP ha ridotto la guida sull'utile operativo non-IFRS per l'effetto delle acquisizioni (Dremio e Prior Labs), mentre la guida sulla cloud revenue è rimasta invariata.",
+     "Prossimo appuntamento: risultati Q3 il {{sap.q3_26.date}} (alcuni calendari mostrano il 22 per il fuso orario).",
+     "Il giorno dei risultati guarda: crescita del CCB a cambi costanti, cloud revenue, Cloud ERP Suite, aggiornamento dell'outlook e commenti sull'AI nei grandi deal."
+    ],
+    "ae": "Se il cliente cita i risultati, ascolta prima: di solito vuole capire se SAP continuerà a investire nel suo settore e nella sua roadmap, non il tasso di crescita."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il CFO ha letto che l'outlook FY2026 sull'utile operativo non-IFRS è ora {{sap.fy26.op_profit_outlook}} e teme un rallentamento del cloud. Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Hanno abbassato la guida sull'utile: il cloud sta rallentando?"
+     },
+     "o": [
+      "Riflette l'impatto delle acquisizioni, non la domanda: la guida sul cloud è invariata",
+      "Riflette un calo della domanda cloud: anche la guida sulla cloud revenue è stata ridotta",
+      "Riflette l'effetto dei cambi, quindi dipende dal dollaro e non dall'attività di SAP",
+      "Riflette un taglio degli investimenti AI: SAP rinuncia ad acquisire nuove società"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "SAP ha legato il ritocco dell'utile operativo non-IFRS all'effetto delle acquisizioni di Dremio e Prior Labs, lasciando invariata la guida sulla cloud revenue. Non è un segnale di debolezza della domanda cloud; distinguere le due cose è la tua credibilità."
+    },
+    {
+     "t": "fill",
+     "q": "Il prossimo appuntamento trimestrale con i risultati SAP (Q3) è fissato per il ___.",
+     "o": [
+      "{{sap.q3_26.date}}",
+      "27 ottobre 2026",
+      "23 luglio 2026",
+      "14 ottobre 2026"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "I risultati Q3 sono attesi il {{sap.q3_26.date}} (alcuni calendari mostrano il 22 per il fuso orario). Gli altri sono distrattori: TechEd ({{sap.teched26}}), SAP NOW AI Tour ({{w01.sap_now_milan}}) e risultati Q2 ({{sap.q2_26.date}})."
+    },
+    {
+     "t": "mcq",
+     "q": "Un IT director vuole capire se SAP continuerà a investire in cloud ERP. Dove guardi per dargli un segnale concreto?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "Come faccio a sapere che SAP continuerà a investire nel cloud ERP?"
+     },
+     "o": [
+      "Outlook e CCB a cambi costanti, più la roadmap ufficiale che ti passa il pre-sales",
+      "Il prezzo dell'azione dell'ultimo mese, che riflette già gli investimenti pianificati",
+      "Il numero di dipendenti, che segnala quanto SAP investe in ciascun prodotto cloud",
+      "Le presentazioni di Sapphire, che garantiscono date di rilascio vincolanti per i clienti"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il segnale più solido è una combinazione di numeri pubblici (outlook cloud, crescita del CCB) e roadmap ufficiale. Il prezzo dell'azione non è una metrica di prodotto; gli annunci di Sapphire non sono impegni vincolanti sulle date."
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine i passi per preparare una conversazione sui risultati SAP.",
+     "items": [
+      "Controlla data e fonte dell'ultimo quarterly statement",
+      "Annota cloud revenue, CCB e FCF con crescita in euro e a cambi costanti",
+      "Verifica l'outlook e cosa è cambiato rispetto al trimestre precedente",
+      "Collega i numeri al tema del cliente (cloud ERP, AI)",
+      "Cita il dato con data e fonte, senza promettere il futuro"
+     ],
+     "exp": "Prima si controlla la fonte, poi si raccolgono i numeri con entrambi i tassi, poi si guarda l'outlook, si collega al cliente e infine si cita il dato con data e fonte. Saltare un passo porta a numeri sbagliati o fuori contesto."
+    },
+    {
+     "t": "multi",
+     "q": "Alla pubblicazione dei risultati Q3, quali elementi guarderai per primi?",
+     "ctx": {
+      "who": "Collega AE",
+      "say": "Escono i risultati Q3: cosa guardo per primo?"
+     },
+     "o": [
+      "CCB e crescita a cambi costanti",
+      "Aggiornamento dell'outlook FY2026",
+      "Cloud ERP Suite revenue",
+      "Prezzo di listino di S/4HANA",
+      "Quote di mercato SAP nei singoli clienti"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "diff": 2,
+     "exp": "I risultati pubblici contengono CCB, cloud revenue, Cloud ERP Suite e outlook. I prezzi di listino non fanno parte dei risultati (e non sono pubblici), e le quote nei singoli clienti non sono pubblicate."
+    }
+   ]
+  },
+  {
+   "id": "w01-l10",
+   "title": "Acquisizioni che contano",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SAP compra per riempire i pezzi mancanti dello stack: dati, AI, persone, adozione. Mappa rapida: Reltio (master data), Dremio (data lakehouse), Prior Labs (modelli tabellari), SmartRecruiters (recruiting), WalkMe (adozione digitale).",
+     "Reltio: {{sap.acq.reltio}}. Dremio: {{sap.acq.dremio}}.",
+     "Prior Labs: {{sap.acq.prior_labs}}. SmartRecruiters: {{sap.acq.smartrecruiters}}.",
+     "WalkMe: {{w01.acq.walkme}}.",
+     "Dremio e Prior Labs hanno un impatto trascurabile su ricavi e backlog del 2026 ma pesano sull'utile operativo: per questo la guida dell'utile è stata ritoccata."
+    ],
+    "ae": "Non promettere integrazioni non ancora annunciate: usa «SAP ha acquisito X per rafforzare Y» e chiedi al pre-sales lo stato della roadmap prima di impegnarti."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina l'acquisizione alla sua area.",
+     "pairs": [
+      [
+       "Reltio",
+       "Master data management"
+      ],
+      [
+       "Dremio",
+       "Data lakehouse basato su Apache Iceberg"
+      ],
+      [
+       "Prior Labs",
+       "Modelli fondazionali per dati tabellari"
+      ],
+      [
+       "SmartRecruiters",
+       "Piattaforma di recruiting"
+      ],
+      [
+       "WalkMe",
+       "Piattaforma di digital adoption"
+      ]
+     ],
+     "exp": "Tre acquisizioni toccano dati e AI (Reltio, Dremio, Prior Labs), due toccano persone e adozione (SmartRecruiters, WalkMe). Ricordare l'area ti permette di agganciarle ai temi del cliente."
+    },
+    {
+     "t": "order",
+     "q": "Ordina le acquisizioni per data di completamento, dalla più vecchia alla più recente.",
+     "items": [
+      "WalkMe",
+      "SmartRecruiters",
+      "Reltio",
+      "Dremio",
+      "Prior Labs"
+     ],
+     "exp": "WalkMe: {{w01.acq.walkme}}. SmartRecruiters: {{sap.acq.smartrecruiters}}. Reltio: {{sap.acq.reltio}}. Dremio: {{sap.acq.dremio}}. Prior Labs: {{sap.acq.prior_labs}}. Il ritmo recente conferma la priorità su dati e AI."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale acquisizione porta in SAP un motore di master data management?",
+     "o": [
+      "Reltio, specializzata in master data",
+      "Dremio, specializzata in lakehouse",
+      "WalkMe, specializzata in adozione",
+      "Prior Labs, specializzata in modelli"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Reltio è la piattaforma di master data management. Dremio è un data lakehouse, WalkMe una piattaforma di adozione digitale e Prior Labs lavora su modelli fondazionali per dati tabellari."
+    },
+    {
+     "t": "tf",
+     "q": "Secondo SAP, Dremio e Prior Labs hanno un impatto trascurabile su ricavi e backlog 2026 ma pesano sull'utile operativo.",
+     "a": true,
+     "diff": 3,
+     "exp": "Vero: l'effetto sui conti 2026 è soprattutto di costo (per questo la guida sull'utile operativo non-IFRS è stata ritoccata), mentre l'impatto su ricavi e backlog è trascurabile. Sono investimenti nello stack dati e AI, non fonti di ricavi a breve."
+    },
+    {
+     "t": "mcq",
+     "q": "Il Chief Data Officer di un'azienda consumer ha anagrafiche cliente e prodotto sparse in sei sistemi. Come rispondi sul master data?",
+     "ctx": {
+      "who": "Chief Data Officer",
+      "say": "Ho anagrafiche sparse in sei sistemi: SAP ha qualcosa per governarle?"
+     },
+     "o": [
+      "SAP ha acquisito Reltio per il master data: verifico con il pre-sales l'integrazione",
+      "È già inclusa in S/4HANA senza altri componenti: basta attivare una funzione standard",
+      "SAP non si occupa di master data: dovrai rivolgerti a un fornitore specializzato esterno",
+      "Dipende da Dremio, che è il motore di master data scelto da SAP per i clienti"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "SAP ha un'offerta di master data (con Reltio) e storicamente anche soluzioni di governance dei dati master, ma l'integrazione con il landscape del cliente va verificata con il pre-sales. Dire che è già inclusa o che SAP non fa master data è impreciso."
+    }
+   ]
+  },
+  {
+   "id": "w01-l11",
+   "title": "Come vende SAP",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "SAP vende in tre modi che convivono: direttamente con i propri team (soprattutto i grandi clienti), tramite partner (reseller, system integrator) e con abbonamenti cloud (subscription) che sostituiscono la licenza una tantum.",
+     "I partner pesano molto: {{w01.partner_share}} (stima, non un dato di bilancio).",
+     "Nel Q2 2026 {{w01.indirect_q2}}. Il programma partner globale è {{w01.partneredge}}.",
+     "La metrica che lega tutto è il backlog cloud: ogni contratto firmato e ogni rinnovo si traduce in ricavi dei mesi successivi. Per questo un AE guarda il CCB e non solo il fatturato."
+    ],
+    "ae": "Il partner è un moltiplicatore, non un concorrente: coinvolgilo presto e chiarisci fin dall'inizio chi firma il contratto e chi implementa."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un CFO chiede perché il contratto è un abbonamento e non una licenza una tantum. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Perché dovrei pagare un canone se prima compravo la licenza una volta?"
+     },
+     "o": [
+      "Il canone copre servizio e aggiornamenti: confrontiamo i costi sull'intero ciclo",
+      "La licenza una tantum non esiste più: il canone è la forma commerciale disponibile",
+      "Il canone è più basso della licenza e quindi il confronto economico è già a tuo favore",
+      "L'abbonamento prevede un aggiornamento annuale incluso, quindi non pagherai altri costi"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il canone include servizio, aggiornamenti e continuità: il confronto onesto è sul costo dell'intero ciclo di vita. Affermare che il canone sia sempre più basso, che la licenza non esista più o che non ci siano altri costi è una promessa che non puoi mantenere."
+    },
+    {
+     "t": "tf",
+     "q": "Nel Q2 2026 {{w01.indirect_q2}}: per SAP il canale partner è ormai marginale.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: il canale indiretto cresce più del diretto ed è descritto dal management come un pilastro di crescita. Chi tratta i partner come un canale residuale sbaglia la lettura della strategia go-to-market."
+    },
+    {
+     "t": "match",
+     "q": "Abbina il canale o l'attore al suo ruolo.",
+     "pairs": [
+      [
+       "Vendita diretta",
+       "Team SAP che seguono in prima persona i grandi clienti"
+      ],
+      [
+       "Partner di canale",
+       "Rivendono soluzioni SAP e accompagnano il cliente"
+      ],
+      [
+       "System integrator",
+       "Implementano i progetti e integrano i sistemi"
+      ],
+      [
+       "Subscription cloud",
+       "Canone ricorrente per usare il servizio"
+      ]
+     ],
+     "exp": "Diretto, partner di canale e system integrator sono attori diversi; la subscription è invece il modello commerciale che li attraversa tutti. In una trattativa conviene sempre chiarire chi ha quale ruolo."
+    },
+    {
+     "t": "mcq",
+     "q": "Un manager dice che il CCB è salito e che quindi il fatturato dell'anno è già garantito. Cosa rispondi?",
+     "ctx": {
+      "who": "Manager",
+      "say": "Il CCB è salito molto: il fatturato cloud di quest'anno è praticamente assicurato."
+     },
+     "o": [
+      "Il CCB è un limite inferiore dei ricavi cloud dei 12 mesi, non una garanzia sul totale",
+      "Hai ragione: il CCB coincide con il fatturato cloud dei prossimi 12 mesi",
+      "Hai ragione, a patto che i contratti siano stati firmati tramite il canale diretto SAP",
+      "Non è vero: il CCB riguarda le licenze on-premise e non dice nulla sul cloud"
+     ],
+     "a": 0,
+     "diff": 3,
+     "exp": "Il CCB conta solo impegni contrattuali firmati prima della data chiave: i ricavi dei 12 mesi successivi possono essere maggiori (consumi, nuovi deal), ma non è una garanzia né un forecast. Non dipende dal canale e riguarda solo il cloud."
+    },
+    {
+     "t": "mcq",
+     "q": "Un responsabile acquisti chiede se può comprare direttamente da SAP o deve passare da un partner. Cosa rispondi?",
+     "ctx": {
+      "who": "Procurement",
+      "say": "Posso comprare direttamente da SAP o devo passare per forza da un partner?"
+     },
+     "o": [
+      "Dipende da dimensione e percorso: chiariamo chi firma il contratto e chi implementa",
+      "Si compra dal partner: SAP non gestisce contratti diretti con i clienti finali",
+      "Si compra direttamente da SAP: i partner intervengono dopo la firma per il progetto",
+      "Il canale lo decide il listino globale, uguale per clienti di qualsiasi dimensione"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "SAP serve direttamente molti grandi clienti e passa dai partner per una larga parte degli altri: la scelta dipende da dimensione, percorso e paese. L'importante è chiarire presto chi firma il contratto e chi implementa."
+    }
+   ]
+  },
+  {
+   "id": "w01-l12",
+   "title": "Eventi e calendario",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Il calendario SAP ha ritmi fissi: risultati trimestrali (di norma tre-quattro settimane dopo la chiusura del trimestre), Sapphire in primavera per visione e annunci, TechEd in autunno per tecnologia e sviluppatori.",
+     "Sapphire 2026: {{sap.sapphire26}}. Prossima edizione secondo aggregatori di eventi (da confermare): {{sap.sapphire27}}.",
+     "TechEd 2026: {{sap.teched26}}. Risultati Q3: {{sap.q3_26.date}}.",
+     "In Italia: SAP NOW AI Tour Milano, {{w01.sap_now_milan}}.",
+     "Per restare aggiornato: news.sap.com (con la sezione Italia), la pagina Investor Relations per risultati e calendario, SAP Learning e le release notes per le novità di prodotto."
+    ],
+    "ae": "Usa gli eventi come pretesto di contatto: «Al SAP NOW AI Tour di Milano c'è una sessione su questo tema: vieni con il tuo team?» vale più di una email generica."
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "I risultati trimestrali SAP escono di norma ___ settimane dopo la chiusura del trimestre.",
+     "o": [
+      "tre-quattro",
+      "sei-sette",
+      "una-due",
+      "dieci-dodici"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Q2 è uscito il {{sap.q2_26.date}} e Q3 è atteso il {{sap.q3_26.date}}: circa tre settimane dopo la chiusura del trimestre; il bilancio annuale arriva a fine gennaio. Segnati le date: sono pretesti di conversazione."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale appuntamento SAP è tipicamente quello di visione e grandi annunci di prodotto, in primavera?",
+     "o": [
+      "Sapphire, con edizione americana ed europea",
+      "TechEd, dedicato a sviluppatori e tecnologia",
+      "SAP NOW AI Tour, il roadshow locale sull'AI",
+      "Il quarterly statement, sui risultati"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Sapphire è l'evento di visione e annunci ({{sap.sapphire26}}). TechEd è più tecnico e in autunno; il SAP NOW AI Tour è un roadshow locale; il quarterly statement è il documento dei risultati."
+    },
+    {
+     "t": "order",
+     "q": "Ordina gli appuntamenti SAP del 2026 dal primo all'ultimo.",
+     "items": [
+      "Sapphire a Orlando e Madrid",
+      "Risultati del Q2",
+      "SAP NOW AI Tour a Milano",
+      "Risultati del Q3",
+      "TechEd a Berlino"
+     ],
+     "exp": "Sapphire: {{sap.sapphire26}}. Risultati Q2: {{sap.q2_26.date}}. SAP NOW AI Tour: {{w01.sap_now_milan}}. Risultati Q3: {{sap.q3_26.date}}. TechEd: {{sap.teched26}}. Ottobre è un mese pieno di spunti per i clienti."
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente Life Sciences vuole le novità AI senza leggere duecento pagine. Qual è la risposta migliore?",
+     "ctx": {
+      "who": "CIO Life Sciences",
+      "say": "Voglio capire le novità AI di SAP senza leggere duecento pagine."
+     },
+     "o": [
+      "Lo inviti al SAP NOW AI Tour e chiedi al pre-sales una sintesi per il suo settore",
+      "Gli invii il 20-F di SAP, dove sono elencate le novità di prodotto per settore",
+      "Gli proponi di seguire i risultati trimestrali, dove SAP elenca le novità AI per settore",
+      "Gli dici di rimandare la valutazione AI finché i risultati trimestrali non la confermano"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Un evento locale più una sintesi mirata del pre-sales rispondono al bisogno reale: capire cosa conta per il suo settore. Il 20-F e i risultati sono documenti finanziari, non guide di prodotto; rimandare la valutazione fa solo perdere tempo."
+    },
+    {
+     "t": "tf",
+     "q": "TechEd è l'evento SAP più orientato a tecnologia e sviluppatori.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: TechEd è l'appuntamento tecnico dell'autunno (2026: {{sap.teched26}}). Per un AE è utile per capire la roadmap tecnica e per invitare gli architetti del cliente."
+    }
+   ]
+  },
+  {
+   "id": "w01-l13",
+   "title": "Governance, clima, sovranità",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Governance a due livelli, come da modello tedesco: l'Executive Board gestisce l'azienda, il Supervisory Board la controlla e comprende anche rappresentanti dei dipendenti. CEO: {{sap.ceo}}. CFO: {{sap.cfo}}.",
+     "Supervisory Board: {{w01.supervisory_board}}.",
+     "Clima: SAP punta al {{w01.net_zero}}.",
+     "Sovranità del dato: SAP ha presentato {{w01.eu_ai_cloud}}.",
+     "In Italia la sovranità si traduce in domande concrete: dove stanno i dati, chi li gestisce, quale giurisdizione si applica, quali certificazioni esistono. Non rispondere a memoria: coinvolgi cloud e legal."
+    ],
+    "ae": "Davanti a una domanda su sovranità o GDPR raccogli i requisiti (settore, tipo di dati, regolatore) e coinvolgi cloud e legal prima di promettere un'opzione di deployment."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina l'organo o il ruolo alla sua funzione.",
+     "pairs": [
+      [
+       "Executive Board",
+       "Gestisce l'azienda, guidato dal CEO"
+      ],
+      [
+       "Supervisory Board",
+       "Controlla e nomina l'Executive Board"
+      ],
+      [
+       "{{sap.ceo}}",
+       "Chief Executive Officer di SAP"
+      ],
+      [
+       "{{sap.cfo}}",
+       "Chief Financial Officer di SAP"
+      ]
+     ],
+     "exp": "Nel modello a due livelli l'Executive Board gestisce, il Supervisory Board controlla e nomina. CEO e CFO sono membri dell'Executive Board: conoscerne i nomi serve per citare correttamente le dichiarazioni sui risultati."
+    },
+    {
+     "t": "tf",
+     "q": "Il presidente del Supervisory Board di SAP è anche il CEO dell'azienda.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: nel modello tedesco a due livelli le due funzioni sono separate. Il CEO guida l'Executive Board, mentre il Supervisory Board ha un proprio presidente che controlla il lavoro del management."
+    },
+    {
+     "t": "mcq",
+     "q": "Sul clima, quale standard esterno è il riferimento per l'obiettivo net zero di SAP?",
+     "o": [
+      "Science Based Targets initiative (SBTi)",
+      "Basilea III sulle emissioni finanziarie",
+      "ISO 9001 sulla qualità dei processi",
+      "Codice tedesco di corporate governance"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "L'obiettivo di SAP, cioè {{w01.net_zero}}, segue lo standard Net-Zero della Science Based Targets initiative. Gli altri standard citati riguardano finanza, qualità e governance, non il clima."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CIO di un'azienda farmaceutica deve tenere i dati regolatori in Europa. Come imposti la risposta su SAP?",
+     "ctx": {
+      "who": "CIO farmaceutico",
+      "say": "I nostri dati regolatori devono restare in Europa: cosa offre SAP?"
+     },
+     "o": [
+      "C'è EU AI Cloud con più opzioni di sovranità: verifico con cloud e legal quella adatta",
+      "Il cloud SAP è sovrano per definizione, quindi i dati restano in UE senza altre verifiche",
+      "La sovranità riguarda la sede legale del fornitore: non serve una verifica tecnica",
+      "Basta inserire una clausola sul GDPR nel contratto e il tema è risolto per il regolatore"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "SAP ha presentato EU AI Cloud con diverse modalità (data center SAP, infrastruttura europea fidata, gestione on-site); quale copra i requisiti del cliente va verificato con cloud e legal. La sovranità non è automatica né si risolve con una clausola."
+    },
+    {
+     "t": "bucket",
+     "q": "Dove colloci questi elementi?",
+     "buckets": [
+      "Governance",
+      "Clima",
+      "Sovranità del dato"
+     ],
+     "items": [
+      [
+       "Executive Board e Supervisory Board",
+       0
+      ],
+      [
+       "Rappresentanti dei dipendenti nel board",
+       0
+      ],
+      [
+       "Obiettivo di -90% di emissioni lorde al 2030",
+       1
+      ],
+      [
+       "Standard SBTi Net-Zero",
+       1
+      ],
+      [
+       "EU AI Cloud",
+       2
+      ],
+      [
+       "Gestione on-site presso il cliente",
+       2
+      ]
+     ],
+     "exp": "Governance, clima e sovranità sono tre temi che i clienti regolati sollevano spesso. Tenerli separati ti aiuta a dare risposte precise invece di un generico «SAP è sostenibile e sicura»."
+    }
+   ]
+  },
+  {
+   "id": "w01-l14",
+   "title": "Boss: il primo trimestre da AE",
+   "kind": "boss",
+   "lesson": {
+    "points": [
+     "Il boss mescola tutto il mondo: identità, strategia, lessico finanziario, risultati, acquisizioni, vendita e governance.",
+     "Per ogni domanda chiediti: è un dato volatile (serve data e fonte), una definizione stabile o uno scenario con un cliente?",
+     "Se non sei sicuro di un numero, non citarlo: una formula qualitativa onesta vale più di un dato che il cliente può smontare."
+    ]
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Quale metrica anticipa meglio i ricavi cloud dei prossimi dodici mesi?",
+     "o": [
+      "Il current cloud backlog a cambi costanti",
+      "Il free cash flow dell'ultimo trimestre",
+      "L'operating profit non-IFRS dell'esercizio",
+      "I ricavi totali dell'ultimo trimestre"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il CCB conta ricavi cloud già contrattualizzati per i 12 mesi successivi: è il pezzo più prospettico. FCF, utile operativo e ricavi totali descrivono il passato."
+    },
+    {
+     "t": "fill",
+     "q": "Il current cloud backlog di Q2 2026 è ___.",
+     "o": [
+      "{{sap.q2_26.ccb}}",
+      "€18,0 mld (+8%; +9% a cambi costanti)",
+      "€31,5 mld (+41%; +40% a cambi costanti)",
+      "€12,4 mld (+12%; +11% a cambi costanti)"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il CCB di Q2 2026 è quello del quarterly statement pubblicato il {{sap.q2_26.date}}. Gli altri valori sono inventati a scopo di esercizio: ricorda sempre di citare data e fonte quando riporti un numero."
+    },
+    {
+     "t": "multi",
+     "q": "Quali affermazioni sul CCB sono corrette?",
+     "o": [
+      "È un limite inferiore dei ricavi cloud dei 12 mesi successivi alla data chiave",
+      "Include i rinnovi già firmati prima della data chiave",
+      "Include i consumi a utilizzo senza impegno minimo",
+      "Dal 2020 ha sostituito i «new cloud bookings» nel reporting",
+      "Include anche le licenze software on-premise"
+     ],
+     "a": [
+      0,
+      1,
+      3
+     ],
+     "diff": 3,
+     "exp": "Il CCB è un limite inferiore basato su impegni firmati (nuovi e rinnovi), introdotto nel 2020 al posto dei new cloud bookings. Non comprende consumi senza impegno minimo né licenze on-premise: riguarda solo il cloud."
+    },
+    {
+     "t": "match",
+     "q": "Quale area dello stack rafforza ciascuna acquisizione?",
+     "pairs": [
+      [
+       "Reltio",
+       "Master data"
+      ],
+      [
+       "Dremio",
+       "Dati e lakehouse"
+      ],
+      [
+       "SmartRecruiters",
+       "Recruiting e talento"
+      ],
+      [
+       "WalkMe",
+       "Adozione digitale delle applicazioni"
+      ]
+     ],
+     "exp": "Reltio e Dremio rafforzano il livello dati; SmartRecruiters il recruiting (area persone); WalkMe l'adozione degli utenti dentro le applicazioni. Sapere l'area ti permette di collegare ogni acquisizione al tema giusto del cliente."
+    },
+    {
+     "t": "tf",
+     "q": "Nel 2026 il CCB ha sostituito la cloud revenue come misura ufficiale dei ricavi cloud di SAP.",
+     "a": false,
+     "diff": 3,
+     "exp": "Falso: la cloud revenue resta il ricavo cloud riconosciuto; il CCB, introdotto nel 2020 al posto dei new cloud bookings, è una metrica complementare sui contratti futuri. Sono due strumenti diversi."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CEO nota che SAP ha acquisito Reltio, Dremio e Prior Labs nello stesso anno e chiede che segnale sia. Come rispondi?",
+     "ctx": {
+      "who": "CEO",
+      "say": "SAP compra una startup dati dopo l'altra: che segnale è per noi clienti?"
+     },
+     "o": [
+      "Rafforzano lo stack dati e AI: conta la roadmap ufficiale, non l'annuncio d'acquisto",
+      "Segnalano che SAP sta lasciando l'ERP per diventare un'azienda di servizi dati",
+      "Segnalano un aumento imminente dei prezzi dei prodotti cloud già venduti ai clienti",
+      "Segnalano che le tre società verranno integrate nei contratti attuali senza costi"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Le acquisizioni rafforzano lo stack dati e AI attorno all'ERP. Ma un acquisto non è una roadmap: chiedi al pre-sales cosa è disponibile, cosa è annunciato e cosa no, e non attribuire intenzioni sui prezzi o sui contratti."
+    },
+    {
+     "t": "mcq",
+     "q": "Nel Q2 2026 la Cloud ERP Suite vale {{sap.q2_26.cloud_erp_suite}}. Cosa ne ricavi sul peso del cloud ERP?",
+     "o": [
+      "È la componente prevalente della cloud revenue e guida la crescita cloud di SAP",
+      "È una componente secondaria della cloud revenue, dominata da altre soluzioni SaaS",
+      "È un sottoinsieme delle licenze on-premise, riclassificato nel reporting cloud",
+      "È la stima SAP dei ricavi futuri, non i ricavi già riconosciuti nel trimestre"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Con {{sap.q2_26.cloud_erp_suite}}, la Cloud ERP Suite è il cuore del business cloud. Sono ricavi riconosciuti nel trimestre, non stime né licenze riclassificate."
+    },
+    {
+     "t": "mcq",
+     "q": "Un partner chiede perché SAP spinga tanto il cloud rispetto alla licenza perpetua. Quale risposta è più solida?",
+     "ctx": {
+      "who": "Partner",
+      "say": "Perché SAP insiste sul cloud e non sulle licenze perpetue?"
+     },
+     "o": [
+      "Ricavi ricorrenti visibili nel backlog e un programma partner ormai orientato al cloud",
+      "Perché le licenze perpetue non sono più vendibili in Europa per ragioni regolatorie",
+      "Perché il cloud costa meno di sviluppare e SAP vuole ridurre i margini dei partner",
+      "Perché i clienti hanno chiesto di eliminare il supporto on-premise entro pochi anni"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il modello a subscription dà ricavi ricorrenti e visibili nel backlog, e il programma partner (PartnerEdge) è stato ridisegnato per essere cloud-first. Le altre spiegazioni sono invenzioni senza fonte."
+    },
+    {
+     "t": "multi",
+     "q": "Quali appuntamenti SAP cadono tra il 14 e il 29 ottobre 2026?",
+     "o": [
+      "SAP NOW AI Tour a Milano",
+      "Risultati del Q3",
+      "TechEd a Berlino",
+      "Sapphire a Orlando",
+      "Risultati del Q2"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "diff": 2,
+     "exp": "SAP NOW AI Tour: {{w01.sap_now_milan}}. Risultati Q3: {{sap.q3_26.date}}. TechEd: {{sap.teched26}}. Sapphire era a maggio e i risultati Q2 sono usciti a luglio."
+    }
+   ]
+  }
+ ]
+}

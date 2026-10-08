@@ -1,0 +1,83 @@
+{
+  "id": "w03",
+  "items": [
+    {
+      "t": "tf",
+      "q": "RISE with SAP nasce soprattutto per accompagnare i clienti SAP esistenti verso il cloud.",
+      "a": true,
+      "exp": "RISE è il percorso di modernizzazione per chi ha già un ERP SAP on-premise. GROW è invece pensato per chi parte dallo standard o cresce in fretta.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "Come si chiama, nel naming SAP attuale, la versione private dell'ERP cloud?",
+      "o": [
+        "SAP Cloud ERP Private",
+        "SAP ECC Cloud Edition",
+        "SAP Business One Private",
+        "SAP Hybrid ERP Suite"
+      ],
+      "a": 0,
+      "exp": "Dal 2025 la ex S/4HANA Cloud Private Edition è SAP Cloud ERP Private. I clienti usano spesso ancora il vecchio nome: tieni a mente entrambi.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "Quale percorso porta un ECC esistente alla Private mantenendo il sistema e i dati storici?",
+      "o": [
+        "Conversione del sistema esistente (brownfield o system conversion) con i dati storici",
+        "Nuova implementazione da zero (greenfield) con migrazione dei soli dati master aperti",
+        "Migrazione verso la public edition tramite conversione tecnica del sistema ECC attuale",
+        "Semplice spostamento dell'hosting dell'ECC su un hyperscaler, senza alcuna conversione"
+      ],
+      "a": 0,
+      "exp": "La system conversion è il percorso brownfield verso la Private. Verso la public si procede in greenfield; spostare solo l'hosting non porta a S/4HANA.",
+      "diff": 2
+    },
+    {
+      "t": "multi",
+      "q": "Quali affermazioni sulla subscription RISE sono corrette?",
+      "o": [
+        "È un canone ricorrente pluriennale",
+        "Software, infrastruttura e servizi tecnici stanno nello stesso contratto",
+        "Include sempre il progetto completo del partner SI",
+        "Prevede una licenza perpetua pagata una volta sola"
+      ],
+      "a": [
+        0,
+        1
+      ],
+      "exp": "RISE è una subscription di servizio. Il progetto di migrazione del partner SI è un contratto a parte e la licenza perpetua appartiene al vecchio modello on-premise.",
+      "diff": 2
+    },
+    {
+      "t": "fill",
+      "q": "La transition option per i clienti ECC richiede ___.",
+      "o": [
+        "un contratto RISE attivo",
+        "una licenza S/4HANA on-premise",
+        "la scelta della public edition",
+        "un contratto di manutenzione estesa"
+      ],
+      "a": 0,
+      "exp": "Secondo le comunicazioni SAP riportate dagli analisti, la transition option è legata a un contratto RISE; condizioni e prezzi arriveranno più avanti: {{sap.ecc.transition_option}}.",
+      "diff": 3
+    },
+    {
+      "t": "multi",
+      "q": "Per un cliente che chiede sovranità, quali affermazioni sono corrette?",
+      "o": [
+        "La residenza dei dati in UE non coincide automaticamente con la sovranità legale",
+        "Esistono opzioni europee in evoluzione, da verificare con SAP caso per caso",
+        "Qualsiasi data center in UE garantisce piena sovranità",
+        "Il cliente non può mai scegliere l'infrastruttura in RISE"
+      ],
+      "a": [
+        0,
+        1
+      ],
+      "exp": "La sovranità ha più livelli (residenza, controllo, giurisdizione) e l'offerta cambia nel tempo. Il cliente può scegliere tra le opzioni di infrastruttura supportate.",
+      "diff": 3
+    }
+  ]
+}

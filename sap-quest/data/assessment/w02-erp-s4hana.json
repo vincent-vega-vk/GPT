@@ -1,0 +1,14 @@
+{"id":"w02","items":[
+{"t":"mcq","q":"Che cosa indica la sigla O2C (order-to-cash) in un ERP?","o":["Il percorso dall'ordine del cliente fino all'incasso","Il percorso dalla richiesta d'acquisto al pagamento","Il percorso dalla scrittura contabile al bilancio","Il percorso dall'assunzione all'uscita del dipendente"],"a":0,"diff":1,
+ "exp":"Order-to-cash va dall'ordine del cliente all'incasso, passando da consegna, fatturazione e gestione dei crediti. Gli altri percorsi sono procure-to-pay, record-to-report e hire-to-retire."},
+{"t":"tf","q":"SAP S/4HANA gira esclusivamente su database SAP HANA.","a":true,"diff":1,
+ "exp":"Vero: S/4HANA richiede SAP HANA come database, in cloud e on-premise. ECC supportava più database, ed è per questo che spostare ECC su HANA non equivale a essere su S/4HANA."},
+{"t":"mcq","q":"Che cosa distingue un approccio greenfield da uno brownfield?","o":["Il greenfield riparte da un sistema nuovo; il brownfield converte il sistema ECC esistente","Il greenfield converte il sistema esistente; il brownfield riparte da un sistema nuovo","Il greenfield riguarda il cloud, il brownfield riguarda i sistemi installati on-premise","Il greenfield migra lo storico completo, il brownfield i dati degli ultimi due anni"],"a":0,"diff":2,
+ "exp":"Greenfield è una nuova implementazione con processi ridisegnati; brownfield è la conversione del sistema esistente, con personalizzazioni e storico. Il criterio non è cloud contro on-premise né la quantità di storico."},
+{"t":"fill","q":"La manutenzione estesa di ECC è prevista fino al ___.","o":["{{sap.ecc.extended_end}}","31 dicembre 2027 (con sovrapprezzo)","31 dicembre 2033 (con sovrapprezzo)","30 giugno 2029 (con sovrapprezzo)"],"a":0,"diff":2,
+ "exp":"La manutenzione estesa arriva al {{sap.ecc.extended_end}}. Il {{sap.ecc.mainstream_end}} è la fine della manutenzione standard, mentre la transition option copre il periodo successivo con un contratto RISE."},
+{"t":"tf","q":"Dal ciclo 2023, SAP S/4HANA on-premise ha una nuova release base ogni anno.","a":false,"diff":3,
+ "exp":"Falso: {{w02.s4_release_model}}. Chi parla di rilascio annuale confonde le release base con i feature pack o con le release semestrali della public edition."},
+{"t":"mcq","q":"Quale strumento SAP propone una roadmap di prodotti consigliati partendo dall'uso attuale del portafoglio SAP del cliente?","o":["{{w02.tool.transformation_navigator}}, self-service","{{w02.tool.readiness_check}} per la conversione ECC","SAP Activate, la metodologia di progetto","SAP Fiori launchpad, l'interfaccia utente"],"a":0,"diff":3,
+ "exp":"Il Transformation Navigator parte dall'uso attuale dei prodotti SAP e suggerisce una roadmap di prodotti. Il Readiness Check analizza il sistema ECC per la conversione; Activate e Fiori non sono strumenti di assessment."}
+]}

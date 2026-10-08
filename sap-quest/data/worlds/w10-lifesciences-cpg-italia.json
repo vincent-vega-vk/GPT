@@ -1,0 +1,1639 @@
+{
+ "id": "w10",
+ "levels": [
+  {
+   "id": "w10-l01",
+   "title": "GxP: l'alfabeto della farma",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "GxP è la famiglia delle buone pratiche regolatorie: GMP (produzione), GLP (laboratori non clinici), GCP (sperimentazione clinica), GDP (distribuzione), GVP (farmacovigilanza). Cambia la «x», non il principio.",
+     "Il principio: la qualità si dimostra con evidenze. «Se non è documentato, non è stato fatto». Per questo contano tracciabilità, firme, audit trail e procedure controllate.",
+     "In UE le GMP stanno nell'EudraLex Volume 4, con gli Annex (tra cui l'Annex 11 sui sistemi computerizzati). Negli USA le cGMP sono nel 21 CFR Parts 210 e 211, i record elettronici nella Part 11.",
+     "Ogni sistema che tocca dati GxP, ERP compreso, può essere ispezionato: il cliente deve poter dimostrare come lo controlla (validazione, accessi, modifiche)."
+    ],
+    "ae": "Parla come il Quality Head: non «funzioni», ma «evidenza per l'ispettore». Chiedi quali processi del vostro ERP sono GxP-critici."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa la sigla GxP al suo ambito",
+     "pairs": [
+      [
+       "GMP",
+       "Produzione e controllo qualità"
+      ],
+      [
+       "GLP",
+       "Studi di laboratorio non clinici"
+      ],
+      [
+       "GCP",
+       "Sperimentazione clinica sull'uomo"
+      ],
+      [
+       "GDP",
+       "Distribuzione dei medicinali"
+      ],
+      [
+       "GVP",
+       "Farmacovigilanza"
+      ]
+     ],
+     "exp": "Le sigle cambiano ambito ma condividono lo stesso principio: processi controllati, documentati e tracciabili. Saperle distinguere ti fa parlare la lingua del Quality Head.",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "Il principio «se non è documentato, non è stato fatto» è alla base dell'approccio delle ispezioni GxP.",
+     "a": true,
+     "exp": "Corretto. L'ispettore giudica ciò che può verificare nelle evidenze. Per un AE significa che ogni funzione che tocca dati qualità va presentata insieme al modo in cui il cliente la controlla.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "In quale raccolta europea si trova l'Annex 11 sui sistemi computerizzati?",
+     "o": [
+      "EudraLex Volume 4 (linee guida GMP)",
+      "Regolamento (UE) 2017/745 sui dispositivi",
+      "Direttiva (UE) 2022/2555 sulla cybersicurezza",
+      "Codice dei contratti pubblici italiano"
+     ],
+     "a": 0,
+     "exp": "L'Annex 11 è uno degli allegati delle GMP europee (EudraLex Volume 4). Gli altri riferimenti sono reali ma riguardano dispositivi medici, cybersicurezza e appalti pubblici.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali di questi sistemi possono essere oggetto di ispezione GxP?",
+     "o": [
+      "ERP che gestisce lotti e rilascio qualità",
+      "LIMS di laboratorio per i controlli",
+      "Gestione documentale delle procedure controllate",
+      "Sistema di prenotazione della sala mensa",
+      "Serializzazione e tracciabilità dei lotti"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Contano i sistemi che producono, conservano o elaborano dati con impatto su qualità e sicurezza del prodotto. La prenotazione della mensa non ha alcun impatto GxP.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un Quality Head dice: l'ERP lo gestisce l'IT e lui risponde agli ispettori, non ai fornitori di software. Cosa rispondi?",
+     "ctx": {
+      "who": "Quality Head",
+      "say": "Il mio ERP lo gestisce l'IT. Io rispondo agli ispettori, non ai fornitori di software."
+     },
+     "o": [
+      "Proprio per questo: voglio capire quali processi GxP passano dall'ERP.",
+      "Gli ispettori guardano raramente l'ERP, ma è bene che il Quality conosca il fornitore.",
+      "Il software SAP è già certificato GxP: basta archiviare i vostri documenti di qualità.",
+      "Ne parlo volentieri con l'IT: la qualità interviene in fase di collaudo finale."
+     ],
+     "a": 0,
+     "exp": "Il Quality è il vero proprietario del rischio: se l'ERP gestisce rilascio lotti o registrazioni, ne risponde in ispezione. Non esiste un «ERP certificato GxP»: esiste un uso validato dal cliente.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l02",
+   "title": "Annex 11, Part 11, data integrity",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Annex 11 (UE) e 21 CFR Part 11 (USA) chiedono sistemi computerizzati affidabili: validati, con accessi controllati, audit trail, firme elettroniche equivalenti a quelle autografe, backup e gestione del rischio.",
+     "Data integrity = ALCOA+: Attributable, Legible, Contemporaneous, Original, Accurate, più Complete, Consistent, Enduring, Available. Il dato va protetto lungo tutto il ciclo di vita.",
+     "La validazione resta responsabilità del cliente; il fornitore (SAP) dà documentazione ed evidenze del proprio ciclo qualità, da valutare con un supplier assessment. Non esiste un «ERP certificato GxP».",
+     "Con cloud e aggiornamenti frequenti si valida in modo risk-based, con test automatizzati e controllo dei cambiamenti (GAMP 5 seconda edizione). Novità normativa: {{w10.annex11_revision}}."
+    ],
+    "ae": "Alla domanda «SAP è validato?» rispondi: il cliente valida il proprio uso, SAP fornisce evidenze. Offri di costruire la strategia di validazione insieme al partner."
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "Secondo Part 11 e Annex 11, una firma elettronica GxP ha lo stesso valore di una firma ___.",
+     "o": [
+      "autografa",
+      "scansionata",
+      "notarile"
+     ],
+     "a": 0,
+     "exp": "Le firme elettroniche devono avere lo stesso effetto di quelle manuali, con identificazione univoca del firmatario e collegamento al record firmato.",
+     "diff": 1
+    },
+    {
+     "t": "match",
+     "q": "Associa la lettera di ALCOA al suo significato",
+     "pairs": [
+      [
+       "Attributable",
+       "Si sa chi ha generato o modificato il dato"
+      ],
+      [
+       "Legible",
+       "Il dato è leggibile e comprensibile nel tempo"
+      ],
+      [
+       "Contemporaneous",
+       "Registrato nel momento in cui avviene l'attività"
+      ],
+      [
+       "Original",
+       "Prima registrazione o copia certificata"
+      ],
+      [
+       "Accurate",
+       "Corretto e privo di errori"
+      ]
+     ],
+     "exp": "ALCOA+ è il lessico con cui gli ispettori parlano di data integrity. Per un ERP vuol dire audit trail, utenti nominali, orari di sistema e niente dati sovrascritti senza traccia.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Un ERP in ambiente GxP va validato in modo proporzionato al rischio e la responsabilità resta dell'azienda che lo usa.",
+     "a": true,
+     "exp": "Corretto. L'approccio risk-based concentra i test sui processi critici (rilascio lotti, registrazioni qualità); il fornitore supporta con evidenze ma non sostituisce la responsabilità del cliente.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un Quality Head chiede: «Ma SAP è validato?». Quale risposta è corretta?",
+     "ctx": {
+      "who": "Quality Head",
+      "say": "Mi serve una cosa sola: SAP è validato, sì o no?"
+     },
+     "o": [
+      "Validate voi l'uso nel vostro contesto; SAP fornisce evidenze del proprio ciclo qualità.",
+      "Sì, SAP è certificato GxP: la validazione è già coperta dal fornitore per i clienti.",
+      "Dipende dalla versione: la public edition è validata da SAP, la private no.",
+      "Il partner valida il sistema e il cliente firma il collaudo finale in autonomia."
+     ],
+     "a": 0,
+     "exp": "La validazione riguarda l'uso specifico (processi, configurazione, interfacce) e non si compra. SAP e il partner portano metodo e documentazione; la responsabilità e l'approvazione sono del cliente.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi sono richiesti tipicamente ai sistemi computerizzati GxP?",
+     "o": [
+      "Audit trail dei cambiamenti ai dati",
+      "Accessi controllati per ruolo",
+      "Backup e ripristino testati",
+      "Interfaccia utente sempre in lingua inglese",
+      "Gestione del rischio proporzionata"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Tracciabilità delle modifiche, controllo degli accessi, continuità dei dati e analisi del rischio sono il nucleo di Annex 11 e Part 11. La lingua dell'interfaccia non è un requisito.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l03",
+   "title": "Serializzazione e tracciabilità",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "In UE la Direttiva 2011/62/UE e il Regolamento delegato 2016/161 richiedono, su molti farmaci con prescrizione, un identificativo univoco (2D Data Matrix con seriale) e un sigillo antimanomissione, dal 9 febbraio 2019.",
+     "In farmacia il codice viene verificato e disattivato alla dispensazione su repertori nazionali collegati all'hub europeo; il produttore carica i dati nel repertorio.",
+     "Negli USA il DSCSA impone tracciabilità elettronica interoperabile a livello di unità: logica simile (seriale univoco, aggregazione di scatole e pallet, scambio dati tra partner).",
+     "Serializzazione di linea (packaging) ed ERP devono dialogare: anagrafica prodotto, lotti, seriali, aggregazione, riconciliazione. SAP storicamente propone: {{w10.sap_serialization_solutions}}."
+    ],
+    "ae": "Chiedi: «Come gestite seriali, aggregazione e riconciliazione tra linea di packaging, ERP e repertorio?». Spesso emerge un patchwork di sistemi."
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "In UE l'identificativo univoco di un medicinale serializzato è riportato in un codice ___.",
+     "o": [
+      "Data Matrix 2D",
+      "a barre lineare EAN",
+      "RFID attivo"
+     ],
+     "a": 0,
+     "exp": "Il codice 2D Data Matrix contiene prodotto, seriale, lotto e scadenza. Il codice a barre lineare non porta tutti questi dati e l'RFID non è richiesto dalla normativa.",
+     "diff": 1
+    },
+    {
+     "t": "order",
+     "q": "Ordina il flusso di verifica di un medicinale serializzato in UE",
+     "items": [
+      "Il produttore genera e carica i seriali nel repertorio",
+      "La confezione riceve codice 2D e sigillo antimanomissione",
+      "Il lotto viene distribuito lungo la filiera",
+      "La farmacia verifica il codice alla dispensazione",
+      "Il codice viene disattivato nel repertorio"
+     ],
+     "exp": "Dal repertorio alla farmacia ogni passaggio lascia traccia: è la ragione per cui ERP, packaging e repertorio devono riconciliarsi. Un seriale usato due volte genera un allarme.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Anche negli USA esiste un obbligo di tracciabilità elettronica a livello di unità, il DSCSA, con logica simile alla serializzazione europea.",
+     "a": true,
+     "exp": "Corretto. Cambiano regole e tempi, ma i concetti (seriale univoco, aggregazione, scambio dati tra partner) sono gli stessi: chi esporta negli USA deve gestire entrambi i regimi.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un COO farmaceutico ha serializzazione di linea separata dall'ERP, con dati riportati a mano. Cosa proponi?",
+     "ctx": {
+      "who": "COO",
+      "say": "La linea ha il suo sistema di serializzazione, poi i dati vanno a mano nell'ERP e nel repertorio. A volte i conti non tornano."
+     },
+     "o": [
+      "Mappiamo il flusso linea-ERP-repertorio: meno passaggi manuali, meno errori.",
+      "Eliminiamo la serializzazione di linea e teniamo i dati nel solo sistema ERP aziendale.",
+      "Accettiamo gli scarti di riconciliazione, finché restano sotto la tolleranza interna.",
+      "Consolidiamo i dati in un foglio condiviso, aggiornato a fine turno dall'ufficio qualità."
+     ],
+     "a": 0,
+     "exp": "I passaggi manuali sono dove nascono errori e rilievi ispettivi. Il primo passo è misurare quanti dati si ribattono e dove i numeri non tornano, poi ridurre i passaggi.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi contiene il codice 2D di un medicinale serializzato in UE?",
+     "o": [
+      "Codice prodotto",
+      "Numero seriale univoco",
+      "Numero di lotto",
+      "Data di scadenza",
+      "Prezzo di vendita al pubblico"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "exp": "Il codice porta prodotto, seriale, lotto e scadenza (più, dove richiesto, il codice nazionale di rimborso). Il prezzo non è una componente dell'identificativo.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l04",
+   "title": "Lotti, quarantena e rilascio",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "La gestione lotti traccia origine (materie prime e fornitori), processo (batch record) e destinazione (clienti). La genealogia permette il recall mirato: chi ha ricevuto lotti con la materia prima X?",
+     "Stati dello stock: sbloccato, in controllo qualità, bloccato o in quarantena. Un lotto non si vende finché non è rilasciato; la scadenza guida i prelievi (logica FEFO, first expired first out).",
+     "Nell'UE il rilascio del lotto di un medicinale è certificato dalla Persona Qualificata (QP) del sito: è una responsabilità personale e regolata.",
+     "L'ERP gestisce stati, ispezioni, blocchi, scadenze e il legame con deviazioni e CAPA. I materiali per sperimentazione clinica hanno regole proprie (etichette, cieco, tracciabilità per sito e paziente) e spesso sistemi specializzati."
+    ],
+    "ae": "Chiedi al Quality Head: «Quanto tempo serve oggi per ricostruire un lotto in caso di recall e quanti sistemi devi interrogare?»"
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Chi certifica il rilascio del lotto di un medicinale in UE?",
+     "o": [
+      "La Persona Qualificata (QP) del sito",
+      "Il direttore commerciale dell'azienda",
+      "L'autorità regolatoria, lotto per lotto",
+      "Il responsabile IT che gestisce l'ERP"
+     ],
+     "a": 0,
+     "exp": "La QP certifica che ogni lotto è stato prodotto e controllato secondo GMP e autorizzazione. Per alcune categorie (come i vaccini) esistono ulteriori controlli ufficiali, ma non sono la regola generale.",
+     "diff": 2
+    },
+    {
+     "t": "bucket",
+     "q": "Vendibile o non vendibile?",
+     "buckets": [
+      "Vendibile",
+      "Non vendibile"
+     ],
+     "items": [
+      [
+       "Lotto rilasciato dopo controlli superati",
+       0
+      ],
+      [
+       "Lotto in quarantena in attesa di analisi",
+       1
+      ],
+      [
+       "Lotto bloccato per una deviazione aperta",
+       1
+      ],
+      [
+       "Lotto scaduto",
+       1
+      ],
+      [
+       "Lotto sbloccato con scadenza valida",
+       0
+      ]
+     ],
+     "exp": "Il sistema deve impedire la vendita di quanto non è rilasciato o è scaduto. È uno dei controlli automatici che più interessano il Quality Head.",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "La genealogia di lotto permette di individuare quali clienti hanno ricevuto prodotti contenenti una certa materia prima.",
+     "a": true,
+     "exp": "Corretto. Dal lotto del fornitore al lotto del prodotto finito fino al cliente: è la base del recall mirato, che riduce il perimetro e i costi di un ritiro.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un Quality Head racconta che ricostruire un recall richiede giorni e molti fogli Excel. Cosa proponi?",
+     "ctx": {
+      "who": "Quality Head",
+      "say": "Se domani ci fosse un recall, ricostruire chi ha ricevuto cosa mi richiederebbe giorni e molti fogli Excel."
+     },
+     "o": [
+      "Misuriamo il tempo di ricostruzione e simuliamo un recall completo su lotti e clienti.",
+      "Un recall è un evento raro: conviene investire prima in processi più frequenti.",
+      "Teniamo meno stock per prodotto: così un eventuale recall coinvolge meno lotti.",
+      "Deleghiamo la ricostruzione al trasportatore, che ha già i dati di consegna."
+     ],
+     "a": 0,
+     "exp": "Una simulazione end-to-end rende visibile il costo del rischio e il numero di sistemi coinvolti. È un argomento che il Quality e il COO riconoscono subito.",
+     "diff": 2
+    },
+    {
+     "t": "fill",
+     "q": "Per ridurre le scadenze, il magazzino preleva prima i lotti con scadenza più vicina: logica ___.",
+     "o": [
+      "FEFO",
+      "FIFO",
+      "LIFO"
+     ],
+     "a": 0,
+     "exp": "FEFO (first expired, first out) segue la scadenza. FIFO segue la data di ingresso e LIFO l'ultimo entrato: nei prodotti con shelf life contano le scadenze.",
+     "diff": 1
+    }
+   ]
+  },
+  {
+   "id": "w10-l05",
+   "title": "Cold chain e distribuzione GDP",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "La Good Distribution Practice (GDP, linee guida UE del 2013) chiede di mantenere qualità e integrità dei medicinali in distribuzione: trasporto, stoccaggio, documenti, fornitori qualificati.",
+     "Per molti biologici e vaccini la temperatura è critica, tipicamente 2-8 °C. Cold chain = contenitori e trasporti qualificati, monitoraggio continuo e gestione delle escursioni.",
+     "Un'escursione non significa automaticamente distruzione: il Quality valuta l'impatto con i dati di stabilità e decide se rilasciare, rilavorare o distruggere il lotto.",
+     "Il dato del data logger o IoT deve raggiungere il sistema qualità: collega spedizione e lotto, apre la deviazione, blocca lo stock e documenta la decisione."
+    ],
+    "ae": "Chiedi: «Quando un data logger segnala un'escursione, chi lo scopre, in quanto tempo e come blocca il lotto nel sistema?»"
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "Il range di temperatura tipico per molti biologici nella catena del freddo è ___.",
+     "o": [
+      "2-8 °C",
+      "15-25 °C",
+      "da -10 a 0 °C"
+     ],
+     "a": 0,
+     "exp": "Il range 2-8 °C è lo standard per molti vaccini e biologici. 15-25 °C è la conservazione a temperatura ambiente controllata; sotto zero si applica solo a prodotti specifici.",
+     "diff": 1
+    },
+    {
+     "t": "order",
+     "q": "Ordina la gestione di un'escursione di temperatura",
+     "items": [
+      "Il data logger segnala l'escursione",
+      "Il lotto viene bloccato nel sistema",
+      "Si apre una deviazione",
+      "Il Quality valuta l'impatto con i dati di stabilità",
+      "Si decide: rilascio, rilavorazione o distruzione"
+     ],
+     "exp": "Prima si blocca, poi si valuta, poi si decide: un lotto non può essere venduto mentre la deviazione è aperta. Il valore del sistema è rendere automatici blocco e tracciabilità.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un COO dice che le spedizioni a temperatura controllata sono la parte meno visibile della sua supply chain. Cosa proponi?",
+     "ctx": {
+      "who": "COO",
+      "say": "Le spedizioni a temperatura controllata sono la parte più rischiosa e meno visibile della nostra supply chain."
+     },
+     "o": [
+      "Colleghiamo monitoraggio, spedizione e lotto: l'escursione blocca lo stock in automatico.",
+      "Aggiungiamo più ghiaccio secco nei contenitori e verifichiamo il peso delle spedizioni.",
+      "Limitiamo le spedizioni ai giorni feriali e ai trasportatori con più esperienza storica.",
+      "Assicuriamo il carico contro i danni e trattiamo il resto come un rischio accettato."
+     ],
+     "a": 0,
+     "exp": "Il problema è la visibilità e il collegamento dato-lotto-decisione. Più ghiaccio o più cautela riducono il rischio ma non danno evidenze all'ispettore né bloccano il lotto in automatico.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Dopo un'escursione di temperatura, il Quality valuta l'impatto con i dati di stabilità prima di decidere il destino del lotto.",
+     "a": true,
+     "exp": "Corretto. L'escursione non porta in automatico alla distruzione: la decisione è documentata e basata sui dati di stabilità, e il sistema deve conservare l'intera traccia.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi fanno parte di una cold chain sotto controllo?",
+     "o": [
+      "Contenitori e trasporti qualificati",
+      "Monitoraggio continuo della temperatura",
+      "Procedura per gestire le escursioni",
+      "Etichette multilingue sul pallet",
+      "Fornitori logistici qualificati"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Qualificazione, monitoraggio, procedure e fornitori qualificati sono richiesti dalla GDP. Le etichette multilingue riguardano la conformità di mercato, non la catena del freddo.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l06",
+   "title": "MDR e IVDR per il medtech",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "L'MDR (Reg. UE 2017/745) sui dispositivi medici e l'IVDR (2017/746) sui diagnostici in vitro hanno sostituito le vecchie direttive: valutazione clinica, sorveglianza post-market, tracciabilità UDI, organismi notificati.",
+     "Classi di rischio: MDR I, IIa, IIb, III; IVDR A, B, C, D. Più alta la classe, più controlli e più peso del certificato di un organismo notificato.",
+     "Le scadenze transitorie sono state prorogate: {{w10.mdr_ivdr_transition}}.",
+     "UDI = identificativo univoco del dispositivo, registrato nella banca dati EUDAMED. Richiede dati di prodotto ed etichettatura coerenti e collega produzione, lotto o seriale e distribuzione."
+    ],
+    "ae": "Per il medtech parla di UDI, reclami e vigilanza post-market: sono processi che attraversano ERP, qualità e service."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa il termine al significato",
+     "pairs": [
+      [
+       "MDR",
+       "Regolamento UE 2017/745 sui dispositivi medici"
+      ],
+      [
+       "IVDR",
+       "Regolamento UE 2017/746 sui diagnostici in vitro"
+      ],
+      [
+       "UDI",
+       "Identificativo univoco del dispositivo"
+      ],
+      [
+       "Organismo notificato",
+       "Ente terzo che certifica la conformità delle classi superiori"
+      ],
+      [
+       "EUDAMED",
+       "Banca dati europea dei dispositivi medici"
+      ]
+     ],
+     "exp": "Sono il vocabolario base del medtech in UE. Un AE che conosce UDI ed EUDAMED capisce subito perché dati di prodotto e tracciabilità sono un tema ERP.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Quali sono le classi di rischio dei dispositivi medici nell'MDR?",
+     "o": [
+      "I, IIa, IIb, III",
+      "A, B, C, D",
+      "1, 2, 3, 4",
+      "Bassa, media, alta, critica"
+     ],
+     "a": 0,
+     "exp": "L'MDR usa I, IIa, IIb, III. Le classi A-D appartengono all'IVDR (diagnostici in vitro): è l'errore più comune.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Le scadenze transitorie di MDR e IVDR sono state prorogate rispetto alle date originali, a condizioni precise.",
+     "a": true,
+     "exp": "Corretto, con regolamenti successivi di proroga. Stato e date: {{w10.mdr_ivdr_transition}}. Con il cliente non interpretare la norma: verifica con il suo Regulatory Affairs.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un medtech riceve i reclami dal service, ma la qualità li scopre settimane dopo. Cosa proponi?",
+     "ctx": {
+      "who": "Quality Head",
+      "say": "I reclami arrivano al service, ma noi del Quality li scopriamo settimane dopo."
+     },
+     "o": [
+      "Un flusso unico service-reclami-qualità, con lotto o seriale e UDI.",
+      "Mandiamo ogni reclamo per email al Quality, con copia al responsabile del service.",
+      "Aspettiamo il prossimo audit per capire se il flusso attuale è davvero insufficiente.",
+      "Trattiamo i reclami come ticket di servizio e la vigilanza come attività separata."
+     ],
+     "a": 0,
+     "exp": "Reclami e vigilanza post-market richiedono tempi e tracciabilità: il dato di lotto o UDI deve arrivare alla qualità senza ribattere. Un flusso unico riduce i ritardi e le lacune ispettive.",
+     "diff": 3
+    },
+    {
+     "t": "fill",
+     "q": "La tracciabilità di un dispositivo medico lungo la filiera si basa sull'identificativo ___.",
+     "o": [
+      "UDI",
+      "AIC",
+      "GTIN farmaco"
+     ],
+     "a": 0,
+     "exp": "UDI (Unique Device Identification) identifica il dispositivo. L'AIC è il codice di autorizzazione dei medicinali in Italia, non dei dispositivi.",
+     "diff": 1
+    }
+   ]
+  },
+  {
+   "id": "w10-l07",
+   "title": "AIFA, prezzi e payback",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "AIFA (Agenzia Italiana del Farmaco) autorizza l'immissione in commercio (AIC), negozia prezzo e rimborsabilità a carico del SSN e monitora spesa e farmacovigilanza. Classi: A rimborsati, H uso ospedaliero, C a carico del cittadino.",
+     "Payback: ripiano dello sfondamento dei tetti di spesa. Nel farmaceutico le aziende contribuiscono se la spesa supera i tetti; per i dispositivi medici tetti regionali e ripiano a carico dei fornitori hanno generato forti contenziosi.",
+     "Per il CFO: ricavi lordi contro netti, accantonamenti per payback, sconti obbligatori, prezzi regolati. Serve visibilità su volumi per cliente, regione e prodotto per stimare l'impatto durante l'anno.",
+     "Per l'AE: non spiegare la norma. Chiedi come l'azienda calcola e accantona il payback e quanto tempo richiede la chiusura. È un tema di dati e processo finanziario, non di legge."
+    ],
+    "ae": "Con il CFO: «Come calcolate e accantonate il payback oggi? Quante persone e quanti file ci lavorano a ogni chiusura?»"
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un CFO dice che il payback gli sposta il margine ogni anno e lo scopre tardi. Cosa proponi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il payback mi sposta il margine ogni anno e lo scopro sempre tardi."
+     },
+     "o": [
+      "Partiamo da vendite per cliente, regione e prodotto in un unico dato.",
+      "Aspettiamo le comunicazioni ufficiali sui tetti e accantoniamo a fine esercizio.",
+      "Riduciamo i volumi verso le regioni a rischio, per limitare l'esposizione al ripiano.",
+      "Presentiamo ricorso: il payback si gestisce in sede legale, non nei sistemi aziendali."
+     ],
+     "a": 0,
+     "exp": "Il payback si stima bene solo con dati granulari e tempestivi. Aspettare le comunicazioni ufficiali ti lascia con sorprese di fine anno; ridurre i volumi o il ricorso non sostituiscono il controllo.",
+     "diff": 2
+    },
+    {
+     "t": "match",
+     "q": "Associa la classe o il termine AIFA al significato",
+     "pairs": [
+      [
+       "Classe A",
+       "Medicinali rimborsabili dal SSN"
+      ],
+      [
+       "Classe H",
+       "Medicinali per uso ospedaliero"
+      ],
+      [
+       "Classe C",
+       "Medicinali a carico del cittadino"
+      ],
+      [
+       "AIC",
+       "Autorizzazione all'immissione in commercio"
+      ],
+      [
+       "Payback",
+       "Ripiano dello sfondamento dei tetti di spesa"
+      ]
+     ],
+     "exp": "Sono termini che il CFO e il Market Access usano ogni giorno. Conoscerli ti evita errori di lessico e ti fa capire dove stanno prezzi regolati e margini.",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "Il payback riguarda solo le aziende farmaceutiche: i dispositivi medici ne sono esclusi.",
+     "a": false,
+     "exp": "Falso. Anche per i dispositivi medici sono previsti tetti di spesa e ripiano a carico dei fornitori, con un lungo contenzioso. Per il medtech il tema è altrettanto rilevante per il CFO.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO dice che il payback lo gestiscono in Excel e che l'ERP funziona. Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il payback lo gestiamo in Excel e funziona. Il nostro ERP fa il suo lavoro."
+     },
+     "o": [
+      "Funziona finché i volumi per regione e prodotto sono corretti. Quanti file ci lavorano?",
+      "Excel non è ammesso dalla normativa: serve una soluzione certificata.",
+      "Sono d'accordo: non vedo margini di miglioramento in un processo già collaudato.",
+      "Passando a SAP il payback scompare, perché i tetti vengono calcolati in automatico."
+     ],
+     "a": 0,
+     "exp": "Non attaccare lo strumento: chiedi quanto costa il processo (file, persone, tempo, errori). Se il numero è alto, il caso nasce da solo. Promettere che il payback «scompare» è falso.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali dati servono al CFO per stimare l'impatto del payback durante l'anno?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Se potessi avere un solo cruscotto per il payback, cosa dovrebbe mostrarmi?"
+     },
+     "o": [
+      "Vendite per cliente, regione e prodotto",
+      "Sconti e condizioni obbligatorie applicate",
+      "Andamento rispetto al tetto di spesa",
+      "Numero di pagine del catalogo prodotti",
+      "Volumi consegnati per periodo"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Servono granularità e tempestività dei dati commerciali e il confronto con il tetto. Il numero di pagine del catalogo non ha alcun nesso con il ripiano.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l08",
+   "title": "Soluzioni SAP per Life Sciences",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Non esiste un ERP farma a parte: SAP Cloud ERP (nomi: {{sap.naming.cloud_erp}}) copre finanza, supply chain, produzione e qualità. Le esigenze di settore si coprono con funzioni standard più estensioni di industria.",
+     "Capacità tipiche: lotti e scadenze, Quality Management (ispezioni, reclami, CAPA), pianificazione (SAP Integrated Business Planning), magazzino (Extended Warehouse Management).",
+     "Serializzazione: storicamente {{w10.sap_serialization_solutions}}. Rilascio lotti: ad esempio {{w10.sap_batch_release}}.",
+     "Per ambienti regolati molti valutano la edizione private (single-tenant) per più controllo su upgrade e validazione; la public edition punta su standard e rilasci frequenti. Entrambe richiedono validazione.",
+     "I nomi commerciali di industria cambiano: verificali sul sito SAP prima di proporli. Il racconto 2026: {{sap.sapphire26.platform}}."
+    ],
+    "ae": "Parti dal processo (lotto, rilascio, serializzazione, cold chain), poi scegli il prodotto. Se non hai il nome aggiornato, descrivi la capacità e conferma con il solution advisor."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa la capacità alla famiglia di soluzioni SAP",
+     "pairs": [
+      [
+       "Pianificazione integrata di domanda e supply",
+       "SAP Integrated Business Planning (IBP)"
+      ],
+      [
+       "Gestione avanzata del magazzino",
+       "SAP Extended Warehouse Management (EWM)"
+      ],
+      [
+       "Ispezioni, reclami e CAPA",
+       "Quality Management in SAP Cloud ERP"
+      ],
+      [
+       "Serializzazione e scambio dati di tracciabilità",
+       "{{w10.sap_serialization_solutions}}"
+      ],
+      [
+       "Rilascio dei lotti nelle Life Sciences",
+       "{{w10.sap_batch_release}}"
+      ]
+     ],
+     "exp": "Dalla capacità si arriva al prodotto. Per le soluzioni di industria (ultime due) i nomi sono quelli storici e vanno riverificati: spiega sempre la funzione prima del nome.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente farmaceutico vuole controllare i tempi di aggiornamento e la validazione. Cosa valuti?",
+     "ctx": {
+      "who": "Quality Head",
+      "say": "Voglio decidere io quando si aggiorna il sistema e come lo validiamo."
+     },
+     "o": [
+      "Valutare Cloud ERP Private: più controllo su calendario degli upgrade e validazione.",
+      "Scegliere la public edition perché gli aggiornamenti standard non richiedono validazione.",
+      "Restare su ECC senza piani di migrazione, per evitare la validazione del cloud.",
+      "Rimandare ogni decisione cloud: i sistemi regolati devono restare on-premise per norma."
+     ],
+     "a": 0,
+     "exp": "Non è una regola, ma una leva: la edizione private offre più controllo sul calendario. Nessuna scelta evita la validazione, e nessuna norma vieta il cloud ai sistemi regolati.",
+     "diff": 3
+    },
+    {
+     "t": "tf",
+     "q": "Per un cliente regolato, passare a un ERP cloud elimina la necessità di validare il sistema.",
+     "a": false,
+     "exp": "Falso. Il cloud cambia il modello di responsabilità e rende necessari approcci continui (supplier assessment, controllo dei cambiamenti), ma la validazione dell'uso resta responsabilità del cliente.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un IT Director è su ECC (manutenzione standard fino al {{sap.ecc.mainstream_end}}) e dice che la validazione impedisce di migrare in sei mesi. Cosa rispondi?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "La validazione richiede mesi. Non possiamo migrare in sei mesi: sarebbe irresponsabile."
+     },
+     "o": [
+      "Concordo: pianifichiamo ora validazione e fasi, partendo dai processi più critici.",
+      "Aspettate l'estensione della manutenzione: dopo quella data non avrete più problemi.",
+      "Con il cloud la validazione si può rimandare a dopo la messa in produzione.",
+      "Migrate comunque in sei mesi: la validazione si recupera nella fase successiva."
+     ],
+     "a": 0,
+     "exp": "Il tempo di validazione è il vero percorso critico: anticiparlo evita di arrivare alla scadenza senza margine. Anche l'estensione ha un limite: {{sap.ecc.extended_end}}.",
+     "diff": 3
+    },
+    {
+     "t": "multi",
+     "q": "Quali capacità tipiche di un'azienda farmaceutica si coprono con funzioni SAP standard o di industria?",
+     "o": [
+      "Gestione lotti e scadenze",
+      "Controlli qualità e reclami",
+      "Pianificazione integrata di domanda e supply",
+      "Prescrizione di medicinali ai pazienti",
+      "Gestione avanzata del magazzino"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Lotti, qualità, pianificazione e magazzino sono processi di supply chain e manifattura coperti dalla suite. La prescrizione ai pazienti è un processo clinico, fuori dal perimetro ERP.",
+     "diff": 1
+    }
+   ]
+  },
+  {
+   "id": "w10-l09",
+   "title": "CPG: trade promotion e RGM",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Nel consumer products i ricavi dipendono da prezzo, promozioni, assortimento e distribuzione: è il Revenue Growth Management (RGM). La trade promotion è la leva con cui il produttore paga il retailer per sconti e visibilità.",
+     "Trade Promotion Management: pianificare le promozioni, stimare il lift (incremento di vendite), liquidare gli accordi (deduzioni e claim), misurare il ritorno. Una quota rilevante dei ricavi lordi passa dal trade spend.",
+     "Sell-in = vendite del produttore al retailer; sell-out = vendite del retailer al consumatore. Senza sell-out non sai se la promozione ha funzionato o ha solo riempito il magazzino del retailer.",
+     "Novità: {{w10.autonomous_rgm}}. Verifica perimetro e disponibilità prima di citarla al cliente."
+    ],
+    "ae": "Chiedi al CFO o al Sales Director: «Quanto trade spend ha un ROI misurato e quanto tempo serve per chiudere le deduzioni dei retailer?»"
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa il termine del trade al suo significato",
+     "pairs": [
+      [
+       "Sell-in",
+       "Vendite del produttore al retailer"
+      ],
+      [
+       "Sell-out",
+       "Vendite del retailer al consumatore"
+      ],
+      [
+       "Lift promozionale",
+       "Incremento di vendite dovuto alla promozione"
+      ],
+      [
+       "Trade spend",
+       "Spesa del produttore verso i canali (sconti, visibilità)"
+      ],
+      [
+       "Deduzione (claim)",
+       "Importo trattenuto dal retailer per una promozione"
+      ]
+     ],
+     "exp": "Sono il lessico del Sales Director e del CFO di un CPG. Conoscerli ti permette di parlare di ROI promozionale e di chiusura delle deduzioni senza passare per principiante.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO di un CPG dice che chiude le promozioni mesi dopo e non sa quali abbiano reso. Cosa proponi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Chiudiamo le promozioni mesi dopo e non so dirti quali abbiano reso davvero."
+     },
+     "o": [
+      "Misuriamo il ROI per promozione collegando accordi, sell-out e deduzioni, per decidere.",
+      "Riduciamo le promozioni a quelle storiche e rinegoziamo gli sconti principali.",
+      "Concentriamo gli sconti sui retailer maggiori, che hanno volumi più prevedibili.",
+      "Attendiamo i dati del prossimo anno per confrontare le promozioni."
+     ],
+     "a": 0,
+     "exp": "Il collegamento accordo-sell-out-deduzione è ciò che permette di decidere su dati. Tagliare o concentrare gli sconti senza misura rischia di eliminare le promozioni che funzionano.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Una promozione che aumenta il sell-in verso il retailer ha per forza aumentato i consumi finali.",
+     "a": false,
+     "exp": "Falso. Il retailer può aver comprato di più per fare scorta: senza il sell-out non si distingue tra consumo reale e carico del magazzino. È il motivo per cui i dati di sell-out sono centrali.",
+     "diff": 2
+    },
+    {
+     "t": "fill",
+     "q": "Per sapere se una promozione ha funzionato oltre il carico del magazzino del retailer serve il dato di ___.",
+     "o": [
+      "sell-out",
+      "sell-in",
+      "lead time"
+     ],
+     "a": 0,
+     "exp": "Il sell-out misura ciò che il consumatore compra davvero. Il sell-in è la vendita al retailer e il lead time è un tempo logistico, non una misura di efficacia promozionale.",
+     "diff": 1
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi servono per valutare il ROI di una promozione?",
+     "ctx": {
+      "who": "Sales Director",
+      "say": "Come faccio a dire al CFO se una promozione ha davvero reso o ha solo spostato vendite?"
+     },
+     "o": [
+      "Baseline di vendita senza promozione",
+      "Costo della promozione (sconto, visibilità)",
+      "Incremento (lift) misurato",
+      "Cannibalizzazione di altri prodotti",
+      "Numero di pagine del volantino"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "exp": "Il ROI confronta lift e costi rispetto alla baseline e tiene conto della cannibalizzazione. Il numero di pagine del volantino è un dettaglio operativo, non una misura di ritorno.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l10",
+   "title": "Demand planning e retail execution",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Demand planning: previsione della domanda per prodotto, canale e periodo con storico, promozioni, stagionalità e segnali di mercato. Obiettivo: servire il cliente con meno scorte. Piattaforma SAP: SAP Integrated Business Planning.",
+     "Misure: accuratezza (WAPE o MAPE), bias (sovrastima o sottostima sistematica), forecast value added (FVA, il miglioramento rispetto a un forecast semplice). Un bias persistente è un problema di processo.",
+     "S&OP: processo mensile che allinea domanda, supply, finanza e vendite su un unico piano.",
+     "Retail execution: la presenza del prodotto a scaffale, in termini di disponibilità (OSA), rispetto del planogram, di prezzi e promozioni. Le visite dei merchandiser producono dati utili per misurare l'esecuzione."
+    ],
+    "ae": "Con il Demand Planning Head parla di bias e FVA, non di «algoritmi». Con il Sales Director di OSA e di quante promozioni arrivano a scaffale come pianificate."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Che cosa indica il bias di un forecast?",
+     "o": [
+      "Una tendenza sistematica a sovrastimare o sottostimare la domanda",
+      "L'errore medio assoluto tra previsione e consuntivo nel periodo",
+      "La stagionalità del prodotto nei diversi mesi dell'anno",
+      "Il costo del processo di previsione per ciascun prodotto"
+     ],
+     "a": 0,
+     "exp": "Il bias è la direzione dell'errore, non la sua dimensione. L'errore medio assoluto è la misura di accuratezza (WAPE/MAPE). Un bias persistente indica un problema di processo o di comportamento.",
+     "diff": 2
+    },
+    {
+     "t": "match",
+     "q": "Associa la sigla al significato",
+     "pairs": [
+      [
+       "WAPE / MAPE",
+       "Misure di accuratezza (errore percentuale)"
+      ],
+      [
+       "Bias",
+       "Errore sistematico in una direzione"
+      ],
+      [
+       "FVA",
+       "Valore aggiunto del forecast rispetto a uno semplice"
+      ],
+      [
+       "OSA",
+       "Disponibilità del prodotto a scaffale"
+      ],
+      [
+       "S&OP",
+       "Allineamento mensile di domanda, supply e finanza"
+      ]
+     ],
+     "exp": "Sono le sigle con cui parlano il Demand Planning Head e il Sales Director. Usarle bene dà credibilità; usarle a caso la rovina.",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "Se l'errore medio del forecast è basso, non serve controllare il bias.",
+     "a": false,
+     "exp": "Falso. Un errore medio basso può coprire un bias sistematico (sempre in eccesso o in difetto) che genera scorte o mancanze. Si monitorano entrambi.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un COO dice che sovrastima sempre le promozioni e finisce con scorte e svalutazioni. Cosa proponi?",
+     "ctx": {
+      "who": "COO",
+      "say": "Sovrastimiamo sempre le promozioni e finiamo con scorte alte e svalutazioni a fine anno."
+     },
+     "o": [
+      "Guardiamo bias e FVA per promozione e portiamo i piani promozionali nel processo.",
+      "Compriamo un modello AI più grande e smettiamo di rivedere ogni mese i dati di vendita.",
+      "Riduciamo la frequenza delle promozioni, così l'errore di previsione ha meno occasioni.",
+      "Aumentiamo la scorta di sicurezza di un terzo per coprire la variabilità."
+     ],
+     "a": 0,
+     "exp": "Il problema è un errore sistematico sulle promozioni: va misurato (bias, FVA) e corretto integrando i piani promozionali nel forecast. Più scorta o meno promozioni sono rimedi di sintomo, non di causa.",
+     "diff": 2
+    },
+    {
+     "t": "order",
+     "q": "Ordina il ciclo S&OP mensile",
+     "items": [
+      "Raccolta dati e forecast statistico",
+      "Revisione della domanda con commerciale e marketing",
+      "Revisione della supply e dei vincoli",
+      "Riunione di allineamento e decisione",
+      "Esecuzione e monitoraggio"
+     ],
+     "exp": "Il ciclo parte dai dati, passa per domanda e supply e chiude con una decisione unica. Il valore è che commerciale, supply e finanza condividono lo stesso piano.",
+     "diff": 1
+    }
+   ]
+  },
+  {
+   "id": "w10-l11",
+   "title": "Packaging, EPR e sostenibilità",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "EPR (Extended Producer Responsibility): il produttore risponde del fine vita degli imballaggi. In Italia il sistema è gestito da CONAI e dai consorzi di filiera, con un contributo ambientale sui materiali immessi al consumo.",
+     "Il nuovo Regolamento europeo sugli imballaggi: {{w10.ppwr_application}}. Introduce requisiti su riciclabilità, contenuto riciclato, riduzione dei rifiuti ed etichettatura armonizzata.",
+     "Il dato chiave è la distinta di imballaggio per prodotto (materiali, pesi, tipologie): serve a dichiarare, calcolare i contributi e progettare imballaggi riciclabili. Spesso è sparso tra R&D, acquisti ed ERP.",
+     "Sostenibilità: rendicontazione (CSRD/ESRS, con perimetro e tempi in revisione a livello UE: verificane lo stato), impronta di carbonio di prodotto, Scope 3. Il valore sta nel dato primario di processo, non nei fogli di fine anno."
+    ],
+    "ae": "Chiedi: «Chi possiede oggi i dati di materiale e peso degli imballaggi e quanto tempo serve per la dichiarazione annuale?». Se la risposta è «un foglio Excel e tre persone», hai un caso."
+   },
+   "ex": [
+    {
+     "t": "tf",
+     "q": "In Italia il sistema EPR degli imballaggi è gestito da CONAI e dai consorzi di filiera.",
+     "a": true,
+     "exp": "Corretto. Il produttore versa il contributo ambientale e dichiara i materiali immessi sul mercato. Per questo la distinta di imballaggio aggiornata è un dato critico per il CFO e per la compliance.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Qual è il dato più critico per gestire contributi EPR e conformità del packaging?",
+     "o": [
+      "La distinta di imballaggio per prodotto, con materiali e pesi",
+      "Il fatturato per canale e per area geografica del cliente",
+      "Il numero di dipendenti per stabilimento e per turno",
+      "Il piano marketing con le promozioni dell'anno in corso"
+     ],
+     "a": 0,
+     "exp": "Contributi e dichiarazioni si calcolano da materiali e pesi degli imballaggi per prodotto. Gli altri dati sono rilevanti per altri processi ma non determinano il contributo.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO di un CPG dice che la dichiarazione degli imballaggi richiede settimane e non è sicuro dei numeri. Cosa proponi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Ogni anno la dichiarazione degli imballaggi ci costa settimane e alla fine non siamo sicuri dei numeri."
+     },
+     "o": [
+      "Centralizziamo materiali e pesi nella distinta e ricaviamo le dichiarazioni dal dato.",
+      "Assumiamo un consulente esterno che ricostruisca i dati ogni anno prima della scadenza.",
+      "Chiediamo ai fornitori di imballaggi di inviare i pesi con una frequenza trimestrale.",
+      "Affidiamo la dichiarazione al consorzio, che la prepara in base ai nostri acquisti."
+     ],
+     "a": 0,
+     "exp": "Se il dato nasce una volta sola nella distinta e viene riusato, le dichiarazioni diventano un'estrazione e non un progetto annuale. Consulenti e richieste ai fornitori rendono il processo più costoso ma non più affidabile.",
+     "diff": 2
+    },
+    {
+     "t": "fill",
+     "q": "Il principio per cui il produttore risponde del fine vita dei propri imballaggi si chiama ___.",
+     "o": [
+      "EPR",
+      "CBAM",
+      "ETS"
+     ],
+     "a": 0,
+     "exp": "EPR = Extended Producer Responsibility. CBAM (meccanismo di adeguamento del carbonio alle frontiere) ed ETS (scambio di quote di emissione) riguardano il carbonio, non gli imballaggi.",
+     "diff": 1
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi tratta il regolamento europeo sugli imballaggi (PPWR)?",
+     "o": [
+      "Riciclabilità degli imballaggi",
+      "Contenuto minimo di materiale riciclato (per alcuni imballaggi)",
+      "Etichettatura armonizzata dei materiali",
+      "Divieto di usare plastica in qualsiasi imballaggio",
+      "Obbligo di usare imballaggi in vetro per gli alimenti"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "exp": "Il PPWR fissa requisiti su riciclabilità, contenuto riciclato, riduzione e etichettatura. Non vieta la plastica in generale né impone il vetro: gli obblighi sono specifici e graduali. Verifica sempre i dettagli con il cliente.",
+     "diff": 3
+    }
+   ]
+  },
+  {
+   "id": "w10-l12",
+   "title": "Italia: medie imprese e famiglie",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "L'Italia è un Paese di PMI e medie imprese industriali (distretti, export). Molte sono a controllo familiare: decide l'imprenditore e il passaggio generazionale pesa. Le filiali di multinazionali decidono in parte con la casa madre.",
+     "Il buyer: nei gruppi familiari decide spesso il CEO o la proprietà con il CFO; l'IT è piccolo e si appoggia a un system integrator. Orizzonti lunghi, attenzione al TCO, fiducia personale e referenze contano più di una demo.",
+     "Nelle filiali di multinazionali la scelta ERP è spesso globale: il tuo interlocutore italiano è influencer e implementatore. Vendi il valore locale (fisco, SDI, localizzazione) dentro il template della casa madre.",
+     "Strutture tipiche: holding e società operative, consolidato, intercompany, più stabilimenti e magazzini, rapporti con le banche. Il CFO è il tuo alleato sul business case."
+    ],
+    "ae": "Con un gruppo familiare costruisci fiducia con referenze simili e un piano a fasi. Con una filiale di multinazionale lavora in parallelo la casa madre e il caso locale."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un CFO di un gruppo familiare dice che non investe in ciò che non capisce. Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "L'azienda l'ha fondata mio padre e la guidiamo io e mio fratello. Non investiamo in cose che non capiamo."
+     },
+     "o": [
+      "Ti propongo un piano a fasi con referenze di aziende simili, da un'area misurabile.",
+      "Ti mando una presentazione completa con tutte le funzioni, così hai il quadro generale.",
+      "Il vostro ERP è ormai fuori mercato: bisogna decidere in fretta per non perdere terreno.",
+      "Se firmi entro fine trimestre, ti garantisco un prezzo più vantaggioso."
+     ],
+     "a": 0,
+     "exp": "Nelle aziende familiari fiducia, comprensione e riduzione del rischio guidano la decisione. Un piano a fasi con referenze comparabili risponde proprio a questo; pressione e liste di funzioni lo peggiorano.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "In una media impresa a controllo familiare, le referenze di aziende simili pesano molto nella decisione d'acquisto.",
+     "a": true,
+     "exp": "Corretto. Fiducia personale e prova che altri hanno avuto successo con un'azienda simile riducono il rischio percepito. Ricorda: citarle solo se pubbliche o autorizzate.",
+     "diff": 1
+    },
+    {
+     "t": "bucket",
+     "q": "Gruppo familiare o filiale di multinazionale?",
+     "buckets": [
+      "Gruppo familiare",
+      "Filiale di multinazionale"
+     ],
+     "items": [
+      [
+       "Decide la proprietà insieme al CFO",
+       0
+      ],
+      [
+       "Template ERP definito dalla casa madre",
+       1
+      ],
+      [
+       "Il passaggio generazionale influenza i tempi",
+       0
+      ],
+      [
+       "Business case approvato a livello regionale o globale",
+       1
+      ],
+      [
+       "Fiducia personale e referenze pesano molto",
+       0
+      ],
+      [
+       "Localizzazione fiscale e SDI da portare nel template",
+       1
+      ]
+     ],
+     "exp": "Nel primo caso vendi fiducia e piano a fasi; nel secondo ti allinei alla casa madre portando il valore locale (fisco, SDI, lingua, normative).",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali sono caratteristiche tipiche di una media impresa italiana a controllo familiare?",
+     "o": [
+      "IT interno piccolo, con il supporto di un system integrator",
+      "Decisione vicina alla proprietà",
+      "Attenzione al TCO e ai tempi di ritorno",
+      "Scelta ERP imposta da un comitato globale",
+      "Relazioni di lungo periodo con fornitori e clienti locali"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Sono tratti ricorrenti, non regole. La scelta imposta da un comitato globale descrive piuttosto le filiali di multinazionali.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un IT Director con tre persone dice di non avere risorse per un progetto grande. Cosa proponi?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "Siamo in tre in IT. Non abbiamo le risorse per un progetto grande."
+     },
+     "o": [
+      "Serve un partner che porti competenze e un perimetro a fasi che non sovraccarichi il team.",
+      "Aggiungi dieci persone al team IT per la durata del progetto e rinvia le altre attività.",
+      "Parti con tutto il perimetro insieme: un progetto spezzettato costa sempre di più.",
+      "Aspettiamo che il team cresca di numero prima di cominciare qualunque attività."
+     ],
+     "a": 0,
+     "exp": "Il team piccolo non è un blocco ma un vincolo di progetto: partner e fasi lo gestiscono. Soluzioni che richiedono più persone o più tempo di attesa non lo risolvono.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l13",
+   "title": "Incentivi: PNRR e Transizione 5.0",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Il PNRR è il piano italiano finanziato dal dispositivo europeo RRF (Next Generation EU). Scadenze europee: {{w10.pnrr_deadline}}.",
+     "A ottobre 2026, quindi, il PNRR non è una leva per nuovi progetti: i fondi sono impegnati o in chiusura. Vendite basate su «bandi PNRR» vanno trattate con grande prudenza: verifica con il cliente cosa è ancora attivo.",
+     "Transizione 5.0 (D.L. 19/2024) era un credito d'imposta finanziato con fondi PNRR per investimenti 4.0 e minori consumi energetici: richiedeva perizie e comunicazioni al GSE. Gli incentivi successivi vanno verificati con il commercialista.",
+     "Regola dell'AE: non promettere importi né ammissibilità. Dichiara cosa fa il software (interconnessione, misura dei consumi) e lascia la qualificazione fiscale al consulente del cliente."
+    ],
+    "ae": "Se il CFO cita incentivi: «Chiedo al vostro commercialista quali agevolazioni valgono per questo investimento; io vi fornisco la documentazione tecnica del software»."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un CFO chiede se può finanziare il progetto con il PNRR. Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Possiamo finanziare il progetto con il PNRR, vero? Il mio commercialista mi parlava di incentivi."
+     },
+     "o": [
+      "Verifichiamo col vostro commercialista cosa è ancora attivo, prima di costruire il caso.",
+      "Sì, i fondi PNRR restano disponibili per i nuovi progetti IT fino alla fine del decennio.",
+      "Sì, ti garantisco per iscritto l'ammissibilità del progetto alle misure di agevolazione.",
+      "No, il PNRR non ha finanziato progetti di digitalizzazione delle imprese manifatturiere."
+     ],
+     "a": 0,
+     "exp": "Il PNRR ha scadenze europee nel 2026 e per i nuovi progetti non è una base affidabile. Non promettere ammissibilità né importi: la qualificazione fiscale è del consulente del cliente.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "A ottobre 2026 il PNRR è una leva commerciale ideale per lanciare nuovi progetti con alta probabilità di finanziamento.",
+     "a": false,
+     "exp": "Falso. Con le scadenze europee fissate nel 2026 i fondi sono in chiusura: {{w10.pnrr_deadline}}. Fonda il business case sul valore del progetto, non su incentivi incerti.",
+     "diff": 2
+    },
+    {
+     "t": "fill",
+     "q": "Il credito d'imposta Transizione 5.0 era finanziato con fondi del ___.",
+     "o": [
+      "PNRR (REPowerEU)",
+      "Fondo di garanzia per le PMI",
+      "Bilancio ordinario regionale"
+     ],
+     "a": 0,
+     "exp": "Transizione 5.0 era una misura finanziata dal PNRR (capitolo REPowerEU), per questo la sua sorte è legata a quella del piano. Gli altri sono strumenti diversi.",
+     "diff": 2
+    },
+    {
+     "t": "order",
+     "q": "Ordina la gestione di un incentivo con il CFO",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il mio commercialista dice che dobbiamo sbrigarci per gli incentivi, prima che chiudano."
+     },
+     "items": [
+      "Chiedi se hanno un consulente fiscale",
+      "Descrivi la parte tecnica del software senza promettere ammissibilità",
+      "Il consulente verifica misura e requisiti",
+      "Il CFO inserisce l'incentivo nel business case come scenario",
+      "Concordate un piano valido anche senza incentivo"
+     ],
+     "exp": "L'incentivo è uno scenario, non il caso. La responsabilità fiscale resta del consulente, e il progetto deve reggere anche se l'agevolazione non arriva.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali pratiche sono corrette quando il cliente cita incentivi fiscali?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Voglio un'offerta che dica chiaramente che il progetto rientra negli incentivi."
+     },
+     "o": [
+      "Rimandare la qualifica al consulente fiscale",
+      "Fornire documentazione tecnica del software",
+      "Costruire il business case anche senza l'incentivo",
+      "Garantire per iscritto l'ammissibilità",
+      "Presentare il credito d'imposta come uno sconto"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "exp": "Il software può essere documentato, non qualificato fiscalmente. Garantire l'ammissibilità o presentare il credito come sconto espone cliente e fornitore a errori e contestazioni.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l14",
+   "title": "NIS2, SDI e appalti",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "NIS2 (Direttiva UE 2022/2555) alza gli obblighi di cybersicurezza per soggetti «essenziali» e «importanti» in molti settori. In Italia: {{w10.nis2_italy}}.",
+     "Nel perimetro rientrano, a seconda di attività e dimensione, anche produttori di farmaci, di dispositivi medici e imprese alimentari.",
+     "Obblighi: gestione del rischio (catena di fornitura inclusa), notifica incidenti (allerta entro 24 ore, notifica entro 72), responsabilità degli organi di gestione.",
+     "Per l'AE: NIS2 porta il fornitore dentro la supply chain del cliente (cloud, patching, continuità). Prepara risposte su sicurezza, certificazioni, subfornitori e incident response, senza dichiarare la «conformità NIS2» del cliente.",
+     "SDI: Sistema di Interscambio per la fatturazione elettronica (B2B dal 2019); per la sanità pubblica anche gli ordini elettronici NSO. Il Codice dei contratti pubblici (D.Lgs. 36/2023) guida gli acquisti delle aziende sanitarie."
+    ],
+    "ae": "Su NIS2 non dire «siamo conformi»: spiega le misure del fornitore e aiuta il cliente a mappare i propri obblighi con il suo consulente."
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "Secondo la NIS2, l'allerta precoce di un incidente significativo va inviata entro ___ ore.",
+     "o": [
+      "24",
+      "12",
+      "96"
+     ],
+     "a": 0,
+     "exp": "La direttiva prevede allerta precoce entro 24 ore, notifica dell'incidente entro 72 ore e relazione finale entro un mese. Tempi stretti: il cliente deve avere processi pronti anche con il fornitore.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Anche le medie imprese possono rientrare nel perimetro NIS2, se operano in un settore coperto dalla direttiva.",
+     "a": true,
+     "exp": "Corretto. Contano settore e dimensione: molte medie imprese manifatturiere e farmaceutiche sono in perimetro. Non è un tema solo da grandi gruppi.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un IT Director dice che la NIS2 impone di controllare i fornitori e chiede come lo aiutate. Cosa rispondi?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "La NIS2 ci obbliga a controllare i fornitori. Come ci aiutate voi?"
+     },
+     "o": [
+      "Forniamo misure, certificazioni, subfornitori e incident response; la conformità è vostra.",
+      "SAP vi rende conformi alla NIS2 con la licenza cloud, senza altro lavoro vostro.",
+      "La NIS2 non riguarda i fornitori di software: riguarda le infrastrutture fisiche.",
+      "Per la sicurezza rivolgetevi al partner di implementazione, che risponde per noi."
+     ],
+     "a": 0,
+     "exp": "Il fornitore supporta con evidenze, ma gli obblighi sono del soggetto in perimetro. Dichiarare di «rendere conformi» è una promessa che nessun AE può fare.",
+     "diff": 2
+    },
+    {
+     "t": "match",
+     "q": "Associa il riferimento al significato",
+     "pairs": [
+      [
+       "SDI",
+       "Sistema di Interscambio delle fatture elettroniche"
+      ],
+      [
+       "NSO",
+       "Ordini elettronici verso le aziende sanitarie pubbliche"
+      ],
+      [
+       "D.Lgs. 36/2023",
+       "Codice dei contratti pubblici"
+      ],
+      [
+       "ACN",
+       "Autorità nazionale competente per la NIS2"
+      ],
+      [
+       "NIS2",
+       "Direttiva UE sulla cybersicurezza"
+      ]
+     ],
+     "exp": "Sono i riferimenti che ricorrono quando vendi a farma e CPG in Italia: fatturazione, ordini alla sanità pubblica, appalti e cybersicurezza.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Per vendere a un'azienda sanitaria pubblica, quale riferimento normativo guida le procedure di acquisto?",
+     "o": [
+      "Codice dei contratti pubblici (D.Lgs. 36/2023)",
+      "Regolamento MDR (UE 2017/745)",
+      "Direttiva NIS2 (UE 2022/2555)",
+      "Regolamento generale sulla protezione dei dati"
+     ],
+     "a": 0,
+     "exp": "Gli acquisti degli enti pubblici seguono il Codice dei contratti pubblici. MDR, NIS2 e GDPR sono rilevanti per altri aspetti (dispositivi, sicurezza, dati) ma non regolano le procedure di gara.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l15",
+   "title": "Ecosistema: partner e user group",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "SAP Italia lavora con un ecosistema di partner: system integrator globali, boutique italiane specializzate in SAP, partner di industria e di canale per il mid-market. Spesso il partner conosce il cliente prima di te.",
+     "Il partner porta implementazione, localizzazione (fisco, SDI), integrazioni e supporto alla validazione. Nel co-selling ruoli, perimetro e responsabilità si definiscono prima; non promettere ciò che il partner non può erogare.",
+     "ITAUG (Italian SAP User Group) riunisce gli utenti SAP in Italia: eventi, gruppi di lavoro, confronto tra pari. Farmindustria, Confindustria Dispositivi Medici e Centromarca (beni di consumo) influenzano agenda regolatoria e networking.",
+     "Referenze: pesano molto in Italia, ma usa solo informazioni pubbliche e autorizzate. Non attribuire a un cliente reale una scelta tecnologica senza il suo consenso."
+    ],
+    "ae": "Prima di una proposta a un cliente regolato, allinea con il partner chi gestisce validazione, data migration e localizzazione. Poi vai dal cliente con un messaggio unico."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un CFO dice che il suo system integrator lo segue da vent'anni e chiede perché dovrebbe parlare con te. Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il nostro system integrator ci segue da vent'anni. Perché dovrei parlare con voi?"
+     },
+     "o": [
+      "Il partner resta centrale: io porto roadmap e contesto SAP, la proposta è comune.",
+      "Il partner non è necessario: SAP può gestire direttamente l'intero progetto del cliente.",
+      "Un partner così legato al passato frena l'innovazione: valuterei un integratore diverso.",
+      "Fidati del fornitore diretto: il partner ha interessi diversi dai tuoi, noi no."
+     ],
+     "a": 0,
+     "exp": "In Italia il partner è parte della decisione e spesso la persona di fiducia del cliente. Metterlo in discussione fa perdere il cliente e il partner. La mossa è allearsi e portare valore complementare.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Un AE può citare con nome un cliente reale come utilizzatore di una soluzione SAP anche se il caso non è pubblico.",
+     "a": false,
+     "exp": "Falso. Citare un cliente non autorizzato viola riservatezza e correttezza commerciale. Usa solo referenze pubbliche o scenari generici («un'azienda farmaceutica a controllo familiare»).",
+     "diff": 1
+    },
+    {
+     "t": "match",
+     "q": "Associa l'attore al suo ruolo",
+     "pairs": [
+      [
+       "ITAUG",
+       "Associazione italiana degli utenti SAP"
+      ],
+      [
+       "Farmindustria",
+       "Associazione delle imprese del farmaco"
+      ],
+      [
+       "Centromarca",
+       "Associazione delle industrie di marca (beni di consumo)"
+      ],
+      [
+       "System integrator",
+       "Implementa, integra e localizza le soluzioni"
+      ],
+      [
+       "Confindustria Dispositivi Medici",
+       "Rappresenta le imprese dei dispositivi medici"
+      ]
+     ],
+     "exp": "Sono i luoghi in cui il tuo cliente si confronta con i pari e con la regolazione. Conoscerli ti dà accesso a temi, eventi e linguaggio del settore.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un Quality Head chiede chi si occupa della validazione quando migrate. Cosa rispondi?",
+     "ctx": {
+      "who": "Quality Head",
+      "say": "Quando migriamo, chi si occupa della validazione? Io non firmo nulla che non conosco."
+     },
+     "o": [
+      "Resta vostra la responsabilità; partner e SAP portano metodo e documentazione.",
+      "SAP valida l'intero sistema al posto vostro e vi consegna la documentazione.",
+      "Il partner valida e voi non dovete firmare nulla, perché il sistema è già collaudato.",
+      "La validazione non serve in un ERP standard, perché i processi non vengono modificati."
+     ],
+     "a": 0,
+     "exp": "Il cliente resta il responsabile della validazione del proprio uso. Una chiara divisione dei compiti con il partner evita sorprese in ispezione e nel budget.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Cosa conviene allineare con il partner prima di una proposta a un cliente farmaceutico?",
+     "ctx": {
+      "who": "COO",
+      "say": "Voglio una proposta unica, non due messaggi diversi da SAP e dal partner."
+     },
+     "o": [
+      "Chi gestisce validazione e data migration",
+      "Chi cura localizzazione fiscale e SDI",
+      "Ruoli, perimetro e responsabilità del progetto",
+      "Quale cliente reale citare senza permesso",
+      "Calendario e risorse effettivamente disponibili"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Validazione, migrazione, localizzazione, perimetro e risorse sono ciò che determina il successo. Citare clienti senza permesso va evitato in ogni caso.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w10-l16",
+   "title": "Boss: il comitato farma e CPG",
+   "kind": "boss",
+   "lesson": {
+    "points": [
+     "Ripasso: GxP e data integrity, serializzazione, lotti e rilascio, cold chain, MDR/IVDR, AIFA e payback, soluzioni SAP, CPG, forecasting, packaging, Italia e ecosistema.",
+     "Regola d'oro: parti dal processo e dal ruolo (Quality, CFO, COO, IT), non promettere conformità, validazione o incentivi, verifica i nomi e le date.",
+     "Ricorda: nessun ERP è «certificato GxP», il cliente valida il proprio uso, il PNRR è in chiusura e i dati di settore vengono dai sistemi, non dai fogli."
+    ]
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "L'ispettore ha chiesto come garantiamo l'integrità dei dati nel nuovo ERP. Cosa prepariamo?",
+     "ctx": {
+      "who": "Quality Head",
+      "say": "L'ispettore ci chiede come garantiamo l'integrità dei dati nel nuovo ERP. Cosa preparo?"
+     },
+     "o": [
+      "Validazione risk-based, audit trail, accessi per ruolo e controllo dei cambiamenti.",
+      "Il certificato GxP del fornitore, che dimostra la conformità dell'intero sistema.",
+      "Il manuale utente dell'ERP aggiornato, con la descrizione di moduli e funzioni.",
+      "Una dichiarazione del partner che conferma di aver testato le funzioni principali."
+     ],
+     "a": 0,
+     "exp": "L'ispettore vuole evidenze di controllo: validazione proporzionata al rischio, tracciabilità delle modifiche e accessi. Non esiste un certificato GxP del fornitore che sostituisca la validazione dell'uso.",
+     "diff": 2
+    },
+    {
+     "t": "fill",
+     "q": "Il rilascio del lotto di un medicinale in UE è certificato dalla ___.",
+     "o": [
+      "Persona Qualificata (QP)",
+      "Direzione commerciale",
+      "Autorità fiscale"
+     ],
+     "a": 0,
+     "exp": "La QP certifica il rilascio del lotto secondo GMP e autorizzazione. È una figura regolata, non una funzione commerciale né fiscale.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO non sa quanto accantonare per il payback fino a fine anno. Cosa proponi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Non so mai quanto accantonare per il payback fino a fine anno."
+     },
+     "o": [
+      "Una vista per cliente, regione e prodotto rispetto al tetto, aggiornata ogni mese.",
+      "Accantoniamo l'importo dell'anno scorso e lo adeguiamo quando arriva la comunicazione.",
+      "Chiediamo a ogni regione di comunicarci le sue stime e consolidiamo il totale a fine anno.",
+      "Applichiamo uno sconto uniforme su tutti i prodotti per ridurre l'esposizione complessiva."
+     ],
+     "a": 0,
+     "exp": "La stima in corso d'anno richiede dati commerciali granulari e il confronto con il tetto. Le altre risposte rimandano la misura o applicano rimedi non mirati.",
+     "diff": 2
+    },
+    {
+     "t": "bucket",
+     "q": "Farma, medtech o consumer products?",
+     "buckets": [
+      "Farma (GxP)",
+      "Medtech (MDR/IVDR)",
+      "Consumer products"
+     ],
+     "items": [
+      [
+       "Persona Qualificata e rilascio del lotto",
+       0
+      ],
+      [
+       "Identificativo UDI",
+       1
+      ],
+      [
+       "Trade promotion e sell-out",
+       2
+      ],
+      [
+       "Serializzazione UE con codice 2D",
+       0
+      ],
+      [
+       "Organismo notificato",
+       1
+      ],
+      [
+       "Contributo ambientale CONAI",
+       2
+      ]
+     ],
+     "exp": "Ogni settore ha i suoi riferimenti: farma con GxP e serializzazione, medtech con MDR/IVDR e UDI, CPG con trade promotion ed EPR. Riconoscerli subito imposta la conversazione giusta.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Impostare il business case di un progetto ERP su un bando PNRR è una scelta prudente a ottobre 2026.",
+     "a": false,
+     "exp": "Falso. I tempi del PNRR si chiudono nel 2026: {{w10.pnrr_deadline}}. Il progetto deve reggere anche senza incentivi, e la qualificazione fiscale spetta al consulente del cliente.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un COO CPG fa visitare i punti vendita ma non sa se le promozioni sono arrivate a scaffale. Cosa proponi?",
+     "ctx": {
+      "who": "COO",
+      "say": "I merchandiser visitano i punti vendita, ma non so se le promozioni sono arrivate davvero a scaffale."
+     },
+     "o": [
+      "Raccogliamo dati di esecuzione (OSA, planogram, prezzi) e li colleghiamo alle vendite.",
+      "Aumentiamo le visite dei merchandiser e chiediamo un report fotografico.",
+      "Chiediamo ai retailer di mettere i prodotti promossi nelle posizioni migliori.",
+      "Riduciamo le promozioni dove l'esecuzione è più difficile da controllare."
+     ],
+     "a": 0,
+     "exp": "La retail execution si gestisce con dati strutturati di esecuzione collegati a promozioni e vendite. Più visite o più report non producono analisi, e spostare i prodotti dipende dai retailer.",
+     "diff": 2
+    },
+    {
+     "t": "order",
+     "q": "Ordina i passi di un recall",
+     "items": [
+      "Rilevazione del problema di qualità",
+      "Blocco dei lotti coinvolti nel sistema",
+      "Genealogia: quali clienti hanno ricevuto i lotti",
+      "Notifica alle autorità e ai clienti",
+      "Ritiro, riconciliazione e chiusura con CAPA"
+     ],
+     "exp": "Prima si ferma la distribuzione, poi si ricostruisce chi ha ricevuto cosa, poi si notifica e si chiude. Un ERP che lega lotti, clienti e fornitori accorcia la fase centrale.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un IT Director è su ECC (manutenzione standard fino al {{sap.ecc.mainstream_end}}), con tre persone in IT, NIS2 e validazione. Da dove parti?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "Siamo su ECC, in tre in IT, con NIS2 e validazione da gestire. Da dove cominciamo?"
+     },
+     "o": [
+      "Con un partner mappiamo i processi GxP critici e proponiamo un piano a fasi risk-based.",
+      "Migriamo tutto in un'unica fase per chiudere prima il tema e concentrare la validazione.",
+      "Attendiamo l'estensione della manutenzione e rinviamo ogni decisione di architettura.",
+      "Mettiamo prima a norma la sicurezza NIS2 e valutiamo la migrazione a conclusione."
+     ],
+     "a": 0,
+     "exp": "Con risorse limitate e scadenze vicine servono priorità e fasi: processi critici per primi, partner per la capacità, validazione proporzionata al rischio. Rimandare tutto o fare tutto insieme aumenta il rischio.",
+     "diff": 3
+    },
+    {
+     "t": "match",
+     "q": "Associa la norma all'ambito",
+     "pairs": [
+      [
+       "Annex 11",
+       "Sistemi computerizzati nelle GMP UE"
+      ],
+      [
+       "21 CFR Part 11",
+       "Record e firme elettroniche (USA)"
+      ],
+      [
+       "Reg. UE 2016/161",
+       "Identificativo univoco e antimanomissione"
+      ],
+      [
+       "MDR",
+       "Dispositivi medici"
+      ],
+      [
+       "NIS2",
+       "Cybersicurezza"
+      ]
+     ],
+     "exp": "Cinque riferimenti che ricorrono nei comitati con Quality, Regulatory e IT: riconoscerli e collocarli è il minimo per un AE che vende a farma e medtech.",
+     "diff": 1
+    }
+   ]
+  }
+ ]
+}

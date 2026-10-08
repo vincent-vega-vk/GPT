@@ -1,0 +1,82 @@
+{
+  "id": "w13",
+  "items": [
+    {
+      "t": "mcq",
+      "q": "Che cosa si intende con l'acronimo FUD nella competizione commerciale?",
+      "o": [
+        "Diffondere paura e dubbio sul competitor senza basarsi su prove",
+        "Un metodo di previsione del fatturato basato sui dati storici del cliente",
+        "Un formato di battlecard che confronta funzioni, prezzi e dettagli tecnici",
+        "Un livello di sconto concordato con il cliente in fase di chiusura"
+      ],
+      "a": 0,
+      "exp": "FUD sta per fear, uncertainty, doubt: insinuare rischi senza prove. È scorretto, poco efficace e può diventare denigrazione.",
+      "diff": 1
+    },
+    {
+      "t": "tf",
+      "q": "Una battlecard su un competitor, per restare affidabile, deve indicare per ogni dato la fonte e la data di verifica.",
+      "a": true,
+      "exp": "Senza fonte e data un dato non è verificabile e invecchia in silenzio: la battlecard perde credibilità davanti al cliente.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "Quale coppia di date SAP per ECC 6.0 EHP6-8 è corretta (manutenzione standard e manutenzione estesa)?",
+      "o": [
+        "{{sap.ecc.mainstream_end}} e {{sap.ecc.extended_end}}",
+        "31 dicembre 2025 e 31 dicembre 2027 (con sovrapprezzo)",
+        "31 dicembre 2030 e 31 dicembre 2033 (con sovrapprezzo)",
+        "31 dicembre 2027 e 31 dicembre 2040 (con sovrapprezzo)"
+      ],
+      "a": 0,
+      "exp": "Le date SAP sono standard fino a fine 2027 ed estesa con sovrapprezzo fino a fine 2030. Il 2040 è la dichiarazione di un fornitore terzo e il 2033 riguarda un'altra opzione, quindi non vanno confusi.",
+      "diff": 2
+    },
+    {
+      "t": "multi",
+      "q": "Quali elementi indichi quando citi un report di analisti a un cliente?",
+      "o": [
+        "Il nome completo del report",
+        "L'edizione o l'anno di pubblicazione",
+        "Il segmento di mercato valutato",
+        "Una frase che definisce inferiori i vendor concorrenti",
+        "Il numero di clienti SAP nel settore del cliente"
+      ],
+      "a": [
+        0,
+        1,
+        2
+      ],
+      "exp": "Report, edizione e segmento rendono la citazione verificabile e contestualizzata. Giudizi sui concorrenti o dati non pertinenti non fanno parte di una citazione corretta.",
+      "diff": 2
+    },
+    {
+      "t": "mcq",
+      "q": "Perché la residenza UE dei dati non basta per dichiarare sovranità giuridica?",
+      "o": [
+        "Perché conta quali leggi e autorità possono accedere ai dati, non dove sono conservati",
+        "Perché la residenza UE vale per i dati personali ma non per i dati finanziari aziendali",
+        "Perché la sovranità riguarda la lingua del contratto e il foro scelto dalle parti",
+        "Perché i data center europei sono meno sicuri di quelli situati fuori dall'Unione"
+      ],
+      "a": 0,
+      "exp": "Residenza e sovranità rispondono a domande diverse: dove stanno i dati e chi può chiederne l'accesso. Per il caso concreto serve il parere di Legal.",
+      "diff": 3
+    },
+    {
+      "t": "mcq",
+      "q": "Due fonti riportano date discordanti (2029 e 2030) per la fine supporto di un prodotto concorrente. Come lo presenti?",
+      "o": [
+        "Indico l'intervallo con le due fonti e la data di verifica, chiedendo conferma",
+        "Scelgo la data più vicina, perché è più prudente e rafforza l'argomento a favore di SAP",
+        "Scelgo la data più lontana, perché è la più favorevole a chi valuta di restare",
+        "Ometto la data e uso una formula generica, evitando di citare le fonti nel documento"
+      ],
+      "a": 0,
+      "exp": "Un dato incerto va presentato come tale: intervallo, fonti e data di verifica. Scegliere la data più comoda o nascondere le fonti compromette la correttezza e la credibilità.",
+      "diff": 3
+    }
+  ]
+}

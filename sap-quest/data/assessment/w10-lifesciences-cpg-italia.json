@@ -1,0 +1,81 @@
+{
+ "id": "w10",
+ "items": [
+  {
+   "t": "fill",
+   "q": "La sigla GDP, nel mondo farmaceutico, indica le buone pratiche di ___.",
+   "o": [
+    "distribuzione",
+    "diagnostica",
+    "dispensazione"
+   ],
+   "a": 0,
+   "exp": "GDP = Good Distribution Practice: riguarda trasporto, stoccaggio e documenti lungo la filiera. Non è la diagnostica e non coincide con la dispensazione in farmacia.",
+   "diff": 1
+  },
+  {
+   "t": "tf",
+   "q": "Un ERP presentato come adatto al settore farmaceutico non richiede validazione da parte dell'azienda che lo usa.",
+   "a": false,
+   "exp": "Falso. Nessun ERP è «certificato GxP»: l'azienda valida il proprio uso, con approccio proporzionato al rischio. Il fornitore supporta con documentazione ed evidenze.",
+   "diff": 1
+  },
+  {
+   "t": "mcq",
+   "q": "Nel consumer products, che cosa distingue il sell-out dal sell-in?",
+   "o": [
+    "Sell-out: retailer verso consumatore; sell-in: produttore verso retailer",
+    "Sell-out: produttore verso retailer; sell-in: retailer verso consumatore",
+    "Sell-out: vendite online; sell-in: vendite nei punti vendita fisici",
+    "Sell-out: vendite scontate; sell-in: vendite a prezzo pieno"
+   ],
+   "a": 0,
+   "exp": "Il sell-in è la vendita del produttore al retailer, il sell-out quella del retailer al consumatore. La seconda dice se la promozione ha funzionato davvero.",
+   "diff": 2
+  },
+  {
+   "t": "multi",
+   "q": "Quali sono obblighi tipici della NIS2 per i soggetti in perimetro?",
+   "o": [
+    "Misure di gestione del rischio cyber",
+    "Notifica degli incidenti significativi",
+    "Responsabilità degli organi di gestione",
+    "Uso obbligatorio di software prodotto in Italia",
+    "Divieto di utilizzare servizi cloud"
+   ],
+   "a": [
+    0,
+    1,
+    2
+   ],
+   "exp": "La direttiva chiede gestione del rischio (catena di fornitura inclusa), notifica degli incidenti e responsabilità del management. Non impone software nazionale né vieta il cloud.",
+   "diff": 2
+  },
+  {
+   "t": "mcq",
+   "q": "Quale novità regolatoria del 2025 riguarda i sistemi computerizzati GMP e l'AI?",
+   "o": [
+    "Bozze di revisione dell'Annex 11 e di un nuovo Annex 22 sull'AI, messe in consultazione",
+    "L'abrogazione dell'Annex 11, assorbito dalle norme ISO sulla qualità del software",
+    "L'estensione della Part 11 FDA ai medicinali venduti in UE tramite mutuo riconoscimento",
+    "L'obbligo di validare ogni sistema AI con un organismo notificato prima dell'uso"
+   ],
+   "a": 0,
+   "exp": "{{w10.annex11_revision}}. Stato finale da verificare: non presentare le bozze come norme in vigore. Le altre risposte sono invenzioni plausibili ma false.",
+   "diff": 3
+  },
+  {
+   "t": "mcq",
+   "q": "Da quando si applica in generale il Regolamento (UE) 2025/40 sugli imballaggi (PPWR)?",
+   "o": [
+    "{{w10.ppwr_application_date}}, data di applicazione generale",
+    "11 febbraio 2025, data di entrata in vigore",
+    "1° gennaio 2028, dopo il periodo transitorio",
+    "1° gennaio 2030, con gli obiettivi di riciclo"
+   ],
+   "a": 0,
+   "exp": "{{w10.ppwr_application}}. Non confondere l'entrata in vigore con l'applicazione generale, e verifica le date degli obblighi specifici con il cliente.",
+   "diff": 3
+  }
+ ]
+}

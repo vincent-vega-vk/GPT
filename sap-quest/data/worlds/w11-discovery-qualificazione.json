@@ -1,0 +1,1636 @@
+{
+ "id": "w11",
+ "levels": [
+  {
+   "id": "w11-l01",
+   "title": "Chi compra davvero?",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "In una vendita enterprise decide un buying center, non una persona: finance, IT, operations, procurement, utenti e vertice hanno interessi diversi e spesso in conflitto.",
+     "Economic buyer: chi ha il budget e l'ultima parola sulla spesa (spesso CFO o CEO). Può dire sì quando gli altri dicono no, ma di rado partecipa alle demo.",
+     "Champion: ha influenza e un motivo personale per volere il cambiamento, e difende il progetto quando non ci sei. Non è il contatto simpatico: deve avere accesso al potere.",
+     "Blocker: chi perde controllo, status o budget se il progetto passa. Va identificato presto e coinvolto, non aggirato. Poi ci sono influencer tecnici, utenti e procurement.",
+     "Una persona può avere più ruoli e il titolo non basta: chiedi chi ha approvato l'ultimo investimento simile e cosa succede quando due direttori non sono d'accordo."
+    ],
+    "ae": "Chiedi sempre: «Chi altro dovremmo coinvolgere perché questa decisione regga?». Mappi il buying center senza sembrare un interrogatorio."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni ruolo del buying center alla sua definizione",
+     "pairs": [
+      [
+       "Economic buyer",
+       "Ha il budget e l'ultima parola sulla spesa"
+      ],
+      [
+       "Champion",
+       "Ha influenza e interesse personale a vederti vincere"
+      ],
+      [
+       "Blocker",
+       "Perde potere o controllo se il cambiamento passa"
+      ],
+      [
+       "Influencer tecnico",
+       "Valuta requisiti e fit tecnico, ma non firma il budget"
+      ],
+      [
+       "Procurement",
+       "Governa processo, condizioni e confronto tra offerte"
+      ]
+     ],
+     "exp": "Ogni ruolo ha un interesse diverso. Se confondi l'influencer tecnico con l'economic buyer, ottimizzi la demo per chi non può dire sì."
+    },
+    {
+     "t": "mcq",
+     "q": "Il direttore IT è entusiasta e risponde subito a ogni mail. Come capisci se è un vero champion?",
+     "o": [
+      "Gli chiedo di presentarmi il CFO: vedo se ha accesso al potere e un interesse personale",
+      "Attendo la RFP formale, così vedo chi tra i contatti si espone davvero con il vertice",
+      "Gli propongo di firmare una lettera di intenti per misurare il suo livello di impegno",
+      "Lo considero champion perché è entusiasta, risponde in fretta e conosce bene i processi"
+     ],
+     "a": 0,
+     "exp": "Un champion ha influenza, motivazione personale e accesso al potere. L'entusiasmo non basta: il test è se ti apre la porta dell'economic buyer.",
+     "ctx": {
+      "who": "Direttore IT",
+      "say": "Il progetto mi piace molto. Il mio CFO però decide da solo e non ama le novità."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Un contatto molto cordiale, che risponde sempre, non è per forza un champion.",
+     "a": true,
+     "exp": "Cordialità e reattività sono ottime per te, ma il champion si riconosce da influenza interna, interesse personale e accesso al potere. Spesso è un coach: utile ma senza peso decisionale."
+    },
+    {
+     "t": "mcq",
+     "q": "Un direttore operations teme di perdere controllo sugli ordini di produzione e frena in comitato. Come lo tratti?",
+     "o": [
+      "Lo evito e lavoro con CFO e CIO, che hanno più peso nella decisione finale sul progetto",
+      "Chiedo al CEO di intervenire in comitato per fargli cambiare idea prima della demo finale",
+      "Aspetto che si convinca da solo dopo la demo finale e i risultati di un progetto pilota",
+      "Lo tratto come possibile blocker: capisco cosa teme di perdere e lo coinvolgo nel disegno"
+     ],
+     "a": 3,
+     "exp": "Il blocker ha un timore concreto. Ascoltarlo e dargli un ruolo trasforma spesso un oppositore in alleato; aggirarlo lo spinge a bloccare il progetto in modo ancora più deciso.",
+     "ctx": {
+      "who": "Direttore Operations",
+      "say": "Se il nuovo sistema gestisce gli ordini al posto mio, che ruolo mi resta?"
+     }
+    },
+    {
+     "t": "bucket",
+     "q": "Chi è? Assegna ogni comportamento al ruolo",
+     "buckets": [
+      "Economic buyer",
+      "Champion",
+      "Blocker"
+     ],
+     "items": [
+      [
+       "Firma il budget e risponde del ritorno al board",
+       0
+      ],
+      [
+       "Può dire sì anche contro il parere dell'IT",
+       0
+      ],
+      [
+       "Ti prepara l'incontro col CFO e ti dà informazioni interne",
+       1
+      ],
+      [
+       "Difende il progetto nelle riunioni a cui non partecipi",
+       1
+      ],
+      [
+       "Vede il progetto come una minaccia al proprio ruolo",
+       2
+      ],
+      [
+       "Chiede nuovi requisiti per rallentare la decisione",
+       2
+      ]
+     ],
+     "exp": "I ruoli si riconoscono dai comportamenti, non dai titoli. Nota che il blocker spesso sembra un cliente 'attento': chiedi cosa teme di perdere."
+    }
+   ]
+  },
+  {
+   "id": "w11-l02",
+   "title": "ICP e priorità degli account",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "L'ICP (Ideal Customer Profile) descrive l'azienda su cui hai più probabilità di vincere e creare valore: settore, dimensione, complessità, landscape, momento di vita e decisori.",
+     "Fit non è intent: un'azienda perfetta sulla carta (fit) può non avere alcun motivo per muoversi ora. Si prioritizza combinando fit con segnali di timing: trigger, intent, relazioni.",
+     "Nel mid-market italiano a controllo familiare la decisione passa spesso da proprietà, CFO e consulenti di fiducia: includili nell'ICP e nella mappa dei decisori.",
+     "Un buon ICP dice anche dove non andare. Verificalo sui deal vinti e persi, non sull'intuizione: dire no a un account a basso fit libera tempo per quelli che possono chiudere.",
+     "Tiering: pochi account strategici con piano dedicato (1:1), un gruppo medio con campagne mirate (1:pochi), il resto con un approccio leggero."
+    ],
+    "ae": "Prima di mettere un account nel tuo piano, rispondi per iscritto a due domande: perché loro e perché ora? Se non c'è risposta, non è prioritario."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Qual è la differenza tra fit e intent?",
+     "o": [
+      "Sono sinonimi: marketing e vendite li usano per indicare la stessa cosa nei report",
+      "Fit: budget disponibile nell'anno; intent: dimensione dell'azienda e numero di sedi",
+      "Fit: interesse del champion verso il progetto; intent: potere del CFO sulla spesa",
+      "Fit: quanto somiglia all'ICP; intent: segnali che sta valutando un cambiamento"
+     ],
+     "a": 3,
+     "exp": "Un account può avere ottimo fit senza alcun intent. Il bravo AE usa il fit per scegliere dove guardare e l'intent per decidere quando agire."
+    },
+    {
+     "t": "bucket",
+     "q": "Fit con l'ICP o segnale di timing?",
+     "buckets": [
+      "Fit con l'ICP",
+      "Segnale di timing"
+     ],
+     "items": [
+      [
+       "Produce farmaci con più stabilimenti in Italia e all'estero",
+       0
+      ],
+      [
+       "Usa un ERP on-premise datato con molte personalizzazioni",
+       0
+      ],
+      [
+       "Ha un nuovo CFO arrivato da novanta giorni",
+       1
+      ],
+      [
+       "Ha annunciato un'acquisizione",
+       1
+      ],
+      [
+       "Fatturato in fascia mid-market con forte export",
+       0
+      ],
+      [
+       "Ha avviato la selezione di un system integrator",
+       1
+      ]
+     ],
+     "exp": "Landscape, settore e dimensione descrivono il fit; acquisizioni, nuovi decisori e selezione di partner sono segnali di timing. L'ERP datato è fit: la scadenza della manutenzione è il timing."
+    },
+    {
+     "t": "tf",
+     "q": "Un account con fit altissimo ma nessun segnale di timing va in cima alla lista d'azione di questo trimestre.",
+     "a": false,
+     "exp": "Senza timing la conversazione si ferma ai buoni propositi. Meglio nutrirlo con contenuti e relazioni e dedicare il tempo agli account con fit e segnali presenti."
+    },
+    {
+     "t": "mcq",
+     "q": "Hai 40 account e tempo per lavorarne a fondo una decina. Qual è il criterio più solido per sceglierli?",
+     "o": [
+      "Parto dai dieci con il fatturato più alto, perché portano più valore potenziale per SAP",
+      "Scelgo quelli con cui ho già buoni rapporti personali, perché chiudono più rapidamente",
+      "Combino fit, segnali di timing e accesso ai decisori e verifico la scelta sui deal passati",
+      "Li lavoro tutti un po' ogni settimana per non lasciare indietro nessuna opportunità"
+     ],
+     "a": 2,
+     "exp": "Un criterio multiplo e verificato batte intuizione e relazioni. Il fatturato da solo non dice se il cliente ha un motivo per cambiare.",
+     "ctx": {
+      "who": "Sales Director",
+      "say": "Hai quaranta account e capacità per dieci. Dimmi come scegli e perché."
+     }
+    },
+    {
+     "t": "fill",
+     "q": "Nel tiering degli account, quelli strategici ricevono un approccio ___ con un piano dedicato.",
+     "o": [
+      "solo automatizzato",
+      "uno-a-uno (1:1)",
+      "di massa (1:molti)",
+      "occasionale"
+     ],
+     "a": 1,
+     "exp": "Gli account strategici giustificano ricerca, piano e relazioni dedicate. L'approccio di massa o automatizzato è per la coda lunga."
+    }
+   ]
+  },
+  {
+   "id": "w11-l03",
+   "title": "Account plan e whitespace",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "L'account plan risponde a: chi è il cliente, cosa vuole ottenere nei prossimi 12-24 mesi, chi decide, cosa abbiamo già, dove possiamo crescere e quali azioni facciamo nei prossimi 90 giorni.",
+     "Whitespace: aree del business del cliente o del portafoglio SAP dove oggi non c'è presenza ma c'è un bisogno plausibile. Si ricava incrociando processi, linee di business e soluzioni già installate.",
+     "Org map e relationship map: per ogni stakeholder annota ruolo, atteggiamento (sostenitore, neutro, ostile), influenza e chi della tua squadra ha la relazione. I buchi mostrano dove fare multi-threading.",
+     "Land and expand: scegli un punto d'ingresso legato a un problema che il cliente sente (es. chiusure finanziarie, pianificazione) e pianifica l'espansione dopo aver dimostrato risultati.",
+     "Il piano è un documento vivo: rivedilo ogni trimestre con Solution Advisor, specialist e partner, e togli le azioni che non muovono una relazione o un'opportunità."
+    ],
+    "ae": "Ogni account plan finisce con tre azioni nei prossimi 30 giorni, ciascuna con nome, data e scopo: una relazione nuova, una conversazione di valore, un'ipotesi da testare."
+   },
+   "ex": [
+    {
+     "t": "order",
+     "q": "Metti in ordine i passi di un account planning efficace",
+     "items": [
+      "Raccogli dati: strategia, risultati, landscape, ultime notizie",
+      "Mappa stakeholder e relazioni attuali",
+      "Individua whitespace e ipotesi di valore",
+      "Scegli il punto d'ingresso e il perché ora",
+      "Definisci azioni a 30/60/90 giorni con responsabili"
+     ],
+     "exp": "Prima capisci il cliente e la rete di relazioni, poi cerchi dove creare valore e scegli da dove entrare. Il piano senza azioni datate resta un documento."
+    },
+    {
+     "t": "match",
+     "q": "Abbina ogni elemento dell'account plan alla sua funzione",
+     "pairs": [
+      [
+       "Org map",
+       "Chi sono gli stakeholder e come si collegano"
+      ],
+      [
+       "Whitespace",
+       "Aree dove non siamo presenti ma il bisogno è plausibile"
+      ],
+      [
+       "Relationship map",
+       "Chi della tua squadra conosce chi, e con quale qualità"
+      ],
+      [
+       "Punto d'ingresso",
+       "Primo caso d'uso con valore chiaro da cui espandere"
+      ],
+      [
+       "Piano 30/60/90",
+       "Azioni concrete con responsabili e scadenze"
+      ]
+     ],
+     "exp": "Ogni elemento risponde a una domanda diversa: chi, dove, con quale relazione, da dove partire, che fare adesso."
+    },
+    {
+     "t": "mcq",
+     "q": "Un collega propone di presentare l'intera suite a un'azienda CPG mid-market in un colpo solo. Cosa rispondi?",
+     "o": [
+      "Sì: più il perimetro è ampio, più alta è la probabilità di chiudere un contratto grande",
+      "No: restiamo sul prodotto che conosciamo meglio, per non disperdere la credibilità",
+      "Presentiamo tutto e lasciamo che sia il cliente a scegliere cosa gli interessa di più",
+      "Scegliamo un punto d'ingresso legato a un problema sentito e usiamo il resto come mappa"
+     ],
+     "a": 3,
+     "exp": "Un'offerta ampia e generica diluisce il valore e allunga il ciclo. Un punto d'ingresso chiaro crea risultati rapidi e rende credibile l'espansione.",
+     "ctx": {
+      "who": "Collega Solution Advisor",
+      "say": "Vedo tutto quello che potremmo vendere: finance, supply chain, HR, analytics, AI. Partiamo da tutto?"
+     }
+    },
+    {
+     "t": "tf",
+     "q": "La whitespace analysis serve soltanto a elencare i prodotti SAP che il cliente non ha ancora.",
+     "a": false,
+     "exp": "Parte dal business del cliente: processi, linee di business e obiettivi. I prodotti vengono dopo, solo dove c'è un bisogno plausibile."
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi trovi in un buon account plan? (seleziona tutte)",
+     "o": [
+      "Prezzi di listino previsti per ogni modulo",
+      "Sconto da concedere a fine trimestre",
+      "Mappa degli stakeholder e delle relazioni",
+      "Azioni a breve termine con responsabili",
+      "Ipotesi di valore legate agli obiettivi del cliente"
+     ],
+     "a": [
+      2,
+      3,
+      4
+     ],
+     "exp": "Il piano parla di persone, valore e azioni. Prezzi e sconti vengono dopo, nel business case e nella negoziazione, e non vanno nell'account plan."
+    }
+   ]
+  },
+  {
+   "id": "w11-l04",
+   "title": "Trigger event: perché ora?",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Trigger event: fatto che rompe l'inerzia e crea urgenza. Fine manutenzione, M&A, nuove normative, cambio di CFO/CIO/CEO, crescita, incidenti (cyber, qualità) e nuovi piani industriali.",
+     "ECC 6.0: la manutenzione standard (EHP6-8) finisce il {{sap.ecc.mainstream_end}}; la manutenzione estesa arriva fino al {{sap.ecc.extended_end}}. È un trigger reale, ma da solo è debole.",
+     "La NIS2 italiana (D.Lgs. 138/2024) {{w11.nis2_italia}}. Per farma e CPG può riaprire il tema di sicurezza e processi: verifica con loro se rientrano nel perimetro.",
+     "Un nuovo CFO o CIO nei primi mesi rivede lo status quo e cerca vittorie rapide. Un'acquisizione impone di integrare processi, dati e reporting nei tempi del nuovo gruppo.",
+     "Tre domande: why change (perché cambiare lo status quo), why now (cosa succede se aspetti), why SAP (perché noi, con quali prove). Senza risposta a tutte e tre il deal non è qualificato."
+    ],
+    "ae": "Non aprire con la scadenza: apri con l'evento del cliente (acquisizione, nuovo CFO, nuovo sito) e collega la scadenza dopo aver capito l'impatto."
+   },
+   "ex": [
+    {
+     "t": "bucket",
+     "q": "Why change, why now o why SAP?",
+     "buckets": [
+      "Why change",
+      "Why now",
+      "Why SAP"
+     ],
+     "items": [
+      [
+       "Le chiusure contabili richiedono giorni di riconciliazioni manuali",
+       0
+      ],
+      [
+       "Gli stabilimenti non hanno una vista unica sulle scorte",
+       0
+      ],
+      [
+       "Un'acquisizione va integrata entro il budget del prossimo anno",
+       1
+      ],
+      [
+       "La manutenzione standard del sistema ha una data di fine",
+       1
+      ],
+      [
+       "Referenze di aziende simili e un piano di migrazione credibile",
+       2
+      ],
+      [
+       "Partner e roadmap che coprono i processi del settore",
+       2
+      ]
+     ],
+     "exp": "Why change riguarda il dolore attuale, why now ciò che cambia con il tempo, why SAP la prova che puoi risolverlo meglio delle alternative (compreso non fare nulla)."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO di un'azienda farma appena acquisita dice che l'ERP non è una priorità. Qual è la prima mossa migliore?",
+     "o": [
+      "Aspetto che l'integrazione sia completata e lo ricontatto tra qualche mese con nuove idee",
+      "Gli ricordo che la manutenzione standard di ECC ha una data di fine e il tempo stringe",
+      "Chiedo quali obiettivi di integrazione e di reporting ha posto il nuovo gruppo",
+      "Propongo una demo di Joule per mostrargli le novità AI che il nuovo gruppo apprezzerà"
+     ],
+     "a": 2,
+     "exp": "L'acquisizione è il trigger del cliente: collegarti ai suoi obiettivi di integrazione porta a un problema concreto. La scadenza ECC arriva dopo, come vincolo di tempo.",
+     "ctx": {
+      "who": "CFO di un'azienda farma",
+      "say": "Siamo appena stati acquisiti da un gruppo internazionale. Per ora l'ERP non è una priorità."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "La fine della manutenzione di ECC è un trigger reale, ma da sola non basta a rendere il progetto prioritario per il cliente.",
+     "a": true,
+     "exp": "Il cliente ha alternative: manutenzione estesa fino al {{sap.ecc.extended_end}} oppure rinvio. Senza un problema di business sentito, la decisione viene spesso rimandata."
+    },
+    {
+     "t": "fill",
+     "q": "La domanda «___» serve a capire cosa succede al cliente se non decide entro una certa data.",
+     "o": [
+      "Why SAP?",
+      "Why you?",
+      "Why change?",
+      "Why now?"
+     ],
+     "a": 3,
+     "exp": "Why now lega la decisione a un evento o a una scadenza reale del cliente. Se la risposta è «niente», la priorità è bassa, qualunque sia il tuo calendario."
+    },
+    {
+     "t": "multi",
+     "q": "Quali sono trigger event legittimi per aprire una conversazione di discovery? (seleziona tutte)",
+     "o": [
+      "La chiusura del tuo trimestre di vendita",
+      "Nuovi obblighi normativi che toccano processi e dati",
+      "Acquisizione di un'azienda o di un sito produttivo",
+      "Una promozione commerciale che scade a fine mese",
+      "Nomina di un nuovo CIO"
+     ],
+     "a": [
+      1,
+      2,
+      4
+     ],
+     "exp": "Un trigger è un evento del cliente, non del venditore. Il tuo fine trimestre non interessa a nessuno tranne a te: usarlo come leva ti fa sembrare opportunista."
+    }
+   ]
+  },
+  {
+   "id": "w11-l05",
+   "title": "Il metodo giusto per il caso",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "BANT (Budget, Authority, Need, Timeline), attribuito a IBM, è un filtro rapido per lead semplici. CHAMP (Challenges, Authority, Money, Prioritization) parte invece dalle sfide del cliente, non dal budget.",
+     "MEDDPICC è il framework di qualifica per deal complessi con più stakeholder: ti dice cosa non sai ancora e dove sta il rischio del deal.",
+     "SPIN (Situation, Problem, Implication, Need-payoff) e il pain funnel di Sandler sono metodi di discovery: servono a far emergere e quantificare il problema con le domande giuste.",
+     "Challenger (Teach, Tailor, Take control) serve quando il cliente non sa di avere un problema o è convinto di conoscere già la soluzione: porti un insight che riformula la sfida.",
+     "I metodi si combinano: discovery con SPIN o Sandler, messaggio con Challenger, qualifica con MEDDPICC. Sono griglie di domande, non copioni da recitare."
+    ],
+    "ae": "Usa MEDDPICC come lista di controllo interna a ogni deal review, non come questionario da leggere al cliente: le domande devono suonare curiose, non burocratiche."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni metodo al suo uso tipico",
+     "pairs": [
+      [
+       "BANT",
+       "Filtro rapido su budget, potere, bisogno e tempi"
+      ],
+      [
+       "CHAMP",
+       "Qualifica che parte da sfide e priorità del cliente"
+      ],
+      [
+       "MEDDPICC",
+       "Qualifica di deal complessi con più stakeholder"
+      ],
+      [
+       "SPIN",
+       "Domande di discovery: situazione, problema, implicazione, beneficio"
+      ],
+      [
+       "Challenger",
+       "Insegnare un insight, adattare il messaggio, guidare la decisione"
+      ]
+     ],
+     "exp": "Non c'è un metodo migliore in assoluto: dipende dalla complessità del deal e dallo stadio. Filtro, discovery, messaggio e qualifica sono funzioni diverse."
+    },
+    {
+     "t": "mcq",
+     "q": "Una piccola azienda ha scaricato un whitepaper e chiede una call. Quale qualifica è più proporzionata?",
+     "o": [
+      "Nessuna qualifica: rispondo subito con il prezzo e la proposta standard",
+      "Un MEDDPICC completo con mappa di otto stakeholder e piano di account dedicato",
+      "Un filtro rapido tipo BANT o CHAMP, proporzionato a un lead semplice",
+      "Una sessione di discovery Sandler di tre ore con tutto il team di vendita"
+     ],
+     "a": 2,
+     "exp": "La profondità della qualifica deve essere proporzionata al deal. Per un lead semplice basta un filtro; MEDDPICC serve quando decisori, rischi e tempi sono molti."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CIO è certo di aver bisogno solo di una migrazione tecnica 1:1. Quale metodo usi per aprire la conversazione?",
+     "o": [
+      "SPIN: parto con una lunga serie di domande di Situation sul sistema attuale",
+      "Sandler: gli chiedo se è pronto a firmare questa settimana per chiudere il trimestre",
+      "Challenger: porto un insight sul valore che una migrazione 1:1 non cattura",
+      "BANT: budget e timeline ci sono già, quindi preparo subito la proposta commerciale"
+     ],
+     "a": 2,
+     "exp": "Quando il cliente ha già deciso la soluzione, serve un insight che riformuli il problema. Un questionario di situazione o un invito a firmare non spostano la sua cornice.",
+     "ctx": {
+      "who": "CIO di un'azienda CPG",
+      "say": "Il nostro ERP funziona, il budget è approvato e so già cosa voglio: una migrazione 1:1 a S/4HANA."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "In una call il MEDDPICC va letto punto per punto al cliente come fosse un questionario.",
+     "a": false,
+     "exp": "MEDDPICC è uno strumento interno. Le informazioni emergono da una conversazione curiosa, poi le registri e vedi cosa manca."
+    },
+    {
+     "t": "bucket",
+     "q": "Discovery (far emergere il problema) o qualifica (valutare il deal)?",
+     "buckets": [
+      "Discovery",
+      "Qualifica del deal"
+     ],
+     "items": [
+      [
+       "Domande di implicazione di SPIN",
+       0
+      ],
+      [
+       "Pain funnel di Sandler",
+       0
+      ],
+      [
+       "MEDDPICC",
+       1
+      ],
+      [
+       "BANT",
+       1
+      ]
+     ],
+     "exp": "SPIN e Sandler servono a capire e quantificare il problema; BANT e MEDDPICC a giudicare se il deal è reale e dove sta il rischio."
+    }
+   ]
+  },
+  {
+   "id": "w11-l06",
+   "title": "MEDDPICC lettera per lettera",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "M = Metrics: i risultati misurabili che il cliente vuole ottenere (giorni di chiusura, scorte, costi, rischio), con numeri e baseline condivisi. E = Economic buyer: chi ha budget e firma.",
+     "D = Decision criteria: i criteri formali con cui valuteranno le soluzioni. D = Decision process: i passi, le persone e i tempi con cui decideranno. P = Paper process: legale, security, procurement e firma.",
+     "I = Identify pain: il problema di business, con impatto e urgenza (alcune fonti lo leggono come «Implicate the pain»). C = Champion. C = Competition: ogni alternativa, compreso non fare nulla.",
+     "Le varianti MEDDIC, MEDDICC e MEDDPICC differiscono per le lettere aggiunte nel tempo (Competition e Paper Process). I nomi cambiano, la logica no: ogni lettera è una domanda a cui devi saper rispondere.",
+     "Usalo per trovare i buchi: una lettera che non sai compilare è un rischio di forecast, non un campo da riempire con una supposizione."
+    ],
+    "ae": "Il paper process si apre presto: chiedi a legale e procurement del cliente cosa serve (NDA, security review, DPA, firme) quando il deal è ancora in valutazione, non a fine trimestre."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni lettera di MEDDPICC al suo significato",
+     "pairs": [
+      [
+       "Metrics",
+       "Risultati misurabili attesi dal cliente, con baseline"
+      ],
+      [
+       "Decision criteria",
+       "Criteri formali con cui verranno valutate le soluzioni"
+      ],
+      [
+       "Decision process",
+       "Passi, persone e tempi con cui il cliente deciderà"
+      ],
+      [
+       "Paper process",
+       "Legale, security, procurement e firma del contratto"
+      ],
+      [
+       "Competition",
+       "Ogni alternativa, compreso non fare nulla"
+      ]
+     ],
+     "exp": "Criteria e process vengono spesso confusi: i criteri dicono su cosa giudicano, il processo dice come e quando decidono."
+    },
+    {
+     "t": "fill",
+     "q": "In MEDDPICC la lettera «I» sta per ___ pain, cioè il problema di business con impatto e urgenza.",
+     "o": [
+      "Ignore",
+      "Invest",
+      "Identify",
+      "Inspect"
+     ],
+     "a": 2,
+     "exp": "Identify pain: senza un dolore chiaro e urgente non c'è motivo di cambiare. Sapere che problema ha il cliente non basta: serve capire quanto gli costa e per chi è critico."
+    },
+    {
+     "t": "mcq",
+     "q": "Un deal è in fase avanzata, ma non sai quali passaggi legali e di sicurezza servono prima della firma. Quale elemento MEDDPICC è scoperto?",
+     "o": [
+      "Paper process",
+      "Economic buyer",
+      "Decision criteria",
+      "Decision process"
+     ],
+     "a": 0,
+     "exp": "Il paper process comprende legale, security, procurement e firma. Scoprirlo tardi è una delle cause più comuni di deal che slittano di un trimestre."
+    },
+    {
+     "t": "tf",
+     "q": "In MEDDPICC la «Competition» comprende anche l'opzione di non fare nulla.",
+     "a": true,
+     "exp": "Spesso il vero concorrente è lo status quo: il cliente decide di rimandare. Va mappato come ogni altro competitor, con le sue ragioni."
+    },
+    {
+     "t": "mcq",
+     "q": "Il direttore IT ti spiega che i fornitori saranno valutati su copertura del settore, rischio di migrazione e costo a cinque anni. Quale lettera hai appena compilato?",
+     "o": [
+      "Decision criteria",
+      "Identify pain",
+      "Paper process",
+      "Decision process"
+     ],
+     "a": 0,
+     "exp": "Sono i criteri su cui verrà giudicata la soluzione. Il decision process riguarda invece i passi e i tempi della decisione; le Metrics i risultati di business attesi.",
+     "ctx": {
+      "who": "Direttore IT",
+      "say": "Valutiamo i fornitori su tre assi: copertura funzionale del settore, rischio di migrazione e costo totale a cinque anni."
+     }
+    }
+   ]
+  },
+  {
+   "id": "w11-l07",
+   "title": "MEDDPICC sul campo",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Usa MEDDPICC come diagnosi: per ogni lettera chiediti cosa sai, da chi lo hai sentito e cosa manca. Una lettera ipotizzata vale come una lettera vuota.",
+     "Metrics senza baseline sono slogan: «ridurre i costi» non è una metrica; «portare la chiusura da 12 a 6 giorni» sì, ma solo se il CFO la riconosce come sua.",
+     "Se non hai accesso all'economic buyer, il rischio principale non è il prezzo ma la perdita di sponsorship. Chiedi al champion un incontro con uno scopo chiaro, non un favore.",
+     "Se il decision process è confuso, proponilo tu: scrivi una bozza di passi e date e chiedi al cliente di correggerla. È l'inizio del Mutual Action Plan."
+    ],
+    "ae": "Dopo ogni call aggiorna le lettere con evidenza e fonte («detto dal CFO il 12 ottobre»). Se la fonte è «mi sembra», la lettera è rossa."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il tuo champion vuole gestire da solo l'approvazione del CEO. Qual è la risposta migliore?",
+     "o": [
+      "Aspetto che sia il CEO a farsi vivo quando avrà letto la proposta che ti ho inviato",
+      "Ti ringrazio: cosa deve sentire il CEO per dire sì? Prepariamo insieme una pagina",
+      "Perfetto, mi fido di te: ti mando la proposta così la inoltri direttamente al CEO",
+      "Preferisco incontrare il CEO senza di te, così evitiamo passaggi e facciamo prima"
+     ],
+     "a": 1,
+     "exp": "Rispetti il ruolo del champion ma costruisci l'accesso: dargli gli argomenti per vendere internamente e proporre un incontro è il modo per non dipendere solo da lui.",
+     "ctx": {
+      "who": "Champion (Responsabile Finance)",
+      "say": "Il CEO deve approvare, ma è sempre tra gli stabilimenti. Ci penso io, tu non ti preoccupare."
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "Il direttore supply chain vuole ridurre le scorte ma non ha numeri solidi. Quale lettera è debole e come la rafforzi?",
+     "o": [
+      "Competition: gli chiedo quali fornitori sta valutando e con quali criteri di scelta",
+      "Paper process: anticipo la revisione del contratto con il suo ufficio legale",
+      "Champion: gli chiedo una lettera di raccomandazione da portare al suo CEO",
+      "Metrics: costruisco con lui la baseline con dati su scorte e costi di giacenza"
+     ],
+     "a": 3,
+     "exp": "Senza baseline l'obiettivo di ridurre le scorte è un'intenzione, non una metrica. Costruirla con il cliente rende il numero suo e difendibile davanti al CFO.",
+     "ctx": {
+      "who": "Direttore Supply Chain",
+      "say": "L'obiettivo è ridurre le scorte, ma non ho ancora numeri solidi. Dobbiamo capire quanto."
+     }
+    },
+    {
+     "t": "order",
+     "q": "Ordina le azioni per mettere in sicurezza un deal in cui non conosci il decision process",
+     "items": [
+      "Proponi una bozza dei passi decisionali con date",
+      "Chiedi al champion di correggerla e completarla",
+      "Individua chi interviene in ogni passo, economic buyer compreso",
+      "Concorda le date nel Mutual Action Plan",
+      "Rivedi il piano a ogni incontro"
+     ],
+     "exp": "Partire da una bozza fa risparmiare tempo al cliente e rivela le sue priorità. Il processo diventa il Mutual Action Plan, da aggiornare a ogni milestone."
+    },
+    {
+     "t": "bucket",
+     "q": "Evidenza o ipotesi? Come classifichi ciò che sai del deal",
+     "buckets": [
+      "Evidenza (da registrare)",
+      "Ipotesi (da verificare)"
+     ],
+     "items": [
+      [
+       "Il CFO mi ha detto che il budget è nel piano 2027",
+       0
+      ],
+      [
+       "Il champion pensa che il CEO sarà d'accordo",
+       1
+      ],
+      [
+       "Il responsabile legale ha elencato i passaggi di review contrattuale",
+       0
+      ],
+      [
+       "Immagino che non ci siano altri fornitori in gara",
+       1
+      ],
+      [
+       "Il CIO ha condiviso per iscritto i criteri di valutazione",
+       0
+      ],
+      [
+       "Credo che il procurement non farà obiezioni",
+       1
+      ]
+     ],
+     "exp": "Evidenza è ciò che ha detto o scritto la persona giusta; il resto è ipotesi e va verificato. Un forecast basato su ipotesi è una scommessa."
+    },
+    {
+     "t": "mcq",
+     "q": "In deal review hai un champion forte e un pain chiaro, ma nessun contatto con l'economic buyer e un paper process sconosciuto. Cosa dici al manager?",
+     "o": [
+      "Lo porto in best case e chiarisco decisore e paper process dopo l'invio dell'offerta",
+      "Va in commit: con un champion forte e un pain chiaro il rischio principale è coperto",
+      "Rischio alto: niente commit finché non chiarisco accesso al decisore e paper process",
+      "Lo lascio in commit e recupero i dettagli legali e di security a novembre"
+     ],
+     "a": 2,
+     "exp": "Due lettere cruciali sono vuote. Champion e pain sono necessari ma non sufficienti: chi firma e come si firma decidono se il deal chiude davvero.",
+     "ctx": {
+      "who": "VP Sales (il tuo manager)",
+      "say": "Questo deal è in commit, chiudiamo a dicembre. Dammi il quadro MEDDPICC in una riga."
+     }
+    }
+   ]
+  },
+  {
+   "id": "w11-l08",
+   "title": "SPIN e Sandler: il costo",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SPIN: Situation (fatti sul presente), Problem (difficoltà), Implication (conseguenze del problema), Need-payoff (il valore di risolverlo, detto dal cliente). Nei deal grandi pesano più Implication e Need-payoff.",
+     "Troppe domande di Situation annoiano e mostrano che non hai fatto i compiti: leggi bilanci, comunicati e offerte di lavoro prima, e usa la call per Problem e Implication.",
+     "Pain funnel di Sandler: parti dai sintomi, chiedi un esempio, scendi all'impatto sul business e poi a quello personale. Tre livelli: problema, impatto aziendale, impatto personale.",
+     "Quantifica: «quanto costa?», «quante volte?», «da quanto tempo?». Un dolore che il cliente non sa misurare non giustifica un budget e non sopravvive alla domanda di un CFO.",
+     "L'up-front contract di Sandler (concordi all'inizio obiettivo e possibili esiti della call, anche un no) riduce la pressione e rende il cliente più onesto."
+    ],
+    "ae": "Chiudi ogni blocco di domande con una sintesi: «Quindi oggi chiudere costa dodici giorni e due persone a tempo pieno: ho capito bene?». Il cliente corregge o conferma."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni tipo di domanda SPIN a un esempio",
+     "pairs": [
+      [
+       "Situation",
+       "Quanti sistemi usate oggi per consolidare il bilancio?"
+      ],
+      [
+       "Problem",
+       "Dove vi crea più difficoltà il consolidato?"
+      ],
+      [
+       "Implication",
+       "Che effetto ha il ritardo di chiusura sul reporting al board?"
+      ],
+      [
+       "Need-payoff",
+       "Come cambierebbe il vostro lavoro con chiusure più rapide?"
+      ]
+     ],
+     "exp": "Le quattro famiglie di domande vanno dal fatto all'impatto fino al beneficio. Il valore percepito nasce dalle ultime due."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale di queste è una domanda di Implication?",
+     "o": [
+      "Cosa succede ai costi di magazzino se i dati di stock arrivano con ritardo?",
+      "Non sarebbe utile avere dati di stock aggiornati in tempo reale per i vari siti?",
+      "Qual è la difficoltà principale che incontrate nella pianificazione delle scorte?",
+      "Quanti magazzini avete oggi in Italia e quali sistemi usate per gestirli?"
+     ],
+     "a": 0,
+     "exp": "L'Implication esplora le conseguenze del problema. Chiedere quanti magazzini ci sono è Situation, la difficoltà principale è Problem; «non sarebbe utile...» è una domanda suggestiva, non un vero Need-payoff."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente minimizza il problema delle chiusure lente. Qual è la mossa SPIN o Sandler più efficace?",
+     "o": [
+      "Propongo subito una demo che mostra come si risolve il problema delle chiusure lente",
+      "Gli dico che la concorrenza chiude in metà tempo, per fargli sentire il ritardo",
+      "Accetto la sua lettura: se non è un'emergenza passo agli altri temi della call",
+      "Chiedo un esempio recente: quanto tempo e quali persone ha richiesto, per capire l'impatto"
+     ],
+     "a": 3,
+     "exp": "Un esempio concreto e un numero rendono il problema tangibile senza spaventare. Usare la concorrenza come minaccia o passare alla demo salta la fase in cui il cliente capisce quanto gli costa.",
+     "ctx": {
+      "who": "Direttore Finance",
+      "say": "Le chiusure sono lente, sì. Ma ci siamo abituati, non è un'emergenza."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Più domande di Situation fai, più il cliente ti percepisce preparato.",
+     "a": false,
+     "exp": "Il contrario: le informazioni pubbliche vanno studiate prima. Il tempo con il cliente va speso su problema e impatto."
+    },
+    {
+     "t": "fill",
+     "q": "Il pain funnel di Sandler scende dai sintomi, passa per l'impatto aziendale e arriva all'impatto ___.",
+     "o": [
+      "tecnico",
+      "contrattuale",
+      "personale",
+      "fiscale"
+     ],
+     "a": 2,
+     "exp": "L'ultimo livello collega il problema alla persona che decide: reputazione, carico di lavoro, obiettivi. È lì che nasce la motivazione a muoversi."
+    }
+   ]
+  },
+  {
+   "id": "w11-l09",
+   "title": "Challenger: insegna e guida",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Challenger (Dixon e Adamson, CEB, oggi parte di Gartner): nelle vendite complesse funziona il venditore che insegna qualcosa di nuovo, adatta il messaggio a ogni stakeholder e guida la decisione.",
+     "Teach: porta un commercial insight, cioè un'idea che riformula come il cliente vede la sua sfida e conduce al tuo valore. Non è una brochure né una critica: è un pattern o un dato che il cliente non conosce.",
+     "Tailor: stessa storia, valore diverso. Il CFO ascolta rischio, cassa e controllo; il CIO integrazione, sicurezza e debito tecnico; il COO continuità e performance; il CHRO adozione e competenze.",
+     "Take control: proponi tu il prossimo passo, parli di tempi e budget, gestisci il disaccordo con rispetto invece di cedere. Con clienti italiani conta il tono: fermezza basata su dati, non pressione.",
+     "Non esiste un insight universale: preparalo sul settore e verifica se il cliente lo riconosce. Se non gli suona vero, hai solo una tesi."
+    ],
+    "ae": "Un buon insight finisce con una domanda, non con una slide: «Vi riconoscete in questo schema? Dove lo vedete nella vostra azienda?»."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni concetto Challenger al suo significato",
+     "pairs": [
+      [
+       "Teach",
+       "Portare un'idea che riformula la sfida del cliente"
+      ],
+      [
+       "Tailor",
+       "Adattare il valore al ruolo e ai driver di ogni stakeholder"
+      ],
+      [
+       "Take control",
+       "Proporre passi e tempi e gestire il disaccordo"
+      ],
+      [
+       "Commercial insight",
+       "Idea che il cliente non conosceva e porta alla tua soluzione"
+      ]
+     ],
+     "exp": "Le tre T sono comportamenti, non tecniche di pressione. L'insight è il carburante di Teach."
+    },
+    {
+     "t": "mcq",
+     "q": "Un COO attribuisce il problema ai fornitori. Quale risposta Challenger è la più forte?",
+     "o": [
+      "Spesso il ritardo nasce da segnali di domanda tardivi: lo verifichiamo sui vostri dati?",
+      "Hai ragione, i fornitori sono il problema: vediamo come migliorare la collaborazione",
+      "Vi mostro subito la nostra soluzione di supply chain planning e i casi simili",
+      "Non sono d'accordo: il problema è la vostra pianificazione, che è poco affidabile"
+     ],
+     "a": 0,
+     "exp": "L'insight riformula la causa senza accusare e invita a verificare. Dare ragione al cliente conferma la cornice sbagliata; contraddirlo senza prove crea scontro; saltare alla demo ignora la sfida.",
+     "ctx": {
+      "who": "COO di un'azienda CPG",
+      "say": "Le nostre previsioni di vendita sono buone, il problema sono i fornitori che consegnano in ritardo."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Nel modello Challenger, «Tailor» significa adattare il valore del messaggio al ruolo di ciascun stakeholder.",
+     "a": true,
+     "exp": "Il CFO, il CIO e il COO non cercano la stessa cosa. La storia è la stessa ma l'enfasi cambia: cassa e rischio, sicurezza e integrazione, continuità operativa."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO e il CIO ascoltano la stessa presentazione. Che cosa significa «Tailor»?",
+     "o": [
+      "Stesso messaggio di fondo, con valore e rischi rilevanti per ciascun ruolo",
+      "Due presentazioni completamente diverse, una per ruolo, senza elementi in comune",
+      "Lasciare che ognuno scelga le slide che gli interessano dal materiale completo",
+      "Prezzo con il CFO e tecnologia con il CIO, senza uscire da questi due temi"
+     ],
+     "a": 0,
+     "exp": "Tailor non è cambiare storia, ma enfasi. Parlare solo di prezzo o tecnologia riduce gli interlocutori a stereotipi e fa perdere la visione d'insieme."
+    },
+    {
+     "t": "multi",
+     "q": "Quali sono caratteristiche di un buon commercial insight? (seleziona tutte)",
+     "o": [
+      "Riformula la sfida in un modo che il cliente non aveva considerato",
+      "Elenca le funzionalità più innovative del prodotto",
+      "Conduce naturalmente al valore che sai creare",
+      "Si appoggia a dati o pattern verificabili",
+      "Critica le scelte passate del cliente"
+     ],
+     "a": [
+      0,
+      2,
+      3
+     ],
+     "exp": "L'insight sposta la cornice del cliente, non vende funzionalità né giudica. Criticare le scelte passate mette il cliente sulla difensiva."
+    }
+   ]
+  },
+  {
+   "id": "w11-l10",
+   "title": "La discovery call",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Struttura: prepara ipotesi e domande, apri con scopo e tempo, esplora problema e impatto, riassumi, concorda un prossimo passo con data.",
+     "Domande aperte (come, cosa, quando, perché adesso) fanno parlare; le chiuse servono a confermare. Evita domande suggestive («non sarebbe meglio...?») e doppie domande.",
+     "Ascolto attivo: parafrasa, nomina ciò che senti, chiedi «mi fai un esempio?». Il silenzio dopo una domanda importante è uno strumento: spesso la risposta vera arriva dopo il primo tentativo.",
+     "Punta a far parlare il cliente per la gran parte del tempo, e prendi appunti visibili: ti servono per il riepilogo e mostrano rispetto.",
+     "Il prossimo passo concreto (chi, cosa, quando) è l'unico esito che conta. «Ti aggiorno» non è un prossimo passo."
+    ],
+    "ae": "Chiudi con una proposta che il cliente può correggere: «Il prossimo passo utile potrebbe essere X con Y entro Z: ha senso o preferisci un altro percorso?»."
+   },
+   "ex": [
+    {
+     "t": "order",
+     "q": "Ordina i passi di una discovery call efficace",
+     "items": [
+      "Prepara ipotesi sul cliente e domande",
+      "Apri con scopo, agenda e tempo disponibile",
+      "Fai domande aperte sul problema e sul suo impatto",
+      "Approfondisci con esempi e quantifica",
+      "Riassumi ciò che hai capito e fallo correggere",
+      "Concorda un prossimo passo con chi, cosa e quando"
+     ],
+     "exp": "Preparazione e apertura danno cornice; le domande scavano; riepilogo e prossimo passo trasformano la conversazione in avanzamento del deal."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente si ferma dopo aver detto che la pianificazione funziona «con qualche foglio Excel». Cosa fai?",
+     "o": [
+      "Passo alla domanda successiva per non perdere tempo e coprire tutta l'agenda prevista",
+      "Gli dico che i fogli Excel sono un rischio per la compliance e per l'audit del bilancio",
+      "Resto in silenzio un attimo, poi: «Qualche foglio Excel... mi racconti come funziona?»",
+      "Gli mostro come la nostra soluzione sostituisce i fogli Excel con processi standard"
+     ],
+     "a": 2,
+     "exp": "Il silenzio e il mirroring invitano il cliente a raccontare dove si nasconde il problema. Giudicare Excel o saltare alla soluzione chiude la conversazione.",
+     "ctx": {
+      "who": "Direttore Supply Chain",
+      "say": "Il nostro S&OP... diciamo che funziona, con qualche foglio Excel."
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "A fine call il cliente dice che ci penserà e vi farà sapere. Qual è la risposta migliore?",
+     "o": [
+      "Volentieri: rivediamoci il giorno X con anche l'IT, per validare insieme le ipotesi?",
+      "Perfetto, ti ricontatto tra due settimane per sapere che cosa avete deciso nel frattempo",
+      "Ti mando subito la presentazione e la proposta, così hai tutto per decidere con calma",
+      "Nessun problema, aspetto una tua mail quando avrete fatto le vostre valutazioni"
+     ],
+     "a": 0,
+     "exp": "«Ci penso» senza data né persone è un no gentile. Una proposta concreta, con chi e quando, la sottopone al cliente e verifica se l'interesse è reale.",
+     "ctx": {
+      "who": "Direttore Finance",
+      "say": "Interessante, ci pensiamo e vi facciamo sapere."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "La domanda «Non sarebbe meglio avere un'unica piattaforma?» è una buona domanda aperta di discovery.",
+     "a": false,
+     "exp": "È chiusa e suggestiva: guida il cliente alla risposta che vuoi sentire. Meglio «Cosa succederebbe se i dati arrivassero da un'unica fonte?»."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO ti concede venti minuti e chiede subito in due parole cosa fate. Come apri?",
+     "o": [
+      "In trenta secondi dico cosa ho capito di loro e chiedo se la direzione è giusta",
+      "Faccio dieci domande di Situation per capire l'azienda prima di dire altro",
+      "Presento SAP in quindici slide, partendo dal fatturato globale e dalle referenze",
+      "Chiedo di riprogrammare quando avrà più tempo, per fare una discovery adeguata"
+     ],
+     "a": 0,
+     "exp": "Con un C-level breve il tempo è la risorsa: mostri di aver preparato un'ipotesi e la sottoponi. Una presentazione generica o un interrogatorio sprecano i venti minuti.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Ho venti minuti. Mi dica in due parole cosa fate."
+     }
+    }
+   ]
+  },
+  {
+   "id": "w11-l11",
+   "title": "Multi-threading e champion",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Multi-threading: costruire relazioni con più stakeholder (finance, IT, operations, procurement, vertice) invece di dipendere da un solo contatto. Se il tuo unico sponsor cambia ruolo o perde potere, il deal si ferma.",
+     "Un champion ha tre cose: credibilità interna, motivazione personale (vince se il progetto riesce) e accesso al potere. Testalo con piccoli compiti: organizza un incontro, condivide un documento, ti dice una cosa scomoda.",
+     "Dai al champion ciò che gli serve per vendere internamente: una pagina con il problema in numeri, un business case in bozza, le risposte alle obiezioni attese.",
+     "Il coach ti informa ma non ha potere; il champion usa il suo potere. Servono entrambi. Non confondere un sostenitore entusiasta con chi si espone per te.",
+     "Aggirare il contatto principale per parlare con il suo capo, senza dirglielo, distrugge la fiducia. Chiedi il permesso e spiega perché l'incontro serve anche a lui."
+    ],
+    "ae": "Test del champion: «Se tu fossi in ferie il giorno della decisione, chi difenderebbe il progetto?». Se non c'è risposta, sei appeso a un solo filo."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni figura del deal al suo ruolo",
+     "pairs": [
+      [
+       "Champion",
+       "Ha influenza e si espone per far scegliere la soluzione"
+      ],
+      [
+       "Coach",
+       "Ti guida sull'organizzazione ma non ha potere decisionale"
+      ],
+      [
+       "Multi-threading",
+       "Relazioni con più stakeholder per ridurre il rischio"
+      ],
+      [
+       "Deal single-threaded",
+       "Deal che dipende da un solo contatto interno"
+      ],
+      [
+       "Sponsor esecutivo",
+       "Vertice che legittima il progetto e libera le risorse"
+      ]
+     ],
+     "exp": "Ogni figura serve a qualcosa. Il rischio è fermarsi al coach (simpatico, informato) senza costruire un champion e uno sponsor."
+    },
+    {
+     "t": "mcq",
+     "q": "Il tuo unico contatto non vuole che tu parli con Finance. Qual è la risposta migliore?",
+     "o": [
+      "Gli dico che senza accesso a Finance ritiro l'offerta e chiudiamo la trattativa",
+      "Contatto Finance di nascosto via LinkedIn per anticipare i suoi dubbi sul progetto",
+      "Capisco: dimmi cosa temi e come prepariamo Finance insieme, per un progetto più forte",
+      "Rispetto la richiesta: finché ho lui come contatto il deal è abbastanza sicuro"
+     ],
+     "a": 2,
+     "exp": "Chiedere cosa teme trasforma il blocco in una collaborazione. Aggirarlo rompe la fiducia, l'ultimatum è controproducente, e restare a un solo thread lascia il deal fragile.",
+     "ctx": {
+      "who": "Il tuo contatto IT",
+      "say": "Preferisco che tu non parli con Finance: ci pensiamo noi. Se arrivi tu, si complica."
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "Il tuo unico champion è stato trasferito in un'altra funzione. Quale azione avrebbe ridotto il rischio?",
+     "o": [
+      "Costruire relazioni con altre funzioni influenti, come Finance e Operations, in anticipo",
+      "Accelerare la firma il più possibile, anche a condizioni meno favorevoli per noi",
+      "Avere più contatti, ma tutti all'interno dello stesso team IT del cliente",
+      "Chiedergli di restare coinvolto a tempo anche dopo il trasferimento di funzione"
+     ],
+     "a": 0,
+     "exp": "Il multi-threading riduce la dipendenza da una persona e va fatto tra funzioni diverse. Più contatti nella stessa funzione sono un thread solo con più fili.",
+     "ctx": {
+      "who": "Direttore IT (il tuo champion)",
+      "say": "Mi hanno spostato alla sicurezza: da lunedì non seguirò più questo progetto."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Un contatto entusiasta che risponde sempre, ma non ha accesso al potere, è un coach o un sostenitore e non necessariamente un champion.",
+     "a": true,
+     "exp": "Il coach è prezioso per navigare l'organizzazione, ma il champion è chi usa la propria influenza per te. Costruisci entrambi."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO è infastidito perché non lo hai coinvolto prima. Qual è la risposta migliore?",
+     "o": [
+      "Scusa, ti invio subito tutta la documentazione così recuperi i mesi di lavoro",
+      "Il team non mi aveva indicato il tuo coinvolgimento nelle decisioni del progetto",
+      "Era previsto: prima volevamo raccogliere i requisiti e poi coinvolgere il vertice",
+      "Hai ragione, dovevamo coinvolgerti prima: ora vorrei capire quali sono le tue priorità"
+     ],
+     "a": 3,
+     "exp": "Riconosci l'errore senza scaricare colpe e riporti la conversazione sulle sue priorità. Scaricare sul team o rifugiarsi in un processo peggiora la situazione.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Mi hanno detto che parlate con il mio team da mesi. Perché non mi avete cercato prima?"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w11-l12",
+   "title": "Qualifica tecnica ECC",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Qualificare tecnicamente significa capire quanto è complesso il percorso: release di ECC, database, numero di sistemi e istanze, utenti per tipo, volumi di dati, interfacce e integrazioni.",
+     "Personalizzazioni Z (codice custom, report, interfacce, user exit): più sono e meno sono documentate, più costa e dura una migrazione. Chiedi quante sono usate davvero.",
+     "Il Business Transformation Center di SAP (su Cloud ALM) {{w11.sap_btc}}. Strumenti come questo e le analisi del custom code servono a dare numeri, non opinioni, su scope e rischi.",
+     "Percorsi tipici: brownfield (conversione del sistema esistente), greenfield (nuova implementazione) e selective data transition (si porta solo ciò che serve). Pesano clean core, qualità dei dati e tempi.",
+     "Coinvolgi Solution Advisor e partner quando serve una valutazione credibile: landscape complesso, molte Z, requisiti di settore (es. validazione GxP nel farma) o richieste di stime di tempi e costi. Non promettere da solo."
+    ],
+    "ae": "Prima di parlare di date di go-live chiedi tre numeri: quanti utenti, quante personalizzazioni Z usate davvero, quante interfacce. Con quelli chiami il Solution Advisor con un caso serio."
+   },
+   "ex": [
+    {
+     "t": "bucket",
+     "q": "Qualifica tecnica o commerciale? Classifica le informazioni",
+     "buckets": [
+      "Qualifica tecnica",
+      "Qualifica commerciale"
+     ],
+     "items": [
+      [
+       "Release e versione di ECC in uso",
+       0
+      ],
+      [
+       "Numero di personalizzazioni Z realmente utilizzate",
+       0
+      ],
+      [
+       "Interfacce verso sistemi esterni e produzione",
+       0
+      ],
+      [
+       "Chi firma il budget del progetto",
+       1
+      ],
+      [
+       "Criteri con cui il cliente sceglie il fornitore",
+       1
+      ],
+      [
+       "Tempi entro cui il cliente vuole decidere",
+       1
+      ]
+     ],
+     "exp": "La qualifica tecnica misura la complessità del percorso; quella commerciale chi decide, come e quando. Servono entrambe per un forecast credibile."
+    },
+    {
+     "t": "match",
+     "q": "Abbina ogni termine di migrazione alla sua descrizione",
+     "pairs": [
+      [
+       "Brownfield",
+       "Conversione del sistema esistente con i suoi dati"
+      ],
+      [
+       "Greenfield",
+       "Nuova implementazione con processi ridisegnati"
+      ],
+      [
+       "Selective data transition",
+       "Si porta solo una selezione di dati e processi"
+      ],
+      [
+       "Clean core",
+       "Core vicino allo standard, con estensioni separate"
+      ],
+      [
+       "Custom code Z",
+       "Sviluppi su misura nel sistema ECC del cliente"
+      ]
+     ],
+     "exp": "Non c'è un percorso giusto in assoluto: dipende da quanto il cliente vuole cambiare, dalla qualità dei dati e dal tempo disponibile."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CIO farma pensa di chiudere in pochi mesi una conversione con migliaia di oggetti custom in ambiente validato. Qual è la mossa migliore?",
+     "o": [
+      "Suggerisco di eliminare tutto il custom code prima di aprire la conversazione con noi",
+      "Propongo un assessment con Solution Advisor e partner su custom code e validazione",
+      "Passo subito al prezzo di RISE, così il progetto può entrare nel budget del trimestre",
+      "Confermo i tempi: abbiamo già gestito molti progetti simili e riusciamo a rispettarli"
+     ],
+     "a": 1,
+     "exp": "In ambiente validato (GxP) ogni modifica ha costi di test e documentazione. Una stima senza assessment è un rischio per te e per il cliente. Fissare tempi o prezzi da solo è un errore.",
+     "ctx": {
+      "who": "CIO di un'azienda farma",
+      "say": "Abbiamo migliaia di oggetti custom e lavoriamo in ambiente validato. Facciamo una conversione tecnica e finiamo entro l'anno."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Dopo una sola call di discovery puoi promettere al cliente durata e costo della migrazione.",
+     "a": false,
+     "exp": "Durata e costo dipendono da landscape, Z, dati e requisiti. Servono assessment e stime di Solution Advisor e partner. Promesse premature sono la prima causa di perdita di fiducia."
+    },
+    {
+     "t": "multi",
+     "q": "Quali domande aiutano a stimare la complessità di una migrazione da ECC? (seleziona tutte)",
+     "o": [
+      "Qual è l'obiettivo di fatturato del prossimo anno?",
+      "Quante personalizzazioni Z sono realmente usate?",
+      "Quale CRM usa il team vendite?",
+      "Quali interfacce e integrazioni dipendono dall'ERP?",
+      "Da quanti sistemi e istanze è composto il landscape?"
+     ],
+     "a": [
+      1,
+      3,
+      4
+     ],
+     "exp": "Z, interfacce e struttura del landscape determinano sforzo e rischio. CRM e obiettivi di fatturato sono domande legittime di discovery, ma non misurano la complessità tecnica della migrazione."
+    }
+   ]
+  },
+  {
+   "id": "w11-l13",
+   "title": "Pipeline math e coverage",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Pipeline coverage = valore della pipeline aperta / obiettivo ancora da raggiungere nel periodo. Se la tua conversione storica è 25%, ti serve circa 4x di coverage (1 diviso 0,25).",
+     "Il 3x o 4x citato spesso è una regola empirica: calibrala sui tuoi dati storici (win rate, ciclo, slippage). Un deal enterprise con ciclo di nove mesi non chiude nel trimestre se nasce oggi.",
+     "Calcolo a ritroso: obiettivo, valore medio del deal, numero di deal, opportunità necessarie in base al win rate, e quindi contatti e meeting da generare. Serve costanza, non picchi di fine trimestre.",
+     "Quattro leve della velocità: numero di opportunità, valore medio, win rate e durata del ciclo. Migliorarne una sola del 10% non basta se le altre peggiorano.",
+     "Coverage alta con pipeline sporca (deal fermi, senza next step, senza economic buyer) è una falsa sicurezza: conta la qualità, non solo la quantità."
+    ],
+    "ae": "Ogni lunedì, per ogni deal: c'è un prossimo passo con data? Quando ho parlato per l'ultima volta con l'economic buyer? Se la risposta è «non so», non vale per la coverage."
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "Con un win rate storico del 20%, per un obiettivo di 1 milione servono circa ___ di pipeline qualificata.",
+     "o": [
+      "5 milioni",
+      "10 milioni",
+      "2 milioni",
+      "1,2 milioni"
+     ],
+     "a": 0,
+     "exp": "Win rate 20% significa che chiudi 1 opportunità su 5: coverage = 1 / 0,20 = 5x. L'obiettivo di 1 milione richiede circa 5 milioni di pipeline qualificata."
+    },
+    {
+     "t": "mcq",
+     "q": "Hai un obiettivo residuo di 600.000 euro e una pipeline aperta di 1.500.000 euro. Qual è la coverage?",
+     "o": [
+      "1,5x",
+      "0,4x",
+      "2,5x",
+      "4,0x"
+     ],
+     "a": 2,
+     "exp": "Coverage = pipeline / obiettivo residuo = 1.500.000 / 600.000 = 2,5x. Se il tuo win rate è 25% ne servirebbero 4x: qui manca pipeline qualificata."
+    },
+    {
+     "t": "mcq",
+     "q": "La coverage è 4x, ma metà dei deal è senza next step da 60 giorni e senza economic buyer. Cosa rispondi?",
+     "o": [
+      "La coverage nominale è alta ma la qualità è bassa: ripulisco e ricalcolo sui deal vivi",
+      "Aggiungo nuove opportunità per portare la coverage a sei volte il target del trimestre",
+      "Quattro volte bastano: i deal fermi si sbloccano di solito nelle ultime settimane",
+      "Alzo la probabilità di tutti i deal aperti per compensare la qualità della pipeline"
+     ],
+     "a": 0,
+     "exp": "Un deal fermo e senza decisore è pipeline fittizia. Gonfiare probabilità o numeri peggiora l'accuratezza del forecast; pulire e ricalcolare dà un quadro onesto.",
+     "ctx": {
+      "who": "Sales Director",
+      "say": "Hai 4x di coverage sul trimestre: sono tranquillo."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Una regola di coverage di 3x o 4x vale per qualsiasi azienda, win rate e durata del ciclo.",
+     "a": false,
+     "exp": "È solo un'euristica: la coverage giusta è 1 / win rate e va calibrata su dati storici e sulla durata del ciclo. Con win rate più alti o più bassi cambia."
+    },
+    {
+     "t": "order",
+     "q": "Ordina il calcolo a ritroso della pipeline necessaria",
+     "items": [
+      "Parti dall'obiettivo da raggiungere",
+      "Dividi per il valore medio dei deal per ottenere i deal necessari",
+      "Dividi per il win rate per ottenere le opportunità necessarie",
+      "Considera la durata del ciclo per sapere quando generarle"
+     ],
+     "exp": "Dall'obiettivo risali ai deal, poi alle opportunità e infine al tempo: se il ciclo dura nove mesi, la pipeline per il prossimo trimestre andava creata nove mesi fa."
+    }
+   ]
+  },
+  {
+   "id": "w11-l14",
+   "title": "Stage hygiene, forecast e MAP",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Stage hygiene: ogni fase ha criteri di uscita verificabili (problema quantificato, economic buyer identificato, decision process concordato). Se i criteri non ci sono, il deal torna indietro.",
+     "Forecast onesto: categorie tipiche sono pipeline, best case e commit (le definizioni variano per azienda). Commit solo con evidenza su economic buyer, decision process, paper process e data di firma.",
+     "Due errori classici: sandbagging (tenere i deal bassi per poi sovraperformare) e happy ears (sentire un sì dove c'è un forse). Entrambi rendono il forecast inutilizzabile.",
+     "Mutual Action Plan (MAP): documento condiviso con passi, responsabili e date dalla discovery alla firma e all'avvio. Include decision process, paper process, security review e approvazioni interne.",
+     "Il MAP funziona se il cliente lo costruisce con te, se ha una data che lui stesso considera importante (budget, chiusura d'anno, go-live) e se lo aggiorni a ogni incontro."
+    ],
+    "ae": "Proponi il MAP già alla fine della prima o seconda discovery: «Per rispettare la vostra data X, ecco i passi che vedo: me li correggi?»."
+   },
+   "ex": [
+    {
+     "t": "bucket",
+     "q": "Evidenza o ottimismo? Il deal può andare in commit?",
+     "buckets": [
+      "Supporta il commit",
+      "Non basta per il commit"
+     ],
+     "items": [
+      [
+       "L'economic buyer ha confermato il budget per iscritto",
+       0
+      ],
+      [
+       "Il paper process è mappato con date di legale e security",
+       0
+      ],
+      [
+       "Il cliente ha accettato un MAP con data di firma",
+       0
+      ],
+      [
+       "Il champion è convinto che si chiuderà",
+       1
+      ],
+      [
+       "L'ultima call è andata benissimo",
+       1
+      ],
+      [
+       "La demo è stata molto apprezzata",
+       1
+      ]
+     ],
+     "exp": "Il commit si basa su fatti verificabili e confermati dal cliente. Sensazioni, demo riuscite e fiducia del champion sono segnali positivi ma non evidenza."
+    },
+    {
+     "t": "mcq",
+     "q": "Che cos'è il sandbagging nel forecast?",
+     "o": [
+      "Gonfiare la probabilità dei deal per apparire più avanti rispetto al piano",
+      "Eliminare dal forecast i deal persi senza registrarne la ragione di perdita",
+      "Aggiornare il CRM a fine trimestre invece che dopo ogni interazione con il cliente",
+      "Tenere i deal in categorie più basse del reale per poi sovraperformare"
+     ],
+     "a": 3,
+     "exp": "Il sandbagging nasconde il potenziale per proteggersi; il suo opposto sono gli happy ears. In entrambi i casi chi gestisce il forecast non può fidarsi dei numeri."
+    },
+    {
+     "t": "order",
+     "q": "Ordina i passi per costruire un Mutual Action Plan",
+     "items": [
+      "Concorda con il cliente la data obiettivo e perché è importante",
+      "Elenca i passi dalla discovery alla firma e all'avvio",
+      "Assegna a ogni passo un responsabile (cliente e venditore)",
+      "Includi paper process, security review e approvazioni interne",
+      "Rivedi il MAP a ogni incontro"
+     ],
+     "exp": "Parti dall'obiettivo del cliente, mappa i passi, assegna responsabilità e non dimenticare il paper process. Un MAP non aggiornato diventa subito carta."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente indica dicembre ma lega la firma a verifiche legali e di sicurezza. Qual è la mossa migliore?",
+     "o": [
+      "Metto il deal in commit a dicembre per dare un segnale chiaro al mio manager",
+      "Chiedo di ridurre la security review per rispettare la data di dicembre",
+      "Attendo che le verifiche si concludano prima di pianificare i passi successivi",
+      "Inserisco le verifiche nel MAP con responsabili e date e le avvio in parallelo"
+     ],
+     "a": 3,
+     "exp": "Parallelizzare le verifiche è il modo più rapido e onesto di rispettare la data. Saltare la security review non è in tuo potere, e aspettare allunga i tempi.",
+     "ctx": {
+      "who": "Direttore Acquisti",
+      "say": "Possiamo firmare entro dicembre, ma dipende da quando finiscono le verifiche legali e di sicurezza."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Un MAP costruito insieme al cliente e aggiornato a ogni incontro è più affidabile di uno scritto dal venditore e inviato per ricevuta.",
+     "a": true,
+     "exp": "Un MAP è efficace se il cliente lo possiede: date e responsabilità concordate sono impegni, quelle imposte sono solo un calendario."
+    }
+   ]
+  },
+  {
+   "id": "w11-l15",
+   "title": "C-level, cold call, social selling",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "CFO: cassa, rischio, controllo e ritorno. CIO: debito tecnico, sicurezza, integrazione e resilienza. COO: continuità, qualità, produttività e supply. CHRO: adozione, competenze ed esperienza delle persone.",
+     "Con un C-level sii breve e specifico: un'ipotesi basata su ricerca («Ho visto il nuovo sito: di solito mette sotto pressione la pianificazione. È così da voi?»), non una presentazione dell'azienda.",
+     "Cold call: riconosci che è una chiamata a freddo, dici in dieci secondi perché loro, fai una domanda e chiedi il permesso di continuare. L'obiettivo è un meeting, non una vendita.",
+     "Social selling etico: messaggi personalizzati, contenuti utili, niente invii massivi o automazioni che violano le regole della piattaforma; rispetta il GDPR (informativa, base giuridica, opt-out) e le policy aziendali.",
+     "Rispetta il no: se il contatto non è interessato o chiede di non essere ricontattato, annotalo e smetti. Non insistere su altri canali né aggirarlo passando da colleghi."
+    ],
+    "ae": "Il primo messaggio a un C-level ha tre parti: un'osservazione specifica su di lui o sull'azienda, un'ipotesi di sfida e una domanda piccola. Niente allegati."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni C-level ai temi che gli stanno a cuore",
+     "pairs": [
+      [
+       "CFO",
+       "Cassa, rischio, controllo e ritorno sull'investimento"
+      ],
+      [
+       "CIO",
+       "Debito tecnico, sicurezza, integrazione e resilienza"
+      ],
+      [
+       "COO",
+       "Continuità operativa, qualità, produttività e supply"
+      ],
+      [
+       "CHRO",
+       "Adozione, competenze ed esperienza dei dipendenti"
+      ],
+      [
+       "CEO",
+       "Strategia, crescita, posizionamento e reputazione"
+      ]
+     ],
+     "exp": "Parlare la lingua del ruolo apre la conversazione; lo stesso messaggio per tutti viene ignorato. Il tema scelto deve riflettere ciò di cui la persona risponde."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO risponde seccato a un tuo messaggio LinkedIn. Qual è la risposta migliore?",
+     "o": [
+      "Capisco, è giusto: le ho scritto per un motivo preciso e, se non è una priorità, mi fermo",
+      "Provo a scrivere a un suo collaboratore, che magari ha più tempo per rispondermi",
+      "Le ricordo che la manutenzione di ECC sta per finire e che il tempo stringe",
+      "Mi scusi, le invio una brochure per chiarire meglio che cosa facciamo con i clienti"
+     ],
+     "a": 0,
+     "exp": "Riconosci l'irritazione, spieghi in una riga perché hai scritto e offri di fermarti: rispetto e brevità. Insistere su altri canali o usare la scadenza ECC come leva peggiora la percezione.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Ricevo venti messaggi come il suo ogni settimana. Perché dovrei rispondere?"
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "Quale apertura di cold call è più efficace con un CFO?",
+     "o": [
+      "«Buongiorno, ha un minuto per sentire le novità SAP di quest'anno nel vostro settore?»",
+      "«Buongiorno, mi passa il responsabile IT? Devo parlargli di un progetto importante»",
+      "«È una chiamata a freddo: le faccio una domanda sull'acquisizione, poi decide lei»",
+      "«Chiamo per fissare una demo del nuovo prodotto: quando le farebbe comodo?»"
+     ],
+     "a": 2,
+     "exp": "Onestà sulla natura della chiamata, un motivo specifico e il controllo lasciato all'interlocutore. Le altre aperture sono generiche o chiedono qualcosa senza dare nulla."
+    },
+    {
+     "t": "tf",
+     "q": "Inviare in automatico lo stesso messaggio a centinaia di C-level con un tool non consentito dalla piattaforma è social selling etico, se il testo è cortese.",
+     "a": false,
+     "exp": "La cortesia non compensa invii massivi, automazioni vietate e uso opaco di dati personali. L'etica richiede personalizzazione, trasparenza, rispetto del GDPR e delle regole della piattaforma."
+    },
+    {
+     "t": "multi",
+     "q": "Quali pratiche sono coerenti con un social selling etico? (seleziona tutte)",
+     "o": [
+      "Usare dati personali raccolti da fonti poco chiare",
+      "Rispettare un opt-out e non ricontattare",
+      "Condividere contenuti utili senza pretendere una risposta",
+      "Fingere una conoscenza in comune per ottenere risposta",
+      "Personalizzare il messaggio con un elemento verificabile"
+     ],
+     "a": [
+      1,
+      2,
+      4
+     ],
+     "exp": "Trasparenza e rispetto sono la base. Ingannare sul rapporto o usare dati di origine opaca viola fiducia e, spesso, la normativa sulla protezione dei dati."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CHRO parla della crescita delle persone, non di software. Come proseguire?",
+     "o": [
+      "Gli dico che il tema è tecnico e lo passo al CIO per una valutazione congiunta",
+      "Chiedo cosa rallenta onboarding e sviluppo e quanto costa in tempo e turnover",
+      "Riporto la conversazione sull'ERP finance, dove abbiamo più referenze di settore",
+      "Passo alla demo delle funzionalità HR della suite, per mostrargli cosa offriamo"
+     ],
+     "a": 1,
+     "exp": "Seguire il tema del cliente e quantificarne l'impatto costruisce credibilità. Cambiare argomento o rimandare ad altri chiude la porta proprio quando si è aperta.",
+     "ctx": {
+      "who": "CHRO di un'azienda CPG",
+      "say": "Stiamo crescendo e assumiamo molto. Il problema è far crescere in fretta le persone nuove, non il sistema."
+     }
+    }
+   ]
+  },
+  {
+   "id": "w11-l16",
+   "title": "Boss: la discovery completa",
+   "kind": "boss",
+   "lesson": {
+    "points": [
+     "Chi: mappa buying center, economic buyer, champion e blocker; non fidarti di un solo thread.",
+     "Perché ora: parti dal trigger event del cliente, poi verifica why change, why now e why SAP.",
+     "Come: discovery con SPIN o Sandler, insight alla Challenger, qualifica MEDDPICC con evidenze, qualifica tecnica con Solution Advisor e partner.",
+     "Dove sta il deal: pipeline sana, stage hygiene, forecast onesto, Mutual Action Plan, C-level contattati con rispetto ed etica."
+    ]
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il CFO di un'azienda farma dice che ECC funziona e non vede urgenza. Qual è la risposta migliore?",
+     "o": [
+      "Chiedo quali processi di chiusura e reporting costano di più, poi collego le date",
+      "Gli mostro la roadmap AI di Joule, che porta valore anche sui sistemi attuali",
+      "Gli ricordo che la manutenzione standard ha una data di fine e il tempo stringe",
+      "Gli dico che molti competitor hanno già migrato e ne stanno già traendo benefici"
+     ],
+     "a": 0,
+     "exp": "Prima il problema del cliente, poi la leva temporale. Solo la scadenza è vendita per paura e invita all'obiezione sulla manutenzione estesa; la roadmap AI e i competitor non rispondono alla sua domanda.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il nostro ECC funziona bene da quindici anni. Perché dovrei occuparmene adesso?"
+     }
+    },
+    {
+     "t": "match",
+     "q": "Abbina ogni segnale di rischio alla contromisura giusta",
+     "pairs": [
+      [
+       "Nessun contatto con il decisore",
+       "Chiedi al champion un incontro con uno scopo chiaro"
+      ],
+      [
+       "Metriche vaghe",
+       "Costruisci la baseline con i dati del cliente"
+      ],
+      [
+       "Decision process ignoto",
+       "Proponi una bozza di MAP da far correggere"
+      ],
+      [
+       "Pipeline ferma senza next step",
+       "Ripulisci e chiedi evidenze con date"
+      ],
+      [
+       "Molte Z e landscape complesso",
+       "Coinvolgi Solution Advisor e partner per un assessment"
+      ]
+     ],
+     "exp": "Ogni segnale di rischio ha una contromisura precisa. Il lavoro dell'AE è trasformare un buco in un'azione con nome e data."
+    },
+    {
+     "t": "order",
+     "q": "Ordina il ciclo di un account, da nuovo target a MAP concordato",
+     "items": [
+      "Seleziona l'account con ICP e segnali di timing",
+      "Ricerca e ipotesi di valore per i decisori",
+      "Primo contatto personalizzato con un insight",
+      "Discovery sul problema e sul suo impatto",
+      "Qualifica con MEDDPICC e coinvolgi l'economic buyer",
+      "Concorda un Mutual Action Plan con il cliente"
+     ],
+     "exp": "Si parte dalla scelta, si prepara, si apre con un insight, si scava, si qualifica e si pianifica la chiusura insieme al cliente."
+    },
+    {
+     "t": "mcq",
+     "q": "Il tuo champion vuole proteggere il progetto dal CFO scettico. Qual è la mossa migliore?",
+     "o": [
+      "Chiedo al champion di insistere con il CEO, affinché imponga la decisione anche al CFO",
+      "Rimando tutto finché il CFO non si convince da solo con i risultati del trimestre",
+      "Cerco il CFO di nascosto, per anticipare le obiezioni prima che le sollevi in riunione",
+      "Concordo con lui come preparare il CFO: priorità di Finance e un caso con i suoi dati"
+     ],
+     "a": 3,
+     "exp": "Il CFO scettico va coinvolto, non evitato, ma insieme al champion e con un caso che parla la sua lingua. Aggirare o rimandare indebolisce sia il champion sia il deal.",
+     "ctx": {
+      "who": "Responsabile IT (champion)",
+      "say": "Il CFO è nuovo e scettico. Preferisco non esporlo ai numeri finché non ho l'ok del CEO."
+     }
+    },
+    {
+     "t": "fill",
+     "q": "Con un win rate del 25%, per un obiettivo di 800.000 euro servono circa ___ di pipeline qualificata.",
+     "o": [
+      "1,6 milioni",
+      "8 milioni",
+      "3,2 milioni",
+      "2 milioni"
+     ],
+     "a": 2,
+     "exp": "Win rate 25% significa coverage di 4x: 800.000 x 4 = 3,2 milioni. Il calcolo vale solo se la pipeline è qualificata e coerente con la durata del ciclo."
+    },
+    {
+     "t": "multi",
+     "q": "Quali sono segnali di un deal single-threaded a rischio? (seleziona tutte)",
+     "o": [
+      "Un solo contatto in azienda risponde alle mail",
+      "Il cliente ha letto il business case",
+      "Nessuna interazione con Finance o con l'economic buyer",
+      "Il MAP è stato aggiornato a ogni incontro",
+      "Il champion non ti presenta nessun altro"
+     ],
+     "a": [
+      0,
+      2,
+      4
+     ],
+     "exp": "Dipendere da una persona e non avere accesso a chi firma sono segnali classici di fragilità. Un business case letto e un MAP vivo sono invece segnali positivi."
+    },
+    {
+     "t": "mcq",
+     "q": "Il landscape ha tre istanze ECC e molte interfacce verso la produzione. Cosa fai prima di parlare di tempi e costi?",
+     "o": [
+      "Rimando ogni discussione a dopo la firma, quando avremo più informazioni sul landscape",
+      "Propongo subito un'unica istanza globale, che semplifica il progetto e riduce i costi",
+      "Do una stima di massima basata su altri progetti seguiti di recente, senza fare assessment",
+      "Raccolgo dati su istanze, Z e interfacce e coinvolgo Solution Advisor e partner"
+     ],
+     "a": 3,
+     "exp": "Senza dati di landscape ogni stima è un'ipotesi. Coinvolgere Solution Advisor e partner protegge il cliente e la tua credibilità.",
+     "ctx": {
+      "who": "Direttore IT",
+      "say": "Abbiamo tre istanze ECC, una per paese, e molte interfacce con i sistemi di produzione."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Inviare un messaggio personalizzato a un C-level e fermarsi quando chiede di non essere contattato è coerente con un social selling etico.",
+     "a": true,
+     "exp": "Personalizzazione e rispetto dell'opt-out sono i pilastri. Insistere dopo un no è scorretto e può violare le norme sulla protezione dei dati."
+    },
+    {
+     "t": "mcq",
+     "q": "Un deal ha champion forte, pain chiaro e MAP concordato, ma il paper process non è mai stato discusso. Dove lo classifichi?",
+     "o": [
+      "Commit, perché champion forte e pain chiaro coprono già il rischio principale",
+      "Best case, finché non mappo il paper process e ottengo la data di firma",
+      "Pipeline, perché senza paper process il deal non è ancora una vera opportunità",
+      "Fuori forecast, finché non esiste una bozza di contratto condivisa con il cliente"
+     ],
+     "a": 1,
+     "exp": "Mancano elementi per il commit, ma il deal è avanzato. Il best case riflette il potenziale con rischio aperto; il commit richiede il paper process mappato."
+    }
+   ]
+  }
+ ]
+}

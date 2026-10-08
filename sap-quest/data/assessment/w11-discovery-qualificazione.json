@@ -1,0 +1,82 @@
+{
+ "id": "w11",
+ "items": [
+  {
+   "t": "mcq",
+   "q": "In un deal enterprise, chi è l'economic buyer?",
+   "o": [
+    "La persona che usa il sistema quotidianamente e ne conosce a fondo i processi",
+    "La persona che gestisce la negoziazione del contratto per il cliente",
+    "La persona che ti ha presentato l'azienda e ti segue nel deal",
+    "La persona con il budget e l'ultima parola sull'approvazione della spesa"
+   ],
+   "a": 3,
+   "exp": "L'economic buyer ha l'autorità sul budget e può dire sì anche quando altri dicono no. Utenti, sponsor e procurement hanno ruoli diversi: contano, ma non sono chi decide la spesa.",
+   "diff": 1
+  },
+  {
+   "t": "tf",
+   "q": "Una discovery efficace è fatta soprattutto di domande aperte e di ascolto del cliente.",
+   "a": true,
+   "exp": "Le domande aperte fanno emergere problema, impatto e priorità; l'ascolto permette di riassumere e approfondire. Il venditore che parla troppo non scopre nulla.",
+   "diff": 1
+  },
+  {
+   "t": "mcq",
+   "q": "Nel MEDDPICC, che cosa descrive il «Paper Process»?",
+   "o": [
+    "Il processo con cui il cliente confronta le offerte dei fornitori",
+    "I documenti commerciali che il venditore invia prima della prima call",
+    "I passaggi legali, di sicurezza e di procurement che portano dall'accordo alla firma",
+    "Il piano di formazione degli utenti dopo il go-live del progetto"
+   ],
+   "a": 2,
+   "exp": "Il paper process è tutto ciò che sta tra l'accordo verbale e la firma: legale, security review, procurement, approvazioni. Il confronto tra offerte rientra invece nel decision process.",
+   "diff": 2
+  },
+  {
+   "t": "multi",
+   "q": "Quali elementi sono tipici di un buon Mutual Action Plan?",
+   "o": [
+    "Le soglie interne di sconto e approvazione",
+    "La previsione delle commissioni del venditore",
+    "Passi con responsabili sia del cliente sia del venditore",
+    "Date concordate con il cliente fino alla firma",
+    "Paper process e security review"
+   ],
+   "a": [
+    2,
+    3,
+    4
+   ],
+   "exp": "Il MAP è un documento condiviso: passi, responsabili e date reali, compreso il paper process. Soglie interne di sconto e commissioni sono informazioni riservate che non vanno mai nel piano condiviso.",
+   "diff": 2
+  },
+  {
+   "t": "mcq",
+   "q": "Dopo tre richieste, il tuo contatto entusiasta non è riuscito a organizzarti un incontro con il CFO. Cosa indica più probabilmente?",
+   "o": [
+    "Che il CFO è contrario al progetto: conviene scontare per riaprire il dialogo con lui",
+    "Che il progetto non è una priorità: lo declasso a pipeline e smetto di investirci tempo",
+    "Che il contatto sta temporeggiando: invio un'offerta formale per forzare la decisione",
+    "Ha poca influenza: è un coach, quindi cerco con il suo consenso un altro canale"
+   ],
+   "a": 3,
+   "exp": "Un champion apre le porte del potere; se non ci riesce dopo più tentativi hai probabilmente un coach. La risposta è costruire un secondo thread con il suo consenso, non scontare o forzare.",
+   "diff": 3
+  },
+  {
+   "t": "mcq",
+   "q": "Quale evidenza è la più solida per portare un deal in commit?",
+   "o": [
+    "La data di firma confermata dall'economic buyer, con paper process mappato",
+    "Un champion molto convinto che la firma arriverà entro la fine del trimestre in corso",
+    "La richiesta del manager di avere più deal nel numero di fine mese per il board",
+    "Una demo molto apprezzata dal team IT e dai responsabili operations"
+   ],
+   "a": 0,
+   "exp": "Il commit richiede fatti verificabili confermati dal cliente che decide. Convinzioni del champion, demo riuscite e pressioni interne non sono evidenze.",
+   "diff": 3
+  }
+ ]
+}

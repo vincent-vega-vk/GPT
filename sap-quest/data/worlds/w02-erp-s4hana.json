@@ -1,0 +1,1607 @@
+{
+ "id": "w02",
+ "levels": [
+  {
+   "id": "w02-l01",
+   "title": "Che cos'è un ERP",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "ERP (Enterprise Resource Planning) = sistema integrato che gestisce i processi core dell'azienda (finanza, acquisti, vendite, produzione, logistica, persone) su dati condivisi.",
+     "Il valore sta nell'integrazione: un ordine di vendita aggiorna magazzino, contabilità e fatturazione senza ribattere i dati tra sistemi diversi.",
+     "L'ERP è il «system of record»: la fonte ufficiale di transazioni e dati master. CRM, MES e BI si collegano a lui, non lo sostituiscono.",
+     "Per un'azienda regolata (per esempio Life Sciences) contano anche tracciabilità e controlli: chi ha fatto cosa e quando, con audit trail e regole di autorizzazione."
+    ],
+    "ae": "Non partire dal prodotto: chiedi quanti sistemi diversi tocca un singolo ordine dall'offerta all'incasso. Più sono, più l'integrazione è il tuo argomento."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Quale caratteristica definisce un ERP?",
+     "o": [
+      "Processi core integrati su dati condivisi",
+      "Un portale web per gli ordini online dei clienti",
+      "Un archivio documentale per contratti e fatture",
+      "Un data warehouse per report e dashboard"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Un ERP integra i processi core su dati condivisi. Portali, archivi documentali e data warehouse sono sistemi utili ma collegati all'ERP, non equivalenti."
+    },
+    {
+     "t": "tf",
+     "q": "In un ERP integrato, un ordine di vendita può aggiornare in modo coerente magazzino e contabilità.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: è il vantaggio tipico di un ERP integrato. Un solo dato di partenza evita ribattiture e riconciliazioni tra sistemi, e riduce errori e tempi di chiusura."
+    },
+    {
+     "t": "fill",
+     "q": "L'ERP è il ___ di riferimento: la fonte ufficiale per transazioni e dati master.",
+     "o": [
+      "system of record",
+      "system of engagement",
+      "data lake",
+      "front-end"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Il system of record è la fonte ufficiale delle transazioni e dei dati master. I sistemi di engagement (CRM, portali) interagiscono con clienti e utenti, ma si appoggiano all'ERP per i dati ufficiali."
+    },
+    {
+     "t": "match",
+     "q": "Abbina l'area funzionale a ciò che gestisce.",
+     "pairs": [
+      [
+       "Finanza e controllo",
+       "Contabilità, tesoreria, costi e chiusure"
+      ],
+      [
+       "Acquisti",
+       "Dall'ordine al fornitore al pagamento"
+      ],
+      [
+       "Vendite e distribuzione",
+       "Dall'ordine cliente alla fatturazione"
+      ],
+      [
+       "Produzione e logistica",
+       "Pianificazione, magazzino e spedizioni"
+      ]
+     ],
+     "exp": "Le aree funzionali sono i mattoni di un ERP. In discovery ti serviranno per capire con chi parlare: controller per la finanza, procurement per gli acquisti, supply chain per produzione e logistica."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO descrive quattro sistemi che toccano ogni ordine e riconciliazioni a mano a fine mese. Come imposti la discovery?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Per ogni ordine tocchiamo quattro sistemi e riconciliamo a mano a fine mese."
+     },
+     "o": [
+      "Mappo con te il percorso dell'ordine e quantifico tempi ed errori di riconciliazione",
+      "Ti dico subito che S/4HANA elimina le riconciliazioni e ti propongo un preventivo",
+      "Ti propongo di consolidare i quattro sistemi in un'unica soluzione entro il trimestre",
+      "Ti chiedo quale versione di ECC usate, perché da quella dipende il valore del progetto"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Prima si misura il problema (tempi, errori, rischio), poi si propone una soluzione. Promettere subito che un prodotto risolve tutto, o fissare una scadenza irrealistica, fa perdere credibilità."
+    }
+   ]
+  },
+  {
+   "id": "w02-l02",
+   "title": "Le cinque autostrade",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Order-to-cash (O2C): dall'ordine del cliente all'incasso — ordine, consegna, fatturazione, gestione dei crediti e incasso.",
+     "Procure-to-pay (P2P): dalla richiesta d'acquisto al pagamento del fornitore — richiesta, ordine, entrata merci, verifica fattura, pagamento.",
+     "Record-to-report (R2R): dalla registrazione contabile al bilancio — scritture, chiusura, consolidamento, reporting.",
+     "Plan-to-produce: dalla pianificazione della domanda alla produzione dei prodotti finiti. Hire-to-retire (H2R): dall'assunzione all'uscita del dipendente, con tempi, payroll e sviluppo."
+    ],
+    "ae": "Ogni cliente ha un processo che fa male: trovalo con una domanda sola, «dove perdete più tempo tra ordine e incasso?», poi mappalo su una delle cinque autostrade."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina il processo end-to-end al suo percorso.",
+     "pairs": [
+      [
+       "Order-to-cash",
+       "Dall'ordine cliente all'incasso"
+      ],
+      [
+       "Procure-to-pay",
+       "Dalla richiesta d'acquisto al pagamento fornitore"
+      ],
+      [
+       "Record-to-report",
+       "Dalla scrittura contabile al bilancio"
+      ],
+      [
+       "Plan-to-produce",
+       "Dalla pianificazione alla produzione dei prodotti finiti"
+      ],
+      [
+       "Hire-to-retire",
+       "Dall'assunzione all'uscita del dipendente"
+      ]
+     ],
+     "exp": "Sono le cinque autostrade con cui si descrive un ERP. Imparare a nominarle ti permette di fare domande precise e di collegare ogni pain del cliente a un'area di prodotto."
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine le fasi di un order-to-cash.",
+     "items": [
+      "Ordine cliente",
+      "Consegna",
+      "Fatturazione",
+      "Incasso"
+     ],
+     "exp": "L'order-to-cash parte dall'ordine, passa dalla consegna e dalla fattura e si chiude con l'incasso. Ogni passaggio manuale in più allunga il tempo di incasso: è lì che si misura il valore."
+    },
+    {
+     "t": "bucket",
+     "q": "A quale processo appartiene ciascuna attività?",
+     "buckets": [
+      "Procure-to-pay",
+      "Order-to-cash",
+      "Record-to-report"
+     ],
+     "items": [
+      [
+       "Verifica della fattura del fornitore",
+       0
+      ],
+      [
+       "Entrata merci da ordine d'acquisto",
+       0
+      ],
+      [
+       "Emissione della fattura al cliente",
+       1
+      ],
+      [
+       "Gestione dei crediti e dei solleciti",
+       1
+      ],
+      [
+       "Chiusura contabile di fine mese",
+       2
+      ],
+      [
+       "Consolidamento di bilancio",
+       2
+      ]
+     ],
+     "exp": "P2P guarda ai fornitori (cosa compri e paghi), O2C ai clienti (cosa vendi e incassi) e R2R chiude i conti. Molte attività sembrano simili ma cambiano interlocutori e sistemi."
+    },
+    {
+     "t": "mcq",
+     "q": "Un responsabile acquisti lamenta pagamenti ai fornitori in ritardo e sconti persi. A quale processo lo riconduci?",
+     "ctx": {
+      "who": "Responsabile acquisti",
+      "say": "Paghiamo i fornitori in ritardo e perdiamo gli sconti di pagamento anticipato."
+     },
+     "o": [
+      "Procure-to-pay: dalla richiesta d'acquisto al pagamento",
+      "Order-to-cash: dall'ordine del cliente all'incasso",
+      "Record-to-report: dalla scrittura contabile al bilancio",
+      "Hire-to-retire: dall'assunzione all'uscita del dipendente"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Ritardi nei pagamenti ai fornitori e sconti persi nascono nel procure-to-pay: richiesta, ordine, entrata merci, verifica fattura e pagamento. È il processo da mappare per primo."
+    },
+    {
+     "t": "tf",
+     "q": "Hire-to-retire comprende anche il payroll.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: hire-to-retire va dal reclutamento all'uscita e include tempi, presenze e payroll. È il processo del mondo HR, che incontrerai di nuovo nel percorso dedicato."
+    }
+   ]
+  },
+  {
+   "id": "w02-l03",
+   "title": "Dal sintomo al processo",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "In discovery il cliente non parla di processi SAP: parla di sintomi (ritardi, errori, costi). Il tuo lavoro è tradurre il sintomo in processo.",
+     "Traduzioni tipiche: «incassi lenti» → order-to-cash; «sconti fornitori persi» → procure-to-pay; «chiusura lunga» → record-to-report; «previsioni scollegate dalla produzione» → plan-to-produce; «payroll manuale» → hire-to-retire.",
+     "Spesso il sintomo attraversa più processi (un ritardo di consegna può nascere da pianificazione, acquisti e logistica): chiedi sempre dove nasce il primo errore.",
+     "Dopo il processo, chiedi il sistema: dove vive oggi il dato? Quanti passaggi manuali? Quanti sistemi diversi?"
+    ],
+    "ae": "Frase utile: «Se seguo un ordine dall'inizio alla fine, dove si ferma o si ripete il lavoro?»"
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un controller racconta che ogni mese si perdono giorni a riconciliare i conti tra stabilimenti. Quale processo è coinvolto?",
+     "ctx": {
+      "who": "Controller",
+      "say": "Ogni mese passiamo giorni a riconciliare i conti tra gli stabilimenti."
+     },
+     "o": [
+      "Record-to-report: dalla scrittura contabile al bilancio",
+      "Order-to-cash: dall'ordine del cliente all'incasso",
+      "Plan-to-produce: dalla pianificazione alla produzione",
+      "Hire-to-retire: dall'assunzione all'uscita del dipendente"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Riconciliazioni e chiusura sono il cuore del record-to-report. È il processo che si lega al Universal Journal, di cui parliamo tra poco."
+    },
+    {
+     "t": "mcq",
+     "q": "Un pianificatore dice che previsioni di domanda e piano di produzione non si parlano. Quale processo è coinvolto?",
+     "ctx": {
+      "who": "Supply planner",
+      "say": "Le previsioni di domanda e il piano di produzione non si parlano tra loro."
+     },
+     "o": [
+      "Plan-to-produce: dalla domanda alla produzione",
+      "Order-to-cash: dall'ordine del cliente all'incasso",
+      "Procure-to-pay: dalla richiesta d'acquisto al pagamento",
+      "Record-to-report: dalla scrittura contabile al bilancio"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Quando la previsione di domanda non alimenta il piano di produzione, il problema è nel plan-to-produce: pianificazione, MRP, ordini di produzione. È un tema tipico per aziende manifatturiere e Consumer Products."
+    },
+    {
+     "t": "mcq",
+     "q": "Un direttore commerciale lamenta clienti che pagano in ritardo e fatture scadute non tracciate. Quale processo è coinvolto?",
+     "ctx": {
+      "who": "Direttore commerciale",
+      "say": "I clienti pagano in ritardo e non sappiamo quali fatture sono scadute."
+     },
+     "o": [
+      "Order-to-cash: dall'ordine del cliente all'incasso",
+      "Procure-to-pay: dalla richiesta d'acquisto al pagamento",
+      "Hire-to-retire: dall'assunzione all'uscita del dipendente",
+      "Plan-to-produce: dalla pianificazione alla produzione"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Crediti, solleciti e incassi sono la parte finale dell'order-to-cash. Misurare i giorni medi di incasso (DSO) è un buon modo per quantificare il pain."
+    },
+    {
+     "t": "match",
+     "q": "Abbina il sintomo al processo.",
+     "pairs": [
+      [
+       "Chiusura mensile in dodici giorni",
+       "Record-to-report"
+      ],
+      [
+       "Sconti fornitori persi per ritardi di pagamento",
+       "Procure-to-pay"
+      ],
+      [
+       "Fatture cliente in ritardo, crediti non gestiti",
+       "Order-to-cash"
+      ],
+      [
+       "Onboarding e payroll gestiti su fogli Excel",
+       "Hire-to-retire"
+      ]
+     ],
+     "exp": "Ogni sintomo ha un processo di riferimento. Se il cliente ne cita più d'uno, parti da quello che costa di più o che è più vicino alla chiusura del contratto."
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine una discovery sul processo.",
+     "items": [
+      "Ascolta il sintomo del cliente",
+      "Traduci il sintomo in processo",
+      "Chiedi dove nasce il primo errore",
+      "Mappa sistemi e passaggi manuali",
+      "Quantifica tempo, costi e rischio"
+     ],
+     "exp": "Si parte dall'ascolto, poi si traduce, si cerca l'origine dell'errore, si mappano i sistemi e infine si quantifica. Quantificare prima di aver capito dove nasce il problema produce numeri deboli."
+    }
+   ]
+  },
+  {
+   "id": "w02-l04",
+   "title": "ECC e S/4HANA: il motore",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SAP ERP Central Component (ECC 6.0) è l'ERP storico della Business Suite: gira su database di terze parti (Oracle, DB2, SQL Server) oppure su HANA.",
+     "SAP S/4HANA è la suite di nuova generazione: gira solo su SAP HANA, un database in-memory che tiene i dati in memoria centrale e gestisce transazioni e analisi sulla stessa base.",
+     "Attenzione alla trappola: ECC spostato su database HANA («Suite on HANA») non è S/4HANA: modello dati e applicazioni restano quelli di ECC.",
+     "S/4HANA è stato lanciato nel 2015: ha semplificato il modello dati (meno tabelle aggregate), introdotto il Business Partner e il Universal Journal, e portato SAP Fiori come interfaccia."
+    ],
+    "ae": "Quando senti «ma noi siamo già su HANA», verifica: sul database o su S/4HANA? È una delle domande più utili in discovery."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Qual è la differenza fondamentale tra «ECC su HANA» e S/4HANA?",
+     "o": [
+      "S/4HANA ha modello dati e applicazioni riscritti per HANA; ECC su HANA cambia il database",
+      "ECC su HANA è la versione cloud di S/4HANA, con gli stessi processi e un'unica licenza",
+      "S/4HANA gira anche su Oracle e SQL Server, mentre ECC su HANA richiede il database HANA",
+      "Sono sinonimi: dopo la migrazione del database a HANA l'azienda è già su S/4HANA"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Con ECC su HANA cambi il database, ma le applicazioni e il modello dati restano quelli di ECC. S/4HANA è una suite riscritta e semplificata per HANA, e gira solo su HANA. Confondere le due cose porta a sottostimare il progetto."
+    },
+    {
+     "t": "tf",
+     "q": "S/4HANA può girare su un database Oracle o SQL Server.",
+     "a": false,
+     "diff": 1,
+     "exp": "Falso: S/4HANA gira solo su SAP HANA. È una delle differenze principali rispetto a ECC, che supportava più database di terze parti."
+    },
+    {
+     "t": "fill",
+     "q": "HANA è un database ___: tiene i dati in memoria centrale e supporta transazioni e analisi sulla stessa base.",
+     "o": [
+      "in-memory",
+      "relazionale su disco",
+      "documentale",
+      "a grafo"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "HANA è in-memory: i dati risiedono in memoria centrale, con struttura colonnare per le analisi. Questo permette di eseguire sulla stessa base dati transazioni e analytics, senza copie intermedie."
+    },
+    {
+     "t": "mcq",
+     "q": "Un IT director dice di aver già migrato il database a HANA e di essere quindi su S/4. Come rispondi?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "Abbiamo già migrato il database a HANA tre anni fa, quindi siamo già su S/4."
+     },
+     "o": [
+      "Verifichiamo: se l'applicazione è ancora ECC, avete HANA come database ma non S/4HANA",
+      "Avete ragione: con il database su HANA l'ERP è già S/4HANA e il progetto è concluso",
+      "Sì, ma dovete comunque cambiare il database per ottenere il supporto sull'ERP",
+      "Dipende dal fornitore dell'hardware: se è certificato, la migrazione a S/4HANA è fatta"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Una domanda gentile evita di mettere il cliente a disagio: quale applicazione gira sul database HANA? Se è ECC, il progetto S/4HANA è ancora da fare e le date di manutenzione ECC restano rilevanti."
+    },
+    {
+     "t": "multi",
+     "q": "Cosa è tipico di S/4HANA rispetto a ECC?",
+     "o": [
+      "Gira solo su SAP HANA",
+      "Modello dati semplificato",
+      "Esperienza utente SAP Fiori",
+      "Richiede un database Oracle",
+      "È stato lanciato nel 1992"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "diff": 2,
+     "exp": "S/4HANA è del 2015, gira solo su HANA, ha un modello dati semplificato e Fiori come interfaccia. Il 1992 è l'anno di R/3, da cui discende ECC; Oracle era uno dei database supportati da ECC."
+    }
+   ]
+  },
+  {
+   "id": "w02-l05",
+   "title": "Universal Journal (ACDOCA)",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "In ECC contabilità generale (FI), controlling (CO), ledger dei materiali e cespiti avevano tabelle separate, da riconciliare a fine mese. In S/4HANA una sola tabella di voci di dettaglio, ACDOCA, è la fonte unica.",
+     "Cosa cambia: niente riconciliazione strutturale tra FI e CO; totali e saldi si calcolano al volo dalle voci di dettaglio invece di leggere tabelle di aggregazione.",
+     "Più dimensioni su ogni riga (conto, centro di costo, segmento, prodotto) permettono report e analisi senza ricostruire i dati.",
+     "Per il CFO: una sola verità, chiusura più rapida e una base dati pronta per l'automazione dei processi contabili."
+    ],
+    "ae": "Con il CFO non dire «ACDOCA»: di' «una sola fonte per contabilità e controlling, senza riconciliazioni». Il nome tecnico serve solo con il team finance IT."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Come si chiama la tabella del Universal Journal in S/4HANA?",
+     "o": [
+      "ACDOCA, voci del Universal Journal",
+      "BSEG, voci contabili di ECC",
+      "COEP, voci di controlling di ECC",
+      "MKPF, testata documenti materiale di ECC"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "ACDOCA contiene le voci di dettaglio unificate di contabilità, controlling, cespiti e material ledger. BSEG e COEP erano le tabelle separate di ECC per FI e CO; MKPF era la testata dei documenti materiale."
+    },
+    {
+     "t": "tf",
+     "q": "Nel Universal Journal contabilità e controlling condividono le stesse voci di dettaglio.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: una sola riga porta sia l'informazione contabile sia quella di controlling. Per questo la riconciliazione tra FI e CO non è più un'attività strutturale."
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi confluiscono nel Universal Journal di S/4HANA?",
+     "o": [
+      "Contabilità generale (FI)",
+      "Controlling (CO)",
+      "Contabilità cespiti",
+      "Payroll HR",
+      "Piani di produzione MRP"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "diff": 2,
+     "exp": "Il Universal Journal unifica contabilità generale, controlling e cespiti (con il material ledger). Payroll e pianificazione MRP sono altri processi, che alimentano la contabilità ma non fanno parte della tabella."
+    },
+    {
+     "t": "fill",
+     "q": "Con il Universal Journal la riconciliazione tra FI e ___ non è più necessaria.",
+     "o": [
+      "CO",
+      "HR",
+      "SD",
+      "MM"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "FI è la contabilità generale e CO il controlling: in ECC erano due mondi da riconciliare, in S/4HANA condividono la stessa riga. SD, MM e HR sono altri moduli."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO chiede quanti giorni perde ogni mese a riconciliare contabilità e controlling. Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Quanti giorni perdo ogni mese a riconciliare contabilità e controlling?"
+     },
+     "o": [
+      "Il Universal Journal elimina la riconciliazione strutturale: FI e CO leggono la stessa riga",
+      "Il Universal Journal elimina la chiusura mensile: i conti si aggiornano ogni sera",
+      "Riduce il numero di conti contabili, quindi la riconciliazione tra moduli diventa opzionale",
+      "Sposta il controlling in un sistema separato: le riconciliazioni restano tra i due sistemi"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il Universal Journal rimuove la causa strutturale delle riconciliazioni FI-CO, non la chiusura in sé: restano controlli, accantonamenti e consolidamento. Quantifica con il cliente quanto tempo dedica oggi a questa attività."
+    }
+   ]
+  },
+  {
+   "id": "w02-l06",
+   "title": "Business Partner e dati snelli",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "In ECC cliente e fornitore sono oggetti separati, con due anagrafiche. In S/4HANA il Business Partner (BP) è l'oggetto unico: la stessa entità può essere cliente, fornitore o entrambi, con ruoli diversi.",
+     "Il BP è obbligatorio nella conversione: la Customer/Vendor Integration (CVI) sincronizza le anagrafiche esistenti. È uno dei primi lavori di pulizia dati in un progetto.",
+     "Il modello dati è stato semplificato: meno tabelle di aggregati, strutture nuove (per esempio documenti materiale in una tabella unica) e codici materiale più lunghi, fino a 40 caratteri.",
+     "Cosa cambia è documentato nella Simplification List (Simplification Item Catalog): elenca cosa cambia, cosa sparisce e cosa viene sostituito."
+    ],
+    "ae": "Con anagrafiche sporche (duplicati cliente/fornitore) il BP diventa un'occasione: collega il tema master data alla migrazione, non lasciarlo a fine progetto."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Cosa unifica il Business Partner in S/4HANA?",
+     "o": [
+      "Le anagrafiche di cliente e fornitore in un unico oggetto con più ruoli",
+      "I conti contabili e i centri di costo in un'unica struttura gerarchica",
+      "Gli ordini di vendita e gli ordini d'acquisto in un solo documento",
+      "I dipendenti e i candidati in un unico archivio per il recruiting"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Il Business Partner sostituisce le anagrafiche separate: la stessa entità può avere ruolo di cliente, fornitore o altro. Conti, documenti e candidati non rientrano in questo oggetto."
+    },
+    {
+     "t": "tf",
+     "q": "In S/4HANA il Business Partner è opzionale: si possono continuare a usare solo le anagrafiche cliente e fornitore separate.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: nella conversione a S/4HANA il Business Partner è obbligatorio. Le anagrafiche esistenti si sincronizzano con la Customer/Vendor Integration, e i duplicati vanno ripuliti prima."
+    },
+    {
+     "t": "fill",
+     "q": "Per sincronizzare le anagrafiche cliente e fornitore con il Business Partner si usa la ___ Integration (CVI).",
+     "o": [
+      "Customer/Vendor",
+      "Contract/Variant",
+      "Cost/Value",
+      "Central/Verified"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "CVI sta per Customer/Vendor Integration: è il meccanismo standard per allineare le vecchie anagrafiche al Business Partner. In un progetto è un'attività critica e di solito si fa prima del cutover."
+    },
+    {
+     "t": "mcq",
+     "q": "Un data manager dice di avere 40.000 anagrafiche fornitori con molti duplicati. Cosa suggerisci?",
+     "ctx": {
+      "who": "Data manager",
+      "say": "Abbiamo 40.000 anagrafiche fornitori e molti duplicati."
+     },
+     "o": [
+      "Pulire e deduplicare prima di convertire, e cogliere l'occasione per governare i master data",
+      "Convertire così come sono: il sistema deduplica da solo durante la sincronizzazione CVI",
+      "Ricreare a mano tutti i fornitori nel nuovo sistema, abbandonando lo storico dei dati",
+      "Rimandare il tema a dopo il go-live, quando i duplicati daranno meno problemi"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "La conversione al Business Partner porta a galla i duplicati: pulire prima riduce rischi e costi. È anche l'aggancio naturale al tema master data governance. Ricreare tutto a mano o rimandare peggiora il problema."
+    },
+    {
+     "t": "match",
+     "q": "Abbina il concetto alla sua funzione.",
+     "pairs": [
+      [
+       "Simplification List",
+       "Elenco di cosa cambia o sparisce passando a S/4HANA"
+      ],
+      [
+       "CVI",
+       "Sincronizza le anagrafiche cliente e fornitore con il BP"
+      ],
+      [
+       "Business Partner",
+       "Oggetto unico per clienti, fornitori e altri ruoli"
+      ],
+      [
+       "ACDOCA",
+       "Tabella unica delle voci contabili del Universal Journal"
+      ]
+     ],
+     "exp": "Quattro termini che ricorrono in ogni progetto di conversione. Non servono tutti al cliente, ma devi riconoscerli quando il partner li cita nelle stime."
+    }
+   ]
+  },
+  {
+   "id": "w02-l07",
+   "title": "Fiori e il pitch ECC-S/4",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "SAP Fiori è il design system e l'esperienza utente di S/4HANA: app basate sui ruoli, responsive (desktop, tablet, mobile), raccolte in un launchpad. Per molti ruoli sostituisce nella pratica le transazioni di SAP GUI.",
+     "SAP GUI non scompare ovunque: in on-premise e Private molte transazioni restano disponibili; in Cloud ERP (public) l'esperienza è web, Fiori-first.",
+     "Pitch ECC → S/4HANA in tre benefici verificabili: dati (una sola fonte, con Universal Journal e Business Partner), esperienza (Fiori per ruolo), innovazione (analytics e AI su dati unificati).",
+     "Non vendere funzioni: collega ogni differenza a un costo o a un rischio del cliente (tempo di chiusura, errori manuali, adozione da parte degli utenti)."
+    ],
+    "ae": "Mostra una demo Fiori sul ruolo del tuo interlocutore (per esempio il controller) prima di parlare di architettura."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un CFO chiede cosa cambia concretamente per i suoi utenti e per lui passando a S/4HANA. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Cosa cambia per i miei utenti e per me, concretamente?"
+     },
+     "o": [
+      "Esperienza per ruolo con Fiori e dati contabili unificati: ti mostro una demo sul tuo ruolo",
+      "Cambia soprattutto il nome del prodotto: processi e interfaccia restano identici a ECC",
+      "Cambia tutto: conviene ripartire da zero con nuovi processi, senza considerare lo storico",
+      "Cambia il database sotto l'ERP, mentre gli utenti non noteranno alcuna differenza pratica"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "La risposta efficace collega le differenze a ciò che il CFO vede: chiusure più rapide, dati unificati, utenti con app per ruolo. Ridurre il passaggio a un cambio di nome o di database, o promettere un reset totale, sono due estremi sbagliati."
+    },
+    {
+     "t": "tf",
+     "q": "SAP Fiori è l'interfaccia utente di riferimento di S/4HANA.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: Fiori è l'esperienza utente di S/4HANA, con app per ruolo e launchpad. Nelle versioni on-premise e Private convive ancora con SAP GUI, nel Cloud ERP (public) è la via principale."
+    },
+    {
+     "t": "mcq",
+     "q": "Un key user che usa SAP GUI da vent'anni chiede perché dovrebbe cambiare. Cosa rispondi?",
+     "ctx": {
+      "who": "Key user",
+      "say": "Io uso solo SAP GUI da vent'anni, perché dovrei cambiare?"
+     },
+     "o": [
+      "Partiamo dai tuoi compiti ricorrenti: ti mostro le app Fiori che li sostituiscono",
+      "Perché SAP GUI sarà spento ovunque alla fine della manutenzione standard di ECC",
+      "Perché Fiori è più bello e gli utenti non possono più usare le transazioni abituali",
+      "Perché il progetto prevede la formazione obbligatoria di tutto il personale entro l'anno"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il cambiamento si accetta quando parte dai compiti reali dell'utente. Dire che SAP GUI sparirà ovunque o imporre formazione obbligatoria è sia inesatto sia controproducente."
+    },
+    {
+     "t": "match",
+     "q": "Abbina l'elemento al beneficio da portare al cliente.",
+     "pairs": [
+      [
+       "Universal Journal",
+       "Una sola fonte per contabilità e controlling"
+      ],
+      [
+       "Business Partner",
+       "Anagrafica unica per clienti e fornitori"
+      ],
+      [
+       "SAP Fiori",
+       "Esperienza utente per ruolo, anche da mobile"
+      ],
+      [
+       "HANA in-memory",
+       "Analisi e transazioni sulla stessa base dati"
+      ]
+     ],
+     "exp": "Ogni elemento tecnico ha un beneficio di business. Nel pitch parti sempre dal beneficio e usa il nome tecnico solo se il tuo interlocutore lo conosce."
+    },
+    {
+     "t": "multi",
+     "q": "Quali sono vantaggi concreti da proporre in un pitch ECC → S/4HANA?",
+     "ctx": {
+      "who": "CIO",
+      "say": "Dammi tre buoni motivi per passare a S/4HANA."
+     },
+     "o": [
+      "Una sola fonte dati per finanza e controllo",
+      "Esperienza utente per ruolo con Fiori",
+      "Base dati unificata per analytics e AI",
+      "Eliminazione garantita di ogni personalizzazione",
+      "Nessun progetto di migrazione necessario"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "diff": 2,
+     "exp": "Dati unificati, esperienza per ruolo e base per analytics e AI sono benefici verificabili. Nessun progetto serio promette di eliminare le personalizzazioni o di evitare la migrazione: sono promesse che il cliente smonta al primo confronto."
+    }
+   ]
+  },
+  {
+   "id": "w02-l08",
+   "title": "Public, Private, on-premise",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Tre modi di consumare S/4HANA: Cloud ERP (public edition, SaaS multi-tenant), Cloud ERP Private (single-tenant gestito da SAP, di solito via RISE) e on-premise (licenza; il cliente gestisce o affida a un hosting partner).",
+     "Nomi attuali: {{sap.naming.cloud_erp}}",
+     "Public: standard e best practice, aggiornamenti frequenti inclusi, estensibilità controllata. Private: più personalizzazione e controllo dei tempi di upgrade, con più responsabilità nel progetto. On-premise: massimo controllo e massimo carico operativo.",
+     "Cadenza: la public edition riceve {{w02.cloud_erp_public_cadence}}. Private e on-premise seguono un ciclo diverso, che vedremo più avanti."
+    ],
+    "ae": "Non chiedere «public o private?» all'inizio: chiedi quanta personalizzazione hanno oggi e quanto sono disposti a cambiare processo. La risposta decide il modello."
+   },
+   "ex": [
+    {
+     "t": "bucket",
+     "q": "Public o Private?",
+     "buckets": [
+      "Cloud ERP (public)",
+      "Cloud ERP Private"
+     ],
+     "items": [
+      [
+       "Multi-tenant",
+       0
+      ],
+      [
+       "Single-tenant",
+       1
+      ],
+      [
+       "Standard e best practice, aggiornamenti frequenti",
+       0
+      ],
+      [
+       "Maggiore personalizzazione e controllo dei tempi di upgrade",
+       1
+      ],
+      [
+       "Percorso tipicamente associato a GROW",
+       0
+      ],
+      [
+       "Percorso tipicamente associato a RISE",
+       1
+      ]
+     ],
+     "exp": "La public edition è standard-first e multi-tenant, la Private è un ambiente dedicato con più libertà e più responsabilità. I nomi GROW e RISE indicano i percorsi tipici associati."
+    },
+    {
+     "t": "mcq",
+     "q": "Qual è la differenza principale tra Cloud ERP (public) e Cloud ERP Private?",
+     "o": [
+      "La public è multi-tenant e standardizzata; la Private è single-tenant, con più personalizzazione",
+      "La public è on-premise e gestita dal cliente; la Private è ospitata da SAP in un ambiente condiviso",
+      "La public ha un ciclo di rilascio biennale; la Private riceve una nuova release ogni mese",
+      "La public è per le grandi imprese; la Private è riservata alle PMI con pochi utenti"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Public: ambiente condiviso (multi-tenant), standard e aggiornamenti frequenti. Private: ambiente dedicato (single-tenant), gestito da SAP, con più margine di personalizzazione e controllo dei tempi di upgrade. Dimensione del cliente e frequenza delle release non sono il criterio."
+    },
+    {
+     "t": "tf",
+     "q": "Per Cloud ERP (public edition) SAP prevede {{w02.cloud_erp_public_cadence}}: la cadenza è identica a quella della Private Edition.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: la public edition ha il proprio calendario con due release l'anno, mentre Private e on-premise seguono il ciclo delle release base di S/4HANA, più lento. Se il cliente chiede «quando arriva l'aggiornamento», chiarisci di quale edizione parla."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CIO di un'azienda consumer ha poche personalizzazioni e vuole partire in fretta. Quale modello esplori per primo?",
+     "ctx": {
+      "who": "CIO consumer",
+      "say": "Abbiamo poche personalizzazioni e vogliamo partire in fretta."
+     },
+     "o": [
+      "Cloud ERP (public): standard-first, con aggiornamenti inclusi e tempi di avvio rapidi",
+      "On-premise: la licenza dà più controllo e un avvio più rapido grazie all'hardware proprio",
+      "Cloud ERP Private: serve sempre per ottenere un go-live in tempi inferiori a un anno",
+      "Un ERP di un altro fornitore: nessuna edizione SAP supporta un avvio rapido"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Con poche personalizzazioni e fretta, la public edition è la candidata naturale: standard-first, aggiornamenti inclusi, tempi di avvio più brevi. Lo scenario va comunque confermato con fit-to-standard e controllo di compliance."
+    },
+    {
+     "t": "multi",
+     "q": "Quali affermazioni sulle tre modalità sono corrette?",
+     "o": [
+      "La public edition è multi-tenant",
+      "La Private Edition è single-tenant",
+      "Con l'on-premise il cliente gestisce o affida a terzi sistema e upgrade",
+      "La public edition permette di modificare liberamente il codice standard",
+      "La Private Edition non prevede alcun progetto di migrazione"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "diff": 2,
+     "exp": "Multi-tenant per la public, single-tenant per la Private, gestione a carico del cliente per l'on-premise. La public non consente modifiche libere al codice standard (clean core), e anche la Private richiede un progetto di migrazione."
+    }
+   ]
+  },
+  {
+   "id": "w02-l09",
+   "title": "Chi sceglie cosa",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Public (standard-first): per nuove entità, filiali, scale-up e aziende che accettano di adattare i processi allo standard per andare veloci e restare aggiornate.",
+     "Private: per aziende con processi complessi o molto personalizzati, requisiti regolatori o di integrazione specifici, che vogliono una transizione guidata (RISE) e controllo sui tempi di upgrade.",
+     "On-premise: resta per chi ha vincoli forti (sovranità, reti isolate) o un investimento da ammortizzare, sapendo che innovazione e supporto seguono il ciclo delle release.",
+     "Two-tier ERP: la sede resta su un ERP robusto (Private o on-premise) mentre filiali o nuove acquisizioni partono in public cloud su un secondo ERP SAP. Il termine è in uso nei materiali di formazione SAP.",
+     "Chi decide: spesso CIO e CFO insieme. Il segnale chiave è quanta personalizzazione servono davvero ai processi che differenziano il business."
+    ],
+    "ae": "Una domanda risolve metà del dubbio: «Quali processi sono davvero unici per voi e quali possono essere standard?»"
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un'azienda ha processi molto personalizzati e vuole che SAP gestisca l'infrastruttura, ma decidere quando fare gli upgrade. Quale modello è il candidato naturale?",
+     "ctx": {
+      "who": "CIO",
+      "say": "Processi molto customizzati, vogliamo che SAP gestisca l'infrastruttura ma decidere noi quando fare upgrade."
+     },
+     "o": [
+      "Cloud ERP Private, tipicamente con il percorso RISE",
+      "Cloud ERP (public), con aggiornamenti nel calendario fissato da SAP",
+      "On-premise nel data center del cliente, gestito interamente dal cliente",
+      "Cloud ERP (public) con estensioni al codice standard sviluppate dal cliente"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Infrastruttura gestita da SAP e controllo sui tempi di upgrade sono i tratti della Private Edition. La public ha un calendario di release deciso da SAP; l'on-premise lascia l'infrastruttura al cliente."
+    },
+    {
+     "t": "mcq",
+     "q": "La filiale appena acquisita deve avere un ERP in sei mesi, con processi standard. Quale modello proponi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Dobbiamo avere un ERP in sei mesi nella nuova società, con processi standard."
+     },
+     "o": [
+      "Cloud ERP (public), avviato con fit-to-standard e best practice",
+      "Cloud ERP Private con un progetto di personalizzazione completo per la filiale",
+      "On-premise con una nuova installazione, per mantenere il pieno controllo",
+      "Estendere il sistema della sede alla filiale con un progetto di consolidamento"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Tempi brevi e processi standard indicano la public edition con fit-to-standard. Un progetto Private personalizzato o una nuova installazione on-premise allungano i tempi; estendere il sistema della sede è un'altra scelta, da valutare con il cliente."
+    },
+    {
+     "t": "mcq",
+     "q": "La sede ha un ERP molto personalizzato mentre le dodici filiali estere usano sistemi diversi. Quale architettura proponi di esplorare?",
+     "ctx": {
+      "who": "CEO di gruppo",
+      "say": "La sede ha un ERP molto personalizzato; le filiali estere usano sistemi diversi."
+     },
+     "o": [
+      "Two-tier ERP: la sede resta su Private o on-premise, le filiali su public",
+      "Un'unica istanza on-premise per tutte le società, personalizzata come la sede",
+      "Nessun ERP nelle filiali: ordini e fatture gestiti a mano e consolidati dalla sede",
+      "Migrazione di tutte le società alla public nello stesso mese, senza fasi"
+     ],
+     "a": 0,
+     "diff": 3,
+     "exp": "Il two-tier ERP bilancia complessità della sede e velocità delle filiali: la sede resta su un ERP robusto, le filiali partono in public con processi standard. Un'unica istanza personalizzata o un big bang aumentano il rischio."
+    },
+    {
+     "t": "match",
+     "q": "Abbina la situazione al modello più adatto.",
+     "pairs": [
+      [
+       "Nuova filiale, processi standard, go-live rapido",
+       "Cloud ERP (public)"
+      ],
+      [
+       "Processi complessi, infrastruttura gestita da SAP",
+       "Cloud ERP Private"
+      ],
+      [
+       "Ambiente isolato, controllo totale richiesto",
+       "On-premise"
+      ],
+      [
+       "Sede complessa più filiali con processi standard",
+       "Two-tier ERP"
+      ]
+     ],
+     "exp": "Ogni situazione ha un modello di partenza. È un punto di partenza per la discovery, non una regola: il cliente può avere ragioni diverse."
+    },
+    {
+     "t": "tf",
+     "q": "Il modello di deployment si sceglie soltanto in base al budget del cliente.",
+     "a": false,
+     "diff": 1,
+     "exp": "Falso: contano processi differenzianti, personalizzazione, requisiti regolatori, tempi, sovranità e capacità interne. Il budget è un vincolo, non il criterio principale."
+    }
+   ]
+  },
+  {
+   "id": "w02-l10",
+   "title": "Clean core",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Clean core = tenere il nucleo ERP il più vicino possibile allo standard SAP e mettere le differenze fuori dal core, tramite interfacce rilasciate e stabili. Obiettivo: aggiornamenti senza riscrivere le estensioni.",
+     "Tre vie di estensione: key user (in-app) per campi, logiche e UI semplici, senza codice; developer extensibility on-stack con ABAP Cloud per logica più complessa dentro il sistema, solo con API rilasciate; side-by-side su BTP per app e integrazioni esterne.",
+     "ABAP Cloud è il modello di sviluppo ABAP per estensioni cloud-ready e stabili negli upgrade: usa solo oggetti e API rilasciati da SAP.",
+     "Perché conta per il cliente: meno costi di upgrade, meno debito tecnico, più facilità di adottare nuove release e AI. Per te: nei progetti brownfield è il discorso sul custom code da ripulire."
+    ],
+    "ae": "Chiedi: «Quante estensioni custom avete e quante toccano il codice standard?». Il numero dice quanto lavoro di clean core c'è."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Che cosa significa «clean core»?",
+     "o": [
+      "Core vicino allo standard SAP, con le differenze fuori dal core tramite interfacce rilasciate",
+      "Core ripulito dai dati storici prima della migrazione, per ridurre il volume del database",
+      "Core installato in cloud, separato dalle estensioni che restano nel data center del cliente",
+      "Core senza interfacce verso altri sistemi, per ridurre i rischi di sicurezza"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Clean core non riguarda la pulizia dei dati né la sicurezza: è un principio di architettura. Si tiene lo standard intatto e si estende tramite API rilasciate, così gli aggiornamenti non rompono le estensioni."
+    },
+    {
+     "t": "match",
+     "q": "Abbina la via di estensione al suo uso tipico.",
+     "pairs": [
+      [
+       "Key user (in-app)",
+       "Campi e logiche semplici, senza codice"
+      ],
+      [
+       "ABAP Cloud (on-stack)",
+       "Logica complessa nel sistema, con soli API rilasciati"
+      ],
+      [
+       "Side-by-side su BTP",
+       "App e integrazioni esterne al core"
+      ],
+      [
+       "Modifica del codice standard",
+       "Da evitare: rende gli upgrade costosi"
+      ]
+     ],
+     "exp": "Le prime tre vie mantengono il core pulito; la modifica diretta del codice standard è l'anti-pattern. Ogni estensione ha un livello di complessità e un luogo in cui vive."
+    },
+    {
+     "t": "tf",
+     "q": "Con ABAP Cloud si possono usare liberamente tutte le tabelle e funzioni interne di S/4HANA.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: ABAP Cloud ammette solo oggetti e API rilasciati da SAP, per garantire estensioni stabili negli upgrade. Usare oggetti interni non rilasciati è proprio ciò che il clean core vuole evitare."
+    },
+    {
+     "t": "bucket",
+     "q": "Coerente o contrario al clean core?",
+     "buckets": [
+      "Coerente col clean core",
+      "Contro il clean core"
+     ],
+     "items": [
+      [
+       "Estendere tramite API rilasciate",
+       0
+      ],
+      [
+       "Costruire un'app side-by-side su BTP",
+       0
+      ],
+      [
+       "Usare campi personalizzati da key user",
+       0
+      ],
+      [
+       "Modificare direttamente il codice standard",
+       1
+      ],
+      [
+       "Leggere tabelle interne non rilasciate",
+       1
+      ],
+      [
+       "Copiare programmi SAP e modificarli",
+       1
+      ]
+     ],
+     "exp": "Le pratiche coerenti usano interfacce stabili e tengono le estensioni fuori dal core; quelle contrarie intaccano lo standard e legano il cliente a un debito tecnico a ogni upgrade."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO chiede perché dovrebbe spendere per il clean core se oggi tutto funziona. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Perché dovrei spendere per il clean core, se oggi tutto funziona?"
+     },
+     "o": [
+      "Ogni modifica allo standard moltiplica costo e rischio dei prossimi upgrade; il clean core abbassa il costo di possesso",
+      "Perché SAP lo impone e senza clean core il supporto sull'ERP viene sospeso dal prossimo anno",
+      "Perché l'on-premise sta per spegnersi e tutte le personalizzazioni andranno rifatte in cloud",
+      "Perché il clean core garantisce che l'ERP non richieda più nessuna manutenzione tecnica"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "L'argomento è economico: più si modifica lo standard, più ogni upgrade costa. Il clean core riduce il debito tecnico e facilita le nuove release e l'AI. Minacce di sospensione del supporto o promesse di zero manutenzione non reggono."
+    }
+   ]
+  },
+  {
+   "id": "w02-l11",
+   "title": "Greenfield, brownfield, bluefield",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Greenfield (new implementation): si parte da un sistema nuovo, si ridisegnano i processi e si migrano solo i dati scelti. Massimo reset, più cambiamento organizzativo.",
+     "Brownfield (system conversion): si converte il sistema ECC esistente (con Software Update Manager e DMO) mantenendo processi, personalizzazioni e storico. Più rapido sul piano tecnico, ma porta con sé il debito.",
+     "Selective data transition (spesso detta bluefield): si sceglie cosa portare (società, periodo storico, configurazione), combinando elementi dei due approcci. {{w02.tool.btc}} include una selective data transition «lean».",
+     "Come scegliere: quanto è customizzato il sistema, quanto il cliente vuole cambiare i processi, quanta storia serve, quanto tempo e rischio può sopportare, se vuole consolidare più sistemi.",
+     "Per Cloud ERP (public) si parte di norma da una nuova implementazione; per la Private si possono valutare tutte le strade."
+    ],
+    "ae": "Non dire mai «brownfield è meglio» o «greenfield è meglio»: fai emergere i vincoli del cliente e lascia che l'approccio sia una conseguenza."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina l'approccio alla sua descrizione.",
+     "pairs": [
+      [
+       "Greenfield",
+       "Nuova implementazione con processi ridisegnati"
+      ],
+      [
+       "Brownfield",
+       "Conversione del sistema esistente con dati e storico"
+      ],
+      [
+       "Selective data transition",
+       "Si sceglie cosa migrare: società, storico, configurazione"
+      ],
+      [
+       "Bluefield",
+       "Altro nome comune della selective data transition"
+      ]
+     ],
+     "exp": "Greenfield riparte da zero, brownfield converte l'esistente, selective data transition (o bluefield) sta nel mezzo con una scelta mirata di cosa portare. Il nome conta meno della logica."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente ha un ECC quasi standard e vuole ridurre tempi e rischi senza ridisegnare i processi. Quale approccio proponi per primo?",
+     "ctx": {
+      "who": "CIO",
+      "say": "Il nostro ECC è quasi standard, i processi funzionano e vogliamo ridurre rischio e tempi."
+     },
+     "o": [
+      "Brownfield: conversione del sistema esistente, con valutazione del custom code",
+      "Greenfield: nuova implementazione con ridisegno completo di tutti i processi",
+      "Selective data transition con migrazione di un solo anno di storico",
+      "Rimandare il progetto fino a quando il sistema ECC non sarà del tutto obsoleto"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Sistema quasi standard, processi che funzionano e desiderio di ridurre rischio: il brownfield è il candidato naturale. Va verificato con il Readiness Check e con l'analisi del custom code."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente ha quindici anni di personalizzazioni che nessuno capisce più e vuole cambiare i processi finanziari. Quale approccio proponi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Abbiamo quindici anni di customizzazioni che nessuno capisce più, e vogliamo cambiare i processi finanziari."
+     },
+     "o": [
+      "Greenfield: nuova implementazione, ridisegnando processi e migrando solo i dati scelti",
+      "Brownfield: conversione completa, mantenendo personalizzazioni e storico senza modifiche",
+      "Brownfield con rinvio della pulizia del custom code a dopo il go-live",
+      "Mantenere ECC con manutenzione estesa per evitare qualunque cambio di processo"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Debito tecnico elevato e volontà di cambiare i processi puntano al greenfield (o a una selective transition). Il brownfield porterebbe con sé le personalizzazioni che il cliente non capisce più."
+    },
+    {
+     "t": "tf",
+     "q": "Il brownfield porta con sé le personalizzazioni e il debito tecnico del sistema esistente, se non vengono ripulite.",
+     "a": true,
+     "diff": 1,
+     "exp": "Vero: la conversione mantiene processi, custom code e dati. Se non si fa pulizia prima o durante il progetto, il debito tecnico passa in S/4HANA e rende più costosi gli upgrade."
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine i passi per scegliere l'approccio di migrazione.",
+     "items": [
+      "Raccogli lo stato del landscape (custom code, dati, add-on)",
+      "Chiarisci gli obiettivi di business e di cambiamento",
+      "Valuta le opzioni (greenfield, brownfield, selective)",
+      "Confronta tempi, rischi e costi",
+      "Decidi e pianifica la roadmap"
+     ],
+     "exp": "Si parte dai fatti sul sistema e dagli obiettivi, poi si confrontano le opzioni e solo alla fine si decide. Decidere l'approccio prima di conoscere il landscape è la causa principale dei progetti fuori budget."
+    }
+   ]
+  },
+  {
+   "id": "w02-l12",
+   "title": "Fit-to-standard e SAP Activate",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Fit-to-standard: invece di raccogliere requisiti da zero (fit-gap), si parte dallo standard e dalle best practice SAP e si discute con il cliente dove l'adattamento è davvero necessario.",
+     "SAP Activate è la metodologia di implementazione di SAP, con sei fasi: {{w02.activate_phases}}. Il fit-to-standard si svolge nella fase Explore.",
+     "Realize costruisce in modo iterativo dal backlog; Deploy porta in produzione (cutover); Run copre operations e ottimizzazione.",
+     "Activate si applica sia ai progetti cloud sia a quelli on-premise, con roadmap e acceleratori consultabili da SAP for Me.",
+     "Per l'AE: Activate è il linguaggio dei piani di progetto dei partner. Conoscerlo ti aiuta a verificare tempi e responsabilità."
+    ],
+    "ae": "Se un partner ti propone un piano senza workshop fit-to-standard, chiedi perché: è il momento in cui si decide quanto standard il cliente accetta."
+   },
+   "ex": [
+    {
+     "t": "order",
+     "q": "Metti in ordine le sei fasi di SAP Activate.",
+     "items": [
+      "Discover",
+      "Prepare",
+      "Explore",
+      "Realize",
+      "Deploy",
+      "Run"
+     ],
+     "exp": "Discover valuta le opzioni, Prepare imposta il progetto, Explore ospita i workshop fit-to-standard, Realize costruisce e testa, Deploy porta in produzione e Run copre operations e ottimizzazione."
+    },
+    {
+     "t": "mcq",
+     "q": "In quale fase di SAP Activate si svolgono i workshop fit-to-standard?",
+     "o": [
+      "Explore",
+      "Discover",
+      "Deploy",
+      "Run"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "I workshop fit-to-standard si svolgono in Explore, usando le best practice SAP in un sistema dimostrativo. Discover valuta le opzioni, Deploy è il cutover e Run l'operatività."
+    },
+    {
+     "t": "fill",
+     "q": "Il fit-to-standard parte dallo ___ e dalle best practice SAP, non da una lista di requisiti scritti da zero.",
+     "o": [
+      "standard",
+      "codice custom",
+      "organigramma",
+      "bilancio"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "Si parte dallo standard e si adatta solo dove serve: meno personalizzazioni, meno costi di upgrade e coerenza con il clean core. È la differenza rispetto al fit-gap tradizionale."
+    },
+    {
+     "t": "tf",
+     "q": "Fit-to-standard significa che il cliente non può adattare alcun processo e deve accettare ogni funzione standard.",
+     "a": false,
+     "diff": 2,
+     "exp": "Falso: si parte dallo standard, ma dove c'è un vero bisogno si adatta con estensioni controllate (key user, ABAP Cloud, BTP). Il punto è decidere i gap con criterio e non per abitudine."
+    },
+    {
+     "t": "mcq",
+     "q": "Il partner vuole saltare i workshop di fit-to-standard per risparmiare tempo. Come reagisci?",
+     "ctx": {
+      "who": "Partner",
+      "say": "Saltiamo i workshop e andiamo direttamente alla configurazione, così risparmiamo tempo."
+     },
+     "o": [
+      "Spiego che lì si decide quanto standard accettare; saltarli sposta le discussioni in Realize",
+      "Accetto: i workshop sono facoltativi e i requisiti si possono raccogliere durante il test",
+      "Chiedo di sostituirli con una lunga raccolta di requisiti scritti prima dell'avvio",
+      "Accetto solo se il cliente firma subito il piano di progetto senza ulteriori verifiche"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "I workshop sono il momento in cui il cliente vede lo standard e decide dove adattarlo. Se si saltano, i dubbi emergono nella fase di build o di test, dove cambiare costa molto di più."
+    }
+   ]
+  },
+  {
+   "id": "w02-l13",
+   "title": "Strumenti di assessment",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "{{w02.tool.readiness_check}}: analizza il sistema ECC del cliente rispetto alla conversione a S/4HANA (simplification item, add-on, custom code, volumi di dati) e produce un report su impatti e lavoro atteso.",
+     "{{w02.tool.transformation_navigator}}: strumento self-service (serve un S-user) che, partendo dall'uso attuale del portafoglio SAP, propone una roadmap di prodotti consigliati.",
+     "{{w02.tool.btc}}: ambiente di SAP per pianificare e guidare la trasformazione. Include il Transformation Approach Finder, che usa dati di Readiness Check e di profiling per suggerire il percorso, e funzioni di selective data transition.",
+     "Process mining e modellazione (famiglia SAP Signavio): mostrano come girano davvero i processi dai log di sistema, per decidere cosa standardizzare e cosa mantenere.",
+     "Scenari di valore: {{w02.bsr_process_discovery}}."
+    ],
+    "ae": "Prima di stimare un progetto, chiedi se il cliente ha già eseguito un Readiness Check: i risultati accorciano la discovery e dicono quanto è sporco il codice custom."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina lo strumento alla sua funzione.",
+     "pairs": [
+      [
+       "{{w02.tool.readiness_check}}",
+       "Analizza il sistema ECC rispetto alla conversione a S/4HANA"
+      ],
+      [
+       "{{w02.tool.transformation_navigator}}",
+       "Propone una roadmap di prodotti SAP dall'uso attuale"
+      ],
+      [
+       "{{w02.tool.btc}}",
+       "Pianifica la trasformazione e suggerisce il percorso"
+      ],
+      [
+       "Process mining (famiglia Signavio)",
+       "Mostra come girano davvero i processi dai dati di sistema"
+      ]
+     ],
+     "exp": "Quattro strumenti, quattro domande: cosa devo fare sul mio ECC (Readiness Check), quali prodotti mi servono (Transformation Navigator), quale percorso seguire (Business Transformation Center), come girano davvero i miei processi (process mining)."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale strumento è pensato per capire l'impatto tecnico e funzionale della conversione di un sistema ECC?",
+     "o": [
+      "{{w02.tool.readiness_check}}",
+      "{{w02.tool.transformation_navigator}}",
+      "SAP Activate",
+      "SAP Fiori launchpad"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Il Readiness Check analizza il sistema ECC rispetto alla conversione: simplification item, add-on e custom code. Il Transformation Navigator guarda al portafoglio prodotti; Activate è una metodologia e il launchpad è un'interfaccia."
+    },
+    {
+     "t": "tf",
+     "q": "Un Readiness Check fornisce fatti sul sistema ECC (impatti, custom code, volumi), non la decisione finale sull'approccio di migrazione.",
+     "a": true,
+     "diff": 2,
+     "exp": "Vero: il Readiness Check produce fatti sul sistema, non decisioni. L'approccio nasce dall'incrocio con obiettivi di business, tolleranza al rischio e tempi."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CIO ha ECC, SRM e BW tutti personalizzati e non sa da dove cominciare. Cosa proponi?",
+     "ctx": {
+      "who": "CIO",
+      "say": "Non sappiamo da dove cominciare: abbiamo ECC, SRM e BW, tutto personalizzato."
+     },
+     "o": [
+      "Prima assessment e discovery sui processi, poi scegliamo il percorso",
+      "Firmiamo subito il contratto e definiamo il perimetro durante il progetto",
+      "Facciamo una nuova implementazione completa, senza analizzare lo stato attuale",
+      "Aspettiamo la scadenza della manutenzione standard e poi decidiamo il perimetro"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Con un landscape complesso si parte dai fatti: Transformation Navigator per la roadmap di prodotti, Readiness Check per il sistema ECC, process mining per i processi. Poi si sceglie il percorso. Decidere prima di sapere è la ricetta per il progetto fuori controllo."
+    },
+    {
+     "t": "mcq",
+     "q": "A cosa serve un report di tipo Business Scenario Recommendations (poi evoluto in Process Discovery)?",
+     "o": [
+      "A indicare, dall'uso reale dell'ERP, gli scenari di business con più valore in S/4HANA",
+      "A calcolare il prezzo del progetto di migrazione in base al numero di utenti del sistema",
+      "A migrare i dati in automatico dal vecchio sistema al nuovo, senza intervento dei partner",
+      "A monitorare le prestazioni dei server durante il cutover e sino alla chiusura del progetto"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Questo tipo di report parte dall'uso reale dell'ERP per suggerire quali scenari di business hanno più valore in S/4HANA. Nome e disponibilità attuale vanno verificati con il pre-sales: non promettere tempi o formati."
+    }
+   ]
+  },
+  {
+   "id": "w02-l14",
+   "title": "Il calendario ECC",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Manutenzione standard di ECC 6.0 EHP6-8: fino al {{sap.ecc.mainstream_end}}.",
+     "Manutenzione estesa: {{sap.ecc.extended_end}}.",
+     "Transition option (SAP ERP, private edition): {{sap.ecc.transition_option}}.",
+     "Cosa non dire: non promettere prezzi o condizioni della transition option (SAP annuncia i dettagli più vicino al 2028) né presentare la scadenza come una minaccia. La leva è il valore della trasformazione; la data è il contesto.",
+     "Il calendario riguarda ECC; anche S/4HANA ha un suo ciclo di release e di manutenzione, che vediamo nel prossimo livello."
+    ],
+    "ae": "Apri con il problema di business e collega la data dopo, non prima: «Se volete fare il passaggio con calma, il periodo utile per progettare è adesso»."
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "La manutenzione standard di ECC 6.0 EHP6-8 termina il ___.",
+     "o": [
+      "{{sap.ecc.mainstream_end}}",
+      "31 dicembre 2025",
+      "30 giugno 2028",
+      "31 dicembre 2030"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "La manutenzione standard di ECC 6.0 EHP6-8 termina il {{sap.ecc.mainstream_end}}. La manutenzione estesa arriva al {{sap.ecc.extended_end}}: non confonderle."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO ha sentito che SAP «spegne» ECC alla fine della manutenzione standard e chiede se deve migrare subito. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Mi hanno detto che alla fine della manutenzione standard SAP spegne ECC: devo migrare subito?"
+     },
+     "o": [
+      "Finisce la manutenzione standard, non l'uso: esistono opzioni di estensione da valutare",
+      "Sì: dopo quella data ECC smette di funzionare e non esistono altre opzioni",
+      "No: la manutenzione standard è stata prorogata sino al 2035 senza alcun costo",
+      "Dipende dal paese: in Italia la manutenzione standard prosegue senza limiti di data"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "La data riguarda la fine della manutenzione standard, non lo spegnimento del sistema. Esistono manutenzione estesa (con sovrapprezzo) e una transition option legata a RISE: il tema è come usare il tempo, non una scadenza di sopravvivenza."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CIO propone di acquistare la manutenzione estesa e rimandare tutto alla sua scadenza. Cosa rispondi?",
+     "ctx": {
+      "who": "CIO",
+      "say": "Compro la manutenzione estesa e rimando tutto alla sua scadenza, no?"
+     },
+     "o": [
+      "È un'opzione, ma costa di più e sposta il rischio: valutiamo costo totale e capacità di innovare",
+      "Non è possibile: la manutenzione estesa è stata cancellata e non è più acquistabile",
+      "È gratuita, quindi conviene sempre rimandare e guadagnare tempo sull'investimento",
+      "È obbligatoria per tutti i clienti ECC e quindi non c'è altra scelta pratica"
+     ],
+     "a": 0,
+     "diff": 3,
+     "exp": "La manutenzione estesa è prevista con sovrapprezzo: rimandare tiene in vita ECC ma costa di più e concentra la migrazione a ridosso della scadenza. Va confrontata con costo di trasformazione, rischio e opportunità di innovare (AI inclusa)."
+    },
+    {
+     "t": "tf",
+     "q": "L'opzione di copertura ECC fino al 2033 si può acquistare senza un contratto RISE.",
+     "a": false,
+     "diff": 2,
+     "ctx": {
+      "who": "Procurement",
+      "say": "Ho sentito che c'è un'opzione fino al 2033, quindi RISE non mi serve."
+     },
+     "exp": "Falso. Condizioni attuali: {{sap.ecc.transition_option}}. SAP annuncerà dettagli e prezzi più avanti: non promettere condizioni al cliente."
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine cronologico le scadenze ECC, dalla prima all'ultima.",
+     "items": [
+      "Fine della manutenzione standard",
+      "Transition option acquistabile",
+      "Fine della manutenzione estesa",
+      "Inizio della copertura transition option",
+      "Fine della copertura transition option"
+     ],
+     "exp": "Standard: {{sap.ecc.mainstream_end}}. Estesa: {{sap.ecc.extended_end}}. Transition option: {{sap.ecc.transition_option}}. Segui quest'ordine per spiegare il calendario al cliente."
+    }
+   ]
+  },
+  {
+   "id": "w02-l15",
+   "title": "Release, FPS e verticali",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Private e on-premise: {{w02.s4_release_model}}. Non è un rilascio annuale: diffida di chi dice «ogni anno esce una nuova versione base».",
+     "Versione base corrente: {{w02.s4_current_release}}. Feature pack: {{w02.s4_fps}}.",
+     "La public edition riceve {{w02.cloud_erp_public_cadence}}: il numero (per esempio 2602) indica anno e mese.",
+     "Un Feature Pack Stack (FPS) porta novità non disruptive tra due release base, ed è più semplice da adottare di un upgrade di release base.",
+     "Soluzioni di settore: oltre al core ci sono funzioni specifiche per industria. Distingui cosa è standard, cosa è funzione di settore e cosa è estensione o partner; in public cloud lo scope disponibile va verificato con il pre-sales."
+    ],
+    "ae": "Quando il cliente chiede «quale versione installo?», non rispondere a memoria: verifica release corrente, FPS e fine manutenzione con il pre-sales e annota la data."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un responsabile IT dice che S/4HANA ha una nuova release base ogni anno e vuole aspettare la prossima. Come rispondi?",
+     "ctx": {
+      "who": "Responsabile IT",
+      "say": "So che S/4HANA ha una nuova versione ogni anno, quindi aspetto la prossima."
+     },
+     "o": [
+      "La release base è biennale, con FPS semestrali: aspettare non elimina la migrazione",
+      "È corretto: ogni anno esce una release base, quindi conviene attendere la prossima",
+      "La release base è semestrale per le edizioni cloud e on-premise, quindi conviene attendere",
+      "Non esistono più release base: S/4HANA si aggiorna in modo continuo senza progetti"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Per on-premise e Private il ciclo è biennale (2023, 2025) con feature pack semestrali; la public edition ha il suo calendario con due release l'anno. Aspettare la prossima release non evita il lavoro di migrazione e allunga l'esposizione alla scadenza ECC."
+    },
+    {
+     "t": "tf",
+     "q": "Nella numerazione delle release della public edition, 2602 indica l'anno 2026 e il mese di febbraio.",
+     "a": true,
+     "diff": 2,
+     "exp": "Vero: il formato è AAMM, quindi 2602 è la release di febbraio 2026 e 2608 quella della seconda metà dell'anno. Se il cliente cita un numero di release, controlla di quale edizione sta parlando."
+    },
+    {
+     "t": "fill",
+     "q": "Un Feature Pack Stack (FPS) porta novità ___ tra due release base.",
+     "o": [
+      "non disruptive",
+      "puramente correttive",
+      "incompatibili",
+      "limitate al cloud"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Gli FPS portano funzioni nuove ma non disruptive, ogni sei mesi, fino alla release base successiva. Non sono solo correzioni né riservate al cloud, e non rompono la compatibilità."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CIO Life Sciences chiede quali funzioni di settore siano disponibili. Come imposti la risposta?",
+     "ctx": {
+      "who": "CIO Life Sciences",
+      "say": "Ci servono funzioni specifiche per il nostro settore: cosa c'è nel prodotto?"
+     },
+     "o": [
+      "Verifichiamo con il pre-sales cosa è standard, di settore o da fare con un partner",
+      "Il prodotto standard include già le funzioni di settore nelle varie edizioni e versioni",
+      "S/4HANA non ha funzioni di settore: vanno sviluppate come estensioni custom dal cliente",
+      "Dipende dal partner di implementazione: SAP non pubblica uno scope di settore"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Le funzioni di settore dipendono da edizione, versione e scope: vanno mappate con il pre-sales distinguendo standard, funzione di settore ed estensione o partner. Promettere che tutto è incluso, o negare che esistano, sono errori opposti."
+    },
+    {
+     "t": "match",
+     "q": "Abbina l'edizione o il componente alla sua cadenza.",
+     "pairs": [
+      [
+       "Cloud ERP (public)",
+       "Due release l'anno, numerate AAMM"
+      ],
+      [
+       "S/4HANA on-premise e Private",
+       "Release base biennale, con FPS semestrali"
+      ],
+      [
+       "Feature Pack Stack (FPS)",
+       "Novità non disruptive tra due release base"
+      ],
+      [
+       "Mainstream maintenance per release",
+       "Sette anni dal ciclo 2023 in poi"
+      ]
+     ],
+     "exp": "Il calendario dipende dall'edizione: la public ha due release l'anno, Private e on-premise seguono il ciclo biennale con FPS semestrali e sette anni di mainstream maintenance per release."
+    }
+   ]
+  },
+  {
+   "id": "w02-l16",
+   "title": "Boss: il landscape del cliente",
+   "kind": "boss",
+   "lesson": {
+    "points": [
+     "Il boss mescola tutto il mondo: processi, differenze tra ECC e S/4HANA, deployment, clean core, migrazione, strumenti e calendario.",
+     "Per ogni scenario cerca prima il problema di business del cliente, poi traduci in processo, poi scegli modello e approccio.",
+     "Se un dato è volatile (date, versioni, nomi di strumenti), citalo con data e fonte; se non sei sicuro, usa una formula qualitativa."
+    ]
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina l'elemento al suo ruolo.",
+     "pairs": [
+      [
+       "Universal Journal",
+       "Una sola fonte di voci per contabilità e controlling"
+      ],
+      [
+       "Business Partner",
+       "Oggetto unico per clienti e fornitori"
+      ],
+      [
+       "Clean core",
+       "Estensioni fuori dal core, con interfacce rilasciate"
+      ],
+      [
+       "Fit-to-standard",
+       "Si parte dallo standard e si adatta dove serve"
+      ],
+      [
+       "Selective data transition",
+       "Si sceglie cosa migrare, anche società e storico"
+      ]
+     ],
+     "exp": "Cinque concetti che vedrai in ogni conversazione ERP: li usi per spiegare perché S/4HANA non è solo un cambio di database."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale affermazione su S/4HANA e sul database è corretta?",
+     "o": [
+      "Gira solo su SAP HANA, un database in-memory",
+      "Gira su HANA o su Oracle, a scelta del cliente",
+      "Gira su HANA in cloud e su altri database on-premise",
+      "Gira su qualunque database, con HANA per le analisi"
+     ],
+     "a": 0,
+     "diff": 1,
+     "exp": "S/4HANA gira esclusivamente su SAP HANA, in cloud e on-premise. ECC supportava più database; per questo spostare il database ECC su HANA non basta a essere su S/4HANA."
+    },
+    {
+     "t": "fill",
+     "q": "La fonte unica delle voci contabili nel Universal Journal è la tabella ___.",
+     "o": [
+      "ACDOCA",
+      "BSEG",
+      "COEP",
+      "ANEP"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "ACDOCA unifica le voci di contabilità, controlling, cespiti e material ledger. BSEG e COEP erano le tabelle separate di ECC; ANEP conteneva righe del modulo cespiti."
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente chiede perché nella public edition non può modificare il codice standard. Come spieghi?",
+     "ctx": {
+      "who": "CIO",
+      "say": "Perché nella public non posso modificare il codice standard come facevo in ECC?"
+     },
+     "o": [
+      "Perché è multi-tenant e aggiornata spesso: le estensioni passano da interfacce rilasciate",
+      "Perché SAP vuole vendere più estensioni e riserva le modifiche ai propri consulenti",
+      "Perché la public è meno sicura e le modifiche al core la renderebbero vulnerabile",
+      "Perché le modifiche sono consentite solo dopo un anno di utilizzo della public edition"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "La public edition è un ambiente condiviso con aggiornamenti frequenti: per non rompere le estensioni a ogni release, si estende con interfacce rilasciate (key user, ABAP Cloud, BTP). È una scelta di architettura, non commerciale."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente vuole migrare solo due società e cinque anni di storico, lasciando indietro il resto del sistema. Quale approccio esplori?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Vogliamo portare solo due società e cinque anni di storico, e lasciare indietro il resto."
+     },
+     "o": [
+      "Selective data transition: si sceglie cosa migrare, anche società e storico",
+      "Brownfield: conversione dell'intero sistema esistente con tutte le società e lo storico",
+      "Greenfield senza migrazione dati: si riparte da zero anche per le anagrafiche",
+      "Nessuno: S/4HANA richiede sempre la migrazione completa dello storico di ECC"
+     ],
+     "a": 0,
+     "diff": 2,
+     "exp": "Scegliere società e periodo storico da portare è il tratto distintivo della selective data transition (o bluefield). Brownfield converte tutto; greenfield riparte da zero; non c'è alcun obbligo di migrare l'intero storico."
+    },
+    {
+     "t": "multi",
+     "q": "Quali pratiche sono coerenti con il clean core?",
+     "o": [
+      "Estensioni key user in-app",
+      "ABAP Cloud con API rilasciate",
+      "App side-by-side su BTP",
+      "Modifiche dirette al codice standard",
+      "Lettura di tabelle interne non rilasciate"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "diff": 2,
+     "exp": "Key user, ABAP Cloud e side-by-side tengono le estensioni fuori dal core, con interfacce stabili. Modificare lo standard o leggere oggetti interni non rilasciati lega il cliente al debito tecnico a ogni upgrade."
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO chiede cosa succede dopo la manutenzione estesa di ECC e quanto costerà la transition option. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Dopo la manutenzione estesa cosa succede, e quanto costa la transition option?"
+     },
+     "o": [
+      "Date note: la transition option richiede RISE, ma condizioni e prezzi arriveranno più avanti",
+      "Ti confermo che la transition option costa come la manutenzione estesa e copre l'intero perimetro ECC",
+      "Dopo la manutenzione estesa ECC non è più utilizzabile e non esistono opzioni di copertura",
+      "Ti garantisco prezzo e perimetro della transition option, perché sono già pubblici da SAP"
+     ],
+     "a": 0,
+     "diff": 3,
+     "exp": "Si indicano le date note ({{sap.ecc.mainstream_end}} standard, {{sap.ecc.extended_end}} estesa) e il fatto che la transition option richiede RISE; condizioni e prezzi non sono ancora annunciati, quindi non vanno promessi. Il perimetro è più stretto di quello della Business Suite 7."
+    },
+    {
+     "t": "bucket",
+     "q": "Strumento, metodologia o modello di deployment?",
+     "buckets": [
+      "Strumento di assessment",
+      "Metodologia",
+      "Modello di deployment"
+     ],
+     "items": [
+      [
+       "{{w02.tool.readiness_check}}",
+       0
+      ],
+      [
+       "{{w02.tool.btc}}",
+       0
+      ],
+      [
+       "SAP Activate",
+       1
+      ],
+      [
+       "Fit-to-standard",
+       1
+      ],
+      [
+       "Cloud ERP Private",
+       2
+      ],
+      [
+       "Cloud ERP (public)",
+       2
+      ]
+     ],
+     "exp": "Gli strumenti analizzano e raccomandano; le metodologie guidano il progetto; i modelli di deployment dicono dove e come gira il sistema. Confondere le tre categorie crea piani di progetto incoerenti."
+    },
+    {
+     "t": "tf",
+     "q": "La public edition di Cloud ERP e le versioni on-premise di S/4HANA condividono lo stesso calendario di release.",
+     "a": false,
+     "diff": 3,
+     "exp": "Falso: la public edition ha due release l'anno numerate AAMM, mentre on-premise e Private seguono il ciclo biennale con feature pack semestrali. Chiedi sempre di quale edizione parla il cliente prima di discutere di aggiornamenti."
+    }
+   ]
+  }
+ ]
+}

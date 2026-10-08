@@ -1,0 +1,92 @@
+{
+  "w02.s4_release_model": {
+    "label": "Ciclo di rilascio di SAP S/4HANA on-premise e Private",
+    "value": "dalla release 2023 una release base ogni due anni (2023, 2025), con Feature Pack Stack ogni sei mesi e 7 anni di mainstream maintenance per release",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://news.sap.com/2022/09/new-sap-s4hana-release-maintenance-strategy/",
+    "confidence": "primary",
+    "note": "Strategia annunciata da SAP a settembre 2022 (ciclo biennale, 7 anni, FPS semestrali), confermata dal materiale SAP Learning sul Private Edition (https://learning.sap.com/courses/implementing-sap-s-4hana-cloud-private-edition/navigating-release-upgrades_ae2d796c-bafd-4e04-8b41-562ebda9eb49), che segue il ciclo dell'on-premise. ATTENZIONE: NON è un rilascio annuale. Le date di fine manutenzione per singola release (SAP Note 2900388) non sono state verificate: per la 2023 consulenze indicano dicembre 2030, per la 2025 le fonti divergono, quindi non usarle."
+  },
+  "w02.s4_current_release": {
+    "label": "Release base corrente di SAP S/4HANA (on-premise e Private)",
+    "value": "SAP S/4HANA 2025 (disponibile da ottobre 2025)",
+    "asOf": "2025-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://help.sap.com/doc/819cdef021e44d7aad27b31c8bb1ebfc/2025/en-US/START_OP2025.pdf",
+    "confidence": "primary",
+    "note": "Guida «Getting Started» SAP per la release 2025 (versione 1.0 datata 8 ottobre 2025). Con il ciclo biennale non è atteso un nuovo rilascio base nel 2026; l'assenza di una release 2026 è dedotta (nessuna fonte la cita) e una consulenza indica ancora la 2025 come ultima per il Private Edition (https://www.riministreet.com/blog/sap-s4hana-2602-decoded-what-the-release-reveals-about-sap-innovation/)."
+  },
+  "w02.s4_fps": {
+    "label": "Feature Pack Stack della release S/4HANA 2025",
+    "value": "FPS01 della release 2025 disponibile da marzo 2026; il successivo (cadenza semestrale) è da verificare",
+    "asOf": "2026-03-09",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.savictech.com/insights/sap-s4hana-2025-fps01-ai-embedded-erp-2026/",
+    "confidence": "secondary",
+    "note": "Data del 9 marzo 2026 da una consulenza; la guida SAP per FPS01 (versione 2.0) è datata 25 febbraio 2026, quindi la data esatta di disponibilità va confermata su fonte SAP. Non risulta verificato se FPS02 sia già uscito a ottobre 2026: non affermarlo."
+  },
+  "w02.cloud_erp_public_cadence": {
+    "label": "Cadenza di rilascio di SAP Cloud ERP (public edition)",
+    "value": "due release l'anno, con numerazione AAMM: 2602 (febbraio 2026) e 2608 (seconda metà del 2026)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.riministreet.com/blog/sap-s4hana-2602-decoded-what-the-release-reveals-about-sap-innovation/",
+    "confidence": "secondary",
+    "note": "La release 2602 (febbraio 2026) è solo per la public edition; SAP Learning programma le Early Release Series «2602» (H1 2026) e «2608» (H2 2026), vedi https://learning.sap.com/live-sessions/extensibility-2608-early-release-series, e Viseo parla di due release l'anno (https://www.viseo.com/insights/sap-cloud-erp-a-scalable-and-innovative-solution/). Un sito di formazione parla di cadenza trimestrale: fonte debole, scartata. Data esatta della 2608 non verificata."
+  },
+  "w02.tool.readiness_check": {
+    "label": "Nome dello strumento SAP di analisi per la conversione ECC → S/4HANA",
+    "value": "SAP Readiness Check",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://learning.sap.com/courses/implementing-sap-s-4hana-cloud-private-edition/performing-system-preparation-activities-for-system-conversions_c131e647-d7d1-4887-a2ff-c01b25966a52",
+    "confidence": "secondary",
+    "note": "Valuta impatti funzionali e tecnici della conversione di un sistema ECC verso S/4HANA on-premise o Private (simplification item, add-on, custom code, volumi). Esiste anche un «Readiness Check for SAP Cloud ALM» per altro scopo. Non trovata alcuna notizia di sostituzione o rinomina nel 2026, ma lo stato attuale va confermato su SAP for Me."
+  },
+  "w02.tool.transformation_navigator": {
+    "label": "Nome dello strumento SAP che propone una roadmap di prodotti",
+    "value": "SAP Transformation Navigator",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://support.sap.com/upgrade",
+    "confidence": "secondary",
+    "note": "Strumento self-service (serve un S-user) che deriva i prodotti consigliati dall'uso attuale del portafoglio SAP e dalle preferenze di deployment. Il corso openSAP dedicato è stato ritirato a ottobre 2023: ritirato il corso, non lo strumento. Stato attuale da confermare."
+  },
+  "w02.tool.btc": {
+    "label": "Nome dell'ambiente SAP per pianificare la trasformazione verso S/4HANA",
+    "value": "SAP Business Transformation Center",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://support.sap.com/en/alm/sap-cloud-alm/transformation/btc/taf.html",
+    "confidence": "secondary",
+    "note": "Include il Transformation Approach Finder (usa dati di Readiness Check e profiling dei dati per suggerire il percorso) e la selective data transition «lean» annunciata a Sapphire 2024 (https://news.sap.com/2024/07/serving-customers-better-lean-selective-data-transition/). Secondo SAP è incluso nei contratti cloud, Enterprise Support e RISE. Funzioni e confini con gli altri strumenti evolvono: verificare."
+  },
+  "w02.activate_phases": {
+    "label": "Fasi della metodologia SAP Activate",
+    "value": "Discover, Prepare, Explore, Realize, Deploy, Run",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://learning.sap.com/courses/discovering-sap-activate-implementation-tools-and-methodology/describing-the-methodology-structure",
+    "confidence": "primary",
+    "note": "Sei fasi; Prepare-Deploy sono le quattro fasi centrali, Discover e Run le aggiuntive. Il fit-to-standard si svolge in Explore. Roadmap e acceleratori aggiornati si consultano nel road map viewer di SAP for Me."
+  },
+  "w02.bsr_process_discovery": {
+    "label": "Business Scenario Recommendations e la sua evoluzione",
+    "value": "report basato sull'uso reale dell'ERP che indica gli scenari di business con più valore in S/4HANA (Business Scenario Recommendations, poi evoluto in «Process Discovery»); disponibilità attuale da verificare",
+    "asOf": "2021-11-24",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://assets.dm.ux.sap.com/webinars/sap-user-groups-k4u/pdfs/211124_process_discovery_for_sap_s4hana_transformation.pdf",
+    "confidence": "low",
+    "note": "Fonti del 2019-2022 (presentazioni SAP per user group): il BSR era un report gratuito per clienti in manutenzione, basato sull'uso ERP, poi descritto come evoluto in Process Discovery. Nessuna fonte 2025-2026 trovata: non dire che esiste ancora con questo nome e non promettere tempi di consegna."
+  }
+}

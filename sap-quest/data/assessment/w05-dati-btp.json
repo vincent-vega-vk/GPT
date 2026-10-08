@@ -1,0 +1,81 @@
+{
+  "id": "w05",
+  "items": [
+    {
+      "t": "tf",
+      "q": "SAP Integration Suite permette di collegare applicazioni SAP e non-SAP con flussi di integrazione e API.",
+      "a": true,
+      "exp": "È la piattaforma di integrazione (iPaaS) di SAP su BTP: flussi, API Management e scambio B2B per collegare sistemi di origine diversa.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "In Business Data Cloud, che cosa si intende con «data product»?",
+      "o": [
+        "Un dataset curato per un tema di business, con metadati e accesso governato",
+        "Un report già impaginato per il management, con grafici e commenti predefiniti",
+        "Un'applicazione di terze parti per il reparto finance, venduta in un marketplace",
+        "Una copia di backup del database dell'ERP, conservata in un ambiente separato"
+      ],
+      "a": 0,
+      "exp": "Il data product unisce dati raffinati, metadati che spiegano i campi e un punto di accesso governato: il significato di business viaggia con il dato.",
+      "diff": 1
+    },
+    {
+      "t": "mcq",
+      "q": "Un cliente usa Snowflake. Quale elemento di BDC gli permette di usare i dati SAP senza copiarli?",
+      "o": [
+        "BDC Connect, con il connettore zero-copy dedicato a Snowflake",
+        "Un export notturno da Datasphere verso Snowflake",
+        "Il BW Data Product Generator, che sposta i dati nel suo ambiente",
+        "SAP Build Process Automation, che sposta i dati tra i due sistemi"
+      ],
+      "a": 0,
+      "exp": "{{w05.bdc_connect_snowflake}} per il connettore Snowflake. Un export notturno è una replica, quindi l'opposto dello zero-copy.",
+      "diff": 2
+    },
+    {
+      "t": "mcq",
+      "q": "Quale modello commerciale BTP prevede un pool di crediti prepagati da consumare sui servizi del catalogo?",
+      "o": [
+        "CPEA, con impegno annuale su un importo da consumare nel tempo",
+        "Pay-As-You-Go, con fatturazione mensile e nessun impegno",
+        "Subscription, con canone fisso per una capacità definita"
+      ],
+      "a": 0,
+      "exp": "CPEA (talvolta indicato come BTPEA) è il modello a crediti prepagati. Il pay-as-you-go è a consumo senza impegno, la subscription è a capacità fissa.",
+      "diff": 2
+    },
+    {
+      "t": "multi",
+      "q": "Quali affermazioni sulle acquisizioni dati e AI di SAP nel 2026 sono corrette?",
+      "o": [
+        "Reltio porta master data management multi-dominio con entity resolution basata su AI",
+        "Dremio porta un lakehouse basato su Apache Iceberg",
+        "Prior Labs sviluppa modelli foundation per dati tabellari",
+        "Dremio ha sostituito Datasphere come componente di data management di BDC",
+        "Reltio può essere usato soltanto come componente interno di BDC"
+      ],
+      "a": [
+        0,
+        1,
+        2
+      ],
+      "exp": "Reltio {{sap.acq.reltio}}; Dremio {{sap.acq.dremio}}; Prior Labs {{sap.acq.prior_labs}}. Datasphere resta un componente di BDC, e Reltio è acquistabile anche da solo (per ora).",
+      "diff": 3
+    },
+    {
+      "t": "mcq",
+      "q": "Secondo il posizionamento di SAP, qual è la differenza tra Master Data Governance e Reltio?",
+      "o": [
+        "MDG governa il dato alla creazione nell'ERP; Reltio unifica i master data tra sistemi",
+        "Reltio governa il dato alla creazione nell'ERP; MDG unifica i master data tra sistemi",
+        "Reltio sostituisce MDG, che viene dismesso per chi adotta Business Data Cloud",
+        "MDG gestisce i master data dei clienti e Reltio quelli dei fornitori, separati"
+      ],
+      "a": 0,
+      "exp": "{{w05.mdg_vs_reltio}}. Sono complementari: non è un caso di sostituzione, e la divisione per dominio (clienti o fornitori) non è il criterio.",
+      "diff": 3
+    }
+  ]
+}

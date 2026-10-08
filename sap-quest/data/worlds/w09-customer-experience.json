@@ -90,9 +90,9 @@
      },
      "o": [
       "Ti chiedo quanto costano errori di prezzo, offerte lente e resi: la CX agisce lì.",
-      "Il CRM non c'entra col bilancio, ma ai tuoi commerciali piacerà molto, vedrai.",
-      "Se non lo compri tu, lo comprerà il marketing con un budget separato dal tuo.",
-      "Ti mostro subito una demo: l'interfaccia è molto moderna e piace a tutti."
+      "Ti chiedo quanti lead genera il sito: il marketing è il vero motore dei ricavi.",
+      "Ti spiego che il CRM è ormai uno standard di mercato che hanno i tuoi concorrenti.",
+      "Ti mostro le funzioni principali del CRM: pipeline, campagne e assistenza in una demo."
      ],
      "a": 0,
      "exp": "Il CFO ragiona in ricavi, margini, DSO e rischio. Collega la CX a quei numeri (errori d'ordine, sconti fuori policy, incassi in ritardo) invece di parlare di funzioni.",
@@ -149,7 +149,7 @@
       "Oggi si chiama {{w09.engagement_cloud_name}}: stesse funzioni, nome nuovo.",
       "Emarsys è stato dismesso e sostituito da Sales Cloud V2 nel 2026.",
       "Emarsys oggi fa parte di SAP Cloud ERP come modulo di marketing.",
-      "Emarsys non è mai stato un prodotto di SAP, ma di un partner."
+      "Emarsys non è un prodotto SAP: è di un partner commerciale integrato."
      ],
      "a": 0,
      "exp": "{{w09.engagement_cloud_rename}}. Non è una sostituzione con altri prodotti né una dismissione: è la stessa piattaforma con un nome e un posizionamento nuovi.",
@@ -182,10 +182,10 @@
       "say": "Abbiamo Sales Cloud V1 da anni. Ci dicono di passare a V2: è un upgrade, giusto?"
      },
      "o": [
-      "No: V2 è ricostruito. È un progetto di migrazione, parto dalla mappa dell'esistente.",
-      "Sì, è un aggiornamento automatico incluso nella manutenzione standard.",
-      "No, per passare a V2 devi per forza cambiare fornitore di CRM.",
-      "Sì, ma si può fare solo dopo il passaggio completo a S/4HANA."
+      "No, V2 è ricostruito: serve un progetto che parta dalla mappa dell'esistente e dei dati.",
+      "Sì, V2 eredita dati e configurazioni di V1: basta una finestra di aggiornamento.",
+      "Sì, ma dopo il passaggio a S/4HANA, perché è un prerequisito tecnico di V2 stesso.",
+      "No, V2 richiede di ripartire da zero con un altro fornitore e un nuovo contratto."
      ],
      "a": 0,
      "exp": "V2 è un prodotto nuovo: dati, integrazioni e processi vanno rivisti. Proponi una discovery dell'esistente (oggetti, integrazioni, estensioni) e un piano per fasi collegato a un beneficio, non una paura.",
@@ -211,10 +211,10 @@
      "t": "mcq",
      "q": "Qual è la differenza architetturale chiave di Sales Cloud V2 rispetto a V1?",
      "o": [
-      "È ricostruito cloud-native a microservizi, con estensioni esterne al prodotto",
-      "È V1 con una nuova interfaccia grafica",
-      "È una versione on-premise di V1",
-      "È un modulo interno di S/4HANA"
+      "È ricostruito cloud-native a microservizi, con estensioni esterne al prodotto (clean core)",
+      "È la stessa architettura di V1 con un'interfaccia nuova e più veloce da usare",
+      "È una versione on-premise di V1 rilasciata per i clienti con vincoli sui dati",
+      "È un modulo interno di S/4HANA, accessibile ai clienti con ERP SAP nel cloud"
      ],
      "a": 0,
      "exp": "V2 non è un restyling: è una nuova architettura. Per questo estensioni e integrazioni di V1 non si portano 1:1 e la migrazione va pianificata.",
@@ -225,8 +225,8 @@
      "q": "Nel principio «clean core» applicato a Sales Cloud V2 si estende il prodotto con estensioni ___ invece di modificarlo internamente.",
      "o": [
       "side-by-side",
-      "a codice ABAP custom",
-      "modificando il database"
+      "inline (dentro il core)",
+      "hard-coded"
      ],
      "a": 0,
      "exp": "Clean core significa lasciare standard il prodotto e costruire le differenze accanto (su BTP o con API). Aggiornamenti più semplici, meno debito tecnico.",
@@ -276,10 +276,10 @@
       "say": "Il nostro partner dice che Sales Cloud V1 non sarà più supportato dal mese prossimo. È vero?"
      },
      "o": [
-      "Non risulta una data pubblica: verifico la roadmap ufficiale e ti rispondo per iscritto.",
-      "Confermo: meglio migrare subito, lo dicono tutti i partner di SAP.",
-      "Smentisco: V1 sarà supportato per sempre, senza alcuna scadenza.",
-      "Non è un tema mio: per queste cose devi chiedere al tuo partner."
+      "Non risulta una data pubblica: verifico la roadmap ufficiale e ti rispondo.",
+      "Confermo: SAP ha comunicato la fine supporto di V1 ai partner, meglio migrare subito.",
+      "Smentisco: V1 continuerà a essere supportato a lungo, quindi non c'è alcuna urgenza.",
+      "Non è un tema mio: la fine supporto la comunica il partner che gestisce il contratto."
      ],
      "a": 0,
      "exp": "Non confermare né smentire a memoria: {{w09.v1_to_v2}} La regola vale in ogni caso: date e roadmap si danno solo dopo conferma ufficiale dell'account team.",
@@ -334,10 +334,10 @@
       "say": "Un terzo degli ordini dei distributori arriva per mail e telefono. Costa tempo e sbagliamo i prezzi."
      },
      "o": [
-      "Misuro costo per ordine ed errori, poi propongo un portale con prezzi e stock reali.",
-      "Un portale risolve tutto in un mese: basta una licenza.",
-      "Un chatbot sul sito: gli ordini arriveranno da soli.",
-      "Cambiare ERP è l'unico modo per ridurre gli errori."
+      "Misuro costo per ordine ed errori, poi propongo un portale con prezzi e stock dall'ERP.",
+      "Propongo un portale B2B in un mese: bastano licenza e configurazione standard.",
+      "Propongo un chatbot sul sito che gestisce gli ordini dei distributori in autonomia.",
+      "Propongo di cambiare ERP per eliminare gli errori sui prezzi dei distributori."
      ],
      "a": 0,
      "exp": "Parti dalla misura del problema (costo per ordine, errori, tempo di gestione) e collega il portale ai dati ERP. Promettere tempi e risultati senza discovery è il modo più veloce di perdere credibilità.",
@@ -349,7 +349,7 @@
      "o": [
       "disponibilità a magazzino",
       "margini interni sul prodotto",
-      "costi standard di produzione"
+      "costi di produzione"
      ],
      "a": 0,
      "exp": "Prezzo e disponibilità reali riducono telefonate, errori e contestazioni. I margini e i costi interni non vanno mai esposti al cliente.",
@@ -387,10 +387,10 @@
       "say": "Il nostro SAP Commerce è on-premise, versione 2205. Fino a quando è supportato?"
      },
      "o": [
-      "Manutenzione standard terminata: pianifichiamo il cloud partendo dalle personalizzazioni.",
-      "Hai supporto standard fino al 2030, come per ECC.",
-      "Cambia solo il nome: Hybris e Commerce Cloud sono identici.",
-      "Devi passare per forza alla cloud ERP edition."
+      "Manutenzione standard terminata: pianifichiamo il cloud dalle personalizzazioni.",
+      "Hai ancora supporto standard fino al 2030, come per ECC: nessuna urgenza di migrare.",
+      "È un cambio di nome: Hybris on-premise e Commerce Cloud sono lo stesso prodotto.",
+      "Devi passare alla cloud ERP edition, che è il percorso previsto per questi clienti."
      ],
      "a": 0,
      "exp": "Secondo le fonti di settore la manutenzione standard dell'on-premise è terminata (vedi lezione), il cloud non è interessato. La cloud ERP edition è per chi usa Cloud ERP, non un percorso obbligato. Formula con prudenza e conferma con SAP.",
@@ -417,9 +417,9 @@
      "q": "Quale caratteristica SAP sottolinea per Engagement Cloud rispetto a un marketing automation tradizionale?",
      "o": [
       "Usa segnali operativi di commerce, servizio ed ERP per adattare le comunicazioni",
-      "Sostituisce il CRM di vendita",
-      "Gestisce solo email transazionali",
-      "Funziona solo con S/4HANA on-premise"
+      "Sostituisce il CRM di vendita con un unico archivio dei contatti marketing e vendite",
+      "Si concentra sulle email transazionali, come conferme d'ordine e avvisi di spedizione",
+      "Funziona con S/4HANA on-premise tramite un connettore dedicato e un database proprio"
      ],
      "a": 0,
      "exp": "Il differenziatore dichiarato è l'aggancio ai segnali operativi dell'azienda (ordini, consegne, casi aperti): personalizzazione basata su ciò che accade davvero al cliente.",
@@ -471,10 +471,10 @@
       "say": "Abbiamo già uno strumento di email marketing. Perché dovrei guardare la vostra piattaforma di engagement?"
      },
      "o": [
-      "Quanti clienti riconosci in tutti i canali? E usi dati di ordini e servizio nei messaggi?",
-      "Le nostre email hanno aperture più alte, lo dicono anche gli analisti di settore.",
-      "La nostra piattaforma costa meno di qualunque altro concorrente sul mercato.",
-      "Presto sarà obbligatoria per tutti i clienti SAP che usano il cloud."
+      "Quanti clienti riconosci in ogni canale? E usi i dati di ordini e servizio nei messaggi?",
+      "Ti mostro come migrare le liste email esistenti: la migrazione richiede pochi giorni.",
+      "Ti spiego che Gartner ci ha messo tra i Leader, quindi sei più sicuro con noi.",
+      "Ti faccio una demo del builder di journey: vedrai quanto è semplice creare campagne."
      ],
      "a": 0,
      "exp": "Non confrontare strumenti di invio: sposta la conversazione su dati unificati e segnali operativi. Promesse di prezzo o di obbligo sono false e rompono la fiducia.",
@@ -536,9 +536,9 @@
      "q": "Reltio, acquisita da SAP nel 2026, è una società specializzata in che cosa?",
      "o": [
       "Master data management (golden record)",
-      "Contact center in cloud",
-      "Pagamenti online",
-      "Gestione delle risorse umane"
+      "Contact center in cloud con voce e canali digitali",
+      "Pagamenti online e gestione dei rischi di frode",
+      "Gestione delle risorse umane e dei talenti"
      ],
      "a": 0,
      "exp": "Reltio fa MDM basato su matching intelligente per creare record unici di clienti, fornitori, prodotti. Stato dell'operazione: {{sap.acq.reltio}}. Rilevante per CX e AI perché la qualità dei dati è il prerequisito.",
@@ -552,10 +552,10 @@
       "say": "Abbiamo tre anagrafiche cliente diverse e il marketing personalizza male. Mi basta aggiungere AI?"
      },
      "o": [
-      "No: l'AI amplifica i dati che trova. Prima profili e consenso, poi personalizziamo.",
-      "Sì, l'AI elimina da sola i duplicati senza intervento.",
-      "Sì, ma serve un modello più grande.",
-      "No, bisogna prima cambiare ERP."
+      "No: l'AI amplifica i dati che trova. Prima profili e consenso, poi un caso d'uso piccolo.",
+      "Sì: l'AI riconosce i duplicati e li unisce da sola, senza un progetto sui dati.",
+      "Sì, ma serve un modello più grande, addestrato sulle tue anagrafiche e sui tuoi ordini.",
+      "No: bisogna prima sostituire l'ERP, perché è l'ERP la causa dei dati scollegati."
      ],
      "a": 0,
      "exp": "Anche SAP lo ripete nel racconto Autonomous CX: l'AI amplifica ciò che già esiste, punti deboli compresi. Parti da MDM/CDP e consenso con un caso d'uso piccolo.",
@@ -652,10 +652,10 @@
       "say": "I commerciali promettono consegne che il magazzino non riesce a rispettare. Poi i clienti chiamano furiosi."
      },
      "o": [
-      "Porto la disponibilità reale dell'ERP nei preventivi: la data promessa è verificata.",
-      "Formo i commerciali a essere più prudenti nel promettere le date ai clienti.",
-      "Compriamo più scorte di sicurezza di tutti i prodotti, così non mancano mai.",
-      "Condividiamo le date di consegna su un foglio Excel aggiornato ogni giorno."
+      "Porto la disponibilità ERP nei preventivi: la data promessa è verificata.",
+      "Formo i commerciali a essere più prudenti nelle date che promettono ai clienti.",
+      "Compriamo più scorte di sicurezza per i prodotti con più richieste dei clienti.",
+      "Chiedo al magazzino di inviare ogni mattina un file con le date di consegna."
      ],
      "a": 0,
      "exp": "Il problema è informativo: il commerciale non vede la disponibilità. La soluzione è portare il dato ERP nel processo di vendita, non aggiungere buffer o più disciplina.",
@@ -737,10 +737,10 @@
      "t": "mcq",
      "q": "Nel lessico SAP, in che cosa un «assistente» si distingue da un «agente»?",
      "o": [
-      "L'assistente guida l'utente e coordina più agenti; l'agente esegue un compito specifico",
-      "L'assistente è a pagamento e l'agente è gratuito",
-      "L'agente richiede sempre un consulente",
-      "Sono sinonimi usati in modo intercambiabile"
+      "L'assistente guida l'utente e coordina agenti; l'agente esegue un compito preciso",
+      "L'assistente è un prodotto a pagamento; l'agente è una funzione inclusa nella licenza",
+      "L'agente guida l'utente nella conversazione; l'assistente esegue compiti in background",
+      "L'assistente opera nelle app SAP; l'agente opera nelle app di terze parti"
      ],
      "a": 0,
      "exp": "L'assistente è il livello che interagisce con la persona e orchestra; gli agenti sono i lavoratori specializzati. Usare bene i termini evita equivoci sul controllo umano.",
@@ -761,10 +761,10 @@
       "say": "Mi hanno detto che il vostro agente chiude i deal da solo, da domani. Quando parte davvero?"
      },
      "o": [
-      "Ti confermo per iscritto cosa è disponibile, la roadmap e le licenze; poi un pilota.",
-      "Parte domani per tutti i clienti SAP, senza costi aggiuntivi di licenza.",
+      "Ti confermo per iscritto cosa è disponibile, roadmap e licenze; poi un pilota.",
+      "Parte dal prossimo trimestre per tutti i clienti SAP, senza costi aggiuntivi di licenza.",
       "Non c'è ancora nulla di reale: ricontattami tra un anno, quando sarà pronto.",
-      "Dipende solo da quanto spendi già in licenze ERP con SAP."
+      "Dipende da quanto spendi già in licenze ERP con SAP, non dal caso d'uso."
      ],
      "a": 0,
      "exp": "Disponibilità e licenze AI variano per assistente e cambiano spesso. Risposta professionale: stato certo oggi, roadmap, licenza, pilota con metrica.",
@@ -812,10 +812,10 @@
       "say": "I miei clienti B2B ricomprano poco e io non riesco a capire perché."
      },
      "o": [
-      "Quanti clienti attivi hai, ogni quanto riordinano, quali segnali mancano al marketing?",
-      "Hai già provato a mandare più email e promozioni ai clienti dormienti?",
-      "Ti serve soprattutto un chatbot sul sito, così i clienti si sentono seguiti.",
-      "Ti propongo subito un bundle di licenze con uno sconto importante."
+      "Quanti clienti attivi hai, ogni quanto riordinano e cosa non vedi nei dati?",
+      "Quanto spendi oggi in campagne email e quale sconto medio offri ai clienti dormienti?",
+      "Hai già un chatbot sul sito? Con i clienti B2B aiuta a farli ricomprare più spesso.",
+      "Ti propongo un bundle di licenze con uno sconto importante, valido fino a fine anno."
      ],
      "a": 0,
      "exp": "Discovery prima della soluzione: frequenza di riordino e segnali mancanti (ordini, assistenza, visite) rivelano dove i dati sono scollegati. Le altre risposte saltano la diagnosi.",
@@ -829,10 +829,10 @@
       "say": "Il consenso dei nostri contatti è basso e il team non sa più chi può ricevere cosa."
      },
      "o": [
-      "Consenso e preferenze centralizzati, poi segmenti solo sui contatti attivabili.",
-      "Mandiamo comunque le campagne a tutti, il consenso si chiede dopo.",
-      "Compriamo liste di contatti dall'esterno.",
-      "Smettiamo di fare marketing diretto."
+      "Consenso e preferenze centralizzati, poi segmenti sui contatti attivabili e canali.",
+      "Inviamo le campagne a tutti i contatti e raccogliamo il consenso nelle risposte.",
+      "Acquistiamo liste esterne di contatti profilati per aumentare rapidamente il bacino.",
+      "Riduciamo il marketing diretto e puntiamo sui canali pubblicitari a pagamento."
      ],
      "a": 0,
      "exp": "Il consenso è la base della personalizzazione: va gestito in un unico punto e propagato ai canali. Inviare senza base giuridica o comprare liste espone ad ammende e danni di reputazione.",
@@ -895,10 +895,10 @@
       "say": "Il mio responsabile IT dice che integrare tutto costerà troppo e che il progetto non finirà mai."
      },
      "o": [
-      "Mappiamo i sistemi: con due sorgenti e un caso d'uso, l'integrazione resta contenuta.",
-      "Non preoccuparti: l'integrazione la fa SAP gratis, è inclusa nel contratto.",
-      "Se non integri tutti i sistemi fin dall'inizio, la soluzione non funziona.",
-      "Non preoccuparti, l'AI integra da sola ogni sistema senza lavoro di progetto."
+      "Con due sorgenti dati e un caso d'uso, l'integrazione resta contenuta e misurabile.",
+      "L'integrazione la fa SAP gratis: è inclusa nel contratto di licenza della piattaforma.",
+      "Integriamo tutti i sistemi fin dall'inizio, altrimenti la soluzione non funziona.",
+      "L'AI integra da sola ogni sistema collegato, senza bisogno di un progetto dedicato."
      ],
      "a": 0,
      "exp": "Riduci il perimetro: due sorgenti, un caso d'uso, un KPI. Promettere gratuità o integrazione automatica è falso e ti ritorna come obiezione al primo preventivo.",
@@ -928,10 +928,10 @@
       "say": "Il forecast di fine trimestre sbaglia sempre del 20%. Il CEO non si fida più dei miei numeri."
      },
      "o": [
-      "Vediamo da dove nasce l'errore: qualità dati, stadi incoerenti, deal che slittano.",
-      "Con la nostra AI il forecast sarà perfetto.",
-      "Cambia i venditori.",
-      "Il forecast non è importante: guarda le vendite."
+      "Vediamo da dove nasce l'errore: qualità dei dati, stadi incoerenti, deal che slittano.",
+      "Con la nostra AI il forecast diventa molto più accurato già dal primo trimestre.",
+      "Sostituiamo il processo di forecast con una media mobile calcolata sui deal chiusi.",
+      "Chiediamo ai venditori di inserire le previsioni ogni settimana, con più dettagli."
      ],
      "a": 0,
      "exp": "Il forecast sbaglia per cause diverse (dati, definizione degli stadi, abitudini). Diagnosticare viene prima di promettere l'AI. «Perfetto» è una promessa che nessun CRO crede.",
@@ -975,10 +975,10 @@
       "say": "I miei venditori odiano compilare il CRM. Lo fanno il venerdì sera, a memoria."
      },
      "o": [
-      "Meno data entry: attività registrate con l'AI e dati ERP senza doppio inserimento.",
-      "Una policy più severa, con sanzioni per chi non compila il CRM in tempo.",
-      "Eliminare il CRM e passare a fogli di calcolo condivisi tra i venditori.",
-      "Più campi obbligatori in ogni scheda, per migliorare la qualità dei dati."
+      "Meno data entry: attività registrate con l'AI e dati ERP senza ribattiture manuali.",
+      "Rendiamo obbligatori più campi in ogni scheda, così migliora la qualità dei dati.",
+      "Introduciamo una policy con sanzioni per chi non aggiorna il CRM entro il venerdì.",
+      "Passiamo a fogli di calcolo condivisi, più veloci da compilare del CRM attuale."
      ],
      "a": 0,
      "exp": "Il data entry si riduce automatizzando e riusando dati esistenti, non aumentando obblighi. Un CRM che aiuta il venditore a vendere viene usato; uno che serve solo al management no.",
@@ -1049,10 +1049,10 @@
       "say": "Il 30% delle chiamate è «dov'è il mio ordine?». Il costo per contatto sta esplodendo."
      },
      "o": [
-      "Porto stato ordini e consegne dall'ERP in servizio e self-service: la chiamata non nasce.",
+      "Porto stato ordini e consegne dall'ERP in servizio e self-service.",
       "Assumiamo più agenti per coprire le ore di punta delle telefonate dei clienti.",
       "Allunghiamo il messaggio vocale iniziale con le risposte alle domande frequenti.",
-      "Non è un tema di CX ma dell'ufficio logistica e dei trasportatori esterni."
+      "Spostiamo il tema alla logistica, che deve comunicare meglio i ritardi."
      ],
      "a": 0,
      "exp": "Il costo evitabile è la chiamata che nasce da un'informazione già presente nell'ERP. Rendere il dato visibile all'agente e al cliente ha ritorno più alto che aggiungere persone.",
@@ -1073,10 +1073,10 @@
       "say": "I nostri tecnici tornano due volte su tre dallo stesso ospedale. Mancano i ricambi giusti."
      },
      "o": [
-      "Storico dell'installato, ricambi disponibili e pianificazione collegati a service ed ERP.",
-      "Più formazione ai tecnici su tutti i prodotti.",
-      "Una hotline gratuita per gli ospedali.",
-      "Acquistare più furgoni."
+      "Storico dell'installato e ricambi disponibili collegati a service, ERP e magazzino.",
+      "Più formazione ai tecnici su tutti i prodotti, per ridurre le visite di ritorno.",
+      "Una hotline dedicata agli ospedali, con priorità per i guasti sulle macchine critiche.",
+      "Più furgoni e più tecnici sul territorio, per accorciare i tempi di intervento."
      ],
      "a": 0,
      "exp": "Il first-time fix dipende da sapere quale apparecchio, quale storico e quali ricambi servono prima di partire. Field Service collegato ai dati dell'installato e al magazzino ricambi risolve proprio quel gap.",
@@ -1125,10 +1125,10 @@
      "t": "mcq",
      "q": "Qual è l'approccio corretto per posizionare SAP CX contro un concorrente?",
      "o": [
-      "Partire dal processo del cliente e dai dati ERP, riconoscendo i punti di forza altrui",
-      "Elencare con precisione i difetti noti del prodotto del concorrente",
-      "Dire che il concorrente non è adatto alle aziende di grandi dimensioni",
-      "Offrire sempre sconti più alti di quelli che propone il concorrente"
+      "Partire dal processo del cliente e dai dati ERP, riconoscendo i punti forti altrui",
+      "Elencare con precisione i difetti noti del prodotto del concorrente, citando le fonti",
+      "Sostenere che il concorrente è pensato per aziende più piccole di quella del cliente",
+      "Proporre uno sconto superiore a quello del concorrente fin dal primo incontro"
      ],
      "a": 0,
      "exp": "Il FUD fa perdere credibilità e il cliente conosce già i suoi problemi. Un confronto onesto su processo, integrazione ERP e costo totale è più forte e ripetibile.",
@@ -1170,7 +1170,7 @@
      "q": "Il prezzo «a risultato» di HubSpot per i Breeze Agents significa pagare per una conversazione ___ o per un lead raccomandato.",
      "o": [
       "risolta",
-      "iniziata",
+      "aperta",
       "archiviata"
      ],
      "a": 0,
@@ -1185,10 +1185,10 @@
       "say": "Il mio team vive su Teams e Outlook. Dynamics mi sembra molto più naturale."
      },
      "o": [
-      "Ha ragione: microsoft 365 integrato è un vantaggio. poi vediamo ordini e prezzi erp.",
-      "Dynamics non va bene per le aziende serie, è pensato per team più piccoli.",
-      "Teams non è abbastanza sicuro per condividere dati di clienti e offerte.",
-      "Con SAP anche Teams e Outlook diventano superflui, quindi non servono."
+      "Ha ragione, è un vantaggio reale. Poi vediamo dove pesano davvero ordini e prezzi ERP.",
+      "Dynamics è pensato per team più piccoli: con la vostra dimensione cercherei altro.",
+      "Teams non offre sufficienti garanzie di sicurezza per condividere dati di clienti.",
+      "Con SAP Teams e Outlook diventano superflui, perché l'interfaccia è tutta unificata."
      ],
      "a": 0,
      "exp": "Riconoscere un punto di forza reale costruisce fiducia. Poi sposti il confronto sul processo end-to-end (preventivo, disponibilità, ordine) dove l'integrazione ERP pesa.",
@@ -1218,10 +1218,10 @@
       "say": "I retailer ordinano in modo irregolare e non so mai quali scorte servono per le promozioni."
      },
      "o": [
-      "Collego ordini, promozioni e stock ai dati di vendita; portale B2B per i clienti minori.",
-      "Eliminiamo i retailer piccoli: costano più di quanto portano come fatturato.",
+      "Collego ordini e promozioni ai dati di vendita; portale B2B per i clienti minori.",
+      "Eliminiamo i retailer più piccoli: costano più di quanto portano come fatturato.",
       "Aggiungiamo un'app per i consumatori finali, così la domanda si stabilizza.",
-      "Aumentiamo le scorte di tutti i prodotti, così non rischiamo mai di mancare."
+      "Aumentiamo le scorte di tutti i prodotti, così non rischiamo di mancare."
      ],
      "a": 0,
      "exp": "L'irregolarità degli ordini si gestisce con visibilità su promozioni, sell-out e disponibilità. Escludere clienti o gonfiare le scorte sposta il problema invece di risolverlo.",
@@ -1235,10 +1235,10 @@
       "say": "Per i medici abbiamo già un CRM specializzato per la forza vendita. Non lo cambieremo."
      },
      "o": [
-      "Non lo tocchiamo: vediamo dove il processo si spezza tra ordini, servizio e qualità.",
-      "Va sostituito subito: SAP può fare tutto quello che fa un CRM specializzato.",
-      "Allora non c'è proprio nulla da fare per voi nel campo della customer experience.",
-      "Migrate in SAP solo i dati anagrafici dei medici e lasciate il resto dov'è."
+      "Non lo tocchiamo: cerchiamo dove il processo si spezza tra ordini, servizio e qualità.",
+      "Va sostituito: SAP copre le stesse funzioni, con il vantaggio di meno sistemi.",
+      "Allora non c'è nulla da fare per voi nel campo della customer experience.",
+      "Migrate in SAP i dati anagrafici dei medici e lasciate il resto dov'è oggi."
      ],
      "a": 0,
      "exp": "Attaccare un CRM specializzato è controproducente. Il valore sta nel perimetro adiacente: portali di ordine, service con dati ERP, customer data e consenso, collegamento con la qualità.",
@@ -1340,10 +1340,10 @@
      "t": "mcq",
      "q": "Perché passare da Sales Cloud V1 a V2 è un progetto e non un upgrade?",
      "o": [
-      "Perché V2 è una nuova applicazione: dati, integrazioni ed estensioni vanno rivisti",
-      "Perché V2 è on-premise",
-      "Perché V1 è già stato spento",
-      "Perché V2 richiede un nuovo ERP"
+      "Perché V2 è una nuova applicazione: dati e integrazioni vanno rivisti",
+      "Perché V2 è una versione on-premise, quindi serve installare l'infrastruttura",
+      "Perché V1 è già stato spento dal fornitore e i dati vanno recuperati dai backup",
+      "Perché V2 richiede un nuovo ERP, e il cambio di ERP va fatto prima del CRM"
      ],
      "a": 0,
      "exp": "V2 è ricostruito con architettura diversa e approccio clean core. Stato di supporto V1: {{w09.v1_to_v2}}",
@@ -1357,10 +1357,10 @@
       "say": "Voglio personalizzare, ma i dati sono sparsi tra ERP, e-commerce e CRM."
      },
      "o": [
-      "Profilo unificato e consenso su un caso d'uso piccolo, con una metrica a 90 giorni.",
-      "Dall'acquisto di un modello AI più grande.",
-      "Dalla sostituzione di tutti i sistemi.",
-      "Da una campagna massiva a tutti i contatti."
+      "Profilo unificato e consenso su un caso d'uso piccolo e misurabile, con KPI a 90 giorni.",
+      "Acquisto di un modello AI più grande che legga tutte le fonti dati senza bonifica.",
+      "Sostituzione dei sistemi con una piattaforma unica prima di iniziare a personalizzare.",
+      "Una campagna massiva a tutti i contatti, per raccogliere dati di risposta."
      ],
      "a": 0,
      "exp": "Senza profili unificati e consenso l'AI amplifica il disordine. Pilota piccolo e misurabile prima di estendere.",
@@ -1392,10 +1392,10 @@
       "say": "Perché dovrei investire in CX e non in un magazzino automatico?"
      },
      "o": [
-      "Colleghiamo la CX a ricavi e cassa e la confrontiamo con il ritorno del magazzino.",
-      "Il magazzino non serve.",
-      "La CX è più moderna.",
-      "Decide il marketing, non tu."
+      "Colleghiamo la CX a ricavi e cassa e la confrontiamo con il magazzino.",
+      "La CX è più moderna e più visibile ai clienti, quindi ha un impatto d'immagine.",
+      "Il magazzino è un costo, la CX è un investimento: il confronto non ha senso.",
+      "Decide il marketing, non il CFO: porto la proposta al CMO e poi ne riparliamo."
      ],
      "a": 0,
      "exp": "Con il CFO si confrontano progetti sullo stesso metro: ricavi, margini, DSO, capitale circolante. Una risposta che denigra l'alternativa perde subito.",

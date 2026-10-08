@@ -1,0 +1,1588 @@
+{
+ "id": "w12",
+ "levels": [
+  {
+   "id": "w12-l01",
+   "title": "Dal prodotto al valore",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Value selling: parti da ciò che il cliente vuole ottenere (più ricavi, meno costi, meno rischio, più agilità) e dimostra con numeri suoi come cambiare lo porta lì. Il prodotto è il mezzo, non il messaggio.",
+     "Tre leve di valore: ricavi (crescita, time-to-market, nuovi servizi), costi (efficienza, automazione, infrastruttura) e rischio (compliance, continuità, cybersecurity). Il CFO pesa soprattutto cassa e rischio.",
+     "Baseline: la fotografia di oggi (costi, tempi, errori, rischi) validata dal cliente. Senza baseline ogni beneficio è una tua opinione. Chiedi i dati al cliente e documenta fonte e ipotesi.",
+     "Hard benefit: misurabile in euro e visibile nei conti (costi evitati, scorte ridotte). Soft benefit: qualitativo (agilità, esperienza). Il CFO crede agli hard; i soft vanno spiegati con cautela.",
+     "Il concorrente più frequente è lo status quo: il cliente decide di non cambiare. Il suo costo (inefficienze, rischi, supporto aggiuntivo) va incluso nel business case."
+    ],
+    "ae": "Parti sempre dai numeri del cliente: «Se ci date il costo di una chiusura e quante persone ci lavorano, costruiamo insieme la baseline». Se i numeri sono tuoi, il CFO li smonta."
+   },
+   "ex": [
+    {
+     "t": "bucket",
+     "q": "A quale leva di valore appartiene ogni beneficio?",
+     "buckets": [
+      "Ricavi",
+      "Costi",
+      "Rischio"
+     ],
+     "items": [
+      [
+       "Lancio di nuovi prodotti in meno tempo",
+       0
+      ],
+      [
+       "Cross-selling grazie a una vista unica del cliente",
+       0
+      ],
+      [
+       "Riduzione delle ore di lavoro manuale nelle chiusure",
+       1
+      ],
+      [
+       "Minori scorte e minore obsolescenza",
+       1
+      ],
+      [
+       "Evitare sanzioni per non conformità",
+       2
+      ],
+      [
+       "Maggiore continuità operativa in caso di incidente",
+       2
+      ]
+     ],
+     "exp": "Un beneficio può toccare più leve, ma conviene assegnarlo a quella principale per non contarlo due volte nel business case."
+    },
+    {
+     "t": "mcq",
+     "q": "Che cos'è una baseline in un business case?",
+     "o": [
+      "La situazione attuale misurata e condivisa col cliente, base dei benefici",
+      "Una media di mercato usata al posto dei dati interni quando questi sono incompleti",
+      "Il beneficio massimo promesso dal fornitore nelle condizioni migliori possibili",
+      "Il prezzo di partenza della trattativa, da cui si calcolano gli sconti successivi"
+     ],
+     "a": 0,
+     "exp": "La baseline è il punto di partenza condiviso: costi, tempi ed errori di oggi. Senza di essa i benefici sono promesse e il CFO non può verificarli."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO chiede un numero di risparmio subito, senza aver condiviso dati. Come rispondi?",
+     "o": [
+      "Le do una media di settore, poi la adatta lei ai suoi numeri quando potrà",
+      "Un numero credibile nasce dai vostri dati: costruiamo la baseline, poi stimiamo un range",
+      "Non posso dare numeri senza un contratto firmato: dipendono dall'ambito finale",
+      "Le mando la nostra stima standard per il settore, così ha un ordine di grandezza"
+     ],
+     "a": 1,
+     "exp": "Un numero senza dati del cliente è una tua opinione e perde credibilità al primo controllo. Proporre baseline e range lo rende un lavoro comune.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Mi dica quanto risparmio ci porta: voglio un numero oggi."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "I soft benefit pesano nel convincere un CFO quanto gli hard benefit.",
+     "a": false,
+     "exp": "Il CFO si fida di ciò che si vede nei conti: costi evitati, scorte, ricavi. I soft benefit sono importanti ma vanno spiegati, stimati con prudenza e mai usati per coprire un hard debole."
+    },
+    {
+     "t": "fill",
+     "q": "Il principale concorrente in molte vendite enterprise è ___: il cliente decide di non cambiare nulla.",
+     "o": [
+      "il listino",
+      "lo status quo",
+      "il partner",
+      "il tempo di risposta"
+     ],
+     "a": 1,
+     "exp": "Il rinvio è la decisione più comune. Per questo il business case deve mostrare anche il costo di non cambiare, con ipotesi dichiarate."
+    }
+   ]
+  },
+  {
+   "id": "w12-l02",
+   "title": "Il linguaggio del CFO",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "NPV (valore attuale netto): somma dei flussi di cassa futuri attualizzati con un tasso di sconto, meno l'investimento. NPV positivo significa che il progetto rende più del rendimento richiesto.",
+     "Payback: tempo necessario perché i flussi cumulati recuperino l'investimento. È semplice, ma ignora il valore del tempo e ciò che accade dopo il recupero.",
+     "IRR (tasso interno di rendimento): il tasso di sconto che porta l'NPV a zero. Si confronta con il rendimento minimo richiesto (hurdle rate) dall'azienda. Con flussi anomali può dare risultati ambigui.",
+     "ROI: (benefici meno costi) diviso costi. Facile da comunicare ma ignora la tempistica. Chiedi al CFO quali metriche e quale tasso di sconto usa: calcola nel suo formato, non nel tuo.",
+     "Passando da licenza perpetual a subscription la spesa si sposta tendenzialmente da capex a opex: il trattamento contabile va validato con il cliente e i revisori. Tu evidenzi l'impatto, non fai consulenza contabile."
+    ],
+    "ae": "Chiedi in anticipo: «Con quale tasso di sconto e orizzonte valutate gli investimenti IT, e quale payback considerate accettabile?». Poi costruisci il caso nel suo formato."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni metrica finanziaria alla sua definizione",
+     "pairs": [
+      [
+       "NPV",
+       "Flussi futuri attualizzati meno investimento iniziale"
+      ],
+      [
+       "Payback",
+       "Tempo per recuperare l'investimento con i flussi cumulati"
+      ],
+      [
+       "IRR",
+       "Tasso di sconto che porta l'NPV a zero"
+      ],
+      [
+       "ROI",
+       "(Benefici meno costi) diviso i costi, senza considerare il tempo"
+      ],
+      [
+       "Hurdle rate",
+       "Rendimento minimo richiesto dall'azienda per approvare"
+      ]
+     ],
+     "exp": "Le metriche rispondono a domande diverse: quanto valore, quanto presto, che rendimento. Il CFO sceglie la combinazione e il tasso di sconto, non tu."
+    },
+    {
+     "t": "mcq",
+     "q": "Un investimento di 1.000.000 euro genera 400.000 euro di benefici netti all'anno. Qual è il payback semplice?",
+     "o": [
+      "2,5 anni",
+      "4,0 anni",
+      "1,5 anni",
+      "0,4 anni"
+     ],
+     "a": 0,
+     "exp": "Payback semplice = investimento / flusso annuo = 1.000.000 / 400.000 = 2,5 anni. Non considera il tasso di sconto né i flussi dopo il recupero: per questo si affianca all'NPV."
+    },
+    {
+     "t": "mcq",
+     "q": "Un progetto ha NPV positivo al tasso di sconto del cliente. Che cosa significa?",
+     "o": [
+      "Ha un IRR inferiore al costo del capitale, compensato da benefici soft rilevanti",
+      "Recupera l'investimento in meno di un anno rispetto alla soglia di payback",
+      "I benefici qualitativi superano i costi complessivi stimati nell'orizzonte scelto",
+      "Rende più del rendimento minimo richiesto, al netto dell'investimento"
+     ],
+     "a": 3,
+     "exp": "NPV positivo vuol dire che il valore dei flussi attualizzati supera l'investimento: il progetto crea valore oltre il rendimento richiesto. Dice poco sulla velocità di recupero."
+    },
+    {
+     "t": "mcq",
+     "q": "Il tuo business case ha payback di 36 mesi, il CFO vuole 24. Che fai?",
+     "o": [
+      "Anticipo i benefici nel modello per farli rientrare nei 24 mesi richiesti",
+      "Spiego che il criterio dei 24 mesi non si adatta a un ERP e suggerisco di ignorarlo",
+      "Chiedo se il criterio è rigido e rivedo fasi, ramp e benefici reali anticipabili",
+      "Riduco il costo del progetto nel modello fino a rispettare la soglia di payback"
+     ],
+     "a": 2,
+     "exp": "Si può rivedere la struttura (fasi, ramp, benefici reali anticipabili) e mostrare NPV e rischio di non agire, ma non truccare il modello. Un caso manipolato crolla alla prima revisione.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il payback a tre anni non mi basta: i nostri progetti IT devono rientrare in 24 mesi."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "L'IRR è il tasso di sconto per cui l'NPV del progetto è uguale a zero.",
+     "a": true,
+     "exp": "È la definizione: più l'IRR supera il rendimento minimo richiesto, più il progetto è attraente. Con flussi anomali possono esistere più IRR o nessuno, per questo si guarda anche l'NPV."
+    }
+   ]
+  },
+  {
+   "id": "w12-l03",
+   "title": "TCO a 5 anni e costo inazione",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "TCO (total cost of ownership): tutti i costi per possedere e far funzionare la soluzione nel periodo, di solito 5 anni: licenze o subscription, implementazione, infrastruttura, run, integrazioni, formazione, change management.",
+     "Confronta a parità di perimetro: l'on-premise include hardware, data center, DBA, patching e upgrade; il cloud include infrastruttura e operations nel canone. Omettere i costi interni del cliente rende il confronto disonesto.",
+     "Costo dell'inazione: supporto aggiuntivo, rischi di sicurezza, inefficienze, competenze rare, opportunità perse. Va stimato con ipotesi esplicite e range, non usato come minaccia.",
+     "Ipotesi e sensibilità: mostra un caso base, uno prudente e uno ottimistico, e le tre variabili che spostano di più il risultato. Un solo numero esatto non è credibile.",
+     "Costi che il cliente dimentica: pulizia e migrazione dati, test e validazione (es. GxP nel farma), formazione, backfill delle persone interne e periodo di parallelo con il vecchio sistema."
+    ],
+    "ae": "Chiedi: «Quali costi interni non compaiono in nessun budget IT: ore di key user, DBA, consulenti, report manuali?». Spesso sono il costo nascosto più persuasivo."
+   },
+   "ex": [
+    {
+     "t": "multi",
+     "q": "Quali voci rientrano in un TCO a 5 anni di un ERP? (seleziona tutte)",
+     "o": [
+      "Licenze o subscription",
+      "Il fatturato aggiuntivo atteso dal progetto",
+      "Lo sconto concesso al cliente a fine trimestre",
+      "Costi interni di key user, change e formazione",
+      "Implementazione e integrazioni"
+     ],
+     "a": [
+      0,
+      3,
+      4
+     ],
+     "exp": "Il TCO è un insieme di costi nel periodo. Il fatturato aggiuntivo è un beneficio e lo sconto è una condizione commerciale: entrambi vanno altrove nel modello."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO confronta la tua subscription con i soli costi di licenza e manutenzione on-premise. Come rispondi?",
+     "o": [
+      "Il confronto non è corretto, ma non ho dati per proporne uno diverso adesso",
+      "Confrontiamo a parità di perimetro con infrastruttura, operations, upgrade e personale",
+      "Il cloud costa meno dell'on-premise per definizione, e i nostri clienti lo confermano",
+      "Posso ridurre la subscription fino a rientrare nel confronto che mi ha mostrato"
+     ],
+     "a": 1,
+     "exp": "Un confronto che omette costi interni dell'on-premise penalizza il cloud in modo ingiusto. Allargare il perimetro con dati del cliente è più forte di un'affermazione generale o di uno sconto.",
+     "ctx": {
+      "who": "CFO di un'azienda farma",
+      "say": "Il vostro TCO cloud sembra più alto dell'on-premise: io vedo solo la subscription."
+     }
+    },
+    {
+     "t": "order",
+     "q": "Ordina i passi per costruire un TCO credibile",
+     "items": [
+      "Definisci perimetro, orizzonte e scenari da confrontare",
+      "Raccogli i costi attuali con il cliente, anche quelli interni",
+      "Stima i costi della soluzione: subscription, progetto, change",
+      "Aggiungi ipotesi e range con analisi di sensibilità",
+      "Valida il modello con il Finance del cliente"
+     ],
+     "exp": "Perimetro e costi attuali vengono prima dei costi della soluzione. La validazione finale con Finance rende il modello suo e difendibile."
+    },
+    {
+     "t": "tf",
+     "q": "Includere nel TCO i costi interni del cliente (key user, backfill, formazione) rende il business case più credibile.",
+     "a": true,
+     "exp": "Mostra che conosci il progetto reale e che non nascondi nulla. Il CFO sa che quei costi esistono: vederli nel modello aumenta la fiducia."
+    },
+    {
+     "t": "mcq",
+     "q": "Come presenti il costo dell'inazione in modo etico?",
+     "o": [
+      "Con ipotesi dichiarate e range basati su dati del cliente su supporto e incidenti",
+      "Omettendolo del tutto, perché parlarne può sembrare aggressivo agli occhi di un CFO",
+      "Con un elenco di rischi di sicurezza generici, senza attribuire loro un valore in euro",
+      "Con una stima alta per creare urgenza, che il cliente potrà ridimensionare in trattativa"
+     ],
+     "a": 0,
+     "exp": "Il costo dell'inazione è legittimo se basato su dati e ipotesi dichiarate. Gonfiarlo è vendita per paura; ometterlo lascia il cliente senza il confronto con lo status quo."
+    }
+   ]
+  },
+  {
+   "id": "w12-l04",
+   "title": "Struttura del business case",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Struttura classica: executive summary (decisione richiesta), contesto e problema, baseline, soluzione e perimetro, benefici (hard e soft) con ipotesi, costi (TCO), indicatori (NPV, payback, IRR), rischi, piano.",
+     "Il business case è del cliente, non tuo: costruiscilo con Finance e le linee di business, con i loro dati e la loro terminologia. Se lo sponsor lo difende con parole proprie, ha il proprietario giusto.",
+     "Ogni beneficio ha un owner nel business che ne risponde, una metrica, una baseline, un target e una data. Senza owner il beneficio resta su carta.",
+     "Sensibilità e rischi: mostra cosa succede se i benefici sono inferiori del 20-30% o se il progetto ritarda. Un caso che regge in scenario prudente convince; uno che crolla al primo stress no.",
+     "Il business case non è una slide di ROI a fine deal: nasce nella discovery, evolve con il progetto e diventa il riferimento per misurare il valore dopo il go-live."
+    ],
+    "ae": "Invita il CFO o il controller al workshop sul modello: chi ha co-costruito le ipotesi le difende davanti al board."
+   },
+   "ex": [
+    {
+     "t": "order",
+     "q": "Ordina le sezioni di un business case",
+     "items": [
+      "Executive summary con la decisione richiesta",
+      "Contesto, problema e baseline",
+      "Soluzione e perimetro",
+      "Benefici e costi con ipotesi",
+      "Indicatori finanziari, rischi e sensibilità",
+      "Piano e prossimi passi"
+     ],
+     "exp": "Si parte dalla decisione, poi problema e baseline, soluzione, numeri e rischi, infine il piano. L'executive summary si scrive per ultimo ma sta in cima."
+    },
+    {
+     "t": "match",
+     "q": "Abbina ogni elemento del business case alla sua funzione",
+     "pairs": [
+      [
+       "Executive summary",
+       "Dice in una pagina cosa si decide e perché"
+      ],
+      [
+       "Baseline",
+       "Punto di partenza misurato e validato dal cliente"
+      ],
+      [
+       "Benefit owner",
+       "Responsabile nel business del raggiungimento del beneficio"
+      ],
+      [
+       "Analisi di sensibilità",
+       "Mostra come cambia il risultato al variare delle ipotesi"
+      ],
+      [
+       "Piano di realizzo",
+       "Come e quando si misureranno i benefici dopo il go-live"
+      ]
+     ],
+     "exp": "Ogni elemento aumenta la credibilità in un punto preciso: decisione, partenza, responsabilità, robustezza e verifica."
+    },
+    {
+     "t": "mcq",
+     "q": "Il controller contesta i benefici perché nessuno ne risponde. Qual è la risposta migliore?",
+     "o": [
+      "Giusto: ogni beneficio avrà un owner nel business, con metrica, baseline e data",
+      "La responsabilità di realizzarli spetta al partner di implementazione dopo il go-live",
+      "Li ridimensiono io del 15% per un caso più prudente",
+      "Sono basati su benchmark di settore, quindi li considero affidabili per il vostro caso"
+     ],
+     "a": 0,
+     "exp": "Un beneficio senza owner non verrà realizzato. Assegnarlo a una persona con metrica e data trasforma una promessa del fornitore in un impegno del cliente.",
+     "ctx": {
+      "who": "Controller del cliente",
+      "say": "Questi benefici sono ottimistici. Chi risponde di un risparmio del 15% sui costi di acquisto?"
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Il business case dovrebbe essere costruito dal venditore in autonomia, per proteggere la riservatezza del modello.",
+     "a": false,
+     "exp": "Un caso costruito da solo non ha un proprietario nel cliente e viene smontato al primo controllo. Costruirlo con Finance e linee di business lo rende difendibile."
+    },
+    {
+     "t": "mcq",
+     "q": "Qual è il vantaggio principale di un'analisi di sensibilità?",
+     "o": [
+      "Sostituisce il confronto con Finance, perché copre già gli scenari plausibili",
+      "Permette di aumentare i benefici senza doverli spiegare nel dettaglio al CFO",
+      "Rende il modello più complesso e più difficile da contestare per i non esperti",
+      "Mostra se il caso regge quando le ipotesi peggiorano"
+     ],
+     "a": 3,
+     "exp": "Il CFO sa che le ipotesi sono incerte: vedere come cambiano NPV e payback con scenari prudenti è ciò che lo convince. Complicare il modello fa l'effetto opposto."
+    }
+   ]
+  },
+  {
+   "id": "w12-l05",
+   "title": "Value Advisory e strumenti",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Il team Value Advisory di SAP {{w12.value_advisors}}. Verifica internamente come ingaggiarlo e per quali deal: di solito serve su progetti grandi o complessi.",
+     "Strumenti pubblici di esempio: {{w12.value_case_agent}}. Lo stato di disponibilità cambia: verifica con il tuo team prima di proporlo al cliente.",
+     "Il SAP Value Lifecycle Manager {{w12.vlm}}. Nome e modalità di accesso vanno confermati con il tuo team.",
+     "Strumenti e benchmark danno bozze e ordini di grandezza, non sostituiscono i dati del cliente: ogni output va validato con Finance e ogni ipotesi ha una fonte dichiarata.",
+     "Se un tool lavora su dati del cliente (es. process mining) chiarisci prima privacy, sicurezza e permessi (ruoli e DPA). Non portare dati del cliente in strumenti non autorizzati."
+    ],
+    "ae": "Quando coinvolgi un value advisor porta già: obiettivo del cliente, tre metriche candidate, chi in Finance validerà e la data della decisione. Sarà più utile e più veloce."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il CFO è scettico sui ROI dei fornitori. Qual è la risposta più efficace?",
+     "o": [
+      "Fa bene a diffidare: partiamo dai vostri dati e validiamo insieme le ipotesi con Finance",
+      "Il nostro strumento di valutazione è certificato, quindi il risultato è affidabile per voi",
+      "Le mostro il ROI più basso del nostro modello, perché così apparirà più prudente",
+      "Il 300% è una media su clienti simili, che può usare come riferimento per il suo caso"
+     ],
+     "a": 0,
+     "exp": "Lo scetticismo si vince con trasparenza e co-costruzione. Citare certificazioni, medie anonime o un ROI «prudente» ma non suo ripete lo stesso errore.",
+     "ctx": {
+      "who": "CFO di un'azienda CPG",
+      "say": "Ho già visto tre presentazioni con ROI del 300%. Perché dovrei credere alla vostra?"
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "L'analista Finance trova un risparmio del 20% in un report di settore. Cosa fai?",
+     "o": [
+      "Lo uso se è favorevole alla nostra tesi e lo metto al centro della presentazione",
+      "Lo inserisco nel modello come beneficio atteso, perché viene da una fonte autorevole",
+      "Lo uso come ordine di grandezza con la fonte dichiarata, ma preferisco i dati del cliente",
+      "Lo scarto e non parlo di benchmark, perché potrebbero essere contestati dal cliente"
+     ],
+     "a": 2,
+     "exp": "Un benchmark è un riferimento, non una promessa. Dichiararne la fonte e limiti lo rende utile; usarlo selettivamente o come garanzia danneggia la fiducia.",
+     "ctx": {
+      "who": "Analista Finance",
+      "say": "Nel report di settore c'è un risparmio del 20% sui costi di acquisto: possiamo usarlo?"
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "Il process mining mostra attese tra approvazione e spedizione. Come trasformi il dato in valore?",
+     "o": [
+      "Riporto i giorni di attesa come beneficio, perché il valore economico è evidente a tutti",
+      "Rimando la quantificazione a dopo la firma, quando avremo più dati di processo disponibili",
+      "Con Operations e Finance stimo ore e costi con parametri del cliente, in un range",
+      "Uso il costo orario medio di settore proposto dallo strumento senza chiederne conferma"
+     ],
+     "a": 2,
+     "exp": "Un dato di processo diventa valore solo con parametri del cliente (ore, costo, giacenza) validati da Finance. Un parametro di tool non confermato è un'ipotesi esterna.",
+     "ctx": {
+      "who": "Direttore Operations",
+      "say": "Con il process mining ci avete mostrato molte attese tra approvazione e spedizione. Ma quanto vale in euro?"
+     }
+    },
+    {
+     "t": "bucket",
+     "q": "Hard benefit o soft benefit?",
+     "buckets": [
+      "Hard benefit",
+      "Soft benefit"
+     ],
+     "items": [
+      [
+       "Riduzione delle ore di straordinario nelle chiusure",
+       0
+      ],
+      [
+       "Minori scorte a magazzino",
+       0
+      ],
+      [
+       "Costi di licenze legacy dismesse",
+       0
+      ],
+      [
+       "Migliore esperienza dei dipendenti",
+       1
+      ],
+      [
+       "Maggiore agilità nelle decisioni",
+       1
+      ],
+      [
+       "Migliore reputazione verso i partner",
+       1
+      ]
+     ],
+     "exp": "Gli hard benefit si misurano in euro e si vedono nei conti. I soft sono reali ma più difficili da quantificare: vanno raccontati, non addizionati senza cautela."
+    },
+    {
+     "t": "tf",
+     "q": "Ogni output di uno strumento di value case va validato con il Finance del cliente prima di presentarlo come stima.",
+     "a": true,
+     "exp": "Anche uno strumento SAP produce bozze basate su ipotesi. La validazione con Finance e la fonte di ogni parametro trasformano la bozza in un numero difendibile."
+    }
+   ]
+  },
+  {
+   "id": "w12-l06",
+   "title": "Subscription o perpetual?",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Perpetual: paghi una licenza (capex) con diritto d'uso a tempo indeterminato e, di norma, un canone annuo di manutenzione. Subscription: un canone periodico (opex) per il diritto d'uso durante il contratto.",
+     "Nel cloud ERP il modello è subscription. Nomi attuali: {{sap.naming.cloud_erp}}. A seconda dell'offerta, il canone comprende software e, in tutto o in parte, infrastruttura e servizi gestiti.",
+     "Per il cliente contano: flusso di cassa (capex o opex), prevedibilità dei costi, aggiornamenti inclusi, flessibilità su utenti e volumi, rischio di lock-in e costi di uscita.",
+     "Con la subscription, a fine contratto il diritto d'uso termina se non rinnovi: contano durata, rinnovi, price protection e portabilità dei dati. Nel perpetual il diritto resta, ma senza manutenzione perdi aggiornamenti.",
+     "Nessun modello è giusto in assoluto: dipende da strategia IT, bilancio e propensione al rischio. Il tuo compito è rendere chiaro il TCO di entrambi senza nascondere costi."
+    ],
+    "ae": "Mostra al CFO una tabella a 5 anni con flussi di cassa per anno: capex e opex a confronto sono più chiari di qualsiasi slide sul «passaggio al cloud»."
+   },
+   "ex": [
+    {
+     "t": "bucket",
+     "q": "Perpetual con manutenzione o subscription?",
+     "buckets": [
+      "Perpetual + manutenzione",
+      "Subscription"
+     ],
+     "items": [
+      [
+       "Pagamento iniziale della licenza (capex)",
+       0
+      ],
+      [
+       "Canone annuale di supporto per aggiornamenti",
+       0
+      ],
+      [
+       "Diritto d'uso a tempo indeterminato",
+       0
+      ],
+      [
+       "Canone periodico legato alla durata del contratto",
+       1
+      ],
+      [
+       "Diritto d'uso che termina se non rinnovi",
+       1
+      ],
+      [
+       "Spesa tipicamente trattata come opex",
+       1
+      ]
+     ],
+     "exp": "Perpetual significa pagare in anticipo e mantenere nel tempo; subscription significa pagare per l'uso nel periodo. Il trattamento contabile va comunque confermato con il cliente."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO teme che con la subscription non possiederà più nulla. Qual è la risposta migliore?",
+     "o": [
+      "Può tornare al modello perpetual quando lo desidera, senza dover modificare il contratto",
+      "Non ha motivo di preoccuparsi: il cloud ormai è lo standard di mercato",
+      "È legittimo: lo trattiamo in contratto con durata, price protection e uscita dei dati",
+      "Il canone resta comunque inferiore all'on-premise, quindi il tema non si pone davvero"
+     ],
+     "a": 2,
+     "exp": "La preoccupazione è reale e si risolve con clausole concrete su rinnovi, prezzi e uscita. Minimizzare, promettere un ritorno al perpetual o spostare il discorso sul prezzo non la affronta.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Con la subscription non possiedo più nulla: tra cinque anni dipendo da voi."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "In un modello perpetual, smettere di pagare la manutenzione fa perdere aggiornamenti e supporto, non il diritto d'uso già acquisito.",
+     "a": true,
+     "exp": "È la differenza chiave con la subscription, dove il diritto d'uso dipende dal contratto in corso. Le condizioni esatte dipendono comunque dal contratto: verifica sempre il testo."
+    },
+    {
+     "t": "fill",
+     "q": "Il passaggio da licenza perpetual a subscription sposta spesa dal capex all'___, con effetti sul flusso di cassa.",
+     "o": [
+      "roi",
+      "ebit",
+      "tco",
+      "opex"
+     ],
+     "a": 3,
+     "exp": "Il canone periodico è tendenzialmente una spesa operativa, mentre la licenza perpetual è un investimento iniziale. L'effetto contabile esatto va confermato con il Finance del cliente."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale aspetto il cliente deve valutare con più attenzione in una subscription pluriennale?",
+     "o": [
+      "Rinnovi, price protection, uplift e uscita, perché pesano sul TCO nel lungo periodo",
+      "La dimensione del team di assistenza del fornitore, perché garantisce la continuità",
+      "Il prezzo del primo anno, perché gli anni successivi seguono lo stesso schema",
+      "La possibilità di aumentare gli utenti nei primi mesi, perché serve flessibilità"
+     ],
+     "a": 0,
+     "exp": "Nel lungo periodo ciò che pesa sul TCO è come evolve il canone e quanto è difficile uscire. Il prezzo del primo anno è solo un pezzo del quadro."
+    }
+   ]
+  },
+  {
+   "id": "w12-l07",
+   "title": "Durata, ramp e rinnovi",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Durata (term): contratti più lunghi danno prevedibilità al fornitore e di norma più protezione di prezzo al cliente; più brevi danno flessibilità. È una leva negoziale: cosa scambi per una durata maggiore?",
+     "Ramp: ingresso graduale (utenti, moduli, entità legali, paesi) con canone crescente in linea con il go-live. Allinea costi e benefici, ma volumi e date vanno scritti nel contratto e nel business case.",
+     "Rinnovi: rinnovo automatico, preavviso di disdetta, durata del rinnovo. Chiariscili in negoziazione, non a fine contratto, quando il cliente scopre vincoli che non aveva considerato.",
+     "Price protection e uplift: limiti agli aumenti nei rinnovi (tetto percentuale, indicizzazione a un indice come i prezzi al consumo ISTAT, importi fissi). Sono concetti generici: ciò che puoi offrire dipende dalle approvazioni interne.",
+     "True-up e true-down: adeguamento dei volumi alla realtà (più o meno utenti). Chiarisci metriche di utilizzo, frequenza di verifica e cosa succede se il cliente scende, ad esempio per la cessione di un business."
+    ],
+    "ae": "Quando il cliente chiede price protection, chiedi cosa lo preoccupa: l'aumento annuale, il rinnovo o i volumi? Ognuno ha una soluzione contrattuale diversa."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni termine contrattuale al suo significato",
+     "pairs": [
+      [
+       "Ramp",
+       "Ingresso graduale di utenti o moduli con canone crescente"
+      ],
+      [
+       "Price protection",
+       "Limite agli aumenti di prezzo nei rinnovi"
+      ],
+      [
+       "Uplift",
+       "Aumento di canone applicato al rinnovo o in corso di contratto"
+      ],
+      [
+       "True-up",
+       "Adeguamento economico ai volumi realmente utilizzati"
+      ],
+      [
+       "Preavviso di disdetta",
+       "Termine entro cui comunicare di non voler rinnovare"
+      ]
+     ],
+     "exp": "Sono i concetti con cui il CFO governa il rischio di costo nel tempo. Saperli spiegare senza gergo ti rende un interlocutore affidabile."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO teme aumenti forti al rinnovo. Quale approccio è più sensato in negoziazione?",
+     "o": [
+      "Promettere che i prezzi non aumenteranno nel corso del contratto, per rassicurarlo subito",
+      "Rispondere che il contratto standard non prevede alcuna tutela sugli aumenti di canone",
+      "Offrire uno sconto consistente sul primo anno, che renda meno rilevante il rinnovo",
+      "Capisco il rischio e valuto una tutela in cambio di durata, con le approvazioni"
+     ],
+     "a": 3,
+     "exp": "Prima capisci il rischio, poi proponi uno scambio entro ciò che è approvabile. Promettere ciò che non puoi garantire o scontare il primo anno non risolve il timore sul rinnovo.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Non voglio sorprese al rinnovo: tra tre anni il canone può schizzare."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Prima di offrire una tutela sugli aumenti al rinnovo devi verificare cosa è approvabile internamente.",
+     "a": true,
+     "exp": "Condizioni su prezzo e rinnovi richiedono approvazioni. Promettere al cliente ciò che non è stato approvato crea un impegno che poi l'azienda non può onorare."
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente CPG vuole partire con due paesi e poi estendere ad altri entro due anni. Quale struttura è più naturale?",
+     "o": [
+      "Un ramp con volumi e date di attivazione definiti, collegati al piano di go-live",
+      "Un contratto annuale rinnovato anno dopo anno, senza impegni su volumi o paesi futuri",
+      "Un contratto senza volumi, da definire nei prossimi mesi in base all'andamento",
+      "Il pagamento anticipato di tutti i paesi previsti, in cambio di una riduzione maggiore"
+     ],
+     "a": 0,
+     "exp": "Il ramp allinea il canone al go-live graduale e dà prevedibilità a entrambi. Pagare in anticipo paesi non attivi o lasciare volumi indefiniti crea costi o incertezza."
+    },
+    {
+     "t": "order",
+     "q": "Come gestisci una richiesta di price protection?",
+     "items": [
+      "Chiedi quale rischio il cliente vuole coprire",
+      "Verifica internamente cosa è possibile e chi approva",
+      "Proponi opzioni condizionate (durata, volume, metrica)",
+      "Concorda il testo con legale e procurement",
+      "Documenta nel contratto e nel business case"
+     ],
+     "exp": "Capire il rischio, verificare le approvazioni, offrire scambi e poi scrivere nero su bianco evita promesse non sostenibili."
+    }
+   ]
+  },
+  {
+   "id": "w12-l08",
+   "title": "Sconti: disciplina e governance",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Lo sconto non è una strategia ma una concessione. Ogni concessione va scambiata con qualcosa che vale per te (durata maggiore, volume, referenza, firma anticipata, perimetro più ampio): è il principio give-get.",
+     "Il valore non si sconta: se parti dal prezzo, hai già perso la conversazione sul valore. Scontare senza motivo insegna che il prezzo iniziale era negoziabile e riduce la tua credibilità.",
+     "Governance di approvazione: nelle aziende ben gestite gli sconti oltre certe soglie richiedono approvazioni di livelli superiori (manager, finance, deal desk). Le soglie sono interne: non rivelarle né prometterle prima di averle.",
+     "Un'approvazione si ottiene con un caso solido: valore per il cliente, strategic fit, concorrenza, contropartite. Chiedila in anticipo: l'urgenza dell'ultimo giorno non è un caso.",
+     "Non dire «ultimo prezzo» o «sconto massimo» se non è vero: la credibilità vale più di qualsiasi sconto. Mai accordi paralleli (side letter) non approvati."
+    ],
+    "ae": "Quando il cliente chiede sconto rispondi con una domanda: «Se riesco a ottenere X, che cosa posso avere in cambio da voi?». Trasformi la richiesta in uno scambio."
+   },
+   "ex": [
+    {
+     "t": "bucket",
+     "q": "Concessione (give) o contropartita (get)?",
+     "buckets": [
+      "Concessione (give)",
+      "Contropartita (get)"
+     ],
+     "items": [
+      [
+       "Sconto sul canone del primo anno",
+       0
+      ],
+      [
+       "Tutela sugli aumenti al rinnovo",
+       0
+      ],
+      [
+       "Condizioni di pagamento più dilazionate",
+       0
+      ],
+      [
+       "Durata contrattuale più lunga",
+       1
+      ],
+      [
+       "Referenza o case study pubblico",
+       1
+      ],
+      [
+       "Firma entro una data concordata",
+       1
+      ]
+     ],
+     "exp": "Le concessioni costano a te, le contropartite valgono per te. Se concedi senza ricevere, hai solo abbassato il prezzo."
+    },
+    {
+     "t": "mcq",
+     "q": "Il Procurement chiede il 15% in meno senza altra spiegazione. Qual è la prima mossa?",
+     "o": [
+      "Chiedo cosa è incluso nel loro budget e propongo scambi su perimetro, durata o ramp",
+      "Passo la richiesta al mio manager senza rispondere, per verificare se esiste margine",
+      "Rifiuto: il prezzo che ho presentato è definitivo e non è in discussione",
+      "Offro subito un 10% per mostrare disponibilità e riportare la trattativa su un tavolo"
+     ],
+     "a": 0,
+     "exp": "Prima di discutere il prezzo capisci a cosa è riferito il budget, poi scambi condizionati. Cedere subito, irrigidirsi o escalare senza rispondere fa perdere iniziativa.",
+     "ctx": {
+      "who": "Responsabile Acquisti",
+      "say": "Il budget a nostra disposizione è inferiore alla vostra offerta del 15%. Dovete scontare."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Promettere uno sconto al cliente prima di averlo fatto approvare internamente è accettabile se sei sicuro che passerà.",
+     "a": false,
+     "exp": "La certezza non esiste fino all'approvazione. Una promessa ritirata dopo costa più fiducia di una risposta onesta («verifico internamente e ti rispondo entro X»)."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale motivazione è più solida per chiedere un'approvazione di sconto?",
+     "o": [
+      "Un caso scritto con valore per il cliente, contropartite concordate, concorrenza e impatto",
+      "Il cliente minaccia di non firmare e la trattativa rischia di saltare entro fine mese",
+      "Siamo a fine trimestre e il deal serve al numero da presentare al management",
+      "Un collega ha concesso la stessa condizione a un altro cliente di dimensioni simili"
+     ],
+     "a": 0,
+     "exp": "Chi approva decide su valore e rischio. Minacce, fine trimestre e precedenti non sono un caso: mostrano pressione, non motivi per concedere."
+    },
+    {
+     "t": "multi",
+     "q": "Quali pratiche rispecchiano una buona disciplina sugli sconti? (seleziona tutte)",
+     "o": [
+      "Chiedere le approvazioni in anticipo, con un caso scritto",
+      "Rivelare al cliente le soglie interne di approvazione",
+      "Concedere uno sconto extra a fine trimestre per accelerare",
+      "Collegare ogni concessione a una contropartita",
+      "Documentare tutto nel contratto, senza accordi paralleli"
+     ],
+     "a": [
+      0,
+      3,
+      4
+     ],
+     "exp": "Disciplina significa scambi, tempi e trasparenza interna. Gli sconti di fine trimestre insegnano a aspettare e rivelare soglie interne toglie ogni margine di manovra."
+    }
+   ]
+  },
+  {
+   "id": "w12-l09",
+   "title": "BATNA, ZOPA, ancoraggio",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "BATNA (Best Alternative To a Negotiated Agreement, dal libro Getting to Yes di Fisher e Ury): la tua migliore alternativa se non si trova un accordo. Chi ha una BATNA forte negozia meglio: definisci la tua e stima quella del cliente.",
+     "Per il cliente la BATNA può essere un altro vendor, restare sul sistema attuale con supporto esteso, rimandare o gestire in house. Per te: un altro cliente, un deal in pipeline, o non chiudere a condizioni cattive.",
+     "ZOPA (zona di possibile accordo): intervallo in cui entrambi preferiscono un accordo al non-accordo. Se la tua soglia minima supera la soglia massima del cliente, non c'è ZOPA e conviene non chiudere.",
+     "Ancoraggio: la prima cifra orienta la trattativa. Ancora con un'offerta motivata dal valore, non arbitraria. Se il cliente ancora basso, non rispondere con una cifra: riporta la conversazione su perimetro e valore.",
+     "Concessioni piccole, decrescenti e condizionate («se tu... allora io...») mostrano che ti avvicini al limite. Ogni concessione senza contropartita cambia la percezione del tuo prezzo."
+    ],
+    "ae": "Scrivi prima della trattativa: la mia BATNA, la mia soglia minima, cosa posso dare in cambio di cosa. Chi entra senza una soglia scritta cede sotto pressione."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni concetto di negoziazione alla sua definizione",
+     "pairs": [
+      [
+       "BATNA",
+       "Migliore alternativa se non si raggiunge un accordo"
+      ],
+      [
+       "ZOPA",
+       "Intervallo in cui entrambe le parti preferiscono accordarsi"
+      ],
+      [
+       "Ancoraggio",
+       "Prima cifra o riferimento che orienta la trattativa"
+      ],
+      [
+       "Concessione condizionata",
+       "«Se tu fai X, io faccio Y»: uno scambio, non un regalo"
+      ],
+      [
+       "Soglia minima",
+       "Limite oltre il quale è meglio non chiudere"
+      ]
+     ],
+     "exp": "Sono gli strumenti di preparazione: senza BATNA e soglia non sai quando dire no, senza ZOPA non sai se un accordo è possibile."
+    },
+    {
+     "t": "mcq",
+     "q": "Il Procurement minaccia di passare a un'offerta più bassa. Qual è la risposta migliore?",
+     "o": [
+      "Chiedo cosa include quell'offerta e confronto perimetro, rischi e TCO",
+      "Mi allineo subito al prezzo indicato, per evitare di perdere un deal già a buon punto",
+      "Rispondo che il mio prezzo è già il minimo possibile e non ci sono altri margini",
+      "Spiego che quell'offerta è di qualità inferiore e il loro rischio di progetto aumenterebbe"
+     ],
+     "a": 0,
+     "exp": "Un'offerta più bassa non dice nulla finché non confronti ciò che copre. Allinearsi cede valore, denigrare il concorrente è debole e rigidità senza argomenti chiude il dialogo.",
+     "ctx": {
+      "who": "Responsabile Acquisti",
+      "say": "Abbiamo un'offerta di un altro fornitore molto più bassa: se non vi allineate, andiamo da loro."
+     }
+    },
+    {
+     "t": "fill",
+     "q": "Se la soglia minima del venditore supera la soglia massima del cliente, non esiste una ___.",
+     "o": [
+      "BATNA",
+      "MAP",
+      "TCO",
+      "ZOPA"
+     ],
+     "a": 3,
+     "exp": "Senza sovrapposizione tra le soglie non c'è margine di accordo. Meglio saperlo presto che concedere sotto la tua soglia."
+    },
+    {
+     "t": "tf",
+     "q": "Definire la propria BATNA prima di entrare in trattativa riduce il rischio di cedere sotto pressione.",
+     "a": true,
+     "exp": "Conoscere la tua alternativa ti dice quando un'offerta è peggio del non accordo. Senza BATNA, ogni concessione sembra necessaria."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente apre con una cifra molto bassa. Qual è la mossa più efficace?",
+     "o": [
+      "Non controffro subito: riporto la discussione su perimetro, valore e criteri",
+      "Gli chiedo di fare la proposta migliore e poi mi adeguo",
+      "Controffro a metà strada tra la sua cifra e la mia, per chiudere rapidamente il confronto",
+      "Mi irrigidisco e dico che a queste condizioni non siamo interessati a proseguire"
+     ],
+     "a": 0,
+     "exp": "Rispondere subito con una cifra accetta la sua ancora e sposta la media verso il basso. Riportare la conversazione su perimetro e valore ti rimette in controllo."
+    }
+   ]
+  },
+  {
+   "id": "w12-l10",
+   "title": "Voss: ascolto tattico",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Chris Voss (ex negoziatore FBI, autore di «Never Split the Difference»): negoziare è prima di tutto ascoltare. Mirroring: ripeti le ultime due o tre parole del cliente con tono interrogativo per farlo elaborare.",
+     "Labeling: dai un nome all'emozione o alla posizione («Sembra che vi preoccupi essere vincolati per cinque anni»). Fa sentire compresi e abbassa le difese; usa «sembra / mi pare», non «tu sei».",
+     "Domande calibrate: aperte, con «come» o «cosa», evitando «perché» (suona accusatorio). Esempio: «Come potremmo trovare una struttura che funzioni per voi e per noi?».",
+     "Accusation audit: elenca prima tu le obiezioni negative che il cliente potrebbe avere («Penserete che spingiamo per chiudere a dicembre») per toglierle forza. Obiettivo: il «è proprio così» dopo un tuo riassunto.",
+     "Con i clienti italiani il tono conta: non usare le tecniche in modo meccanico. Funzionano se sei autentico, curioso e preparato; se si sente il copione, perdi fiducia."
+    ],
+    "ae": "Quando senti «è troppo caro» non difenderti: mirror («troppo caro?») e poi una domanda calibrata: «Rispetto a cosa vi sembra troppo?». Scoprirai se è budget, confronto o tattica."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni tecnica di Voss al suo effetto",
+     "pairs": [
+      [
+       "Mirroring",
+       "Ripeti le ultime parole del cliente per farlo elaborare"
+      ],
+      [
+       "Labeling",
+       "Nomina l'emozione o la preoccupazione che percepisci"
+      ],
+      [
+       "Domanda calibrata",
+       "Domanda aperta con «come» o «cosa» che lo fa ragionare"
+      ],
+      [
+       "Accusation audit",
+       "Dici tu per primo le obiezioni negative che temi"
+      ],
+      [
+       "«È proprio così»",
+       "Segnale che il cliente si sente capito dopo il tuo riassunto"
+      ]
+     ],
+     "exp": "Sono strumenti di ascolto prima che di persuasione: l'obiettivo è far emergere ciò che il cliente non dice, non vincere la discussione."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO dice solo «Il prezzo è troppo alto». Qual è la risposta più efficace per capire?",
+     "o": [
+      "Gli spiego perché il valore del progetto supera ampiamente il costo previsto",
+      "Propongo uno sconto del 10% per capire se il prezzo è la sola obiezione",
+      "Ripeto «troppo alto?» e chiedo: «Rispetto a quale riferimento lo state confrontando?»",
+      "Gli dico che altri clienti simili hanno accettato lo stesso prezzo"
+     ],
+     "a": 2,
+     "exp": "Mirror più domanda calibrata scopre il riferimento (budget, offerta concorrente, aspettativa). Difendersi o scontare subito risponde a un'obiezione che non conosci ancora.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il prezzo è troppo alto."
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente sospetta che tu spinga per la chiusura di dicembre. Qual è la risposta migliore?",
+     "o": [
+      "Capisco che sembri così. Cosa vi aiuterebbe a decidere con i vostri tempi?",
+      "Non è vero: la data di dicembre è solo una coincidenza legata al calendario delle ferie",
+      "È vero, ma l'offerta migliore resta disponibile soltanto fino alla fine dell'anno in corso",
+      "Lascio perdere la data e da adesso non ne parlo più in nessuna riunione con voi"
+     ],
+     "a": 0,
+     "exp": "Etichetti il sospetto senza negarlo e passi la parola al cliente con una domanda calibrata. Negare, usare la scadenza come leva o ritirarsi fanno perdere fiducia o iniziativa.",
+     "ctx": {
+      "who": "Direttore Acquisti",
+      "say": "Francamente ho l'impressione che vogliate solo chiudere entro dicembre."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Secondo Voss, le domande che iniziano con «perché» sono sempre le più efficaci per far ragionare il cliente.",
+     "a": false,
+     "exp": "Voss le sconsiglia: «perché» suona come un'accusa e mette sulla difensiva. Meglio «come» e «cosa», che invitano a spiegare e a risolvere il problema."
+    },
+    {
+     "t": "mcq",
+     "q": "Il legale rifiuta un limite di responsabilità. Quale approccio calibrato usi per aprire?",
+     "o": [
+      "«Come potremmo strutturarlo per renderlo accettabile?» e coinvolgo il nostro legale",
+      "Offro uno sconto sul canone come compensazione del rischio che il cliente percepisce",
+      "Spiego che è una clausola standard e che non può essere modificata in questa fase",
+      "Gli chiedo perché non lo accetta, così capisco le sue ragioni di fondo"
+     ],
+     "a": 0,
+     "exp": "Una domanda calibrata sposta il legale dal rifiuto al problema da risolvere, e il coinvolgimento del legale SAP evita impegni che non puoi prendere. Sconto e rigidità non toccano il rischio.",
+     "ctx": {
+      "who": "Legale del cliente",
+      "say": "Questo limite di responsabilità non è accettabile."
+     }
+    }
+   ]
+  },
+  {
+   "id": "w12-l11",
+   "title": "Negoziare con il Procurement",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Il Procurement ottimizza costo totale, rischio fornitore e conformità di processo; spesso non possiede il valore del progetto e non è l'economic buyer. Rispettane il ruolo e coinvolgilo presto.",
+     "Tattiche comuni: confronto tra offerte, richieste di sconto, gara o RFP, aste al ribasso, pagamenti dilazionati, SLA e penali stringenti, clausole legali del cliente. Non sono attacchi: è il loro lavoro.",
+     "Non negoziare il valore con chi non lo possiede: se il Procurement parla solo di prezzo, riporta lo sponsor di business (CFO, COO, CIO) nella conversazione, senza scavalcare nessuno di nascosto.",
+     "Preparati: criteri di aggiudicazione, chi decide, clausole non negoziabili del cliente, calendario. Sii trasparente su ciò che è negoziabile e su ciò che richiede approvazioni interne.",
+     "Mid-market italiano a controllo familiare: spesso il titolare partecipa e la fiducia personale pesa. Combina rigore e rapporto, rispetta i tempi decisionali ed evita pressioni di fine trimestre che per loro non hanno senso."
+    ],
+    "ae": "Chiedi al Procurement all'inizio: «Come valuterete le offerte e quali clausole non sono negoziabili per voi?» e rifletti i loro criteri nella proposta."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il Procurement ha due offerte e chiede perché la tua costa di più. Quale risposta valorizza la proposta senza attaccare il competitor?",
+     "o": [
+      "Confrontiamo perimetro e TCO a parità di condizioni, legando le differenze agli obiettivi",
+      "Se serve, posso rivedere il prezzo del 10% per avvicinarci alla sua offerta",
+      "La nostra soluzione è migliore e questo giustifica il prezzo, come mostrano le referenze",
+      "Il competitor ha costi nascosti che emergeranno dopo la firma, ne ho visti diversi"
+     ],
+     "a": 0,
+     "exp": "Riportare il confronto su perimetro e TCO è onesto e verificabile. Affermazioni generiche, accuse al competitor e sconti immediati non spiegano la differenza.",
+     "ctx": {
+      "who": "Responsabile Acquisti",
+      "say": "Ho due offerte: mi dica perché la sua costa di più. Lo sponsor è convinto, ma la parte economica la gestisco io."
+     }
+    },
+    {
+     "t": "order",
+     "q": "Ordina i passi di una negoziazione con il Procurement",
+     "items": [
+      "Chiedi processo, criteri e calendario di valutazione",
+      "Condividi il valore concordato con lo sponsor di business",
+      "Presenta l'offerta con struttura e opzioni",
+      "Negozia scambi condizionati, non sconti isolati",
+      "Concorda clausole e paper process con il legale"
+     ],
+     "exp": "Capisci le regole del gioco, ancori la discussione al valore, offri opzioni e negozi scambi: solo alla fine si chiude il testo contrattuale."
+    },
+    {
+     "t": "mcq",
+     "q": "Il Procurement vuole fare un'asta al ribasso su una soluzione critica. Come rispondi?",
+     "o": [
+      "Propongo di confrontare TCO e rischio di migrazione, con criteri non solo di prezzo",
+      "Mi ritiro dalla gara, perché soluzioni di questo tipo non si possono confrontare",
+      "Partecipo e presento il prezzo più basso che posso, per non perdere l'occasione",
+      "Chiamo il CEO del cliente per proporre di annullare la gara e passare a un accordo"
+     ],
+     "a": 0,
+     "exp": "Un'asta su prezzo per una soluzione critica ignora rischio e TCO. Proporre criteri più ampi è legittimo; ritirarsi, svendere o scavalcare il processo danneggiano la tua posizione.",
+     "ctx": {
+      "who": "Responsabile Acquisti",
+      "say": "Faremo un'asta tra tre fornitori per questa soluzione, comprese le condizioni di rinnovo."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Per accelerare, conviene aggirare il Procurement e far firmare direttamente lo sponsor di business.",
+     "a": false,
+     "exp": "Il Procurement governa il processo e può bloccare la firma. Aggirarlo crea un nemico e allunga i tempi; coinvolgerlo presto e alleare lo sponsor funziona meglio."
+    },
+    {
+     "t": "mcq",
+     "q": "Il titolare di un'azienda CPG vuole una referenza prima di firmare e non ha fretta. Come costruisci il calendario?",
+     "o": [
+      "Lascio che il cliente decida i tempi, senza proporre passi o date intermedie concordate",
+      "Spingo sulla scadenza di fine trimestre per ottenere uno sconto da riconoscere al cliente",
+      "Escalo subito al management SAP per chiedere un incontro con il vertice del cliente",
+      "Parto dal loro ritmo decisionale e dai loro eventi, non dal mio trimestre"
+     ],
+     "a": 3,
+     "exp": "Un cliente familiare decide quando si fida: la referenza è un passo del piano, non un ostacolo. Imporre il tuo calendario o sparire dal processo fa perdere la fiducia.",
+     "ctx": {
+      "who": "Titolare e CFO",
+      "say": "Prima di firmare vogliamo parlare con un'azienda come noi e farci un'idea tranquilla. Non abbiamo fretta."
+     }
+    }
+   ]
+  },
+  {
+   "id": "w12-l12",
+   "title": "DPA, GDPR, SLA, responsabilità",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "GDPR art. 28: se il fornitore tratta dati personali per il cliente (titolare) serve un contratto (DPA) con oggetto, durata, finalità, tipi di dati, istruzioni documentate, sicurezza, assistenza, cancellazione o restituzione e audit.",
+     "Sub-responsabili: il cliente deve autorizzarli e poter obiettare ai cambi. Trasferimenti extra-UE: serve una base legale (adeguatezza, clausole contrattuali standard o altro) e una valutazione del rischio.",
+     "SLA: livello di servizio impegnato (disponibilità, tempi di risposta e ripristino, manutenzioni), con crediti se non rispettato. Chiarisci come si misura, cosa è escluso e che i crediti non sono un risarcimento pieno.",
+     "Limitazione di responsabilità: tetto ed esclusione dei danni indiretti. In Italia è nullo il patto preventivo che limita la responsabilità per dolo o colpa grave (art. 1229 c.c.).",
+     "Nelle condizioni generali predisposte dal fornitore, le clausole di limitazione richiedono approvazione specifica scritta (art. 1341 c.c.). Non negoziare da solo il testo legale: coinvolgi legale e security SAP."
+    ],
+    "ae": "Chiedi presto il modello di DPA, i requisiti di security e i questionari del cliente e rispondi con documentazione pubblica (trust center, certificazioni): sono i tempi più lunghi del paper process."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni termine legale al suo significato",
+     "pairs": [
+      [
+       "DPA",
+       "Contratto con cui il fornitore tratta dati su istruzione del titolare"
+      ],
+      [
+       "SLA",
+       "Livello di servizio impegnato, con crediti se non rispettato"
+      ],
+      [
+       "Sub-responsabile",
+       "Terzo cui il fornitore affida parte del trattamento"
+      ],
+      [
+       "Limitazione di responsabilità",
+       "Tetto o esclusione dei danni risarcibili tra le parti"
+      ],
+      [
+       "Titolare del trattamento",
+       "Chi decide finalità e mezzi del trattamento (il cliente)"
+      ]
+     ],
+     "exp": "Sono i termini che il legale del cliente userà per primi. Conoscerli ti permette di capire cosa chiede e a chi portare la richiesta."
+    },
+    {
+     "t": "mcq",
+     "q": "Il legale chiede chi risponde in caso di incidente sui dati. Cosa fai?",
+     "o": [
+      "Non rispondo da solo: spiego i ruoli nel DPA e coinvolgo legale e security SAP",
+      "Rimando al DPA standard senza aggiungere altro, perché è già completo",
+      "Garantisco che il rischio è azzerato grazie alle misure di sicurezza già in essere",
+      "Rispondo che SAP non è responsabile in nessun caso, per tutelare la nostra posizione"
+     ],
+     "a": 0,
+     "exp": "Su responsabilità e incidenti ci vogliono risposte coerenti con il contratto: coinvolgi le funzioni giuste. Garanzie assolute o scarichi di responsabilità non sono né credibili né onesti.",
+     "ctx": {
+      "who": "Legale del cliente (farma)",
+      "say": "Se c'è un incidente sui dati, chi ne risponde e fino a che punto?"
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Una clausola che esclude in anticipo la responsabilità del fornitore anche per dolo o colpa grave è valida in Italia se il cliente la firma.",
+     "a": false,
+     "exp": "In generale i patti preventivi che escludono o limitano la responsabilità per dolo o colpa grave sono nulli (art. 1229 c.c.). Coinvolgi sempre il legale per i dettagli."
+    },
+    {
+     "t": "mcq",
+     "q": "Una limitazione di responsabilità è nelle condizioni generali predisposte dal fornitore. Cosa prevede l'art. 1341 c.c.?",
+     "o": [
+      "Approvazione specifica per iscritto del cliente (la cosiddetta doppia firma)",
+      "Che sia valida anche senza approvazione specifica, se il cliente è un'impresa strutturata",
+      "Che sia efficace solo se il contratto supera una soglia di valore stabilita dalla legge",
+      "Che il giudice la convalidi prima che il contratto produca i suoi effetti tra le parti"
+     ],
+     "a": 0,
+     "exp": "Per le condizioni generali, le clausole che limitano la responsabilità del predisponente richiedono approvazione specifica per iscritto, anche tra imprese. Ne discute il legale: tu devi saperlo per non promettere tempi."
+    },
+    {
+     "t": "multi",
+     "q": "Quali elementi sono tipici di un DPA ai sensi dell'art. 28 GDPR? (seleziona tutte)",
+     "o": [
+      "Regole sull'uso di sub-responsabili",
+      "Istruzioni documentate del titolare",
+      "Garanzia di risultato sul business case",
+      "Misure di sicurezza e assistenza al titolare",
+      "Prezzo e sconti del servizio"
+     ],
+     "a": [
+      0,
+      1,
+      3
+     ],
+     "exp": "Il DPA disciplina il trattamento dei dati personali. Prezzi e benefici stanno nel contratto commerciale e nel business case."
+    }
+   ]
+  },
+  {
+   "id": "w12-l13",
+   "title": "Sovranità ed EU Data Act",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Sovranità del dato non è un solo concetto: dove sono i dati (residenza), chi li gestisce e con quali accessi, quale legge si applica e quali richieste estere possono arrivare (giurisdizione), quanto è facile uscire (portabilità).",
+     "Il Data Act UE (Reg. 2023/2854) si applica dal {{w12.data_act_start_date}} e {{w12.data_act_switching}}. Il periodo di transizione è di {{w12.data_act_transition}}.",
+     "Costi di switching: {{w12.data_act_charges}}. Sulla riforma c'è anche altro in discussione: {{w12.data_act_omnibus}}. Basa il contratto sulle regole in vigore, non su proposte.",
+     "Trasferimenti extra-UE: il Data Privacy Framework UE-USA {{w12.dpf_status}}. Molti consulenti suggeriscono le clausole contrattuali standard come rete di sicurezza.",
+     "Lato SAP: {{w12.sap_eu_ai_cloud}}. Prima di proporre un livello di sovranità capisci i requisiti reali del cliente (settore, dati, regolatori): più sovranità può voler dire meno funzioni o costi diversi."
+    ],
+    "ae": "Quando senti «vogliamo i dati in Europa» chiedi: residenza, accessi, legge applicabile o portabilità? Sono quattro conversazioni diverse con risposte diverse."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Abbina ogni dimensione della sovranità alla domanda del cliente",
+     "pairs": [
+      [
+       "Residenza del dato",
+       "In quali data center e paesi sono archiviati i dati?"
+      ],
+      [
+       "Accessi operativi",
+       "Chi può accedere ai sistemi e da dove?"
+      ],
+      [
+       "Giurisdizione",
+       "Quale legge si applica e quali richieste estere sono possibili?"
+      ],
+      [
+       "Portabilità",
+       "Quanto è facile e costoso cambiare fornitore?"
+      ],
+      [
+       "Trasferimenti extra-UE",
+       "Quale base legale copre i dati inviati fuori dallo SEE?"
+      ]
+     ],
+     "exp": "Sovranità è un termine ombrello: ogni dimensione ha una domanda diversa e una risposta diversa. Chiedere quale dimensione preoccupa il cliente evita promesse generiche."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CIO definisce la sovranità come assenza di qualsiasi accesso da governi extra-UE. Cosa fai?",
+     "o": [
+      "Gli dico che la sovranità è soprattutto marketing e non un requisito reale",
+      "Gli garantisco che con il cloud questo scenario non potrà mai verificarsi nel suo caso",
+      "Preciso quali garanzie contano (giurisdizione, accessi, residenza) e chiedo supporto",
+      "Lo rimando alla clausola standard del contratto, che già tratta la protezione dei dati"
+     ],
+     "a": 2,
+     "exp": "Definizioni assolute vanno scomposte in garanzie verificabili. Promettere zero rischio, banalizzare o rimandare alla clausola standard non affronta il requisito.",
+     "ctx": {
+      "who": "CIO di un'azienda farma",
+      "say": "Per noi sovranità significa che nessun governo extra-UE possa accedere ai dati."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Il Data Act consente al fornitore cloud di imporre costi di switching liberamente stabiliti.",
+     "a": false,
+     "exp": "Il Data Act limita i costi di switching: {{w12.data_act_charges}}. Per questo in negoziazione cloud vanno controllate procedure di uscita, portabilità e costi."
+    },
+    {
+     "t": "mcq",
+     "q": "Quale approccio sul Data Act è corretto in una negoziazione cloud?",
+     "o": [
+      "Basarsi sulle semplificazioni del Digital Omnibus come se fossero già legge",
+      "Verificare con il legale switching, portabilità e costi rispetto alle regole in vigore",
+      "Ignorarlo, perché riguarda soprattutto i fornitori americani di infrastruttura",
+      "Promettere un'uscita gratuita in qualsiasi caso, per rassicurare il cliente"
+     ],
+     "a": 1,
+     "exp": "Le regole vanno applicate nella versione in vigore: oggi {{w12.data_act_omnibus}}. Promesse di gratuità assoluta o sottovalutazioni espongono al rischio contrattuale."
+    },
+    {
+     "t": "fill",
+     "q": "Un cliente che chiede dove sono fisicamente archiviati i dati sta parlando di ___ del dato.",
+     "o": [
+      "residenza",
+      "giurisdizione",
+      "proprietà",
+      "portabilità"
+     ],
+     "a": 0,
+     "exp": "La residenza riguarda dove si trovano i dati; la giurisdizione la legge applicabile e le richieste di accesso; la portabilità la facilità di uscita. Sono tre domande da non confondere."
+    }
+   ]
+  },
+  {
+   "id": "w12-l14",
+   "title": "Etica e scadenza ECC",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "La scadenza di ECC è un fatto: manutenzione standard fino al {{sap.ecc.mainstream_end}}, estesa fino al {{sap.ecc.extended_end}}. Il cliente ha più opzioni, non solo «migra subito».",
+     "Esiste anche la transition option: {{sap.ecc.transition_option}}. Dettagli e prezzi non sono ancora noti: non promettere condizioni, non usarla né come minaccia né come promessa.",
+     "Vendita per paura: usare la scadenza per creare ansia, esagerare i rischi o fingere che non esistano alternative. Funziona una volta, rovina la fiducia e spinge il cliente a rimandare o a cercare alternative.",
+     "Approccio etico: date e fatti con fonte, opzioni del cliente (restare con supporto esteso, supporto di terze parti, migrare in modi diversi) con pro, contro e costi, e decisione collegata ai suoi obiettivi di business.",
+     "Non promettere sconti o condizioni legati alla scadenza che non hai approvato, non dire che «SAP non supporterà più nulla», non denigrare le alternative. Se non sai, dì: «verifico e ti rispondo»."
+    ],
+    "ae": "Frase tipo: «La scadenza è un dato, non una strategia. Vediamo quali sono le vostre opzioni, cosa costano e cosa vi serve davvero»."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il CFO crede che ECC non sarà più supportato dal 2028 e che debba firmare entro dicembre. Come rispondi?",
+     "o": [
+      "Confermo che dopo il 2027 ECC non sarà più supportato e che conviene firmare adesso",
+      "Lo rassicuro dicendo che la scadenza non ha alcun peso e può aspettare serenamente",
+      "Preciso le date di manutenzione standard ed estesa, poi valutiamo le opzioni",
+      "Gli dico che a dicembre scade lo sconto per la migrazione e conviene approfittarne"
+     ],
+     "a": 2,
+     "exp": "Correggi con i fatti: standard fino al {{sap.ecc.mainstream_end}}, estesa fino al {{sap.ecc.extended_end}}. Poi ragioni sulle opzioni. Confermare l'errore, minimizzare o inventare scadenze commerciali sono tutti scorretti.",
+     "ctx": {
+      "who": "CFO di un'azienda CPG",
+      "say": "Mi hanno detto che dal 2028 ECC non sarà più supportato. Devo firmare entro fine anno?"
+     }
+    },
+    {
+     "t": "bucket",
+     "q": "Approccio etico o vendita per paura?",
+     "buckets": [
+      "Approccio etico",
+      "Vendita per paura"
+     ],
+     "items": [
+      [
+       "Citare le date ufficiali con la fonte",
+       0
+      ],
+      [
+       "Elencare le opzioni del cliente con pro e contro",
+       0
+      ],
+      [
+       "Collegare i tempi agli obiettivi di business del cliente",
+       0
+      ],
+      [
+       "Dire che dopo la scadenza si rischia il blocco totale",
+       1
+      ],
+      [
+       "Presentare la migrazione come unica scelta possibile",
+       1
+      ],
+      [
+       "Insinuare che chi aspetta subirà attacchi o sanzioni certi",
+       1
+      ]
+     ],
+     "exp": "L'etica sta in fatti verificabili, opzioni e collegamento agli obiettivi. La paura usa toni assoluti, nasconde alternative e sostituisce l'analisi con l'urgenza."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CIO cita un'opzione di transizione fino al 2033. Come rispondi con onestà?",
+     "o": [
+      "Esiste e rende superflua una decisione: potete restare sul sistema attuale fino al 2033",
+      "Esiste ed è legata a RISE, ma le condizioni non sono note: non prometto nulla",
+      "Non esiste: sono solo voci senza fondamento tra i consulenti",
+      "Esiste e costerà poco: conviene aspettare il 2028 prima di prendere qualunque decisione"
+     ],
+     "a": 1,
+     "exp": "Transition option: {{sap.ecc.transition_option}}. Non è ancora una soluzione definita: non va né negata né presentata come garanzia di tempo o di costo.",
+     "ctx": {
+      "who": "CIO di un'azienda farma",
+      "say": "Un consulente mi dice che c'è un'opzione di transizione fino al 2033. Se aspettiamo il 2028 per scegliere, cosa perdiamo?"
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Citare la fine della manutenzione standard di ECC è legittimo se accompagnato da fonte e opzioni del cliente.",
+     "a": true,
+     "exp": "La scadenza è un fatto pubblico. Diventa vendita per paura solo se usata da sola, esagerata o senza alternative. Con fonte, opzioni e collegamento al business è informazione corretta."
+    },
+    {
+     "t": "mcq",
+     "q": "Il cliente valuta il supporto di terze parti per ECC. Qual è la risposta più etica ed efficace?",
+     "o": [
+      "Il supporto di terze parti non è consentito dal contratto e comporta gravi rischi",
+      "Se lo scegliete, dovrete aspettarvi condizioni meno favorevoli quando tornerete da noi",
+      "Confrontiamo costi, limiti e rischi delle opzioni rispetto al vostro piano a medio termine",
+      "Non conosco questa opzione, quindi preferisco non esprimermi sul confronto"
+     ],
+     "a": 2,
+     "exp": "Il supporto di terze parti è un'opzione che il cliente può valutare: la tua credibilità sta nel confronto onesto su costi, limiti (aggiornamenti, innovazione) e rischi, non nelle minacce o nei silenzi.",
+     "ctx": {
+      "who": "Direttore IT",
+      "say": "Il consulente di terze parti dice che il supporto indipendente costa molto meno. Voi cosa dite?"
+     }
+    }
+   ]
+  },
+  {
+   "id": "w12-l15",
+   "title": "Chiusura, forecast, win/loss",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Mutual close plan: come il MAP, ma sugli ultimi passi: approvazioni finali, review legale e security, firma, ordine d'acquisto, onboarding. Ogni passo ha un owner e una data; il cliente lo possiede.",
+     "Paper process: NDA, security review, DPA, termini commerciali, approvazioni interne di entrambe le parti, firma (anche digitale), emissione dell'ordine. In una grande azienda può richiedere settimane: parti presto.",
+     "Fine trimestre: la scadenza che conta è quella del cliente (chiusura di bilancio, approvazione del budget, finestre di go-live). Un'urgenza artificiale legata ai tuoi numeri erode la fiducia e fa saltare deal sani.",
+     "Forecast: pipeline, best case e commit (definizioni interne). Un deal è commit solo con evidenza: economic buyer allineato, paper process mappato, data di firma confermata dal cliente, rischi aperti gestiti.",
+     "Win/loss review: dopo ogni deal chiuso o perso rivedi cosa ha deciso davvero (valore, rischio, relazione, prezzo, tempi), con l'input del cliente. Evita il «perso per il prezzo» senza evidenza."
+    ],
+    "ae": "Chiedi al cliente un debrief a 30 giorni, vinca o perda: «Cosa avremmo potuto fare meglio?». È l'insight più gratuito e più sottovalutato che esista."
+   },
+   "ex": [
+    {
+     "t": "order",
+     "q": "Ordina i passi finali verso la firma",
+     "items": [
+      "Approvazione finale di criteri e business case con l'economic buyer",
+      "Paper process: security review, DPA e termini commerciali",
+      "Allineamento sulle approvazioni interne di entrambe le parti",
+      "Firma del contratto ed emissione dell'ordine",
+      "Kick-off e piano di onboarding"
+     ],
+     "exp": "Valore e decisione prima, poi paper process e approvazioni, firma e avvio. Saltare un passo sposta il rischio dopo la firma."
+    },
+    {
+     "t": "bucket",
+     "q": "In quale categoria di forecast va il deal?",
+     "buckets": [
+      "Commit",
+      "Best case",
+      "Pipeline"
+     ],
+     "items": [
+      [
+       "Decisore allineato, legale in corso con date, firma confermata",
+       0
+      ],
+      [
+       "MAP concordato, security review conclusa, attesa dell'ordine",
+       0
+      ],
+      [
+       "Contratto in legale, ma il budget non è ancora approvato",
+       1
+      ],
+      [
+       "Champion forte, ma manca l'approvazione del CFO",
+       1
+      ],
+      [
+       "Discovery in corso, nessun prossimo passo concordato",
+       2
+      ],
+      [
+       "Demo gradita, nessun contatto con il decisore",
+       2
+      ]
+     ],
+     "exp": "Le categorie variano per azienda, ma la logica è comune: il commit richiede evidenza su decisore, paper process e data; il best case ha rischi aperti; la pipeline è ancora esplorativa."
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO dice che il budget 2026 si chiude a fine novembre. Come usi questa informazione?",
+     "o": [
+      "La ignoro: il mio trimestre si chiude a dicembre e per il mio piano conta quella data",
+      "La uso per chiedere uno sconto in cambio della firma entro quella scadenza",
+      "La inserisco nel mutual close plan come data del cliente e lavoro a ritroso",
+      "Propongo di firmare subito e di sistemare gli aspetti legali in un secondo momento"
+     ],
+     "a": 2,
+     "exp": "La data del cliente è un vincolo reale: lavorando a ritroso capisci cosa serve per rispettarla. Ignorarla, monetizzarla o saltare il paper process mette a rischio il deal.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il nostro budget 2026 si chiude il 30 novembre: dopo, la spesa slitta al 2027."
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "Hai perso un deal. Qual è la pratica migliore di win/loss review?",
+     "o": [
+      "Archiviare il deal come perso per il prezzo, senza fare altre domande",
+      "Chiedere un debrief al cliente su valore, rischio, relazione, prezzo e tempi",
+      "Attribuire la perdita al competitor e concentrarsi sul prossimo deal",
+      "Aggiornare il CRM con lo stato finale e passare alla prossima opportunità"
+     ],
+     "a": 1,
+     "exp": "Senza evidenza dal cliente la causa è un'ipotesi. Un debrief ben condotto migliora ICP, qualifica e messaggio per i deal successivi."
+    },
+    {
+     "t": "tf",
+     "q": "Un deal può andare in commit perché il champion è sicuro che il cliente firmerà entro fine trimestre.",
+     "a": false,
+     "exp": "La fiducia del champion non è evidenza: servono economic buyer allineato, paper process mappato e data di firma confermata dal cliente."
+    },
+    {
+     "t": "mcq",
+     "q": "Quando conviene avviare il paper process?",
+     "o": [
+      "Dopo l'approvazione dello sconto, perché le condizioni commerciali devono essere finali",
+      "Subito, in parallelo alla valutazione, con legale e security del cliente",
+      "A fine trimestre, quando il cliente è più motivato a completare le firme necessarie",
+      "Dopo la decisione verbale, per non sprecare tempo e risorse se il deal non procede"
+     ],
+     "a": 1,
+     "exp": "Il paper process è spesso il collo di bottiglia. Avviarlo in parallelo (NDA, security review, DPA) toglie settimane al percorso e mostra preparazione."
+    }
+   ]
+  },
+  {
+   "id": "w12-l16",
+   "title": "Boss: dal valore alla firma",
+   "kind": "boss",
+   "lesson": {
+    "points": [
+     "Valore: baseline del cliente, TCO a cinque anni, NPV, payback e IRR nel formato del CFO, con ipotesi e sensibilità.",
+     "Struttura commerciale: subscription o perpetual, durata, ramp, rinnovi, price protection e scambi give-get, sempre con approvazioni interne e senza promesse non autorizzate.",
+     "Negoziazione: BATNA, ZOPA, ancoraggio, concessioni condizionate, ascolto alla Voss, rispetto del Procurement.",
+     "Legale e chiusura: DPA, GDPR, SLA, responsabilità, sovranità e Data Act, etica sulla scadenza ECC, mutual close plan e forecast onesto."
+    ]
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il CFO dice che il business case è «tutto ottimismo». Qual è la risposta più efficace?",
+     "o": [
+      "Rivediamo con il vostro Finance le ipotesi e mostriamo caso prudente e sensibilità",
+      "Riduco i benefici del 30% in tutte le voci per presentarle un caso più conservativo",
+      "Le ipotesi sono prese da benchmark di settore e quindi robuste per il suo caso specifico",
+      "Le propongo di partire con il progetto e di verificare i benefici dopo il go-live"
+     ],
+     "a": 0,
+     "exp": "Co-validare le ipotesi con Finance e mostrare lo scenario prudente costruisce credibilità. Appoggiarsi a benchmark, tagliare a caso o rimandare la verifica non risolve il dubbio.",
+     "ctx": {
+      "who": "CFO",
+      "say": "Questo business case mi sembra tutto ottimismo. Come faccio a fidarmi dei benefici?"
+     }
+    },
+    {
+     "t": "match",
+     "q": "Abbina ogni concetto alla sua descrizione corretta",
+     "pairs": [
+      [
+       "Baseline",
+       "Situazione attuale misurata e validata dal cliente"
+      ],
+      [
+       "TCO a 5 anni",
+       "Tutti i costi di possesso e gestione nel periodo"
+      ],
+      [
+       "BATNA",
+       "Migliore alternativa se non si raggiunge l'accordo"
+      ],
+      [
+       "Price protection",
+       "Limite agli aumenti di canone nei rinnovi"
+      ],
+      [
+       "Paper process",
+       "Legale, security, procurement e firma del contratto"
+      ]
+     ],
+     "exp": "Cinque concetti che coprono l'intero percorso: dalla fotografia del cliente alle regole del contratto e alla firma."
+    },
+    {
+     "t": "order",
+     "q": "Ordina un percorso di valore e negoziazione, dalla baseline alla firma",
+     "items": [
+      "Costruisci la baseline con i dati del cliente",
+      "Stima TCO e benefici con ipotesi e sensibilità",
+      "Valida il caso con Finance e il decisore di business",
+      "Negozia scambi condizionati con il Procurement",
+      "Chiudi paper process e firma con un mutual close plan"
+     ],
+     "exp": "Il valore precede il prezzo, il prezzo precede il contratto, il contratto precede la firma: invertire i passi indebolisce la tua posizione."
+    },
+    {
+     "t": "mcq",
+     "q": "Il Procurement chiede uno sconto del 12% sul canone. Hai già concordato durata e ramp. Cosa fai?",
+     "o": [
+      "Dico che l'azienda non applica sconti, per scoraggiare altre richieste",
+      "Rifiuto qualsiasi sconto perché durata e ramp sono già un'ottima condizione",
+      "Concedo il 6% subito, così mostro disponibilità e mantengo un margine per il giro dopo",
+      "Valuto cosa posso ottenere in cambio, verifico le approvazioni e propongo uno scambio"
+     ],
+     "a": 3,
+     "exp": "Una richiesta di sconto è l'inizio di uno scambio: contropartita, approvazione e caso scritto. Concedere subito, irrigidirsi o negare sconti in modo assoluto sono tutte posizioni deboli.",
+     "ctx": {
+      "who": "Responsabile Acquisti",
+      "say": "Avete già durata e ramp, ma per chiudere ci serve un 12% sul canone."
+     }
+    },
+    {
+     "t": "tf",
+     "q": "Un legale che contesta un limite di responsabilità va ascoltato con domande calibrate, e il testo va portato ai colleghi legali SAP.",
+     "a": true,
+     "exp": "Le domande calibrate fanno emergere il vero rischio; il testo contrattuale è competenza di legale e security, non dell'AE. Promettere modifiche da solo è un errore grave."
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente chiede garanzia di prezzo congelato fino al 2033 legata all'opzione di transizione ECC. Cosa rispondi?",
+     "o": [
+      "Posso garantire il prezzo attuale fino al 2033 se firmate entro la fine dell'anno",
+      "L'opzione è confermata nelle condizioni pubblicate, quindi il prezzo resta quello attuale",
+      "Non prometto: dettagli e prezzi della transition option non sono noti, verifico con SAP",
+      "Meglio non parlarne ora: ne discuteremo quando avrete già firmato il contratto principale"
+     ],
+     "a": 2,
+     "exp": "Transition option: {{sap.ecc.transition_option}}. Garantire prezzi o condizioni oggi sarebbe un impegno senza basi; evitare l'argomento nasconde un'informazione che il cliente può già trovare.",
+     "ctx": {
+      "who": "CFO di un'azienda farma",
+      "say": "Voglio il prezzo congelato fino al 2033, in linea con la transition option."
+     }
+    },
+    {
+     "t": "multi",
+     "q": "Quali pratiche sono coerenti con una chiusura onesta e solida? (seleziona tutte)",
+     "o": [
+      "Costruire il mutual close plan intorno alle date reali del cliente",
+      "Mettere in commit i deal con champion convinto ma senza decisore",
+      "Creare urgenza con scadenze commerciali non reali",
+      "Chiedere un debrief al cliente dopo il deal, vinto o perso",
+      "Avviare in parallelo security review e DPA"
+     ],
+     "a": [
+      0,
+      3,
+      4
+     ],
+     "exp": "La chiusura si regge su date reali, paper process anticipato e apprendimento. Urgenze artificiali e commit senza decisore alterano forecast e fiducia."
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente vuole una cloud con dati solo in UE. Come imposti la conversazione sulla sovranità?",
+     "o": [
+      "Chiedo quale dimensione conta (residenza, accessi, legge, portabilità) e coinvolgo esperti",
+      "Rimando la discussione a dopo l'assessment tecnico, che dovrebbe già definire tutto",
+      "Rispondo che la residenza UE è già garanzia sufficiente di sovranità per ogni scopo",
+      "Presento subito l'offerta più sovrana disponibile, perché riduce i dubbi di compliance"
+     ],
+     "a": 0,
+     "exp": "Sovranità è un termine ombrello: capire quale dimensione conta evita di vendere troppo o troppo poco. Offerte massime o semplificazioni non rispondono al requisito reale.",
+     "ctx": {
+      "who": "CIO",
+      "say": "Vogliamo una soluzione cloud con i dati solo in Europa."
+     }
+    },
+    {
+     "t": "mcq",
+     "q": "Quale comportamento è coerente con la vendita etica sulla scadenza di ECC?",
+     "o": [
+      "Sottolineare il rischio di blocco totale per accelerare una decisione che si rimanda",
+      "Presentare date e opzioni con la fonte, senza promettere condizioni non confermate",
+      "Omettere la manutenzione estesa per non offrire al cliente un'alternativa al progetto",
+      "Anticipare uno sconto sulla migrazione per convincere il cliente a decidere subito"
+     ],
+     "a": 1,
+     "exp": "La scadenza è un fatto da presentare con fonte e opzioni. Gonfiare il rischio, nascondere alternative o anticipare sconti non approvati è vendita per paura o promessa non autorizzata."
+    }
+   ]
+  }
+ ]
+}

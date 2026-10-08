@@ -1,0 +1,1521 @@
+{
+  "id": "w13",
+  "levels": [
+    {
+      "id": "w13-l01",
+      "title": "La mappa del campo",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Non tutti i competitor sono uguali: ci sono suite ERP cloud (Oracle Fusion e NetSuite, Microsoft Dynamics 365, Infor, IFS, Epicor), specialisti HCM e Finance (Workday) e piattaforme di workflow e CRM (ServiceNow, Salesforce).",
+          "Nel mid-market ci sono Odoo e i vendor italiani (Zucchetti, TeamSystem), radicati su PMI, paghe e studi professionali. In Life Sciences c'è Veeva, che copre ambiti commerciali, regolatori e qualità.",
+          "Un terzo gruppo non vende un ERP: il supporto di terze parti (Rimini Street, Spinnaker Support) compete sul contratto di manutenzione, non sulla suite.",
+          "Prima delle funzioni chiediti: contro chi competo davvero in questo deal? Spesso è lo status quo (ECC invariato) o un altro uso del budget, non un altro vendor.",
+          "Ogni mappa competitiva ha una data di scadenza: lanci, acquisizioni e prezzi cambiano ogni trimestre. Annota sempre fonte e data di ciò che scrivi."
+        ],
+        "ae": "Nel CRM annota per ogni deal il competitor dichiarato, quello reale (anche «non fare nulla») e la fonte pubblica da cui lo sai."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Associa il vendor al suo posizionamento principale",
+          "pairs": [
+            [
+              "Workday",
+              "Suite cloud per HCM e Finance"
+            ],
+            [
+              "ServiceNow",
+              "Piattaforma di workflow, service management e agenti AI"
+            ],
+            [
+              "Veeva",
+              "Cloud software verticale per Life Sciences"
+            ],
+            [
+              "Rimini Street",
+              "Supporto di terze parti per software enterprise come ECC"
+            ],
+            [
+              "TeamSystem",
+              "Software gestionale italiano per PMI e studi professionali"
+            ]
+          ],
+          "exp": "Ogni vendor occupa un livello diverso: suite finanziaria, piattaforma di workflow, verticale di settore, supporto di terzi o gestionale locale. Sapere dove compete evita confronti tra mele e pere."
+        },
+        {
+          "t": "bucket",
+          "q": "Dove compete questo vendor?",
+          "buckets": [
+            "Suite ERP",
+            "Piattaforma sopra l'ERP",
+            "Supporto di terzi"
+          ],
+          "items": [
+            [
+              "Oracle Fusion Cloud ERP",
+              0
+            ],
+            [
+              "IFS Cloud",
+              0
+            ],
+            [
+              "Infor CloudSuite",
+              0
+            ],
+            [
+              "ServiceNow",
+              1
+            ],
+            [
+              "Salesforce Agentforce",
+              1
+            ],
+            [
+              "Rimini Street",
+              2
+            ],
+            [
+              "Spinnaker Support",
+              2
+            ]
+          ],
+          "exp": "Suite ERP, piattaforme di workflow o CRM e supporto di terzi si incontrano in punti diversi del deal. I confini si stanno sfumando con gli agenti AI, ma capire il livello aiuta a scegliere la domanda giusta."
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la prima mossa con questo CFO?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Stiamo valutando anche Microsoft, Oracle e un partner che ci offre supporto esterno su ECC."
+          },
+          "o": [
+            "Chiedo quale decisione stia valutando: nuova suite, o estendere ECC con supporto terzi",
+            "Presento il confronto funzionale con Microsoft e Oracle, i rivali che il CFO ha nominato",
+            "Propongo uno sconto per anticipare la decisione, prima che arrivino le altre offerte",
+            "Spiego che il supporto esterno su ECC è rischioso e che le altre offerte costano di più"
+          ],
+          "a": 0,
+          "exp": "Sono tre decisioni diverse: suite alternativa, supporto di terzi, nulla. Chiarire quale è sul tavolo evita di combattere la battaglia sbagliata e di attaccare chi non c'entra."
+        },
+        {
+          "t": "tf",
+          "q": "In un deal il concorrente più frequente può essere la decisione di non cambiare nulla.",
+          "a": true,
+          "exp": "Lo status quo è spesso il rivale più forte: costa meno nel breve e non richiede energia. Va trattato come un competitor, con domande sul costo dell'attesa."
+        },
+        {
+          "t": "fill",
+          "q": "Ogni affermazione su un competitor in battlecard deve riportare la fonte e la ___ del fatto.",
+          "o": [
+            "data di pubblicazione",
+            "quota di mercato stimata",
+            "valutazione del team vendite",
+            "priorità commerciale interna"
+          ],
+          "a": 0,
+          "exp": "Un fatto senza data invecchia in silenzio: lanci, prezzi e acquisizioni cambiano spesso. Fonte e data permettono a te e al cliente di verificare."
+        }
+      ]
+    },
+    {
+      "id": "w13-l02",
+      "title": "Competere con etica",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "FUD sta per fear, uncertainty, doubt: insinuare rischi senza prove. Funziona poco, brucia credibilità e può sconfinare nella denigrazione, che è concorrenza sleale.",
+          "Un'affermazione sul competitor è difendibile se è un fatto pubblico, datato, con una fonte che il cliente può aprire: comunicato, filing, documentazione ufficiale, report con edizione.",
+          "Distingui fatto («il vendor ha annunciato X a ottobre 2025»), interpretazione («sembra puntare sull'AI») e opinione. Al cliente porta i fatti; le interpretazioni si costruiscono insieme.",
+          "Non commentare ciò che non sai: prezzi, sconti, contratti e clienti altrui. Se il cliente cita un'offerta concorrente, ascolta ciò che sceglie di condividere, senza chiedere documenti riservati.",
+          "Informazioni arrivate da documenti riservati del competitor o da ex colleghi che violano un obbligo di riservatezza non si usano, nemmeno «senza citarle»."
+        ],
+        "ae": "Formula sicura: «Da fonti pubbliche, a [mese anno], [vendor] ha dichiarato X. Verificalo con loro per il tuo scenario». Poi torna al problema del cliente."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Quale frase è un esempio di competizione etica?",
+          "o": [
+            "«A settembre 2026 il vendor ha annunciato X (comunicato): vediamo come incide su di te»",
+            "«Quel vendor è in difficoltà finanziarie e non sopravviverà ai prossimi due anni»",
+            "«I clienti di quel vendor sono insoddisfatti: me l'ha detto una fonte interna»",
+            "«Il loro prodotto ha problemi di sicurezza noti nel settore: meglio non rischiare»"
+          ],
+          "a": 0,
+          "exp": "La prima frase è un fatto datato con fonte, collegato al caso del cliente. Le altre sono insinuazioni senza prove o fonti non condivisibili: classico FUD che si ritorce contro di te."
+        },
+        {
+          "t": "bucket",
+          "q": "Fatto, interpretazione o FUD?",
+          "buckets": [
+            "Fatto verificabile",
+            "Interpretazione",
+            "FUD da evitare"
+          ],
+          "items": [
+            [
+              "Il vendor X ha chiuso l'acquisizione di Y nel 2025 (comunicato)",
+              0
+            ],
+            [
+              "Il report di analisti (ed. 2025) colloca X tra i Leader del segmento",
+              0
+            ],
+            [
+              "Con questa acquisizione X sembra puntare più sull'AI che sul core ERP",
+              1
+            ],
+            [
+              "Per il tuo caso il loro approccio potrebbe richiedere integrazione",
+              1
+            ],
+            [
+              "Chi sceglie X resterà bloccato e pagherà il triplo",
+              2
+            ],
+            [
+              "Il prodotto di X è un disastro, lo dicono tutti",
+              2
+            ]
+          ],
+          "exp": "Un fatto ha fonte e data; un'interpretazione dichiara di essere una lettura e si discute; il FUD afferma senza prove. Porta al cliente i fatti e costruisci le interpretazioni insieme a lui."
+        },
+        {
+          "t": "tf",
+          "q": "Se un'informazione sul competitor viene da un documento riservato non destinato a te, la scelta etica è non usarla.",
+          "a": true,
+          "exp": "Usare materiale riservato espone te e SAP a rischi legali e reputazionali, e rompe la fiducia del cliente. Meglio un fatto pubblico meno spettacolare che uno riservato impossibile da citare."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a questa affermazione del procurement?",
+          "ctx": {
+            "who": "Procurement",
+            "say": "Il competitor dice che SAP ha costi di licenza triplicati e che i clienti stanno scappando. È vero?"
+          },
+          "o": [
+            "Non commento le loro tesi: confrontiamo i costi sul tuo perimetro, con assunzioni scritte",
+            "Ammetto che qualche cliente rivaluta, ma con noi spendi meno: ti faccio una proposta",
+            "Smentisco: i loro clienti non scappano e ti dimostro che i loro costi sono più alti",
+            "Preferisco non rispondere: parlare dei concorrenti non è corretto in trattativa"
+          ],
+          "a": 0,
+          "exp": "Non rilanciare accuse né difenderti con numeri tuoi non verificabili: riporta il confronto su costi totali, perimetro e assunzioni scritte. È tracciabile ed evita l'escalation."
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi rendono difendibile un'affermazione sul competitor in una battlecard?",
+          "o": [
+            "Una fonte pubblica che il cliente può aprire",
+            "La data del fatto",
+            "L'edizione dell'analista, se citato",
+            "Un'indiscrezione ricevuta a una cena",
+            "L'opinione del sales manager senza fonte"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Fonte pubblica, data ed edizione rendono l'affermazione verificabile. Indiscrezioni e opinioni non verificabili non reggono se il cliente chiede «da dove lo sai?»."
+        }
+      ]
+    },
+    {
+      "id": "w13-l03",
+      "title": "Analisti: citarli bene",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Gartner pubblica Magic Quadrant, IDC i MarketScape, Forrester le Wave. Ogni report ha segmento, criteri ed edizione propri: cita sempre nome completo del report e anno.",
+          "Esempio datato, Gartner: {{w13.gartner_mq_cloud_erp_2025}}",
+          "Esempi datati, IDC e Forrester: {{w13.idc_marketscape_midsize_erp_2024}} {{w13.forrester_wave_erp_2024}}",
+          "Regole d'uso: {{w13.gartner_usage_policy}}",
+          "Un posizionamento è una fotografia di un segmento in un anno, non un voto assoluto: «Leader» in un report non significa «migliore per il tuo caso»."
+        ],
+        "ae": "Quando citi un analista indica report, edizione, segmento e ruolo del vendor, con il link al reprint ufficiale fornito da SAP. Mai un ritaglio senza contesto."
+      },
+      "ex": [
+        {
+          "t": "order",
+          "q": "Prima di citare un analista a un cliente, in che ordine procedi?",
+          "items": [
+            "Individua il report e l'edizione più recente",
+            "Verifica che il segmento coincida con il caso del cliente",
+            "Controlla la policy d'uso e usa il reprint ufficiale",
+            "Cita nome, anno, segmento e posizionamento",
+            "Invita il cliente a leggere il report completo"
+          ],
+          "exp": "Prima trovi la fonte giusta, poi verifichi che il segmento sia pertinente, poi rispetti le regole d'uso e solo allora citi. Il rimando al report completo chiude in modo trasparente."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CIO sul posizionamento Gartner?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Gartner dice che SAP è Leader? Basta questo per decidere?"
+          },
+          "o": [
+            "Cito report, edizione, segmento e ruolo di SAP, con il link al reprint ufficiale",
+            "Confermo che Gartner indica SAP come migliore ERP in assoluto e non serve altro confronto",
+            "Dico che i report degli analisti sono poco affidabili e conviene guardare i casi cliente",
+            "Giro la domanda spiegando che Gartner non valuta i vendor ERP e il tema non è rilevante"
+          ],
+          "a": 0,
+          "exp": "La citazione corretta è completa e verificabile. Gli estremi («migliore in assoluto» o «gli analisti non contano») sono entrambi scorretti: il report ha un segmento preciso e Gartner non sostiene un vendor."
+        },
+        {
+          "t": "tf",
+          "q": "Essere Leader in un Magic Quadrant significa essere la scelta migliore per qualsiasi cliente.",
+          "a": false,
+          "exp": "Il quadrante valuta vendor in un segmento e in un'edizione, con criteri generali. Il «migliore per il tuo caso» dipende da processi, industria, dati e capacità del cliente."
+        },
+        {
+          "t": "fill",
+          "q": "Gartner, IDC e Forrester pubblicano rispettivamente Magic Quadrant, ___ e Wave.",
+          "o": [
+            "MarketScape",
+            "Hype Cycle",
+            "Peer Insights",
+            "Battlecard"
+          ],
+          "a": 0,
+          "exp": "IDC usa il MarketScape. Hype Cycle e Peer Insights sono prodotti Gartner, la battlecard è un documento interno di vendita."
+        },
+        {
+          "t": "mcq",
+          "q": "Come gestisci questa obiezione del CIO?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Ho visto che un altro vendor è Leader nello stesso quadrante. Perché dovrei scegliere voi?"
+          },
+          "o": [
+            "Siamo entrambi nel report: confrontiamo le tue priorità, che il quadrante non misura",
+            "Rispondo che il nostro posizionamento nel quadrante è più alto e la scelta è ovvia",
+            "Rispondo che il report ha sbagliato a valutare quel vendor e va ignorato",
+            "Propongo di ignorare gli analisti e decidere in base al prezzo finale dell'offerta"
+          ],
+          "a": 0,
+          "exp": "Quando due vendor sono Leader il report non decide: ciò che differenzia è il fit con processi, industria e priorità del cliente. Attaccare l'analista o sminuire il rivale non aiuta."
+        }
+      ]
+    },
+    {
+      "id": "w13-l04",
+      "title": "Oracle: Fusion e NetSuite",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Oracle ha due ERP cloud distinti: Fusion Cloud ERP (tipicamente grandi imprese e gruppi) e NetSuite (mid-market e aziende in crescita). Architetture e go-to-market sono diversi: non trattarli come un unico prodotto.",
+          "{{w13.oracle_fusion_agents}}",
+          "{{w13.oracle_analyst_summit_forrester}}",
+          "Dove Oracle compete: ERP applicativo più infrastruttura cloud (OCI) in un unico rapporto. Il tuo valore: profondità di processo per industria (Life Sciences, CPG), ecosistema partner e un percorso concreto per la base ECC.",
+          "Quando si parla di AI chiedi sempre: quali processi, quali dati, quali costi a consumo? Un «incluso» va letto nei termini contrattuali del vendor, non nelle slide."
+        ],
+        "ae": "Se il cliente ha Oracle E-Business Suite o JD Edwards, la domanda utile non è «Oracle è peggio» ma «qual è la tua roadmap per quel sistema nei prossimi cinque anni?»."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Quale affermazione su Oracle è corretta e prudente?",
+          "o": [
+            "Oracle ha due ERP cloud distinti, Fusion Cloud ERP e NetSuite, con target diversi",
+            "NetSuite è il nome commerciale di Fusion Cloud ERP per le aziende più piccole",
+            "Fusion Cloud ERP e NetSuite condividono lo stesso codice e differiscono per il prezzo",
+            "NetSuite è stato dismesso da Oracle e i clienti vengono migrati su Fusion Cloud ERP"
+          ],
+          "a": 0,
+          "exp": "Sono due prodotti distinti, con storie e modelli di vendita diversi. Confonderli ti fa sbagliare l'interlocutore, il confronto e le domande di discovery."
+        },
+        {
+          "t": "tf",
+          "q": "Se un analista riporta che Oracle indirizza i suoi agenti verso Fusion SaaS, puoi citarlo come fonte datata senza attribuire a Oracle intenzioni che non ha scritto.",
+          "a": true,
+          "exp": "È la regola dell'etica competitiva: riporti il fatto, con fonte e data, e lasci all'interlocutore l'interpretazione. Dire «Oracle abbandonerà EBS» sarebbe una conclusione tua."
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la risposta al CFO di questo gruppo?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Siamo un gruppo in crescita con sei società; NetSuite ci promette un go-live veloce. SAP è troppo pesante, no?"
+          },
+          "o": [
+            "Capisco le criticità e confrontiamo SAP e NetSuite su un business case comune",
+            "Spiego che NetSuite non regge gruppi multi-società e che un go-live veloce nasconde rischi",
+            "Presento SAP come scelta obbligata per un gruppo in crescita e propongo subito RISE",
+            "Concordo che SAP è troppo pesante e propongo un ambito minimo per non perdere il deal"
+          ],
+          "a": 0,
+          "exp": "Il confronto onesto parte dalle esigenze del gruppo e usa lo stesso business case per entrambe le strade. Dire che NetSuite non regge il multi-società sarebbe falso e FUD."
+        },
+        {
+          "t": "multi",
+          "q": "Quali domande di discovery sono utili se il cliente valuta gli agenti AI di Oracle?",
+          "o": [
+            "Quali processi vuoi automatizzare e con quali KPI?",
+            "Come sono licenziati e misurati i consumi degli agenti?",
+            "Quali dati servono e dove risiedono?",
+            "Quali clienti Oracle sono insoddisfatti degli agenti?",
+            "Quanto sconto ha ricevuto Oracle da altri clienti?"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Le domande utili riguardano processi, KPI, licenza e dati del cliente. Cercare clienti scontenti o sconti altrui sposta la conversazione su insinuazioni e su informazioni che non puoi avere."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il prodotto Oracle al suo ruolo",
+          "pairs": [
+            [
+              "Fusion Cloud ERP",
+              "ERP cloud per grandi imprese e gruppi"
+            ],
+            [
+              "NetSuite",
+              "ERP cloud per mid-market e aziende in crescita"
+            ],
+            [
+              "OCI",
+              "Infrastruttura cloud su cui girano gli agenti Fusion"
+            ],
+            [
+              "AI Agent Studio",
+              "Ambiente per creare e gestire agenti in Fusion"
+            ]
+          ],
+          "exp": "Conoscere i nomi giusti ti permette di fare domande precise. OCI è l'infrastruttura, AI Agent Studio l'ambiente di sviluppo, Fusion e NetSuite i due ERP."
+        }
+      ]
+    },
+    {
+      "id": "w13-l05",
+      "title": "Microsoft e Workday",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Microsoft Dynamics 365: ERP (Finance, Supply Chain Management; Business Central per le PMI) integrato con Microsoft 365, Power Platform e Copilot. Il vantaggio percepito è l'ecosistema Microsoft già presente in azienda.",
+          "{{w13.microsoft_dynamics_roadmap}}",
+          "Workday: suite cloud per HCM e Finance con base clienti enterprise. {{w13.workday_ai_acquisitions}}",
+          "Evento: {{w13.workday_rising_2026}} Dopo l'evento rileggi gli annunci prima di aggiornare la battlecard.",
+          "Con SuccessFactors e SAP Cloud ERP la sovrapposizione con Workday è su HCM e Finance. Il tuo argomento: dati di processo end-to-end (supply chain, produzione, qualità) oltre a HCM e Finance."
+        ],
+        "ae": "Se vedi Workday HCM nel cliente non iniziare dalla guerra: chiedi dove vivono i dati master di personale e costi e come si integrano con finanza e supply chain."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il vendor alla sua area principale",
+          "pairs": [
+            [
+              "Microsoft Dynamics 365",
+              "ERP integrato con Microsoft 365 e Copilot"
+            ],
+            [
+              "Workday",
+              "Suite cloud per HCM e Finance"
+            ],
+            [
+              "Business Central",
+              "ERP Microsoft per le PMI"
+            ],
+            [
+              "Pipedream (Workday)",
+              "Connettori per far operare gli agenti su app esterne"
+            ]
+          ],
+          "exp": "Sono posizionamenti pubblici e datati. Pipedream è un'acquisizione di Workday per collegare gli agenti ad altri sistemi; Business Central è l'ERP Microsoft per le PMI."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CIO sull'ecosistema Microsoft?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Abbiamo già Microsoft 365 e Copilot ovunque: Dynamics sarà più semplice di SAP, no?"
+          },
+          "o": [
+            "Dipende dai processi: Microsoft 365 aiuta l'adozione, ma ERP e licenze vanno valutati",
+            "Concordo: se l'azienda è già su Microsoft, Dynamics risulta quasi sempre più semplice",
+            "Spiego che Copilot non funziona con i dati SAP e che l'integrazione sarebbe rischiosa",
+            "Osservo che Dynamics non regge i volumi enterprise e propongo di escluderlo"
+          ],
+          "a": 0,
+          "exp": "Un ecosistema già presente facilita l'adozione, ma non risolve da solo processi ERP, dati e licenze. Affermare incompatibilità o limiti non verificati sarebbe FUD."
+        },
+        {
+          "t": "tf",
+          "q": "Se un blog di partner dice che una funzione agentica del competitor è a consumo, puoi presentarlo al cliente come fatto certo.",
+          "a": false,
+          "exp": "Una fonte non ufficiale e senza data è un indizio, non un fatto. Verifica la documentazione del vendor e, se non puoi, presentalo come informazione da confermare."
+        },
+        {
+          "t": "fill",
+          "q": "Workday e SAP si sovrappongono soprattutto su HCM e ___.",
+          "o": [
+            "Finance",
+            "Manufacturing",
+            "Logistica fisica",
+            "Real estate"
+          ],
+          "a": 0,
+          "exp": "Workday è nata su HCM e ha ampliato su Finance. Con SuccessFactors e SAP Cloud ERP la sovrapposizione è lì, mentre manufacturing e logistica sono aree dove SAP ha profondità storica."
+        },
+        {
+          "t": "order",
+          "q": "Un competitor annuncia nuove funzioni a un evento: come aggiorni la battlecard?",
+          "items": [
+            "Leggi il comunicato o la documentazione ufficiale",
+            "Annota data, fonte e stato (disponibile, preview, roadmap)",
+            "Distingui l'annuncio dalla disponibilità effettiva",
+            "Valuta l'impatto sul tuo segmento (Life Sciences, CPG)",
+            "Aggiorna la battlecard e condividi con il team"
+          ],
+          "exp": "Un annuncio non è disponibilità. Prima fonte e stato, poi impatto sul tuo mercato, poi aggiornamento: così eviti di inseguire slide e di diffondere informazioni imprecise."
+        }
+      ]
+    },
+    {
+      "id": "w13-l06",
+      "title": "Salesforce e ServiceNow",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Salesforce: CRM e piattaforma Agentforce per agenti AI su vendite, servizio e marketing. Con SAP si incontra su customer experience e dati cliente; spesso è complementare ai processi ERP.",
+          "{{w13.salesforce_agentforce_q2fy27}}",
+          "ServiceNow: piattaforma di workflow (IT, HR, customer service) con agenti AI, tipicamente affiancata all'ERP e non al suo posto.",
+          "{{w13.servicenow_acquisitions}}",
+          "Con questi vendor si coesiste più spesso di quanto si competa: definisci il confine (ERP come sistema di registrazione, piattaforme per esperienza e workflow) e le integrazioni."
+        ],
+        "ae": "Sul livello degli agenti il cliente può avere più piattaforme: chiedi qual è il sistema di registrazione e dove vivono i dati master prima di parlare di agenti."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come posizioni Salesforce o ServiceNow accanto a un ERP SAP?",
+          "o": [
+            "Piattaforme di esperienza e workflow che coesistono con l'ERP: chiarisco le integrazioni",
+            "Sostituti diretti dell'ERP finanziario, quindi li escludo dalla discussione con il cliente",
+            "Soluzioni incompatibili con SAP, perché gli agenti AI non possono lavorare sui dati ERP",
+            "Concorrenti da battere nel deal, evitando integrazioni che rafforzino la loro presenza"
+          ],
+          "a": 0,
+          "exp": "Nella maggior parte dei casi sono piattaforme che stanno sopra o accanto all'ERP, che resta il sistema di registrazione. Posizionarle come sostituti o come incompatibili è impreciso e danneggia la credibilità."
+        },
+        {
+          "t": "tf",
+          "q": "Un ARR Agentforce in crescita dimostra che i clienti ottengono un ritorno economico misurato dagli agenti.",
+          "a": false,
+          "exp": "L'ARR misura i ricavi ricorrenti del vendor, non il ritorno del cliente; inoltre la definizione è stata ampliata nel Q2 FY27, quindi il confronto con i trimestri precedenti non è omogeneo."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al responsabile supply chain?",
+          "ctx": {
+            "who": "Responsabile supply chain",
+            "say": "Salesforce dice che Agentforce può orchestrare anche la supply chain. Perché dovrei usare agenti SAP?"
+          },
+          "o": [
+            "Chiedo su quali dati opererebbero gli agenti e come garantire permessi e audit",
+            "Rispondo che Agentforce non può accedere ai dati SAP e l'integrazione sarebbe instabile",
+            "Propongo di sostituire Salesforce: due piattaforme di agenti creano confusione e costi",
+            "Sostengo che gli agenti SAP sono inclusi nel contratto e quindi costano meno di Agentforce"
+          ],
+          "a": 0,
+          "exp": "Il punto non è chi ha l'agente migliore ma dove stanno dati, permessi e controlli sulle transazioni. Le altre risposte promettono o escludono cose che non puoi dimostrare."
+        },
+        {
+          "t": "mcq",
+          "q": "Quale vendor ha completato le acquisizioni di Moveworks e di Armis secondo comunicati e stampa?",
+          "o": [
+            "ServiceNow",
+            "Salesforce",
+            "Workday",
+            "Oracle"
+          ],
+          "a": 0,
+          "exp": "ServiceNow ha chiuso Moveworks a dicembre 2025 e Armis ad aprile 2026. Conoscere queste mosse aiuta a capire dove il vendor investe: agenti per l'employee experience e sicurezza."
+        },
+        {
+          "t": "bucket",
+          "q": "Spesso complementare o competitor diretto sul core finanziario?",
+          "buckets": [
+            "Spesso complementare",
+            "Competitor sul core"
+          ],
+          "items": [
+            [
+              "ServiceNow (workflow e agenti)",
+              0
+            ],
+            [
+              "Salesforce (CRM e agenti)",
+              0
+            ],
+            [
+              "Oracle Fusion Cloud ERP",
+              1
+            ],
+            [
+              "Microsoft Dynamics 365 Finance",
+              1
+            ],
+            [
+              "Workday Financial Management",
+              1
+            ]
+          ],
+          "exp": "ServiceNow e Salesforce lavorano di norma su esperienza e workflow attorno all'ERP; Oracle, Microsoft Dynamics 365 Finance e Workday Financial Management competono sul sistema finanziario. I confini cambiano con gli agenti: verifica caso per caso."
+        }
+      ]
+    },
+    {
+      "id": "w13-l07",
+      "title": "Infor, IFS, Odoo e italiani",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "{{w13.infor_koch}}",
+          "{{w13.ifs_nexus_black}} IFS ha la sua forza in ambiti industriali, asset-intensive e service.",
+          "{{w13.odoo_profile}}",
+          "{{w13.teamsystem_profile}} {{w13.zucchetti_profile}}",
+          "I vendor mid-market italiani sono forti su localizzazione fiscale e prossimità. Il confronto onesto è su processi industriali, compliance (per esempio GxP) e crescita multi-paese, non sulla critica al prezzo."
+        ],
+        "ae": "Con un'azienda che cresce su un gestionale italiano non attaccare il fornitore: chiedi dove il sistema oggi frena (multi-paese, tracciabilità, compliance, consolidamento)."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il vendor al profilo pubblico",
+          "pairs": [
+            [
+              "Infor",
+              "Suite cloud per industria, controllata da Koch Industries"
+            ],
+            [
+              "IFS",
+              "Software industriale con il programma AI Nexus Black"
+            ],
+            [
+              "Odoo",
+              "ERP modulare con edizione Community open source"
+            ],
+            [
+              "TeamSystem",
+              "Gestionali italiani per PMI e studi professionali"
+            ]
+          ],
+          "exp": "Sono profili pubblici e datati. Per Odoo e Zucchetti i dati numerici sono stime o dichiarazioni aziendali: vanno presentati con questa cautela."
+        },
+        {
+          "t": "mcq",
+          "q": "Come apri la conversazione con il titolare?",
+          "ctx": {
+            "who": "Titolare",
+            "say": "Con il mio gestionale italiano faccio fatture e magazzino da anni. Perché dovrei passare a un ERP globale?"
+          },
+          "o": [
+            "Chiedo dove il gestionale frena oggi: multi-paese, tracciabilità, consolidamento, audit",
+            "Spiego che i gestionali italiani sono superati e che un ERP globale è ormai lo standard",
+            "Parto dal listino SAP per mostrare che il costo è inferiore a quello che immagina",
+            "Propongo un go-live in pochi mesi per dimostrare quanto sia semplice cambiare sistema"
+          ],
+          "a": 0,
+          "exp": "Partire dai punti in cui il sistema attuale frena rende la conversazione utile al cliente. Giudicare il suo gestionale o promettere tempi senza analisi crea resistenza e rischio."
+        },
+        {
+          "t": "tf",
+          "q": "Per un competitor non quotato che usa una stima trovata su un aggregatore, è corretto indicare il numero come stima e citare la fonte.",
+          "a": true,
+          "exp": "Un numero di aggregatore è una stima, non un dato ufficiale. Dichiararlo come tale e citare la fonte ti protegge da contestazioni e rende credibile il resto della battlecard."
+        },
+        {
+          "t": "multi",
+          "q": "Quali fonti sono adatte per aggiornare la scheda di un competitor privato come TeamSystem o Odoo?",
+          "o": [
+            "Comunicati e presentazioni aziendali datate",
+            "Bilanci depositati e stampa economica affidabile",
+            "Report di analisti con edizione indicata",
+            "Indiscrezioni da conversazioni informali",
+            "Post anonimi sui social"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Per un privato i bilanci, i comunicati e i report con edizione sono le basi più solide. Indiscrezioni e post anonimi non sono verificabili e non reggono se contestati."
+        },
+        {
+          "t": "fill",
+          "q": "La valutazione di Odoo riportata da aggregatori va presentata come ___ e non come dato ufficiale.",
+          "o": [
+            "stima di terzi",
+            "fatto verificato",
+            "dato di bilancio",
+            "quotazione di borsa"
+          ],
+          "a": 0,
+          "exp": "Le valutazioni di un'azienda non quotata variano molto tra le fonti. Presentale come stime e cita chi le produce, senza trasformarle in fatti."
+        }
+      ]
+    },
+    {
+      "id": "w13-l08",
+      "title": "Veeva e Life Sciences",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Veeva è un cloud verticale per le Life Sciences: CRM commerciale (Vault CRM), contenuti regolatori, qualità e clinica sulla piattaforma Vault. Non è un ERP: nelle aziende farmaceutiche convive tipicamente con SAP.",
+          "{{w13.veeva_vault_crm}}",
+          "Dove SAP e Veeva si toccano: dati master di prodotto, lotti e tracciabilità, qualità, supply chain e ordini. Il tema chiave è l'integrazione e la fonte di verità condivisa, non la rivalità.",
+          "Il confine dipende dal cliente: dove vive la «source of truth» per materiali, lotti, specifiche e rilascio? Disegnalo insieme a IT e Quality.",
+          "Nei casi d'uso non dire cosa usa un cliente reale: parla di «un'azienda farmaceutica italiana a controllo familiare»."
+        ],
+        "ae": "In un account farmaceutico chiedi chi possiede il dato di rilascio lotto e dove si fa la QA release: ERP, QMS o entrambi? La risposta definisce i confini con Veeva."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come descrivi il rapporto tra Veeva e SAP in un'azienda farmaceutica?",
+          "o": [
+            "Coesistono: Veeva su ambiti commerciali, regolatori e qualità; SAP su ERP e supply chain",
+            "Veeva sostituisce l'ERP nelle aziende Life Sciences, quindi SAP resta utile per la finanza",
+            "SAP copre il CRM farmaceutico e Veeva la logistica, quindi non si sovrappongono",
+            "Le due piattaforme non sono integrabili: il cliente sceglie una piattaforma per processo"
+          ],
+          "a": 0,
+          "exp": "Veeva è un cloud verticale per ambiti di settore e non un ERP; SAP gestisce ERP, supply chain e finanza. Nella pratica si integrano su lotti, specifiche e ordini."
+        },
+        {
+          "t": "tf",
+          "q": "Veeva è un ERP concorrente di SAP S/4HANA per la contabilità generale.",
+          "a": false,
+          "exp": "Veeva copre applicazioni verticali (CRM, regolatorio, qualità, clinica) e non offre il cuore finanziario di un ERP. Il confronto corretto riguarda i punti di contatto e l'integrazione."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al responsabile commerciale?",
+          "ctx": {
+            "who": "Commercial Excellence",
+            "say": "Stiamo migrando il CRM su Vault CRM. Questo cambia la vostra proposta?"
+          },
+          "o": [
+            "Verifico il perimetro: il CRM è fuori dal core ERP, ma dati master e ordini si integrano",
+            "Propongo di sospendere la migrazione, perché Vault CRM è ancora poco maturo",
+            "Propongo di sostituire Vault CRM con un CRM SAP, senza capire perché hanno scelto Veeva",
+            "Dico che la migrazione non riguarda SAP e che non serve parlare di integrazione con l'ERP"
+          ],
+          "a": 0,
+          "exp": "Il CRM commerciale non è il core ERP, ma i dati master, gli ordini e i clienti attraversano entrambi i sistemi. Rispetta la scelta del cliente e concentra la discussione sull'integrazione."
+        },
+        {
+          "t": "bucket",
+          "q": "Dove vive di norma il dato?",
+          "buckets": [
+            "Tipicamente ERP (SAP)",
+            "Tipicamente Veeva",
+            "Da concordare"
+          ],
+          "items": [
+            [
+              "Costing e contabilità di prodotto",
+              0
+            ],
+            [
+              "Ordini e fatturazione",
+              0
+            ],
+            [
+              "Pianificazione della produzione",
+              0
+            ],
+            [
+              "Interazioni con i medici (CRM)",
+              1
+            ],
+            [
+              "Documenti regolatori di registrazione",
+              1
+            ],
+            [
+              "Rilascio lotto e QA release",
+              2
+            ],
+            [
+              "Anagrafica materiali e specifiche",
+              2
+            ]
+          ],
+          "exp": "Costi, ordini e produzione stanno di norma nell'ERP; CRM e documenti regolatori nelle applicazioni Veeva. Rilascio lotto e specifiche dipendono dall'architettura del cliente: vanno concordati con IT e Quality."
+        },
+        {
+          "t": "multi",
+          "q": "Quali domande aiutano a mappare il confine tra ERP e Veeva?",
+          "o": [
+            "Dove si registra il rilascio del lotto?",
+            "Chi è la source of truth per specifiche e materiali?",
+            "Quali integrazioni con l'ERP esistono già?",
+            "Quanto costa Veeva rispetto a SAP?",
+            "Quali dipendenti Veeva conosci?"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Le domande utili riguardano dove vivono i dati e come si scambiano. Il confronto sul costo di un altro vendor o i contatti personali non aiutano a disegnare i confini."
+        }
+      ]
+    },
+    {
+      "id": "w13-l09",
+      "title": "Suite, best-of-breed, clean core",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Suite integrata: modello dati unico e un vendor per più processi, con meno interfacce e governance comune. Best-of-breed: il meglio per funzione, ma più integrazioni da costruire e mantenere.",
+          "Non è un dogma: dipende da quanto l'integrazione pesa sul processo (dal piano alla produzione fino al rilascio lotto) e dalla capacità dell'IT di governarla.",
+          "Clean core: tenere il nucleo ERP standard e portare le personalizzazioni in estensioni fuori dal core, così gli aggiornamenti restano semplici. Non vieta le estensioni: le governa.",
+          "{{w13.clean_core_levels}}",
+          "Con un ECC pieno di codice Z il clean core è un percorso (inventario, riduzione, spostamento in estensioni), non un interruttore."
+        ],
+        "ae": "Quando il cliente cita best-of-breed non difendere la suite in astratto: mappa i tre processi dove l'integrazione costa di più e valuta con lui chi li governa."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è il vantaggio principale di una suite integrata?",
+          "o": [
+            "Modello dati e governance comuni, con meno interfacce da costruire e mantenere",
+            "Costo totale inferiore a quello di una soluzione best-of-breed per qualsiasi cliente",
+            "Maggiore profondità funzionale rispetto a un prodotto specialistico nella stessa area",
+            "Assenza di integrazioni con sistemi di terzi, perché tutto è nello stesso ambiente"
+          ],
+          "a": 0,
+          "exp": "Il beneficio tipico della suite è la coerenza di dati e governance. Non garantisce costi più bassi né profondità superiore in ogni area: dipende dal caso."
+        },
+        {
+          "t": "tf",
+          "q": "Clean core significa vietare qualsiasi estensione al sistema ERP.",
+          "a": false,
+          "exp": "Il clean core non vieta le estensioni: le sposta fuori dal core standard, con API rilasciate e regole di governance, così gli upgrade restano semplici."
+        },
+        {
+          "t": "order",
+          "q": "Percorso verso il clean core di un ECC con molte personalizzazioni: ordina i passi",
+          "items": [
+            "Inventaria le personalizzazioni (codice Z) e il loro uso",
+            "Classifica per valore e rischio",
+            "Elimina o sostituisci con lo standard ciò che non serve",
+            "Sposta il resto in estensioni fuori dal core",
+            "Governa le nuove estensioni con regole e controlli"
+          ],
+          "exp": "Prima capisci cosa c'è e cosa viene usato, poi riduci, poi sposti, infine governi. Saltare l'inventario porta a migrare codice inutile e a ricostruire il debito tecnico."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al responsabile IT sul best-of-breed?",
+          "ctx": {
+            "who": "Responsabile IT",
+            "say": "Per la pianificazione vogliamo un best-of-breed. Voi ci obbligate a usare il vostro modulo?"
+          },
+          "o": [
+            "Vediamo dove l'integrazione SAP dà valore e dove serve uno specialista, costi inclusi",
+            "Confermo che conviene usare i moduli SAP anche dove sono meno profondi di uno specialista",
+            "Dico che un best-of-breed non si integra bene con SAP e conviene evitare la complessità",
+            "Rispondo che la scelta spetta al partner di implementazione e l'AE non entra nel merito"
+          ],
+          "a": 0,
+          "exp": "Una risposta onesta riconosce che la scelta dipende dal processo e rende espliciti i costi di integrazione. Scoraggiare lo specialista senza analisi è difensivo; delegare tutto al partner è una rinuncia."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il livello clean core alla descrizione",
+          "pairs": [
+            [
+              "Livello A",
+              "Estensioni con API rilasciate (ABAP Cloud o side-by-side)"
+            ],
+            [
+              "Livello B",
+              "Classic ABAP con API classiche stabili"
+            ],
+            [
+              "Livello C",
+              "Uso di oggetti interni SAP: rischio gestibile"
+            ],
+            [
+              "Livello D",
+              "Modifiche o oggetti non raccomandati: rischio massimo"
+            ]
+          ],
+          "exp": "La scala va dal livello A, il più conforme, al D, il più a rischio. Prima di classificare un caso reale verifica la nota SAP aggiornata: le liste di oggetti cambiano."
+        }
+      ]
+    },
+    {
+      "id": "w13-l10",
+      "title": "Ascolta, chiarisci, rispondi",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Quattro mosse: 1) ascolta tutta l'obiezione senza interrompere; 2) chiarisci con una domanda per capire la causa reale; 3) rispondi con un'evidenza pertinente; 4) verifica che il dubbio sia risolto.",
+          "Un'obiezione è spesso un sintomo: «costa troppo» può significare budget, paura del rischio, un'offerta non comparabile oppure valore non percepito.",
+          "Rispondere con evidenza significa un fatto, un caso autorizzato o un dato con fonte e data, non un'opinione. Se non sai, dillo e prometti una risposta entro una data.",
+          "Battlecard utile: segmento, quando compete, domande di discovery, tuoi punti di forza con evidenza, punti di forza onesti del competitor, fonti con data, trappole da evitare, owner e data di revisione.",
+          "Non mettere in discussione la persona: riconosci la preoccupazione («ha senso») prima di rispondere."
+        ],
+        "ae": "Dopo la risposta chiedi: «Questo risponde al tuo dubbio o c'è un altro aspetto che ti preoccupa?». Se segue silenzio, l'obiezione vera deve ancora emergere."
+      },
+      "ex": [
+        {
+          "t": "order",
+          "q": "Ordina le quattro mosse di una risposta a un'obiezione",
+          "items": [
+            "Ascolta l'obiezione fino in fondo",
+            "Chiarisci con una domanda aperta",
+            "Rispondi con un'evidenza pertinente",
+            "Verifica che il dubbio sia risolto"
+          ],
+          "exp": "Ascolti per capire, chiarisci per scoprire la causa, rispondi con evidenza e verifichi. Rispondere prima di chiarire è l'errore più comune: spesso risolvi un problema che il cliente non ha."
+        },
+        {
+          "t": "mcq",
+          "q": "Quale prima reazione è la più utile?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Il vostro prezzo è troppo alto."
+          },
+          "o": [
+            "«Capisco. Rispetto a cosa lo confronti, e su quale perimetro di moduli e utenti?»",
+            "«Siamo in linea con il mercato, perché il nostro prezzo include più funzioni degli altri»",
+            "«Posso proporre uno sconto del 10% se firmiamo entro la fine del trimestre»",
+            "«Gli altri vendor non includono supporto e AI, quindi il confronto non è corretto»"
+          ],
+          "a": 0,
+          "exp": "Prima di rispondere devi capire con cosa il cliente confronta il prezzo. Sconto immediato, difesa o attacco al competitor partono da un'ipotesi che potrebbe essere sbagliata."
+        },
+        {
+          "t": "tf",
+          "q": "Un'obiezione può essere il sintomo di un dubbio diverso da quello espresso.",
+          "a": true,
+          "exp": "«Costa troppo» può nascondere paura del rischio, un perimetro non comparabile o valore poco chiaro. La domanda di chiarimento serve a scoprire la causa reale prima di rispondere."
+        },
+        {
+          "t": "multi",
+          "q": "Cosa deve contenere una buona battlecard?",
+          "o": [
+            "Fonti con data",
+            "Punti di forza onesti del competitor",
+            "Domande di discovery",
+            "Il listino riservato del competitor",
+            "Owner e data di revisione"
+          ],
+          "a": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "exp": "Una battlecard utile è onesta, datata e mantenuta. Il listino riservato non si usa e comunque non farebbe parte di materiale condivisibile."
+        },
+        {
+          "t": "bucket",
+          "q": "A quale mossa appartiene questa frase?",
+          "buckets": [
+            "Chiarisci",
+            "Rispondi con evidenza",
+            "Verifica"
+          ],
+          "items": [
+            [
+              "Che cosa intendi per «troppo alto»?",
+              0
+            ],
+            [
+              "Rispetto a quale offerta lo stai confrontando?",
+              0
+            ],
+            [
+              "Ti mostro la fonte pubblica con la data",
+              1
+            ],
+            [
+              "Ecco un caso autorizzato con numeri e fonte",
+              1
+            ],
+            [
+              "Questo risolve il tuo dubbio?",
+              2
+            ],
+            [
+              "Cosa ti serve per decidere il prossimo passo?",
+              2
+            ]
+          ],
+          "exp": "Chiarisci con domande aperte, rispondi con prove, verifica che la risposta abbia funzionato. Tenere separate le mosse evita di rispondere troppo presto o di chiudere senza controllo."
+        }
+      ]
+    },
+    {
+      "id": "w13-l11",
+      "title": "Roleplay: «Costa troppo»",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Prezzo: separa prezzo, costo totale (TCO) e valore. Due offerte raramente hanno lo stesso perimetro: moduli, utenti, ambienti, servizi, supporto e funzioni AI possono cambiare molto.",
+          "Prima di scontare, riallinea il perimetro e chiedi quale metrica di valore conta (tempi di chiusura, giacenze, compliance). Uno sconto senza valore insegna che il prezzo è sempre negoziabile.",
+          "Rischio di migrazione: è reale. Rispondi con un piano (fasi, pilota, rollback, partner con esperienza) e non con rassicurazioni generiche.",
+          "Complessità: SAP è ampio. Si riduce con standard e best practice, roadmap a fasi e scope chiaro: «cosa serve al primo go-live e cosa dopo».",
+          "Evidenza: casi pubblici autorizzati, documentazione ufficiale e numeri di scenario con assunzioni scritte. Mai promesse di risparmio senza assunzioni."
+        ],
+        "ae": "«Costa troppo» è la porta d'ingresso al business case: proponi di costruirlo insieme, con le assunzioni del cliente e un ordine di grandezza condiviso."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la prima domanda da fare?",
+          "ctx": {
+            "who": "CFO",
+            "say": "L'offerta del competitor è il 30% più bassa della vostra."
+          },
+          "o": [
+            "Che perimetro include: moduli, utenti, ambienti, servizi, supporto e funzioni AI?",
+            "Di quale competitor si tratta? Così ti preparo un confronto che ne evidenzi i limiti",
+            "Quale sconto ti servirebbe per portare la nostra offerta allo stesso livello di prezzo?",
+            "Hai considerato che un'offerta più bassa spesso nasconde costi che emergono dopo la firma?"
+          ],
+          "a": 0,
+          "exp": "Prima di parlare di sconto devi sapere se le offerte sono comparabili. Attaccare il competitor, scontare subito o insinuare costi nascosti sono mosse che chiudono la conversazione."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al responsabile operations sul rischio?",
+          "ctx": {
+            "who": "COO",
+            "say": "Migrare l'ERP in produzione è rischiosissimo: se si ferma lo stabilimento perdiamo milioni."
+          },
+          "o": [
+            "Il rischio è reale: costruiamo un piano a fasi con pilota, test, rollback e ruoli chiari",
+            "Abbiamo fatto molte migrazioni: con il nostro metodo il rischio è basso, non succede nulla",
+            "Il fermo produzione dipende dal partner: con un partner affidabile il tema non si pone",
+            "Possiamo ridurre il rischio rimandando la migrazione finché il cliente non si sente pronto"
+          ],
+          "a": 0,
+          "exp": "Riconoscere il rischio e proporre un piano concreto è più credibile di una rassicurazione. Dire «non succede nulla» è una promessa non verificabile; rimandare non risolve il problema."
+        },
+        {
+          "t": "order",
+          "q": "Ordina la risposta a «è troppo complesso»",
+          "items": [
+            "Riconosci la preoccupazione",
+            "Chiedi cosa percepisce come complesso (processi, IT, tempi)",
+            "Proponi uno scope ridotto a fasi con lo standard",
+            "Mostra un'evidenza con fonte e data",
+            "Verifica che il piano risponda al dubbio"
+          ],
+          "exp": "Prima ascolti e capisci dove sta la complessità, poi riduci lo scope, poi porti prove e infine controlli che il dubbio sia risolto. Partire dai dati senza chiarire rischia di rispondere alla domanda sbagliata."
+        },
+        {
+          "t": "tf",
+          "q": "Davanti a «costa troppo» la risposta migliore è offrire subito uno sconto per non perdere l'opportunità.",
+          "a": false,
+          "exp": "Uno sconto immediato insegna che il prezzo è negoziabile e non risolve la causa. Chiarisci perimetro e valore: spesso il nodo è un confronto non comparabile."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi senza inventare casi?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Nel nostro settore nessuno ha fatto questo passaggio con successo."
+          },
+          "o": [
+            "Chiedo cosa intende per successo e porto casi pubblici autorizzati o una reference",
+            "Cito un'azienda farmaceutica che conosco bene e che ha già completato il passaggio con SAP",
+            "Sostengo che i progetti del competitor nel settore sono falliti e noi siamo più sicuri",
+            "Rispondo che i casi sono riservati e propongo di passare al confronto economico"
+          ],
+          "a": 0,
+          "exp": "Prima capisci cosa il cliente considera successo, poi usi solo casi autorizzati o una reference approvata dai canali ufficiali. Nominare clienti o attaccare il competitor senza prove non è accettabile."
+        }
+      ]
+    },
+    {
+      "id": "w13-l12",
+      "title": "Roleplay: «Restiamo su ECC»",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Date ufficiali SAP: manutenzione standard ECC 6.0 EHP6-8 fino al {{sap.ecc.mainstream_end}}; manutenzione estesa fino al {{sap.ecc.extended_end}}.",
+          "Opzione di transizione (SAP ERP, private edition): {{sap.ecc.transition_option}}.",
+          "{{w13.rimini_2040}} È un'opzione legittima da valutare su ciò che copre, non una data di SAP.",
+          "Domande oneste al cliente: cosa copre il contratto terzo (fix, compliance fiscale locale)? Come arriverà alle innovazioni AI? Qual è il costo totale su 5-7 anni, inclusa una futura migrazione?",
+          "«Aspettiamo» ha una logica (budget, priorità), ma aspettare ha un costo: finestre di progetto, risorse dei partner, dati da pulire. Costruisci il costo dell'attesa con i numeri del cliente."
+        ],
+        "ae": "Non dire «ECC è finito»: porta le date, riconosci le opzioni (estesa, terzi) e sposta il confronto su costo totale e capacità che il cliente vuole nei prossimi anni."
+      },
+      "ex": [
+        {
+          "t": "fill",
+          "q": "La manutenzione standard di ECC 6.0 EHP6-8 termina il ___.",
+          "ctx": {
+            "who": "CFO",
+            "say": "Quando finisce il supporto standard del nostro ECC?"
+          },
+          "o": [
+            "{{sap.ecc.mainstream_end}}",
+            "31 dicembre 2025",
+            "30 giugno 2028"
+          ],
+          "a": 0,
+          "exp": "Le date vengono dal piano di manutenzione SAP: standard e poi estesa con sovrapprezzo. Citale con precisione e con la data di verifica: sono il fatto da cui parte ogni confronto onesto."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CFO sul supporto terzi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Restiamo su ECC con un fornitore terzo: costa la metà e non dobbiamo cambiare nulla."
+          },
+          "o": [
+            "Rispetto l'opzione: confrontiamo costo totale a 5-7 anni, copertura e capacità AI",
+            "Spiego che il supporto di terzi non è affidabile e che SAP potrebbe rifiutare migrazioni",
+            "Propongo di abbassare il prezzo della migrazione per pareggiare il supporto esterno",
+            "Ricordo che SAP non sostiene il supporto esterno e la licenza potrebbe essere contestata"
+          ],
+          "a": 0,
+          "exp": "L'opzione è legittima: il confronto onesto è su costo totale, copertura e capacità future. Insinuazioni su licenza o affidabilità sono FUD e senza prove; scontare subito non affronta il tema."
+        },
+        {
+          "t": "tf",
+          "q": "Il supporto di terze parti per ECC è un'opzione di mercato esistente: un AE etico la discute senza descriverla come illegale.",
+          "a": true,
+          "exp": "Esistono fornitori che lo offrono. Il tuo compito è confrontare costo totale, copertura e roadmap, non dichiararlo illegale: sarebbe falso e ti farebbe perdere credibilità."
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi vanno confrontati onestamente tra estensione di ECC e migrazione?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Voglio confrontare le due strade con criteri chiari, non con slogan."
+          },
+          "o": [
+            "Costo totale su 5-7 anni, inclusa la migrazione futura",
+            "Copertura di fix e compliance locale",
+            "Accesso a innovazione e aggiornamenti",
+            "L'opinione del partner su chi vince",
+            "Gli slogan commerciali del vendor"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Il confronto onesto riguarda costi, copertura e capacità. Opinioni e slogan non sono dati verificabili e non aiutano il cliente a decidere."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al COO senza fare pressione?",
+          "ctx": {
+            "who": "COO",
+            "say": "Aspettiamo il prossimo anno, ora abbiamo altre priorità."
+          },
+          "o": [
+            "Rispetto la priorità e chiedo cosa costa l'attesa: slot dei partner, dati da pulire, date",
+            "Ricordo che dopo il 2027 il sistema sarà fuori supporto e che conviene decidere subito",
+            "Offro condizioni migliori se firma entro il trimestre, così non perde la finestra",
+            "Lo ricontatto tra un mese ripetendo la proposta, per tenere viva la relazione"
+          ],
+          "a": 0,
+          "exp": "Riconosci la priorità e rendi visibile il costo dell'attesa con i dati del cliente. «Fuori supporto» sarebbe inesatto (esiste la manutenzione estesa), lo sconto a tempo è pressione, ripetere il pitch non aggiunge valore."
+        }
+      ]
+    },
+    {
+      "id": "w13-l13",
+      "title": "Roleplay: hype AI e lock-in",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Hype AI: il dubbio è sano. Rispondi con casi d'uso concreti, dati disponibili, KPI e governance; evita dichiarazioni sull'AI «che fa tutto».",
+          "Evidenza di mercato SAP: {{sap.q2_26.ai_in_top_deals}} dei 50 maggiori deal di Q2 2026 includevano AI e Business Data Cloud (dichiarazione del CEO riportata dalla stampa). È un dato commerciale, non un ritorno del cliente.",
+          "Sapphire 2026: {{sap.sapphire26.platform}}. Verifica sempre lo stato di ogni funzione (disponibile, early adopter, roadmap) prima di promettere.",
+          "Lock-in: ogni piattaforma crea dipendenza. Rispondi con apertura (API, standard di dati, esportabilità), contratti chiari su uscita e dati e architettura che isola le estensioni (clean core).",
+          "Dipendenza dal SI e dal partner: parla di competenze interne, governance, knowledge transfer e possibilità di cambiare partner."
+        ],
+        "ae": "Su «è solo hype» proponi un pilota con un KPI misurabile e una data di valutazione, non una promessa generale."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CEO?",
+          "ctx": {
+            "who": "CEO",
+            "say": "L'AI è marketing. Io voglio vedere risultati, non slide."
+          },
+          "o": [
+            "Hai ragione a chiedere prove: scegliamo un processo con KPI misurabile e un pilota datato",
+            "Capisco, ma i risultati ci sono: i grandi clienti SAP usano già l'AI con buoni ritorni",
+            "Il rischio vero è restare indietro: i tuoi concorrenti adottano già l'AI nei processi",
+            "Allora ti mostro le slide dei casi d'uso: ne ho una collezione per diverse industrie"
+          ],
+          "a": 0,
+          "exp": "Il dubbio del CEO è sano: la risposta giusta trasforma la discussione in un esperimento misurabile. Citare grandi clienti, pressione competitiva o raccolte di slide non risponde alla richiesta di risultati."
+        },
+        {
+          "t": "tf",
+          "q": "Il fatto che la maggior parte dei grandi deal SAP includa AI dimostra che i clienti SAP ottengono un ritorno garantito dall'AI.",
+          "a": false,
+          "exp": "È un dato commerciale sui contratti, non una misura di valore ottenuto dai clienti. Il ritorno va dimostrato caso per caso, con KPI definiti e assunzioni scritte."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CIO sul rischio di dipendenza?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Se mi sposto su SAP Cloud ERP resto prigioniero di SAP."
+          },
+          "o": [
+            "La dipendenza esiste con ogni vendor: valutiamo API, export dei dati e clausole di uscita",
+            "Con SAP puoi uscire quando vuoi senza costi, perché i dati restano di tua proprietà",
+            "Un'azienda europea non crea lock-in: il tema riguarda piuttosto i fornitori extraeuropei",
+            "Il lock-in è inevitabile con le suite, quindi conviene valutare alternative best-of-breed"
+          ],
+          "a": 0,
+          "exp": "Il rischio esiste con ogni piattaforma: la risposta credibile lo riconosce e propone misure verificabili (API, export dei dati, uscita contrattuale, clean core). Promettere uscite gratuite o negare il tema non regge."
+        },
+        {
+          "t": "multi",
+          "q": "Quali misure riducono il rischio di lock-in e di dipendenza dal partner?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Voglio poter cambiare partner fra tre anni senza ripartire da zero."
+          },
+          "o": [
+            "Documentazione e knowledge transfer al cliente",
+            "Estensioni fuori dal core con API rilasciate",
+            "Clausole chiare su esportazione dati e uscita",
+            "Un solo partner con accesso esclusivo ai sistemi",
+            "Assenza di governance interna sul progetto"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Competenze trasferite, architettura pulita e clausole di uscita riducono la dipendenza. Un accesso esclusivo e l'assenza di governance la aumentano."
+        },
+        {
+          "t": "match",
+          "q": "Abbina l'obiezione alla prima risposta",
+          "pairs": [
+            [
+              "«È solo hype»",
+              "Pilota con KPI e data di valutazione"
+            ],
+            [
+              "«Resto prigioniero»",
+              "API aperte, esportabilità dei dati e clausole di uscita"
+            ],
+            [
+              "«Dipendo dal partner»",
+              "Knowledge transfer e governance interna"
+            ],
+            [
+              "«Costa troppo»",
+              "Riallineare il perimetro e costruire il business case"
+            ]
+          ],
+          "exp": "Ogni obiezione ha una prima mossa diversa. Rispondere con la risposta sbagliata (per esempio uno sconto al «è solo hype») non tocca la preoccupazione reale."
+        }
+      ]
+    },
+    {
+      "id": "w13-l14",
+      "title": "Roleplay: sovranità e CLOUD Act",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Il CLOUD Act (USA, 2018) consente alle autorità statunitensi di richiedere dati a fornitori soggetti alla giurisdizione USA, anche se conservati altrove: residenza non equivale a sovranità. Per il caso concreto serve Legal.",
+          "Tre concetti distinti: residenza (dove stanno i dati), sovranità giuridica (quale legge e quali autorità possono accedere) e controllo operativo (chi amministra e supporta il servizio).",
+          "{{w13.sap_eu_ai_cloud}}",
+          "Non promettere immunità legale e non minimizzare: l'applicabilità del CLOUD Act dipende da struttura societaria del fornitore e contratto. Porta la domanda a SAP Legal e chiedi una risposta scritta.",
+          "Aiuta il cliente a classificare i carichi di lavoro: per alcuni dati bastano residenza UE e cifratura, per altri serve un'opzione sovrana."
+        ],
+        "ae": "Alla domanda «il CLOUD Act si applica a voi?» non rispondere a memoria: «Domanda legittima. Ti porto la posizione scritta di Legal e intanto mappiamo i dati più sensibili»."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come rispondi al DPO?",
+          "ctx": {
+            "who": "DPO",
+            "say": "I dati stanno in un data center in Germania, quindi siamo al sicuro dal CLOUD Act, giusto?"
+          },
+          "o": [
+            "Non per forza: residenza e sovranità sono diverse, contano la giurisdizione e il contratto",
+            "Sì, il CLOUD Act riguarda i dati conservati negli USA e la residenza in Germania basta",
+            "No, i dati in Europa sono a disposizione delle autorità USA a prescindere dal fornitore",
+            "Sì, il GDPR prevale sul CLOUD Act e rende irrilevante ogni richiesta di autorità extra-UE"
+          ],
+          "a": 0,
+          "exp": "Dove stanno i dati non decide da solo chi può chiederli: contano giurisdizione del fornitore, struttura societaria, misure tecniche e contratto. Le altre risposte semplificano in un senso o nell'altro."
+        },
+        {
+          "t": "tf",
+          "q": "Una promessa di residenza dei dati nell'UE equivale automaticamente a sovranità giuridica.",
+          "a": false,
+          "exp": "La residenza dice dove sono i dati, la sovranità quali leggi e autorità possono accedervi. Sono livelli diversi e vanno trattati con contratto, misure tecniche e parere legale."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il concetto alla definizione",
+          "pairs": [
+            [
+              "Residenza del dato",
+              "Dove sono fisicamente conservati i dati"
+            ],
+            [
+              "Sovranità giuridica",
+              "Quale legge e quali autorità possono accedere ai dati"
+            ],
+            [
+              "Controllo operativo",
+              "Chi amministra e supporta l'infrastruttura"
+            ],
+            [
+              "Chiavi gestite dal cliente",
+              "Riducono l'accesso del fornitore ai dati in chiaro"
+            ]
+          ],
+          "exp": "Tenere separati i concetti evita equivoci: residenza, sovranità e controllo operativo rispondono a domande diverse. Le chiavi gestite dal cliente sono una misura tecnica complementare."
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è la risposta più prudente al procurement?",
+          "ctx": {
+            "who": "Procurement",
+            "say": "Voi siete tedeschi, quindi il CLOUD Act non vi riguarda."
+          },
+          "o": [
+            "Non lo do per scontato: chiedo a SAP Legal una posizione scritta, caso per caso",
+            "Confermo che non ci riguarda: la sede in Germania ci esclude dall'ambito di applicazione",
+            "Rispondo che dipende dalla città del data center scelto e propongo un sito in Europa",
+            "Rispondo che il rischio esiste e che la soluzione realistica è evitare del tutto il cloud"
+          ],
+          "a": 0,
+          "exp": "Non rispondere a memoria su temi legali: chiedi una posizione scritta a SAP Legal. Garantire l'esclusione o ridurre tutto al luogo del data center sono semplificazioni che il cliente può contestare."
+        },
+        {
+          "t": "multi",
+          "q": "Quali passi propone un AE responsabile per dati clinici sensibili?",
+          "ctx": {
+            "who": "CIO",
+            "say": "Dobbiamo spostare dati clinici sensibili nel cloud: da dove partiamo?"
+          },
+          "o": [
+            "Classificare i dati per criticità",
+            "Valutare opzioni sovrane o chiavi gestite dal cliente",
+            "Coinvolgere Legal e DPO",
+            "Garantire che il rischio legale sia pari a zero",
+            "Evitare di parlare di sovranità per non allarmare"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Classificare, valutare opzioni tecniche e coinvolgere Legal e DPO sono passi concreti. Promettere rischio zero o evitare il tema non è né onesto né utile."
+        }
+      ]
+    },
+    {
+      "id": "w13-l15",
+      "title": "Boss: la battlecard sotto stress",
+      "kind": "boss",
+      "lesson": {
+        "points": [
+          "Ripasso: mappa competitiva sempre datata, con fonte; competizione etica (fatti, non FUD); analisti citati con edizione e segmento.",
+          "Obiezioni: ascolta, chiarisci, rispondi con evidenza, verifica. Prezzo, rischio, ECC con supporto terzi, hype AI, lock-in e sovranità hanno ciascuna una prima mossa diversa.",
+          "Per i dati volatili usa le date dei fatti: un'informazione di tre mesi fa può essere già cambiata."
+        ]
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come rispondi al CFO senza confermare condizioni di terzi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Oracle dice che i suoi agenti sono inclusi senza costi aggiuntivi. Voi quanto fate pagare l'AI?"
+          },
+          "o": [
+            "Non commento condizioni altrui: verifichiamo i termini di entrambe e confrontiamo i costi",
+            "Quella dichiarazione è fuorviante: gli agenti Oracle hanno costi nascosti dopo la firma",
+            "Da noi l'AI è inclusa nel prezzo base: il confronto economico è a nostro favore",
+            "Rimando il confronto economico alla fase successiva e parliamo prima delle funzioni AI"
+          ],
+          "a": 0,
+          "exp": "Non puoi confermare né smentire condizioni di un altro vendor. Proponi di verificare i termini scritti di entrambe le offerte e di confrontare costi sullo stesso perimetro."
+        },
+        {
+          "t": "fill",
+          "q": "Il posizionamento in un report di analisti vale per un ___ e un'edizione precisi.",
+          "o": [
+            "segmento di mercato",
+            "singolo cliente",
+            "livello di prezzo",
+            "partner di canale"
+          ],
+          "a": 0,
+          "exp": "Magic Quadrant, MarketScape e Wave valutano vendor in un segmento e in un'edizione. Fuori da quel contesto il posizionamento perde significato."
+        },
+        {
+          "t": "bucket",
+          "q": "Risposta etica o da evitare?",
+          "buckets": [
+            "Risposta etica",
+            "Da evitare"
+          ],
+          "items": [
+            [
+              "Cito la fonte pubblica con data e chiedo di verificare insieme",
+              0
+            ],
+            [
+              "Ammetto un punto di forza del competitor e torno al caso del cliente",
+              0
+            ],
+            [
+              "Propongo un pilota con KPI misurabile",
+              0
+            ],
+            [
+              "Dichiaro che il competitor sta per fallire",
+              1
+            ],
+            [
+              "Uso un documento riservato del competitor",
+              1
+            ],
+            [
+              "Prometto risparmi senza assunzioni scritte",
+              1
+            ]
+          ],
+          "exp": "Le risposte etiche sono verificabili, riconoscono i punti di forza altrui e propongono prove. Quelle da evitare insinuano, usano materiali riservati o promettono senza fondamento."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al procurement?",
+          "ctx": {
+            "who": "Procurement",
+            "say": "Un fornitore terzo ci garantisce supporto ECC fino al 2040. Perché migrare entro il 2027?"
+          },
+          "o": [
+            "Il 2027 non obbliga a migrare: confrontiamo costo totale, copertura e capacità future",
+            "Dopo il 2027 SAP non offrirà alcun supporto e il fornitore terzo non potrà rimediare",
+            "Il fornitore terzo non è affidabile e la data del 2040 è una promessa non mantenibile",
+            "Conviene migrare nel 2027 perché i costi del supporto terzo cresceranno dopo quella data"
+          ],
+          "a": 0,
+          "exp": "La manutenzione estesa e il supporto terzi esistono: la risposta onesta riconosce le opzioni e sposta il confronto su costo totale e capacità. Le altre risposte sono inesatte o non provabili."
+        },
+        {
+          "t": "order",
+          "q": "Ordina la risposta a «aspettiamo»",
+          "items": [
+            "Riconosci la priorità",
+            "Chiedi cosa pesa nel rimandare",
+            "Quantifica il costo dell'attesa con i dati del cliente",
+            "Proponi un passo piccolo e datato (workshop, pilota)",
+            "Verifica che il prossimo passo sia accettabile"
+          ],
+          "exp": "Riconosci, esplora, quantifica con i numeri del cliente, proponi un passo piccolo e controlla che sia accettabile. Così non fai pressione e mantieni il dialogo aperto."
+        },
+        {
+          "t": "tf",
+          "q": "Se un cliente chiede se il CLOUD Act si applica a SAP, la risposta migliore è garantire che non si applica mai.",
+          "a": false,
+          "exp": "Non puoi garantire ciò che dipende da struttura societaria, contratto e leggi: la risposta onesta è portare la domanda a SAP Legal e ottenere una posizione scritta."
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono buone fonti per aggiornare una battlecard su un competitor quotato?",
+          "o": [
+            "Comunicati ufficiali e filing",
+            "Trascrizioni delle earnings call",
+            "Report di analisti con edizione indicata",
+            "Rumor da un forum anonimo",
+            "Screenshot di una chat privata"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "exp": "Documenti ufficiali, trascrizioni e report datati sono verificabili. Rumor e chat private non si possono citare e possono esporti a rischi legali."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il vendor al punto di partenza della conversazione",
+          "pairs": [
+            [
+              "Oracle",
+              "Fusion o NetSuite: quale perimetro e quale scala?"
+            ],
+            [
+              "Microsoft",
+              "Ecosistema M365 e licenze: processi, dati e consumi"
+            ],
+            [
+              "Workday",
+              "HCM e Finance: dove vivono i dati master e le integrazioni"
+            ],
+            [
+              "Veeva",
+              "Confine tra CRM, qualità, regolatorio ed ERP"
+            ],
+            [
+              "Rimini Street",
+              "Cosa copre il supporto e come si arriva all'innovazione"
+            ]
+          ],
+          "exp": "Ogni vendor apre una conversazione diversa. Imparare il punto di partenza giusto ti evita di usare lo stesso pitch contro tutti."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi al responsabile Quality?",
+          "ctx": {
+            "who": "Responsabile Quality",
+            "say": "Il nostro QMS è su Veeva e non lo possiamo toccare. Come lo gestiamo con l'ERP?"
+          },
+          "o": [
+            "Non devi toccarlo: definiamo le integrazioni con l'ERP per lotti, specifiche e rilascio",
+            "Per l'ERP va rivisto anche il QMS: conviene sostituirlo con un modulo SAP equivalente",
+            "Veeva non si integra con SAP in modo affidabile, quindi serve un'architettura alternativa",
+            "Il QMS non rientra nel perimetro SAP, quindi non serve alcun confronto sull'integrazione"
+          ],
+          "a": 0,
+          "exp": "Il QMS può restare dov'è: l'attenzione va sulle integrazioni con l'ERP (lotti, specifiche, rilascio) e su chi è la fonte di verità. Sostituire o ignorare l'integrazione sono errori tipici."
+        },
+        {
+          "t": "mcq",
+          "q": "Cosa chiedi dopo aver risposto a un'obiezione?",
+          "o": [
+            "«Questo risolve il tuo dubbio, o c'è un altro aspetto che ti preoccupa?»",
+            "«Quindi possiamo fissare la firma entro fine mese, giusto?»",
+            "«Ti è chiaro quanto sia migliore la nostra soluzione, vero?»",
+            "«Posso mandarti la presentazione completa dei casi cliente?»"
+          ],
+          "a": 0,
+          "exp": "La mossa «verifica» serve a controllare se l'obiezione è risolta. Le altre domande spingono alla chiusura, cercano consenso forzato o cambiano argomento."
+        }
+      ]
+    }
+  ]
+}

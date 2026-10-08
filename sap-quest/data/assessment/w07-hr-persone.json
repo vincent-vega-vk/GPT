@@ -1,0 +1,78 @@
+{
+  "id": "w07",
+  "items": [
+    {
+      "t": "mcq",
+      "q": "Che ruolo ha Employee Central nel portafoglio SuccessFactors?",
+      "o": [
+        "Gestisce le candidature e le pipeline di recruiting",
+        "È il sistema di record dei dati dei dipendenti (Core HR)",
+        "Offre guida contestuale agli utenti dentro le applicazioni",
+        "Calcola le analisi HR su Business Data Cloud"
+      ],
+      "a": 1,
+      "diff": 1,
+      "exp": "Employee Central è il Core HR: anagrafica, struttura organizzativa e storico su cui poggiano gli altri moduli. Recruiting, digital adoption e analytics sono funzioni di altri prodotti."
+    },
+    {
+      "t": "tf",
+      "q": "WalkMe, la piattaforma di digital adoption, è entrata nel portafoglio SAP con un'acquisizione.",
+      "a": true,
+      "diff": 1,
+      "exp": "SAP ha acquisito WalkMe: {{w07.walkme_deal}}. Serve a guidare gli utenti dentro le applicazioni e a favorire l'adozione dei processi."
+    },
+    {
+      "t": "mcq",
+      "q": "Un cliente chiede fino a quando potrà contare sulla manutenzione standard del suo ERP HCM on-premise. Cosa rispondi?",
+      "o": [
+        "Fino al 31 dicembre 2030, senza costi aggiuntivi per il cliente",
+        "Fino al 31 dicembre 2025, senza possibilità di estensione",
+        "Fino al {{sap.ecc.mainstream_end}}, con estesa a pagamento successiva",
+        "Fino al 31 dicembre 2035, in base a un impegno SAP sulla suite"
+      ],
+      "a": 2,
+      "diff": 2,
+      "exp": "ERP HCM rientra in Business Suite 7: standard fino al {{sap.ecc.mainstream_end}}, estesa fino al {{sap.ecc.extended_end}}. Il 2035 non è un impegno SAP."
+    },
+    {
+      "t": "mcq",
+      "q": "Quale di questi obblighi del D.Lgs. 96/2026 vale per tutti i datori di lavoro, senza soglia di dipendenti?",
+      "o": [
+        "Pubblicare ogni anno un report sul divario retributivo di genere",
+        "Avviare una valutazione retributiva congiunta con i rappresentanti",
+        "Trasmettere i dati a un organismo di monitoraggio presso il ministero",
+        "Indicare retribuzione iniziale o fascia negli annunci di lavoro"
+      ],
+      "a": 3,
+      "diff": 2,
+      "exp": "Gli obblighi senza soglia sono annunci, divieto di chiedere lo storico retributivo e diritto di informazione. Report e valutazione congiunta riguardano le aziende sopra la soglia: {{w07.it_reporting}}."
+    },
+    {
+      "t": "mcq",
+      "q": "Un CHRO vuole attivare l'AI sulle skill, ma i profili dei dipendenti sono incompleti. Qual è il primo passo più sensato?",
+      "o": [
+        "Valutare qualità e fonti dei dati sulle competenze prima di attivare i suggerimenti AI",
+        "Attivare i suggerimenti AI sui profili esistenti e correggere gli errori in corsa",
+        "Acquistare un catalogo di corsi più ampio per colmare i gap in modo diretto",
+        "Sostituire la tassonomia esistente con una standard senza coinvolgere le funzioni"
+      ],
+      "a": 0,
+      "diff": 3,
+      "exp": "Con dati incompleti l'AI produce suggerimenti poco credibili: il primo passo è un assessment di qualità e fonti, poi la tassonomia e l'arricchimento dei profili. Il software da solo non risolve un problema di dati."
+    },
+    {
+      "t": "multi",
+      "q": "Quali elementi mappi prima di promettere a un cliente la copertura del payroll in Italia?",
+      "o": [
+        "I CCNL applicati e le relative mensilità e indennità",
+        "Le voci variabili e gli accordi aziendali",
+        "Gli adempimenti (UniEmens, CU) e le integrazioni con il consulente del lavoro",
+        "Il numero di candidati gestiti nel sistema di recruiting",
+        "La lingua dell'interfaccia usata dai manager"
+      ],
+      "a": [0, 1, 2],
+      "diff": 3,
+      "exp": "La copertura payroll dipende da CCNL, voci variabili e adempimenti, oltre che dalle integrazioni. Recruiting e lingua dell'interfaccia non incidono. Verifica poi il perimetro con SAP e partner."
+    }
+  ]
+}

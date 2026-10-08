@@ -1,0 +1,1549 @@
+{
+  "id": "w08",
+  "levels": [
+    {
+      "id": "w08-l01",
+      "title": "Parla come un COO",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Il COO o Head of Supply Chain è misurato su servizio al cliente, costi e capitale circolante: consegne puntuali e complete, rotazione delle scorte, continuità e resa degli impianti.",
+          "OTIF (On Time In Full): quota di ordini consegnati nei tempi e nelle quantità concordati. La definizione (finestra di tolleranza, livello di dettaglio) cambia da cliente a cliente, soprattutto nella grande distribuzione.",
+          "Inventory turns: costo del venduto diviso scorta media (oppure giorni di copertura). Più sono alte, meno capitale è fermo; ma rotazioni troppo spinte possono significare rotture di stock.",
+          "OEE (Overall Equipment Effectiveness) = disponibilità × prestazione × qualità. Non citare «benchmark di settore» senza fonte: chiedi al cliente il suo valore e come lo calcola."
+        ],
+        "ae": "Chiedi quale tra OTIF, scorte e OEE oggi fa più male e come viene calcolato. Spesso il primo risultato è scoprire che ogni sito lo calcola in modo diverso."
+      },
+      "ex": [
+        {
+          "t": "multi",
+          "q": "Quali di questi sono KPI tipici di un COO o Head of Supply Chain?",
+          "o": [
+            "OTIF (consegne puntuali e complete)",
+            "Rotazione delle scorte (inventory turns)",
+            "OEE degli impianti",
+            "Time-to-hire",
+            "Tasso di conversione dei lead"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 1,
+          "exp": "OTIF, rotazione delle scorte e OEE sono i tre indicatori di servizio, capitale e produttività. Time-to-hire è un KPI HR e il tasso di conversione dei lead è marketing/vendite."
+        },
+        {
+          "t": "mcq",
+          "q": "L'OEE è il prodotto di quali tre fattori?",
+          "o": [
+            "Costo, tempo e volume di produzione",
+            "Disponibilità, prestazione e qualità",
+            "Capacità, domanda e scorte disponibili",
+            "Rendimento, rotazione e margine di linea"
+          ],
+          "a": 1,
+          "diff": 1,
+          "exp": "OEE = disponibilità × prestazione × qualità: misura quanta parte del tempo pianificato un impianto produce buon prodotto alla velocità nominale. Chiedi sempre al cliente come lo calcola."
+        },
+        {
+          "t": "tf",
+          "q": "Per rendere credibile un valore di OEE conviene citare un benchmark di settore, senza sapere come il cliente lo calcola.",
+          "a": false,
+          "diff": 1,
+          "exp": "Un benchmark non fontato o calcolato con un'altra definizione fa perdere credibilità. Meglio chiedere il valore del cliente, la formula usata e il perimetro (quali linee, quali fermi sono esclusi)."
+        },
+        {
+          "t": "mcq",
+          "q": "Un COO perde penali dalla grande distribuzione e ogni sito scarica la colpa su un altro. Qual è la prima mossa migliore?",
+          "ctx": {
+            "who": "COO",
+            "say": "Perdiamo penali dalla grande distribuzione per consegne non conformi, ma ogni sito dice che la colpa è di un altro."
+          },
+          "o": [
+            "Proporre subito un sistema di pianificazione avanzato per migliorare il servizio",
+            "Suggerire di rinegoziare le penali con la grande distribuzione per ridurre l'esposizione",
+            "Chiedere come viene definito l'OTIF con quel cliente e scomporlo per causa e per sito",
+            "Mostrare una demo del modulo trasporti per ridurre i ritardi nelle consegne"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "Prima si capisce dove nasce il difetto: definizione di OTIF, cause (piano, produzione, magazzino, trasporto) e siti. Solo dopo si sceglie la soluzione; partire dal prodotto significa rispondere a una domanda non fatta."
+        },
+        {
+          "t": "bucket",
+          "q": "A quale KPI si riferisce questa frase?",
+          "buckets": [
+            "OTIF",
+            "Inventory turns",
+            "OEE"
+          ],
+          "items": [
+            [
+              "Ordini consegnati nei tempi e nelle quantità concordati",
+              0
+            ],
+            [
+              "Costo del venduto diviso scorta media",
+              1
+            ],
+            [
+              "Disponibilità × prestazione × qualità",
+              2
+            ],
+            [
+              "Penali dalla grande distribuzione per consegne in ritardo",
+              0
+            ],
+            [
+              "Capitale circolante immobilizzato nel magazzino",
+              1
+            ],
+            [
+              "Fermi macchina e scarti di linea",
+              2
+            ]
+          ],
+          "diff": 2,
+          "exp": "Ogni KPI racconta un dolore diverso: servizio (OTIF), capitale (scorte), produttività dell'impianto (OEE). Collegare le frasi del cliente al KPI giusto guida la scelta dell'area su cui lavorare."
+        }
+      ]
+    },
+    {
+      "id": "w08-l02",
+      "title": "Plan, Source, Make, Deliver",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Un modello semplice: Plan (pianificare), Source (approvvigionare), Make (produrre), Deliver (consegnare), con manutenzione e qualità come abilitatori. Mappa il portafoglio SAP su queste fasi.",
+          "Plan: IBP. Source: acquisti in S/4HANA e SAP Business Network. Make: produzione, qualità e manutenzione in S/4HANA, Digital Manufacturing, Asset Management. Deliver: EWM, Transportation Management, Business Network per la logistica.",
+          "S/4HANA è il core transazionale (ordini, produzione, magazzino, acquisti); IBP, EWM, TM e Digital Manufacturing si collegano a esso. Il messaggio per l'AE: processi collegati sullo stesso core, non sei isole.",
+          "Le sigle contano meno dei problemi: parti da dove si rompe la catena (piano sbagliato, magazzino, impianto fermo, consegna in ritardo) e porta il prodotto giusto."
+        ],
+        "ae": "Disegna P-S-M-D su una lavagna e chiedi al cliente di segnare dove perde soldi. Il prodotto SAP si sceglie dopo, non prima."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il prodotto SAP alla sua funzione nella supply chain",
+          "pairs": [
+            [
+              "IBP",
+              "Pianificazione integrata di domanda, supply e S&OP"
+            ],
+            [
+              "EWM",
+              "Gestione avanzata del magazzino"
+            ],
+            [
+              "Transportation Management",
+              "Pianificazione ed esecuzione dei trasporti"
+            ],
+            [
+              "Digital Manufacturing",
+              "Esecuzione di produzione (MES) in cloud"
+            ],
+            [
+              "Asset Management",
+              "Manutenzione degli asset: ordini, piani, storico"
+            ]
+          ],
+          "diff": 1,
+          "exp": "È la mappa base del portafoglio supply chain. Sapere associare un prodotto alla fase della catena è il minimo per condurre una discovery credibile con un COO."
+        },
+        {
+          "t": "bucket",
+          "q": "In quale fase si colloca?",
+          "buckets": [
+            "Plan",
+            "Make",
+            "Deliver"
+          ],
+          "items": [
+            [
+              "Previsione della domanda",
+              0
+            ],
+            [
+              "S&OP mensile",
+              0
+            ],
+            [
+              "Ordini di produzione e distinte base",
+              1
+            ],
+            [
+              "Controllo qualità in linea",
+              1
+            ],
+            [
+              "Gestione del magazzino e delle spedizioni",
+              2
+            ],
+            [
+              "Selezione dei vettori",
+              2
+            ]
+          ],
+          "diff": 1,
+          "exp": "Plan decide cosa produrre e quanto, Make lo realizza, Deliver lo porta al cliente. Usare questa mappa in discovery aiuta a localizzare il problema prima di parlare di prodotti."
+        },
+        {
+          "t": "mcq",
+          "q": "Come imposti la conversazione con un COO che non sa se i ritardi nascono dal piano, dalla produzione o dal trasporto?",
+          "ctx": {
+            "who": "COO",
+            "say": "I ritardi di consegna ai clienti sono il mio problema numero uno, ma non so se dipendono dal piano, dalla produzione o dal trasporto."
+          },
+          "o": [
+            "Propongo IBP per migliorare l'accuratezza del piano e ridurre così i ritardi",
+            "Scompongo i ritardi per causa lungo piano, produzione e trasporto, poi scelgo",
+            "Propongo un nuovo MES per aumentare la puntualità della produzione in linea",
+            "Propongo il modulo di trasporto per gestire meglio i vettori e le tempistiche"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Quando la causa non è nota, ogni proposta di prodotto è un'ipotesi. Scomporre i ritardi per causa lungo la catena produce il dato che orienta la scelta (e dà credibilità all'AE)."
+        },
+        {
+          "t": "tf",
+          "q": "S/4HANA è il core transazionale a cui si collegano IBP, EWM, TM e Digital Manufacturing.",
+          "a": true,
+          "diff": 1,
+          "exp": "S/4HANA gestisce ordini, produzione, magazzino e acquisti; le altre soluzioni si collegano al core e ne estendono le funzioni. Sono prodotti distinti, non lo stesso prodotto con nomi diversi."
+        },
+        {
+          "t": "fill",
+          "q": "In ottica Plan-Source-Make-Deliver, la gestione di vettori e spedizioni rientra nella fase ___.",
+          "o": [
+            "Plan (pianificazione)",
+            "Deliver (consegna)",
+            "Source (approvvigionamento)"
+          ],
+          "a": 1,
+          "diff": 1,
+          "exp": "Vettori, spedizioni e magazzino di uscita appartengono alla consegna. Il piano è a monte, mentre l'approvvigionamento riguarda i flussi in ingresso dai fornitori."
+        }
+      ]
+    },
+    {
+      "id": "w08-l03",
+      "title": "IBP: il piano che regge",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP IBP è la soluzione cloud per pianificare la supply chain su più orizzonti: demand planning, supply planning, inventory optimization, S&OP e control tower.",
+          "Differenza chiave: S/4HANA (MRP Live, PP/DS) calcola e schedula il fabbisogno operativo; IBP lavora sul piano multi-sito di medio-lungo periodo e collega commerciale, produzione e finanza in un unico processo.",
+          "S&OP (o IBP come processo): ciclo mensile in cui domanda, supply, finanza e vendite concordano un unico piano. Il software abilita la riunione; non sostituisce l'allineamento tra funzioni.",
+          "Gli scenari what-if permettono di simulare l'impatto di un evento (es. un fornitore che salta) su servizio, costi e scorte prima di decidere."
+        ],
+        "ae": "Chiedi chi, oggi, possiede «il numero». Se vendite, produzione e finanza hanno tre piani, l'S&OP è la conversazione e IBP lo strumento."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Quale affermazione distingue meglio IBP da MRP Live in S/4HANA?",
+          "o": [
+            "MRP Live copre il piano multi-sito di lungo periodo; IBP il fabbisogno operativo",
+            "IBP copre il piano multi-sito e di lungo periodo; MRP Live il fabbisogno operativo",
+            "IBP è un modulo di magazzino, MRP Live uno strumento di pianificazione dei trasporti",
+            "IBP gestisce i fornitori, MRP Live gestisce i clienti e gli ordini di vendita"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "MRP Live calcola i fabbisogni per l'esecuzione; IBP sale di livello, collegando domanda, capacità e finanza su più siti e orizzonti. Non sono in alternativa: sono livelli diversi della stessa catena."
+        },
+        {
+          "t": "order",
+          "q": "Ordina le cinque fasi classiche del ciclo S&OP",
+          "items": [
+            "Raccolta dati e piano di domanda statistico",
+            "Revisione della domanda con vendite e marketing",
+            "Revisione del piano di supply e dei vincoli di capacità",
+            "Riunione pre-S&OP di riconciliazione con la finanza",
+            "Riunione esecutiva con decisioni e responsabilità"
+          ],
+          "diff": 2,
+          "exp": "Dati, domanda, supply, riconciliazione e decisione esecutiva: ogni fase prepara la successiva. IBP supporta il ciclo, ma il valore nasce dall'allineamento delle funzioni su un unico piano."
+        },
+        {
+          "t": "tf",
+          "q": "L'S&OP è un processo ricorrente: lo strumento lo supporta ma non sostituisce l'allineamento tra le funzioni.",
+          "a": true,
+          "diff": 1,
+          "exp": "L'S&OP è un ciclo (in genere mensile) con ruoli e decisioni. Il software lo rende più rapido e trasparente, ma senza governance resta una riunione di confronto tra file."
+        },
+        {
+          "t": "mcq",
+          "q": "Qual è la proposta più utile per una riunione S&OP in cui ognuno porta il proprio file?",
+          "ctx": {
+            "who": "Head of Supply Chain",
+            "say": "Facciamo la riunione S&OP ogni mese, ma ognuno porta il suo file e passiamo il tempo a discutere i numeri."
+          },
+          "o": [
+            "Introdurre un nuovo modello di previsione statistica che sostituisca le stime commerciali",
+            "Allungare la riunione e aggiungere un incontro settimanale di allineamento tra le funzioni",
+            "Definire un'unica versione del piano con responsabilità chiare, poi supportarla con IBP",
+            "Chiedere a ciascuna funzione di inviare i file in anticipo per consolidarli con un foglio"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "Il problema è l'assenza di una versione unica del piano e di responsabilità. Lo strumento aiuta dopo aver definito processo e ruoli; più riunioni o più fogli lasciano il problema intatto."
+        },
+        {
+          "t": "multi",
+          "q": "Quali capacità appartengono al perimetro di IBP?",
+          "o": [
+            "Demand planning",
+            "Inventory optimization",
+            "Collaborazione S&OP tra le funzioni",
+            "Esecuzione dei task di magazzino con terminali RF",
+            "Fatturazione ai clienti"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "Demand planning, inventory optimization e S&OP sono il cuore di IBP. I task di magazzino con RF sono EWM e la fatturazione appartiene all'area vendite/finanza di S/4HANA."
+        }
+      ]
+    },
+    {
+      "id": "w08-l04",
+      "title": "Demand sensing e forecast",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Previsione statistica: usa storico, stagionalità e trend per l'orizzonte medio-lungo. Demand sensing: affina il breve termine (giorni o settimane) con segnali recenti come ordini, sell-out e spedizioni.",
+          "Nel CPG pesano promozioni, stagionalità e lanci: la domanda è volatile. Nelle Life Sciences contano gare pubbliche e continuità di fornitura: la domanda è spesso meno volatile, ma una rottura di stock può avere impatto critico.",
+          "Metriche: accuratezza (quanto ci si avvicina alla domanda reale) e bias (sovra o sottostima sistematica). Il bias è spesso più pericoloso dell'errore casuale perché gonfia le scorte o genera rotture.",
+          "I dati sono il collo di bottiglia: senza sell-out, storico pulito e anagrafiche coerenti, nessun modello AI/ML fa miracoli."
+        ],
+        "ae": "Chiedi: «Quanto spesso rifate il forecast e chi lo corregge a mano?». Se i planner correggono tutto in Excel, il sensing deve prima conquistare la loro fiducia."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è la differenza principale tra previsione statistica e demand sensing?",
+          "o": [
+            "Statistica: segnali recenti di ordini. Sensing: storico e stagionalità sul lungo periodo",
+            "Statistica: storico e stagionalità. Sensing: correzione del breve con segnali recenti",
+            "Statistica: previsione manuale dei commerciali. Sensing: previsione dei fornitori",
+            "Statistica: orizzonte di breve termine. Sensing: orizzonte pluriennale di capacità"
+          ],
+          "a": 1,
+          "diff": 1,
+          "exp": "La statistica lavora sul medio-lungo periodo, il sensing corregge il breve con dati recenti. Le due cose si combinano: il sensing non sostituisce il forecast, lo affina."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine della pianificazione della domanda al suo significato",
+          "pairs": [
+            [
+              "Bias",
+              "Sovra o sottostima sistematica della domanda"
+            ],
+            [
+              "Forecast accuracy",
+              "Quanto la previsione si avvicina alla domanda reale"
+            ],
+            [
+              "Sell-out",
+              "Vendite dal punto vendita al consumatore finale"
+            ],
+            [
+              "Scorta di sicurezza",
+              "Buffer che copre incertezza di domanda e di fornitura"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Sono i termini che un demand planner usa ogni giorno. Il sell-out è il segnale più prezioso per il sensing nel CPG, ma spesso è nelle mani del cliente distributore: va negoziato."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a un demand planner CPG travolto dalle promozioni della grande distribuzione?",
+          "ctx": {
+            "who": "Demand planner CPG",
+            "say": "Le promozioni della grande distribuzione mi stravolgono il forecast ogni settimana."
+          },
+          "o": [
+            "Ignoriamo le promozioni nel forecast e le gestiamo con scorte di sicurezza maggiori",
+            "Allunghiamo l'orizzonte di previsione, così le oscillazioni si compensano nel tempo",
+            "Chiediamo alla grande distribuzione di non fare promozioni nel trimestre di picco",
+            "Separiamo domanda di base ed effetto promo e aggiungiamo segnali di breve periodo"
+          ],
+          "a": 3,
+          "diff": 2,
+          "exp": "Separare la baseline dall'effetto promozionale rende il forecast spiegabile; i segnali di breve periodo correggono la parte volatile. Ignorare le promo o rimandarle non è una strategia."
+        },
+        {
+          "t": "tf",
+          "q": "Se il forecast sovrastima sistematicamente la domanda, aumenta il rischio di scorte in eccesso.",
+          "a": true,
+          "diff": 1,
+          "exp": "Un bias positivo porta a produrre e ordinare più del necessario: scorte alte, capitale immobilizzato, obsolescenza. Misurare il bias, oltre all'errore, è una domanda di discovery molto efficace."
+        },
+        {
+          "t": "fill",
+          "q": "Il demand sensing agisce soprattutto sull'orizzonte di ___ termine.",
+          "o": [
+            "breve",
+            "lungo",
+            "pluriennale"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "Il sensing corregge i giorni o le settimane immediatamente successivi con segnali recenti. Per il lungo periodo restano il forecast statistico e il piano S&OP."
+        }
+      ]
+    },
+    {
+      "id": "w08-l05",
+      "title": "S/4HANA per la produzione",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "In S/4HANA la produzione parte da distinta base e ciclo (o ricetta), poi MRP, ordini di produzione o di processo, conferme e costi. Nel farmaceutico e nell'alimentare si usano molto gli ordini di processo.",
+          "MRP Live calcola i fabbisogni direttamente sul database HANA; PP/DS (embedded) aggiunge la schedulazione di dettaglio con vincoli di capacità.",
+          "Gestione dei lotti (batch management): caratteristiche del lotto, scadenza, stato di qualità. È la base di tracciabilità e richiami.",
+          "Per il cliente la domanda non è «PP o IBP?»: quale parte del problema è di esecuzione (S/4HANA, Digital Manufacturing) e quale di pianificazione (IBP)?"
+        ],
+        "ae": "Fatti raccontare la vita di un lotto, dall'ordine delle materie prime alla spedizione. Dove si interrompe il filo informativo? Lì ci sono i quick win."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "In un impianto farmaceutico che produce a lotti, quale documento guida la produzione in S/4HANA?",
+          "o": [
+            "Ordine di vendita",
+            "Ordine di processo",
+            "Ordine di manutenzione",
+            "Ordine d'acquisto"
+          ],
+          "a": 1,
+          "diff": 1,
+          "exp": "Nelle industrie di processo (farmaceutico, chimico, alimentare) l'ordine di processo governa ricetta, componenti e lotti. L'ordine di produzione discreto è tipico di assemblaggio e meccanica."
+        },
+        {
+          "t": "order",
+          "q": "Ordina il flusso produttivo in S/4HANA",
+          "items": [
+            "MRP calcola il fabbisogno dei materiali",
+            "Creazione e rilascio dell'ordine di produzione o di processo",
+            "Prelievo dei materiali e conferma delle operazioni",
+            "Ispezione di qualità e decisione sul lotto",
+            "Entrata a magazzino del prodotto finito"
+          ],
+          "diff": 2,
+          "exp": "Il fabbisogno genera l'ordine, l'ordine consuma materiali e produce il lotto, la qualità lo accetta e solo allora entra a magazzino. Le interruzioni di questo filo sono i punti dove il cliente perde tempo o tracciabilità."
+        },
+        {
+          "t": "tf",
+          "q": "MRP Live in S/4HANA calcola i fabbisogni sfruttando il database in-memory HANA.",
+          "a": true,
+          "diff": 2,
+          "exp": "MRP Live porta il calcolo sul database, riducendo i tempi dell'esecuzione rispetto al vecchio MRP. Non risolve da solo i vincoli di capacità: serve la schedulazione di dettaglio (PP/DS) o altri strumenti."
+        },
+        {
+          "t": "mcq",
+          "q": "Un pianificatore schedula a mano su Excel perché l'MRP non considera la capacità. Cosa gli rispondi?",
+          "ctx": {
+            "who": "Plant manager",
+            "say": "Il nostro pianificatore schedula gli ordini a mano su Excel perché l'MRP non tiene conto della capacità."
+          },
+          "o": [
+            "Aggiungiamo ai parametri MRP un buffer di capacità, così il piano diventa fattibile",
+            "Spostiamo la pianificazione su IBP, che schedula nel dettaglio gli ordini di linea",
+            "Distinguiamo il calcolo dei fabbisogni dalla schedulazione con vincoli di capacità",
+            "Sostituiamo il pianificatore con un MES che calcola i fabbisogni dalle conferme di linea"
+          ],
+          "a": 2,
+          "diff": 3,
+          "exp": "L'MRP calcola cosa serve e quando, non se la linea ha capacità: la schedulazione di dettaglio con vincoli (PP/DS e simili) è un altro livello. IBP lavora a un orizzonte più alto, non sulla sequenza di linea."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine della produzione al suo significato",
+          "pairs": [
+            [
+              "Distinta base (BOM)",
+              "Elenco dei componenti necessari per fare un prodotto"
+            ],
+            [
+              "Ciclo (routing)",
+              "Sequenza di operazioni e risorse per produrlo"
+            ],
+            [
+              "Lotto (batch)",
+              "Quantità omogenea tracciabile, con scadenza e stato"
+            ],
+            [
+              "Work center",
+              "Risorsa o linea dove si eseguono le operazioni"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Questi quattro oggetti sono la grammatica della produzione in S/4HANA. Chi non li padroneggia perde credibilità con un direttore di stabilimento."
+        }
+      ]
+    },
+    {
+      "id": "w08-l06",
+      "title": "Qualità e tracciabilità",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "S/4HANA Quality Management: piani di controllo, lotti di ispezione, decisione d'impiego (usage decision), non conformità e notifiche qualità. Collega qualità, produzione e magazzino sullo stesso lotto.",
+          "Tracciabilità: dal lotto di materia prima al lotto di prodotto finito e al cliente (where-from e where-used). In un richiamo la velocità di risposta limita danni e costi.",
+          "Life Sciences: GxP, rilascio del lotto, serializzazione delle confezioni, catena del freddo. CPG alimentare: allergeni, scadenze, richiami. Verifica sempre i requisiti applicabili con il cliente, non darli per scontati.",
+          "Dati di qualità e di produzione insieme permettono di vedere le cause (macchina, materiale, turno) invece di ispezionare soltanto a fine linea."
+        ],
+        "ae": "Proponi un test: «Se domani dovete ritirare un lotto, in quanto tempo sapete a chi è stato venduto?». Il tempo di risposta è già il business case."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come rispondi a un direttore qualità che vuole sapere in ore l'impatto di un lotto contaminato?",
+          "ctx": {
+            "who": "Direttore qualità",
+            "say": "Se un lotto di materia prima risulta contaminato, voglio sapere in ore quali lotti finiti e quali clienti sono coinvolti."
+          },
+          "o": [
+            "Un registro dei reclami in cui i clienti segnalano i lotti sospetti",
+            "Tracciabilità di lotto: dalla materia prima al prodotto finito e ai clienti",
+            "Un'analisi statistica periodica dei difetti rilevati a fine linea",
+            "Un modulo di allerta ai fornitori per i lotti di materia prima non conformi"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Serve la genealogia del lotto in entrambe le direzioni (where-from e where-used) con il collegamento ai clienti. Reclami, statistiche e allerte ai fornitori sono utili ma non danno la risposta in ore."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine della qualità al suo significato",
+          "pairs": [
+            [
+              "Where-from",
+              "Dal prodotto finito ai lotti di materie prime usati"
+            ],
+            [
+              "Where-used",
+              "Da un lotto di componente ai prodotti finiti che lo contengono"
+            ],
+            [
+              "Usage decision",
+              "Decisione di accettazione o rifiuto del lotto ispezionato"
+            ],
+            [
+              "Notifica di qualità",
+              "Registra e gestisce una non conformità"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Where-from e where-used sono le due direzioni della tracciabilità: in un richiamo servono entrambe. La usage decision è il punto in cui il lotto diventa utilizzabile o bloccato."
+        },
+        {
+          "t": "tf",
+          "q": "La tracciabilità di lotto permette di risalire dal prodotto finito alle materie prime e viceversa.",
+          "a": true,
+          "diff": 1,
+          "exp": "Where-from e where-used coprono le due direzioni: dal finito alle materie prime e da un componente a tutti i prodotti che lo contengono. In un richiamo servono entrambe."
+        },
+        {
+          "t": "multi",
+          "q": "Quali temi sono tipici di una supply chain Life Sciences?",
+          "o": [
+            "GxP e validazione dei processi",
+            "Rilascio del lotto da parte della qualità",
+            "Serializzazione delle confezioni e catena del freddo",
+            "Gestione dei planogrammi a scaffale nei punti vendita",
+            "Valutazione del merito di credito dei clienti"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "GxP, rilascio del lotto, serializzazione e catena del freddo sono temi centrali del settore. I planogrammi riguardano il retail e il merito di credito la finanza. Verifica sempre i requisiti applicabili al prodotto."
+        },
+        {
+          "t": "order",
+          "q": "Ordina i passi di un test di richiamo simulato (mock recall)",
+          "items": [
+            "Seleziona un lotto di prodotto finito",
+            "Individua i lotti di materie prime coinvolti (where-from)",
+            "Individua gli altri lotti finiti che usano gli stessi componenti (where-used)",
+            "Elenca clienti e quantità spedite",
+            "Misura il tempo totale e le lacune emerse"
+          ],
+          "diff": 3,
+          "exp": "Il test parte dal lotto, risale alle materie prime, allarga ai prodotti coinvolti, arriva ai clienti e misura il tempo. È anche uno strumento commerciale: il tempo impiegato quantifica il rischio."
+        }
+      ]
+    },
+    {
+      "id": "w08-l07",
+      "title": "Digital Manufacturing",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Digital Manufacturing (DM) è il MES cloud di SAP: guida gli operatori in linea, raccoglie dati di produzione, gestisce lotti e tracciabilità a livello di shop floor e si collega a S/4HANA per ordini e conferme.",
+          "Vecchi MES (SAP ME, SAP MII): {{w08.me_mii_sunset}}. Verifica date e perimetro nel contratto e nella roadmap SAP prima di parlarne con il cliente.",
+          "Non è un drop-in: il passaggio da ME/MII a DM è una riprogettazione di workflow, integrazioni e connettività di linea. Parlane come programma di modernizzazione a ondate, non come upgrade.",
+          "Valore tipico: meno carta (batch record elettronico in ambienti regolati), dati di linea in tempo reale per l'OEE, istruzioni guidate agli operatori. Va quantificato sul sito, non promesso in astratto."
+        ],
+        "ae": "Chiedi quanti fogli, schermate e passaggi manuali separano oggi l'operatore dal dato di produzione. Se la risposta è «molti», Digital Manufacturing entra nella conversazione."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Quale prodotto SAP è indicato come successore cloud di SAP ME e SAP MII?",
+          "o": [
+            "SAP Integrated Business Planning",
+            "SAP Extended Warehouse Management",
+            "SAP Digital Manufacturing",
+            "SAP Transportation Management"
+          ],
+          "a": 2,
+          "diff": 1,
+          "exp": "Digital Manufacturing è il MES cloud su cui SAP indirizza i clienti dei vecchi MES. Le date di fine manutenzione di ME/MII vanno verificate: {{w08.me_mii_sunset}}."
+        },
+        {
+          "t": "tf",
+          "q": "Passare da SAP MII a Digital Manufacturing è un semplice upgrade tecnico, senza riprogettare workflow e integrazioni.",
+          "a": false,
+          "diff": 2,
+          "exp": "Le fonti descrivono un passaggio che richiede di ridisegnare workflow, integrazioni e connettività di linea. Presentarlo come upgrade fa sottostimare tempi, costi e coinvolgimento degli stabilimenti."
+        },
+        {
+          "t": "mcq",
+          "q": "Un IT di stabilimento ha SAP ME e MII da anni e chiede cosa succede con la manutenzione. Cosa rispondi?",
+          "ctx": {
+            "who": "IT di stabilimento",
+            "say": "Abbiamo SAP ME e MII da anni: cosa succede con la manutenzione e cosa dovremmo fare?"
+          },
+          "o": [
+            "Il vecchio MES si spegne a breve: conviene migrare tutto entro il prossimo anno",
+            "Le versioni attuali restano supportate a tempo indefinito, quindi non serve pianificare",
+            "Meglio attendere una nuova release dei vecchi MES che risolva i limiti della piattaforma",
+            "Verifichiamo date e perimetro con SAP, poi pianifichiamo Digital Manufacturing a ondate"
+          ],
+          "a": 3,
+          "diff": 3,
+          "exp": "Le fonti consultate non concordano sulle date esatte, quindi la risposta onesta è verificare, poi pianificare a ondate. Scadenze minacciose o rassicurazioni infinite non reggono: {{w08.me_mii_sunset}}."
+        },
+        {
+          "t": "multi",
+          "q": "Quali benefici tipici si cercano con un MES come Digital Manufacturing?",
+          "o": [
+            "Istruzioni guidate per gli operatori e meno carta in linea",
+            "Dati di linea in tempo reale per misurare l'OEE",
+            "Tracciabilità di lotto a livello di shop floor",
+            "Sostituzione del sistema di contabilità generale",
+            "Pianificazione delle vendite a 24 mesi"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "Un MES porta l'esecuzione in linea sotto controllo: istruzioni, dati e tracciabilità. Contabilità e pianificazione delle vendite sono altri ambiti, rispettivamente S/4HANA Finance e IBP."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine del mondo MES al suo significato",
+          "pairs": [
+            [
+              "Shop floor execution",
+              "Gestione e registrazione delle operazioni in linea"
+            ],
+            [
+              "Batch record elettronico",
+              "Registro digitale dei passi di produzione di un lotto"
+            ],
+            [
+              "Connettività di linea",
+              "Collegamento di macchine e sensori al sistema"
+            ],
+            [
+              "Istruzioni di lavoro guidate",
+              "Passi mostrati all'operatore, con controlli e registrazioni"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Sono i concetti con cui un responsabile di produzione descrive il valore di un MES. Nel farmaceutico il batch record elettronico sostituisce la carta con registrazioni verificabili."
+        }
+      ]
+    },
+    {
+      "id": "w08-l08",
+      "title": "Manutenzione e asset",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "Asset Management in S/4HANA gestisce l'intero ciclo della manutenzione: struttura impianti (ubicazioni tecniche, equipment), notifiche di guasto, ordini di manutenzione, piani preventivi, costi e storico.",
+          "Strategie: correttiva (a guasto), preventiva (a calendario o contatore), predittiva o condition-based (dai dati dei sensori). Le soluzioni SAP di asset performance management aggiungono analisi di criticità e stato di salute degli asset.",
+          "Collegamento con l'OEE: i fermi non pianificati abbassano la disponibilità. Meno guasti significa più OEE, ma la manutenzione ha un costo: l'obiettivo è il giusto equilibrio, non zero interventi.",
+          "In ambiente regolato (GMP) manutenzione e tarature sono attività documentate e verificabili: audit trail e storico completo contano."
+        ],
+        "ae": "Chiedi quanti fermi non pianificati ha avuto la linea più critica nell'ultimo anno e chi ne conosce la causa. Senza uno storico affidabile la manutenzione predittiva è prematura."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina la strategia di manutenzione alla sua descrizione",
+          "pairs": [
+            [
+              "Correttiva",
+              "Si interviene dopo il guasto"
+            ],
+            [
+              "Preventiva",
+              "Interventi pianificati a calendario o a contatore"
+            ],
+            [
+              "Predittiva",
+              "Intervento deciso dai dati di condizione dell'asset"
+            ],
+            [
+              "Notifica di guasto",
+              "Segnalazione che avvia il processo di manutenzione"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Le tre strategie differiscono per il momento in cui si decide l'intervento; la notifica è il punto di ingresso del processo. Saperle distinguere ti permette di valutare la maturità del cliente."
+        },
+        {
+          "t": "mcq",
+          "q": "Un responsabile manutenzione vuole la predittiva ma ha lo storico guasti su carta. Come rispondi?",
+          "ctx": {
+            "who": "Responsabile manutenzione",
+            "say": "Vorrei fare manutenzione predittiva, ma lo storico dei guasti è ancora su carta."
+          },
+          "o": [
+            "Parti subito con la predittiva: i modelli compensano la mancanza di storico",
+            "Rinvia ogni progetto finché non installi sensori su tutta la fabbrica",
+            "Sostituisci le macchine più vecchie, così il problema dello storico scompare",
+            "Digitalizza prima notifiche, ordini e codici guasto sugli asset critici"
+          ],
+          "a": 3,
+          "diff": 2,
+          "exp": "La predittiva si nutre di dati puliti: prima si digitalizza il processo sugli asset critici, poi si costruiscono i modelli. Sensori ovunque o sostituzioni non risolvono il problema dello storico."
+        },
+        {
+          "t": "tf",
+          "q": "I fermi non pianificati riducono la componente di disponibilità dell'OEE.",
+          "a": true,
+          "diff": 1,
+          "exp": "La disponibilità misura il tempo in cui l'impianto produce rispetto al tempo pianificato: i fermi non pianificati la riducono. Per questo manutenzione e OEE sono due facce della stessa conversazione."
+        },
+        {
+          "t": "fill",
+          "q": "Un ordine di manutenzione nasce spesso da una ___ di guasto inserita da un operatore.",
+          "o": [
+            "notifica",
+            "fattura",
+            "lettera"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "La notifica segnala il problema e avvia l'ordine di manutenzione: da lì nascono pianificazione, costi e storico. Digitalizzare la notifica è spesso il primo passo di un progetto di asset management."
+        },
+        {
+          "t": "bucket",
+          "q": "Quale strategia di manutenzione descrive la frase?",
+          "buckets": [
+            "A guasto",
+            "Preventiva",
+            "Predittiva"
+          ],
+          "items": [
+            [
+              "Intervento dopo la rottura",
+              0
+            ],
+            [
+              "Cambio filtri ogni 500 ore di funzionamento",
+              1
+            ],
+            [
+              "Analisi delle vibrazioni da sensore per prevedere un cedimento",
+              2
+            ],
+            [
+              "Ispezione mensile da calendario",
+              1
+            ],
+            [
+              "Riparazione di una pompa che si è fermata",
+              0
+            ],
+            [
+              "Modello che stima la vita residua di un componente",
+              2
+            ]
+          ],
+          "diff": 2,
+          "exp": "Dopo il guasto è correttiva, a calendario o a contatore è preventiva, dai dati di condizione è predittiva. La maggior parte dei clienti combina le tre strategie in funzione della criticità dell'asset."
+        }
+      ]
+    },
+    {
+      "id": "w08-l09",
+      "title": "Acquisti e fornitori",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "S/4HANA gestisce il ciclo procure-to-pay: richieste, ordini d'acquisto, entrata merci, verifica fattura. Il valore per il COO è prezzo, tempi e qualità del fornitore, non solo il processo.",
+          "Fornitori: valutazione delle prestazioni (puntualità, qualità), contratti e rischio. SAP Business Network collega aziende e fornitori per scambiare ordini, conferme e documenti.",
+          "Resilienza: dipendenza da fornitori unici, rischio paese, tempi di approvvigionamento lunghi. Una base dati unica di fornitori e materiali permette di vedere dove sei esposto.",
+          "Life Sciences e CPG: fornitori qualificati e audit (GMP), materie prime con specifiche e certificazioni; cambiare fornitore non è un click."
+        ],
+        "ae": "Chiedi: «Se il fornitore del componente più critico si ferma domani, in quante ore sai cosa è esposto?». La risposta misura la resilienza."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un responsabile acquisti lamenta fornitori che confermano e poi consegnano in ritardo senza avvisare. Come rispondi?",
+          "ctx": {
+            "who": "Head of Procurement",
+            "say": "I fornitori confermano l'ordine e poi consegnano in ritardo senza avvisare: lo scopro quando il materiale non arriva."
+          },
+          "o": [
+            "Introdurre penali più alte nei contratti, così i fornitori rispettano le date",
+            "Scambiare ordini, conferme e avvisi di spedizione sulla rete e valutare i fornitori",
+            "Assumere più sollecitatori che chiamino i fornitori prima di ogni consegna",
+            "Ridurre i fornitori a uno per categoria, per semplificare il controllo"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Il problema è di informazione: conferme, avvisi di spedizione e valutazione delle prestazioni su una rete condivisa danno visibilità prima del ritardo. Penali, sollecitatori e fornitore unico non risolvono (e aumentano il rischio)."
+        },
+        {
+          "t": "tf",
+          "q": "In Life Sciences, cambiare fornitore di una materia prima critica richiede in genere qualifica e verifiche di qualità prima dell'uso.",
+          "ctx": {
+            "who": "Buyer",
+            "say": "Un fornitore alternativo costa meno: lo inseriamo da lunedì, no?"
+          },
+          "a": true,
+          "diff": 1,
+          "exp": "Per materie prime critiche in ambienti regolati servono qualifica del fornitore, specifiche e controlli prima dell'uso. Per questo dati di fornitori e qualità condivisi accelerano un cambio, ma non lo rendono un click."
+        },
+        {
+          "t": "mcq",
+          "q": "Un COO ha tre stabilimenti con tre anagrafiche fornitori diverse. Quale proposta è più sensata?",
+          "ctx": {
+            "who": "COO",
+            "say": "Ho tre stabilimenti con tre anagrafiche fornitori diverse: non so quanto spendo davvero con ciascuno."
+          },
+          "o": [
+            "Armonizzare anagrafiche e materiali per avere una vista unica di spesa e rischio",
+            "Lasciare tre anagrafiche e consolidare a fine mese in un foglio di analisi",
+            "Scegliere l'anagrafica dello stabilimento più grande e scartare le altre",
+            "Dedicare un buyer per stabilimento che mantenga la propria anagrafica locale"
+          ],
+          "a": 0,
+          "diff": 2,
+          "exp": "Senza anagrafiche coerenti non esiste una vista di spesa e rischio. L'armonizzazione dei dati di base è il prerequisito di acquisti, resilienza e analisi dei fornitori."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il passaggio del procure-to-pay al suo significato",
+          "pairs": [
+            [
+              "Richiesta d'acquisto",
+              "Richiesta interna di approvvigionamento"
+            ],
+            [
+              "Ordine d'acquisto",
+              "Impegno formale verso il fornitore"
+            ],
+            [
+              "Entrata merci",
+              "Registrazione fisica del ricevimento"
+            ],
+            [
+              "Verifica fattura",
+              "Confronto tra ordine, ricevimento e fattura"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Sono i quattro passaggi su cui si innestano controlli, approvazioni e dati di qualità. La verifica fattura (three-way match) è il punto di raccordo con la finanza."
+        },
+        {
+          "t": "order",
+          "q": "Ordina i passaggi del procure-to-pay",
+          "items": [
+            "Richiesta d'acquisto",
+            "Ordine d'acquisto al fornitore",
+            "Entrata merci",
+            "Verifica fattura",
+            "Pagamento"
+          ],
+          "diff": 1,
+          "exp": "Dalla richiesta al pagamento, ogni passaggio produce un documento che alimenta il successivo. Ottimizzare questo ciclo riduce errori, ritardi di pagamento e discrepanze con i fornitori."
+        }
+      ]
+    },
+    {
+      "id": "w08-l10",
+      "title": "Magazzino con EWM",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Extended Warehouse Management (EWM) gestisce magazzini complessi: struttura per ubicazioni, task e ordini di magazzino, ondate di prelievo, terminali RF, integrazione con l'automazione e gestione dei lotti.",
+          "Può essere embedded in S/4HANA o decentralizzato su un sistema dedicato: la scelta dipende da dimensioni, complessità, volumi e governance IT. Non dare una risposta unica senza analisi.",
+          "Life Sciences e CPG: FEFO (first expired, first out), quarantena e blocco per stato di qualità, catena del freddo, tracciabilità per lotto.",
+          "KPI collegati: accuratezza dell'inventario, tempo di evasione, produttività di prelievo, errori di spedizione. Sono il ponte verso l'OTIF."
+        ],
+        "ae": "Visita il magazzino prima di parlare di EWM: guarda dove ci sono carta, fogli di prelievo e ricerca manuale delle ubicazioni. Un walk-through vale più di una slide."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che cosa significa FEFO in un magazzino?",
+          "o": [
+            "First Expired, First Out: si preleva prima il lotto con scadenza più vicina",
+            "First Entered, First Out: si preleva prima il lotto entrato per primo",
+            "Last Entered, First Out: si preleva prima l'ultimo lotto entrato in magazzino"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "FEFO guida il prelievo sulla scadenza, non sull'ordine di arrivo: è fondamentale per farmaceutico e alimentare. FIFO e LIFO sono strategie diverse che ignorano la data di scadenza."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a un responsabile di magazzino che a volte spedisce il lotto sbagliato?",
+          "ctx": {
+            "who": "Responsabile magazzino",
+            "say": "Abbiamo prodotti in quarantena e lotti con scadenze diverse: a volte spediamo il lotto sbagliato."
+          },
+          "o": [
+            "Etichette più grandi sui bancali, così il lotto si legge a colpo d'occhio",
+            "Lotti con stato di qualità, blocco in quarantena e strategia di prelievo FEFO",
+            "Più personale in spedizione che controlli a mano i lotti prima del carico",
+            "Un secondo magazzino dedicato ai prodotti con scadenza vicina"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Il sistema deve conoscere stato di qualità e scadenza del lotto e impedire il prelievo sbagliato. Etichette, controlli manuali e magazzini dedicati riducono il rischio, ma non lo eliminano e costano di più."
+        },
+        {
+          "t": "multi",
+          "q": "Quali sono funzioni tipiche di EWM?",
+          "o": [
+            "Task e ordini di magazzino con terminali RF",
+            "Strategie di prelievo come FEFO",
+            "Integrazione con sistemi di automazione del magazzino",
+            "Schedulazione di dettaglio degli ordini di produzione",
+            "Calcolo del forecast statistico della domanda"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "EWM governa i movimenti, le strategie di prelievo e l'automazione del magazzino. La schedulazione di produzione è PP/DS e il forecast è IBP."
+        },
+        {
+          "t": "tf",
+          "q": "EWM può essere usato in modalità embedded in S/4HANA oppure decentralizzata su un sistema dedicato.",
+          "a": true,
+          "diff": 2,
+          "exp": "EWM esiste in entrambe le modalità. La scelta dipende da complessità, volumi e governance IT: va valutata caso per caso, non decisa a priori."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il termine di magazzino al suo significato",
+          "pairs": [
+            [
+              "Wave (ondata)",
+              "Raggruppamento di prelievi da rilasciare insieme"
+            ],
+            [
+              "Ubicazione",
+              "Posizione fisica di stoccaggio nel magazzino"
+            ],
+            [
+              "Cross-docking",
+              "Merce spedita senza essere stoccata"
+            ],
+            [
+              "Quarantena",
+              "Stock bloccato in attesa dell'esito qualità"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Sono i concetti di base di qualunque magazzino avanzato. In Life Sciences la quarantena è un requisito di conformità, non un'opzione."
+        }
+      ]
+    },
+    {
+      "id": "w08-l11",
+      "title": "Trasporti con TM",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Transportation Management (TM) pianifica ed esegue il trasporto: freight order, pianificazione del carico, scelta dei vettori, gare, tracciamento e liquidazione delle fatture di trasporto (freight settlement).",
+          "Nell'ecosistema: S/4HANA fornisce ordini di vendita e consegne; TM pianifica; i vettori collaborano tramite SAP Business Network per la logistica su stato e documenti.",
+          "Leve di costo: ottimizzazione di carico e percorso, consolidamento delle spedizioni, scelta modale, controllo delle fatture rispetto ai contratti tariffari.",
+          "Life Sciences: trasporto a temperatura controllata e conformità GDP (Good Distribution Practice). CPG: consegne a punti vendita e piattaforme della grande distribuzione con finestre orarie rigide."
+        ],
+        "ae": "Chiedi quanti trasportatori usano e come controllano le fatture. Se il controllo è manuale, il costo nascosto del trasporto è spesso la prima leva da quantificare."
+      },
+      "ex": [
+        {
+          "t": "match",
+          "q": "Abbina il termine del trasporto al suo significato",
+          "pairs": [
+            [
+              "Freight order",
+              "Ordine che descrive un trasporto da eseguire con un vettore"
+            ],
+            [
+              "Selezione del vettore",
+              "Scelta del vettore in base a tariffe, regole e disponibilità"
+            ],
+            [
+              "Freight settlement",
+              "Controllo e liquidazione delle fatture del vettore"
+            ],
+            [
+              "Consolidamento",
+              "Unione di più spedizioni in un unico trasporto"
+            ]
+          ],
+          "diff": 1,
+          "exp": "Sono i concetti chiave di TM. Il consolidamento e il controllo delle fatture sono le leve di costo che più spesso emergono in discovery con un responsabile logistica."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a un responsabile logistica CPG che paga penali per ritardi sulle consegne alla grande distribuzione?",
+          "ctx": {
+            "who": "Responsabile logistica",
+            "say": "Le consegne alla grande distribuzione hanno finestre orarie strette e paghiamo penali per ogni ritardo."
+          },
+          "o": [
+            "Contratti con un solo vettore nazionale, per semplificare le responsabilità del servizio",
+            "Pianificazione con finestre orarie e visibilità di spedizione condivisa con i vettori",
+            "Più scorte nel magazzino di uscita, così le consegne partono in anticipo",
+            "Un calendario condiviso delle consegne, aggiornato a mano dai responsabili di sito"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Servono pianificazione che rispetti le finestre orarie e visibilità condivisa con i vettori per anticipare i ritardi. Scorte, vettore unico o calendari manuali spostano il problema senza risolverlo."
+        },
+        {
+          "t": "fill",
+          "q": "La verifica e liquidazione delle fatture dei vettori rispetto alle tariffe contrattuali si chiama ___.",
+          "o": [
+            "freight settlement",
+            "cross-docking",
+            "quality inspection"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "Il freight settlement confronta le fatture dei vettori con ordini di trasporto e tariffe. Se oggi è manuale, la leva di risparmio e controllo è facile da quantificare."
+        },
+        {
+          "t": "tf",
+          "q": "TM si occupa di gestire le postazioni di prelievo all'interno del magazzino.",
+          "a": false,
+          "diff": 1,
+          "exp": "I movimenti interni di magazzino sono dominio di EWM. TM pianifica ed esegue il trasporto tra sedi, magazzini e clienti, con vettori, tariffe e fatture."
+        },
+        {
+          "t": "order",
+          "q": "Ordina il flusso di un trasporto",
+          "items": [
+            "La consegna viene creata in S/4HANA",
+            "TM pianifica e consolida il carico",
+            "Il vettore viene scelto o assegnato tramite gara",
+            "Il trasporto viene eseguito e tracciato",
+            "La fattura del vettore viene verificata e liquidata"
+          ],
+          "diff": 2,
+          "exp": "Dalla consegna alla liquidazione, ogni passaggio produce dati che alimentano il successivo. Gli errori più costosi sono in genere nelle due estremità: la pianificazione e il controllo delle fatture."
+        }
+      ]
+    },
+    {
+      "id": "w08-l12",
+      "title": "Visibilità e resilienza",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "SAP Business Network per la logistica collega spedizionieri, vettori e clienti in una rete cloud per condividere ordini di trasporto, stato delle spedizioni ed eventi (ritardi, consegne). Si integra con TM e S/4HANA.",
+          "Visibilità end-to-end: sapere dove sono ordini, scorte e spedizioni oltre le mura dell'azienda. Senza i dati di fornitori e vettori la visibilità si ferma al magazzino.",
+          "Resilienza: capacità di anticipare, assorbire e riprendersi da un evento. Strumenti: scenari what-if, scorte di sicurezza dove servono, fonti alternative, segnali precoci di rischio (control tower).",
+          "Attenzione al messaggio: la resilienza è un compromesso tra costo e protezione. Non promettere «zero interruzioni»: promettere tempi di reazione più brevi."
+        ],
+        "ae": "Proponi un esercizio di simulazione: bloccate insieme un fornitore o un porto e misurate in ore quanto serve per sapere cosa è impattato."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Qual è il ruolo di SAP Business Network per la logistica?",
+          "o": [
+            "Un sistema di pianificazione della produzione per gli stabilimenti del cliente",
+            "Un modulo di contabilità per registrare i costi di trasporto e dei fornitori",
+            "Una rete cloud dove spedizionieri, vettori e clienti condividono ordini e spedizioni",
+            "Un database interno per archiviare contratti con i vettori e relative tariffe"
+          ],
+          "a": 2,
+          "diff": 1,
+          "exp": "È una rete di collaborazione: i partner scambiano ordini di trasporto, stato ed eventi, e il dato torna in TM e S/4HANA. Pianificazione di produzione, contabilità e archivio contratti sono altre cose."
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi rafforzano la resilienza di una supply chain?",
+          "o": [
+            "Scenari what-if sull'impatto di un fornitore o di un porto bloccato",
+            "Fonti alternative per i componenti critici",
+            "Segnali precoci di rischio e avvisi da una control tower",
+            "Eliminare ogni scorta di sicurezza per ridurre i costi",
+            "Concentrare gli acquisti su un unico fornitore per ottenere il prezzo migliore"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "La resilienza richiede simulazione, alternative e segnali precoci. Eliminare ogni scorta o concentrare gli acquisti riduce i costi ma aumenta l'esposizione: è il compromesso da discutere con il COO."
+        },
+        {
+          "t": "mcq",
+          "q": "Come rispondi a un COO che scopre i blocchi dei porti dal cliente che lo chiama?",
+          "ctx": {
+            "who": "COO",
+            "say": "Quando un porto si blocca lo scopro dal cliente che mi chiama, non dai miei sistemi."
+          },
+          "o": [
+            "Chiedere ai vettori un report settimanale sullo stato dei carichi in transito",
+            "Aumentare la scorta di sicurezza dei prodotti principali nei magazzini",
+            "Visibilità basata su eventi lungo i vettori, con avvisi della control tower",
+            "Assegnare un responsabile che segua i carichi in transito con telefonate quotidiane"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "Il COO ha un problema di tempestività dell'informazione: eventi dai vettori in tempo quasi reale e avvisi proattivi lo risolvono. Report settimanali o telefonate sono lenti; le scorte costano ma non danno visibilità."
+        },
+        {
+          "t": "tf",
+          "q": "Una control tower ha valore anche se i dati dei vettori non arrivano al sistema.",
+          "a": false,
+          "diff": 2,
+          "exp": "Senza eventi dai partner la control tower vede solo il perimetro interno e perde il suo scopo. La qualità e la copertura dei dati dei partner è il primo punto da chiarire in discovery."
+        },
+        {
+          "t": "order",
+          "q": "Ordina il percorso di maturità della resilienza",
+          "items": [
+            "Mappare fornitori, flussi e nodi critici",
+            "Raccogliere eventi e dati dei partner",
+            "Definire soglie e allarmi",
+            "Simulare scenari e piani di risposta",
+            "Automatizzare le decisioni ripetibili con supervisione umana"
+          ],
+          "diff": 3,
+          "exp": "Si parte dalla mappa, poi dai dati, dagli allarmi e dalle simulazioni; l'automazione arriva dopo, con supervisione. Saltare i primi passi produce allarmi inutili o decisioni automatiche su dati poco affidabili."
+        }
+      ]
+    },
+    {
+      "id": "w08-l13",
+      "title": "Dal 4.0 all'iperammortamento",
+      "kind": "roleplay",
+      "lesson": {
+        "points": [
+          "Dal 1° gennaio 2026 lo strumento per gli investimenti 4.0 è {{w08.it_incentive_regime}}, che sostituisce i crediti d'imposta Industria 4.0 e Transizione 5.0: è una maggiorazione del costo ammortizzabile, non un credito d'imposta.",
+          "Finestra e procedura: {{w08.it_hyper_window}}.",
+          "Maggiorazioni: {{w08.it_hyper_rates}}.",
+          "Software: {{w08.it_hyper_cloud}}. Per gli ERP: {{w08.it_hyper_erp}}.",
+          "Per l'AE: niente consulenza fiscale e nessuna promessa di agevolazione sulle sottoscrizioni cloud. Il perimetro (macchine, automazione, software interconnessi, perizia asseverata) lo valida il cliente con commercialista e perito."
+        ],
+        "ae": "Usa l'incentivo per far anticipare la decisione, non come argomento di vendita: «Il vostro commercialista ha già mappato quali investimenti di fabbrica rientrano?»."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Un CFO chiede se può usare l'iperammortamento acquistando SAP in cloud. Cosa rispondi?",
+          "ctx": {
+            "who": "CFO",
+            "say": "Se compro SAP in cloud posso usare l'iperammortamento sul canone?"
+          },
+          "o": [
+            "Sì, i canoni cloud rientrano nel perimetro e la maggiorazione vale sui canoni annui",
+            "Il SaaS risulta escluso dal perimetro: lo verifichiamo con il vostro consulente fiscale",
+            "Dipende dall'importo: sopra 10 milioni di euro il cloud diventa agevolabile",
+            "Rientra se il contratto cloud ha durata superiore a cinque anni"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Le fonti consultate: {{w08.it_hyper_cloud}}. L'AE non dà pareri fiscali: indica la posizione nota e rimanda al consulente, evitando promesse che il cliente potrebbe poi contestare."
+        },
+        {
+          "t": "fill",
+          "q": "Dal 2026 gli investimenti 4.0 in Italia sono sostenuti da un ___.",
+          "o": [
+            "iperammortamento",
+            "credito d'imposta Transizione 5.0 del PNRR",
+            "superbonus edilizio"
+          ],
+          "a": 0,
+          "diff": 1,
+          "exp": "Strumento in vigore: {{w08.it_incentive_regime}}. Il credito Transizione 5.0 e i vecchi crediti 4.0 sono stati sostituiti; il superbonus riguarda l'edilizia."
+        },
+        {
+          "t": "tf",
+          "q": "L'iperammortamento 2026 è un credito d'imposta da compensare in F24, come la vecchia Transizione 5.0.",
+          "ctx": {
+            "who": "CFO",
+            "say": "Ho letto che dal 2026 c'è un credito da compensare nell'F24, come la vecchia Transizione 5.0."
+          },
+          "a": false,
+          "diff": 2,
+          "exp": "È una maggiorazione del costo ammortizzabile: agisce sulle quote di ammortamento e sui canoni di leasing, quindi giova a chi ha reddito imponibile. Non è un credito da compensare."
+        },
+        {
+          "t": "mcq",
+          "q": "Un plant manager vuole sostituire una linea di confezionamento e collegarla al MES. Cosa gli consigli sull'incentivo?",
+          "ctx": {
+            "who": "Plant manager",
+            "say": "Vorrei sostituire una linea di confezionamento e collegarla al MES: cosa faccio con l'incentivo?"
+          },
+          "o": [
+            "Compra subito: l'incentivo si può richiedere in qualsiasi momento dopo l'investimento",
+            "Aspetta il 2028: l'incentivo sarà più generoso per gli investimenti più tardivi",
+            "Chiedi a SAP di certificare l'agevolabilità del progetto nell'offerta commerciale",
+            "Verifica con commercialista e perito perimetro e procedura GSE prima di ordinare"
+          ],
+          "a": 3,
+          "diff": 3,
+          "exp": "Procedura e perimetro (comunicazioni al GSE, perizia asseverata, interconnessione dei beni) vanno chiariti prima di ordinare. SAP non certifica l'agevolabilità e non c'è alcun premio nell'aspettare: {{w08.it_hyper_window}}."
+        },
+        {
+          "t": "multi",
+          "q": "Quali elementi del regime 2026 sono corretti?",
+          "o": [
+            "La maggiorazione è a scaglioni di investimento, calcolati per ciascun anno",
+            "I software SaaS in cloud restano esclusi dal perimetro agevolabile",
+            "Serve una perizia tecnica asseverata sui beni acquistati",
+            "È cumulabile con il vecchio credito Transizione 5.0 sugli stessi beni",
+            "I servizi cloud sono agevolabili come costi di esercizio"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 3,
+          "exp": "Scaglioni annuali ({{w08.it_hyper_rates}}), esclusione del SaaS e perizia asseverata sono elementi del regime. Le fonti indicano che non è cumulabile con i vecchi crediti sugli stessi beni."
+        },
+        {
+          "t": "bucket",
+          "q": "Rientra nel perimetro dell'iperammortamento (secondo le fonti consultate)?",
+          "buckets": [
+            "Ammesso",
+            "Escluso"
+          ],
+          "items": [
+            [
+              "Macchina di confezionamento interconnessa al gestionale",
+              0
+            ],
+            [
+              "Software con licenza d'uso pluriennale, interconnesso",
+              0
+            ],
+            [
+              "Abbonamento SaaS in cloud",
+              1
+            ],
+            [
+              "Moduli amministrativo-contabili di un ERP",
+              1
+            ],
+            [
+              "Magazzino automatizzato interconnesso ai sistemi gestionali",
+              0
+            ]
+          ],
+          "diff": 3,
+          "exp": "Beni fisici e software interconnessi sono ammessi; SaaS e componenti amministrativo-contabili dell'ERP no, secondo le fonti. Il perimetro finale lo conferma il consulente: {{w08.it_hyper_erp}}."
+        }
+      ]
+    },
+    {
+      "id": "w08-l14",
+      "title": "ESPR, DPP e carbon footprint",
+      "kind": "lesson",
+      "lesson": {
+        "points": [
+          "ESPR (regolamento UE sulla progettazione ecocompatibile): {{w08.espr_basics}}. Il DPP è un insieme strutturato di dati di prodotto accessibile con un identificativo unico (es. QR); i requisiti arrivano con atti delegati per gruppo.",
+          "Il registro UE dei DPP, {{w08.dpp_registry}}. Avvio: {{w08.dpp_registry_live}}.",
+          "Atti per prodotto: {{w08.dpp_delegated}}.",
+          "Batterie: il passaporto digitale è {{w08.battery_passport}}.",
+          "Carbon footprint di prodotto (PCF): emissioni di gas serra lungo il ciclo di vita (spesso dalla culla al cancello), con standard riconosciuti. Servono dati di distinta base, energia e fornitori: è un tema di dati di supply chain."
+        ],
+        "ae": "Non vendere il DPP come obbligo imminente per ogni prodotto: i requisiti arrivano per gruppo. Chiedi quali categorie del cliente sono nel piano di lavoro e quali dati di distinta base e fornitori ha già."
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Che cosa contiene il registro UE dei Digital Product Passport?",
+          "o": [
+            "Il passaporto completo di ogni prodotto, con dati tecnici e di sostenibilità",
+            "L'identificativo unico del prodotto e il link al passaporto, ospitato dall'operatore",
+            "L'elenco dei prodotti venduti dalle aziende con più di 250 dipendenti",
+            "I risultati delle verifiche di conformità svolte dalle autorità di vigilanza"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Il registro è un indice: identificativo e link, mentre i dati restano presso l'operatore. Regolamento di esecuzione e dettagli: {{w08.dpp_registry}}."
+        },
+        {
+          "t": "tf",
+          "q": "Dal luglio 2026 ogni prodotto venduto nell'UE deve avere un Digital Product Passport.",
+          "a": false,
+          "diff": 1,
+          "exp": "L'avvio del registro non rende il passaporto obbligatorio per tutti i prodotti: gli obblighi arrivano con gli atti delegati per gruppo di prodotto. Stato: {{w08.dpp_delegated}}."
+        },
+        {
+          "t": "fill",
+          "q": "Il registro UE dei Digital Product Passport è operativo dal ___.",
+          "o": [
+            "{{w08.dpp_registry_live}}",
+            "18 luglio 2024",
+            "1° gennaio 2027"
+          ],
+          "a": 0,
+          "diff": 2,
+          "exp": "La Commissione ha avviato il registro il {{w08.dpp_registry_live}}, con un ambiente di test. Il 18 luglio 2024 è l'entrata in vigore dell'ESPR, non l'avvio del registro."
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente retail chiede dati di prodotto per il passaporto digitale. Come rispondi?",
+          "ctx": {
+            "who": "COO CPG",
+            "say": "Il nostro cliente retail ci chiede i dati di prodotto per il passaporto digitale: siamo in ritardo?"
+          },
+          "o": [
+            "Il passaporto è già obbligatorio per i prodotti di largo consumo: partiamo subito",
+            "Il registro UE gestisce i dati per conto del produttore: basta iscriversi",
+            "I requisiti arrivano per gruppo di prodotto: verifichiamo categorie e dati disponibili",
+            "Basta un QR code stampato sull'etichetta per essere in regola con il passaporto"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "Gli obblighi dipendono dagli atti delegati per gruppo di prodotto: si parte da quali categorie sono interessate e da quali dati (distinta base, materiali, fornitori) esistono già. Registro e QR da soli non bastano."
+        },
+        {
+          "t": "multi",
+          "q": "Quali dati servono tipicamente per calcolare il carbon footprint di un prodotto?",
+          "o": [
+            "Distinta base e quantità dei materiali",
+            "Consumi energetici di produzione",
+            "Dati o stime di emissione dei fornitori",
+            "Ore di formazione dei dipendenti",
+            "Numero di visite al sito web del prodotto"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 2,
+          "exp": "Il footprint si costruisce da materiali, energia e dati dei fornitori lungo la catena: per questo è un tema di supply chain. Formazione e traffico web non incidono sul calcolo."
+        }
+      ]
+    },
+    {
+      "id": "w08-l15",
+      "title": "Boss: il comitato operations",
+      "kind": "boss",
+      "lesson": {
+        "points": [
+          "Riepilogo: Plan con IBP, Source con acquisti e Business Network, Make con produzione, qualità, Digital Manufacturing e manutenzione, Deliver con EWM, TM e rete logistica. Parti sempre dal KPI che fa più male al COO.",
+          "Dati volatili da riverificare: fine manutenzione dei vecchi MES, stato dell'iperammortamento e delle comunicazioni GSE, atti delegati e scadenze dei passaporti digitali di prodotto.",
+          "Nessun benchmark non fontato, nessun parere fiscale, nessuna promessa di copertura normativa: lavora con i dati e i consulenti del cliente."
+        ]
+      },
+      "ex": [
+        {
+          "t": "mcq",
+          "q": "Come imposti la richiesta di ridurre le scorte senza peggiorare il servizio?",
+          "ctx": {
+            "who": "COO",
+            "say": "Voglio ridurre le scorte senza peggiorare il servizio ai clienti: dove comincio?"
+          },
+          "o": [
+            "Abbassare la scorta di sicurezza sui prodotti a bassa rotazione e monitorare l'OTIF",
+            "Ottimizzare le scorte per segmento in base a variabilità e livello di servizio atteso",
+            "Spostare la scorta dal magazzino centrale a quelli periferici per accorciare le consegne",
+            "Chiedere ai fornitori di tenere le scorte in conto deposito, senza cambiare il piano"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "Si dimensiona la scorta per segmento in base a variabilità della domanda e livello di servizio atteso (inventory optimization), misurando rotazione e OTIF. Tagli lineari o spostamenti spostano il problema."
+        },
+        {
+          "t": "order",
+          "q": "Ordina i passi di una discovery efficace con un COO",
+          "items": [
+            "Chiedi quale KPI (OTIF, scorte, OEE) fa più male oggi",
+            "Scomponi il problema lungo Plan, Source, Make e Deliver",
+            "Quantifica l'impatto in costi, servizio e capitale",
+            "Individua i dati disponibili e i responsabili",
+            "Concorda un pilota su un sito o una famiglia di prodotti"
+          ],
+          "diff": 2,
+          "exp": "Si parte dal dolore misurato, poi dalla scomposizione e dall'impatto; dati e responsabili chiudono il cerchio prima del pilota. Inverti l'ordine e il pilota non avrà un obiettivo."
+        },
+        {
+          "t": "match",
+          "q": "Abbina il problema del cliente alla soluzione più pertinente",
+          "pairs": [
+            [
+              "Piani diversi tra vendite e produzione",
+              "S&OP con IBP"
+            ],
+            [
+              "Lotti e scadenze gestiti a mano",
+              "EWM con FEFO e quarantena"
+            ],
+            [
+              "Ritardi nei trasporti ai punti vendita",
+              "TM con visibilità sulle spedizioni"
+            ],
+            [
+              "Carta in linea e dati di produzione tardivi",
+              "MES in cloud con Digital Manufacturing"
+            ],
+            [
+              "Fermi non pianificati senza storico",
+              "Notifiche e ordini digitali con Asset Management"
+            ]
+          ],
+          "diff": 2,
+          "exp": "Il portafoglio si vende per problemi, non per sigle. Ogni coppia riassume un pain point tipico e il pezzo del portafoglio che lo affronta."
+        },
+        {
+          "t": "mcq",
+          "q": "Come aiuti un cliente che deve calcolare il carbon footprint di prodotto con dati incompleti dei fornitori?",
+          "ctx": {
+            "who": "Head of Sustainability",
+            "say": "Mi servono le emissioni di prodotto per un cliente, ma i dati dei fornitori sono incompleti."
+          },
+          "o": [
+            "Rinviare il calcolo finché i fornitori non forniscono dati primari completi",
+            "Applicare lo stesso fattore medio di settore alle diverse famiglie di prodotti",
+            "Escludere dal calcolo i componenti acquistati e considerare la produzione interna",
+            "Partire da distinta base ed energia, stimando i dati mancanti e coinvolgendo i fornitori"
+          ],
+          "a": 3,
+          "diff": 3,
+          "exp": "Si parte dai dati disponibili (distinta base, energia), si stimano le lacune e si migliorano con i fornitori. Rinviare, usare un fattore medio unico o escludere gli acquisti falsa il risultato."
+        },
+        {
+          "t": "tf",
+          "q": "Il demand sensing sostituisce il forecast statistico di medio-lungo periodo.",
+          "a": false,
+          "diff": 2,
+          "exp": "Il sensing affina il breve termine con segnali recenti; il medio-lungo periodo resta al forecast statistico e al processo S&OP. Le due cose si combinano."
+        },
+        {
+          "t": "mcq",
+          "q": "Come impostare l'analisi di un OEE sotto le attese su una linea di confezionamento?",
+          "ctx": {
+            "who": "COO",
+            "say": "L'OEE della linea di confezionamento è sotto le attese e non so se è un problema di fermi, velocità o scarti."
+          },
+          "o": [
+            "Installare sensori sulle macchine e valutare i risultati dopo un anno di raccolta",
+            "Aumentare la velocità nominale della linea per compensare i fermi macchina",
+            "Scomporre l'OEE in disponibilità, prestazione e qualità e individuare la perdita maggiore",
+            "Sostituire la linea con una nuova, perché l'OEE basso dipende dall'età degli impianti"
+          ],
+          "a": 2,
+          "diff": 2,
+          "exp": "L'OEE si scompone in tre fattori: individuare quale perde di più indirizza l'intervento (manutenzione, set-up, qualità). Interventi generici partono da un'ipotesi non verificata."
+        },
+        {
+          "t": "multi",
+          "q": "Quali affermazioni sul Digital Product Passport e sul registro UE sono corrette a ottobre 2026?",
+          "o": [
+            "Il registro UE è operativo dal luglio 2026 ed è un indice, non un archivio dei dati",
+            "I requisiti di passaporto si definiscono con atti delegati per gruppo di prodotto",
+            "Per le batterie per veicoli elettrici la prima scadenza prevista è nel febbraio 2027",
+            "Il registro UE contiene i dati tecnici completi di tutti i passaporti",
+            "Gli atti delegati per tessili e alluminio sono già in vigore"
+          ],
+          "a": [
+            0,
+            1,
+            2
+          ],
+          "diff": 3,
+          "exp": "Registro operativo, atti delegati per gruppo e batterie come prima scadenza sono i punti fermi. Il registro non contiene i dati completi e gli atti per tessili e alluminio non risultano adottati. Dettagli: {{w08.dpp_delegated}}."
+        },
+        {
+          "t": "bucket",
+          "q": "Da riverificare ogni volta o concetto stabile?",
+          "buckets": [
+            "Da riverificare ogni volta",
+            "Concetto stabile"
+          ],
+          "items": [
+            [
+              "Fine manutenzione dei vecchi MES SAP ME e MII",
+              0
+            ],
+            [
+              "Formula dell'OEE",
+              1
+            ],
+            [
+              "Stato degli atti delegati sul passaporto di prodotto",
+              0
+            ],
+            [
+              "Differenza tra FEFO e FIFO",
+              1
+            ],
+            [
+              "Scaglioni e procedura dell'iperammortamento",
+              0
+            ],
+            [
+              "Differenza tra forecast statistico e demand sensing",
+              1
+            ]
+          ],
+          "diff": 2,
+          "exp": "Date, norme e procedure cambiano e vanno riverificate prima di ogni incontro; definizioni e metodi restano. Distinguere i due ti evita di promettere dati vecchi."
+        },
+        {
+          "t": "mcq",
+          "q": "Un cliente ha un OTIF basso con la grande distribuzione. Quale dato chiedi per primo?",
+          "o": [
+            "L'elenco dei fornitori e dei relativi contratti quadro",
+            "La scomposizione dei casi di mancata consegna per causa e per sito",
+            "Il numero di utenti che accederanno al sistema di pianificazione",
+            "Il budget IT disponibile per i progetti dei prossimi tre anni"
+          ],
+          "a": 1,
+          "diff": 2,
+          "exp": "La scomposizione per causa e sito trasforma un KPI generico in un problema localizzato. Contratti, utenti e budget servono dopo, quando si conosce l'area su cui intervenire."
+        }
+      ]
+    }
+  ]
+}
