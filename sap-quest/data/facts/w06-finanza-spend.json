@@ -1,0 +1,152 @@
+{
+  "w06.csrd_omnibus_directive": {
+    "label": "Direttiva Omnibus I (modifica CSRD e CSDDD)",
+    "value": "la Direttiva (UE) 2026/470 (Omnibus I), pubblicata nella Gazzetta Ufficiale UE il 26 febbraio 2026 e in vigore dal 18 marzo 2026; gli Stati devono recepire le modifiche alla CSRD entro il 19 marzo 2027",
+    "asOf": "2026-03-18",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.lw.com/en/insights/eu-sustainability-omnibus-published-in-the-official-journal",
+    "confidence": "secondary",
+    "note": "Studi legali e tracker del Parlamento UE (EUR-Lex non apribile dal sandbox). Una fonte indica solo l'entrata in vigore; la data di pubblicazione è coerente tra più fonti."
+  },
+  "w06.csrd_scope": {
+    "label": "Perimetro CSRD per le imprese UE dopo Omnibus I",
+    "value": "imprese UE con più di 1.000 dipendenti e più di 450 milioni di euro di fatturato netto (entrambe le soglie)",
+    "asOf": "2026-03-18",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.williamfry.com/wp-content/uploads/2026/03/Omnibus-1-Directive-comes-into-force-in-March-2026-key-amendments-to-CSRD-and-CS3D.pdf",
+    "confidence": "secondary",
+    "note": "Concordano William Fry, Norton Rose Fulbright, DLA Piper e fonti italiane. Una fonte scrive «almeno 450 milioni»: non costruire domande sul valore esatto al limite. Per le imprese extra-UE valgono soglie diverse (non trattate)."
+  },
+  "w06.csrd_first_year": {
+    "label": "Primo esercizio CSRD nel nuovo perimetro",
+    "value": "esercizi con inizio dal 1° gennaio 2027 (prima relazione nel 2028)",
+    "asOf": "2026-03-18",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.williamfry.com/wp-content/uploads/2026/03/Omnibus-1-Directive-comes-into-force-in-March-2026-key-amendments-to-CSRD-and-CS3D.pdf",
+    "confidence": "secondary",
+    "note": "Valido per le imprese che entrano per la prima volta. Per le imprese già soggette dall'esercizio 2024 («wave 1») le regole transitorie dipendono in parte dal recepimento nazionale: non usato nelle domande."
+  },
+  "w06.csrd_stop_clock": {
+    "label": "Direttiva «Stop-the-clock» sulla CSRD",
+    "value": "la Direttiva (UE) 2025/794 «Stop-the-clock» ha rinviato di due anni la rendicontazione per le imprese di seconda e terza ondata, senza toccare chi già rendicontava dall'esercizio 2024",
+    "asOf": "2025-04-17",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://www.lcalex.it/wp-content/uploads/2025/04/Stop-the-Clock-entra-in-vigore-la-Direttiva-UE-2025-794.pdf",
+    "confidence": "secondary",
+    "note": "La data asOf è quella di entrata in vigore indicata dalla stampa; non verificata sul testo ufficiale. Dopo Omnibus I la terza ondata (PMI quotate) è comunque uscita dal perimetro."
+  },
+  "w06.csrd_italy_status": {
+    "label": "Italia: stato del recepimento CSRD e Omnibus",
+    "value": "in Italia la CSRD è recepita dal D.Lgs. 125/2024 e lo Stop-the-clock dalla Legge 118/2025; l'adeguamento del D.Lgs. 125/2024 a Omnibus I è da completare entro il 19 marzo 2027",
+    "asOf": "2026-08-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.fisco7.it/2026/06/rendicontazione-di-sostenibilita-assirevi-chiarisce-il-quadro-tra-stop-the-clock-e-nuove-regole-di-attestazione/",
+    "confidence": "low",
+    "note": "Non ho trovato un atto italiano di recepimento di Omnibus I: l'affermazione che sia ancora da completare è inferita dall'assenza di notizie e da fonti dell'estate 2026. Riverificare sulla Gazzetta Ufficiale prima di usare."
+  },
+  "w06.vida_b2b_date": {
+    "label": "ViDA: data dell'e-fattura strutturata B2B intra-UE",
+    "value": "1° luglio 2030",
+    "asOf": "2025-03-25",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.pwc.com/mt/en/publications/vat/digital-reporting-and-e-invoicing-in-the-eu.html",
+    "confidence": "secondary",
+    "note": "Data confermata da più sintesi (PwC, tracker, fornitori di compliance); testo ufficiale (Direttiva UE 2025/516) non aperto. La Commissione può proporre rinvii dopo la valutazione intermedia."
+  },
+  "w06.vida_legacy_date": {
+    "label": "ViDA: allineamento dei sistemi nazionali di e-fattura e reporting preesistenti",
+    "value": "1° gennaio 2035",
+    "asOf": "2025-03-25",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.pwc.com/mt/en/publications/vat/digital-reporting-and-e-invoicing-in-the-eu.html",
+    "confidence": "secondary",
+    "note": "Una fonte riporta una formulazione poco chiara sui requisiti di ammissibilità del periodo transitorio. Per l'Italia (SDI) più fonti confermano l'allineamento entro il 2035."
+  },
+  "w06.vida_reference": {
+    "label": "ViDA: atto di riferimento",
+    "value": "la Direttiva (UE) 2025/516 (ViDA), adottata dal Consiglio l'11 marzo 2025 e pubblicata nella Gazzetta Ufficiale UE il 25 marzo 2025",
+    "asOf": "2025-03-25",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://digitalpolicyalert.org/change/4990",
+    "confidence": "secondary",
+    "note": "Numero della direttiva e date confermati da più sintesi; EUR-Lex non apribile dal sandbox."
+  },
+  "w06.sdi_derogation": {
+    "label": "Deroga UE per l'obbligo di e-fattura italiano",
+    "value": "con la Decisione di esecuzione (UE) 2024/3150 del 10 dicembre 2024 l'Italia può mantenere l'obbligo di e-fattura via SDI in deroga alla Direttiva IVA fino al 31 dicembre 2027 (o prima, se parte un sistema UE); il quadro ViDA ha in larga parte assorbito la questione",
+    "asOf": "2024-12-10",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.ipsoa.it/documents/quotidiano/2024/12/20/obbligo-fatturazione-elettronica-italia-31-dicembre-2027",
+    "confidence": "secondary",
+    "note": "Più fonti italiane concordano sulla decisione e sulla data; l'interpretazione («assorbita da ViDA») è di commentatori e va letta come tale. Non assumere che il 31 dicembre 2027 sia una scadenza dell'obbligo."
+  },
+  "w06.nso_peppol": {
+    "label": "NSO e Peppol in Italia",
+    "value": "l'NSO (Nodo di Smistamento degli Ordini) è il canale per gli ordini elettronici degli enti del Servizio Sanitario Nazionale, con documenti in formato Peppol BIS 3 (UBL); l'AgID è la Peppol Authority italiana",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://www.agid.gov.it/sites/default/files/repository_files/peppol_stato_avanzamento_settembre_2022_v02.pdf",
+    "confidence": "secondary",
+    "note": "Fonti AgID e di operatori del 2019-2023; le date di avvio dell'obbligo NSO sono discordanti e non sono usate. Non verificate modifiche 2025-2026."
+  },
+  "w06.ariba_spend_analysis": {
+    "label": "SAP Ariba Spend Analysis and Insights",
+    "value": "SAP Ariba Spend Analysis and Insights, annunciata come disponibile a settembre 2026, unifica i dati di spesa di Ariba, Fieldglass, Concur e Cloud ERP (più sistemi non-SAP) e li classifica secondo UNSPSC o una tassonomia del cliente",
+    "asOf": "2026-09-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://news.sap.com/2026/09/sap-ariba-spend-analysis-and-insights-now-available/",
+    "confidence": "primary",
+    "note": "Del comunicato SAP è noto il mese (settembre 2026); il giorno esatto non è stato verificato. Non citare le percentuali di accuratezza dichiarate da SAP."
+  },
+  "w06.autonomous_finance": {
+    "label": "SAP Autonomous Finance (Sapphire 2026)",
+    "value": "Autonomous Finance è la suite di assistenti Joule per la finance presentata a Sapphire 2026 (chiusura, planning, billing, governance, tax e compliance, crediti clienti, cash e treasury), con rilascio scaglionato da Q2 a Q4 2026",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.sap.com/topics/events/sapphire/innovation-news-guide-2026",
+    "confidence": "secondary",
+    "note": "Guida SAP letta tramite sintesi e commenti (SAPinsider, Constellation). Il numero di assistenti varia tra le fonti (7 o 11) e lo stato di rilascio per singolo assistente non è verificato: non fare domande su date o conteggi."
+  },
+  "w06.autonomous_spend": {
+    "label": "Autonomous Spend Management (Sapphire 2026)",
+    "value": "Autonomous Spend Management è il pilastro spesa e forza lavoro dell'Autonomous Enterprise presentato a Sapphire 2026, con agenti Joule in Ariba (Intake Management, Contracts) e Fieldglass (Services Procurement)",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2026/05/enabling-autonomous-spend-management-ai-connected-processes/",
+    "confidence": "secondary",
+    "note": "La disponibilità generale a giugno 2026 è riportata da SAPinsider come pianificazione: non verificata. Non fare domande su date di rilascio."
+  },
+  "w06.taulia_ai": {
+    "label": "SAP Taulia: strumenti AI per il working capital (Sapphire 2026)",
+    "value": "a Sapphire 2026 SAP Taulia ha presentato un Working Capital Agent, Intelligent Terms Negotiations ed Extended Flow with Payables",
+    "asOf": "2026-05-14",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://fintech.global/2026/05/14/sap-taulia-launches-ai-working-capital-tools/",
+    "confidence": "secondary",
+    "note": "Le date di disponibilità (Q3 e Q4 2026) sono pianificazioni riportate dalla stampa e non sono state verificate: non usate nelle domande."
+  },
+  "w06.enterprise_planning": {
+    "label": "SAP Enterprise Planning con agenti Joule",
+    "value": "SAP Enterprise Planning integra agenti Joule nelle attività di pianificazione, costruiti su data product di Business Data Cloud e su SAP Analytics Cloud",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.sap.com/topics/events/sapphire/innovation-news-guide-2026",
+    "confidence": "secondary",
+    "note": "Riportato da una sintesi della guida SAP (disponibilità generale pianificata Q3 2026, non verificata). Nessuna domanda su date."
+  }
+}

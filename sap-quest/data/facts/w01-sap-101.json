@@ -1,0 +1,162 @@
+{
+  "w01.employees": {
+    "label": "Dipendenti SAP a fine 2025",
+    "value": "110.650 FTE a fine 2025 (111.397 persone in organico; 109.121 FTE a fine 2024)",
+    "asOf": "2025-12-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-03-31",
+    "source": "https://www.sap.com/integrated-reports/2025/en/datahub/social-data.html",
+    "confidence": "primary",
+    "note": "Dati dal data hub sociale del Report Integrato 2025 (FTE = full-time equivalent; il totale persone 111.397 = tempo pieno + part-time) e riportati anche da tracker terzi. Stime di fornitori di dati sul lavoro (es. circa 118.000) NON sono dati SAP: non usarle. Prossimo aggiornamento con il report 2026 (inizio 2027)."
+  },
+  "w01.customer_sme_share": {
+    "label": "Quota di clienti SAP che sono PMI",
+    "value": "circa l'80% dei clienti SAP è costituito da PMI",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.sap.com/korea/documents/2017/04/4666ecdd-b67c-0010-82c7-eda71af511fa.html",
+    "confidence": "secondary",
+    "note": "Scheda aziendale SAP «The World's Largest Provider of Enterprise Application Software» (URL con data 2017 ma contenuto aggiornato). Pagina non apribile dal sandbox: dato letto in una sintesi di ricerca e incrociato con Procurement Magazine ottobre 2024 (https://publication.procurementmag.com/procurement-magazine-october-2024/0629905001728298792/p73) e con il profilo SAP su centralbanking.com (https://www.centralbanking.com/central-banks/7954084/sap). Formulare sempre con «circa»."
+  },
+  "w01.top100_customers": {
+    "label": "Grandi aziende clienti SAP",
+    "value": "99 delle 100 maggiori aziende al mondo sono clienti SAP",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.sap.com/korea/documents/2017/04/4666ecdd-b67c-0010-82c7-eda71af511fa.html",
+    "confidence": "secondary",
+    "note": "Stessa scheda aziendale SAP della quota PMI; la stessa cifra compare in una presentazione SAP con dati a ottobre 2023 (https://event.foundryco.com/wp-content/uploads/sites/10/2024/11/SAP-TBD.pdf) e nel profilo su centralbanking.com. Non significa quota di mercato, e non dice quanti processi girano su SAP. Il totale dei clienti NON è usato: le fonti divergono (400.000, 425.000, 440.000) e nessuna è un dato SAP recente."
+  },
+  "w01.sap_italia_ceo": {
+    "label": "Vertice di SAP Italia",
+    "value": "Carla Masperi (presidente e amministratrice delegata)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/italy/2022/07/carla-masperi-e-il-nuovo-amministratore-delegato-di-sap-italia/",
+    "confidence": "secondary",
+    "note": "Nomina di luglio 2022 (comunicato SAP Italia). Ruolo ancora indicato nel 2026 dalla pagina SAP NOW AI Tour Milano (https://www.sap.com/italy/events/sapnowmilan.html) e da un'intervista QuiFinanza di giugno 2026 (https://quifinanza.it/innovazione/video/il-potere-del-dialogo-ospita-carla-masperi/1004336/). Nessun annuncio di cambio trovato. Persona in un ruolo: riverificare."
+  },
+  "w01.sap_now_milan": {
+    "label": "SAP NOW AI Tour Milano 2026",
+    "value": "14 ottobre 2026 al Superstudio Maxi di Milano",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-15",
+    "source": "https://www.sap.com/italy/events/sapnowmilan.html",
+    "confidence": "primary",
+    "note": "Pagina eventi SAP Italia. Alcune pagine di partner indicano «Superstudio Più» come sede: fa fede la pagina SAP. Evento nazionale con sessioni in italiano e inglese; dopo il 14 ottobre diventa un dato storico."
+  },
+  "w01.supervisory_board": {
+    "label": "Presidenza del Supervisory Board SAP",
+    "value": "presidente Pekka Ala-Pietilä (mandato esteso fino al 2027); René Obermann, eletto nel board il 5 maggio 2026, è designato a succedergli nel 2027",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.sap.com/docs/download/investors/2026/sap-2026-chairman-letter-en.pdf",
+    "confidence": "secondary",
+    "note": "Lettera del presidente del 27 marzo 2026 (intenzione di far assumere la presidenza a Obermann nel 2027) più stampa tedesca sull'elezione al 99% (https://www.boerse-express.com/news/articles/sap-aktie-obermann-mit-99-gewaehlt-903230, https://www.channelpartner.de/article/4167644/rene-obermann-in-sap-aufsichtsrat-gewahlt.html). La pagina governance SAP indica la scadenza del mandato Ala-Pietilä al 2026 mentre la lettera parla di proroga al 2027: usare la formula prudente. Persone in un ruolo: riverificare."
+  },
+  "w01.cloud_erp_suite_scope": {
+    "label": "Cosa raggruppa la Cloud ERP Suite nel reporting SAP",
+    "value": "S/4HANA Cloud (Cloud ERP), BTP e le soluzioni cloud core per persone e payroll, spend management, commerce, customer data, process transformation e working capital; il resto di SaaS e PaaS rientra nella Cloud Extension Suite",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.sap.com/korea/documents/2017/04/4666ecdd-b67c-0010-82c7-eda71af511fa.html",
+    "confidence": "secondary",
+    "note": "Elenco dalla scheda aziendale SAP (letta in sintesi). La tabella Q1 2026 del 6-K mostra la riga «Thereof Extension Suite» accanto alla Cloud ERP Suite (https://www.sec.gov/Archives/edgar/data/0001000184/000110465926049650/tm2612672d1_ex99-1.htm). La nota a piè di pagina formale con la definizione NON è stata letta: verificarla prima di citare l'elenco a un CFO."
+  },
+  "w01.fy25_results": {
+    "label": "Dati FY2025 utili come esempio di effetto cambio",
+    "value": "cloud revenue FY2025 €21,02 mld; current cloud backlog a fine 2025 €21,05 mld (+16%; +25% a cambi costanti)",
+    "asOf": "2025-12-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.asug.com/insights/q4-and-fy-2025-sap-delivers-record-cloud-growth-as-business-ai-fuels-momentum",
+    "confidence": "secondary",
+    "note": "Risultati FY2025 (pubblicati a fine gennaio 2026) riportati da ASUG e da Constellation Research (https://www.constellationr.com/insights/news/saps-q4-cloud-backlog-spurs-concerns). La cloud revenue 2025 di €21,02 mld proviene da sintesi dell'outlook 2026 (+23-25% a cambi costanti porta a €25,8-26,2 mld, coerente). PDF primario non apribile."
+  },
+  "w01.acq.walkme": {
+    "label": "Acquisizione WalkMe (digital adoption platform)",
+    "value": "completata il 12 settembre 2024 (equity value di circa 1,5 mld di dollari)",
+    "asOf": "2024-09-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-09-01",
+    "source": "https://news.sap.com/2024/09/sap-completes-walkme-acquisition/",
+    "confidence": "primary",
+    "note": "Comunicato SAP; stessa data nel comunicato diffuso su Nasdaq (https://www.nasdaq.com/press-release/sap-completes-acquisition-walkme-2024-09-12). WalkMe guida gli utenti dentro le applicazioni esistenti ed è legata al tema Joule e adozione."
+  },
+  "w01.autonomous_enterprise": {
+    "label": "Visione presentata a Sapphire 2026",
+    "value": "«Autonomous Enterprise», in cui persone e agenti AI eseguono insieme i processi critici",
+    "asOf": "2026-05-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-05-01",
+    "source": "https://www.cimdata.com/en/industry-summary-articles/item/30057-sap-unveils-the-autonomous-enterprise",
+    "confidence": "secondary",
+    "note": "Sintesi del comunicato SAP «SAP Unveils the Autonomous Enterprise» (maggio 2026), ripresa da CIMdata e da stampa di settore. Gli annunci di prodotto (Joule Work, agenti, Knowledge Graph) hanno stati di disponibilità da riverificare: non promettere date al cliente."
+  },
+  "w01.eu_ai_cloud": {
+    "label": "SAP EU AI Cloud (sovranità del dato)",
+    "value": "EU AI Cloud (annunciata il 27 novembre 2025): dati nell'UE e scelta tra data center SAP, infrastruttura europea fidata o gestione on-site presso il cliente",
+    "asOf": "2025-11-27",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://news.sap.com/2025/11/sap-eu-ai-cloud/",
+    "confidence": "primary",
+    "note": "Comunicato SAP, ripreso da DBTA, TelecomTV e IT Daily (quest'ultimo descrive quattro vie, SAP tre: usare la formula SAP). Disponibilità e certificazioni per Paese (es. Francia con Bleu, SecNumCloud) evolvono: da riverificare caso per caso."
+  },
+  "w01.net_zero": {
+    "label": "Obiettivo climatico di SAP",
+    "value": "net zero lungo la catena del valore entro il 2030 (almeno -90% di emissioni lorde, base 2023, standard SBTi Net-Zero)",
+    "asOf": "2025-12-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.sap.com/integrated-reports/2025/en/csrd/environmental-performance.html",
+    "confidence": "primary",
+    "note": "Report Integrato 2025. Il report 2024 parlava di «intera catena del valore», quello 2025 di «catena del valore rilevante»: l'obiettivo è lo stesso ma la formulazione cambia, quindi non citare il perimetro con più dettaglio. Storia: ambizione net zero 2030 annunciata nel 2022 (prima era 2050). Progressi 2025 non verificati."
+  },
+  "w01.partner_share": {
+    "label": "Peso dei partner nelle vendite e nei progetti SAP",
+    "value": "secondo il Chief Partner Officer di SAP, circa l'80% dei nuovi clienti annui arriva dai partner e circa il 90% dei progetti di implementazione è eseguito da partner",
+    "asOf": "2025-08-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://asug.com/insights/sap-chief-partner-officer-transformation-will-be-partner-centric-partner-driven",
+    "confidence": "low",
+    "note": "Stima di un dirigente SAP in un'intervista ASUG (data esatta non verificata); cifre analoghe riportate da Volpi Capital ad agosto 2025 (https://www.volpicapital.com/?p=713). Non è un dato di bilancio e le misure non sono confrontabili con la quota di order entry indiretto (circa 30% a Q1 2026 secondo sintesi di terzi). Citare sempre come stima."
+  },
+  "w01.indirect_q2": {
+    "label": "Canale indiretto vs diretto nel Q2 2026",
+    "value": "la cloud revenue del canale indiretto è cresciuta più di quella del canale diretto",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://www.sec.gov/Archives/edgar/data/0001000184/000110465926087251/tm2621275d1_ex99-2.htm",
+    "confidence": "secondary",
+    "note": "Frase dell'interim report del primo semestre 2026 (6-K del 23 luglio 2026) letta in sintesi di ricerca; nessuna percentuale pubblicata. Scade con il Q3."
+  },
+  "w01.partneredge": {
+    "label": "Programma partner globale SAP",
+    "value": "SAP PartnerEdge (programma partner globale, ridisegnato nel 2025 con focus sul cloud)",
+    "asOf": "2025-01-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/2025/01/sap-partneredge-cloud-driven-business-in-ai-era/",
+    "confidence": "secondary",
+    "note": "Annuncio SAP di gennaio 2025 letto in snippet e ripreso da SAPinsider e DBTA; la versione italiana lega la revisione a RISE e GROW. Il giorno esatto dell'annuncio non è verificato. Dettagli di tier e incentivi sono interni/riservati: non trattarli."
+  },
+  "w01.non_ifrs_definition": {
+    "label": "Definizione corrente di non-IFRS operating profit SAP",
+    "value": "dalla ridefinizione annunciata a gennaio 2024 include i costi di share-based compensation; restano esclusi gli effetti diretti di acquisizioni e ristrutturazioni",
+    "asOf": "2024-01-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.sap.com/investors/en/financial-news/ad-hoc-news/2024/01/311d894d-b3e3-405a-99e3-8169a0345ca4.html",
+    "confidence": "secondary",
+    "note": "Comunicato SAP di fine gennaio 2024 (ambizione 2025 con circa 2 mld di share-based compensation ora inclusi) letto in snippet, coerente con il 20-F FY2025 (sezione sulle misure non-IFRS non aperta). L'elenco completo delle rettifiche non è stato verificato. Dal 2025 anche il free cash flow ha una definizione rivista (non usata nelle domande)."
+  }
+}

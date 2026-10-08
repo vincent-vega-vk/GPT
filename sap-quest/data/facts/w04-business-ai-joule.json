@@ -1,0 +1,232 @@
+{
+  "w04.connect26": {
+    "label": "SAP Connect 2026",
+    "value": "SAP Connect 2026: 5–7 ottobre 2026 a Las Vegas (con partecipazione virtuale); gli annunci su Joule Work, SAP Pay e nuovi Joule Assistants sono del 6 ottobre",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/central-asia-caucasus/events/connect.html",
+    "confidence": "primary",
+    "note": "Date dell'evento dalla pagina SAP; la data degli annunci (6 ottobre) viene dalla stampa (SiliconANGLE, CIO, Techzine)."
+  },
+  "w04.joule_work_status": {
+    "label": "Stato di Joule Work (ottobre 2026)",
+    "value": "a SAP Connect (ottobre 2026) SAP ha avviato il rollout di Joule Work verso i clienti; la guida Innovation News indica l'inizio della disponibilità generale di Joule Work, Joule Studio e degli agenti della Autonomous Suite a ottobre 2026, come prodotti gestiti da SAP attivabili da SAP for Me, con rilascio a tappe",
+    "asOf": "2026-10-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-30",
+    "source": "https://www.sap.com/topics/events/connect/innovation-news-guide-2026",
+    "confidence": "secondary",
+    "note": "La guida SAP è stata letta solo tramite sintesi di ricerca, incrociata con CIO (7 ottobre) e SiliconANGLE (6 ottobre). La GA è a tappe e non per ogni componente/Paese. SUPERA il fatto condiviso sap.sapphire26.joule_work (Early Adopter Care a maggio 2026). Riverificare dopo TechEd (27-29 ottobre)."
+  },
+  "w04.autonomous_suite_scale": {
+    "label": "Dimensioni della SAP Autonomous Suite (Sapphire 2026)",
+    "value": "la SAP Autonomous Suite, presentata a Sapphire 2026, comprende oltre 50 Joule Assistants che orchestrano oltre 200 agenti specializzati su finance, supply chain, procurement, HR e customer experience",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://sapinsider.org/blogs/sap-sapphire-2026-autonomous-enterprise-ai-agents/",
+    "confidence": "secondary",
+    "note": "Cifre riportate da più testate; un conteggio attribuito a un manager SAP indica 51 assistenti e 224 agenti. Il catalogo cresce: usare sempre «oltre»."
+  },
+  "w04.ga_roadmap": {
+    "label": "Roadmap di disponibilità annunciata a SAP Connect 2026",
+    "value": "a SAP Connect 2026 SAP ha indicato una disponibilità a tappe: da ottobre 2026 per Joule Work, Joule Studio e gli agenti della Autonomous Suite; nel quarto trimestre 2026 per agenti supply chain, International Trade e Governance Assistant; nel primo trimestre 2027 per assistenti Customer Experience e Spend Analytics Assistant; alcuni assistenti finance solo in Early Adopter Care",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.sap.com/topics/events/connect/innovation-news-guide-2026",
+    "confidence": "secondary",
+    "note": "Guida SAP letta solo tramite sintesi di ricerca (SAPinsider, Techzine). Sono date pianificate, non impegni: verificare per prodotto su SAP for Me e innovation news guide."
+  },
+  "w04.sc_agents_ga": {
+    "label": "Finestra GA degli agenti supply chain",
+    "value": "quarto trimestre 2026",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.sap.com/topics/events/connect/innovation-news-guide-2026",
+    "confidence": "secondary",
+    "note": "Data pianificata dalla guida Innovation News di SAP Connect 2026, letta via sintesi di ricerca."
+  },
+  "w04.cx_assistants_ga": {
+    "label": "Finestra GA degli assistenti Customer Experience",
+    "value": "primo trimestre 2027",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.sap.com/topics/events/connect/innovation-news-guide-2026",
+    "confidence": "secondary",
+    "note": "Data pianificata dalla guida Innovation News di SAP Connect 2026, letta via sintesi di ricerca (SAPinsider)."
+  },
+  "w04.procurement_plan": {
+    "label": "Agenti procurement (Ariba, Fieldglass) e Moody's",
+    "value": "agenti per SAP Ariba e SAP Fieldglass con disponibilità generale pianificata a giugno 2026 secondo la guida di Sapphire 2026; i dati di rischio fornitori Moody's in SAP Ariba Supplier Lifecycle and Performance sono previsti nel quarto trimestre 2026",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://sapinsider.org/blogs/sap-delivers-joule-agents-across-ariba-and-fieldglass-in-june-2026/",
+    "confidence": "secondary",
+    "note": "Stato effettivo del rilascio di giugno non verificato in modo indipendente."
+  },
+  "w04.hr_plan": {
+    "label": "Assistenti Joule per HR (SuccessFactors)",
+    "value": "gli assistenti Joule per HR (core HR, payroll, tempi, recruiting, onboarding, learning, performance e altri) hanno disponibilità generale pianificata a giugno 2026 secondo la guida di Sapphire 2026",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.constellationr.com/insights/news/sap-sapphire-2026-sap-makes-its-case-it-should-your-autonomous-enterprise-platform",
+    "confidence": "secondary",
+    "note": "Fonte analista (Constellation Research); stato effettivo del rilascio e copertura per Paese non verificati."
+  },
+  "w04.knowledge_graph": {
+    "label": "SAP Knowledge Graph",
+    "value": "lo SAP Knowledge Graph è il livello semantico che fornisce a Joule il contesto di business (oggetti e relazioni): SAP dichiara oltre 7 milioni di campi dati mappati e lo presenta anche come ciò che delimita i dati raggiungibili dagli agenti",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.unite.ai/?p=480096",
+    "confidence": "secondary",
+    "note": "Cifra dichiarata da SAP a SAP Connect e riportata dalla stampa (Unite.ai, SiliconANGLE); il ruolo di «semantic layer» è confermato anche da e3mag. Nessuna verifica indipendente."
+  },
+  "w04.joule_studio": {
+    "label": "Joule Studio (Sapphire 2026)",
+    "value": "Joule Studio è la versione gestita (managed) dell'ambiente per costruire, distribuire ed eseguire agenti e skill Joule su processi SAP e non-SAP, anche con Python o TypeScript e strumenti come Claude Code o Cursor; l'accesso design-time è gratuito per clienti e partner fino a fine 2026, con limiti di fair use",
+    "asOf": "2026-05-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2026/05/new-joule-studio-enterprise-scale-agentic-development/",
+    "confidence": "primary",
+    "note": "Annuncio SAP letto tramite sintesi di ricerca. La GA è indicata da ottobre 2026 (guida Connect). Una «Joule Studio 2.0» di settembre 2026 è citata solo da un blog di partner: non confermata."
+  },
+  "w04.a2a": {
+    "label": "Interoperabilità agent-to-agent di Joule",
+    "value": "SAP sta rendendo bidirezionale l'interoperabilità agent-to-agent di Joule, così che agenti di terze parti possano richiamare i Joule Agents; la disponibilità generale è pianificata nel quarto trimestre 2026",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.sap.com/topics/events/sapphire/innovation-news-guide-2026",
+    "confidence": "secondary",
+    "note": "Data pianificata dalla guida Innovation News di Sapphire 2026 (via sintesi di ricerca); analisi più vecchie la danno come non ancora GA."
+  },
+  "w04.agent_hub": {
+    "label": "SAP AI Agent Hub",
+    "value": "lo SAP AI Agent Hub è un hub neutrale (vendor-agnostic) per governare agenti SAP e di terze parti; il livello di governance era previsto in disponibilità generale nel terzo trimestre 2026 e incluso nella SAP Business AI Platform senza costi aggiuntivi",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://thenewstack.io/sap-ai-agent-hub/",
+    "confidence": "secondary",
+    "note": "Il terzo trimestre 2026 è concluso: stato effettivo di GA non verificato."
+  },
+  "w04.joule_base": {
+    "label": "Joule Base: cosa è incluso",
+    "value": "Joule Base è incluso senza costi aggiuntivi nelle sottoscrizioni cloud SAP e copre navigazione, risposte dai contenuti SAP Help e semplici operazioni transazionali e analitiche; le capacità avanzate stanno nei pacchetti Joule Premium, misurati in AI Units",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/products/artificial-intelligence/joule-base.html",
+    "confidence": "primary",
+    "note": "Pagina SAP letta tramite sintesi di ricerca. La pagina richiede una sottoscrizione cloud integrata con Joule e un contratto (durata, rinnovo) con prezzo mensile zero. Dopo Sapphire 2026 il perimetro Base/Premium potrebbe essere stato ridisegnato: verificare."
+  },
+  "w04.ai_units": {
+    "label": "Modello AI Units",
+    "value": "le AI Units sono crediti a consumo condivisi tra le soluzioni SAP e non legati a un singolo prodotto; si acquistano su base annuale e scadono dopo 12 mesi se non usate; il saldo si monitora in SAP for Me; alcuni pacchetti Premium sono misurati per utente al mese, altre funzioni per volume o per azione dell'agente",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/products/artificial-intelligence/pricing.html",
+    "confidence": "primary",
+    "note": "Meccanica dalla pagina prezzi SAP (letta via sintesi). SAP non pubblica una tariffa unitaria in euro: le cifre circolanti (es. circa 7 euro per unità) vengono da advisor. Le tariffe per azione degli agenti hanno fonti discordanti e sono omesse."
+  },
+  "w04.ai_units_expiry": {
+    "label": "Scadenza delle AI Units non usate",
+    "value": "12 mesi",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/products/artificial-intelligence/pricing.html",
+    "confidence": "primary",
+    "note": "Condizione riportata dalla pagina prezzi SAP e da più advisor; verificare le condizioni del proprio contratto."
+  },
+  "w04.ai_pricing_shift": {
+    "label": "Direzione del pricing AI dopo Sapphire 2026",
+    "value": "a Sapphire 2026 SAP ha annunciato che l'AI generativa è disponibile senza costo aggiuntivo, spostando la monetizzazione sui compiti eseguiti dagli agenti; design-time di Joule Studio, runtime degli agenti e interoperabilità agent-to-agent sono gratuiti fino a fine 2026 e il prezzo dal 2027 non è stato comunicato",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.gartner.com/en/documents/7843381",
+    "confidence": "secondary",
+    "note": "Sintesi di Gartner (First Take) e SAPinsider. Le voci su un passaggio al pricing a consumo come default ai rinnovi da luglio 2026 vengono da advisor e non sono confermate da SAP."
+  },
+  "w04.anthropic": {
+    "label": "SAP e Anthropic (Sapphire 2026)",
+    "value": "a Sapphire 2026 SAP e Anthropic hanno annunciato l'intenzione di integrare le capacità agentiche di Claude nella SAP Business AI Platform e in Joule, collegate tramite Model Context Protocol (MCP)",
+    "asOf": "2026-05-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2026/05/sap-anthropic-to-bring-claude-sap-business-ai-platform/",
+    "confidence": "primary",
+    "note": "Annuncio di intenzione/collaborazione: tempi di disponibilità, costi e clienti coinvolti non indicati nelle fonti viste."
+  },
+  "w04.ai_partners": {
+    "label": "Partner AI evidenziati a Sapphire 2026",
+    "value": "tra i partner AI messi in evidenza a Sapphire 2026 compaiono Anthropic, AWS, Google Cloud, Microsoft, NVIDIA e Palantir",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://sapinsider.org/articles/decoding-the-autonomous-enterprise-how-sap-anthropic-and-joule-are-rewriting-enterprise-architecture/",
+    "confidence": "secondary",
+    "note": "Elenco riportato da SAPinsider; non esaustivo (es. Databricks per Business Data Cloud)."
+  },
+  "w04.guardrails": {
+    "label": "Guardrail dei Joule Assistants",
+    "value": "SAP dichiara che i Joule Assistants operano con i permessi e le tracce di audit esistenti e che è il cliente a decidere quanta autonomia concedere",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.techzine.eu/news/applications/144748/sap-rolls-out-joule-work-and-enters-the-payments-market-with-sap-pay/",
+    "confidence": "secondary",
+    "note": "Posizionamento dichiarato da SAP e riportato dalla stampa; i dettagli tecnici dei controlli vanno verificati per prodotto."
+  },
+  "w04.ai_ecc_link": {
+    "label": "Accesso all'AI SAP per i clienti ECC",
+    "value": "molte capacità AI di SAP (assistenti e agenti) sono progettate per il cloud; per i clienti ECC on-premise l'accesso a una parte di esse passa da un impegno a modernizzare con RISE",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://sapinsider.org/articles/decoding-the-autonomous-enterprise-how-sap-anthropic-and-joule-are-rewriting-enterprise-architecture/",
+    "confidence": "secondary",
+    "note": "Riportato da SAPinsider e Techzine; perimetro esatto delle funzioni accessibili da ECC non verificato."
+  },
+  "w04.joule_work_internal": {
+    "label": "Risultati interni SAP su Joule Work",
+    "value": "SAP dichiara che Joule Work è già usato da 110.000 suoi dipendenti, con +20% di produttività su finance, HR e procurement (dato interno, non verificato in modo indipendente)",
+    "asOf": "2026-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.unite.ai/?p=480096",
+    "confidence": "secondary",
+    "note": "Dato dichiarato da SAP e riportato da Unite.ai e CIO. Va trattato come claim del fornitore, non come benchmark."
+  },
+  "w04.release_cadence": {
+    "label": "Fonti SAP periodiche sulle novità AI",
+    "value": "SAP pubblica sintesi trimestrali delle novità Business AI (ad esempio «SAP Business AI release highlights Q1 2026», aprile 2026) e guide Innovation News in occasione di Sapphire e di SAP Connect",
+    "asOf": "2026-04-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://news.sap.com/2026/04/sap-business-ai-release-highlights-q1-2026/",
+    "confidence": "primary",
+    "note": "La cadenza trimestrale è dedotta dal titolo «Q1 2026» e dalle guide viste; giorno di pubblicazione non verificato."
+  },
+  "w04.chronology_2025": {
+    "label": "Sapphire 2025 e TechEd 2025 (cronologia)",
+    "value": "a Sapphire 2025 (maggio 2025) SAP ha presentato la SAP Business Suite e portato Joule verso gli agenti; TechEd 2025 (novembre 2025, Berlino) è stato l'appuntamento tecnico per sviluppatori e architetti",
+    "asOf": "2025-11-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://ignitepossible.bramasol.com/blog/keys-announcements-and-insights-from-sap-sapphire-2025",
+    "confidence": "low",
+    "note": "Dettaglio degli annunci di Sapphire 2025 e TechEd 2025 NON riverificato su fonte primaria in questa sessione (limite di ricerche web). Usare solo come cornice cronologica, non per attribuire annunci specifici."
+  }
+}

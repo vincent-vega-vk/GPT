@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "audience": "Account Executive SAP in Italia (focus Life Sciences e Consumer Products)",
+  "assessmentPerWorld": 6,
+  "worlds": [
+    {
+      "id": "w01", "slug": "sap-101", "title": "Benvenuto in SAP", "subtitle": "Azienda, strategia, numeri e linguaggio",
+      "icon": "🏢", "levels": 14,
+      "scope": [
+        "Chi è SAP: storia, sede, mission, dimensioni, ecosistema clienti; SAP Italia",
+        "Strategia attuale: Business Suite + Business Data Cloud + Business AI + BTP; cloud-first; Cloud ERP Suite",
+        "Lessico finanziario che un AE deve saper leggere: cloud revenue, current cloud backlog (CCB), Cloud ERP Suite, non-IFRS, free cash flow, cambi costanti",
+        "Ultimi risultati (Q2 2026) e outlook FY2026; prossimo appuntamento (Q3 il 21 ott 2026) - USA i fatti condivisi sap.*",
+        "Acquisizioni recenti e perché contano (Reltio, Dremio, Prior Labs, SmartRecruiters, WalkMe...)",
+        "Eventi e cadenza degli annunci (Sapphire, TechEd, trimestrali): come tenersi aggiornati",
+        "Come SAP vende: diretto, partner, subscription cloud; perché il backlog cloud è la metrica chiave per un AE",
+        "Governance e leadership (solo ciò che è verificabile), sostenibilità, sovranità del dato"
+      ]
+    },
+    {
+      "id": "w02", "slug": "erp-s4hana", "title": "ERP e S/4HANA", "subtitle": "Dal vecchio ECC al cloud ERP",
+      "icon": "🧱", "levels": 16,
+      "scope": [
+        "Cos'è un ERP, mappa dei processi end-to-end (order-to-cash, procure-to-pay, record-to-report, plan-to-produce, hire-to-retire)",
+        "ECC vs S/4HANA: HANA in-memory, Universal Journal (ACDOCA), Business Partner, modello dati semplificato, Fiori",
+        "Modelli di deployment: Cloud ERP (public), Cloud ERP Private, on-premise; chi sceglie cosa",
+        "Clean core ed estensibilità (key user, side-by-side su BTP, ABAP Cloud)",
+        "Approcci di migrazione: greenfield, brownfield, selective data transition / bluefield; fit-to-standard; SAP Activate",
+        "Strumenti di assessment: Readiness Check, Transformation Navigator, Signavio, Business Transformation Center",
+        "Cronologia manutenzione ECC (2027/2030/transition option 2033) e rilascio annuale S/4HANA - usa fatti condivisi sap.ecc.*",
+        "Soluzioni di settore e Business Scenario Recommendations"
+      ]
+    },
+    {
+      "id": "w03", "slug": "rise-grow", "title": "RISE e GROW", "subtitle": "Le offerte per portare il cliente nel cloud",
+      "icon": "🚀", "levels": 16,
+      "scope": [
+        "Cos'è RISE with SAP e cosa include (S/4HANA Cloud Private, servizi tecnici gestiti, BTP, Signavio, Business Network...) - verifica il perimetro ATTUALE",
+        "Cos'è GROW with SAP, per chi, cosa include, adoption services",
+        "Nuovo naming: SAP Cloud ERP e SAP Cloud ERP Private vs vecchi nomi S/4HANA Cloud Public/Private Edition - usa fatto condiviso sap.naming.cloud_erp",
+        "Scegliere tra public e private edition: criteri, trade-off, domande al cliente",
+        "Hyperscaler e opzioni di hosting, sovranità, regioni",
+        "Struttura commerciale ad alto livello e concetti di pricing PUBBLICI (subscription, durata, metriche) - nessun prezzo di listino",
+        "Il clock ECC 2027/2030/2033 e come usarlo in modo etico nella conversazione",
+        "Percorsi di migrazione con RISE, ruolo dei partner SI, cosa chiedere in discovery"
+      ]
+    },
+    {
+      "id": "w04", "slug": "business-ai-joule", "title": "Business AI e Joule", "subtitle": "Agenti, dati e AI di business",
+      "icon": "🤖", "levels": 16,
+      "scope": [
+        "Joule: da assistente ad agenti; Joule Work, Joule Studio, Autonomous Suite - verifica stato e disponibilità ATTUALI",
+        "SAP Business AI Platform (BTP + Business Data Cloud + Business AI), Knowledge Graph",
+        "Casi d'uso per funzione (finance, procurement, HR, supply chain, sales/service)",
+        "Modello di accesso/pricing dell'AI (AI units o equivalenti) - solo ciò che è pubblico",
+        "Partner e modelli (hyperscaler, LLM provider, Databricks...), Prior Labs e foundation model tabulari",
+        "AI responsabile, governance, EU AI Act, protezione dei dati, sovranità",
+        "Come posizionare l'AI in una trattativa senza hype: valore, prerequisiti dati, clean core",
+        "Cronologia degli annunci AI (Sapphire 2025 -> TechEd 2025 -> Sapphire 2026) e come restare aggiornati"
+      ]
+    },
+    {
+      "id": "w05", "slug": "dati-btp", "title": "Dati e BTP", "subtitle": "Business Data Cloud e piattaforma tecnologica",
+      "icon": "🧩", "levels": 16,
+      "scope": [
+        "SAP Business Technology Platform: pilastri e quando serve davvero",
+        "SAP Business Data Cloud, data products, Datasphere, Analytics Cloud, Databricks, Snowflake, BigQuery, Dremio, Reltio",
+        "Integration Suite, API, Event Mesh; SAP Build (apps, process automation, Work Zone)",
+        "SAP HANA Cloud, ABAP Cloud, CAP, Kyma - a livello di posizionamento, non da sviluppatore",
+        "Modelli commerciali BTP (CPEA, pay-as-you-go, subscription) a livello concettuale",
+        "Data governance, master data, qualità dei dati: perché sono il prerequisito dell'AI",
+        "Signavio e process intelligence, Business Transformation Center",
+        "Domande di discovery per il CIO / Head of Data"
+      ]
+    },
+    {
+      "id": "w06", "slug": "finanza-spend", "title": "Finanza e Spend", "subtitle": "Il mondo del CFO e del Procurement",
+      "icon": "💶", "levels": 15,
+      "scope": [
+        "Finance in S/4HANA: Universal Journal, Group Reporting, Advanced Financial Closing, Cash Management, Treasury, Billing e Revenue Innovation Management",
+        "SAP Enterprise Planning / Analytics Cloud / pianificazione",
+        "Spend: Ariba, Concur, Fieldglass, Taulia, SAP Business Network",
+        "Italia: fatturazione elettronica (SDI/FatturaPA), Peppol, ViDA UE; sostenibilità/CSRD (verifica stato Omnibus ATTUALE)",
+        "Persona CFO/Procurement: KPI (DSO, giorni di chiusura, working capital, spend under management), pain point, linguaggio",
+        "Casi d'uso AI per finance e procurement"
+      ]
+    },
+    {
+      "id": "w07", "slug": "hr-persone", "title": "HR e Persone", "subtitle": "SuccessFactors e il CHRO",
+      "icon": "👥", "levels": 14,
+      "scope": [
+        "SAP SuccessFactors: Employee Central, Recruiting (SmartRecruiters), Onboarding, Performance & Goals, Succession, Learning, Compensation, Payroll, People Analytics",
+        "Skills / Talent Intelligence, Joule per HR, WalkMe e digital adoption",
+        "Futuro di SAP HCM on-premise (date di manutenzione ATTUALI) e percorsi di migrazione",
+        "Italia: payroll e compliance locale, contrattazione collettiva, direttiva UE sulla trasparenza retributiva (stato recepimento ATTUALE)",
+        "Persona CHRO: KPI, pain point, linguaggio; vendita congiunta con Finance/IT"
+      ]
+    },
+    {
+      "id": "w08", "slug": "supply-chain", "title": "Supply Chain e Manufacturing", "subtitle": "Dalla pianificazione alla produzione",
+      "icon": "🏭", "levels": 15,
+      "scope": [
+        "Integrated Business Planning, EWM, Transportation Management, Digital Manufacturing, Asset Management, Business Network for logistics",
+        "S/4HANA per produzione, acquisti, qualità, manutenzione",
+        "Visibilità, tracciabilità, resilienza della supply chain, demand sensing",
+        "Industria 4.0 / Transizione 5.0 in Italia (stato incentivi ATTUALE), Digital Product Passport (ESPR), carbon footprint di prodotto",
+        "Persona COO / Head of Supply Chain: KPI (OTIF, inventory turns, OEE), pain point"
+      ]
+    },
+    {
+      "id": "w09", "slug": "customer-experience", "title": "Customer Experience", "subtitle": "Vendita, servizio, commerce e marketing",
+      "icon": "🛍️", "levels": 14,
+      "scope": [
+        "Portafoglio SAP Customer Experience ATTUALE (Sales Cloud, Service Cloud, Commerce Cloud, Emarsys, Customer Data...) e rinominazioni recenti",
+        "Integrazione con S/4HANA e Business Data Cloud; AI in CX / Joule per vendite e servizio",
+        "Persona CMO/CRO/Head of Service; KPI e pain point",
+        "Posizionamento rispetto a Salesforce, Microsoft Dynamics 365, HubSpot (fatti, non FUD)",
+        "Casi d'uso B2B per manifatturiero, consumer products, life sciences"
+      ]
+    },
+    {
+      "id": "w10", "slug": "lifesciences-cpg-italia", "title": "Life Sciences, CPG e Italia", "subtitle": "Il tuo mercato: farma, consumer e Italia",
+      "icon": "💊", "levels": 16,
+      "scope": [
+        "Farma/Life Sciences: GxP, Annex 11, 21 CFR Part 11, serializzazione e tracciabilità, gestione lotti, cold chain, MDR/IVDR per il medtech, AIFA, payback",
+        "Soluzioni SAP per Life Sciences (batch, QM, track & trace, clinical supply, regulatory) - verifica nomi ATTUALI",
+        "Consumer Products: trade promotion / revenue growth management, demand planning, retail execution, packaging EPR, sostenibilità",
+        "Mercato italiano: struttura delle PMI/medie imprese e dei gruppi familiari, PNRR (stato ATTUALE), Transizione 5.0, NIS2, normativa su appalti, SDI",
+        "Ecosistema locale: SAP Italia, SI partner, user group italiani",
+        "Scenari consulenziali per CFO/COO/Quality Head di aziende farmaceutiche e CPG italiane (generici, senza inventare dettagli su clienti reali)"
+      ]
+    },
+    {
+      "id": "w11", "slug": "discovery-qualificazione", "title": "Discovery e Qualificazione", "subtitle": "Il mestiere: capire e qualificare",
+      "icon": "🔍", "levels": 16,
+      "scope": [
+        "Account planning, ICP, whitespace, buying center, ruoli (economic buyer, champion, blocker)",
+        "Framework: MEDDPICC, BANT/CHAMP, SPIN, Challenger, Sandler pain funnel - quando usare cosa",
+        "Discovery call: domande aperte, ascolto attivo, silenzi, next step; multi-threading e champion building",
+        "Trigger event (fine manutenzione ECC, M&A, normative, nuovo CFO/CIO) e 'why now / why change / why SAP'",
+        "Qualificare tecnicamente: landscape, release, personalizzazioni Z, utenti, readiness; quando coinvolgere Solution Advisor / partner",
+        "Pipeline math, coverage, stage hygiene, forecasting; Mutual Action Plan",
+        "Engagement di livello C: CFO, CIO, COO, CHRO; prima call a freddo; social selling etico"
+      ]
+    },
+    {
+      "id": "w12", "slug": "businesscase-negoziazione", "title": "Business Case e Negoziazione", "subtitle": "Valore, prezzo, contratto, chiusura",
+      "icon": "🤝", "levels": 16,
+      "scope": [
+        "Value selling: baseline, costi/rischi/ricavi, TCO 5 anni, NPV/payback/IRR, linguaggio del CFO",
+        "Struttura di un business case e come costruirlo con il cliente; Value Advisory / strumenti di valore (pubblici)",
+        "Concetti di pricing e contratto: subscription vs perpetual, durata, ramp, rinnovi, price protection, uplift - SENZA prezzi di listino",
+        "Disciplina sugli sconti, governance di approvazione interna (concetti generici), cosa dare in cambio di cosa",
+        "Negoziazione: BATNA, ZOPA, ancoraggio, concessioni condizionate, Voss; negoziare con Procurement italiano",
+        "Legale e sicurezza: DPA, GDPR, SLA, limitazioni di responsabilità, sovranità, EU Data Act (verifica stato ATTUALE)",
+        "Chiusura: mutual close plan, paper process, fine trimestre, forecast categories, win/loss review"
+      ]
+    },
+    {
+      "id": "w13", "slug": "competizione-obiezioni", "title": "Competizione e Obiezioni", "subtitle": "Battlecard e risposte a prova di cliente",
+      "icon": "🥊", "levels": 15,
+      "scope": [
+        "Mappa competitiva ATTUALE: Oracle (Fusion, NetSuite), Microsoft Dynamics 365, Workday, Salesforce, ServiceNow, Infor, IFS, Odoo e vendor italiani (Zucchetti, TeamSystem...), Veeva per Life Sciences",
+        "Best-of-breed vs suite; integrazione; clean core",
+        "Obiezioni tipiche: prezzo, rischio migrazione, complessità, 'restiamo su ECC con supporto terzi', 'aspettiamo', hype AI, lock-in, sovranità/CLOUD Act, dipendenza dal SI",
+        "Struttura di una risposta: ascolta, chiarisci, rispondi con evidenza, verifica; battlecard e fonti",
+        "Competizione etica: niente FUD, solo fatti verificabili e aggiornati (cita la fonte)",
+        "Analisti (Gartner, IDC, Forrester): come citarli correttamente e datati"
+      ]
+    },
+    {
+      "id": "w14", "slug": "ecosistema-compliance-success", "title": "Partner, Compliance e Success", "subtitle": "Ecosistema, regole del gioco, post-vendita",
+      "icon": "🌐", "levels": 15,
+      "scope": [
+        "Ecosistema partner: SI, ISV, hyperscaler, SAP Store, co-sell, canale mid-market; programmi partner ATTUALI",
+        "Customer Success: success plans, adoption, value realization, renewal e expansion (land & expand), reference",
+        "User group (DSAG, ASUG, SUGEN, user group italiano) e SAP Community / Learning",
+        "Compliance commerciale: anticorruzione (FCPA, UK Bribery Act, D.Lgs. 231/2001), regali e ospitalità, conflitti di interesse, PA e codice appalti (D.Lgs. 36/2023)",
+        "Privacy e dati nella vendita (GDPR in CRM e outreach), uso responsabile dell'AI nel lavoro di vendita",
+        "Sicurezza e fiducia: certificazioni (ISO 27001, SOC), Trust Center, sovranità e residenza del dato",
+        "Metodo di studio e abitudini dell'AE: ripasso dilazionato, tenersi aggiornato, fonti ufficiali"
+      ]
+    }
+  ]
+}

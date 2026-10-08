@@ -1,0 +1,243 @@
+{
+  "sap.q2_26.date": {
+    "label": "Data pubblicazione risultati Q2 2026",
+    "value": "23 luglio 2026",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://news.sap.com/2026/07/sap-announces-q2-and-half-year-2026-results/",
+    "confidence": "primary"
+  },
+  "sap.q2_26.ccb": {
+    "label": "Current cloud backlog (CCB) Q2 2026",
+    "value": "€22,9 mld (+27%; +26% a cambi costanti)",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://www.sap.com/docs/download/investors/2026/sap-2026-q2-statement.pdf",
+    "confidence": "secondary",
+    "note": "Cifre riscontrate in più sintesi del quarterly statement (€22.929 mln). PDF primario non apribile dal sandbox."
+  },
+  "sap.q2_26.cloud_revenue": {
+    "label": "Cloud revenue Q2 2026",
+    "value": "€6,28 mld (+22%; +24% a cambi costanti)",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://www.sap.com/docs/download/investors/2026/sap-2026-q2-statement.pdf",
+    "confidence": "secondary"
+  },
+  "sap.q2_26.cloud_erp_suite": {
+    "label": "Cloud ERP Suite revenue Q2 2026",
+    "value": "€5,53 mld (+25%; +27% a cambi costanti), circa l'88% della cloud revenue",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://www.sap.com/docs/download/investors/2026/sap-2026-q2-statement.pdf",
+    "confidence": "secondary"
+  },
+  "sap.q2_26.total_revenue": {
+    "label": "Ricavi totali Q2 2026",
+    "value": "€9,88 mld (+9%; +11% a cambi costanti)",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://www.sap.com/docs/download/investors/2026/sap-2026-q2-statement.pdf",
+    "confidence": "secondary"
+  },
+  "sap.q2_26.fcf": {
+    "label": "Free cash flow Q2 2026",
+    "value": "circa €3 mld (+27%)",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://news.sap.com/2026/07/sap-announces-q2-and-half-year-2026-results/",
+    "confidence": "secondary"
+  },
+  "sap.q2_26.ai_in_top_deals": {
+    "label": "Quota dei 50 maggiori deal Q2 2026 con AI e Business Data Cloud",
+    "value": "oltre il 90%",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://finance.yahoo.com/markets/stocks/articles/sap-q2-earnings-call-highlights-010533873.html",
+    "confidence": "secondary",
+    "note": "Dichiarazione del CEO in earnings call, riportata da stampa finanziaria."
+  },
+  "sap.fy26.cloud_revenue_outlook": {
+    "label": "Outlook FY2026 cloud revenue",
+    "value": "€25,8–26,2 mld (+23–25%)",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://news.sap.com/2026/07/sap-announces-q2-and-half-year-2026-results/",
+    "confidence": "secondary"
+  },
+  "sap.fy26.op_profit_outlook": {
+    "label": "Outlook FY2026 non-IFRS operating profit",
+    "value": "€11,8–12,2 mld (ridotto da €11,9–12,3 mld per l'effetto delle acquisizioni)",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://news.sap.com/2026/07/sap-announces-q2-and-half-year-2026-results/",
+    "confidence": "secondary"
+  },
+  "sap.fy26.fcf_outlook": {
+    "label": "Outlook FY2026 free cash flow",
+    "value": "circa €10 mld",
+    "asOf": "2026-07-23",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-21",
+    "source": "https://news.sap.com/2026/07/sap-announces-q2-and-half-year-2026-results/",
+    "confidence": "secondary"
+  },
+  "sap.q3_26.date": {
+    "label": "Data risultati Q3 2026",
+    "value": "21 ottobre 2026",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-22",
+    "source": "https://www.sap.com/investors/en/financial-documents-and-events/events.html",
+    "confidence": "secondary",
+    "note": "Aggregatori mostrano 21 o 22/10 per differenza di fuso orario (rilascio serale CET)."
+  },
+  "sap.ceo": {
+    "label": "CEO di SAP",
+    "value": "Christian Klein (contratto esteso fino al 2030)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.cimdata.com/en/industry-summary-articles/item/27575-sap-extends-contracts-with-ceo-christian-klein-and-cfo-dominik-asam",
+    "confidence": "secondary"
+  },
+  "sap.cfo": {
+    "label": "CFO di SAP",
+    "value": "Dominik Asam",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.cimdata.com/en/industry-summary-articles/item/27575-sap-extends-contracts-with-ceo-christian-klein-and-cfo-dominik-asam",
+    "confidence": "secondary"
+  },
+  "sap.teched26": {
+    "label": "SAP TechEd 2026",
+    "value": "27–29 ottobre 2026, Berlino (Messe Berlin), con edizione virtuale",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-10-30",
+    "source": "https://www.sap.com/uk/events/teched/berlin/faq-contact.html",
+    "confidence": "primary"
+  },
+  "sap.sapphire26": {
+    "label": "SAP Sapphire 2026",
+    "value": "11–13 maggio 2026 a Orlando, con edizione EMEA a Madrid",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-05-01",
+    "source": "https://www.sap.com/blogs/top-5-sapphire-2026-ai-announcements",
+    "confidence": "secondary"
+  },
+  "sap.sapphire27": {
+    "label": "SAP Sapphire 2027",
+    "value": "Orlando 24–26 maggio 2027; Barcellona 1–3 giugno 2027; virtuale 25–26 maggio",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-01",
+    "source": "https://www.beri.net/events/sap-sapphire-2027",
+    "confidence": "low",
+    "note": "Solo aggregatori di eventi; date da confermare su sap.com/events."
+  },
+  "sap.ecc.mainstream_end": {
+    "label": "Fine manutenzione standard ECC 6.0 EHP6-8",
+    "value": "31 dicembre 2027",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://sapinsider.org/analyst-insights/sap-provides-details-on-erp-transition-option/",
+    "confidence": "secondary"
+  },
+  "sap.ecc.extended_end": {
+    "label": "Fine manutenzione estesa ECC",
+    "value": "31 dicembre 2030 (con sovrapprezzo)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://sapinsider.org/analyst-insights/will-sap-offer-an-extended-maintenance-alternative/",
+    "confidence": "secondary"
+  },
+  "sap.ecc.transition_option": {
+    "label": "SAP ERP, private edition, transition option",
+    "value": "copertura 2031–2033, acquistabile dal 2028, richiede un contratto RISE; perimetro più stretto della Business Suite 7",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://sapinsider.org/analyst-insights/sap-provides-details-on-erp-transition-option/",
+    "confidence": "secondary",
+    "note": "Dettagli e prezzi annunciati da SAP solo più vicino al 2028: non promettere condizioni al cliente."
+  },
+  "sap.naming.cloud_erp": {
+    "label": "Naming cloud ERP (dal 2025)",
+    "value": "SAP Cloud ERP (ex S/4HANA Cloud Public Edition, tipicamente GROW) e SAP Cloud ERP Private (ex S/4HANA Cloud Private Edition, tipicamente RISE); RISE e GROW restano come nomi di percorso/pacchetto",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.timetoact-group.com/content-share/wca/blog/sap-simplifies-the-naming-of-its-cloud-erp-offering-144257",
+    "confidence": "secondary",
+    "note": "Fonti terze (consulenze). Verificare il wording esatto sul sito SAP prima di usarlo in proposte."
+  },
+  "sap.acq.reltio": {
+    "label": "Acquisizione Reltio (master data management)",
+    "value": "annunciata il 27 marzo 2026; chiusa a maggio 2026",
+    "asOf": "2026-05-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.infotech.com/research/sap-acquires-dremio-reltio-and-prior-labs-to-create-an-agentic-ai-platform-and-research-center-for-structured-data",
+    "confidence": "secondary"
+  },
+  "sap.acq.dremio": {
+    "label": "Acquisizione Dremio (data lakehouse Apache Iceberg)",
+    "value": "completata il 6 luglio 2026",
+    "asOf": "2026-07-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/2026/07/sap-completes-dremio-acquisition/",
+    "confidence": "primary"
+  },
+  "sap.acq.prior_labs": {
+    "label": "Acquisizione Prior Labs (tabular foundation models)",
+    "value": "completata il 17 luglio 2026, con un impegno di oltre €1 mld in 4 anni",
+    "asOf": "2026-07-17",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/2026/07/sap-completes-prior-labs-acquisition/",
+    "confidence": "primary"
+  },
+  "sap.acq.smartrecruiters": {
+    "label": "Acquisizione SmartRecruiters (recruiting)",
+    "value": "completata l'11 settembre 2025; integrata con SuccessFactors e mantenuta anche come prodotto standalone",
+    "asOf": "2025-09-11",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-09-01",
+    "source": "https://news.sap.com/2025/09/sap-completes-smartrecruiters-acquisition/",
+    "confidence": "primary"
+  },
+  "sap.sapphire26.platform": {
+    "label": "Sapphire 2026: stack AI unificato",
+    "value": "SAP Business AI Platform = BTP + Business Data Cloud + Business AI, con Joule come interfaccia principale",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-05-01",
+    "source": "https://sapinsider.org/articles/joule-is-now-the-front-door-to-your-business-what-sap-sapphire-2026-means-for-customers-vendors-and-partners/",
+    "confidence": "secondary"
+  },
+  "sap.sapphire26.joule_work": {
+    "label": "Joule Work (Sapphire 2026)",
+    "value": "client web (con app mobile e desktop) in cui l'utente esprime l'obiettivo e Joule coordina assistenti e agenti SAP e non-SAP; disponibile per i clienti Early Adopter Care",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://sapinsider.org/articles/joule-is-now-the-front-door-to-your-business-what-sap-sapphire-2026-means-for-customers-vendors-and-partners/",
+    "confidence": "secondary",
+    "note": "Stato di disponibilità generale da riverificare: potrebbe essere cambiato dopo maggio 2026."
+  }
+}

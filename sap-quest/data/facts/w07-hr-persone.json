@@ -1,0 +1,211 @@
+{
+  "w07.recruiting_direction": {
+    "label": "Direzione di SAP sul recruiting in SuccessFactors",
+    "value": "SmartRecruiters è indicato da SAP come successore a lungo termine del modulo Recruiting nativo di SuccessFactors, con una finestra di migrazione di circa 3-5 anni (indicazione di ottobre 2025); nelle fonti consultate non risultano una data di fine supporto ufficiale né una migrazione forzata",
+    "asOf": "2025-10-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.cio.com/article/4068172/sap-sets-timeline-to-replace-successfactors-recruiting-module-with-smartrecruiters.html",
+    "confidence": "secondary",
+    "note": "Basato su un'intervista a un dirigente SAP riportata da CIO.com (ottobre 2025) e su sintesi di consulenze; nessun documento di roadmap SAP aperto. Chiedere al team prodotto la roadmap ufficiale prima di impegnarsi con un cliente."
+  },
+  "w07.smartrecruiters_phase1": {
+    "label": "Prima fase dell'integrazione SmartRecruiters-SuccessFactors",
+    "value": "annunciata il 4 marzo 2026: single sign-on, navigazione condivisa, sincronizzazione di job family, centri di costo e sedi da SuccessFactors verso SmartRecruiters e assistente AI Winston nei flussi di assunzione",
+    "asOf": "2026-03-04",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://sapinsider.org/blogs/sap-expands-smartrecruiters-integration-to-embed-ai-unified-data-across-hiring-workflows/",
+    "confidence": "secondary",
+    "note": "Riscontrata anche da HR Brew e da un post di SAP News Germania (marzo 2026); le pagine SAP non sono apribili dal sandbox."
+  },
+  "w07.walkme_deal": {
+    "label": "Acquisizione di WalkMe (digital adoption)",
+    "value": "completata il 12 settembre 2024, con un valore dell'equity di circa 1,5 mld di dollari",
+    "asOf": "2024-09-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://news.sap.com/2024/09/sap-completes-walkme-acquisition/",
+    "confidence": "secondary",
+    "note": "Dati verificati nelle riprese del comunicato SAP (Nasdaq, DBTA, WalkMe); la pagina SAP non è apribile dal sandbox."
+  },
+  "w07.walkme_role": {
+    "label": "Ruolo di WalkMe nel portafoglio SAP",
+    "value": "piattaforma di digital adoption che offre guida contestuale dentro le applicazioni; è già integrata in SuccessFactors e SAP la collega alla strategia di Joule",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://futurumgroup.com/insights/walkme-highlighted-as-core-element-of-saps-digital-transformation-strategy",
+    "confidence": "secondary",
+    "note": "Fonti analisti (Futurum, ERP Today) del 2024-2025; non trovata una release note 2026 che colleghi in modo esplicito WalkMe e gli agenti Joule di HR. La data asOf è quella di verifica."
+  },
+  "w07.joule_hr_agents": {
+    "label": "Agenti Joule per HR nella release 1H 2026",
+    "value": "Career and Talent Development, HR Service, People Intelligence e Payroll (release 1H 2026, disponibilità generale prevista a maggio 2026)",
+    "asOf": "2026-05-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://sapinsider.org/articles/new-joule-agents-coming-to-bolster-ai-in-sap-successfactors/",
+    "confidence": "secondary",
+    "note": "SAP li chiama anche «Assistants»; il numero di agenti varia per fonte (4 o 6) e lo stato di disponibilità generale per singolo agente va riverificato (SAP rinvia a una KBA per lo stato aggiornato)."
+  },
+  "w07.ecp_agents": {
+    "label": "Agenti di Employee Central Payroll nella release 1H 2026",
+    "value": "Payroll Explanation, Payroll Alert Resolution, Payroll Validation Rule ed Employee Data Integration",
+    "asOf": "2026-05-31",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://sapinsider.org/articles/successfactors-1h-release-deepens-ai-across-hr-suite/",
+    "confidence": "secondary",
+    "note": "Elenco riportato da SAP Insider sulla base del materiale di release 1H 2026; documento SAP «Employee Central Payroll 1H 2026» non apribile dal sandbox."
+  },
+  "w07.sapphire26_hr_assistants": {
+    "label": "Joule Assistants annunciati a Sapphire 2026 per l'HR",
+    "value": "SAP ha parlato di oltre 50 Joule Assistants di dominio che coordinano oltre 200 agenti specializzati e, per l'HR, di 15 nuovi assistenti previsti nel 2026",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://brandonhall.com/sap-sapphire-2026-the-shift-from-automated-hr-to-autonomous-work-2/",
+    "confidence": "secondary",
+    "note": "Fonte: analisi di Brandon Hall Group sul keynote; comunicato SAP non trovato. Non usare i numeri con il cliente senza conferma dal team prodotto."
+  },
+  "w07.people_intelligence": {
+    "label": "People Intelligence su SAP Business Data Cloud",
+    "value": "applicazione su SAP Business Data Cloud che collega i dati HR di SuccessFactors e di altre fonti per analizzare composizione della forza lavoro, retribuzioni e skills, con data product predefiniti da SAP e risposte in linguaggio naturale tramite Joule",
+    "asOf": "2025-11-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://www.sap.com/products/hcm/people-intelligence.html",
+    "confidence": "primary",
+    "note": "Una consulenza (tt-s, agosto 2026) la presenta come successore di SuccessFactors Workforce Analytics; SAP non lo conferma nel testo consultato: non usarlo come fatto con il cliente. Per alcuni clienti serve una licenza aggiuntiva per Business Data Cloud."
+  },
+  "w07.talent_intelligence_hub": {
+    "label": "Talent Intelligence Hub di SuccessFactors",
+    "value": "framework di skills basato su AI, integrato nella suite SuccessFactors, con disponibilità generale annunciata a ottobre 2023",
+    "asOf": "2023-10-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://news.sap.com/2023/10/skills-based-organization-talent-intelligence-hub/",
+    "confidence": "primary",
+    "note": "Mese dedotto dall'URL del comunicato SAP; funzionalità e confezionamento attuali da riverificare nelle release notes."
+  },
+  "w07.hcm_in_bs7": {
+    "label": "ERP HCM e Payroll on-premise e Business Suite 7",
+    "value": "fanno parte del perimetro SAP Business Suite 7 e seguono le stesse date di manutenzione di ECC",
+    "asOf": "2020-02-04",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://blogs.sap.com/t5/enterprise-resource-planning-blogs-by-sap/sap-business-suite-7-extension-what-this-means-for-sap-erp-human-capital/ba-p/13424955",
+    "confidence": "primary",
+    "note": "Blog SAP del 2020 sull'estensione di Business Suite 7. Le date esatte sono nei fatti condivisi sap.ecc.*. Non trovata una fonte SAP del 2026 che le modifichi."
+  },
+  "w07.h4s4": {
+    "label": "SAP HCM for SAP S/4HANA (on-premise)",
+    "value": "opzione on-premise «ponte» per chi vuole restare su HCM oltre il 2030, disponibile da settembre 2022, con impegno SAP di manutenzione fino al 2040",
+    "asOf": "2022-09-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://blogs.sap.com/t5/enterprise-resource-planning-blogs-by-sap/sap-business-suite-7-extension-what-this-means-for-sap-erp-human-capital/ba-p/13424955",
+    "confidence": "primary",
+    "note": "Impegno 2040 da blog SAP (2020-2022). Perimetro funzionale ridotto rispetto a ERP HCM: verificare SAP Note e Product Availability Matrix. Non trovata una conferma SAP del 2026."
+  },
+  "w07.it_decree": {
+    "label": "Atto italiano di recepimento della direttiva UE 2023/970",
+    "value": "D.Lgs. 7 maggio 2026, n. 96, pubblicato nella Gazzetta Ufficiale n. 125 del 1° giugno 2026",
+    "asOf": "2026-06-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.dirittobancario.it/wp-content/uploads/2026/06/Decreto-legislativo-07-maggio-2026-n.-96-estratto-della-Gazzetta-Ufficiale.pdf",
+    "confidence": "secondary",
+    "note": "Numero e date concordi in oltre cinque fonti (studi legali, stampa specializzata); estratto della Gazzetta non aperto direttamente. Un'unica fonte indicava come data di pubblicazione il 1° luglio: considerata errata."
+  },
+  "w07.it_in_force": {
+    "label": "Entrata in vigore del D.Lgs. 96/2026",
+    "value": "7 giugno 2026",
+    "asOf": "2026-06-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.dirittobancario.it/wp-content/uploads/2026/06/Decreto-legislativo-07-maggio-2026-n.-96-estratto-della-Gazzetta-Ufficiale.pdf",
+    "confidence": "secondary",
+    "note": "Data riportata da molte fonti e coincidente con la scadenza di recepimento della direttiva."
+  },
+  "w07.it_all_employers": {
+    "label": "Obblighi dal 7 giugno 2026 senza soglia dimensionale",
+    "value": "retribuzione iniziale o fascia retributiva negli annunci di lavoro, divieto di chiedere ai candidati lo storico retributivo (anche tramite agenzie) e diritto dei lavoratori di chiedere per iscritto le retribuzioni medie per sesso nelle categorie comparabili",
+    "asOf": "2026-06-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.littler.com/news-analysis/asap/italy-implements-eu-pay-transparency-directive-guide-final-decree",
+    "confidence": "secondary",
+    "note": "Sintesi di studi legali (Littler, A&O Shearman) e stampa italiana; testo del decreto non letto integralmente. Non è consulenza legale."
+  },
+  "w07.it_reporting": {
+    "label": "Report sul divario retributivo di genere: soglie e scadenze",
+    "value": "250 o più dipendenti: annuale con prima scadenza al 7 giugno 2027; 150-249: triennale con prima scadenza al 7 giugno 2027; 100-149: triennale con prima scadenza al 7 giugno 2031; sotto i 100: nessun obbligo di reporting periodico",
+    "asOf": "2026-06-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.ecnews.it/lavoro/rapporto-di-lavoro/gestione-del-rapporto/gender-pay-gap-reporting-e-tutele-gli-adempimenti-previsti-dal-d-lgs-n-96-2026/",
+    "confidence": "secondary",
+    "note": "Concordi Littler, ecnews e altre fonti, e coerente con lo schema della direttiva. Una sintesi EY parlava di reporting annuale per tutte le aziende da 100 dipendenti: considerata una semplificazione."
+  },
+  "w07.it_first_report_250": {
+    "label": "Prima scadenza di reporting per aziende da 150 dipendenti in su",
+    "value": "7 giugno 2027",
+    "asOf": "2026-06-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.ecnews.it/lavoro/rapporto-di-lavoro/gestione-del-rapporto/gender-pay-gap-reporting-e-tutele-gli-adempimenti-previsti-dal-d-lgs-n-96-2026/",
+    "confidence": "secondary",
+    "note": "Vale per la fascia 250+ (annuale) e 150-249 (triennale)."
+  },
+  "w07.it_first_report_100": {
+    "label": "Prima scadenza di reporting per aziende con 100-149 dipendenti",
+    "value": "7 giugno 2031",
+    "asOf": "2026-06-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.ecnews.it/lavoro/rapporto-di-lavoro/gestione-del-rapporto/gender-pay-gap-reporting-e-tutele-gli-adempimenti-previsti-dal-d-lgs-n-96-2026/",
+    "confidence": "secondary"
+  },
+  "w07.it_gap_5pct": {
+    "label": "Soglia del 5% e valutazione retributiva congiunta",
+    "value": "un divario pari o superiore al 5% in una categoria di lavoratori, non giustificato da criteri oggettivi e neutri e non corretto entro sei mesi, porta a una valutazione retributiva congiunta con i rappresentanti dei lavoratori",
+    "asOf": "2026-06-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.littler.com/news-analysis/asap/italy-implements-eu-pay-transparency-directive-guide-final-decree",
+    "confidence": "secondary",
+    "note": "Le fonti descrivono in modo leggermente diverso da quando decorrono i sei mesi e la sequenza delle misure correttive: leggere il testo del decreto prima di affermazioni puntuali."
+  },
+  "w07.it_decrees_pending": {
+    "label": "Decreti ministeriali attuativi sulla trasparenza retributiva",
+    "value": "erano attesi entro 90 giorni dall'entrata in vigore (circa il 5 settembre 2026) per le modalità di raccolta dei dati e entro 180 giorni (circa dicembre 2026) per l'organismo di monitoraggio; la loro adozione non risultava confermata all'8 ottobre 2026",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://www.littler.com/news-analysis/asap/italy-implements-eu-pay-transparency-directive-guide-final-decree",
+    "confidence": "low",
+    "note": "Termini ricavati dal decreto tramite fonti secondarie; stato di adozione non verificato (cercare in Gazzetta Ufficiale e sul sito del Ministero del Lavoro)."
+  },
+  "w07.sap_paytransp": {
+    "label": "Capacità SAP per la trasparenza retributiva UE",
+    "value": "annunciate il 4 febbraio 2026: range retributivi negli annunci di SuccessFactors Recruiting e SmartRecruiters, dichiarazioni retributive individuali con confronto per sesso in Employee Central e insight dedicati in People Intelligence su Business Data Cloud",
+    "asOf": "2026-02-04",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2026/02/new-capabilities-advance-pay-equity-aeu-pay-transparency-compliance/",
+    "confidence": "secondary",
+    "note": "Pagina SAP non apribile dal sandbox: dettagli da analisi di partner (Zalaris, SAP Insider) che citano il comunicato. SAP precisa di non fornire consulenza legale; per gli insight in Business Data Cloud può servire licenza aggiuntiva."
+  },
+  "w07.ecp_italy": {
+    "label": "Employee Central Payroll e Italia",
+    "value": "Employee Central Payroll compare tra i prodotti con aggiornamenti legali per l'Italia nelle release highlights 1H 2022",
+    "asOf": "2022-05-05",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://blogs.sap.com/2022/05/05/country-or-region-specifics-1h-2022-release-highlights/",
+    "confidence": "secondary",
+    "note": "Evidenza del 2022: indica che esiste una versione paese Italia, non il perimetro attuale (CCNL, UniEmens, Certificazione Unica). Non trovata documentazione SAP 2026 sull'Italia: verificare con SAP e partner."
+  }
+}

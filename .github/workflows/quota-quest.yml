@@ -1,0 +1,111 @@
+name: Quota Quest
+
+# - pull_request: valida contenuti e motore di gioco
+# - schedule (ogni giorno): scarica le notizie, ricostruisce il bundle, apre/aggiorna una issue sui fatti da riverificare
+# - push su main / schedule / manuale: pubblica il gioco su GitHub Pages
+# Nota: i workflow schedulati partono solo dal branch predefinito (main) e Pages va abilitato in
+# Settings > Pages > Source = "GitHub Actions".
+on:
+  pull_request:
+    paths: ['sap-quest/**', '.github/workflows/quota-quest.yml']
+  push:
+    branches: [main]
+    paths: ['sap-quest/**', '.github/workflows/quota-quest.yml']
+  schedule:
+    - cron: '30 5 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: quota-quest-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Valida contenuti (schema, segnaposto, fatti con fonte)
+        run: python3 sap-quest/tools/validate.py
+      - name: Test del motore di gioco
+        run: node sap-quest/tools/test_engine.js
+      - name: Il bundle committato è aggiornato?
+        run: |
+          python3 sap-quest/tools/build.py
+          git diff --exit-code -- sap-quest/data/bundle.js sap-quest/data/facts-index.json \
+            || (echo "::error::Esegui 'python3 sap-quest/tools/build.py' e committa data/bundle.js" && exit 1)
+
+  refresh:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scarica le notizie (SAP News Center e rassegna stampa)
+        run: python3 sap-quest/tools/fetch_news.py
+      - name: Ricostruisci il bundle
+        run: python3 sap-quest/tools/build.py
+      - name: Report dei fatti scaduti o in scadenza
+        run: python3 sap-quest/tools/stale_report.py --within 14 --out stale.md --count-file stale.count
+      - name: Commit se qualcosa è cambiato
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sap-quest/data/news.json sap-quest/data/bundle.js sap-quest/data/facts-index.json
+          if git diff --cached --quiet; then echo "Nessuna novità"; else
+            git commit -m "chore(quota-quest): aggiorna notizie e bundle"
+            git push
+          fi
+      - name: Apri o aggiorna la issue "fatti da riverificare"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=$(cat stale.count)
+          title="Quota Quest: fatti da riverificare"
+          num=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')
+          if [ "$n" -gt 0 ]; then
+            if [ -n "$num" ]; then gh issue edit "$num" --body-file stale.md
+            else gh issue create --title "$title" --body-file stale.md; fi
+          elif [ -n "$num" ]; then
+            gh issue close "$num" --comment "Nessun fatto in scadenza: chiudo."
+          fi
+
+  deploy:
+    if: ${{ always() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && needs.check.result == 'success' && (needs.refresh.result == 'success' || needs.refresh.result == 'skipped') }}
+    needs: [check, refresh]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main   # include l'eventuale commit del job refresh
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepara il sito
+        run: python3 sap-quest/tools/build.py --dist _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

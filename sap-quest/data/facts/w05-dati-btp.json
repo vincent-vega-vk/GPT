@@ -1,0 +1,202 @@
+{
+  "w05.bdc_launch": {
+    "label": "Annuncio di SAP Business Data Cloud",
+    "value": "13 febbraio 2025, insieme alla partnership con Databricks (SAP Databricks come componente nativo)",
+    "asOf": "2025-02-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://www.capgemini.com/gb-en/insights/expert-perspectives/sap-business-data-cloud-rebrand-or-game-changer/",
+    "confidence": "secondary",
+    "note": "Data riportata da Capgemini e dalla stampa di settore (Futurum, Databricks blog). Comunicato SAP non aperto dal sandbox."
+  },
+  "w05.bdc_components": {
+    "label": "Servizi abilitabili con il core capacity di Business Data Cloud (pagina prezzi SAP)",
+    "value": "SAP Datasphere, SAP Analytics Cloud, SAP BW, SAP Databricks, BDC Connect, SAP HANA Cloud e Master Data Governance; i data product curati (Intelligent Packages) si acquistano a parte",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/sea/products/data-cloud/pricing.html",
+    "confidence": "secondary",
+    "note": "Letto tramite sintesi della pagina prezzi SAP (non apribile dal sandbox) e incrociato con analisi di terzi (Leverx, Accely). Il perimetro può variare per Paese e nel tempo."
+  },
+  "w05.bdc_pricing_unit": {
+    "label": "Unità commerciale di Business Data Cloud",
+    "value": "Capacity Units (CU), acquistate come core capacity; condizioni e durata contrattuale variano per Paese",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/sea/products/data-cloud/pricing.html",
+    "confidence": "secondary",
+    "note": "Nessun prezzo o sconto: solo l'unità di misura. Verificare la pagina prezzi del mercato italiano."
+  },
+  "w05.bdc_connect_databricks": {
+    "label": "BDC Connect for Databricks: disponibilità",
+    "value": "ottobre 2025",
+    "asOf": "2025-10-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://barc.com/sap-data-analytics-2026/",
+    "confidence": "secondary",
+    "note": "Solo il mese è noto (BARC): il giorno esatto non è stato verificato."
+  },
+  "w05.bdc_connect_snowflake": {
+    "label": "Connettore zero-copy SAP BDC per Snowflake: disponibilità generale",
+    "value": "generalmente disponibile dal 4 maggio 2026",
+    "asOf": "2026-05-04",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://docs.snowflake.com/release-notes/2026/other/2026-05-04-Snowflake-SAP-zerocopy-integration",
+    "confidence": "primary",
+    "note": "Fonte ufficiale Snowflake (release note), non SAP. Non ho trovato un comunicato SAP dedicato."
+  },
+  "w05.bdc_connect_bigquery": {
+    "label": "SAP BDC Connect for Google BigQuery: disponibilità generale",
+    "value": "generalmente disponibile dal 27 luglio 2026",
+    "asOf": "2026-07-27",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://cloud.google.com/blog/products/sap-google-cloud/sap-and-google-cloud-launch-bdc-connect-for-bigquery/",
+    "confidence": "primary",
+    "note": "Annuncio congiunto SAP e Google Cloud; data dal blog di Google Cloud."
+  },
+  "w05.bdc_connect_athena": {
+    "label": "BDC Connect per Amazon Athena",
+    "value": "Amazon Athena: connettore annunciato a Sapphire 2026, disponibilità generale pianificata per la seconda metà del 2026 (stato attuale da verificare)",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2026/05/sap-aws-next-generation-ai-bi-directional-zero-copy-data-sharing-sap-bdc/",
+    "confidence": "secondary",
+    "note": "Pianificazione annunciata a maggio 2026: non ho verificato se sia stata rispettata. Per Microsoft Fabric le fonti sono discordanti (GA a Sapphire oppure H2 2026): non usato nelle domande."
+  },
+  "w05.datasphere_status": {
+    "label": "Stato di SAP Datasphere dopo Business Data Cloud",
+    "value": "SAP Datasphere non è stato rinominato né dismesso: resta un componente strategico di BDC (modellazione, catalogo, data management) ed è acquistabile tramite la core capacity di BDC",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://community.sap.com/t5/technology-blog-posts-by-sap/sap-business-data-cloud-faqs/ba-p/14022781",
+    "confidence": "secondary",
+    "note": "FAQ della SAP Community (non documentazione ufficiale di prodotto), coerente con BARC e con la pagina prezzi SAP. Nessuna fonte parla di rename o dismissione."
+  },
+  "w05.sac_in_bdc": {
+    "label": "SAP Analytics Cloud dentro Business Data Cloud",
+    "value": "SAP Analytics Cloud rientra nell'offerta BDC come livello di reporting e planning; per la pianificazione usa Datasphere come storage (Seamless Planning, disponibile dal primo trimestre 2025)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://barc.com/sap-data-analytics-2026/",
+    "confidence": "secondary",
+    "note": "BARC; lo spostamento dello storage di SAC verso Datasphere è descritto come graduale."
+  },
+  "w05.dremio_iceberg": {
+    "label": "Dremio e Apache Iceberg nella roadmap di BDC",
+    "value": "il piano annunciato è di usare Apache Iceberg come livello di base aperto di BDC, con un catalogo aperto (Apache Polaris, API REST di Iceberg); SAP HANA Cloud resta il motore in-memory per le prestazioni operative",
+    "asOf": "2026-07-06",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://itdaily.com/news/business/sap-finalizes-dremio-acquisition-all-sap-data-bundled/",
+    "confidence": "secondary",
+    "note": "Roadmap, non prodotto rilasciato: non ho trovato conferma di rilascio. Formulare sempre come piano."
+  },
+  "w05.reltio_role": {
+    "label": "Ruolo di Reltio dentro Business Data Cloud",
+    "value": "master data management multi-dominio con entity resolution basata su AI (golden record), integrato in BDC; per ora acquistabile anche standalone; supporta il Model Context Protocol per gli agenti",
+    "asOf": "2026-05-07",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://itdaily.com/news/business/sap-reltio-afronding/",
+    "confidence": "secondary",
+    "note": "Stampa di settore su comunicato SAP. La vendita standalone è indicata come valida «per ora»."
+  },
+  "w05.mdg_vs_reltio": {
+    "label": "Posizionamento SAP: MDG e Reltio",
+    "value": "per SAP, Master Data Governance governa il dato nel momento in cui nasce nell'ERP (workflow, regole, qualità), mentre Reltio unifica e monitora i master data provenienti da qualunque sistema",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/products/data-cloud/reltio.html",
+    "confidence": "secondary",
+    "note": "Posizionamento descritto da SAP e ripreso da analisti (BARC): non è un confronto tecnico indipendente."
+  },
+  "w05.btp_commercial_models": {
+    "label": "Modelli commerciali BTP (livello concettuale)",
+    "value": "CPEA (pool annuale di crediti prepagati), Pay-As-You-Go (consumo fatturato ogni mese, senza impegno) e Subscription (canone fisso per una capacità definita, di norma da 1 a 3 anni)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://developers.sap.com/tutorials/btp-ea-onboard-01-intro/",
+    "confidence": "secondary",
+    "note": "Tutorial SAP per il solo PAYG; il quadro completo è incrociato con analisi di terzi. Il nome CPEA compare anche come BTPEA. Nessuna tariffa o sconto riportati."
+  },
+  "w05.ai_platform_pricing": {
+    "label": "Modello commerciale della SAP Business AI Platform",
+    "value": "secondo SAPinsider non c'è ancora un modello commerciale unificato: ogni livello eredita il pricing del prodotto d'origine (dati a capacity units, AI a consumo con AI Units)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://sapinsider.org/analyst-insights/untangling-the-business-ai-platform-pricing-puzzle/",
+    "confidence": "secondary",
+    "note": "Analisi di un analista, non annuncio SAP. Può cambiare ai prossimi rinnovi: riverificare."
+  },
+  "w05.integration_enhanced": {
+    "label": "SAP Integration Suite: Enhanced Edition",
+    "value": "l'Enhanced Edition, presentata a Sapphire 2026, affianca le altre edizioni e aggiunge funzioni AI come Text-to-Flow (flussi di integrazione generati da linguaggio naturale)",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://sapinsider.org/articles/inside-the-enhanced-edition-what-saps-integration-suite-shift-means-for-the-autonomous-enterprise/",
+    "confidence": "secondary",
+    "note": "La struttura delle edizioni (Starter, Standard, Enhanced, Premium) è descritta in modo discordante dalle fonti: non costruire domande sul listino."
+  },
+  "w05.btm_portfolio": {
+    "label": "SAP Business Transformation Management",
+    "value": "il portafoglio SAP Business Transformation Management riunisce SAP Signavio (processi), SAP LeanIX (architettura) e WalkMe (adozione)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.leanix.net/en/sap-business-transformation-management-virtual-roundtable-jordan-oman-qatar",
+    "confidence": "secondary",
+    "note": "Pagina di evento ospitata da LeanIX; con la Business AI Platform di Sapphire 2026 Signavio e LeanIX sono inquadrati nel livello di governance (SAPinsider)."
+  },
+  "w05.btc": {
+    "label": "SAP Business Transformation Center",
+    "value": "soluzione cloud basata su SAP Cloud ALM per gestire la trasformazione dei dati nei percorsi di migrazione verso il cloud ERP",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://support.sap.com/en/alm/sap-cloud-alm/transformation/btc.html",
+    "confidence": "primary",
+    "note": "La pagina SAP descrive il prodotto in termini generali («transform data operations»): il perimetro funzionale dettagliato va confermato con lo specialista."
+  },
+  "w05.sap_rpt1": {
+    "label": "SAP-RPT-1, modello relazionale per dati tabellari",
+    "value": "SAP-RPT-1 è un modello pre-addestrato per dati tabellari (relational pretrained transformer), annunciato a novembre 2025 e disponibile nelle varianti small e large tramite il Generative AI Hub",
+    "asOf": "2025-11-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://thenewstack.io/rpt-1-sap-launches-a-relational-foundation-model-for-the-enterprise/",
+    "confidence": "secondary",
+    "note": "Il rilascio dei pesi aperti su Hugging Face era annunciato ma non verificato."
+  },
+  "w05.knowledge_graph": {
+    "label": "SAP Knowledge Graph",
+    "value": "livello semantico che collega dati, metadati e processi SAP dentro BDC, usato come base di contesto per Joule e gli agenti; tra i temi centrali di Sapphire 2026",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://futurumgroup.com/?p=89841",
+    "confidence": "secondary",
+    "note": "Analisi di Futurum e altri commentatori; stato di rilascio per componente non verificato."
+  },
+  "w05.intelligent_apps": {
+    "label": "Intelligent Applications su Business Data Cloud",
+    "value": "ogni Intelligent Application ha tre livelli: data product, contenuto di dominio e applicazione (annunciate a ottobre 2025)",
+    "asOf": "2025-10-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://news.sap.com/2025/10/intelligent-applications-data-driven-decision-making/",
+    "confidence": "primary",
+    "note": "Solo il mese di annuncio è noto dall'URL."
+  }
+}

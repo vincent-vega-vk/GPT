@@ -1,0 +1,162 @@
+{
+ "w09.engagement_cloud_name": {
+  "label": "Nome attuale di ex SAP Emarsys",
+  "value": "SAP Engagement Cloud",
+  "asOf": "2026-02-19",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-04-06",
+  "source": "https://news.sap.com/2026/02/sap-engagement-cloud-advances-enterprise-engagement-strategy/",
+  "confidence": "primary",
+  "note": "Il nome Emarsys compare ancora come «formerly SAP Emarsys» su alcune pagine SAP e nel dominio emarsys.com."
+ },
+ "w09.engagement_cloud_rename": {
+  "label": "Rinomina di SAP Emarsys in SAP Engagement Cloud",
+  "value": "SAP Emarsys è diventato SAP Engagement Cloud con l'annuncio del 19 febbraio 2026: le funzioni esistenti restano e SAP introduce anche una Enterprise Edition con più strumenti di amministrazione e governance",
+  "asOf": "2026-02-19",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-04-06",
+  "source": "https://news.sap.com/2026/02/sap-engagement-cloud-advances-enterprise-engagement-strategy/",
+  "confidence": "primary",
+  "note": "Rinomina e data confermate dal comunicato SAP e da stampa di settore; il dettaglio delle edition va riverificato sul sito SAP prima di usarlo in una proposta."
+ },
+ "w09.gartner_personalization_2026": {
+  "label": "SAP nel Magic Quadrant Gartner 2026 per Personalization Engines",
+  "value": "SAP è stata nominata Leader nel Gartner Magic Quadrant 2026 for Personalization Engines (settima volta consecutiva secondo SAP; prodotto valutato: SAP Engagement Cloud)",
+  "asOf": "2026-02-05",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-02-05",
+  "source": "https://news.sap.com/2026/02/sap-a-leader-2026-gartner-magic-quadrant-personalization-engines/",
+  "confidence": "primary",
+  "note": "È un'affermazione di SAP su un report Gartner (disponibile su richiesta): Gartner non sponsorizza i vendor. Citarla come posizionamento di analista, non come garanzia di risultato."
+ },
+ "w09.gartner_digital_commerce_2025": {
+  "label": "SAP nel Magic Quadrant Gartner 2025 per Digital Commerce",
+  "value": "SAP è Leader nel Gartner Magic Quadrant 2025 for Digital Commerce (pubblicato il 3 novembre 2025), l'undicesima volta dal 2014 secondo SAP",
+  "asOf": "2025-11-03",
+  "checked": "2026-10-08",
+  "staleAfter": "2026-11-30",
+  "source": "https://www.sap.com/cmp/dg/gartner-magic-quadrant-e-commerce/index.html",
+  "confidence": "primary",
+  "note": "Affermazione di SAP. L'edizione 2026 è attesa verso novembre 2026: da riverificare appena esce."
+ },
+ "w09.commerce_cloud_erp_edition": {
+  "label": "SAP Commerce Cloud, cloud ERP edition",
+  "value": "SAP Commerce Cloud, cloud ERP edition: soluzione commerce preconfigurata (prezzi, disponibilità, ordini) per le aziende che usano SAP Cloud ERP, pensata per il mid-market e presentata a Sapphire 2026",
+  "asOf": "2026-05-12",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-04-06",
+  "source": "https://www.sap.com/products/crm/commerce-cloud-cloud-erp-edition.html",
+  "confidence": "primary",
+  "note": "Pagina prodotto SAP; sulla scelta rispetto a un'implementazione Commerce Cloud classica le fonti sono partner (es. diva-e)."
+ },
+ "w09.commerce_onprem_eomm": {
+  "label": "Fine manutenzione standard di SAP Commerce on-premise",
+  "value": "SAP Commerce on-premise (ultima release: 2205): la manutenzione standard è terminata il 31 luglio 2026 e si passa a una manutenzione su richiesta senza tempi di risposta garantiti; SAP Commerce Cloud non è interessato",
+  "asOf": "2026-07-31",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-01-08",
+  "source": "https://www.spinnakersupport.com/blog/2026/05/29/sap-commerce-on-premises-eomm-what-to-do-next/",
+  "confidence": "secondary",
+  "note": "Data riportata da più partner (Spinnaker, Akeneo, Arineo); la SAP Note ufficiale non è stata reperita. Formulare con prudenza."
+ },
+ "w09.autonomous_cx": {
+  "label": "Autonomous CX (Sapphire 2026)",
+  "value": "Autonomous CX: assistenti e agenti Joule per marketing, commerce, vendite e servizio, appoggiati a una base dati comune con SAP Cloud ERP (annunciato a Sapphire 2026, maggio)",
+  "asOf": "2026-05-12",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-01-08",
+  "source": "https://news.sap.com/2026/05/autonomous-cx-why-ai-raises-stakes-for-customer-experience/",
+  "confidence": "primary",
+  "note": "Sul sito SAP l'area CRM è presentata come «Autonomous CX»."
+ },
+ "w09.autonomous_cx_availability": {
+  "label": "Disponibilità degli assistenti Autonomous CX",
+  "value": "la disponibilità dei singoli assistenti CX avviene a ondate e le fonti indicano date diverse (dal secondo trimestre 2026 fino a fine 2026 e oltre): va verificata assistente per assistente",
+  "asOf": "2026-10-08",
+  "checked": "2026-10-08",
+  "staleAfter": "2026-11-08",
+  "source": "https://cxtoday.com/sap-launches-autonomous-cx-ai-assistants-at-connect-2026",
+  "confidence": "low",
+  "note": "Fonti discordanti (stampa di settore e blog di partner; SAP indica finestre di rilascio nel 2026). Prima di promettere una funzione al cliente controllare Release Navigator / account team."
+ },
+ "w09.parloa": {
+  "label": "Parloa e SAP Service Cloud",
+  "value": "a maggio 2026 SAP e Parloa (agenti AI vocali) hanno annunciato una partnership con investimento strategico di SAP: gli agenti Parloa si integrano con SAP Service Cloud come app SAP Endorsed",
+  "asOf": "2026-05-12",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-01-08",
+  "source": "https://www.parloa.com/parloa-in-the-press/parloa-sap-partnership/",
+  "confidence": "secondary",
+  "note": "Fonte principale: comunicazione di Parloa e stampa di settore; claim di prestazione di tipo marketing."
+ },
+ "w09.cx_portfolio_names": {
+  "label": "Portafoglio SAP CX: nomi attuali",
+  "value": "SAP Sales Cloud e SAP Service Cloud (Version 2), SAP Commerce Cloud, SAP Engagement Cloud (ex Emarsys), SAP Customer Data Platform, SAP CPQ e SAP Field Service Management, presentati insieme come «Autonomous CX»",
+  "asOf": "2026-10-08",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-01-08",
+  "source": "https://www.sap.com/products/crm.html",
+  "confidence": "secondary",
+  "note": "Elenco ricostruito da pagina CRM/CX SAP, pagina pacchetti CX e stampa di settore; il perimetro esatto dei pacchetti commerciali va verificato con l'account team."
+ },
+ "w09.ai_licensing_models": {
+  "label": "Modelli di licenza delle funzioni AI nei prodotti CX",
+  "value": "le funzioni AI dei prodotti CX sono licenziate in modi diversi a seconda di prodotto e pagina: Joule Base incluso nei piani CX secondo SAP, AI Units dove richieste, CX AI Toolkit come licenza separata rispetto a Sales Cloud V2",
+  "asOf": "2026-10-08",
+  "checked": "2026-10-08",
+  "staleAfter": "2026-12-15",
+  "source": "https://learning.sap.com/courses/exploring-sap-sales-cloud-version-2/exploring-cx-ai-toolkit",
+  "confidence": "low",
+  "note": "Pagine SAP regionali non coerenti tra loro e modello in evoluzione: non citare ai clienti senza conferma dell'account team."
+ },
+ "w09.v1_to_v2": {
+  "label": "Stato di Sales/Service Cloud V1 rispetto a V2",
+  "value": "V2 è una nuova applicazione ricostruita (lanciata dal 2023), non un upgrade di V1; non risulta una data pubblica di fine supporto di V1 e SAP offre percorsi e strumenti di transizione",
+  "asOf": "2026-10-08",
+  "checked": "2026-10-08",
+  "staleAfter": "2026-12-15",
+  "source": "https://www.uniorg.de/en/insights/blog-en/from-sap-sales-and-service-cloud-v1-to-v2-a-transition-compass",
+  "confidence": "low",
+  "note": "Fonte: articolo di un partner non datato. Assenza di una data pubblica non equivale a garanzia: chiedere sempre la roadmap ufficiale all'account team."
+ },
+ "w09.salesforce_data360": {
+  "label": "Salesforce: Data Cloud diventa Data 360",
+  "value": "Salesforce ha rinominato Data Cloud in Data 360 il 14 ottobre 2025, nel lancio di Agentforce 360; licenze e modello dati invariati",
+  "asOf": "2025-10-14",
+  "checked": "2026-10-08",
+  "staleAfter": "2026-12-15",
+  "source": "https://www.salesforceben.com/salesforce-data-cloud-renamed-to-data-360-as-part-of-agentforce-360/",
+  "confidence": "secondary",
+  "note": "Data indicata da stampa di settore; comunicato Salesforce datato 13/14 ottobre 2025 a seconda del fuso."
+ },
+ "w09.salesforce_informatica": {
+  "label": "Salesforce completa l'acquisizione di Informatica",
+  "value": "Salesforce ha completato l'acquisizione di Informatica il 18 novembre 2025 (circa 8 miliardi di dollari di equity value) per portare catalogo dati, integrazione, governance e MDM nella propria piattaforma",
+  "asOf": "2025-11-18",
+  "checked": "2026-10-08",
+  "staleAfter": "2026-12-15",
+  "source": "https://markets.financialcontent.com/clarkebroadcasting.mymotherlode/article/bizwire-2025-11-18-salesforce-completes-acquisition-of-informatica",
+  "confidence": "secondary",
+  "note": "Riproduzione del comunicato Salesforce su aggregatore finanziario."
+ },
+ "w09.hubspot_outcome_pricing": {
+  "label": "HubSpot: prezzo a risultato per i Breeze Agents",
+  "value": "dal 14 aprile 2026 HubSpot fattura il Breeze Customer Agent per conversazione risolta (0,50 dollari) e il Breeze Prospecting Agent per lead raccomandato (1 dollaro)",
+  "asOf": "2026-04-14",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-01-06",
+  "source": "https://martech.org/hubspot-moves-to-outcome-based-pricing-for-some-breeze-ai-agents/",
+  "confidence": "secondary",
+  "note": "Prezzi riportati da stampa di settore, non dal listino HubSpot: usarli solo come esempio di modello a risultato, mai come confronto di costo."
+ },
+ "w09.microsoft_agents": {
+  "label": "Microsoft Dynamics 365 Sales e agenti AI",
+  "value": "Microsoft ha pianificato per la release wave 1 2026 di Dynamics 365 (aprile-settembre 2026) Copilot e agenti AI per i venditori, estendibili con Power Platform e Copilot Studio",
+  "asOf": "2026-03-18",
+  "checked": "2026-10-08",
+  "staleAfter": "2027-01-08",
+  "source": "https://www.microsoft.com/en-us/dynamics-365/blog/business-leader/2026/03/18/2026-release-wave-1-plans-for-microsoft-dynamics-365-microsoft-power-platform-and-copilot-studio-offerings/",
+  "confidence": "primary",
+  "note": "Piano di release dichiarato da Microsoft; lo stato di rilascio di ogni singola funzione non è stato verificato."
+ }
+}

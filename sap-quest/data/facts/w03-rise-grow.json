@@ -1,0 +1,122 @@
+{
+  "w03.rise_definition": {
+    "label": "Definizione SAP di RISE with SAP",
+    "value": "RISE with SAP è il percorso di trasformazione pensato per i clienti SAP esistenti che vogliono modernizzare l'ERP on-premise e portarlo nel cloud, puntando a un core pulito (clean core) con le estensioni su SAP BTP",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://learning.sap.com/courses/discovering-the-autonomous-enterprise-de/die-strategie-updates-fur-rise-with-sap-und-sap-grow-erkunden_fcac53e0-6d9b-4506-b85e-6c366a53b979_de-DE",
+    "confidence": "primary",
+    "note": "Da SAP Learning (corso in tedesco), letto tramite sintesi di ricerca: pagina non apribile dal sandbox."
+  },
+  "w03.private_package_2025": {
+    "label": "Composizione del pacchetto SAP Cloud ERP Private (SAP, aprile 2025)",
+    "value": "il pacchetto SAP Cloud ERP Private è descritto in tre blocchi: applicazioni di business (suite ERP cloud con app per l'agilità finanziaria), strumenti e servizi di trasformazione (con SAP LeanIX e SAP Signavio, onboarding ed esperti) e servizi di ottimizzazione ed estensibilità verso il clean core",
+    "asOf": "2025-04-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-06",
+    "source": "https://news.sap.com/2025/04/sap-cloud-erp-private-package-accelerate-transformation",
+    "confidence": "primary",
+    "note": "Annuncio SAP di aprile 2025 (giorno non verificato); contenuto letto da sintesi di ricerca. Il perimetro attuale può essere cambiato: verificare il listino."
+  },
+  "w03.rise_scope": {
+    "label": "Perimetro tipico di RISE / SAP Cloud ERP Private",
+    "value": "infrastruttura e servizi tecnici cloud gestiti, cloud support e strumenti operativi, crediti SAP BTP, accesso starter a SAP Business Network, strumenti di trasformazione (SAP Signavio, SAP LeanIX) e servizi di onboarding; il dettaglio dipende da pacchetto e contratto",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/uk/products/erp/s4hana-private-edition/pricing.html",
+    "confidence": "secondary",
+    "note": "Elenco ricostruito dalla pagina SAP (infrastruttura, servizi tecnici, cloud support, strumenti operativi) e da pagine di partner (crediti BTP, Business Network, Signavio). Le fonti divergono su cosa sia incluso nel bundle base: verificare service description e order form."
+  },
+  "w03.packaging_2025": {
+    "label": "Riorganizzazione dei pacchetti RISE nel 2025",
+    "value": "dal 2025 il tier Base di RISE è stato ritirato dal listino e il Premium Plus non è più venduto come tale: i pacchetti sono stati riorganizzati attorno a SAP Cloud ERP Private",
+    "asOf": "2025-09-30",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.epiuselabs.com/lets-talk-hcm/news-on-sap-cloud-erp-private-offering-and-transition-for-base-edition-skus",
+    "confidence": "secondary",
+    "note": "Concordano più advisor (EPI-USE, Redress Compliance, UpperEdge) ma divergono sul dettaglio (consolidamento di Premium e Premium Plus vs rinomina) e sulle date di cut-off. Non citare date o SKU al cliente."
+  },
+  "w03.grow_offer": {
+    "label": "Cosa include GROW with SAP",
+    "value": "GROW with SAP combina SAP Cloud ERP (public edition) con processi di best practice preconfigurati per finance, supply chain e HR, servizi di adozione, community e formazione, Joule integrato e GROW Fast, un'implementazione strutturata a perimetro predefinito e prezzi trasparenti",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/products/erp/grow/what-is-sap-grow.html",
+    "confidence": "primary",
+    "note": "Testo ricavato da sintesi di ricerca delle pagine prodotto SAP e di una pagina partner (NTT Data) per community e adoption services."
+  },
+  "w03.grow_fast_finance": {
+    "label": "GROW Fast - Smart Start for Finance",
+    "value": "GROW Fast - Smart Start for Finance: go-live in meno di 16 settimane per la parte finance su SAP Cloud ERP, con Joule fin dall'inizio; rivolto a medie imprese, scale-up e integrazione di filiali",
+    "asOf": "2026-07-01",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.sap.com/germany/assetdetail/2026/07/8cc2759a-5d7f-0010-bca6-c68f7e60039b.html",
+    "confidence": "primary",
+    "note": "asOf = mese di luglio 2026 ricavato dal percorso dell'URL. È un claim di marketing SAP: non presentarlo come garanzia."
+  },
+  "w03.rise_grow_2026_ai": {
+    "label": "Novità RISE e GROW dopo Sapphire 2026 (AI)",
+    "value": "dopo Sapphire 2026 i clienti RISE ricevono l'impegno contrattuale ad attivare tre Joule Assistants entro il primo anno, mentre i clienti GROW ricevono oltre 20 assistenti AI dal primo giorno con una toolchain AI per go-live in poche settimane",
+    "asOf": "2026-05-13",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://news.sap.com/2026/05/sap-sapphire-keynote-business-ai-platform-power-autonomous-enterprise/",
+    "confidence": "secondary",
+    "note": "Wording ricavato da sintesi del keynote SAP e da Techzine (che lo descrive come gratuito nel primo anno). Non è chiaro cosa significhi «attivare» né i prerequisiti: verificare i termini contrattuali."
+  },
+  "w03.rise_toolchain_2026": {
+    "label": "Toolchain di trasformazione di RISE nel 2026",
+    "value": "la toolchain di trasformazione di RISE usa strumenti assistiti da AI (SAP Signavio, SAP LeanIX, WalkMe) e SAP parla di una toolchain agentica con assistenti per migrazione e modernizzazione",
+    "asOf": "2026-06-29",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://learning.sap.com/courses/discovering-the-autonomous-enterprise-de/die-strategie-updates-fur-rise-with-sap-und-sap-grow-erkunden_fcac53e0-6d9b-4506-b85e-6c366a53b979_de-DE",
+    "confidence": "secondary",
+    "note": "Gli strumenti (Signavio, LeanIX, WalkMe) vengono dal corso SAP Learning; la dizione «agent-led toolchain» viene da un podcast SAP del 29 giugno 2026. Dettagli e disponibilità degli assistenti di migrazione non verificati."
+  },
+  "w03.hosting_options": {
+    "label": "Opzioni di hosting di RISE",
+    "value": "RISE può essere ospitato su AWS, Microsoft Azure o Google Cloud (a scelta del cliente) oppure nei data center SAP; regioni e disponibilità vanno verificate caso per caso",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://asia.viseo.com/insights/sap-cloud-erp-private-edition-accelerating-transformation-in-asia-pacific-with-tailored-s-4hana-cloud-solutions/",
+    "confidence": "secondary",
+    "note": "Fonti di partner. Esistono altre opzioni regionali (es. Alibaba Cloud in alcuni mercati) non verificate qui."
+  },
+  "w03.stackit_rise": {
+    "label": "STACKIT (Schwarz Digits) per RISE with SAP",
+    "value": "STACKIT (Schwarz Digits) risulta elencato come infrastruttura per RISE with SAP dall'8 settembre 2026, con deployment tecnici in partenza da novembre 2026; il fornitore dichiara parità di prezzo con gli altri provider certificati",
+    "asOf": "2026-09-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-31",
+    "source": "https://schwarz-digits.de/en/presse/archive/2026/schwarz-digits-launches-rise-with-sap-on-stackit-at-competitive-market-prices",
+    "confidence": "secondary",
+    "note": "Fonte principale è il comunicato del fornitore stesso (le affermazioni «unico hyperscaler europeo» e «parità di prezzo» sono sue); la data di inizio dei deployment viene da stampa tedesca. Nessuna conferma indipendente SAP."
+  },
+  "w03.aws_sovereign": {
+    "label": "SAP Sovereign Cloud su AWS European Sovereign Cloud (annuncio)",
+    "value": "a settembre 2025 AWS e SAP hanno annunciato il piano di portare capacità SAP Sovereign Cloud (tra cui SAP BTP e SAP Cloud ERP) sull'AWS European Sovereign Cloud, con prima regione a Brandenburg in Germania",
+    "asOf": "2025-09-24",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://www.businesswire.com/news/home/20250924911261/en/AWS-and-SAP-Expand-Collaboration-to-Advance-Digital-Sovereignty-Across-Europe",
+    "confidence": "primary",
+    "note": "Comunicato congiunto: è un annuncio di piano. Stato di disponibilità effettivo e perimetro RISE non verificati a ottobre 2026."
+  },
+  "w03.rise_commercial": {
+    "label": "Struttura commerciale di RISE secondo gli advisor",
+    "value": "RISE è una subscription pluriennale con canone ancorato a un pool di FUE (Full Use Equivalent, utenti pesati per tipo di utilizzo); secondo gli advisor la durata tipica è di 3-5 anni, con preferenza SAP per i 5",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-06",
+    "source": "https://redresscompliance.com/sap-rise-negotiation-guide.html",
+    "confidence": "low",
+    "note": "Fonte: advisor di licensing con interesse commerciale, non SAP. Gli advisor divergono su metrica (FUE vs modello a fasce di volume) e durata minima. Nessun prezzo o sconto: usare solo come concetto, non citare numeri al cliente."
+  }
+}

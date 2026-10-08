@@ -1,0 +1,22 @@
+{
+  "w11.nis2_italia": {
+    "label": "NIS2 in Italia (D.Lgs. 138/2024): stato e scadenza misure di base",
+    "value": "è in vigore dal 16 ottobre 2024 e, per la maggior parte dei soggetti, le misure di sicurezza di base vanno completate entro il 31 ottobre 2026",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-11-15",
+    "source": "https://www.ictsecuritymagazine.com/articoli/nis2-e-d-lgs-138-2024/",
+    "confidence": "secondary",
+    "note": "Fonti secondarie italiane (riviste e consulenze; riscontro anche su teamsystem.com/magazine/identita-digitale/direttiva-nis2-misure-sicurezza-ottobre-2026/). I termini decorrono dalla comunicazione di inserimento nell'elenco NIS e variano per soggetto (i nuovi iscritti 2026 potrebbero avere scadenze differite). Testo ACN non consultabile dal sandbox: riverificare. Non dire al cliente se rientra o no nel perimetro: spetta alla sua compliance."
+  },
+  "w11.sap_btc": {
+    "label": "SAP Business Transformation Center (su SAP Cloud ALM)",
+    "value": "è incluso nelle cloud subscription, nei contratti Enterprise Support e in RISE; aiuta a definire lo scope dei dati e supporta la transizione da ECC a S/4HANA, in particolare la selective data transition, senza sostituire strumenti di conversione come SUM",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://support.sap.com/en/alm/sap-cloud-alm/transformation/btc.html",
+    "confidence": "primary",
+    "note": "Pagina SAP non apribile dal sandbox: contenuto riscontrato negli snippet di ricerca (pagina support.sap.com e news.sap.com/2024/07/serving-customers-better-lean-selective-data-transition/). Eventuali cambi di packaging o di nome da riverificare."
+  }
+}

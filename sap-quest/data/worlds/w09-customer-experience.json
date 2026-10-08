@@ -1,0 +1,1488 @@
+{
+ "id": "w09",
+ "levels": [
+  {
+   "id": "w09-l01",
+   "title": "Mappa del portafoglio CX",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "La CX è il front office di SAP: marketing, commerce, vendite, servizio. L'ERP governa ordini, scorte e fatture; la CX governa relazione e domanda. Il valore sta nel collegarli.",
+     "Nomi attuali del portafoglio: {{w09.cx_portfolio_names}}.",
+     "Il racconto 2026 di SAP: {{w09.autonomous_cx}}.",
+     "I nomi cambiano spesso (Hybris, C/4HANA, Emarsys...): in trattativa usa il nome attuale e, se serve, il vecchio tra parentesi per farti riconoscere."
+    ],
+    "ae": "Se il cliente dice «abbiamo già un CRM», non attaccarlo: chiedi quanto è collegato a prezzi, disponibilità e ordini reali."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa il prodotto SAP CX alla sua funzione principale",
+     "pairs": [
+      [
+       "SAP Sales Cloud",
+       "Pipeline, opportunità e previsioni di vendita"
+      ],
+      [
+       "SAP Service Cloud",
+       "Casi di assistenza e contact center"
+      ],
+      [
+       "SAP Commerce Cloud",
+       "Vendita online B2B e B2C"
+      ],
+      [
+       "{{w09.engagement_cloud_name}}",
+       "Campagne e personalizzazione multicanale"
+      ],
+      [
+       "SAP CPQ",
+       "Configurazione e preventivazione di offerte complesse"
+      ]
+     ],
+     "exp": "Ogni prodotto presidia un momento della relazione col cliente. Conoscere la mappa ti evita di proporre «il CRM» in generale e ti permette di entrare dal problema giusto.",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "Il prodotto che fino al 2025 si chiamava SAP Emarsys oggi si chiama {{w09.engagement_cloud_name}}.",
+     "a": true,
+     "exp": "Corretto. {{w09.engagement_cloud_rename}}. Le funzioni restano: cambia il nome e il posizionamento, non serve rifare il progetto.",
+     "diff": 1
+    },
+    {
+     "t": "multi",
+     "q": "Quali attività sono tipicamente coperte dalla CX e non dall'ERP core?",
+     "o": [
+      "Gestione della pipeline di opportunità",
+      "Contabilizzazione delle fatture fornitori",
+      "Gestione dei casi di assistenza",
+      "Calcolo del costo standard di produzione",
+      "Portale ordini self-service per clienti B2B"
+     ],
+     "a": [
+      0,
+      2,
+      4
+     ],
+     "exp": "Pipeline, assistenza e portale ordini sono relazione col cliente (CX). Fatture fornitori e costi standard sono processi amministrativi e produttivi dell'ERP. I due mondi si parlano, ma non coincidono.",
+     "diff": 1
+    },
+    {
+     "t": "fill",
+     "q": "Nel 2026 SAP presenta il suo portafoglio CRM e CX con il nome «___».",
+     "o": [
+      "Autonomous CX",
+      "SAP C/4HANA",
+      "SAP Hybris Suite",
+      "SAP Cloud for Customer"
+     ],
+     "a": 0,
+     "exp": "«Autonomous CX» è il filo conduttore 2026. C/4HANA, Hybris e Cloud for Customer sono nomi storici: citarli come attuali ti fa sembrare indietro di anni.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un CFO dice che il CRM è roba da marketing e che lui compra ERP. Come rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Il CRM è roba da marketing. Io compro ERP, e il resto non mi interessa."
+     },
+     "o": [
+      "Ti chiedo quanto costano errori di prezzo, offerte lente e resi: la CX agisce lì.",
+      "Il CRM non c'entra col bilancio, ma ai tuoi commerciali piacerà molto, vedrai.",
+      "Se non lo compri tu, lo comprerà il marketing con un budget separato dal tuo.",
+      "Ti mostro subito una demo: l'interfaccia è molto moderna e piace a tutti."
+     ],
+     "a": 0,
+     "exp": "Il CFO ragiona in ricavi, margini, DSO e rischio. Collega la CX a quei numeri (errori d'ordine, sconti fuori policy, incassi in ritardo) invece di parlare di funzioni.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l02",
+   "title": "Nomi vecchi, nomi nuovi",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Hybris è diventato SAP Commerce Cloud (rebrand del 2018). Gigya è diventato SAP Customer Data Cloud (identità e consenso), su cui poggia la SAP Customer Data Platform.",
+     "SAP Cloud for Customer (C4C) è la base storica di Sales Cloud e Service Cloud: oggi si parla di V1 (storico) e Version 2 (ricostruito da zero).",
+     "Emarsys, il marketing automation acquisito da SAP, nel 2026 cambia nome: {{w09.engagement_cloud_rename}}.",
+     "Anche il marchio ombrello è cambiato più volte: Hybris, poi C/4HANA, poi SAP Customer Experience, oggi Autonomous CX. I nomi cambiano, le funzioni restano."
+    ],
+    "ae": "Se il cliente usa il vecchio nome, riconoscilo e traduci: «Emarsys, che oggi si chiama {{w09.engagement_cloud_name}}». Mostra che sei aggiornato senza fare lezioni."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa il nome storico al nome attuale o al suo significato",
+     "pairs": [
+      [
+       "SAP Hybris (commerce)",
+       "SAP Commerce Cloud"
+      ],
+      [
+       "Gigya",
+       "SAP Customer Data Cloud (identità e consenso)"
+      ],
+      [
+       "Emarsys",
+       "{{w09.engagement_cloud_name}}"
+      ],
+      [
+       "SAP Cloud for Customer (C4C)",
+       "Base storica di Sales Cloud e Service Cloud V1"
+      ],
+      [
+       "SAP C/4HANA",
+       "Vecchio marchio ombrello della suite CX"
+      ]
+     ],
+     "exp": "I nomi storici sono ancora usati dai clienti. Tradurre vecchio e nuovo nome in una frase è il modo più rapido per mostrare che conosci il portafoglio.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente ti parla di «Emarsys». Come rispondi per mostrarti aggiornato?",
+     "o": [
+      "Oggi si chiama {{w09.engagement_cloud_name}}: stesse funzioni, nome nuovo.",
+      "Emarsys è stato dismesso e sostituito da Sales Cloud V2 nel 2026.",
+      "Emarsys oggi fa parte di SAP Cloud ERP come modulo di marketing.",
+      "Emarsys non è mai stato un prodotto di SAP, ma di un partner."
+     ],
+     "a": 0,
+     "exp": "{{w09.engagement_cloud_rename}}. Non è una sostituzione con altri prodotti né una dismissione: è la stessa piattaforma con un nome e un posizionamento nuovi.",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "Sales Cloud Version 2 è stato ricostruito su un'architettura cloud-native: non è un semplice upgrade di V1.",
+     "a": true,
+     "exp": "Corretto. V2 è una nuova applicazione, per questo il passaggio da V1 è un progetto di migrazione (dati, integrazioni, estensioni). Stato: {{w09.v1_to_v2}}.",
+     "diff": 2
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine cronologico i nomi del marchio ombrello CX di SAP, dal più vecchio al più recente",
+     "items": [
+      "SAP Hybris",
+      "SAP C/4HANA",
+      "SAP Customer Experience",
+      "Autonomous CX"
+     ],
+     "exp": "La sequenza è indicativa: Hybris (dopo l'acquisizione), C/4HANA (2018), SAP Customer Experience (nome successivo) e Autonomous CX (2026). Non serve ricordare gli anni, ma sapere che esiste uno storico.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un IT Director con Sales Cloud V1 chiede se passare a V2 è un semplice upgrade. Cosa dici?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "Abbiamo Sales Cloud V1 da anni. Ci dicono di passare a V2: è un upgrade, giusto?"
+     },
+     "o": [
+      "No: V2 è ricostruito. È un progetto di migrazione, parto dalla mappa dell'esistente.",
+      "Sì, è un aggiornamento automatico incluso nella manutenzione standard.",
+      "No, per passare a V2 devi per forza cambiare fornitore di CRM.",
+      "Sì, ma si può fare solo dopo il passaggio completo a S/4HANA."
+     ],
+     "a": 0,
+     "exp": "V2 è un prodotto nuovo: dati, integrazioni e processi vanno rivisti. Proponi una discovery dell'esistente (oggetti, integrazioni, estensioni) e un piano per fasi collegato a un beneficio, non una paura.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l03",
+   "title": "Sales e Service Cloud V2",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Sales Cloud V2 e Service Cloud V2 sono la ricostruzione cloud-native (dal 2023) dei vecchi prodotti C4C: microservizi e estensioni side-by-side (clean core) invece di personalizzazioni dentro il prodotto.",
+     "Sales Cloud copre lead, opportunità, account, forecast e territori. Service Cloud copre casi, knowledge base, SLA, contact center e self-service. Condividono dati cliente e funzioni AI.",
+     "Per i clienti su V1 la domanda è: quando e come migrare? Stato noto: {{w09.v1_to_v2}}.",
+     "Complementi tipici in manifatturiero e medtech: SAP CPQ per configurare e quotare prodotti complessi, SAP Field Service Management per tecnici e interventi on-site."
+    ],
+    "ae": "Con i clienti su V1 non vendere paura: costruisci un piano di transizione per fasi, legato a un beneficio (forecast, tempi di risposta)."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Qual è la differenza architetturale chiave di Sales Cloud V2 rispetto a V1?",
+     "o": [
+      "È ricostruito cloud-native a microservizi, con estensioni esterne al prodotto",
+      "È V1 con una nuova interfaccia grafica",
+      "È una versione on-premise di V1",
+      "È un modulo interno di S/4HANA"
+     ],
+     "a": 0,
+     "exp": "V2 non è un restyling: è una nuova architettura. Per questo estensioni e integrazioni di V1 non si portano 1:1 e la migrazione va pianificata.",
+     "diff": 1
+    },
+    {
+     "t": "fill",
+     "q": "Nel principio «clean core» applicato a Sales Cloud V2 si estende il prodotto con estensioni ___ invece di modificarlo internamente.",
+     "o": [
+      "side-by-side",
+      "a codice ABAP custom",
+      "modificando il database"
+     ],
+     "a": 0,
+     "exp": "Clean core significa lasciare standard il prodotto e costruire le differenze accanto (su BTP o con API). Aggiornamenti più semplici, meno debito tecnico.",
+     "diff": 1
+    },
+    {
+     "t": "bucket",
+     "q": "Sales Cloud o Service Cloud?",
+     "buckets": [
+      "Sales Cloud",
+      "Service Cloud"
+     ],
+     "items": [
+      [
+       "Previsione di vendita e pipeline",
+       0
+      ],
+      [
+       "Gestione di lead e opportunità",
+       0
+      ],
+      [
+       "Knowledge base e SLA",
+       1
+      ],
+      [
+       "Casi e ticket multicanale",
+       1
+      ],
+      [
+       "Gestione dei territori di vendita",
+       0
+      ],
+      [
+       "Self-service per i clienti",
+       1
+      ]
+     ],
+     "exp": "Sales presidia il percorso fino al contratto, Service il rapporto dopo la vendita. Nei clienti B2B conviene mostrare entrambi sullo stesso dato cliente.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Il partner di un cliente dice che V1 non sarà più supportato il mese prossimo. Cosa fai?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "Il nostro partner dice che Sales Cloud V1 non sarà più supportato dal mese prossimo. È vero?"
+     },
+     "o": [
+      "Non risulta una data pubblica: verifico la roadmap ufficiale e ti rispondo per iscritto.",
+      "Confermo: meglio migrare subito, lo dicono tutti i partner di SAP.",
+      "Smentisco: V1 sarà supportato per sempre, senza alcuna scadenza.",
+      "Non è un tema mio: per queste cose devi chiedere al tuo partner."
+     ],
+     "a": 0,
+     "exp": "Non confermare né smentire a memoria: {{w09.v1_to_v2}} La regola vale in ogni caso: date e roadmap si danno solo dopo conferma ufficiale dell'account team.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali sono complementi tipici di Sales/Service Cloud in aziende manifatturiere e medtech?",
+     "o": [
+      "SAP CPQ per configurare e quotare prodotti complessi",
+      "SAP Field Service Management per gli interventi on-site",
+      "SAP Commerce Cloud per portali ordini B2B",
+      "SAP Ariba Sourcing per le gare ai fornitori",
+      "SAP SuccessFactors Learning per la formazione interna"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "exp": "CPQ, Field Service e Commerce estendono il ciclo cliente (offerta, installato, ordini). Ariba e SuccessFactors sono altri domini (acquisti e HR): utili, ma non complementi della CX.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l04",
+   "title": "Commerce B2B: ordini online",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "SAP Commerce Cloud è la piattaforma e-commerce per B2B e B2C complessi: listini per cliente, cataloghi, account gerarchici, ordini ricorrenti. Analisti: {{w09.gartner_digital_commerce_2025}}.",
+     "Novità 2026: {{w09.commerce_cloud_erp_edition}}. Pensata per partire in fretta con processi standard, senza ricostruire pricing e ordini.",
+     "Attenzione all'on-premise: {{w09.commerce_onprem_eomm}}.",
+     "Per un B2B conta il self-service: il cliente ordina da solo, vede prezzi contrattuali e disponibilità reali dall'ERP e il servizio clienti riceve meno telefonate sullo stato degli ordini."
+    ],
+    "ae": "Con distributori e grossisti il caso d'uso forte è l'ordine self-service con prezzi e stock reali: chiedi quanti ordini arrivano oggi via mail, telefono o agente."
+   },
+   "ex": [
+    {
+     "t": "tf",
+     "q": "SAP Commerce Cloud, cloud ERP edition è pensata per aziende che già usano SAP Cloud ERP e vogliono un canale online con processi preconfigurati.",
+     "a": true,
+     "exp": "{{w09.commerce_cloud_erp_edition}}. Per esigenze molto personalizzate resta da valutare Commerce Cloud classico: chiedi quanta personalizzazione serve davvero.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Il COO di un'azienda di beni di consumo riceve molti ordini da distributori per mail e telefono, con errori di prezzo. Cosa proponi?",
+     "ctx": {
+      "who": "COO",
+      "say": "Un terzo degli ordini dei distributori arriva per mail e telefono. Costa tempo e sbagliamo i prezzi."
+     },
+     "o": [
+      "Misuro costo per ordine ed errori, poi propongo un portale con prezzi e stock reali.",
+      "Un portale risolve tutto in un mese: basta una licenza.",
+      "Un chatbot sul sito: gli ordini arriveranno da soli.",
+      "Cambiare ERP è l'unico modo per ridurre gli errori."
+     ],
+     "a": 0,
+     "exp": "Parti dalla misura del problema (costo per ordine, errori, tempo di gestione) e collega il portale ai dati ERP. Promettere tempi e risultati senza discovery è il modo più veloce di perdere credibilità.",
+     "diff": 2
+    },
+    {
+     "t": "fill",
+     "q": "Il valore di un portale B2B collegato all'ERP è mostrare al cliente prezzi contrattuali e ___ in tempo reale.",
+     "o": [
+      "disponibilità a magazzino",
+      "margini interni sul prodotto",
+      "costi standard di produzione"
+     ],
+     "a": 0,
+     "exp": "Prezzo e disponibilità reali riducono telefonate, errori e contestazioni. I margini e i costi interni non vanno mai esposti al cliente.",
+     "diff": 1
+    },
+    {
+     "t": "match",
+     "q": "Associa il bisogno B2B alla funzione di commerce",
+     "pairs": [
+      [
+       "Listino diverso per ogni cliente",
+       "Prezzi contrattuali e cataloghi per account"
+      ],
+      [
+       "Riordino rapido di prodotti ricorrenti",
+       "Liste di riordino e ordini ricorrenti"
+      ],
+      [
+       "Più utenti con approvazioni nello stesso cliente",
+       "Account gerarchici con ruoli e budget"
+      ],
+      [
+       "Sapere dov'è l'ordine senza telefonare",
+       "Stato ordini e documenti dall'ERP"
+      ]
+     ],
+     "exp": "Sono le esigenze che differenziano un portale B2B da un negozio online consumer. Se il cliente le riconosce, la conversazione passa dal sito all'efficienza di processo.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un cliente ha SAP Commerce on-premise (release 2205). Cosa dici a ottobre 2026?",
+     "ctx": {
+      "who": "IT Director",
+      "say": "Il nostro SAP Commerce è on-premise, versione 2205. Fino a quando è supportato?"
+     },
+     "o": [
+      "Manutenzione standard terminata: pianifichiamo il cloud partendo dalle personalizzazioni.",
+      "Hai supporto standard fino al 2030, come per ECC.",
+      "Cambia solo il nome: Hybris e Commerce Cloud sono identici.",
+      "Devi passare per forza alla cloud ERP edition."
+     ],
+     "a": 0,
+     "exp": "Secondo le fonti di settore la manutenzione standard dell'on-premise è terminata (vedi lezione), il cloud non è interessato. La cloud ERP edition è per chi usa Cloud ERP, non un percorso obbligato. Formula con prudenza e conferma con SAP.",
+     "diff": 3
+    }
+   ]
+  },
+  {
+   "id": "w09-l05",
+   "title": "Engagement Cloud e marketing",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "{{w09.engagement_cloud_rename}}.",
+     "Cosa fa: segmentazione, journey e personalizzazione su più canali (email, SMS, mobile, web), usando segnali di commerce, vendite, servizio e ERP, non solo del marketing. I modelli dati si possono unificare via Business Data Cloud.",
+     "Posizionamento di analista: {{w09.gartner_personalization_2026}}.",
+     "Per il CMO conta il ciclo: dati di prima parte con consenso, segmenti, messaggi e risultati misurati (conversione, valore cliente), non il numero di email inviate."
+    ],
+    "ae": "Con un CMO non partire dal tool: parti dai dati di prima parte e dal consenso. Chiedi: quanti clienti riconosci davvero in tutti i canali?"
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Quale caratteristica SAP sottolinea per Engagement Cloud rispetto a un marketing automation tradizionale?",
+     "o": [
+      "Usa segnali operativi di commerce, servizio ed ERP per adattare le comunicazioni",
+      "Sostituisce il CRM di vendita",
+      "Gestisce solo email transazionali",
+      "Funziona solo con S/4HANA on-premise"
+     ],
+     "a": 0,
+     "exp": "Il differenziatore dichiarato è l'aggancio ai segnali operativi dell'azienda (ordini, consegne, casi aperti): personalizzazione basata su ciò che accade davvero al cliente.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Il posizionamento Leader di un vendor in un Magic Quadrant Gartner è una valutazione di mercato, non una garanzia di risultato nel progetto del cliente.",
+     "a": true,
+     "exp": "Corretto. Gartner valuta visione e capacità di esecuzione e non sponsorizza i vendor. Nota: {{w09.gartner_personalization_2026}}. Citalo come contesto, mai come promessa.",
+     "diff": 1
+    },
+    {
+     "t": "multi",
+     "q": "Quali indicatori interessano davvero a un CMO che valuta una piattaforma di engagement?",
+     "o": [
+      "Costo di acquisizione cliente (CAC)",
+      "Valore del cliente nel tempo (CLV)",
+      "Numero di email inviate al mese",
+      "Tasso di conversione per segmento",
+      "Numero di funzioni nel menu"
+     ],
+     "a": [
+      0,
+      1,
+      3
+     ],
+     "exp": "CAC, CLV e conversione collegano il marketing al business. Volume di email e numero di funzioni sono metriche di attività o di prodotto, non di risultato.",
+     "diff": 2
+    },
+    {
+     "t": "order",
+     "q": "Metti in ordine il ciclo di una campagna data-driven",
+     "items": [
+      "Raccogli dati di prima parte con consenso",
+      "Unifica i profili cliente",
+      "Costruisci segmenti e journey",
+      "Invia sui canali giusti",
+      "Misura i risultati e ottimizza"
+     ],
+     "exp": "Senza consenso e profili unificati la personalizzazione è fragile. La misura chiude il ciclo e alimenta il business case per estendere il progetto.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Un CMO ha già uno strumento di email marketing. Qual è la risposta migliore?",
+     "ctx": {
+      "who": "CMO",
+      "say": "Abbiamo già uno strumento di email marketing. Perché dovrei guardare la vostra piattaforma di engagement?"
+     },
+     "o": [
+      "Quanti clienti riconosci in tutti i canali? E usi dati di ordini e servizio nei messaggi?",
+      "Le nostre email hanno aperture più alte, lo dicono anche gli analisti di settore.",
+      "La nostra piattaforma costa meno di qualunque altro concorrente sul mercato.",
+      "Presto sarà obbligatoria per tutti i clienti SAP che usano il cloud."
+     ],
+     "a": 0,
+     "exp": "Non confrontare strumenti di invio: sposta la conversazione su dati unificati e segnali operativi. Promesse di prezzo o di obbligo sono false e rompono la fiducia.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l06",
+   "title": "Dati cliente, identità, consenso",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "La Customer Data Platform (CDP) unifica i profili da più fonti (anagrafiche, ordini, web, servizio) in una vista cliente utilizzabile. Poggia su identità e consenso, tecnologia nata con Gigya (Customer Data Cloud).",
+     "Il consenso (GDPR) non è un dettaglio: serve base giuridica, preferenze tracciate, storico e revoca. Senza, non puoi attivare i dati per personalizzare.",
+     "Master data e profilo di engagement sono cose diverse: l'anagrafica ufficiale vive nell'ERP o in un MDM, il profilo comportamentale nella CDP. Per l'MDM SAP ha acquisito Reltio: {{sap.acq.reltio}}.",
+     "Un golden record evita che lo stesso cliente esista tre volte con indirizzi diversi: è la base per AI e personalizzazione affidabili."
+    ],
+    "ae": "Parla di dati prima di AI: «Quante anagrafiche duplicate avete tra ERP, CRM e marketing?» È la domanda che apre MDM e CDP."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa il concetto alla definizione",
+     "pairs": [
+      [
+       "CDP (Customer Data Platform)",
+       "Unifica i profili cliente da più fonti"
+      ],
+      [
+       "Consent management",
+       "Registra preferenze, base giuridica e revoche"
+      ],
+      [
+       "MDM / golden record",
+       "Un'unica anagrafica affidabile per cliente o prodotto"
+      ],
+      [
+       "Identity management",
+       "Un account per cliente su tutti i touchpoint"
+      ],
+      [
+       "Master data nell'ERP",
+       "Anagrafiche ufficiali usate per ordini e fatture"
+      ]
+     ],
+     "exp": "Sono livelli diversi dello stesso problema: chi è il cliente (MDM/ERP), come si identifica (identity), cosa ha acconsentito (consenso), cosa fa (CDP).",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "Anche con una CDP, il consenso del cliente va rispettato e applicato quando si attivano i dati per le campagne.",
+     "a": true,
+     "exp": "Corretto. La CDP non cambia gli obblighi: la base giuridica serve ovunque risiedano i dati. Una buona CDP propaga le preferenze ai canali di attivazione, ed è un argomento a favore.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Reltio, acquisita da SAP nel 2026, è una società specializzata in che cosa?",
+     "o": [
+      "Master data management (golden record)",
+      "Contact center in cloud",
+      "Pagamenti online",
+      "Gestione delle risorse umane"
+     ],
+     "a": 0,
+     "exp": "Reltio fa MDM basato su matching intelligente per creare record unici di clienti, fornitori, prodotti. Stato dell'operazione: {{sap.acq.reltio}}. Rilevante per CX e AI perché la qualità dei dati è il prerequisito.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un CMO ha tre anagrafiche clienti diverse e personalizza male. Chiede se basta aggiungere AI. Cosa rispondi?",
+     "ctx": {
+      "who": "CMO",
+      "say": "Abbiamo tre anagrafiche cliente diverse e il marketing personalizza male. Mi basta aggiungere AI?"
+     },
+     "o": [
+      "No: l'AI amplifica i dati che trova. Prima profili e consenso, poi personalizziamo.",
+      "Sì, l'AI elimina da sola i duplicati senza intervento.",
+      "Sì, ma serve un modello più grande.",
+      "No, bisogna prima cambiare ERP."
+     ],
+     "a": 0,
+     "exp": "Anche SAP lo ripete nel racconto Autonomous CX: l'AI amplifica ciò che già esiste, punti deboli compresi. Parti da MDM/CDP e consenso con un caso d'uso piccolo.",
+     "diff": 2
+    },
+    {
+     "t": "bucket",
+     "q": "Master data/ERP o CDP/engagement?",
+     "buckets": [
+      "Master data / ERP-MDM",
+      "CDP / engagement"
+     ],
+     "items": [
+      [
+       "Anagrafica ufficiale con partita IVA e termini di pagamento",
+       0
+      ],
+      [
+       "Storico di navigazione e aperture email",
+       1
+      ],
+      [
+       "Gerarchia di clienti e punti di consegna",
+       0
+      ],
+      [
+       "Segmenti di audience per campagne",
+       1
+      ],
+      [
+       "Preferenze di contatto e consensi",
+       1
+      ],
+      [
+       "Codice articolo e unità di misura",
+       0
+      ]
+     ],
+     "exp": "Il master data è la fonte ufficiale per i processi transazionali. La CDP raccoglie comportamenti e preferenze per l'engagement. Mischiarli crea conflitti: stabilisci sempre chi è il master.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l07",
+   "title": "CX + ERP: il filo rosso",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Il vantaggio rispetto a un CRM isolato: la CX parla con l'ERP su dati vivi, cioè anagrafiche di clienti e prodotti, prezzi, disponibilità, preventivi, ordini e document flow.",
+     "L'ERP di riferimento è oggi SAP Cloud ERP (nomi: {{sap.naming.cloud_erp}}), ma ci sono scenari predefiniti anche verso ERP on-premise via SAP BTP.",
+     "Business Data Cloud porta dati SAP e non-SAP in prodotti di dati governati per analisi e AI. Il racconto 2026: {{sap.sapphire26.platform}}.",
+     "Attenzione al processo, non solo ai connettori: chi è il master di cliente, prodotto, prezzo? Senza regole chiare nascono sincronizzazioni duplicate e conflitti."
+    ],
+    "ae": "Chiedi «Dov'è il prezzo vero?»: se il commerciale quota in un posto e l'ERP fattura in un altro, lì si perdono margine e tempo."
+   },
+   "ex": [
+    {
+     "t": "multi",
+     "q": "Quali dati scorrono tipicamente tra Sales/Service Cloud e l'ERP?",
+     "o": [
+      "Anagrafiche clienti e prodotti",
+      "Prezzi e condizioni dall'ERP",
+      "Preventivi e ordini di vendita",
+      "Buste paga dei dipendenti",
+      "Disponibilità a magazzino"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Sono i dati che riducono errori e attese tra commerciale e back office. Le buste paga appartengono all'HR e non servono al processo commerciale.",
+     "diff": 1
+    },
+    {
+     "t": "fill",
+     "q": "Per integrare la CX con un ERP on-premise SAP offre scenari predefiniti sulla piattaforma ___.",
+     "o": [
+      "SAP BTP",
+      "SAP GUI",
+      "SAP Fiori Launchpad"
+     ],
+     "a": 0,
+     "exp": "L'integrazione passa dalla piattaforma BTP (Integration Suite e connettori predefiniti). Il resto non è un livello di integrazione ma strumenti di accesso o interfaccia.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Il COO lamenta che i commerciali promettono consegne che il magazzino non rispetta. Cosa proponi?",
+     "ctx": {
+      "who": "COO",
+      "say": "I commerciali promettono consegne che il magazzino non riesce a rispettare. Poi i clienti chiamano furiosi."
+     },
+     "o": [
+      "Porto la disponibilità reale dell'ERP nei preventivi: la data promessa è verificata.",
+      "Formo i commerciali a essere più prudenti nel promettere le date ai clienti.",
+      "Compriamo più scorte di sicurezza di tutti i prodotti, così non mancano mai.",
+      "Condividiamo le date di consegna su un foglio Excel aggiornato ogni giorno."
+     ],
+     "a": 0,
+     "exp": "Il problema è informativo: il commerciale non vede la disponibilità. La soluzione è portare il dato ERP nel processo di vendita, non aggiungere buffer o più disciplina.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Integrare un CRM con l'ERP significa soltanto sincronizzare le anagrafiche una volta al giorno.",
+     "a": false,
+     "exp": "Falso. L'integrazione utile include prezzi, disponibilità, preventivi, ordini e document flow, in tempo reale dove serve. Una sincronizzazione notturna di anagrafiche non risolve gli errori di processo.",
+     "diff": 2
+    },
+    {
+     "t": "match",
+     "q": "Associa il dato ERP al beneficio per il commerciale",
+     "pairs": [
+      [
+       "Prezzi e condizioni",
+       "Evita preventivi sbagliati o fuori policy"
+      ],
+      [
+       "Disponibilità (ATP)",
+       "Permette di promettere una consegna verificata"
+      ],
+      [
+       "Document flow",
+       "Collega preventivo, ordine, consegna e fattura"
+      ],
+      [
+       "Master data cliente",
+       "Allinea CRM, ERP e marketing sullo stesso cliente"
+      ]
+     ],
+     "exp": "Ogni dato ERP in vista al commerciale elimina un'attesa o un errore. Costruisci il business case contando quante volte oggi si chiama il back office per saperlo.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l08",
+   "title": "AI in CX: Joule e assistenti",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "{{w09.autonomous_cx}}.",
+     "Assistente: guida l'utente e coordina più agenti verso un obiettivo (es. qualificare un lead). Agente: esegue un compito specifico in autonomia (es. instradare un lead). È il lessico SAP.",
+     "Assistenti annunciati per area: marketing (Content, Campaign), commerce (Merchandising, Shopping, Order Management), vendite (Sales, Deal Qualification, Deal Closing), servizio (Case Management, Service Management).",
+     "Disponibilità: {{w09.autonomous_cx_availability}}. Licenze: {{w09.ai_licensing_models}}.",
+     "Voce e contact center: {{w09.parloa}}."
+    ],
+    "ae": "Non vendere l'AI come magia: chiedi quale decisione vuoi automatizzare, con quali dati, con quale controllo umano e come misuri il risultato."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa l'assistente CX all'area",
+     "pairs": [
+      [
+       "Deal Qualification Assistant",
+       "Vendite: qualifica e instrada i lead"
+      ],
+      [
+       "Merchandising Assistant",
+       "Commerce: contenuti, prezzi e assortimento"
+      ],
+      [
+       "Case Management Assistant",
+       "Servizio: prepara e risolve i casi"
+      ],
+      [
+       "Campaign Assistant",
+       "Marketing: audience, contenuti e ottimizzazione"
+      ]
+     ],
+     "exp": "I nomi seguono le quattro aree di Autonomous CX. Sapere chi fa cosa serve a collegare ogni assistente al KPI di un ruolo (CRO, CMO, Head of Service).",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Nel lessico SAP, in che cosa un «assistente» si distingue da un «agente»?",
+     "o": [
+      "L'assistente guida l'utente e coordina più agenti; l'agente esegue un compito specifico",
+      "L'assistente è a pagamento e l'agente è gratuito",
+      "L'agente richiede sempre un consulente",
+      "Sono sinonimi usati in modo intercambiabile"
+     ],
+     "a": 0,
+     "exp": "L'assistente è il livello che interagisce con la persona e orchestra; gli agenti sono i lavoratori specializzati. Usare bene i termini evita equivoci sul controllo umano.",
+     "diff": 1
+    },
+    {
+     "t": "tf",
+     "q": "Tutti gli assistenti Autonomous CX hanno la stessa data di disponibilità, uguale per ogni cliente e paese.",
+     "a": false,
+     "exp": "Falso. Il rilascio è a ondate e le fonti indicano finestre diverse: {{w09.autonomous_cx_availability}}. Non promettere date: verifica sempre con l'account team.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un CRO ha sentito che l'AI «chiude i deal da sola da domani». Quando parte?",
+     "ctx": {
+      "who": "CRO",
+      "say": "Mi hanno detto che il vostro agente chiude i deal da solo, da domani. Quando parte davvero?"
+     },
+     "o": [
+      "Ti confermo per iscritto cosa è disponibile, la roadmap e le licenze; poi un pilota.",
+      "Parte domani per tutti i clienti SAP, senza costi aggiuntivi di licenza.",
+      "Non c'è ancora nulla di reale: ricontattami tra un anno, quando sarà pronto.",
+      "Dipende solo da quanto spendi già in licenze ERP con SAP."
+     ],
+     "a": 0,
+     "exp": "Disponibilità e licenze AI variano per assistente e cambiano spesso. Risposta professionale: stato certo oggi, roadmap, licenza, pilota con metrica.",
+     "diff": 3
+    },
+    {
+     "t": "multi",
+     "q": "Quali condizioni rendono utile un agente AI nel processo commerciale?",
+     "o": [
+      "Dati cliente puliti e consentiti",
+      "Un obiettivo misurabile (es. tempo di risposta)",
+      "Controllo umano sulle azioni critiche",
+      "Eliminare ogni controllo per risparmiare tempo",
+      "Partire dal processo meno definito dell'azienda"
+     ],
+     "a": [
+      0,
+      1,
+      2
+     ],
+     "exp": "Dati affidabili, obiettivo misurabile e supervisione sono i prerequisiti. Togliere i controlli o partire dal processo meno chiaro aumenta il rischio di errori amplificati.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l09",
+   "title": "Il CMO: parlare di crescita",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Il CMO risponde di crescita, costo di acquisizione cliente (CAC), ritorno delle campagne e valore del cliente nel tempo (CLV). Soffre di dati frammentati, consenso GDPR e dipendenza da agenzie.",
+     "Pain point tipici: non sa se due contatti sono lo stesso cliente, non vede ordini e servizio, personalizza male, fatica a dimostrare il ritorno.",
+     "Nel B2B (distributori, farmacie, retail) il marketing tocca spesso anche e-commerce e canale indiretto: contano ordini ripetuti, share of wallet, attivazione dei nuovi clienti.",
+     "Il tuo approccio: ipotesi di valore su uno o due KPI, un caso d'uso piccolo con dati disponibili, un risultato misurabile in 90 giorni."
+    ],
+    "ae": "Chiudi con un pilota misurabile: «Se in 90 giorni la riattivazione dei clienti dormienti cresce di una soglia che fissiamo insieme, estendiamo»."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Un CMO B2B dice che i clienti ricomprano poco e non sa perché. Qual è la prima domanda?",
+     "ctx": {
+      "who": "CMO",
+      "say": "I miei clienti B2B ricomprano poco e io non riesco a capire perché."
+     },
+     "o": [
+      "Quanti clienti attivi hai, ogni quanto riordinano, quali segnali mancano al marketing?",
+      "Hai già provato a mandare più email e promozioni ai clienti dormienti?",
+      "Ti serve soprattutto un chatbot sul sito, così i clienti si sentono seguiti.",
+      "Ti propongo subito un bundle di licenze con uno sconto importante."
+     ],
+     "a": 0,
+     "exp": "Discovery prima della soluzione: frequenza di riordino e segnali mancanti (ordini, assistenza, visite) rivelano dove i dati sono scollegati. Le altre risposte saltano la diagnosi.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Il CMO ha un basso tasso di consenso e il team non sa chi può ricevere cosa. Cosa proponi?",
+     "ctx": {
+      "who": "CMO",
+      "say": "Il consenso dei nostri contatti è basso e il team non sa più chi può ricevere cosa."
+     },
+     "o": [
+      "Consenso e preferenze centralizzati, poi segmenti solo sui contatti attivabili.",
+      "Mandiamo comunque le campagne a tutti, il consenso si chiede dopo.",
+      "Compriamo liste di contatti dall'esterno.",
+      "Smettiamo di fare marketing diretto."
+     ],
+     "a": 0,
+     "exp": "Il consenso è la base della personalizzazione: va gestito in un unico punto e propagato ai canali. Inviare senza base giuridica o comprare liste espone ad ammende e danni di reputazione.",
+     "diff": 2
+    },
+    {
+     "t": "order",
+     "q": "Ordina i passi di una conversazione efficace con un CMO",
+     "items": [
+      "Esplora KPI e pain point",
+      "Verifica dati disponibili e consenso",
+      "Proponi un caso d'uso piccolo e misurabile",
+      "Definisci un pilota di 90 giorni con una metrica",
+      "Concorda sponsor e prossimo passo"
+     ],
+     "exp": "La sequenza va dal problema alla prova misurabile. Saltare la verifica dei dati porta a pilot senza materiale; saltare lo sponsor porta a progetti senza decisione.",
+     "diff": 1
+    },
+    {
+     "t": "bucket",
+     "q": "KPI da CMO o da CRO?",
+     "buckets": [
+      "CMO",
+      "CRO"
+     ],
+     "items": [
+      [
+       "Costo di acquisizione cliente",
+       0
+      ],
+      [
+       "Ritorno delle campagne (ROAS)",
+       0
+      ],
+      [
+       "Accuratezza del forecast",
+       1
+      ],
+      [
+       "Win rate",
+       1
+      ],
+      [
+       "Valore del cliente nel tempo (CLV)",
+       0
+      ],
+      [
+       "Durata del ciclo di vendita",
+       1
+      ]
+     ],
+     "exp": "Il CMO è misurato su domanda e valore del cliente; il CRO su conversione, pipeline e previsione dei ricavi. Parlare il KPI giusto con il ruolo giusto fa metà del lavoro.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Il responsabile IT del CMO teme che l'integrazione con tutto costerà troppo. Cosa dici?",
+     "ctx": {
+      "who": "CMO",
+      "say": "Il mio responsabile IT dice che integrare tutto costerà troppo e che il progetto non finirà mai."
+     },
+     "o": [
+      "Mappiamo i sistemi: con due sorgenti e un caso d'uso, l'integrazione resta contenuta.",
+      "Non preoccuparti: l'integrazione la fa SAP gratis, è inclusa nel contratto.",
+      "Se non integri tutti i sistemi fin dall'inizio, la soluzione non funziona.",
+      "Non preoccuparti, l'AI integra da sola ogni sistema senza lavoro di progetto."
+     ],
+     "a": 0,
+     "exp": "Riduci il perimetro: due sorgenti, un caso d'uso, un KPI. Promettere gratuità o integrazione automatica è falso e ti ritorna come obiezione al primo preventivo.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l10",
+   "title": "Il CRO e le vendite",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Il CRO (Chief Revenue Officer) risponde di ricavi, copertura di pipeline, win rate, accuratezza del forecast e durata del ciclo di vendita; spesso governa vendite, marketing e a volte service.",
+     "Pain point: forecast poco affidabile, tempo dei venditori speso in data entry, preventivi lenti o sbagliati, scarsa visibilità su disponibilità e margini.",
+     "Leve SAP: Sales Cloud (pipeline e forecast con AI), CPQ (preventivi corretti), integrazione con l'ERP (prezzi e disponibilità), assistenti per qualificazione e chiusura (secondo lo stato di disponibilità).",
+     "Non promettere percentuali: ancora il valore a misure del cliente, come tempo di preventivazione oggi e errore attuale del forecast."
+    ],
+    "ae": "Chiedi al CRO: «Di quanto sbaglia il forecast a fine trimestre e quanto tempo passano i venditori a inserire dati?». Sono i due numeri per il business case."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il CRO dice che il forecast di fine trimestre sbaglia sempre del 20%. Cosa rispondi?",
+     "ctx": {
+      "who": "CRO",
+      "say": "Il forecast di fine trimestre sbaglia sempre del 20%. Il CEO non si fida più dei miei numeri."
+     },
+     "o": [
+      "Vediamo da dove nasce l'errore: qualità dati, stadi incoerenti, deal che slittano.",
+      "Con la nostra AI il forecast sarà perfetto.",
+      "Cambia i venditori.",
+      "Il forecast non è importante: guarda le vendite."
+     ],
+     "a": 0,
+     "exp": "Il forecast sbaglia per cause diverse (dati, definizione degli stadi, abitudini). Diagnosticare viene prima di promettere l'AI. «Perfetto» è una promessa che nessun CRO crede.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali misure servono per costruire un business case con il CRO?",
+     "ctx": {
+      "who": "CRO",
+      "say": "Voglio un business case solido per il CEO, ma non so quali numeri servano davvero."
+     },
+     "o": [
+      "Tempo medio di preventivazione oggi",
+      "Errore medio del forecast",
+      "Tempo dei venditori speso in data entry",
+      "Numero di cookie sul sito",
+      "Win rate per segmento"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Sono misure di processo commerciale che il CRO riconosce e che puoi collegare a un risultato. I cookie sul sito riguardano il marketing digitale, non la produttività di vendita.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Il CRO apprezza una promessa del tipo «con l'AI le vendite cresceranno del 30%».",
+     "a": false,
+     "exp": "Falso. Percentuali senza dati del cliente non sono credibili e non verificabili. Ancora il valore alle misure di partenza e a un pilota con soglia di successo concordata.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Il CRO dice che i venditori odiano compilare il CRM. Cosa proponi?",
+     "ctx": {
+      "who": "CRO",
+      "say": "I miei venditori odiano compilare il CRM. Lo fanno il venerdì sera, a memoria."
+     },
+     "o": [
+      "Meno data entry: attività registrate con l'AI e dati ERP senza doppio inserimento.",
+      "Una policy più severa, con sanzioni per chi non compila il CRM in tempo.",
+      "Eliminare il CRM e passare a fogli di calcolo condivisi tra i venditori.",
+      "Più campi obbligatori in ogni scheda, per migliorare la qualità dei dati."
+     ],
+     "a": 0,
+     "exp": "Il data entry si riduce automatizzando e riusando dati esistenti, non aumentando obblighi. Un CRM che aiuta il venditore a vendere viene usato; uno che serve solo al management no.",
+     "diff": 2
+    },
+    {
+     "t": "order",
+     "q": "Ordina il flusso commerciale quote-to-cash",
+     "items": [
+      "Lead qualificato",
+      "Opportunità",
+      "Preventivo (CPQ) con prezzi ERP",
+      "Ordine di vendita",
+      "Consegna e fatturazione"
+     ],
+     "exp": "Il filo che interessa al CRO è che dal lead alla fattura i dati non si ribattano: prezzi e disponibilità ERP nel preventivo, ordine che nasce dal preventivo, fatturazione coerente.",
+     "diff": 1
+    }
+   ]
+  },
+  {
+   "id": "w09-l11",
+   "title": "Head of Service: costo e qualità",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "L'Head of Service risponde di CSAT/NPS, First Contact Resolution (FCR), tempo medio di gestione (AHT), costo per contatto, SLA rispettati e, sul campo, First-Time Fix.",
+     "Pain point: clienti che richiamano per lo stesso problema, agenti che saltano tra cinque schermate, nessuna visibilità su ordini e consegne, knowledge base frammentata.",
+     "Leve: Service Cloud (casi, knowledge, SLA), Field Service Management (tecnici), self-service, assistenti AI e agenti vocali. Esempio partner: {{w09.parloa}}.",
+     "Nei settori regolati un contatto può essere una segnalazione di reazione avversa o un reclamo di qualità: va instradato nei processi di farmacovigilanza e qualità, non gestito come un normale ticket."
+    ],
+    "ae": "Chiedi: «Quante chiamate sono «dov'è il mio ordine?» e quante richiedono più di un contatto?». È il costo che riduci con dati ERP nel servizio e self-service."
+   },
+   "ex": [
+    {
+     "t": "match",
+     "q": "Associa il KPI di servizio al significato",
+     "pairs": [
+      [
+       "FCR",
+       "Problemi risolti al primo contatto"
+      ],
+      [
+       "AHT",
+       "Durata media di gestione di un contatto"
+      ],
+      [
+       "CSAT",
+       "Soddisfazione dopo un'interazione"
+      ],
+      [
+       "First-Time Fix",
+       "Interventi sul campo risolti alla prima visita"
+      ],
+      [
+       "Costo per contatto",
+       "Costo medio di ogni interazione di assistenza"
+      ]
+     ],
+     "exp": "Sono i numeri su cui l'Head of Service è giudicato. Usare i suoi acronimi in modo preciso crea credibilità; usarli a sproposito la distrugge.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Il 30% delle chiamate al servizio clienti è «dov'è il mio ordine?». Cosa proponi?",
+     "ctx": {
+      "who": "Head of Service",
+      "say": "Il 30% delle chiamate è «dov'è il mio ordine?». Il costo per contatto sta esplodendo."
+     },
+     "o": [
+      "Porto stato ordini e consegne dall'ERP in servizio e self-service: la chiamata non nasce.",
+      "Assumiamo più agenti per coprire le ore di punta delle telefonate dei clienti.",
+      "Allunghiamo il messaggio vocale iniziale con le risposte alle domande frequenti.",
+      "Non è un tema di CX ma dell'ufficio logistica e dei trasportatori esterni."
+     ],
+     "a": 0,
+     "exp": "Il costo evitabile è la chiamata che nasce da un'informazione già presente nell'ERP. Rendere il dato visibile all'agente e al cliente ha ritorno più alto che aggiungere persone.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "In un'azienda farmaceutica, la segnalazione di un effetto indesiderato ricevuta dal contact center va instradata nel processo di farmacovigilanza.",
+     "a": true,
+     "exp": "Corretto. Le segnalazioni di reazioni avverse hanno obblighi di raccolta e inoltro con tempi stretti (buone pratiche di farmacovigilanza). Il sistema di servizio deve riconoscerle e instradarle, non trattarle come ticket generici.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un'azienda medtech lamenta che i tecnici non risolvono alla prima visita e gli ospedali si arrabbiano. Cosa proponi?",
+     "ctx": {
+      "who": "Head of Service",
+      "say": "I nostri tecnici tornano due volte su tre dallo stesso ospedale. Mancano i ricambi giusti."
+     },
+     "o": [
+      "Storico dell'installato, ricambi disponibili e pianificazione collegati a service ed ERP.",
+      "Più formazione ai tecnici su tutti i prodotti.",
+      "Una hotline gratuita per gli ospedali.",
+      "Acquistare più furgoni."
+     ],
+     "a": 0,
+     "exp": "Il first-time fix dipende da sapere quale apparecchio, quale storico e quali ricambi servono prima di partire. Field Service collegato ai dati dell'installato e al magazzino ricambi risolve proprio quel gap.",
+     "diff": 3
+    },
+    {
+     "t": "multi",
+     "q": "Quali sono pain point tipici di un servizio clienti frammentato?",
+     "ctx": {
+      "who": "Head of Service",
+      "say": "Il mio servizio clienti è frammentato, ma faccio fatica a spiegare dove si rompe."
+     },
+     "o": [
+      "Il cliente deve ripetere il problema a più agenti",
+      "Gli agenti usano molte schermate non collegate",
+      "Lo stato degli ordini non è visibile al servizio",
+      "Le campagne email hanno troppe immagini",
+      "La knowledge base non è aggiornata"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "Frammentazione significa dati e conoscenza sparsi tra sistemi. Le immagini nelle email sono una questione di marketing, non di servizio.",
+     "diff": 1
+    }
+   ]
+  },
+  {
+   "id": "w09-l12",
+   "title": "Confronti onesti: i concorrenti",
+   "kind": "lesson",
+   "lesson": {
+    "points": [
+     "Salesforce: riferimento storico del CRM, grande ecosistema. Novità datate: {{w09.salesforce_data360}}. E ancora: {{w09.salesforce_informatica}}.",
+     "Microsoft Dynamics 365: integrazione stretta con Microsoft 365, Teams e Power Platform. {{w09.microsoft_agents}}.",
+     "HubSpot: suite all-in-one diffusa in PMI e mid-market. Esempio di AI a prezzo per risultato: {{w09.hubspot_outcome_pricing}}.",
+     "Posizionamento senza FUD: parti dal processo del cliente (B2B complesso, prezzi/disponibilità/ordini dall'ERP, industria), riconosci i punti di forza altrui, confronta costo totale e tempo al valore, non liste di funzioni."
+    ],
+    "ae": "Se il cliente ha già un concorrente: «Cosa funziona bene oggi e dove perdete tempo tra CRM ed ERP?». Non denigrare: fai emergere il problema."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Qual è l'approccio corretto per posizionare SAP CX contro un concorrente?",
+     "o": [
+      "Partire dal processo del cliente e dai dati ERP, riconoscendo i punti di forza altrui",
+      "Elencare con precisione i difetti noti del prodotto del concorrente",
+      "Dire che il concorrente non è adatto alle aziende di grandi dimensioni",
+      "Offrire sempre sconti più alti di quelli che propone il concorrente"
+     ],
+     "a": 0,
+     "exp": "Il FUD fa perdere credibilità e il cliente conosce già i suoi problemi. Un confronto onesto su processo, integrazione ERP e costo totale è più forte e ripetibile.",
+     "diff": 1
+    },
+    {
+     "t": "match",
+     "q": "Associa il vendor al fatto datato verificabile",
+     "pairs": [
+      [
+       "Salesforce",
+       "Data Cloud rinominato Data 360 e acquisizione Informatica"
+      ],
+      [
+       "Microsoft Dynamics 365",
+       "Integrazione con Microsoft 365, Teams e Power Platform"
+      ],
+      [
+       "HubSpot",
+       "Breeze Agents con prezzo a risultato dal 2026"
+      ],
+      [
+       "SAP CX",
+       "Processi collegati all'ERP SAP: prezzi, stock, ordini"
+      ]
+     ],
+     "exp": "Sono fatti pubblici e datati, non giudizi. Citarli con precisione dà autorevolezza; evita di scendere in confronti di prezzo che non puoi sostenere.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "La rinomina di Salesforce Data Cloud in Data 360 ha cambiato modello di licenza e modello dati dei clienti esistenti.",
+     "a": false,
+     "exp": "Falso, secondo la stampa di settore: {{w09.salesforce_data360}}. Sapere che è un cambio di nome e marketing evita di usarlo come argomento di instabilità.",
+     "diff": 2
+    },
+    {
+     "t": "fill",
+     "q": "Il prezzo «a risultato» di HubSpot per i Breeze Agents significa pagare per una conversazione ___ o per un lead raccomandato.",
+     "o": [
+      "risolta",
+      "iniziata",
+      "archiviata"
+     ],
+     "a": 0,
+     "exp": "{{w09.hubspot_outcome_pricing}} Il messaggio per l'AE è che i modelli di prezzo AI stanno cambiando (posto, consumo, risultato): confronta sempre sul costo totale al tuo volume.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Il CRO dice che il suo team vive su Teams e Outlook e che Dynamics gli sembra più naturale. Come rispondi?",
+     "ctx": {
+      "who": "CRO",
+      "say": "Il mio team vive su Teams e Outlook. Dynamics mi sembra molto più naturale."
+     },
+     "o": [
+      "Ha ragione: microsoft 365 integrato è un vantaggio. poi vediamo ordini e prezzi erp.",
+      "Dynamics non va bene per le aziende serie, è pensato per team più piccoli.",
+      "Teams non è abbastanza sicuro per condividere dati di clienti e offerte.",
+      "Con SAP anche Teams e Outlook diventano superflui, quindi non servono."
+     ],
+     "a": 0,
+     "exp": "Riconoscere un punto di forza reale costruisce fiducia. Poi sposti il confronto sul processo end-to-end (preventivo, disponibilità, ordine) dove l'integrazione ERP pesa.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l13",
+   "title": "CX per industria: B2B, CPG, farma",
+   "kind": "roleplay",
+   "lesson": {
+    "points": [
+     "Manifatturiero B2B: prodotti configurabili (CPQ), preventivi con lead time, assistenza tecnica e ricambi (Field Service), portale per distributori e clienti.",
+     "Consumer products: i clienti sono retailer e distributori; contano ordini ricorrenti, promozioni concordate, disponibilità e un e-commerce B2B per i canali minori. La trade promotion ha processi dedicati (vedi mondo 10).",
+     "Life sciences: il CRM per forza vendita e medici è spesso un prodotto specializzato (es. Veeva). Spazio SAP: portali per grossisti e farmacie, servizio clienti, field service medtech, dati cliente e consenso, collegamento con ERP e qualità.",
+     "Regole di settore: promozione ai medici regolata, trasparenza dei rapporti con i professionisti sanitari, GDPR sui dati dei medici. L'AE li porta in anticipo, non li scopre dopo."
+    ],
+    "ae": "In farma non dire «sostituiamo il vostro CRM»: chiedi dove il processo si spezza tra CRM specializzato, ERP e qualità e proponi un perimetro adiacente."
+   },
+   "ex": [
+    {
+     "t": "mcq",
+     "q": "Il COO di un'azienda di beni di consumo ha retailer che ordinano in modo irregolare. Cosa proponi?",
+     "ctx": {
+      "who": "COO",
+      "say": "I retailer ordinano in modo irregolare e non so mai quali scorte servono per le promozioni."
+     },
+     "o": [
+      "Collego ordini, promozioni e stock ai dati di vendita; portale B2B per i clienti minori.",
+      "Eliminiamo i retailer piccoli: costano più di quanto portano come fatturato.",
+      "Aggiungiamo un'app per i consumatori finali, così la domanda si stabilizza.",
+      "Aumentiamo le scorte di tutti i prodotti, così non rischiamo mai di mancare."
+     ],
+     "a": 0,
+     "exp": "L'irregolarità degli ordini si gestisce con visibilità su promozioni, sell-out e disponibilità. Escludere clienti o gonfiare le scorte sposta il problema invece di risolverlo.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Il responsabile commerciale di un'azienda farmaceutica ha già un CRM specializzato per la forza vendita. Cosa dici?",
+     "ctx": {
+      "who": "Responsabile commerciale",
+      "say": "Per i medici abbiamo già un CRM specializzato per la forza vendita. Non lo cambieremo."
+     },
+     "o": [
+      "Non lo tocchiamo: vediamo dove il processo si spezza tra ordini, servizio e qualità.",
+      "Va sostituito subito: SAP può fare tutto quello che fa un CRM specializzato.",
+      "Allora non c'è proprio nulla da fare per voi nel campo della customer experience.",
+      "Migrate in SAP solo i dati anagrafici dei medici e lasciate il resto dov'è."
+     ],
+     "a": 0,
+     "exp": "Attaccare un CRM specializzato è controproducente. Il valore sta nel perimetro adiacente: portali di ordine, service con dati ERP, customer data e consenso, collegamento con la qualità.",
+     "diff": 3
+    },
+    {
+     "t": "bucket",
+     "q": "Dove sta il valore?",
+     "buckets": [
+      "Spazio naturale SAP CX",
+      "Tipicamente CRM specializzato"
+     ],
+     "items": [
+      [
+       "Portale ordini B2B per grossisti e farmacie",
+       0
+      ],
+      [
+       "Service con stato ordini e consegne dall'ERP",
+       0
+      ],
+      [
+       "Field service su apparecchiature installate",
+       0
+      ],
+      [
+       "Pianificazione delle visite ai medici",
+       1
+      ],
+      [
+       "Gestione dei campioni e della promozione ai medici",
+       1
+      ],
+      [
+       "Customer data e consenso integrati con l'ERP",
+       0
+      ]
+     ],
+     "exp": "In farma la parte relazione col medico è presidiata da CRM di settore; SAP CX è forte dove si incrocia con ordini, servizio, installato e dati ERP. «Tipicamente» è un invito alla verifica, non una regola.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "In un'azienda farmaceutica, i dati personali dei medici usati per le campagne sono esclusi dal GDPR perché sono dati professionali.",
+     "a": false,
+     "exp": "Falso. Il GDPR si applica anche ai dati professionali di persone fisiche. Servono base giuridica, informativa e gestione delle preferenze, oltre alle regole di settore sulla promozione ai medici.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Il responsabile di un costruttore di macchine su misura dice che i preventivi richiedono giorni. Perché CPQ è rilevante?",
+     "ctx": {
+      "who": "COO",
+      "say": "Per le nostre macchine su misura i preventivi richiedono giorni e spesso li rifacciamo."
+     },
+     "o": [
+      "Prodotti configurabili con regole di compatibilità",
+      "Prezzi e sconti governati da regole",
+      "Lead time legato a produzione e capacità",
+      "Campagne social per i consumatori",
+      "Varianti diverse per ogni cliente"
+     ],
+     "a": [
+      0,
+      1,
+      2,
+      4
+     ],
+     "exp": "CPQ serve dove configurazione, prezzo e tempi sono complessi. Le campagne social per i consumatori non c'entrano con la preventivazione B2B.",
+     "diff": 2
+    }
+   ]
+  },
+  {
+   "id": "w09-l14",
+   "title": "Boss: il CX Board",
+   "kind": "boss",
+   "lesson": {
+    "points": [
+     "Ripasso: portafoglio e nomi attuali, V2, commerce, engagement, dati e consenso, integrazione ERP, AI e assistenti, ruoli (CMO, CRO, Head of Service) e concorrenti.",
+     "Regola d'oro: parti dal processo e dal KPI del ruolo, collega la CX all'ERP, dichiara solo ciò che è disponibile e verifica le roadmap.",
+     "Prima di rispondere ricorda: nomi attuali, nessun FUD, nessuna promessa di percentuali, pilota misurabile."
+    ]
+   },
+   "ex": [
+    {
+     "t": "fill",
+     "q": "L'ex SAP Emarsys oggi si chiama ___.",
+     "o": [
+      "{{w09.engagement_cloud_name}}",
+      "SAP Marketing Cloud",
+      "SAP Customer Data Cloud"
+     ],
+     "a": 0,
+     "exp": "{{w09.engagement_cloud_rename}}. SAP Marketing Cloud e Customer Data Cloud sono altri prodotti con storia e funzioni diverse.",
+     "diff": 1
+    },
+    {
+     "t": "mcq",
+     "q": "Perché passare da Sales Cloud V1 a V2 è un progetto e non un upgrade?",
+     "o": [
+      "Perché V2 è una nuova applicazione: dati, integrazioni ed estensioni vanno rivisti",
+      "Perché V2 è on-premise",
+      "Perché V1 è già stato spento",
+      "Perché V2 richiede un nuovo ERP"
+     ],
+     "a": 0,
+     "exp": "V2 è ricostruito con architettura diversa e approccio clean core. Stato di supporto V1: {{w09.v1_to_v2}}",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Un CMO di un'azienda CPG ha dati sparsi tra ERP, e-commerce e CRM e vuole personalizzare. Da dove parti?",
+     "ctx": {
+      "who": "CMO",
+      "say": "Voglio personalizzare, ma i dati sono sparsi tra ERP, e-commerce e CRM."
+     },
+     "o": [
+      "Profilo unificato e consenso su un caso d'uso piccolo, con una metrica a 90 giorni.",
+      "Dall'acquisto di un modello AI più grande.",
+      "Dalla sostituzione di tutti i sistemi.",
+      "Da una campagna massiva a tutti i contatti."
+     ],
+     "a": 0,
+     "exp": "Senza profili unificati e consenso l'AI amplifica il disordine. Pilota piccolo e misurabile prima di estendere.",
+     "diff": 2
+    },
+    {
+     "t": "multi",
+     "q": "Quali affermazioni su Autonomous CX sono corrette?",
+     "o": [
+      "Copre marketing, commerce, vendite e servizio",
+      "Si appoggia a una base dati comune con SAP Cloud ERP",
+      "Tutti gli assistenti sono già disponibili per ogni cliente",
+      "Prevede assistenti che coordinano più agenti",
+      "Elimina la necessità di dati di qualità"
+     ],
+     "a": [
+      0,
+      1,
+      3
+     ],
+     "exp": "Il perimetro e il lessico sono corretti. La disponibilità è a ondate (verificare caso per caso) e l'AI non sostituisce la qualità dei dati, la richiede.",
+     "diff": 2
+    },
+    {
+     "t": "mcq",
+     "q": "Il CFO chiede perché investire in CX e non in un magazzino automatico. Cosa rispondi?",
+     "ctx": {
+      "who": "CFO",
+      "say": "Perché dovrei investire in CX e non in un magazzino automatico?"
+     },
+     "o": [
+      "Colleghiamo la CX a ricavi e cassa e la confrontiamo con il ritorno del magazzino.",
+      "Il magazzino non serve.",
+      "La CX è più moderna.",
+      "Decide il marketing, non tu."
+     ],
+     "a": 0,
+     "exp": "Con il CFO si confrontano progetti sullo stesso metro: ricavi, margini, DSO, capitale circolante. Una risposta che denigra l'alternativa perde subito.",
+     "diff": 2
+    },
+    {
+     "t": "tf",
+     "q": "Per posizionarsi contro Microsoft o Salesforce è utile elencare i difetti noti dei loro prodotti.",
+     "a": false,
+     "exp": "Falso. Il FUD non è verificabile, mette il cliente sulla difensiva e riduce la tua credibilità. Funziona meglio riconoscere i punti di forza altrui e spostare il confronto sul processo end-to-end.",
+     "diff": 1
+    },
+    {
+     "t": "order",
+     "q": "Ordina i passi di un pilota CX B2B",
+     "items": [
+      "Scegli uno o due KPI e il caso d'uso",
+      "Mappa sistemi, dati e consensi",
+      "Integra le sorgenti minime (ERP + CX)",
+      "Avvia il pilota con un gruppo ristretto",
+      "Misura a 90 giorni e decidi l'estensione"
+     ],
+     "exp": "Un pilota ben fatto parte dal KPI, usa pochi dati puliti e termina con una decisione basata su una misura concordata in anticipo.",
+     "diff": 2
+    },
+    {
+     "t": "bucket",
+     "q": "Vendite, servizio o commerce?",
+     "buckets": [
+      "Vendite",
+      "Servizio",
+      "Commerce"
+     ],
+     "items": [
+      [
+       "Forecast poco affidabile",
+       0
+      ],
+      [
+       "Preventivi lenti su prodotti configurabili",
+       0
+      ],
+      [
+       "Clienti che richiamano per lo stato ordini",
+       1
+      ],
+      [
+       "Interventi non risolti alla prima visita",
+       1
+      ],
+      [
+       "Ordini via mail e telefono dai distributori",
+       2
+      ],
+      [
+       "Listini diversi per ogni cliente nel portale",
+       2
+      ]
+     ],
+     "exp": "Ogni sintomo punta a un'area. Spesso si presentano insieme: parti da quello con il costo più misurabile.",
+     "diff": 2
+    },
+    {
+     "t": "match",
+     "q": "Dal vecchio nome al nome attuale",
+     "pairs": [
+      [
+       "Hybris",
+       "SAP Commerce Cloud"
+      ],
+      [
+       "Gigya",
+       "SAP Customer Data Cloud"
+      ],
+      [
+       "Emarsys",
+       "{{w09.engagement_cloud_name}}"
+      ],
+      [
+       "C4C",
+       "Base di Sales e Service Cloud V1"
+      ]
+     ],
+     "exp": "I clienti usano ancora i nomi storici: tradurre al volo mostra che conosci il portafoglio e la sua storia.",
+     "diff": 1
+    }
+   ]
+  }
+ ]
+}

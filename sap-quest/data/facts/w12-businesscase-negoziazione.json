@@ -1,0 +1,112 @@
+{
+  "w12.data_act_start_date": {
+    "label": "EU Data Act: data di applicazione generale",
+    "value": "12 settembre 2025",
+    "asOf": "2025-09-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.eubelius.com/en/news/the-eu-data-act-in-force-what-changes-on-12-september-2025",
+    "confidence": "secondary",
+    "note": "Regolamento (UE) 2023/2854. Fonti: studi legali (Eubelius, Alston, Travers Smith); il testo ufficiale su EUR-Lex va consultato con il legale."
+  },
+  "w12.data_act_switching": {
+    "label": "EU Data Act: obblighi sul cambio di fornitore cloud (switching)",
+    "value": "obbliga i fornitori di servizi cloud a inserire nei contratti clausole che rimuovono le barriere al cambio di fornitore (switching) e a dichiarare procedure e limiti tecnici",
+    "asOf": "2025-09-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.alston.com/en/insights/publications/2025/09/eu-data-act-switching-requirements-cloud-services",
+    "confidence": "secondary",
+    "note": "Commenti di studi legali. I Model Contractual Terms della Commissione, attesi per il 12 settembre 2025, risultavano in ritardo: non citarli come disponibili."
+  },
+  "w12.data_act_transition": {
+    "label": "EU Data Act: periodo di transizione dello switching",
+    "value": "30 giorni, estendibili fino a sette mesi se tecnicamente non fattibile",
+    "asOf": "2025-09-12",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-04-08",
+    "source": "https://www.traverssmith.com/knowledge/knowledge-container/the-data-acts-changes-to-cloud-services-contracts-tipping-the-scales-on-switching/",
+    "confidence": "secondary",
+    "note": "Sintesi di studi legali; verificare l'articolo pertinente su EUR-Lex prima di usarlo in un testo contrattuale."
+  },
+  "w12.data_act_charges": {
+    "label": "EU Data Act: costi di switching cloud (calendario)",
+    "value": "fino al 12 gennaio 2027 il fornitore può addebitare al massimo i costi diretti sostenuti; dal 12 gennaio 2027 i costi di switching sono in generale vietati (restano possibili penali di recesso anticipato e servizi extra opzionali oltre il minimo di legge)",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-12",
+    "source": "https://www.traverssmith.com/knowledge/knowledge-container/the-data-acts-changes-to-cloud-services-contracts-tipping-the-scales-on-switching/",
+    "confidence": "secondary",
+    "note": "Articolo 29 del Data Act secondo commenti di studi legali (Travers Smith, Mishcon, Alston). Dopo il 12 gennaio 2027 il testo va riscritto al presente."
+  },
+  "w12.data_act_ban_date": {
+    "label": "EU Data Act: data da cui i costi di switching cloud sono in generale vietati",
+    "value": "12 gennaio 2027",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-12",
+    "source": "https://www.alston.com/en/insights/publications/2025/09/eu-data-act-switching-requirements-cloud-services",
+    "confidence": "secondary",
+    "note": "Stessa fonte e stesse cautele di w12.data_act_charges."
+  },
+  "w12.data_act_omnibus": {
+    "label": "Digital Omnibus e Data Act: stato della proposta di modifica",
+    "value": "la proposta Digital Omnibus della Commissione (novembre 2025), che interviene anche sul Data Act, risulta ancora in negoziazione senza accordo definitivo tra Parlamento e Consiglio",
+    "asOf": "2026-09-25",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-15",
+    "source": "https://datamatters.sidley.com/2025/12/09/eu-digital-omnibus-the-european-commission-proposes-important-changes-to-the-eus-digital-rulebook/",
+    "confidence": "low",
+    "note": "L'assenza di un accordo è desunta da fonti secondarie fino a fine settembre 2026 (procedura 2025/0360(COD)); la parte AI dell'Omnibus è un testo separato. Verificare sul Legislative Observatory del Parlamento UE prima di affermarlo al cliente."
+  },
+  "w12.dpf_status": {
+    "label": "EU-US Data Privacy Framework: stato",
+    "value": "resta in vigore (decisione di adeguatezza del 2023), ma l'appello Latombe è pendente davanti alla Corte di giustizia UE e, dopo la sentenza Trump v. Slaughter del 29 giugno 2026, il presidente dell'EDPB ha chiesto alla Commissione di valutarne gli effetti",
+    "asOf": "2026-09-17",
+    "checked": "2026-10-08",
+    "staleAfter": "2026-12-15",
+    "source": "https://www.faegredrinker.com/en/insights/publications/2026/9/trump-v-slaughter-implications-of-the-us-supreme-court-ruling-for-eu-us-data-transfers-and-the-data-privacy-framework",
+    "confidence": "secondary",
+    "note": "Commenti di studi legali e IAPP (iapp.org/news/a/edpb-requests-review-of-eu-us-data-privacy-framework-following-trump-v-slaughter). Situazione in evoluzione: riverificare prima di ogni conversazione su trasferimenti extra-UE."
+  },
+  "w12.sap_eu_ai_cloud": {
+    "label": "SAP EU AI Cloud (offerta di sovereign cloud)",
+    "value": "SAP EU AI Cloud, annunciata a novembre 2025, è un'offerta cloud sovrana full-stack in cui il cliente sceglie il livello di sovranità tra opzioni come SAP Cloud Infrastructure (data center SAP nell'UE) e SAP Sovereign Cloud On-Site",
+    "asOf": "2025-11-27",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://news.sap.com/2025/11/sap-eu-ai-cloud/",
+    "confidence": "primary",
+    "note": "Riscontrato negli snippet della news SAP e in più testate; pagina non apribile dal sandbox. Disponibilità per Italia, settori regolati e certificazioni da verificare con SAP: non promettere nulla al cliente."
+  },
+  "w12.value_case_agent": {
+    "label": "Value Case Creation Agent (SAP Signavio / Business Transformation Management)",
+    "value": "il Value Case Creation Agent, un Joule Agent di SAP Signavio (Business Transformation Management), trasforma le inefficienze di processo individuate dai dati in bozze di value case modificabili, con parametri di costo e sforzo configurabili",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://www.sap.com/products/business-transformation-management/value-case-creation-agent.html",
+    "confidence": "primary",
+    "note": "Pagina SAP non apribile dal sandbox; riscontrato negli snippet (anche sap.com/assetdetail/2026/02). A Q4 2025 l'agente risultava in beta e il consumo è a AI Units: disponibilità generale da riverificare. Il claim SAP sul risparmio di tempo (fino al 70%) non è verificato: non usarlo."
+  },
+  "w12.vlm": {
+    "label": "SAP Value Lifecycle Manager",
+    "value": "è descritto da SAP come strumento online di value management con template, KPI e value driver per settore e linea di business, usato per quantificare i benefici e costruire business case anche con il supporto dei value engineer SAP",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://community.sap.com/t5/technology-blogs-by-sap/building-a-hana-business-case/ba-p/13103062",
+    "confidence": "low",
+    "note": "Post della community SAP non recente e annunci di lavoro SAP; nome e disponibilità attuali (accesso self-service o tramite team SAP) non confermati. Nelle lezioni è dato solo come esempio, con invito a verificare internamente."
+  },
+  "w12.value_advisors": {
+    "label": "Team Value Advisory di SAP",
+    "value": "ha ruoli di Value Advisor che affiancano i clienti nella costruzione di business case, nell'analisi finanziaria (NPV, ROI) e nel monitoraggio del valore dopo il go-live",
+    "asOf": "2026-10-08",
+    "checked": "2026-10-08",
+    "staleAfter": "2027-01-08",
+    "source": "https://jobs.sap.com/job/Canberra-Expert-Value-Advisor-2600/1279867901",
+    "confidence": "low",
+    "note": "Dedotto da annunci di lavoro SAP (non da una pagina di offerta ai clienti): presenza, nome e modalità di ingaggio in Italia da verificare internamente."
+  }
+}
