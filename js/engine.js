@@ -61,13 +61,16 @@
     return out;
   };
   E.occupiedShare = (n) => n.regions.filter(r => r.controller && r.controller !== n.id).reduce((a, r) => a + r.share, 0);
+  E.irradiatedShare = (s, n) => n.regions.filter(r => r.irradiatedUntil && r.irradiatedUntil > s.turn && (!r.controller || r.controller === n.id)).reduce((a, r) => a + r.share * 0.7, 0);
   E.effGdp = (s, n) => {
-    let g = n.gdp * (1 - E.occupiedShare(n));
+    let g = n.gdp * (1 - E.occupiedShare(n) - E.irradiatedShare(s, n));
     E.ids(s).forEach(o => { if (o !== n.id) s.nations[o].regions.forEach(r => { if (r.controller === n.id) g += s.nations[o].gdp * r.share * 0.6; }); });
     return g;
   };
   E.worldGdp = (s) => E.ids(s).reduce((a, id) => a + s.nations[id].gdp, 0);
   E.avgTech = (n) => Object.values(n.tech).reduce((a, b) => a + b, 0) / Object.keys(n.tech).length;
+  E.defenseLvl = (n) => n.tech.defense + (n.perks && n.perks.missileshield ? 2 : 0);
+  E.cyberDef = (n) => n.tech.cyber + (n.perks && n.perks.cybershield ? 3 : 0);
   E.techMult = (n) => 1 + n.tech.ai * 0.03 + n.tech.hyper * 0.015 + n.tech.space * 0.02 + n.tech.cyber * 0.01;
   E.milPower = (n) => (n.army * 1.0 + n.navy * 0.5 + n.air * 0.8) * (0.5 + n.readiness / 200) * E.techMult(n) + Math.min(n.missiles, 1500) * 0.01;
   E.canReach = (s, from, to) => {
@@ -77,7 +80,7 @@
     // Occupazione contigua: se controlli una regione di un vicino del bersaglio
     const contig = E.ids(s).some(o => o !== from && (s.nations[o].neighbors.includes(to) || b.neighbors.includes(o)) && s.nations[o].regions.some(r => r.controller === from));
     if (contig) return { ok: true, mult: 0.9 };
-    if (a.navy >= 35) return { ok: true, mult: 0.6, naval: true };
+    if (a.navy >= 35) return { ok: true, mult: a.perks && a.perks.navy ? 0.8 : 0.6, naval: true };
     return { ok: false, mult: 0 };
   };
   E.score = (s, n) => {
@@ -104,7 +107,7 @@
       player: opts.player, difficulty: opts.difficulty || 'normale',
       nations: {}, rel: {}, treaties: [], wars: [], sanctions: [], news: [], pending: [], pendingEvents: [],
       orders: [], market: null, portfolio: { holdings: {}, realized: 0 }, un: [], fallout: 0, gameOver: null,
-      scoreHist: {}, intel: [], log: [],
+      scoreHist: {}, intel: [], log: [], alerts: [],
     };
     GEO.NATIONS.forEach(src => {
       const n = deep(src);
@@ -115,6 +118,7 @@
       n.portfolioValue = 0;
       s.nations[n.id] = n;
     });
+    E.ids(s).forEach(id => GEO.politics.init(s, s.nations[id], { stagger: id !== opts.player, mandateLen: opts.mandateLen }));
     // tecnologie migliori → focus iniziale IA variabile
     E.ids(s).forEach(id => { const n = s.nations[id]; const t = Object.entries(n.tech).sort((a, b) => a[1] - b[1]); n.researchFocus = pick(t.slice(0, 4)).map(x => x)[0]; });
     GEO.RELATIONS_SEED.forEach(([a, b, v]) => E.setRel(s, a, b, v));
@@ -315,8 +319,8 @@
   };
   E.espionage = (s, from, to, tech) => {
     const a = s.nations[from], b = s.nations[to];
-    const p = clamp(0.35 + a.tech.cyber * 0.04 + a.tech.space * 0.02 - b.tech.quantum * 0.04 - b.tech.cyber * 0.02, 0.05, 0.9);
-    const caught = R() < clamp(0.3 - a.tech.cyber * 0.015 + b.tech.cyber * 0.02, 0.05, 0.7);
+    const p = clamp(0.35 + a.tech.cyber * 0.04 + a.tech.space * 0.02 - b.tech.quantum * 0.04 - b.tech.cyber * 0.02 + (a.perks.intel ? 0.25 : 0), 0.05, 0.95);
+    const caught = R() < clamp(0.3 - a.tech.cyber * 0.015 + b.tech.cyber * 0.02, 0.05, 0.7) * (a.perks.intel ? 0.5 : 1);
     let res = { success: false, caught };
     if (R() < p && b.tech[tech] > a.tech[tech]) { a.techProg[tech] = (a.techProg[tech] || 0) + E.techCost(a.tech[tech]) * 0.5; res.success = true; }
     if (caught) { E.changeRel(s, from, to, -20); E.news(s, `🕵️ ${b.flag} ${b.name} scopre una rete di spie di ${a.flag} ${a.name} nei laboratori di ${GEO.TECHS[tech].name}.`, 'dip', [from, to]); }
@@ -324,18 +328,18 @@
   };
   E.destabilize = (s, from, to) => {
     const a = s.nations[from], b = s.nations[to];
-    const eff = 3 + a.tech.cyber * 0.4;
-    b.stability = clamp(b.stability - eff, 0, 100);
-    const caught = R() < clamp(0.4 - a.tech.cyber * 0.02 + b.tech.cyber * 0.02, 0.1, 0.8);
+    const eff = (3 + a.tech.cyber * 0.4) * (a.perks.intel ? 1.25 : 1) * (b.perks.surveillance ? 0.6 : 1);
+    b.stability = clamp(b.stability - eff, 0, 100); if (b.politics) b.politics.opposition = clamp(b.politics.opposition + eff, 0, 100);
+    const caught = R() < clamp(0.4 - a.tech.cyber * 0.02 + b.tech.cyber * 0.02 + (b.perks.intel ? 0.3 : 0), 0.1, 0.9) * (a.perks.intel ? 0.5 : 1);
     if (caught) { E.changeRel(s, from, to, -30); a.reputation = clamp(a.reputation - 5, 0, 100); E.news(s, `${b.flag} ${b.name} accusa ${a.flag} ${a.name} di finanziare proteste e disinformazione.`, 'dip', [from, to]); }
     return { caught, eff };
   };
   E.cyberAttack = (s, from, to) => {
     const a = s.nations[from], b = s.nations[to];
-    const p = clamp(0.3 + a.tech.cyber * 0.06 - b.tech.cyber * 0.03 - b.tech.quantum * 0.05, 0.05, 0.9);
+    const p = clamp(0.3 + a.tech.cyber * 0.06 - E.cyberDef(b) * 0.03 - b.tech.quantum * 0.05, 0.05, 0.9);
     const success = R() < p;
     const caught = R() < clamp(0.5 - a.tech.cyber * 0.02 + b.tech.space * 0.03, 0.15, 0.9);
-    if (success) { b.gdp *= 0.994; b.stability = clamp(b.stability - 2, 0, 100); b.readiness = clamp(b.readiness - 6, 0, 100); b.missiles = Math.max(0, b.missiles - 10); }
+    if (success) { const m = b.perks && b.perks.cybershield ? 0.5 : 1; b.gdp *= 1 - 0.008 * m; b.stability = clamp(b.stability - 3 * m, 0, 100); b.readiness = clamp(b.readiness - 8 * m, 0, 100); b.missiles = Math.max(0, b.missiles - Math.round(15 * m)); }
     if (caught) { E.changeRel(s, from, to, -25); E.news(s, `💻 Cyberattacco ${success ? 'riuscito' : 'fallito'} di ${a.flag} ${a.name} contro ${b.flag} ${b.name}: attribuzione pubblica.`, 'war', [from, to]); }
     else if (success) E.news(s, `💻 Un cyberattacco anonimo paralizza infrastrutture in ${b.flag} ${b.name}.`, 'war', [to]);
     return { success, caught };
@@ -412,8 +416,10 @@
     E.news(s, `🏳️ ${L.flag} ${L.name} CAPITOLA davanti a ${W.flag} ${W.name}! Le regioni occupate sono annesse.`, 'war', [loserId, winnerId]);
     // Tutti i nemici fanno pace; vincitore tiene le occupazioni
     E.enemiesOf(s, loserId).forEach(e => { if (e === winnerId) E.makePeace(s, winnerId, loserId, 'annessione'); else E.makePeace(s, e, loserId, 'bianca'); });
-    L.stability = clamp(L.stability - 20, 5, 100); L.army = Math.max(5, L.army * 0.4); L.missiles = Math.floor(L.missiles * 0.2); L.readiness = 30;
-    L.suzerain = winnerId; L.tribute = { to: winnerId, turns: 12, pct: 0.03 };
+    L.stability = clamp(L.stability - 25, 5, 100); L.army = Math.max(5, L.army * 0.25); L.missiles = Math.floor(L.missiles * 0.1); L.readiness = 30; L.nukes = Math.floor(L.nukes * 0.5);
+    L.gdp *= 0.9; L.gdpPeak = L.gdp; W.treasury += E.effGdp(s, L) * 0.05; // riparazioni e saccheggio
+    L.suzerain = winnerId; L.tribute = { to: winnerId, turns: 16, pct: 0.05 };
+    if (L.politics) { L.politics.loyalty = 40; L.politics.opposition = 70; }
     s.treaties.push({ type: 'nonaggressione', a: loserId, b: winnerId, since: s.turn, expires: s.turn + 20 });
     s.treaties = s.treaties.filter(t => !(t.a === loserId || t.b === loserId) || t.type === 'nonaggressione');
     const capLost = E.capital(L).controller === winnerId;
@@ -436,7 +442,7 @@
     const oside = w.attackers.includes(o.from) ? w.defenders : w.attackers;
     const sup = (arr, excl, tgt) => arr.filter(x => x !== excl).reduce((a, x) => { const n = s.nations[x]; const r = E.canReach(s, x, tgt); return a + (r.ok ? n.army * 0.25 * r.mult * (n.readiness / 100) : n.air * 0.1); }, 0);
     const defRegions = Math.max(1, def.regions.filter(r => !r.controller || r.controller === def.id).length);
-    const attPow = (att.army * (att.readiness / 100) * E.techMult(att) * (1 + att.air / 180) + sup(side, o.from, o.target)) * reach.mult * (o.allIn ? 1.25 : 1);
+    const attPow = (att.army * (att.readiness / 100) * E.techMult(att) * (1 + att.air / 180) + sup(side, o.from, o.target)) * reach.mult * (o.allIn ? 1.25 : 1) * (att.perks.specialforces ? 1.12 : 1);
     const defPow = (def.army * (def.readiness / 100) * E.techMult(def) * (1 + def.air / 180) * 1.5 / Math.sqrt(defRegions) * (0.7 + def.stability / 200) + sup(oside, o.target, o.from)) * (region.capital ? 1.6 : 1);
     const ratio = attPow / Math.max(1, defPow);
     const pCap = clamp((ratio - 1) * 0.35, 0.03, 0.6);
@@ -446,7 +452,7 @@
     att.army = Math.max(3, att.army - attLoss); def.army = Math.max(3, def.army - defLoss);
     att.readiness = clamp(att.readiness - 4, 0, 100); def.readiness = clamp(def.readiness - 3, 0, 100);
     att.exhaustion += 4; def.exhaustion += 3;
-    att.gdp *= 0.997; def.gdp *= 0.994;
+    att.gdp *= 0.996; def.gdp *= 0.991; def.pop *= 0.9995; if (def.popLossTurn < s.turn - 5) def.popLossTurn = s.turn;
     w.lastAction = s.turn;
     if (captured) {
       region.controller = o.from; w.gains[o.from] = (w.gains[o.from] || 0) + 1; w.gains[o.target] = (w.gains[o.target] || 0) - 1;
@@ -466,10 +472,12 @@
     const count = Math.min(o.count, att.missiles); if (count <= 0) return;
     if (!E.atWar(s, o.from, o.target)) E.declareWar(s, o.from, o.target);
     att.missiles -= count;
-    const intercept = clamp(def.tech.defense * 0.08 + def.tech.space * 0.01 - att.tech.hyper * 0.05, 0.02, 0.92);
+    const intercept = clamp(E.defenseLvl(def) * 0.08 + def.tech.space * 0.01 - att.tech.hyper * 0.05, 0.02, 0.92);
     let hits = 0; for (let i = 0; i < count; i++) if (R() > intercept) hits++;
-    def.gdp *= Math.pow(1 - 0.0012, hits); def.army = Math.max(3, def.army - hits * 0.25); def.readiness = clamp(def.readiness - hits * 0.4, 0, 100);
-    def.stability = clamp(def.stability - hits * 0.2, 0, 100); def.missiles = Math.max(0, def.missiles - Math.floor(hits * 0.3));
+    // Saturazione: oltre 20 colpi il danno marginale cala; il danno relativo dipende dalla taglia dell'economia
+    const D = hits <= 20 ? hits : 20 + (hits - 20) * 0.25; const eff = E.effGdp(s, def); const size = clamp(Math.pow(2000 / Math.max(50, eff), 0.4), 0.3, 1.6);
+    def.gdp *= Math.pow(1 - 0.0025 * size, D); def.army = Math.max(3, def.army - D * 0.3); def.readiness = clamp(def.readiness - D * 0.5, 0, 100); def.pop *= Math.pow(1 - 0.0002 * size, D);
+    def.stability = clamp(def.stability - D * 0.3 * size, 0, 100); def.missiles = Math.max(0, def.missiles - Math.floor(hits * 0.2)); if (hits > 10) def.popLossTurn = s.turn;
     def.exhaustion += hits * 0.3;
     E.news(s, `🚀 ${att.flag} ${att.name} lancia ${count} missili balistici su ${def.flag} ${def.name}: ${hits} a segno, ${count - hits} intercettati (${Math.round(intercept * 100)}% difesa).`, 'war', [o.from, o.target]);
     s.market.shocks.DEF = (s.market.shocks.DEF || 0) + 0.02;
@@ -481,12 +489,18 @@
     const count = Math.min(o.count, att.nukes); if (count <= 0) return;
     if (!E.atWar(s, o.from, o.target)) E.declareWar(s, o.from, o.target);
     att.nukes -= count;
-    const intercept = clamp(def.tech.defense * 0.04 - att.tech.hyper * 0.02, 0, 0.5);
+    const intercept = clamp(E.defenseLvl(def) * 0.04 - att.tech.hyper * 0.02, 0, 0.55);
     let hits = 0; for (let i = 0; i < count; i++) if (R() > intercept) hits++;
-    def.gdp *= Math.pow(1 - 0.03, hits); def.pop *= Math.pow(1 - 0.005, hits); def.army = Math.max(3, def.army - hits * 2.5); def.readiness = clamp(def.readiness - hits * 3, 0, 100);
-    def.stability = clamp(def.stability - hits * 4, 0, 100); def.missiles = Math.floor(def.missiles * Math.pow(0.9, hits));
-    if (hits >= 6) { const cap = E.capital(def); if (cap && !cap.controller && R() < 0.3) { E.news(s, `☢️ La capitale di ${def.name} è stata annientata.`, 'nuke', [o.target]); } }
-    s.fallout += hits * 0.12;
+    const popBefore = def.pop;
+    const D = hits <= 10 ? hits : 10 + (hits - 10) * 0.4;
+    def.gdp *= Math.pow(1 - 0.06, D); def.pop *= Math.pow(1 - 0.03, D); def.army = Math.max(3, def.army - D * 3); def.readiness = clamp(def.readiness - D * 4, 0, 100);
+    def.stability = clamp(def.stability - D * 7, 0, 100); def.missiles = Math.floor(def.missiles * Math.pow(0.85, hits)); def.popLossTurn = s.turn;
+    const dead = popBefore - def.pop;
+    const targets = def.regions.filter(r => !r.irradiatedUntil || r.irradiatedUntil <= s.turn); for (let i = 0; i < Math.min(hits, 3) && targets.length; i++) { const r = hits >= 6 && i === 0 && targets.some(x => x.capital) ? targets.find(x => x.capital) : targets[Math.floor(R() * targets.length)]; r.irradiatedUntil = s.turn + 5; targets.splice(targets.indexOf(r), 1); E.news(s, `☢️ ${r.name} (${def.name}) è stata ${r.capital ? 'annientata' : 'devastata'}: zona irradiata per 5 turni.`, 'nuke', [o.target]); }
+    E.news(s, `💀 Vittime stimate in ${def.name}: ${dead.toFixed(1)} milioni di persone. Il ripopolamento delle zone colpite potrà iniziare solo dopo 5 turni.`, 'nuke', [o.target]);
+    if (def.politics) { def.politics.loyalty = clamp(def.politics.loyalty - 10, 0, 100); def.politics.opposition = clamp(def.politics.opposition + 15, 0, 100); }
+    if (def.id === s.player) s.alerts.push({ title: '☢️ ATTACCO NUCLEARE SUBITO', text: `${att.flag} ${att.name} ha colpito il tuo paese con ${hits} testate: ${dead.toFixed(1)} milioni di morti, regioni irradiate per 5 turni, economia in ginocchio.` });
+    s.fallout += hits * 0.2;
     E.news(s, `☢️☢️☢️ ${att.flag} ${att.name} ${isRetaliation ? 'RISPONDE CON UN ATTACCO NUCLEARE' : 'LANCIA UN ATTACCO NUCLEARE'} contro ${def.flag} ${def.name}: ${hits} testate esplodono. Il mondo trattiene il fiato.`, 'nuke', [o.from, o.target]);
     s.market.shocks.world = (s.market.shocks.world || 0) - 0.08 * Math.min(hits, 5); s.market.shocks.GOLD = (s.market.shocks.GOLD || 0) + 0.15;
     if (!isRetaliation) {
@@ -494,8 +508,9 @@
       E.ids(s).forEach(oid => { if (oid === o.from) return; const ally = E.alliesOf(s, o.from).includes(oid); E.changeRel(s, oid, o.from, ally ? -30 : -55); if (oid !== o.target && s.nations[oid].regime === 'democrazia' && !ally && oid !== s.player) E.sanction(s, oid, o.from); });
       E.unVote(s, o.from, o.target, 'nucleare');
       // Rappresaglia
-      if (def.nukes > 0 && def.id !== s.player) {
-        const n = Math.min(def.nukes, Math.max(3, hits * 2));
+      if (def.nukes > 0 && (def.id !== s.player || def.perks.triad)) {
+        const n = def.perks.triad ? Math.min(def.nukes, Math.max(6, hits * 3)) : Math.min(def.nukes, Math.max(3, hits * 2));
+        if (def.perks.triad) E.news(s, `☢️ La triade nucleare di ${def.name} risponde automaticamente.`, 'nuke', [def.id]);
         E.resolveNuke(s, { from: o.target, target: o.from, count: n }, true);
       } else if (def.nukes > 0 && def.id === s.player) {
         E.queueProposal(s, { from: o.from, type: 'rappresaglia_nucleare', terms: { count: Math.min(def.nukes, Math.max(3, hits * 2)) }, text: `☢️ ${att.flag} ${att.name} ti ha attaccato con armi nucleari. Il comando strategico chiede l'autorizzazione alla rappresaglia nucleare (${Math.min(def.nukes, Math.max(3, hits * 2))} testate).` });
@@ -557,7 +572,8 @@
   E.trade = (s, key, amount) => { // amount>0 compra, <0 vende (in mld)
     const p = s.nations[s.player]; const price = E.assetPrice(s, key);
     const h = s.portfolio.holdings[key] || { units: 0, cost: 0 };
-    if (amount > 0) { if (p.treasury < amount) return { ok: false, reason: 'Tesoro insufficiente.' }; p.treasury -= amount; h.units += amount / price; h.cost += amount; }
+    const fee = p.perks.swf ? 0 : 0.01;
+    if (amount > 0) { if (p.treasury < amount) return { ok: false, reason: 'Tesoro insufficiente.' }; p.treasury -= amount; h.units += amount * (1 - fee) / price; h.cost += amount; }
     else { const units = Math.min(h.units, -amount / price); if (units <= 0) return { ok: false, reason: 'Nessuna posizione.' }; const val = units * price; const costPart = h.cost * (units / h.units); s.portfolio.realized += val - costPart; h.units -= units; h.cost -= costPart; p.treasury += val; }
     if (h.units < 1e-9) delete s.portfolio.holdings[key]; else s.portfolio.holdings[key] = h;
     return { ok: true };
@@ -610,7 +626,7 @@
     if (n.tech.semis >= 8) return true;
     return E.ids(s).some(id => id !== n.id && s.nations[id].tech.semis >= 8 && E.getRel(s, id, n.id) >= 10 && !E.isSanctioning(s, id, n.id, 'tech') && !E.isSanctioning(s, id, n.id, 'onu') && !E.atWar(s, id, n.id));
   };
-  E.researchPoints = (s, n, spend) => Math.pow(Math.max(0, spend), 0.7) * 4 * (1 + E.avgTech(n) / 5) * (1 + n.tech.quantum * 0.05) * (n.stability < 40 ? 0.8 : 1);
+  E.researchPoints = (s, n, spend) => Math.pow(Math.max(0, spend), 0.7) * 4 * (1 + E.avgTech(n) / 5) * (1 + n.tech.quantum * 0.05) * (n.stability < 40 ? 0.8 : 1) * (n.perks && n.perks.techhub ? 1.2 : 1) * (1 + (n.boosts || []).reduce((a, b) => a + (b.research || 0), 0)) * (n.inflation > 20 ? 0.8 : 1);
   E.techStep = (s, n, spend) => {
     const rp = E.researchPoints(s, n, spend);
     n.lastRP = rp; n.justLeveled = false;
@@ -629,7 +645,7 @@
     others.forEach(t => add(t, rp * 0.2 / others.length));
     // Programma nucleare (Iran e simili)
     if (n.nuclearProgram !== undefined && n.nukes === 0) {
-      n.nuclearProgram += 0.02 + (n.budget.military > 0.4 ? 0.02 : 0);
+      n.nuclearProgram += 0.04 + (n.budget.military > 0.4 ? 0.04 : 0) + (n.perks.nuclearprog ? 0.06 : 0);
       if (n.nuclearProgram >= 1) { n.nukes = 5; n.nuclearProgram = undefined; E.news(s, `☢️ ${n.flag} ${n.name} testa la sua prima bomba atomica! Equilibri regionali stravolti.`, 'nuke', [n.id]); E.ids(s).forEach(o => { if (E.getRel(s, o, n.id) < 0) E.changeRel(s, o, n.id, -15); }); }
     }
   };
@@ -641,19 +657,24 @@
     const eff = E.effGdp(s, n);
     const B = n.budget;
     g += (B.infra - 0.18) * 3;
+    g += (n.boosts || []).reduce((a, b) => a + (b.growth || 0), 0);
+    if (n.recovering) g += 0.6;
     g += (n.tech.ai - 5) * 0.08 + (n.tech.energy - 5) * 0.02;
     g += Math.min(1.2, E.treatiesOf(s, n.id, 'commercio').length * 0.15);
     const wg = E.worldGdp(s);
     const sanctPenalty = E.sanctionsOn(s, n.id).reduce((a, x) => a + (x.type === 'tech' ? 0.3 : (s.nations[x.from].gdp / wg) * 7), 0);
-    g -= Math.min(4.5, sanctPenalty);
+    g -= Math.min(6, sanctPenalty);
     const wars = E.warsOf(s, n.id);
-    if (wars.length) g -= wars.some(w => w.defenders.includes(n.id)) ? 2.2 : 1.2;
+    if (wars.length) g -= Math.min(5, wars.reduce((a, w) => a + (w.defenders.includes(n.id) ? 3.5 : 2.0), 0));
+    if (n.inflation > 15) g -= (n.inflation - 15) * 0.15;
+    if (n.debt < 60) g += 0.3;
     g += (n.stability - 50) * 0.02;
     if (n.debt > 100) g -= Math.min(1.2, (n.debt - 100) * 0.006);
     if (B.military > 0.4) g -= (B.military - 0.4) * 4;
     g -= s.fallout * 0.8;
     g += (worldGrowth - 2.6) * 0.25;
-    Object.keys(GEO.COMMODITIES).forEach(c => { const ratio = s.market.commodities[c].price / GEO.COMMODITIES[c].base; const ni = E.netImport(s, n, c); g -= ni * (ratio - 1) * 60; });
+    Object.keys(GEO.COMMODITIES).forEach(c => { const ratio = s.market.commodities[c].price / GEO.COMMODITIES[c].base; const ni = E.netImport(s, n, c); g -= ni * (ratio - 1) * 60 * (n.perks.reserves && ratio > 1 && c !== 'chips' && c !== 'rare' ? 0 : 1); });
+    if (s.market.commodities.grain.price / GEO.COMMODITIES.grain.base > 1.8 && (n.res.grain || 0) < 4 && !n.perks.reserves) { n.pop *= 0.997; n.stability -= 3; if (n.popLossTurn < s.turn - 5) n.popLossTurn = s.turn; if (R() < 0.15) E.news(s, `🌾 Carestia in ${n.flag} ${n.name}: rivolte per il pane.`, 'eco', [n.id]); }
     if (n.spendMult > 1) g += (n.spendMult - 1) * 2.5; // stimolo in deficit
     if (n.tribute) g -= 1.0;
     g = clamp(g, -12, 12);
@@ -672,6 +693,9 @@
     Object.keys(GEO.COMMODITIES).forEach(c => { const p = n.res[c] || 0; if (p >= 5) exportInc += (p - 3) * (s.market.commodities[c].price / GEO.COMMODITIES[c].base) * { oil: 5, gas: 3, grain: 1.5, chips: 6, rare: 2 }[c]; });
     n.treasury += exportInc + eff * 0.001; n.lastExport = exportInc;
     if (n.tribute) { const amt = eff * n.tribute.pct; n.treasury -= amt; s.nations[n.tribute.to].treasury += amt; if (--n.tribute.turns <= 0) n.tribute = null; }
+    if (n.treasury < 0) { n.debt += -n.treasury / Math.max(1, eff) * 100; n.treasury = 0; }
+    if (n.inflation > 30) { n.gdp *= 0.99; n.treasury *= 0.97; }
+    if (n.defaultUntil && n.defaultUntil > s.turn && n.spendMult > 1) n.spendMult = 1;
     // Rendimento del fondo sovrano IA (astratto)
     if (n.id !== s.player) n.treasury *= 1 + (s.market.world.hist.length > 1 ? (s.market.world.price / s.market.world.hist[s.market.world.hist.length - 2] - 1) * 0.3 : 0);
     // Militare
@@ -683,6 +707,7 @@
     if (delta > 0 && wars.length) n.army = clamp(n.army + delta * 0.3 * rebuild, 3, 110);
     n.missiles += Math.floor(milSpend * 0.04 * (1 + n.tech.hyper * 0.1));
     if (n.nukes > 0 && n.budget.military > 0.35 && n.id !== 'PRK') n.nukes += n.nukes < 300 ? 2 : 0;
+    E.controlledRegions(s, n.id).filter(x => x.owner !== n.id).forEach(x => { n.army = Math.max(3, n.army - 0.4); n.stability -= 0.8; if (n.readiness < 50 && R() < 0.06) { x.region.controller = null; E.news(s, `✊ Insurrezione: ${x.region.name} si libera dall'occupazione di ${n.flag} ${n.name}.`, 'war', [n.id, x.owner]); } });
     const readyTarget = wars.length ? 95 : 55 + B.military * 50;
     n.readiness += (readyTarget - n.readiness) * 0.2;
     // Esaurimento bellico
@@ -692,16 +717,29 @@
     const occupying = E.controlledRegions(s, n.id).filter(x => x.owner !== n.id).length;
     let target = 52 + (B.welfare - 0.25) * 70 + (g - 2) * 2 - n.exhaustion * 0.3 - occ * 50 - occupying * 2 + (n.regime === 'autocrazia' ? 6 : 0) + (n.tech.bio - 5) * 0.8 - Math.max(0, n.debt - 130) * 0.05 + (n.approval - 50) * 0.12;
     if (E.sanctionsOn(s, n.id).length > 5) target -= 6;
+    if (n.inflation > 6) target -= (n.inflation - 6) * 0.5;
+    if (n.perks.surveillance) target += 6;
+    const refugees = n.neighbors.filter(x => s.nations[x] && E.warsOf(s, x).some(w => w.defenders.includes(x)) && !wars.length).length;
+    if (refugees) target -= refugees * 4;
     n.prevStability = n.stability;
     n.stability = clamp(n.stability + (target - n.stability) * 0.15 + (R() - 0.5) * 2, 0, 100);
-    n.approval = clamp(n.approval + ((52 + (g - 2) * 3 + (B.welfare - 0.25) * 40 - n.exhaustion * 0.3) - n.approval) * 0.2, 0, 100);
+    n.approval = clamp(n.approval + ((52 + (g - 2) * 3 + (B.welfare - 0.25) * 40 - n.exhaustion * 0.3 - Math.max(0, n.inflation - 5) * 0.8 + (n.perks.propaganda ? 6 : 0)) - n.approval) * 0.2, 0, 100);
     // Crisi del debito
-    if (n.debt > 160 && (n.stability < 50 || g < 0) && R() < Math.min(0.15, (n.debt - 160) * 0.003)) { n.gdp *= 0.97; n.stability -= 8; n.spendMult = 0.85; E.news(s, `💥 Crisi del debito in ${n.flag} ${n.name}: fuga di capitali, austerità forzata.`, 'eco', [n.id]); s.market.indexes[n.id].price *= 0.85; }
+    const nocrisis = (n.boosts || []).some(b => b.nocrisis);
+    if (!nocrisis && n.debt > 160 && (n.stability < 50 || g < 0) && R() < Math.min(0.15, (n.debt - 160) * 0.003) * (n.perks.centralbank ? 0.4 : 1)) {
+      if (n.debt > 190 || R() < 0.35) {
+        n.gdp *= 0.92; n.debt *= 0.6; n.treasury = 0; n.stability -= 15; n.approval -= 12; n.defaultUntil = s.turn + 8; s.market.indexes[n.id].price *= 0.6; n.inflation += 10;
+        E.ranking(s).slice(0, 6).forEach(r => { if (r.id !== n.id) E.changeRel(s, n.id, r.id, -10); });
+        E.news(s, `💥 DEFAULT SOVRANO di ${n.flag} ${n.name}: il paese sospende i pagamenti. PIL −8%, inflazione alle stelle, credito chiuso per 8 turni.`, 'eco', [n.id]);
+        if (n.id === s.player) s.alerts.push({ title: '💥 Default sovrano', text: 'Il paese ha dichiarato default: PIL −8%, tesoro azzerato, niente deficit per 8 turni, inflazione +10. Ripaga il debito prima che succeda di nuovo.' });
+      } else { n.gdp *= 0.97; n.stability -= 8; n.spendMult = 0.85; E.news(s, `💥 Crisi del debito in ${n.flag} ${n.name}: fuga di capitali, austerità forzata.`, 'eco', [n.id]); s.market.indexes[n.id].price *= 0.85; }
+    }
     // Rivoluzione / collasso
     if (n.stability < 12 && R() < 0.25 && !n.destroyed) {
       n.stability = 35; n.gdp *= 0.94; n.army *= 0.7; n.regime = n.regime === 'democrazia' ? 'ibrido' : 'democrazia'; n.persona = pick(['difensivo', 'opportunista', 'falco']);
       E.news(s, `🔥 Collasso dello stato in ${n.flag} ${n.name}: il governo cade, nuovo regime (${n.regime}).`, 'eco', [n.id]);
       if (n.id === s.player) s.gameOver = { type: 'sconfitta', text: 'Il tuo governo è stato rovesciato da una rivolta popolare.' };
+      else { GEO.politics.init(s, n, { stagger: true }); n.politics.loyalty = 55; }
     }
     E.techStep(s, n, resSpend);
   };
@@ -724,7 +762,8 @@
       if (ea.includes(b.id)) target -= 100;
       if (ea.some(x => E.alliesOf(s, b.id).includes(x))) target -= 20;
       target = clamp(target, -90, 90);
-      s.rel[k] = clamp(Math.round(cur + (target - cur) * 0.04 + (R() - 0.5) * 3), -100, 100);
+      let drift = (target - cur) * 0.04; if (a.perks.culture) drift += 2; if (b.perks.culture) drift += 2;
+      s.rel[k] = clamp(Math.round(cur + drift + (R() - 0.5) * 3), -100, 100);
     }
     s.treaties = s.treaties.filter(t => { if (t.expires && t.expires <= s.turn) { E.news(s, `Il patto di non aggressione tra ${s.nations[t.a].name} e ${s.nations[t.b].name} è scaduto.`, 'dip', [t.a, t.b]); return false; } return true; });
     E.ids(s).forEach(id => { const n = s.nations[id]; n.reputation = clamp(n.reputation + 0.5, 0, 100); });
@@ -739,7 +778,8 @@
     p.atWar = E.warsOf(s, s.player).length > 0;
     if (R() < 0.38) {
       const list = GEO.EVENTS.filter(e => e.scope === 'player' && (!e.cond || e.cond(p)) && !(s.lastPlayerEvents || []).includes(e.id));
-      if (list.length) { const ev = weightedPick(list); const suspect = E.ids(s).filter(x => x !== s.player && E.getRel(s, s.player, x) < -30); const sId = suspect.length ? pick(suspect) : pick(E.ids(s).filter(x => x !== s.player)); s.pendingEvents.push({ id: ev.id, suspect: sId }); s.lastPlayerEvents = [ev.id, ...(s.lastPlayerEvents || [])].slice(0, 4); }
+      if (list.length) { const ev = weightedPick(list);
+        if (ev.id === 'attentato' && !p.perks.intel && !p.perks.guard && R() < 0.12) { s.gameOver = { type: 'sconfitta', text: '💀 Sei morto in un attentato. Senza Servizi segreti d’élite o Guardia pretoriana la tua scorta non è bastata.' }; E.news(s, `💀 Il leader di ${p.flag} ${p.name} è stato assassinato.`, 'event', [s.player]); return; } const suspect = E.ids(s).filter(x => x !== s.player && E.getRel(s, s.player, x) < -30); const sId = suspect.length ? pick(suspect) : pick(E.ids(s).filter(x => x !== s.player)); s.pendingEvents.push({ id: ev.id, suspect: sId }); s.lastPlayerEvents = [ev.id, ...(s.lastPlayerEvents || [])].slice(0, 4); }
     }
     if (R() < 0.22) {
       const list = GEO.EVENTS.filter(e => e.scope === 'global');
@@ -762,6 +802,7 @@
     if (G.commodity) Object.entries(G.commodity).forEach(([k, v]) => s.market.shocks[k] = (s.market.shocks[k] || 0) + v / 100);
     if (G.techProgTop) Object.entries(G.techProgTop).forEach(([t, v]) => E.ids(s).forEach(id => { const n = s.nations[id]; if (n.tech[t] >= 7) n.techProg[t] = (n.techProg[t] || 0) + v; }));
     if (G.stabilityImporters) E.ids(s).forEach(id => { const n = s.nations[id]; if ((n.res.grain || 0) < 4) n.stability = clamp(n.stability + G.stabilityImporters, 0, 100); });
+    if (G.debtShock) E.ids(s).forEach(id => { const n = s.nations[id]; if (n.debt > 90) n.debt += G.debtShock; });
     if (G.relAllShift) Object.keys(s.rel).forEach(k => { if (s.rel[k] < 0 && s.rel[k] > -100) s.rel[k] = clamp(s.rel[k] + G.relAllShift, -100, 100); });
   };
   E.applyFx = (s, n, fx, ctx) => {
@@ -783,6 +824,10 @@
     if (fx.techProg) Object.entries(fx.techProg).forEach(([t, v]) => n.techProg[t] = (n.techProg[t] || 0) + v);
     if (fx.techProgAll) Object.keys(n.tech).forEach(t => n.techProg[t] = Math.max(0, (n.techProg[t] || 0) + fx.techProgAll));
     if (fx.persona) n.persona = fx.persona;
+    if (fx.inflation) n.inflation = clamp((n.inflation || 3) + fx.inflation, 0, 80);
+    if (fx.loyalty && n.politics) n.politics.loyalty = clamp(n.politics.loyalty + fx.loyalty, 0, 100);
+    if (fx.opposition && n.politics) n.politics.opposition = clamp(n.politics.opposition + fx.opposition, 0, 100);
+    if (fx.pressFreedom && n.politics) n.politics.pressFreedom = clamp(n.politics.pressFreedom + fx.pressFreedom, 0, 100);
     if (fx.regime) n.regime = fx.regime;
     if (fx.sector) Object.entries(fx.sector).forEach(([k, v]) => s.market.shocks[k] = (s.market.shocks[k] || 0) + v / 100);
     if (fx.enemyMissiles) E.enemiesOf(s, id).forEach(e => { s.nations[e].missiles = Math.max(0, s.nations[e].missiles + fx.enemyMissiles); if (fx.enemyStability) s.nations[e].stability = clamp(s.nations[e].stability + fx.enemyStability, 0, 100); });
@@ -815,7 +860,7 @@
     const AI = GEO.AI;
     const p = s.nations[s.player];
     s.pending = s.pending.filter(x => x.type === 'rappresaglia_nucleare'); // le proposte non risposte decadono
-    s.turnLog = [];
+    s.turnLog = []; s.alerts = [];
     // 1. IA decide
     const aiOrders = [];
     E.alive(s).forEach(id => { if (id !== s.player) AI.turn(s, s.nations[id], aiOrders); });
@@ -835,6 +880,8 @@
     E.alive(s).forEach(id => E.economyStep(s, s.nations[id], worldGrowth));
     // 4. Mercati
     E.marketStep(s, worldGrowth);
+    // 4b. Politica interna, tesoro IA
+    E.alive(s).forEach(id => { GEO.politics.step(s, s.nations[id]); if (id !== s.player) GEO.politics.aiStep(s, s.nations[id]); });
     // 5. Relazioni, trattati
     E.relationsStep(s);
     // 6. IA: pace e diplomazia post-combattimento
@@ -869,6 +916,6 @@
 
   // ---------- Serializzazione -------------------------------------------------
   E.serialize = (s) => JSON.stringify(s);
-  E.deserialize = (json) => { const s = JSON.parse(json); E.seedRng(s.seed + s.turn * 7919); return s; };
+  E.deserialize = (json) => { const s = JSON.parse(json); E.seedRng(s.seed + s.turn * 7919); s.alerts = s.alerts || []; E.ids(s).forEach(id => { const n = s.nations[id]; if (!n.politics) GEO.politics.init(s, n, { stagger: true }); }); return s; };
 
 })(typeof globalThis !== 'undefined' ? globalThis : window);

@@ -2,6 +2,7 @@
 const path = require('path');
 require(path.join(__dirname, '../js/data.js'));
 require(path.join(__dirname, '../js/engine.js'));
+require(path.join(__dirname, '../js/politics.js'));
 require(path.join(__dirname, '../js/ai.js'));
 const { GEO } = globalThis; const E = GEO.engine;
 
@@ -18,6 +19,8 @@ for (let g = 0; g < games; g++) {
       if (t === 2) E.trade(s, 'S:DEF', 20);
       if (t === 3) E.propose(s, player, GEO.NATIONS[(g + 1) % GEO.NATIONS.length].id, 'commercio');
       if (t === 10) E.trade(s, 'S:DEF', -10);
+      if (t === 4) { GEO.politics.buyPerk(s, player, 'propaganda'); GEO.politics.runProject(s, player, 'housing'); GEO.politics.investSOE(s, player, 'ENERGY', 10); GEO.politics.payDebt(s, player, 5); }
+      if (t === 12) { GEO.politics.doAction(s, player, 'media'); GEO.politics.divestSOE(s, player, 'ENERGY', 5); }
       E.endTurn(s);
       // invarianti
       for (const id of E.ids(s)) { const n = s.nations[id]; if (!(n.gdp > 0) || isNaN(n.stability) || isNaN(n.army) || isNaN(n.treasury)) throw new Error(`NaN/invalid in ${id} turn ${t}: gdp=${n.gdp} stab=${n.stability} army=${n.army} treas=${n.treasury}`); }
@@ -27,6 +30,7 @@ for (let g = 0; g < games; g++) {
     const r = E.ranking(s).slice(0, 5).map(x => `${x.id}:${x.score}`).join(' ');
     console.log(`Partita ${g + 1} (${player}) ok — turno ${s.turn}, guerre attive ${s.wars.length}, news ${s.news.length}, nukes usate: ${s.news.filter(n => n.kind === 'nuke').length}, fine: ${s.gameOver ? s.gameOver.type : '-'}. Top5: ${r}`);
     const p = s.nations[player];
+    console.log(`   politica: regime ${p.regime} mandati ${p.politics.terms} elezioni ${p.politics.nextElection} opp ${p.politics.opposition.toFixed(0)} loy ${p.politics.loyalty.toFixed(0)} infl ${p.inflation.toFixed(1)} perks ${Object.keys(p.perks).join(',')}`);
     console.log(`   ${player}: PIL ${Math.round(p.gdp)} stab ${p.stability.toFixed(0)} tesoro ${p.treasury.toFixed(0)} army ${p.army.toFixed(0)} tech ${JSON.stringify(p.tech)} debt ${p.debt.toFixed(0)} portafoglio ${E.portfolioValue(s).toFixed(1)}`);
   } catch (e) { fails++; console.error(`Partita ${g + 1} (${player}) FALLITA:`, e.stack); }
 }

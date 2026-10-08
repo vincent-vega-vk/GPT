@@ -35,8 +35,9 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 10px 0; }
 aside, #center { min-height: 0; display: flex; flex-direction: column; }
 aside { background: var(--bg2); border-right: 1px solid var(--line); }
 #right { border-right: 0; border-left: 1px solid var(--line); }
-.tabs { display: flex; border-bottom: 1px solid var(--line); flex-shrink: 0; }
-.tabs button { flex: 1; border: 0; border-radius: 0; background: transparent; padding: 9px 4px; color: var(--muted); border-bottom: 2px solid transparent; font-size: 12.5px; }
+.tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+#leftTabs button { flex: 1 1 33%; }
+.tabs button { flex: 1; border: 0; border-radius: 0; background: transparent; padding: 9px 2px; color: var(--muted); border-bottom: 2px solid transparent; font-size: 12px; white-space: nowrap; }
 .tabs button.active { color: var(--text); border-bottom-color: var(--accent); background: rgba(255,255,255,.03); }
 .panel { overflow-y: auto; padding: 12px; flex: 1; }
 .panel::-webkit-scrollbar, #news::-webkit-scrollbar, .modal-body::-webkit-scrollbar { width: 8px; } .panel::-webkit-scrollbar-thumb, #news::-webkit-scrollbar-thumb, .modal-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
@@ -46,7 +47,7 @@ aside { background: var(--bg2); border-right: 1px solid var(--line); }
 #map { width: 100%; height: 100%; display: block; cursor: pointer; }
 #mapLegend { position: absolute; left: 10px; bottom: 10px; background: rgba(10,15,30,.85); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 11px; display: flex; gap: 10px; flex-wrap: wrap; pointer-events: none; }
 #mapLegend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; background: var(--c); }
-#mapCtl { position: absolute; right: 10px; top: 10px; display: flex; gap: 4px; } #mapCtl .zb { min-width: 30px; font-weight: 700; font-size: 14px; line-height: 1; }
+#mapCtl { position: absolute; right: 10px; top: 10px; display: flex; gap: 4px; } #mapCtl .zb { width: 34px; height: 28px; padding: 0; font-weight: 700; font-size: 16px; line-height: 1; }
 #tooltip { position: absolute; pointer-events: none; background: rgba(12,18,36,.96); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; max-width: 260px; z-index: 5; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
 #newsWrap { height: 200px; border-top: 1px solid var(--line); background: var(--bg2); display: flex; flex-direction: column; flex-shrink: 0; }
 #newsBar { display: flex; gap: 4px; padding: 5px 10px; border-bottom: 1px solid var(--line); align-items: center; flex-wrap: wrap; }
@@ -110,3 +111,13 @@ kbd { background: var(--bg3); border: 1px solid var(--line); padding: 1px 5px; b
 .compare td:nth-child(2), .compare td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums; }
 @media (max-width: 1250px) { #game { grid-template-columns: 320px 1fr 340px; } }
 @media (max-width: 1000px) { #game { grid-template-columns: 1fr; grid-template-rows: auto; overflow-y: auto; } aside { border: 0; border-bottom: 1px solid var(--line); max-height: 60vh; } #mapWrap { height: 420px; flex: none; } body { overflow: auto; } }
+
+.perk { display: flex; gap: 8px; align-items: flex-start; background: var(--bg3); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; margin-bottom: 6px; }
+.perk.owned { border-color: var(--green); } .perk.locked { opacity: .6; }
+.perk .ic { font-size: 20px; } .perk .b { flex: 1; } .perk .b .t { font-weight: 700; font-size: 12.5px; } .perk .b .d { font-size: 11.5px; color: var(--muted); line-height: 1.35; }
+.perk button { flex-shrink: 0; }
+.mandate { height: 10px; background: #0a0f1f; border-radius: 5px; overflow: hidden; margin: 4px 0 8px; position: relative; }
+.mandate > i { display: block; height: 100%; background: linear-gradient(90deg, var(--blue), var(--accent)); }
+.regime-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; }
+.regime-democrazia { background: #1c3a5e; color: #bfdbfe; } .regime-ibrido { background: #4a3a1c; color: #fde68a; } .regime-autocrazia { background: #4a1d1d; color: #fecaca; }
+.chip.danger { border-color: var(--red); color: #ffb3b3; }

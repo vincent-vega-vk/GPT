@@ -29,12 +29,13 @@
     if (t.nukes > 0 && n.nukes === 0 && n.persona !== 'imprevedibile') return 0;
     if (t.nukes > 0 && n.nukes > 0) ratio *= 0.6;
     if (allies.some(id => s.nations[id].nukes > 100) && n.nukes < 100) ratio *= 0.6;
-    let p = P.aggression * diff.aiAggr * 0.045 * (reach.naval ? 0.3 : 1);
+    let p = P.aggression * diff.aiAggr * 0.07 * (reach.naval ? 0.3 : 1);
     p *= claim ? 2.2 : 1;
     p *= rel < -80 ? 1.4 : 1;
     p *= ratio > 2.5 ? 1.6 : ratio > 1.5 ? 1.0 : ratio > 1.15 ? 0.35 : (n.persona === 'imprevedibile' ? 0.05 : 0);
     if (n.stability < 40 && P.aggression > 0.6) p *= 1.3; // guerra diversiva
-    if (t.stability < 35) p *= 1.3;
+    if (t.stability < 35) p *= 1.8;
+    if (t.politics && t.politics.loyalty < 35) p *= 1.3;
     if (E.isSanctioning(s, target, n.id)) p *= 1.2;
     if (n.exhaustion > 20) p *= 0.4;
     if (n.reputation < 40) p *= 0.8;
@@ -162,7 +163,7 @@
     } else if (roll < 0.88 && P.aggression > 0.45) {
       // Ultimatum a vicino debole
       const weak = others.filter(x => rel(x) < -20 && E.milPower(n) > E.milPower(s.nations[x]) * 3 && E.canReach(s, me, x).ok && !E.hasTreaty(s, me, x, 'nonaggressione') && s.nations[x].nukes === 0 && E.alliesOf(s, x).length < 2);
-      if (weak.length && R() < 0.3) { const x = E.pick(weak); const t = s.nations[x]; const region = t.regions.filter(r => !r.capital && (r.controller || x) === x)[0]; if (target(x)) E.queueProposal(s, { from: me, type: 'ultimatum', terms: { kind: 'tributo' }, text: `${n.flag} ${n.name} ti lancia un ultimatum: paga un tributo (3% del PIL) o sarà guerra.` }); else if (region) E.propose(s, me, x, 'ultimatum', { kind: 'regione', region: region.name }); }
+      if (weak.length && R() < 0.5) { const x = E.pick(weak); const t = s.nations[x]; const region = t.regions.filter(r => !r.capital && (r.controller || x) === x)[0]; if (target(x)) E.queueProposal(s, { from: me, type: 'ultimatum', terms: { kind: 'tributo' }, text: `${n.flag} ${n.name} ti lancia un ultimatum: paga un tributo (3% del PIL) o sarà guerra.` }); else if (region) E.propose(s, me, x, 'ultimatum', { kind: 'regione', region: region.name }); }
     } else if (roll < 0.95 && n.treasury > 150 && P.greed > 0.5) {
       // Aiuti economici per comprare influenza
       const o = others.filter(x => rel(x) > 0 && s.nations[x].stability < 50 && E.effGdp(s, s.nations[x]) < E.effGdp(s, n) * 0.3)[0];
@@ -170,6 +171,10 @@
     } else if (n.tech.cyber >= 6) {
       const o = hostile.filter(x => s.nations[x].tech[n.researchFocus] > n.tech[n.researchFocus])[0];
       if (o && R() < 0.3) E.espionage(s, me, o, n.researchFocus);
+    }
+    if (rel(s.player) < -50 && !E.atWar(s, me, s.player) && n.treasury > 20 && R() < 0.08 * GEO.DIFFICULTY[s.difficulty].aiAggr) {
+      n.treasury -= 10; const r = E.destabilize(s, me, s.player);
+      if (!r.caught && s.nations[s.player].perks.intel) E.news(s, `🕵️ I tuoi servizi segreti intercettano un'operazione di destabilizzazione di ${n.flag} ${n.name}.`, 'dip', [s.player, me]);
     }
     // Richiesta di aiuto al giocatore se amico e in difficoltà
     if (E.warsOf(s, me).length && rel(s.player) > 40 && n.stability < 50 && R() < 0.15 && !s.pending.some(p => p.from === me && p.type === 'aiuti')) {

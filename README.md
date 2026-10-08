@@ -1,6 +1,6 @@
 # 🌐 Geopolitica 2026 — Grand Strategy a turni
 
-Un gioco di strategia geopolitica ispirato a *Diplomacy*, giocabile direttamente nel browser senza installazione. Governi una delle 33 nazioni del mondo partendo dallo stato (approssimato) dell'autunno 2026 e ti confronti con le altre, guidate da un'intelligenza artificiale con personalità diverse.
+Un gioco di strategia geopolitica ispirato a *Diplomacy*, giocabile direttamente nel browser senza installazione. Governi una delle 59 nazioni del mondo partendo dallo stato (approssimato) dell'autunno 2026 e ti confronti con le altre, guidate da un'intelligenza artificiale con personalità diverse.
 
 **Avvio:** apri `index.html` in un browser moderno (Chrome, Firefox, Edge, Safari). Nessun server né build necessari.
 
@@ -8,11 +8,14 @@ Un gioco di strategia geopolitica ispirato a *Diplomacy*, giocabile direttamente
 
 | Area | Meccaniche |
 |---|---|
-| 🏛️ Governo | Bilancio trimestrale ripartito tra Difesa, Ricerca, Welfare, Infrastrutture e Diplomazia. Deficit/surplus, debito, stabilità, consenso, reputazione, elezioni. |
+| 🏛️ Governo | Bilancio trimestrale ripartito tra Difesa, Ricerca, Welfare, Infrastrutture e Diplomazia. Deficit/surplus, debito, inflazione, stabilità, consenso, reputazione. |
+| 👑 Potere | Ogni partita segue i **mandati politici**: in democrazia si vota alla scadenza (consenso, crescita, inflazione, opposizione, media). Perdere le elezioni è fine partita. Stratagemmi per restare al potere: campagna elettorale, controllo dei media, rinvio del voto, stato di emergenza, riforma costituzionale, brogli, purga e partito unico (autocrazia). In autocrazia conta la **lealtà delle élite**: sotto 25 rischi il golpe. Richiami ed espulsione dall'UE, sanzioni delle democrazie. |
+| 💰 Tesoro | Oltre alla borsa: ripaga il debito, finanzia progetti (infrastrutture, sanità, istruzione, riarmo, welfare, salvataggio bancario, ricostruzione, stretta monetaria, campagna elettorale, regalie alle élite), compra 15 **capacità nazionali** permanenti (servizi segreti, propaganda, forze speciali, guardia pretoriana, scudo cyber, flotta d'alto mare, banca centrale, polo tecnologico, riserve strategiche, scudo antimissile, triade nucleare, programma nucleare, stato di sorveglianza, fondo sovrano) e investe in **imprese di stato** settoriali con dividendi. |
 | 📈 Borsa | Indice mondiale, 33 indici nazionali, 6 settori (Tech, Energia, Difesa, Agro, Finanza, Oro) e 5 materie prime (petrolio, gas, grano, chip, terre rare). I prezzi reagiscono a guerre, sanzioni, shock, tecnologia. Investi il tesoro sapendo in anticipo cosa farai. |
 | 🔬 Tecnologia | 9 rami: IA, Semiconduttori, Energia, Spazio, Cyber, Ipersonici, Biotech, Quantistica, Difesa antimissile. Dipendenza dai chip ed embarghi tecnologici, spionaggio, intelligence satellitare. |
 | 🤝 Diplomazia | Accordi commerciali, patti di non aggressione, alleanze difensive, blocchi (NATO, UE, BRICS+, SCO, CSTO, AUKUS, QUAD, OPEC+...), ultimatum, aiuti, sanzioni, destabilizzazione, cyberattacchi, Consiglio di Sicurezza ONU con veto dei P5. |
-| ⚔️ Guerra | Ordini simultanei a fine turno (come in Diplomacy): invasioni regione per regione, capitolazioni e stati satellite, attacchi missilistici con intercettazione, cyberattacchi, armi nucleari con rappresaglia (MAD), ombrello nucleare, fallout globale. |
+| ⚔️ Guerra | Ordini simultanei a fine turno (come in Diplomacy): invasioni regione per regione, capitolazioni con riparazioni e stati satellite, insurrezioni nei territori occupati, salve missilistiche con intercettazione e saturazione, cyberattacchi, armi nucleari con rappresaglia (MAD), ombrello nucleare e triade. Un attacco nucleare **stermina milioni di persone** e irradia regioni per 5 turni; solo dopo inizia il ripopolamento. |
+| 💀 Brutalità | Inflazione e iperinflazione, default sovrano, carestie, profughi dalle guerre vicine, attentati (anche mortali), terrorismo, scioperi, golpe militari, operazioni coperte delle IA ostili, ultimatum ai deboli. |
 | 📰 Eventi | Elezioni, scandali, proteste, scoperte, pandemie, crisi finanziarie, shock petroliferi, colpi di stato, carestie, svolte nell'IA... con scelte che hanno conseguenze. |
 | 🏆 Vittoria | Egemonica, Tecnologica, Diplomatica o per punteggio alla scadenza. Sconfitta per capitolazione o rivoluzione. |
 
@@ -25,6 +28,7 @@ index.html        pagina e layout
 css/style.css     tema scuro, layout a tre colonne, modali
 js/data.js        nazioni, relazioni, trattati, eventi, tecnologie, mappa
 js/engine.js      motore: economia, mercati, ricerca, guerra, diplomazia, ONU, eventi
+js/politics.js    mandati, elezioni, regimi, lealtà, inflazione, tesoro: perk, progetti, imprese di stato
 js/ai.js          decisioni delle nazioni IA (bilancio, guerre, pace, proposte)
 js/ui.js          interfaccia, mappa su canvas con zoom, pannelli, modali
 test/sim.js       simulazione headless per verificare la stabilità del motore

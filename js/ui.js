@@ -54,6 +54,7 @@
       body: `<div class="hero"><h1>GEOPOLITICA 2026</h1><p>Un grand strategy a turni ispirato a Diplomacy: economia, borsa, tecnologia, alleanze, sanzioni, guerre convenzionali, missili balistici e deterrenza nucleare in un mondo che parte dallo stato reale dell'autunno 2026. Ogni turno è un trimestre.</p></div>
         <div class="row"><label>Difficoltà <select id="setDiff">${Object.entries(GEO.DIFFICULTY).map(([k, v]) => `<option value="${k}" ${k === diff ? 'selected' : ''}>${v.label}</option>`).join('')}</select></label>
         <label>Durata <select id="setLen"><option value="20">20 turni (5 anni)</option><option value="40" selected>40 turni (10 anni)</option><option value="80">80 turni (20 anni)</option></select></label>
+        <label>Mandato politico <select id="setMandate"><option value="12">12 turni (3 anni)</option><option value="16" selected>16 turni (4 anni)</option><option value="20">20 turni (5 anni)</option></select></label>
         <label>Seed (opzionale) <input type="number" id="setSeed" placeholder="casuale" style="width:110px"></label></div>
         <div class="nation-grid" id="nationGrid">${cards}</div>`,
       foot: `<button id="setHelp">❓ Come si gioca</button><button id="setStart" class="primary">Inizia la partita ▶</button>`,
@@ -62,9 +63,9 @@
     $('setHelp').onclick = () => { showHelp(() => showSetup()); };
     $('setStart').onclick = () => {
       diff = $('setDiff').value; len = +$('setLen').value; const seedV = $('setSeed').value;
-      S = E.newGame({ player: chosen, difficulty: diff, length: len, seed: seedV ? +seedV : undefined });
+      S = E.newGame({ player: chosen, difficulty: diff, length: len, seed: seedV ? +seedV : undefined, mandateLen: +$('setMandate').value });
       sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap();
-      toast(`Benvenuto, leader di ${flagName(S.player)}. Imposta il bilancio, scegli la ricerca, guarda i mercati e stringi alleanze. Premi <b>Fine turno</b> quando sei pronto.`);
+      const pm = me(); toast(`Benvenuto, leader di ${flagName(S.player)}. ${pm.regime === 'democrazia' ? `Il tuo mandato dura ${pm.politics.mandateLen} turni: alle elezioni del T${pm.politics.nextElection} dovrai avere il consenso dalla tua parte.` : 'Governi un regime non democratico: la tua sopravvivenza dipende dalla lealtà delle élite.'} Premi <b>Fine turno</b> quando sei pronto.`);
     };
   }
 
@@ -80,6 +81,9 @@
       <h3>🤝 Diplomazia</h3><p>Accordi commerciali, patti di non aggressione, alleanze difensive, ultimatum, aiuti, sanzioni, embargo sui chip, spionaggio, destabilizzazione, cyberattacchi. Le IA valutano relazioni, reputazione, interessi e paura. Violare un patto distrugge la reputazione. La NATO, il CSTO e l'AUKUS sono blocchi di difesa: attaccare un membro significa affrontare tutti. Le aggressioni senza <i>casus belli</i> (rivendicazione o sanzioni subite) provocano sanzioni e un voto all'ONU, dove i cinque membri permanenti hanno il veto.</p>
       <h3>📈 Borsa</h3><p>Investi il tesoro in indici nazionali, settori (Tech, Energia, Difesa, Agro, Finanza, Oro) e materie prime (petrolio, gas, grano, chip, terre rare). Le guerre gonfiano la Difesa e l'Oro, gli shock petroliferi l'Energia, le sanzioni ai produttori i prezzi delle materie prime. Sai in anticipo cosa farai: usalo.</p>
       <h3>📰 Eventi</h3><p>Elezioni, scandali, cyberattacchi, proteste, scoperte, pandemie, crisi finanziarie, colpi di stato: ogni scelta ha conseguenze. Le proposte delle altre nazioni arrivano a inizio turno.</p>
+      <h3>👑 Potere e mandato</h3><p>Ogni mandato dura un numero fisso di turni. In <b>democrazia</b> alla scadenza si vota: la probabilità di vittoria dipende da consenso, crescita, inflazione, opposizione e controllo dei media. Perdere le elezioni è <b>fine partita</b>. Puoi restare al potere con stratagemmi: campagna elettorale, controllo dei media, rinvio delle elezioni, stato di emergenza, riforma costituzionale, brogli, fino alla <b>purga</b> che instaura un'autocrazia. Ogni passo costa relazioni con l'Occidente, libertà di stampa e può farti espellere dall'UE. In <b>autocrazia</b> non si vota, ma conta la <b>lealtà delle élite</b>: se scende sotto 25 rischi un colpo di stato. La Guardia pretoriana ti protegge.</p>
+      <h3>💰 Tesoro</h3><p>Il tesoro non serve solo alla borsa: ripaga il debito, finanzia progetti (infrastrutture, sanità, istruzione, riarmo, welfare, salvataggi bancari, ricostruzione, stretta monetaria), compra <b>capacità nazionali</b> permanenti (servizi segreti, propaganda, forze speciali, guardia pretoriana, scudo cyber, flotta, banca centrale, polo tecnologico, riserve strategiche, scudo antimissile, triade nucleare, programma nucleare, stato di sorveglianza, fondo sovrano) e investe in <b>imprese di stato</b> settoriali che pagano dividendi.</p>
+      <h3>💀 Brutalità</h3><p>Inflazione, default sovrano, carestie, insurrezioni nei territori occupati, profughi dalle guerre vicine, attentati, terrorismo, scioperi, golpe. Un attacco nucleare stermina milioni di persone e irradia regioni per 5 turni: solo dopo inizia il ripopolamento. Le IA sono più aggressive, lanciano ultimatum, destabilizzano i nemici e colpiscono i deboli.</p>
       <p class="muted small">I dati iniziali sono approssimazioni dello stato del mondo nell'autunno 2026 a scopo ludico. Ogni partita è deterministica dato il seed.</p></div>`,
       foot: `<button id="helpOk" class="primary">Chiudi</button>`, onClose: back,
     });
@@ -96,14 +100,23 @@
       <span class="chip">💰 Tesoro <b>${fmt(p.treasury)}</b> ${port > 0 ? `· Portafoglio ${fmt(port)}` : ''}</span>
       <span class="chip">⚖️ Stabilità <b class="${p.stability < 40 ? 'bad' : ''}">${fmt(p.stability)}</b></span>
       <span class="chip">⭐ Potenza <b>${E.score(S, p)}</b></span>
+      ${mandateChip(p)}
       ${S.pending.length ? `<span class="chip warn">📨 ${S.pending.length} proposte</span>` : ''}${S.orders.length ? `<span class="chip">🎯 ${S.orders.length} ordini</span>` : ''}`;
   }
 
+  function mandateChip(p) {
+    const pol = p.politics; if (!pol) return '';
+    if (p.regime === 'autocrazia') return `<span class="chip ${pol.loyalty < 35 ? 'danger' : ''}">👑 Lealtà élite <b>${fmt(pol.loyalty)}</b></span>`;
+    const left = pol.nextElection - S.turn; const wp = Math.round(GEO.politics.winProb(S, p) * 100);
+    return `<span class="chip ${left <= 3 && wp < 50 ? 'danger' : ''}">🗳️ ${pol.emergency ? 'Elezioni sospese' : `Elezioni tra <b>${left}</b> · vittoria ${wp}%`}</span>`;
+  }
   // ---------- Pannello sinistro ---------------------------------------------
   function renderLeft() {
     const p = me(); const el = $('leftPanel');
     document.querySelectorAll('#leftTabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === leftTab));
     if (leftTab === 'governo') el.innerHTML = govPanel(p);
+    else if (leftTab === 'potere') el.innerHTML = powerPanel(p);
+    else if (leftTab === 'tesoro') el.innerHTML = treasuryPanel(p);
     else if (leftTab === 'tech') el.innerHTML = techPanel(p);
     else if (leftTab === 'mil') el.innerHTML = milPanel(p);
     else el.innerHTML = marketPanel(p);
@@ -125,14 +138,17 @@
         <div class="stat"><div class="l">Debito / PIL</div><div class="v ${p.debt > 120 ? 'bad' : p.debt > 90 ? 'warn' : ''}">${fmt(p.debt)}%</div></div>
         <div class="stat"><div class="l">Tesoro (fondo sovrano)</div><div class="v">${fmt(p.treasury)} <span class="small muted">mld</span></div></div>
         <div class="stat"><div class="l">Reputazione</div><div class="v">${fmt(p.reputation)}</div>${bar(p.reputation)}</div>
-        <div class="stat"><div class="l">Popolazione</div><div class="v">${fmt(p.pop, 1)} <span class="small muted">M</span></div></div>
+        <div class="stat"><div class="l">Popolazione</div><div class="v">${fmt(p.pop, 1)} <span class="small muted">M</span>${p.recovering ? ' <span class="small good">↑ ripopolamento</span>' : p.pop < p.popPeak * 0.98 ? ` <span class="small bad">−${fmt(p.popPeak - p.pop, 1)} M</span>` : ''}</div></div>
+        <div class="stat"><div class="l">Inflazione</div><div class="v ${p.inflation > 8 ? 'bad' : p.inflation > 5 ? 'warn' : ''}">${fmt(p.inflation, 1)}%</div></div>
+        <div class="stat"><div class="l">Regime</div><div class="v"><span class="regime-tag regime-${p.regime}">${p.regime}</span></div></div>
       </div>
+      ${p.defaultUntil && p.defaultUntil > S.turn ? `<div class="box alert">In default: nessun deficit possibile fino al turno ${p.defaultUntil}.</div>` : ''}
       <h4>Bilancio trimestrale: ${fmt(bq * p.spendMult)} mld</h4>
       ${sliders.map(([k, l]) => `<div class="slider-row"><div class="lbl"><span>${l}</span><span><b id="bv_${k}">${Math.round(B[k] * 100)}%</b> · ${fmt(bq * p.spendMult * B[k])} mld</span></div><input type="range" min="2" max="70" value="${Math.round(B[k] * 100)}" data-budget="${k}"></div>`).join('')}
       <div class="slider-row"><div class="lbl"><span>Moltiplicatore di spesa (deficit/surplus)</span><b id="smv">${p.spendMult.toFixed(2)}×</b></div><input type="range" min="70" max="140" value="${Math.round(p.spendMult * 100)}" id="spendMult"><div class="small muted">&gt;1,0: stimolo e debito ↑ · &lt;1,0: austerità, il risparmio va al tesoro</div></div>
       <div class="small muted">Export materie prime: +${fmt(p.lastExport || 0)} mld/trim · Blocchi: ${p.blocs.map(b => `<span class="tag">${GEO.BLOCS[b].name}</span>`).join('') || '—'}</div>
       <h4>Regioni</h4>
-      ${p.regions.map(r => `<div class="region ${r.controller && r.controller !== p.id ? 'occ' : ''}"><span>${r.capital ? '★ ' : ''}${r.name}</span><span>${Math.round(r.share * 100)}% ${r.controller && r.controller !== p.id ? `· occupata da ${N(r.controller).flag}` : ''}</span></div>`).join('')}
+      ${p.regions.map(r => `<div class="region ${r.controller && r.controller !== p.id ? 'occ' : ''}"><span>${r.capital ? '★ ' : ''}${r.name}${r.irradiatedUntil && r.irradiatedUntil > S.turn ? ` <span class="bad">☢️ irradiata fino al T${r.irradiatedUntil}</span>` : ''}</span><span>${Math.round(r.share * 100)}% ${r.controller && r.controller !== p.id ? `· occupata da ${N(r.controller).flag}` : ''}</span></div>`).join('')}
       ${held.length ? `<div class="small" style="margin-top:4px">Territori occupati: ${held.map(x => `<span class="tag war">${N(x.owner).flag} ${x.region.name}</span>`).join('')}</div>` : ''}
       ${p.suzerain ? `<div class="box alert">Sei uno stato satellite di ${flagName(p.suzerain)}.</div>` : ''}
       ${p.tribute ? `<div class="box alert">Paghi un tributo del ${p.tribute.pct * 100}% del PIL a ${flagName(p.tribute.to)} per altri ${p.tribute.turns} turni.</div>` : ''}
@@ -140,6 +156,41 @@
       ${p.tech.space + p.tech.cyber * 0.5 < 6 ? `<div class="small muted">Servono Spazio+Cyber/2 ≥ 6 per leggere le intenzioni degli altri stati.</div>` : intel.length ? intel.map(i => `<div class="box ${i.level > 0.05 ? 'alert' : ''}" style="padding:6px 8px;margin-bottom:4px">${i.text}</div>`).join('') : '<div class="small muted">Nessuna minaccia rilevata.</div>'}
       ${S.pending.length ? `<button class="primary" id="btnProposals" style="width:100%;margin-top:8px">📨 Rispondi a ${S.pending.length} proposte</button>` : ''}
       ${S.pendingEvents.length ? `<button class="primary" id="btnEvents" style="width:100%;margin-top:8px">📌 ${S.pendingEvents.length} eventi in attesa</button>` : ''}`;
+  }
+
+  function powerPanel(p) {
+    const pol = p.politics; const PL = GEO.politics;
+    const dem = p.regime !== 'autocrazia';
+    const elapsed = pol.mandateLen ? pol.mandateLen - (pol.nextElection - S.turn) : 0;
+    const wp = dem ? Math.round(PL.winProb(S, p) * 100) : null;
+    const actions = Object.entries(PL.ACTIONS).map(([k, a]) => { const ok = a.req(p, S); const cost = Math.round(E.effGdp(S, p) * a.costPct / 100); const active = k === 'emergency' && pol.emergency; return `<div class="perk ${ok ? '' : 'locked'}"><div class="ic">${a.icon}</div><div class="b"><div class="t">${a.name}${active ? ' <span class="good">(attivo)</span>' : ''}${k === 'rig' && pol.rigged ? ' <span class="warn">(predisposti)</span>' : ''}</div><div class="d">${a.desc}${ok ? '' : ` <span class="warn">${a.reqText}</span>`}</div></div><button class="small ${k === 'purge' ? 'danger' : ''}" data-regime="${k}" ${ok ? '' : 'disabled'}>${active ? 'Revoca' : cost ? cost + ' mld' : 'Esegui'}</button></div>`; }).join('');
+    return `<div class="box info"><span class="regime-tag regime-${p.regime}">${p.regime.toUpperCase()}</span> · mandato n. ${pol.terms}${p.suzerain ? ' · stato satellite' : ''}
+      ${dem ? `<div class="small" style="margin-top:6px">Mandato: turno ${elapsed}/${pol.mandateLen} · ${pol.emergency ? '<b class="warn">elezioni sospese (stato di emergenza)</b>' : `elezioni al T${pol.nextElection} (tra ${pol.nextElection - S.turn} turni)`}</div><div class="mandate"><i style="width:${Math.min(100, elapsed / pol.mandateLen * 100)}%"></i></div>
+      <div class="row"><label>Proiezione di vittoria</label><b class="${wp >= 55 ? 'good' : wp >= 40 ? 'warn' : 'bad'}">${wp}%</b></div>${bar(wp)}` : `<div class="small" style="margin-top:6px">Nessuna elezione. Il potere si regge sulla lealtà delle élite militari ed economiche.</div>`}
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="l">Consenso popolare</div><div class="v">${fmt(p.approval)}</div>${bar(p.approval)}</div>
+        ${dem ? `<div class="stat"><div class="l">Forza dell'opposizione</div><div class="v ${pol.opposition > 60 ? 'bad' : ''}">${fmt(pol.opposition)}</div>${bar(pol.opposition)}</div>` : `<div class="stat"><div class="l">Lealtà delle élite</div><div class="v ${pol.loyalty < 35 ? 'bad' : ''}">${fmt(pol.loyalty)}</div>${bar(pol.loyalty)}</div>`}
+        <div class="stat"><div class="l">Libertà di stampa</div><div class="v">${fmt(pol.pressFreedom)}</div>${bar(pol.pressFreedom)}</div>
+        <div class="stat"><div class="l">Stabilità</div><div class="v">${fmt(p.stability)}</div>${bar(p.stability)}</div>
+      </div>
+      <div class="small muted" style="margin:6px 0">${pol.mediaControl ? '<span class="tag sanc">media controllati</span>' : ''}${pol.emergency ? '<span class="tag war">stato di emergenza</span>' : ''}${pol.postponements ? `<span class="tag">${pol.postponements} rinvii</span>` : ''}${p.perks.guard ? '<span class="tag ally">guardia pretoriana</span>' : ''}${p.perks.surveillance ? '<span class="tag">sorveglianza</span>' : ''}${pol.euWarnings && p.blocs.includes('EU') ? `<span class="tag sanc">UE: ${pol.euWarnings} richiami</span>` : ''}</div>
+      ${dem ? `<div class="small muted">Cosa pesa sul voto: consenso (${fmt(p.approval)}), crescita (${pct(p.lastGrowth)}), inflazione (${fmt(p.inflation, 1)}%), opposizione, controllo dei media, stabilità, esaurimento bellico. In regime ibrido +20 punti.</div>` : `<div class="small muted">Cosa pesa sulla lealtà: spesa militare (ora ${Math.round(p.budget.military * 100)}%), crescita, sanzioni subite, esaurimento bellico, inflazione, regalie, Guardia pretoriana. Sotto 25: rischio golpe ogni turno.</div>`}
+      <h4>Stratagemmi di potere</h4>${actions}`;
+  }
+
+  function treasuryPanel(p) {
+    const PL = GEO.politics; const eff = E.effGdp(S, p);
+    const perks = Object.entries(GEO.PERKS).map(([k, d]) => { const owned = !!p.perks[k]; const c = PL.cost(S, p, d); const r = owned ? null : PL.canBuyPerk(S, p, k); return `<div class="perk ${owned ? 'owned' : r.ok ? '' : 'locked'}"><div class="ic">${d.icon}</div><div class="b"><div class="t">${d.name}${owned ? ' <span class="good">✓</span>' : ''}</div><div class="d">${d.desc}${!owned && !r.ok && r.reason !== `Servono ${c} mld.` ? ` <span class="warn">${r.reason}</span>` : ''}</div></div>${owned ? '' : `<button class="small" data-perk="${k}" ${r.ok ? '' : 'disabled'}>${c} mld</button>`}</div>`; }).join('');
+    const projects = Object.entries(GEO.PROJECTS).map(([k, d]) => { const c = PL.cost(S, p, d); const r = PL.canRunProject(S, p, k); const active = p.boosts.find(b => b.key === k); return `<div class="perk ${r.ok ? '' : 'locked'}"><div class="ic">${d.icon}</div><div class="b"><div class="t">${d.name}${active ? ` <span class="good">(attivo fino al T${active.until})</span>` : ''}</div><div class="d">${d.desc}${!r.ok && !r.reason.startsWith('Servono') ? ` <span class="warn">${r.reason}</span>` : ''}</div></div><button class="small" data-project="${k}" ${r.ok ? '' : 'disabled'}>${c} mld</button></div>`; }).join('');
+    const soe = GEO.SOE_SECTORS.map(k => { const cap = p.enterprises[k] || 0; const sec = GEO.SECTORS[k]; return `<tr><td>${sec.icon} ${sec.name}</td><td class="right">${cap ? fmt(cap) : '—'}</td><td class="right ${sign(chg(S.market.sectors[k].hist))}">${pct(chg(S.market.sectors[k].hist))}</td><td><button class="small ok" data-soe-in="${k}">+</button><button class="small danger" data-soe-out="${k}" ${cap ? '' : 'disabled'}>−</button></td></tr>`; }).join('');
+    return `<div class="box info"><b>Tesoro: ${fmt(p.treasury)} mld</b> · PIL ${fmt(eff)} · debito ${fmt(p.debt)}% ${p.debt > 100 ? '<span class="bad">(frena la crescita)</span>' : p.debt < 60 ? '<span class="good">(bonus crescita)</span>' : ''}<br><span class="small muted">Entrate: export ${fmt(p.lastExport || 0)} + dividendi ${fmt(p.lastDividends || 0)} + surplus di bilancio. Il tesoro cresce con un moltiplicatore di spesa < 1.</span></div>
+      <h4>💳 Ripaga il debito</h4><div class="row"><input type="number" id="debtAmt" value="${Math.max(1, Math.min(100, Math.floor(p.treasury / 4)))}" min="1" style="width:100px"> mld <button class="small primary" id="payDebt">Ripaga</button><span class="small muted">≈ −${fmt(Math.max(1, Math.min(100, Math.floor(p.treasury / 4))) / eff * 100, 2)} punti</span></div>
+      <h4>🏗️ Progetti</h4>${projects}
+      <h4>🏭 Imprese di stato</h4><div class="small muted" style="margin-bottom:4px">Partecipazioni in settori strategici: dividendi ~1,2%/turno più l'andamento del settore. Disinvestire costa il 5% (0 con Fondo sovrano).</div>
+      <div class="row"><label>Importo (mld)</label><input type="number" id="soeAmt" value="${Math.max(1, Math.min(50, Math.floor(p.treasury / 5)))}" min="1" style="width:90px"></div>
+      <table><tr><th>Settore</th><th class="right">Capitale</th><th class="right">Settore</th><th></th></tr>${soe}</table>
+      <h4>⭐ Capacità nazionali</h4>${perks}`;
   }
 
   function techPanel(p) {
@@ -213,6 +264,14 @@
     const cy = $('ordCyber'); if (cy) cy.onclick = () => { E.addOrder(S, { type: 'cyber', target: tgt() }); renderAll(); };
     const nk = $('ordNuke'); if (nk) nk.onclick = () => orderNuke(tgt());
     const bp = $('btnProposals'); if (bp) bp.onclick = showProposals;
+    const PL = GEO.politics;
+    const act = (fn) => { const r = fn(); renderAll(); if (!r.ok) toast(`⚠️ ${r.reason}`); };
+    const pd = $('payDebt'); if (pd) pd.onclick = () => act(() => PL.payDebt(S, S.player, +$('debtAmt').value));
+    document.querySelectorAll('[data-perk]').forEach(b => b.onclick = () => { const d = GEO.PERKS[b.dataset.perk]; confirmDlg(`${d.icon} ${d.name}`, `${d.desc}<br><br>Costo: <b>${PL.cost(S, me(), d)} mld</b>. Acquisto permanente.`, 'Acquista', () => act(() => PL.buyPerk(S, S.player, b.dataset.perk))); });
+    document.querySelectorAll('[data-project]').forEach(b => b.onclick = () => act(() => PL.runProject(S, S.player, b.dataset.project)));
+    document.querySelectorAll('[data-soe-in]').forEach(b => b.onclick = () => act(() => PL.investSOE(S, S.player, b.dataset.soeIn, +$('soeAmt').value)));
+    document.querySelectorAll('[data-soe-out]').forEach(b => b.onclick = () => act(() => PL.divestSOE(S, S.player, b.dataset.soeOut, +$('soeAmt').value)));
+    document.querySelectorAll('[data-regime]').forEach(b => b.onclick = () => { const k = b.dataset.regime; const a = PL.ACTIONS[k]; if (k === 'emergency' && me().politics.emergency) return act(() => PL.doAction(S, S.player, k)); confirmDlg(`${a.icon} ${a.name}`, `${a.desc}<br><br>${k === 'purge' ? '<b class="bad">Irreversibile senza una transizione democratica.</b>' : ''}`, 'Procedi', () => act(() => PL.doAction(S, S.player, k)), k === 'purge' || k === 'rig'); });
     const be = $('btnEvents'); if (be) be.onclick = showEvents;
     document.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => { const amt = +$('tradeAmt').value; const r = E.trade(S, b.dataset.buy, amt); if (!r.ok) toast(r.reason); renderAll(); });
     document.querySelectorAll('[data-sell]').forEach(b => b.onclick = () => { const amt = +$('tradeAmt').value; const r = E.trade(S, b.dataset.sell, -amt); if (!r.ok) toast(r.reason); renderAll(); });
@@ -269,6 +328,7 @@
     return `<div style="display:flex;gap:10px;align-items:center"><div style="font-size:40px">${n.flag}</div><div><h3 style="margin:0">${n.name}</h3><div class="small muted">${n.regime} · ${P.label} · ${n.continent}</div><div class="small muted">${P.desc}</div></div></div>
       <div style="margin:8px 0">${n.blocs.map(b => `<span class="tag">${GEO.BLOCS[b].name}</span>`).join('')} ${war ? '<span class="tag war">IN GUERRA CON TE</span>' : ''} ${treaties.map(t => `<span class="tag ${t.type === 'difesa' ? 'ally' : t.type === 'commercio' ? 'trade' : ''}">${t.type}${t.expires ? ' (fino T' + t.expires + ')' : ''}</span>`).join('')} ${iSanc ? '<span class="tag sanc">tu la sanzioni</span>' : ''} ${theySanc ? '<span class="tag sanc">ti sanziona</span>' : ''} ${n.suzerain ? `<span class="tag">satellite di ${N(n.suzerain).flag}</span>` : ''}</div>
       <div class="row"><label>Relazioni con te: <b style="color:${relColor(rel)}">${rel} · ${relLabel(rel)}</b></label></div>${bar(rel + 100, 200, 'rel')}
+      <div class="small" style="margin:6px 0"><span class="regime-tag regime-${n.regime}">${n.regime}</span> ${n.politics && n.politics.nextElection ? `· elezioni al T${n.politics.nextElection}` : n.politics ? `· lealtà élite ${fmt(n.politics.loyalty)}` : ''} · inflazione ${fmt(n.inflation, 1)}% · capacità: ${Object.keys(n.perks).map(k => GEO.PERKS[k].icon).join(' ') || '—'}</div>
       <div class="small" style="margin:6px 0">Reputazione ${fmt(n.reputation)} · Alleati: ${allies.length ? allies.map(a => N(a).flag).join(' ') : '—'} · Nemici: ${enemies.length ? enemies.map(a => N(a).flag).join(' ') : '—'} · Sanzionata da ${sancOn.length} paesi</div>
       <table class="compare"><tr><th></th><th>${n.flag} loro</th><th>${p.flag} tu</th></tr>
       ${cmp('PIL (mld)', E.effGdp(S, n), E.effGdp(S, p))}${cmp('Crescita', n.lastGrowth, p.lastGrowth, 1, '%')}${cmp('Potenza militare', E.milPower(n), E.milPower(p))}${cmp('Esercito / Marina / Aero', n.army, p.army)}${cmp('Missili', n.missiles, p.missiles)}${cmp('Testate nucleari', n.nukes, p.nukes)}${cmp('Difesa aerea', n.tech.defense, p.tech.defense)}${cmp('Tech media', E.avgTech(n), E.avgTech(p), 1)}${cmp('IA / Chip', n.tech.ai, p.tech.ai)}${cmp('Stabilità', n.stability, p.stability)}${cmp('Tesoro', n.treasury, p.treasury)}${cmp('Punteggio', E.score(S, n), E.score(S, p))}</table>
@@ -376,12 +436,12 @@
     document.querySelectorAll('[data-acc]').forEach(b => b.onclick = () => handle(+b.dataset.acc, true));
     document.querySelectorAll('[data-rej]').forEach(b => b.onclick = () => handle(+b.dataset.rej, false));
   }
-  const fxLabel = (fx) => Object.entries(fx).map(([k, v]) => ({ stability: `stabilità ${v > 0 ? '+' : ''}${v}`, approval: `consenso ${v > 0 ? '+' : ''}${v}`, debt: `debito ${v > 0 ? '+' : ''}${v}%`, growth: `crescita ${v > 0 ? '+' : ''}${v}%`, treasury: `tesoro ${v > 0 ? '+' : ''}${v} mld`, gdpPct: `PIL ${v}%`, military: `esercito +${v}`, relAll: `relazioni con tutti ${v}`, relDem: `relazioni con le democrazie ${v}`, relSuspect: `relazioni col sospettato ${v}`, cyberHit: 'cyberattacco di rappresaglia', techProg: 'progresso tecnologico', techProgAll: `progresso in tutte le tech ${v > 0 ? '+' : ''}${v}`, res: 'nuove risorse', risk: 'rischio di conseguenze', enemyMissiles: `missili nemici ${v}`, enemyStability: `stabilità nemica ${v}` }[k] || k)).join(' · ');
+  const fxLabel = (fx) => Object.entries(fx).map(([k, v]) => ({ stability: `stabilità ${v > 0 ? '+' : ''}${v}`, approval: `consenso ${v > 0 ? '+' : ''}${v}`, debt: `debito ${v > 0 ? '+' : ''}${v}%`, growth: `crescita ${v > 0 ? '+' : ''}${v}%`, treasury: `tesoro ${v > 0 ? '+' : ''}${v} mld`, gdpPct: `PIL ${v}%`, military: `esercito +${v}`, relAll: `relazioni con tutti ${v}`, relDem: `relazioni con le democrazie ${v}`, relSuspect: `relazioni col sospettato ${v}`, cyberHit: 'cyberattacco di rappresaglia', techProg: 'progresso tecnologico', techProgAll: `progresso in tutte le tech ${v > 0 ? '+' : ''}${v}`, res: 'nuove risorse', risk: 'rischio di conseguenze', enemyMissiles: `missili nemici ${v}`, enemyStability: `stabilità nemica ${v}`, inflation: `inflazione ${v > 0 ? '+' : ''}${v}`, loyalty: `lealtà élite ${v > 0 ? '+' : ''}${v}`, opposition: `opposizione ${v > 0 ? '+' : ''}${v}`, pressFreedom: `libertà di stampa ${v}` }[k] || k)).join(' · ');
   function showEvents(then) {
     if (!S.pendingEvents.length) { if (then) then(); return; }
     const pe = S.pendingEvents[0]; const ev = GEO.EVENTS.find(e => e.id === pe.id);
-    const text = ev.text.replace('{s}', flagName(pe.suspect)).replace('{n}', flagName(S.player));
-    openModal({ title: `📌 ${ev.title}`, onClose: null, body: `<p>${text}</p>${ev.options.map((o, i) => `<button class="option" data-opt="${i}">${o.label}<span class="fx">${fxLabel(o.fx) || 'nessun effetto diretto'}</span></button>`).join('')}` });
+    const text = ev.text.replace('{s}', flagName(pe.suspect)).replace('{n}', flagName(S.player)).replace('{deathNote}', 'Sei sopravvissuto per miracolo.');
+    openModal({ title: `📌 ${ev.title}`, onClose: null, body: `<p>${text}</p>${ev.options.map((o, i) => `<button class="option" data-opt="${i}">${o.label.replace('{s}', flagName(pe.suspect))}<span class="fx">${fxLabel(o.fx) || 'nessun effetto diretto'}</span></button>`).join('')}` });
     document.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => { E.resolveEvent(S, 0, +b.dataset.opt); closeModal(); renderAll(); showEvents(then); });
   }
 
@@ -393,7 +453,13 @@
     save(true);
     renderAll();
     if (S.gameOver) return showGameOver();
-    showTurnReport(() => showEvents(() => showProposals()));
+    showTurnReport(() => showAlerts(() => showEvents(() => showProposals())));
+  }
+  function showAlerts(then) {
+    if (!S.alerts || !S.alerts.length) { if (then) then(); return; }
+    const a = S.alerts.shift();
+    openModal({ title: a.title, onClose: null, body: `<p>${a.text}</p>`, foot: `<button id="alOk" class="primary">Continua</button>` });
+    $('alOk').onclick = () => { closeModal(); showAlerts(then); };
   }
   function showTurnReport(then) {
     const p = me(); const last = S.turn - 1;
@@ -401,13 +467,17 @@
     const world = S.news.filter(n => n.turn === last && ['war', 'nuke', 'un'].includes(n.kind) && !(n.actors && n.actors.includes(S.player))).slice(0, 6);
     const sh = S.scoreHist[S.player]; const dScore = sh.length > 1 ? sh[sh.length - 1] - sh[sh.length - 2] : 0;
     const pv = E.portfolioValue(S); const cost = Object.values(S.portfolio.holdings).reduce((a, h) => a + h.cost, 0);
-    if (!items.length && !world.length && !S.pendingEvents.length && !S.pending.length) { if (then) then(); return; }
+    if (!items.length && !world.length && !S.pendingEvents.length && !S.pending.length && !(S.alerts && S.alerts.length)) { if (then) then(); return; }
     openModal({ title: `📋 Rapporto del trimestre — ${E.dateLabel(S)}`, onClose: then, body: `
       <div class="stat-grid" style="grid-template-columns:repeat(4,1fr)">
         <div class="stat"><div class="l">Crescita</div><div class="v ${sign(p.lastGrowth)}">${pct(p.lastGrowth)}</div></div>
         <div class="stat"><div class="l">Stabilità</div><div class="v">${fmt(p.stability)} <span class="small ${sign(p.stability - p.prevStability)}">${(p.stability - p.prevStability >= 0 ? '+' : '') + fmt(p.stability - p.prevStability, 1)}</span></div></div>
         <div class="stat"><div class="l">Potenza</div><div class="v">${E.score(S, p)} <span class="small ${sign(dScore)}">${dScore >= 0 ? '+' : ''}${dScore}</span></div></div>
         <div class="stat"><div class="l">Portafoglio</div><div class="v">${fmt(pv)} <span class="small ${sign(pv - cost)}">${cost ? pct((pv / cost - 1) * 100) : ''}</span></div></div>
+        <div class="stat"><div class="l">Inflazione</div><div class="v ${p.inflation > 8 ? 'bad' : ''}">${fmt(p.inflation, 1)}%</div></div>
+        <div class="stat"><div class="l">${p.regime === 'autocrazia' ? 'Lealtà élite' : 'Elezioni tra'}</div><div class="v">${p.regime === 'autocrazia' ? fmt(p.politics.loyalty) : p.politics.emergency ? 'sospese' : (p.politics.nextElection - S.turn) + ' turni'}</div></div>
+        <div class="stat"><div class="l">Tesoro</div><div class="v">${fmt(p.treasury)}</div></div>
+        <div class="stat"><div class="l">Debito</div><div class="v">${fmt(p.debt)}%</div></div>
       </div>
       ${items.length ? `<h4>Ti riguarda</h4>${items.map(n => `<div class="news-item ${n.kind}">${esc(n.text)}</div>`).join('')}` : ''}
       ${world.length ? `<h4>Nel mondo</h4>${world.map(n => `<div class="news-item ${n.kind}">${esc(n.text)}</div>`).join('')}` : ''}
