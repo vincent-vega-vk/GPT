@@ -2922,9 +2922,12 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   const defaults = { name: '', hard: false, timer: false, sound: false, theme: 'auto' };
   UI.settings = Object.assign({}, defaults, (CL.store.read().settings || {}));
   UI.saveSettings = () => CL.store.patch((o) => { o.settings = UI.settings; });
+  /* se la pagina è incorporata (es. artifact) l'host può già avere impostato data-theme: "auto" lo rispetta */
+  const hostTheme = document.documentElement.getAttribute('data-theme');
   UI.applyTheme = () => {
     const r = document.documentElement;
-    if (UI.settings.theme === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', UI.settings.theme);
+    if (UI.settings.theme === 'auto') { if (hostTheme) r.setAttribute('data-theme', hostTheme); else r.removeAttribute('data-theme'); }
+    else r.setAttribute('data-theme', UI.settings.theme);
   };
   UI.records = () => {
     const o = CL.store.read();
