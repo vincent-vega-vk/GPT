@@ -88,9 +88,10 @@
 
   /* ───── Stato & impostazioni ───── */
   const S = (UI.S = { screen: 'home', run: null, deal: null, sc: null, phase: 'choose', dojo: null, res: null, openDash: false });
-  const defaults = { name: '', hard: false, timer: false, sound: false, theme: 'auto' };
+  const defaults = { name: '', hard: false, timer: false, sound: false, theme: 'auto', wild: true, fast: false };
   UI.settings = Object.assign({}, defaults, (CL.store.read().settings || {}));
-  UI.saveSettings = () => CL.store.patch((o) => { o.settings = UI.settings; });
+  UI.saveSettings = () => { CL.playerName = UI.settings.name || ''; CL.store.patch((o) => { o.settings = UI.settings; }); };
+  CL.playerName = UI.settings.name || '';
   /* se la pagina è incorporata (es. artifact) l'host può già avere impostato data-theme: "auto" lo rispetta */
   const hostTheme = document.documentElement.getAttribute('data-theme');
   UI.applyTheme = () => {
@@ -130,6 +131,10 @@
         win: [[523, 0, 0.12], [659, 0.1, 0.12], [784, 0.2, 0.12], [1047, 0.3, 0.3]],
         lose: [[392, 0, 0.18, 'triangle'], [330, 0.16, 0.18, 'triangle'], [262, 0.32, 0.4, 'triangle']],
         tick: [[880, 0, 0.04, 'square', 0.03]],
+        phone: [[880, 0, 0.07, 'sine', 0.05], [880, 0.12, 0.07, 'sine', 0.05], [880, 0.5, 0.07, 'sine', 0.05], [880, 0.62, 0.07, 'sine', 0.05]],
+        ping: [[1318, 0, 0.08, 'sine', 0.05], [1760, 0.07, 0.14, 'sine', 0.04]],
+        alert: [[660, 0, 0.12, 'square', 0.05], [440, 0.14, 0.12, 'square', 0.05], [660, 0.28, 0.12, 'square', 0.05], [440, 0.42, 0.2, 'square', 0.05]],
+        door: [[120, 0, 0.12, 'sine', 0.12], [90, 0.1, 0.18, 'sine', 0.1]],
       }[kind];
       if (seq) seq.forEach((n) => tone(n[0], n[1], n[2], n[3], n[4]));
     } catch (e) { /* audio non disponibile */ }
@@ -193,6 +198,8 @@
 
   /* ───── Router ───── */
   UI.go = (screen, extra) => {
+    if (UI.ambience && !['play', 'forecast', 'closing', 'debrief'].includes(screen)) UI.ambience.stop();
+    S.rv++; /* annulla eventuali riproduzioni di scena in corso */
     S.screen = screen;
     if (extra) Object.assign(S, extra);
     UI.render();
@@ -222,7 +229,7 @@
           h('span', { class: 'row gap-4' }, UI.ic('shield'), `Rep. ${S.run.rep}`))
         : null,
       h('button', { class: 'iconbtn', 'aria-label': 'Come si gioca', title: 'Come si gioca', onclick: () => UI.howto() }, UI.ic('info')),
-      h('button', { class: 'iconbtn', 'aria-label': 'Audio', 'aria-pressed': String(UI.settings.sound), title: 'Audio', onclick: () => { UI.settings.sound = !UI.settings.sound; UI.saveSettings(); UI.sfx('pick'); UI.syncTopbar(); if (S.screen === 'home') UI.render(); } }, UI.ic(UI.settings.sound ? 'vol' : 'mute')),
+      h('button', { class: 'iconbtn', 'aria-label': 'Audio', 'aria-pressed': String(UI.settings.sound), title: 'Audio', onclick: () => { UI.settings.sound = !UI.settings.sound; UI.saveSettings(); UI.sfx('pick'); UI.syncTopbar(); if (UI.ambience) UI.ambience.refresh(); if (S.screen === 'home') UI.render(); } }, UI.ic(UI.settings.sound ? 'vol' : 'mute')),
       h('button', { class: 'iconbtn', 'aria-label': 'Tema: ' + UI.settings.theme, title: 'Tema', onclick: () => { const order = ['auto', 'light', 'dark']; UI.settings.theme = order[(order.indexOf(UI.settings.theme) + 1) % 3]; UI.saveSettings(); UI.applyTheme(); UI.syncTopbar(); } }, UI.ic(themeIcon)),
     ));
   };

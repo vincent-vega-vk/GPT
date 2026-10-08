@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Closer · demo dei widget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/style.css">
+<link rel="stylesheet" href="../src/widgets.css">
+<style>
+  /* Solo cornice di prova: il cruscotto reale è la colonna .dash di style.css */
+  :root { --w: 316px; }
+  .bar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .bar .in { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; padding: 10px 16px; }
+  .bar h1 { font: 800 22px/1 var(--font-display); font-stretch: 75%; text-transform: uppercase; margin-right: auto; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); }
+  .seg button { border: 0; background: transparent; padding: 6px 11px; font: 500 12px/1.2 var(--font-mono); color: var(--ink-2); }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+  .bar .lbl { font: 500 10.5px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-right: 6px; }
+  main { padding: 20px 16px 80px; display: grid; gap: 36px; max-width: 2200px; margin: 0 auto; }
+  .ty-h { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .ty-h h2 { font: 800 26px/1 var(--font-display); font-stretch: 75%; text-transform: uppercase; }
+  .ty-h span { font: 500 12px/1 var(--font-mono); color: var(--ink-3); }
+  .vars { display: flex; flex-wrap: wrap; gap: 20px 24px; align-items: flex-start; }
+  .var { margin: 0; width: calc(var(--w) + 34px); max-width: 100%; }
+  .var figcaption { font: 600 10.5px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+  .frame { padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); }
+  .note { max-width: 70ch; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="in">
+    <h1>Widget del cruscotto</h1>
+    <div class="row gap-8"><span class="lbl">Tema</span>
+      <div class="seg" id="seg-theme" role="group" aria-label="Tema">
+        <button data-v="auto" aria-pressed="true">Auto</button><button data-v="light" aria-pressed="false">Chiaro</button><button data-v="dark" aria-pressed="false">Scuro</button>
+      </div></div>
+    <div class="row gap-8"><span class="lbl">Colonna</span>
+      <div class="seg" id="seg-w" role="group" aria-label="Larghezza">
+        <button data-v="300" aria-pressed="false">300</button><button data-v="316" aria-pressed="true">316</button><button data-v="390" aria-pressed="false">390</button><button data-v="520" aria-pressed="false">520</button><button data-v="640" aria-pressed="false">640</button>
+      </div></div>
+    <button class="btn btn--primary btn--sm" id="upd" aria-pressed="false">Simula aggiornamento</button>
+  </div>
+</header>
+<main id="root"></main>
+
+<script src="../src/js/00-core.js"></script>
+<script src="../src/js/40-ui-base.js"></script>
+<script src="../src/js/46-ui-widgets.js"></script>
+<script>
+(function () {
+  'use strict';
+  const UI = CL.ui, h = UI.h;
+  const q = new URLSearchParams(location.search);
+
+  /* ───────────── dati di prova ───────────── */
+  const clone = (x) => JSON.parse(JSON.stringify(x));
+  const mut = (base, fn) => { const c = clone(base); fn(c); return c; };
+
+  /* — mappa del potere — */
+  const SH_A = [
+    { who: 'elisa', name: 'Elisa Marchetti', role: 'VP Operations · il tuo champion', stance: 'champion', note: 'Ti porta dentro il processo e ti passa le date vere.', hue: 205 },
+    { who: 'villa', name: 'Roberto Villa', role: 'CFO · Economic Buyer', stance: 'neutral', note: 'Mai incontrato. Decide lui, ma conosce solo il prezzo.', hue: 150 },
+    { who: 'sala', name: 'Bruno Sala', role: 'CIO', stance: 'skeptic', note: 'Difende il vendor attuale: “funziona, non tocchiamolo”.', hue: 28 },
+    { who: 'neri', name: 'Chiara Neri', role: 'Responsabile Acquisti', stance: 'unknown', note: 'Non l’hai ancora sentita.', hue: 320 },
+    { who: 'ferrante', name: 'Anna Ferrante', role: 'Direttrice Qualità', stance: 'ally', note: 'Vuole la validazione GxP documentata, non a parole.', hue: 265 },
+  ];
+  const SH_B = mut(SH_A, (d) => {
+    d[1].stance = 'ally'; d[1].note = 'Ha letto il business case. Vuole un’ora con te prima del board.';
+    d[2].stance = 'neutral'; d[2].note = 'Dopo il workshop tecnico smette di opporsi, ma non si espone.';
+    d[3].stance = 'neutral'; d[3].note = 'Contattata: chiede il modello di contratto.';
+    d.push({ who: 'bianchi', name: 'Luca Bianchi', role: 'Responsabile Legale', stance: 'skeptic', note: 'Non ha mai visto la clausola di responsabilità.', hue: 95 });
+  });
+  const SH_X = [
+    { who: 'x0', name: 'Maria Antonietta Cavalcanti di San Giorgio', role: 'Direttore Generale Operations, Supply Chain e Trasformazione Digitale di Gruppo', stance: 'champion', note: 'Sponsor storico del progetto: ha già anticipato in due comitati che la scelta è “questione di formalità”, ma non ha mai firmato nulla in prima persona.', hue: 340 },
+    { who: 'x1', name: 'Ing. Pierfrancesco Montanari-Rossi', role: 'Responsabile Sistemi Informativi e Sicurezza delle Informazioni (CISO ad interim)', stance: 'hostile', note: 'Ha già bocciato due fornitori nell’ultimo anno per “rischio di lock-in” e pretende che ogni contratto sopra i 300 mila euro passi dal comitato rischi.', hue: 20 },
+    { who: 'x2', role: 'Chi emette l’ordine d’acquisto?', stance: 'unknown', note: 'Nessuno sa dirti chi sia.' },
+    { who: 'x3', name: 'Li Wei', role: 'IT', stance: 'skeptic' },
+    { who: 'x4', name: 'Giovanni Battista De Santis', role: 'Responsabile-Approvvigionamenti-Indiretti-e-Servizi-Generali', stance: 'ally', note: 'Disponibile.', hue: 180 },
+    { who: 'x5', name: 'Sig.ra Ornella Pellegrino', role: 'Assistente di direzione', note: 'Controlla l’agenda dell’AD.', hue: 60 },
+    { who: 'x6', name: 'Paolo Re', role: 'Revisore', stance: 'neutral', hue: 250 },
+  ];
+  const SH_XB = mut(SH_X, (d) => { d[1].stance = 'skeptic'; d[1].note = 'Dopo la call sulla sicurezza ha ammorbidito la posizione: vuole il pen test completo.'; d[3].stance = 'hostile'; d[2].name = 'Marco Vanni'; d[2].stance = 'neutral'; });
+
+  /* — orologio — */
+  const CK_A = { label: 'Fine trimestre', time: '16:42', deadline: '18:00', pct: 0.74, urgent: false, sub: 'Il CFO è in riunione fino alle 17:30. La finestra per la firma è stretta.' };
+  const CK_B = { label: 'Fine trimestre', time: '17:42', deadline: '18:00', pct: 0.92, urgent: true, sub: 'Il CFO è uscito dalla riunione. Il contratto è sulla sua scrivania da dieci minuti.' };
+  const CK_XA = { label: 'Termine perentorio per la presentazione dell’offerta economica sul portale', time: '17:58', deadline: '18:00', pct: 0.99, urgent: true, sub: 'Il portale della stazione appaltante rallenta a ogni caricamento: il file firmato digitalmente pesa 48 MB e la connessione dell’ufficio non regge. Hai già perso due tentativi.' };
+  const CK_XB = Object.assign({}, CK_XA, { time: '18:03', pct: 1 });
+  const CK_D = { days: 11, of: 11, label: 'Giorni alla firma', sub: 'Il board si riunisce il 14 novembre: ogni giorno perso a monte lo recuperi dopo.' };
+  const CK_D2 = { days: 7, of: 11, label: 'Giorni alla firma', sub: 'Il board si riunisce il 14 novembre: ogni giorno perso a monte lo recuperi dopo.' };
+  const CK_L = { days: 23, of: 90, label: 'Giorni alla chiusura del trimestre', sub: 'Tre trattative aperte.' };
+  const CK_L2 = { days: 4, of: 90, urgent: true, label: 'Giorni alla chiusura del trimestre', sub: 'Tre trattative aperte.' };
+
+  /* — foglio di negoziazione — */
+  const TS_A = { cols: ['Richiesta', 'Nostra posizione', 'Stato'], rows: [
+    { k: 'Sconto', ask: '30%', ours: '12%', st: 'open' },
+    { k: 'Durata', ask: '60 mesi', ours: '36 mesi', st: 'traded' },
+    { k: 'Pagamento', ask: '90 gg', ours: '60 gg', st: 'open' },
+    { k: 'SLA 99,9%', ask: 'Penale 5%', ours: 'Penale 2%', st: 'blocked' },
+    { k: 'Referenza', ask: 'Case study', ours: 'Case study', st: 'won' },
+    { k: 'Esclusiva', ask: 'Territorio IT', ours: 'No', st: 'lost' },
+  ] };
+  const TS_B = mut(TS_A, (d) => { d.rows[0].ours = '15%'; d.rows[0].st = 'traded'; d.rows[2].st = 'won'; d.rows[2].ours = '90 gg'; d.rows.push({ k: 'Formazione', ask: '10 giornate', ours: '4 giornate', st: 'open' }); });
+  const TS_X = { cols: ['Chiedono', 'Offriamo', 'Esito'], rows: [
+    { k: 'Penale per ritardo di consegna oltre il termine contrattuale', ask: '0,5% del canone mensile per ogni giorno di ritardo, senza massimale', ours: '0,1% per giorno, con tetto al 5% dell’importo del lotto', st: 'blocked' },
+    { k: 'Sconto volume pluriennale', ask: '42%', ours: '9%', st: 'open' },
+    { k: 'Recesso anticipato senza penali', ask: 'Sì, dopo 12 mesi', ours: 'Dopo 24 mesi', st: 'lost' },
+    { k: 'Proprietà intellettuale', ask: 'Cessione', ours: 'Licenza d’uso perpetua non esclusiva', st: 'traded' },
+    { k: 'Responsabilità-illimitata-per-danni-indiretti', ask: 'Illimitata', ours: 'Limitata al valore del contratto annuale', st: 'blocked' },
+    { k: 'Corrispettivo', ask: '€480k', ours: '€410k', st: 'open' },
+  ] };
+  const TS_XB = mut(TS_X, (d) => { d.rows[1].ours = '14%'; d.rows[1].st = 'traded'; d.rows[5].ours = '€450k'; d.rows[0].st = 'open'; });
+
+  /* — kanban — */
+  const BD_A = { cols: [
+    { title: 'Sicurezza', cards: [{ t: 'Questionario 320 domande', st: 'todo', k: 'sec1' }, { t: 'Report del penetration test', st: 'doing', k: 'sec2' }, { t: 'Certificato ISO 27001', st: 'done', k: 'sec3' }] },
+    { title: 'Legale', cards: [{ t: 'MSA: redline in corso', st: 'doing', k: 'leg1' }, { t: 'DPA firmato', st: 'done', k: 'leg2' }, { t: 'Responsabilità illimitata', st: 'blocked', k: 'leg3' }] },
+    { title: 'Acquisti', cards: [{ t: 'Iscrizione all’albo fornitori', st: 'doing', k: 'acq1' }, { t: 'Ordine d’acquisto', st: 'todo', k: 'acq2' }] },
+  ] };
+  const BD_B = mut(BD_A, (d) => { d.cols[0].cards[0].st = 'doing'; d.cols[1].cards[2].st = 'doing'; d.cols[2].cards[0].st = 'done'; d.cols[2].cards.push({ t: 'Verifica DURC', st: 'todo', k: 'acq3' }); });
+  const BD_X = { cols: [
+    { title: 'Sicurezza delle informazioni e conformità', cards: [{ t: 'Questionario di valutazione del fornitore con 320 domande a risposta aperta e allegati', st: 'todo', k: 'x1' }, { t: 'Pen test', st: 'blocked', k: 'x2' }] },
+    { title: 'Legale', cards: [{ t: 'Negoziazione-della-clausola-di-limitazione-di-responsabilità', st: 'doing', k: 'x3' }, { t: 'DPA', st: 'done', k: 'x4' }, { t: 'NDA', st: 'done', k: 'x5' }, { t: 'Clausola di uscita', st: 'todo', k: 'x6' }] },
+    { title: 'Acquisti', cards: [] },
+    { title: 'Finanza', cards: [{ t: 'Piano di pagamento', st: 'doing', k: 'x7' }] },
+  ] };
+  const BD_XB = mut(BD_X, (d) => { d.cols[0].cards[1].st = 'doing'; d.cols[2].cards.push({ t: 'Albo fornitori', st: 'todo', k: 'x8' }); d.cols[1].cards[0].st = 'done'; });
+  const BD_2 = { cols: [BD_A.cols[0], BD_A.cols[1]] };
+  const BD_2B = mut(BD_2, (d) => { d.cols[0].cards[0].st = 'done'; d.cols[1].cards[2].st = 'blocked'; d.cols[1].cards[1].st = 'doing'; });
+
+  /* — KPI — */
+  const KP_A = [
+    { k: 'adozione', label: 'Adozione', value: '52%', delta: '+17', tone: 'good', spark: [18, 22, 27, 31, 35, 43, 52], target: '70%' },
+    { k: 'ticket', label: 'Ticket aperti', value: '14', delta: '−6', tone: 'good', spark: [31, 28, 26, 22, 20, 17, 14], target: '10' },
+    { k: 'risposta', label: 'Tempo di risposta', value: '38 h', delta: '+9', tone: 'bad', spark: [22, 24, 23, 27, 30, 35, 38], target: '24 h' },
+    { k: 'rischio', label: 'ACV a rischio', value: '€120k', delta: '0', tone: 'warn', spark: [120, 120, 140, 140, 120, 120, 120] },
+    { k: 'utenti', label: 'Utenti attivi', value: '1.240', delta: '+80', tone: 'neutral', spark: [900, 950, 1010, 1100, 1160, 1240] },
+  ];
+  const KP_B = mut(KP_A, (d) => {
+    d[0].value = '61%'; d[0].delta = '+9'; d[0].spark.push(61);
+    d[2].value = '31 h'; d[2].delta = '−7'; d[2].tone = 'warn'; d[2].spark.push(31);
+    d[4].value = '1.310'; d[4].delta = '+70'; d[4].spark.push(1310);
+  });
+  const KP_X = [
+    { k: 'a', label: 'Tempo medio di risposta del CFO alle richieste di approvazione del budget', value: '€1,28 M', delta: '+€0,31 M', tone: 'good', spark: [0.4, 0.55, 0.62, 0.9, 0.97, 1.28], target: '€1,5 M' },
+    { k: 'b', label: 'Punteggio di salute', value: '−3', delta: '−12', tone: 'bad', spark: [9, 7, 4, 1, -3] },
+    { k: 'c', label: 'Indicatore piatto', value: '100', spark: [50, 50, 50, 50] },
+    { k: 'd', label: 'Un solo punto', value: '7', spark: [7], target: '10' },
+    { k: 'e', label: 'Senza grafico', value: 'Alto', tone: 'warn', delta: 'in salita' },
+    { k: 'f', label: 'Valore testuale lungo', value: 'Quarto trimestre consecutivo', tone: 'neutral', delta: '+1', spark: [1, 2, 3, 4] },
+  ];
+  const KP_XB = mut(KP_X, (d) => { d[1].value = '4'; d[1].delta = '+7'; d[1].tone = 'good'; d[1].spark.push(4); d[2].value = '100'; d[2].delta = '=' ; d[4].value = 'Medio'; d[4].tone = 'neutral'; });
+
+  /* — CRM vs realtà — */
+  const SC_A = [
+    { k: 'budget', label: 'Budget approvato', crm: 'Sì', real: 'No', st: 'bad' },
+    { k: 'eb', label: 'Economic Buyer', crm: 'Villa, incontrato', real: 'Mai visto', st: 'bad' },
+    { k: 'data', label: 'Data di decisione', crm: '30 novembre', real: 'Non definita', st: 'bad' },
+    { k: 'comp', label: 'Concorrenza', crm: 'Nessuna', real: 'Vertex in short-list', st: 'bad' },
+    { k: 'champ', label: 'Champion', crm: 'Elisa', real: 'Elisa, senza accesso', st: 'warn' },
+    { k: 'pain', label: 'Problema riconosciuto', crm: 'Confermato', real: 'Confermato', st: 'good' },
+  ];
+  const SC_B = mut(SC_A, (d) => { d[1].real = 'Incontrato giovedì'; d[1].st = 'warn'; d[2].real = '30 novembre, a voce'; d[2].st = 'warn'; d[0].real = 'In bozza'; d[0].st = 'warn'; });
+  const SC_X = [
+    { k: 'a', label: 'Il budget è stato approvato dal consiglio di amministrazione per l’esercizio in corso', crm: 'Sì, approvato con delibera n. 14/2026 del 12 settembre', real: 'No: esiste solo una previsione di spesa non vincolante inserita nel piano triennale', st: 'bad' },
+    { k: 'b', label: 'Firmatario', crm: 'AD', real: 'Direttore Generale', st: 'warn' },
+    { k: 'c', label: 'Procedura-di-acquisto-prevista', crm: 'Trattativa privata', real: 'Gara europea sopra soglia', st: 'bad' },
+    { k: 'd', label: 'Pain', crm: 'Confermato', real: 'Confermato', st: 'good' },
+    { k: 'e', label: 'Competitor', crm: '—', real: '', st: 'warn' },
+  ];
+  const SC_XB = mut(SC_X, (d) => { d[0].st = 'warn'; d[0].real = 'Approvato in linea di principio, delibera attesa a ottobre'; d[3].st = 'warn'; d[3].real = 'Confermato dal solo reparto qualità'; });
+
+  /* — timeline — */
+  const TL_A = { items: [
+    { k: 't1', t: '15 ott', label: 'Richiesta di budget', st: 'done' },
+    { k: 't2', t: '22 ott', label: 'Workshop con l’IT', st: 'done' },
+    { k: 't3', t: '29 ott', label: 'Validazione del CFO', st: 'now' },
+    { k: 't4', t: '5 nov', label: 'Pre-board con Marchetti', st: 'todo' },
+    { k: 't5', t: '14 nov', label: 'Consiglio di amministrazione', st: 'todo' },
+    { k: 't6', t: '30 nov', label: 'Firma del contratto', st: 'todo' },
+  ] };
+  const TL_B = mut(TL_A, (d) => { d.items[2].st = 'done'; d.items[3].st = 'now'; d.items[4].label = 'Consiglio di amministrazione, spostato'; d.items[4].t = '21 nov'; });
+  const TL_X = { items: [
+    { k: 'x1', t: 'Lunedì 14 ottobre · ore 10:30', label: 'Invio della documentazione tecnica integrativa richiesta dalla commissione giudicatrice', st: 'done' },
+    { k: 'x2', t: '18 ott', label: 'Risposta-ai-chiarimenti-formali', st: 'late' },
+    { k: 'x3', t: 'Oggi', label: 'Seduta pubblica per l’apertura delle buste economiche e verifica delle offerte anomale', st: 'now' },
+    { k: 'x4', t: 'Entro fine mese', label: 'Aggiudicazione provvisoria', st: 'todo' },
+    { k: 'x5', t: 'Da definire', label: 'Stipula', st: 'todo' },
+  ] };
+  const TL_XB = mut(TL_X, (d) => { d.items[1].st = 'done'; d.items[2].st = 'late'; d.items[3].st = 'now'; });
+
+  /* — checklist — */
+  const CL_A = [
+    { k: 'c1', t: 'Chiarimento formale inviato', st: 'done', note: 'Risposta attesa entro il 25 ottobre.' },
+    { k: 'c2', t: 'Referenze verificate', st: 'done' },
+    { k: 'c3', t: 'Garanzia provvisoria', st: 'warn', note: 'Scade il 31 ottobre: manca la fideiussione.' },
+    { k: 'c4', t: 'Offerta tecnica, 70 punti', st: 'todo' },
+    { k: 'c5', t: 'Dichiarazione antimafia', st: 'bad', note: 'Documento scaduto, da rinnovare in Camera di Commercio.' },
+    { k: 'c6', t: 'Offerta economica sigillata', st: 'todo' },
+  ];
+  const CL_B = mut(CL_A, (d) => { d[2].st = 'done'; delete d[2].note; d[3].st = 'warn'; d[3].note = 'Mancano due allegati del tuo SE.'; d[4].note = 'Appuntamento fissato per lunedì.'; });
+  const CL_X = [
+    { k: 'x1', t: 'Verifica della conformità delle clausole contrattuali rispetto al capitolato speciale d’appalto e ai suoi dodici allegati', st: 'warn', note: 'L’allegato 7 richiede una certificazione che Nexora ottiene solo a gennaio. Serve una dichiarazione sostitutiva firmata dal legale rappresentante.' },
+    { k: 'x2', t: 'Parola-lunghissima-senza-spazi-per-provare-il-ritorno-a-capo-del-testo', st: 'bad' },
+    { k: 'x3', t: 'Sì', st: 'done' },
+    { k: 'x4', t: 'Invio PEC', st: 'todo', note: '' },
+  ];
+  const CL_XB = mut(CL_X, (d) => { d[0].st = 'done'; d[3].st = 'warn'; d[3].note = 'Casella piena: il cliente non riceve.'; });
+
+  /* — scoreboard — */
+  const SB_A = { rows: [
+    { k: 'tec', label: 'Tecnica', max: 70, us: 54, them: 58 },
+    { k: 'eco', label: 'Economica', max: 30, us: 26, them: 19 },
+  ], total: { us: 80, them: 77, max: 100 }, caption: 'Stima sulla base del capitolato: la commissione non ha ancora pubblicato i criteri di dettaglio.' };
+  const SB_B = mut(SB_A, (d) => { d.rows[0].us = 61; d.rows[1].them = 23; d.total.us = 87; d.total.them = 81; });
+  const SB_X = { labels: ['Nexora', 'Vertex Systems'], rows: [
+    { k: 'a', label: 'Qualità tecnica della soluzione proposta', max: 40, us: 31, them: 38 },
+    { k: 'b', label: 'Piano di migrazione, formazione e supporto post-avvio', max: 25, us: 0, them: 22 },
+    { k: 'c', label: 'Prezzo', max: 20, us: 20, them: 4 },
+    { k: 'd', label: 'Referenze', max: 15, us: 18, them: 15.5 },
+  ], total: { us: 69, them: 79.5, max: 100 }, caption: 'Stima. Il punteggio della voce “Referenze” supera il massimo: la commissione lo riporterà a 15.' };
+  const SB_XB = mut(SB_X, (d) => { d.rows[1].us = 14; d.total.us = 83; d.rows[2].them = 9; d.total.them = 84.5; });
+
+  /* ───────────── catalogo ───────────── */
+  const TYPES = [
+    { type: 'stakeholders', title: 'Mappa del potere', vars: [
+      ['Vuoto', [], SH_A], ['Tipico', SH_A, SH_B], ['Estremo', SH_X, SH_XB] ] },
+    { type: 'clock', title: 'Fine trimestre', vars: [
+      ['Vuoto', null, CK_A], ['Tipico · ore', CK_A, CK_B], ['Estremo · ore', CK_XA, CK_XB], ['Giorni', CK_D, CK_D2], ['Giorni · 90', CK_L, CK_L2] ] },
+    { type: 'termsheet', title: 'Foglio di negoziazione', vars: [
+      ['Vuoto', { cols: ['Richiesta', 'Nostra posizione', 'Stato'], rows: [] }, TS_A], ['Tipico', TS_A, TS_B], ['Estremo', TS_X, TS_XB] ] },
+    { type: 'board', title: 'Avanzamento del processo', vars: [
+      ['Vuoto', { cols: [] }, BD_A], ['Tipico · 3 corsie', BD_A, BD_B], ['Due corsie', BD_2, BD_2B], ['Estremo · 4 corsie', BD_X, BD_XB] ] },
+    { type: 'kpis', title: 'Indicatori', vars: [
+      ['Vuoto', [], KP_A], ['Tipico', KP_A, KP_B], ['Estremo', KP_X, KP_XB] ] },
+    { type: 'scorecard', title: 'CRM vs realtà', vars: [
+      ['Vuoto', [], SC_A], ['Tipico', SC_A, SC_B], ['Estremo', SC_X, SC_XB] ] },
+    { type: 'timeline', title: 'Percorso verso la firma', vars: [
+      ['Vuoto', { items: [] }, TL_A], ['Tipico', TL_A, TL_B], ['Estremo', TL_X, TL_XB] ] },
+    { type: 'checklist', title: 'Requisiti di gara', vars: [
+      ['Vuoto', [], CL_A], ['Tipico', CL_A, CL_B], ['Estremo', CL_X, CL_XB] ] },
+    { type: 'scoreboard', title: 'Punteggio stimato', vars: [
+      ['Vuoto', { rows: [] }, SB_A], ['Tipico', SB_A, SB_B], ['Estremo', SB_X, SB_XB] ] },
+  ];
+
+  /* ───────────── rendering ───────────── */
+  const root = document.getElementById('root');
+  const cells = [];
+  let phase = 0;
+  const only = q.get('only');
+  const varsQ = q.get('vars') ? q.get('vars').toLowerCase().split(',') : null;
+
+  TYPES.filter((t) => !only || only.split(',').includes(t.type)).forEach((t) => {
+    const vars = h('div', { class: 'vars' });
+    t.vars.filter(([name]) => !varsQ || varsQ.some((v) => name.toLowerCase().startsWith(v))).forEach(([name, a, b]) => {
+      const frame = h('div', { class: 'frame' });
+      const cell = { type: t.type, title: t.title, a, b, last: null, frame, name };
+      cells.push(cell);
+      vars.appendChild(h('figure', { class: 'var', 'data-variant': name }, h('figcaption', null, name), frame));
+    });
+    root.appendChild(h('section', { class: 'ty', 'data-type': t.type }, h('div', { class: 'ty-h' }, h('h2', null, t.type), h('span', null, t.title)), vars));
+  });
+
+  function paint() {
+    cells.forEach((c) => {
+      const data = phase ? c.b : c.a;
+      const el = UI.widget(c.type, c.title, data, c.last);
+      c.last = data;
+      c.frame.replaceChildren(el);
+    });
+  }
+  paint();
+
+  /* ───────────── controlli ───────────── */
+  const seg = (id, apply) => {
+    const box = document.getElementById(id);
+    box.addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      apply(b.dataset.v);
+    });
+    return (v) => { box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.v === v))); apply(v); };
+  };
+  const setTheme = seg('seg-theme', (v) => { if (v === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', v); });
+  const setW = seg('seg-w', (v) => { document.documentElement.style.setProperty('--w', v === 'fit' ? 'calc(100vw - 66px)' : v + 'px'); });
+  const upd = document.getElementById('upd');
+  upd.addEventListener('click', () => { phase = phase ? 0 : 1; upd.setAttribute('aria-pressed', String(!!phase)); paint(); });
+
+  if (q.get('theme')) setTheme(q.get('theme'));
+  if (q.get('w')) setW(q.get('w'));
+  if (q.get('upd') === '1') { phase = 1; upd.setAttribute('aria-pressed', 'true'); paint(); }
+
+  /* per i test automatici */
+  window.__demo = { paint, toggle: () => upd.click(), cells };
+})();
+</script>
+</body>
+</html>

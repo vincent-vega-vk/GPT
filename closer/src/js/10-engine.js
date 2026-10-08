@@ -32,6 +32,7 @@
       integ: 0,
       used: {},
       minP: 1, maxP: 0,
+      wild: null, wildCount: 0, wildUsed: {},
     };
     CL.enterNode(d);
     const p = CL.prob(d).p;
@@ -45,9 +46,11 @@
     mp: new Set(d.mp), flags: Object.assign({}, d.flags),
     hist: d.hist.slice(), entered: Object.assign({}, d.entered),
     integ: d.integ, used: Object.assign({}, d.used), minP: d.minP, maxP: d.maxP, dipped: d.dipped,
+    wild: d.wild, wildCount: d.wildCount, wildUsed: Object.assign({}, d.wildUsed),
   });
 
-  CL.nodeOf = (d) => d.sc.nodes[d.node];
+  /* il nodo corrente: un imprevisto (wild) ha la precedenza sul nodo dello scenario */
+  CL.nodeOf = (d) => (d.wild ? d.wild.node : d.sc.nodes[d.node]);
 
   const applyFx = (d, fx) => {
     const delta = {};
@@ -72,7 +75,8 @@
 
   /* applica una sola volta gli effetti d’ingresso di un nodo (colpi di scena) */
   CL.enterNode = (d) => {
-    const n = CL.nodeOf(d);
+    if (d.wild) return null;
+    const n = d.sc.nodes[d.node];
     if (!n || d.entered[d.node]) return null;
     d.entered[d.node] = true;
     if (!n.enter) return null;
@@ -105,10 +109,19 @@
       });
   };
 
-  CL.pick = (d, id, run) => {
+  /* righe della reazione immediata di una scelta (react può essere funzione dello stato) */
+  CL.reactLines = (d, c) => {
+    const raw = CL.val(c.react, d);
+    return Array.isArray(raw) ? raw.filter((l) => !l.if || l.if(d)) : [];
+  };
+
+  /* opts: { rnd } abilita gli imprevisti (wild); { wild:false } li esclude; { pWild } ne cambia la probabilità */
+  CL.pick = (d, id, run, opts) => {
+    opts = opts || {};
+    const inWild = !!d.wild;
     const n = CL.nodeOf(d);
     const c = n.choices.find((x) => x.id === id);
-    if (!c) throw new Error('scelta inesistente ' + d.sc.id + '/' + d.node + '/' + id);
+    if (!c) throw new Error('scelta inesistente ' + d.sc.id + '/' + (inWild ? 'wild:' + d.wild.id : d.node) + '/' + id);
     if (c.jolly && run && !run.free) {
       if ((run.jolly[c.jolly] || 0) <= 0) throw new Error('jolly esaurito ' + c.jolly);
       run.jolly[c.jolly]--;
@@ -116,7 +129,7 @@
     if (c.jolly) d.used[c.jolly] = (d.used[c.jolly] || 0) + 1;
     const pBefore = CL.prob(d).p;
     const mBefore = Object.assign({}, d.m);
-    const delta = applyFx(d, c.fx || {});
+    const delta = applyFx(d, CL.val(c.fx, d) || {});
     const gained = [], lost = [];
     (c.mp || []).forEach((k) => { if (!d.mp.has(k)) { d.mp.add(k); gained.push(k); } });
     (c.mpx || []).forEach((k) => { if (d.mp.delete(k)) lost.push(k); });
@@ -125,15 +138,23 @@
       d.integ += c.integ;
       if (run) run.rep = CL.clamp(run.rep + c.integ, 0, 100);
     }
-    const next = typeof c.next === 'function' ? c.next(d) : c.next;
+    const next = inWild ? 'RET' : CL.val(c.next, d);
     if (!next) throw new Error('next mancante ' + d.sc.id + '/' + d.node + '/' + id);
-    const rec = { node: d.node, id: c.id, q: c.q, t: c.t, r: c.r, tip: n.tip, delta, gained, lost, jolly: c.jolly || null, integ: c.integ || 0, pBefore, mBefore };
+    const rec = {
+      node: inWild ? 'wild:' + d.wild.id : d.node, id: c.id, q: c.q, t: c.t, say: c.say || null, r: CL.val(c.r, d), react: CL.reactLines(d, c),
+      tip: n.tip, delta, gained, lost, jolly: c.jolly || null, integ: c.integ || 0, pBefore, mBefore,
+      wild: inWild ? d.wild.id : null, wildTitle: inWild ? d.wild.title : null,
+    };
     d.hist.push(rec);
-    if (next === 'END' || next === 'DQ') { d.over = next; }
+    if (inWild) {
+      d.wild = null;
+      rec.entered = CL.enterNode(d); /* ora si entra davvero nel nodo che l'imprevisto aveva interrotto */
+    } else if (next === 'END' || next === 'DQ') { d.over = next; }
     else {
       if (!d.sc.nodes[next]) throw new Error('nodo inesistente ' + next + ' da ' + d.sc.id + '/' + d.node);
       d.node = next;
-      rec.entered = CL.enterNode(d);
+      if (opts.rnd && CL.rollWild(d, opts.rnd, opts)) rec.wildNext = d.wild.id;
+      else rec.entered = CL.enterNode(d);
     }
     const pAfter = CL.prob(d).p;
     rec.pAfter = pAfter;
@@ -141,6 +162,32 @@
     if (pAfter < 0.25 && d.maxP >= 0.45) d.dipped = true;
     d.maxP = Math.max(d.maxP, pAfter);
     return rec;
+  };
+
+  /* ───────────── IMPREVISTI (variabili aleatorie dentro la trattativa) ───────────── */
+  CL.wildPool = (d) => {
+    const last = d.hist[d.hist.length - 1];
+    const lastNode = last ? last.node : null;
+    const mk = (w, generic) => ({ w, key: (generic ? 'g:' : 's:') + w.id, weight: (w.w || 1) * (generic ? 0.5 : 1.5), generic });
+    return [].concat((d.sc.wild || []).map((w) => mk(w, false)), (CL.wildGeneric || []).map((w) => mk(w, true)))
+      .filter((x) => !d.wildUsed[x.key] && (!x.w.after || x.w.after.indexOf(lastNode) >= 0) && (!x.w.if || x.w.if(d)));
+  };
+
+  CL.rollWild = (d, rnd, opts) => {
+    opts = opts || {};
+    if (opts.wild === false || d.wild || d.over) return false;
+    if (d.wildCount >= (opts.maxWild != null ? opts.maxWild : 2)) return false;
+    const last = d.hist[d.hist.length - 1];
+    if (!last || last.wild) return false;
+    if (rnd() >= (opts.pWild != null ? opts.pWild : 0.3)) return false;
+    const pool = CL.wildPool(d);
+    if (!pool.length) return false;
+    let tot = 0; pool.forEach((x) => { tot += x.weight; });
+    let u = rnd() * tot, pick = pool[pool.length - 1];
+    for (const x of pool) { if ((u -= x.weight) <= 0) { pick = x; break; } }
+    d.wild = { id: pick.w.id, title: pick.w.title, node: pick.w.node, generic: pick.generic };
+    d.wildCount++; d.wildUsed[pick.key] = 1;
+    return true;
   };
 
   /* ───────────── SCONTO / LEP ───────────── */
@@ -185,31 +232,79 @@
   /* abbandono di una trattativa in corso: perso, nessun ACV */
   CL.forfeit = (d) => ({
     id: d.sc.id, title: d.sc.title, client: d.sc.client, avgQ: CL.avgQ(d), mp: d.mp.size, hasE: d.mp.has('E'), hasC: d.mp.has('C'),
-    minP: d.minP, dipped: false, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length,
+    minP: d.minP, dipped: false, wilds: 0, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length,
     status: 'lost', acv: 0, p: CL.prob(d).p, pe: 0, roll: 1, disc: 0, promised: d.disc, blocked: false, lep: CL.approval(d).lep, cap: null, listFinal: d.list, overLep: false, forfeited: true,
   });
 
   CL.avgQ = (d) => (d.hist.length ? d.hist.reduce((a, h) => a + h.q, 0) / d.hist.length : 0);
 
-  CL.finish = (d, run, rnd) => {
+  const baseResult = (d) => {
     const sc = d.sc;
-    const base = { id: sc.id, title: sc.title, client: sc.client, avgQ: CL.avgQ(d), mp: d.mp.size, hasE: d.mp.has('E'), hasC: d.mp.has('C'), minP: d.minP, dipped: !!d.dipped, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length };
-    if (d.over === 'DQ') {
-      return Object.assign(base, { status: 'disq', acv: 0, p: 0, disc: 0, refund: sc.dqRefund != null ? sc.dqRefund : 2 });
-    }
-    const pr = CL.prob(d);
-    const ap = pr.ap;
+    return { id: sc.id, title: sc.title, client: sc.client, avgQ: CL.avgQ(d), mp: d.mp.size, hasE: d.mp.has('E'), hasC: d.mp.has('C'), minP: d.minP, dipped: !!d.dipped, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length, wilds: d.hist.filter((h) => h.wild).length };
+  };
+
+  /* chiude le decisioni: l'esito resta SIGILLATO (pending) fino al giorno di chiusura */
+  CL.seal = (d) => {
+    const sc = d.sc;
+    const base = baseResult(d);
+    if (d.over === 'DQ') return Object.assign(base, { status: 'disq', acv: 0, p: 0, disc: 0, refund: sc.dqRefund != null ? sc.dqRefund : 2 });
+    const pr = CL.prob(d), ap = pr.ap;
+    return Object.assign(base, {
+      status: 'pending', acv: 0, p: pr.p, disc: ap.eff, promised: d.disc, blocked: ap.status === 'blocked', lep: ap.lep, cap: pr.cap,
+      listFinal: d.list, overLep: ap.eff > ap.lep, net: Math.round(d.list * (1 - ap.eff / 100)),
+      snap: { m: Object.assign({}, d.m), mp: Array.from(d.mp), flags: Object.assign({}, d.flags), disc: d.disc, list: d.list },
+    });
+  };
+
+  /* stato "ricostruito" da un risultato sigillato, per testare shock e domande di forecast */
+  CL.pseudoDeal = (res) => ({
+    sc: CL.getScenario(res.id), m: Object.assign({}, res.snap.m), mp: new Set(res.snap.mp), flags: Object.assign({}, res.snap.flags),
+    disc: res.snap.disc, list: res.snap.list, hist: [], node: null, integ: res.integ, over: 'END', entered: {}, used: {}, wildUsed: {}, wildCount: 0, wild: null,
+  });
+
+  /* ───────────── SHOCK DEL GIORNO DI CHIUSURA (variabili aleatorie dopo le decisioni) ───────────── */
+  CL.drawShock = (pd, rnd, opts) => {
+    opts = opts || {};
+    if (rnd() >= (opts.pShock != null ? opts.pShock : 0.6)) return null;
+    const pool = [].concat(
+      (pd.sc.shocks || []).map((s) => ({ s, w: (s.w || 1) * 2 })),
+      (CL.shocksGeneric || []).map((s) => ({ s, w: s.w || 1 }))
+    ).filter((x) => !x.s.if || x.s.if(pd));
+    if (!pool.length) return null;
+    let tot = 0; pool.forEach((x) => { tot += x.w; });
+    let u = rnd() * tot, pick = pool[pool.length - 1];
+    for (const x of pool) { if ((u -= x.w) <= 0) { pick = x; break; } }
+    const s = pick.s;
+    const hit = s.hit ? !!s.hit(pd) : true;
+    const dp = hit ? s.dp : (s.dpProt != null ? s.dpProt : (s.kind === 'neg' ? s.dp * 0.12 : 0));
+    return { id: s.id, title: s.title, kind: s.kind, hit, dp, text: hit ? s.hitText : s.protText, generic: !(pd.sc.shocks || []).includes(s) };
+  };
+
+  /* risolve un risultato sigillato: aiuto del manager, shock, tiro finale */
+  CL.settle = (res, run, rnd, opts) => {
+    if (res.status !== 'pending') return res;
+    opts = opts || {};
+    const pd = CL.pseudoDeal(res);
+    const boost = (run && run.boost && run.boost[res.id]) || 0;
+    let p = CL.clamp(res.p + boost, 0, 0.99);
+    const shock = opts.shocks === false ? null : CL.drawShock(pd, rnd, opts);
+    if (shock) p = CL.clamp(p + shock.dp, 0, 1);
     /* sopra l'80% la firma è quasi certa: una trattativa condotta bene non deve dipendere da un dado sfortunato */
-    const pe = pr.p >= 0.9 ? 1 : pr.p >= 0.8 ? pr.p + (pr.p - 0.8) * 2 : pr.p;
+    const pe = p >= 0.9 ? 1 : p >= 0.8 ? p + (p - 0.8) * 2 : p;
     const u = rnd();
     let status;
     if (u < pe) status = 'won';
-    else status = (u - pe) / (1 - pe) < (sc.slip != null ? sc.slip : 0.3) ? 'slip' : 'lost';
-    const acv = status === 'won' ? Math.round(d.list * (1 - ap.eff / 100)) : 0;
-    return Object.assign(base, {
-      status, acv, p: pr.p, pe, roll: u, disc: ap.eff, promised: d.disc, blocked: ap.status === 'blocked', lep: ap.lep,
-      cap: pr.cap, listFinal: d.list, overLep: ap.eff > ap.lep,
-    });
+    else status = (u - pe) / (1 - pe) < (pd.sc.slip != null ? pd.sc.slip : 0.3) ? 'slip' : 'lost';
+    return Object.assign({}, res, { status, acv: status === 'won' ? res.net : 0, pFinal: p, pe, roll: u, boost, shock });
+  };
+
+  /* risultato immediato (allenamento) */
+  CL.finish = (d, run, rnd, opts) => {
+    const sealed = CL.seal(d);
+    if (sealed.status !== 'pending') return sealed;
+    const r = CL.settle(sealed, run, rnd, opts);
+    r.p = sealed.p;
+    return r;
   };
 
   /* ───────────── TRIMESTRE ───────────── */
@@ -222,6 +317,7 @@
       mode: opts.mode || 'career', seed, rnd: CL.rng(seed), hard: !!opts.hard, name: opts.name || '',
       free: opts.mode === 'train', spent: 0, jolly, rep: C.repStart,
       results: [], done: {}, scouted: {}, eventsSeen: {}, eventLog: [], bonusAcv: 0, bonusDeals: [], timeouts: 0, mods: {},
+      mgr: 60, boost: {}, fc: { calls: {} }, promised: {}, closing: null,
     };
   };
   CL.energy = (run) => C.energy - run.spent;
@@ -247,14 +343,30 @@
     run.results.push(res);
     if (run.mode !== 'career') return { energyDelta: 0 };
     run.done[sc.id] = true;
+    res.week = CL.week(run);
     let delta = 0;
     if (res.status === 'disq') { run.spent += Math.max(1, sc.cost - res.refund); delta = -Math.max(1, sc.cost - res.refund); }
     else {
       run.spent += sc.cost;
       delta = -sc.cost;
-      if (res.status === 'won' && res.avgQ >= 2.6 && !run.momentumUsed) { run.momentumUsed = true; run.spent = Math.max(0, run.spent - 1); delta += 1; res.momentum = true; }
+      /* slancio: una trattativa condotta in modo eccellente restituisce una settimana (una volta per trimestre) */
+      if (res.status !== 'lost' && res.p >= 0.85 && res.avgQ >= 2.6 && !run.momentumUsed) { run.momentumUsed = true; run.spent = Math.max(0, run.spent - 1); delta += 1; res.momentum = true; }
     }
     return { energyDelta: delta };
+  };
+
+  /* giorno di chiusura: tutte le trattative in sospeso vengono risolte (aiuto del manager, shock, tiro) */
+  CL.closeQuarter = (run, rnd) => {
+    const log = [];
+    run.results.forEach((res, i) => {
+      if (res.status !== 'pending') return;
+      const fin = CL.settle(res, run, rnd);
+      run.results[i] = fin;
+      log.push(fin);
+    });
+    log.sort((a, b) => (a.week || 0) - (b.week || 0));
+    run.closing = log;
+    return log;
   };
 
   /* ───────────── RIEPILOGO ───────────── */
@@ -279,6 +391,9 @@
     { id: 'streak', name: 'Filotto', desc: 'Vinci 3 deal consecutivi.', test: (r) => { let s = 0, m = 0; r.results.forEach((x) => { if (x.status === 'won') { s++; m = Math.max(m, s); } else if (x.status !== 'disq') s = 0; }); return m >= 3; } },
     { id: 'hard', name: 'Senza rete', desc: 'Centra la quota in modalità “senza rete” (probabilità e indicatori nascosti).', test: (r, s) => r.hard && s.att >= 1 },
     { id: 'cowboy', name: 'Cowboy del forecast', desc: 'Centra la quota con reputazione sotto 40. Capita. Poi i clienti se lo ricordano.', test: (r, s) => s.att >= 1 && r.rep < 40 },
+    { id: 'fc', name: 'Forecast da manuale', desc: 'Chiudi il trimestre con affidabilità del forecast ≥ 85% su almeno 3 trattative.', test: (r, s) => !!(s.fc && s.fc.n >= 3 && s.fc.acc >= 0.85) },
+    { id: 'resil', name: 'Preparato a tutto', desc: 'Assorbi senza danni almeno 2 shock del giorno di chiusura.', test: (r, s) => s.shocksAbsorbed >= 2 },
+    { id: 'sandbag', name: 'Sandbagger', desc: 'Chiama basso una trattativa che poi vinci. Marta se lo ricorda.', test: (r, s) => !!(s.fc && s.fc.sandbagged) },
     { id: 'dojo', name: 'Cintura nera di obiezioni', desc: 'Totalizza almeno il 90% nel Dojo delle obiezioni.', test: () => false },
   ];
 
@@ -289,6 +404,9 @@
     const att = total / C.quota;
     let comm = C.rate1 * Math.min(total, C.quota) + C.rate2 * Math.max(0, total - C.quota);
     if (run.hard) comm *= 1.1;
+    const fcs = CL.fcScore ? CL.fcScore(run) : null;
+    const kicker = fcs && fcs.n >= 2 ? (fcs.acc >= 0.85 ? 1.08 : fcs.acc >= 0.7 ? 1.03 : fcs.acc < 0.4 ? 0.92 : 1) : 1;
+    comm *= kicker;
     let rank = RANKS.find((x) => att < x.max);
     if (att >= 1 && run.rep < 40) rank = { name: 'Cowboy del forecast', line: 'Quota centrata, ma con una scia di promesse che qualcuno dovrà onorare. Il trimestre prossimo si paga.' };
     else if (att < 0.7 && run.rep >= 85) rank = { name: 'Boy scout della pipeline', line: 'Integrità impeccabile, risultato pallido. La coscienza è a posto, la quota un po’ meno.' };
@@ -300,7 +418,10 @@
       avgDisc: wonDeals.length ? wonDeals.reduce((a, x) => a + x.disc, 0) / wonDeals.length : 0,
       avgQ: played.length ? played.reduce((a, x) => a + x.avgQ, 0) / played.length : 0,
       avgMp: played.length ? played.reduce((a, x) => a + x.mp, 0) / played.length : 0,
-      weeks: CL.week(run), energyLeft: Math.max(0, CL.energy(run)),
+      weeks: CL.week(run), energyLeft: Math.max(0, CL.energy(run)), fc: fcs, kicker,
+      shocksHit: run.results.filter((x) => x.shock && x.shock.hit && x.shock.kind === 'neg').length,
+      shocksAbsorbed: run.results.filter((x) => x.shock && !x.shock.hit && x.shock.kind === 'neg').length,
+      wilds: run.results.reduce((a, x) => a + (x.wilds || 0), 0),
     };
     sum.badges = CL.badgeDefs.filter((b) => b.test(run, sum)).map((b) => b.id);
     return sum;

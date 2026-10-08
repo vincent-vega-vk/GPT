@@ -12,13 +12,14 @@ fs.mkdirSync(dist, { recursive: true });
 
 let html = fs.readFileSync(path.join(src, 'index.html'), 'utf8');
 const read = (p) => fs.readFileSync(path.join(src, p), 'utf8');
+const exists = (p) => fs.existsSync(path.join(src, p));
 
 /* CSS */
-html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (_, href) => `<style>\n${read(href)}\n</style>`);
+html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (_, href) => { if (!exists(href)) { console.warn('! file CSS mancante, saltato: ' + href); return ''; } return `<style>\n${read(href)}\n</style>`; });
 
 /* JS: tutti i <script src> consecutivi diventano un solo blocco */
 const scripts = [];
-html = html.replace(/<script src="([^"]+)"><\/script>\s*/g, (_, s) => { scripts.push(s); return ''; });
+html = html.replace(/<script src="([^"]+)"><\/script>\s*/g, (_, s) => { if (!exists(s)) { console.warn('! file JS mancante, saltato: ' + s); return ''; } scripts.push(s); return ''; });
 const js = scripts.map((s) => `/* ${s} */\n${read(s)}`).join('\n');
 if (js.includes('</script')) throw new Error('Il JS contiene </script: non inlinabile');
 html = html.replace('</body>', () => `<script>\n${js}\n</script>\n</body>`);
@@ -29,7 +30,7 @@ console.log(`dist/closer.html · ${(html.length / 1024).toFixed(0)} KB · ${scri
 if (process.argv.includes('--artifact')) {
   const title = /<title>([^<]+)<\/title>/.exec(html)[1];
   const fonts = /<link href="(https:\/\/fonts\.googleapis\.com[^"]+)" rel="stylesheet">/.exec(html)[1];
-  const style = /<style>[\s\S]*?<\/style>/.exec(html)[0];
+  const style = (html.match(/<style>[\s\S]*?<\/style>/g) || []).join('\n');
   const body = /<body>([\s\S]*)<\/body>/.exec(html)[1];
   const frag = `<title>${title}</title>\n<link href="${fonts}" rel="stylesheet">\n${style}\n${body}`;
   fs.writeFileSync(path.join(dist, 'closer.artifact.html'), frag);

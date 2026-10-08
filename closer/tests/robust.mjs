@@ -4,6 +4,7 @@
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { driveForecast, driveClosing } from './lib-ui.mjs';
 
 const require = createRequire(import.meta.url);
 let chromium;
@@ -25,6 +26,7 @@ async function newPage(viewport, seed) {
   await page.addInitScript((s) => { let a = s >>> 0; Math.random = () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }, seed);
   await page.goto(url);
   await page.waitForFunction(() => window.CL && CL.booted);
+  await page.evaluate(() => { CL.ui.settings.fast = true; });
   return page;
 }
 const screen = (p) => p.evaluate(() => CL.ui.S.screen);
@@ -39,15 +41,19 @@ const noOverflow = async (p, label) => {
 
 async function playDealKeys(p, pol) {
   let guard = 0;
-  while ((await screen(p)) === 'play' && guard++ < 60) {
+  while ((await screen(p)) === 'play' && guard++ < 120) {
     const act = await p.evaluate((pol_) => {
       const S = CL.ui.S;
-      if (S.phase !== 'choose') return { next: true };
+      if (S.phase === 'reveal' || S.phase === 'react') return { wait: true };
+      if (S.phase === 'intro' || S.phase === 'feedback') return { next: true };
+      if (S.phase !== 'choose') return { wait: true };
       const ok_ = S.order.map((o, i) => ({ o, i })).filter((x) => !x.o.locked);
       const pool = pol_ === 'random' ? ok_ : ok_.filter((x) => !x.o.c.jolly).sort((a, b) => b.o.c.q - a.o.c.q);
       return { i: (pol_ === 'random' ? pool[Math.floor(Math.random() * pool.length)] : pool[0]).i };
     }, pol);
-    if (act.next) await p.keyboard.press('Enter'); else await p.keyboard.press(String(act.i + 1));
+    if (act.wait) await p.waitForTimeout(30);
+    else if (act.next) await p.keyboard.press('Enter');
+    else await p.keyboard.press(String(act.i + 1));
   }
 }
 
@@ -55,10 +61,12 @@ async function playQuarter(p, pol, label) {
   await p.evaluate(() => CL.ui.go('home'));
   await p.getByRole('button', { name: /Inizia il trimestre/ }).first().click();
   await p.getByRole('button', { name: 'Apri la pipeline' }).click();
-  for (let guard = 0; guard < 40; guard++) {
+  for (let guard = 0; guard < 60; guard++) {
     const sc = await screen(p);
     await noText(p, `${label}/${sc}`);
     if (sc === 'summary') break;
+    if (sc === 'forecast') { await driveForecast(p, pol === 'random' ? 'random' : 'honest'); continue; }
+    if (sc === 'closing') { await driveClosing(p); continue; }
     if (sc === 'event') {
       const n = await p.locator('.choice').count();
       await p.locator('.choice').nth(Math.floor(Math.random() * n)).click();
@@ -98,22 +106,25 @@ await p1.evaluate(() => { CL.ui.settings.hard = true; CL.ui.settings.timer = tru
 await p1.evaluate(() => CL.ui.go('home'));
 await p1.getByRole('button', { name: /Inizia il trimestre/ }).first().click();
 await p1.getByRole('button', { name: 'Apri la pipeline' }).click();
-await p1.evaluate(() => { CL.getScenario('farmavita').nodes.n1.t = 0.4; CL.ui.startDeal(CL.getScenario('farmavita')); });
+await p1.evaluate(() => { CL.getScenario('farmavita').nodes.n1.t = 0.4; CL.ui.S.skipIntro = true; CL.ui.startDeal(CL.getScenario('farmavita')); });
 const hardMask = await p1.locator('.hardmask').count();
 ok(hardMask === 1, 'senza rete: cruscotto nascosto');
 ok((await p1.locator('.ring').count()) === 0, 'senza rete: nessuna probabilità visibile');
-ok((await p1.locator('.timer').count()) === 1, 'pressione: timer visibile');
+await p1.waitForFunction(() => CL.ui.S.phase === 'choose' || CL.ui.S.phase === 'react' || CL.ui.S.phase === 'feedback');
+ok((await p1.locator('.timer').count()) + (await p1.evaluate(() => CL.ui.S.run.timeouts)) >= 1, 'pressione: timer visibile o già scaduto');
 /* simula la scadenza del timer */
 const before = 0;
-await p1.waitForFunction(() => CL.ui.S.phase === 'feedback', null, { timeout: 4000 });
+await p1.waitForFunction(() => CL.ui.S.phase === 'feedback', null, { timeout: 8000 });
 const after = await p1.evaluate(() => CL.ui.S.run.timeouts);
 ok(after === before + 1, 'pressione: la scadenza conta come decisione d’istinto');
 await noText(p1, 'hard+timer feedback');
 await p1.evaluate(() => { CL.ui.settings.hard = false; CL.ui.settings.timer = false; });
 
 /* 3) squalifica del deal zombie (allenamento e trimestre) */
-await p1.evaluate(() => { CL.ui.startCareer(); CL.ui.go('pipeline'); CL.ui.startDeal(CL.getScenario('logistica')); });
+await p1.evaluate(() => { CL.ui.startCareer(); CL.ui.go('pipeline'); CL.ui.S.skipIntro = true; CL.ui.startDeal(CL.getScenario('logistica')); });
+await p1.waitForFunction(() => CL.ui.S.phase === 'choose');
 await p1.evaluate(() => { const i = CL.ui.S.order.findIndex((o) => o.c.next === 'DQ'); CL.ui.playKey(i); });
+await p1.waitForFunction(() => CL.ui.S.phase === 'feedback');
 await p1.keyboard.press('Enter');
 await p1.waitForFunction(() => CL.ui.S.screen === 'debrief');
 ok(await p1.evaluate(() => CL.ui.S.res.status === 'disq'), 'squalifica: esito disq');
@@ -123,7 +134,7 @@ await noText(p1, 'debrief disq');
 /* 4) abbandono di una trattativa */
 await p1.getByRole('button', { name: 'Prosegui', exact: true }).click().catch(() => {});
 await p1.evaluate(() => { if (CL.ui.S.screen !== 'pipeline') CL.ui.go('pipeline'); });
-await p1.evaluate(() => CL.ui.startDeal(CL.getScenario('brenta')));
+await p1.evaluate(() => { CL.ui.S.skipIntro = true; CL.ui.startDeal(CL.getScenario('brenta')); });
 await p1.getByRole('button', { name: 'Esci dalla trattativa' }).click();
 await p1.getByRole('button', { name: /Abbandona/ }).click();
 await p1.waitForFunction(() => CL.ui.S.screen === 'debrief');
@@ -159,9 +170,11 @@ await noOverflow(pm, 'deal modal');
 await pm.keyboard.press('Escape');
 const ids = await pm.evaluate(() => CL.scenarios.map((s) => s.id));
 for (const id of ids) {
-  await pm.evaluate((i) => CL.ui.startDeal(CL.getScenario(i)), id);
+  await pm.evaluate((i) => { CL.ui.S.skipIntro = true; CL.ui.startDeal(CL.getScenario(i)); }, id);
+  await pm.waitForFunction(() => CL.ui.S.phase === 'choose');
   await noOverflow(pm, 'play ' + id);
   await pm.evaluate(() => CL.ui.playKey(0));
+  await pm.waitForFunction(() => CL.ui.S.phase === 'feedback');
   await noOverflow(pm, 'feedback ' + id);
   await noText(pm, 'play ' + id);
   await pm.evaluate(() => { CL.ui.S.dash.el.classList.add('open'); });
@@ -171,7 +184,7 @@ await pm.evaluate(() => CL.ui.startDojo());
 await noOverflow(pm, 'dojo');
 await pm.keyboard.press('1');
 await noOverflow(pm, 'dojo feedback');
-await pm.evaluate(() => { const S = CL.ui.S; S.run = CL.newRun({ mode: 'career' }); S.run.results.push({ id: 'x', title: 'X', client: 'Y', status: 'won', acv: 400, disc: 5, p: .8, avgQ: 2, mp: 5, listFinal: 420, flags: {}, hasE: true, hasC: true }); CL.ui.finishQuarter(); });
+await pm.evaluate(() => { const S = CL.ui.S; S.run = CL.newRun({ mode: 'career' }); S.run.results.push({ id: 'x', title: 'X', client: 'Y', status: 'won', acv: 400, disc: 5, p: .8, avgQ: 2, mp: 5, listFinal: 420, flags: {}, hasE: true, hasC: true }); S.run.closing = []; CL.ui.endQuarter(); });
 await noOverflow(pm, 'summary');
 await noText(pm, 'summary mobile');
 

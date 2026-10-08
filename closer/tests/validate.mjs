@@ -8,7 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsDir = path.join(root, 'src', 'js');
 const verbose = process.argv.includes('--verbose');
 
-const files = fs.readdirSync(jsDir).filter((f) => /^(00|10|2\d|3\d)-.*\.js$/.test(f)).sort();
+const files = fs.readdirSync(jsDir).filter((f) => /^(00|1\d|2\d|3\d)-.*\.js$/.test(f)).sort();
 for (const f of files) await import(pathToFileURL(path.join(jsDir, f)).href);
 const CL = globalThis.CL;
 

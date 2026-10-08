@@ -13,6 +13,32 @@
 
   CL.clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
+  /* valore o funzione dello stato */
+  CL.val = (x, d) => (typeof x === 'function' ? x(d) : x);
+
+  /* cast generico disponibile in ogni scena */
+  CL.GENERIC_CAST = {
+    marta: { name: 'Marta Colombo', role: 'La tua Sales Director', hue: 348 },
+    davide: { name: 'Davide Ferri', role: 'Tuo Solution Engineer', hue: 175 },
+    collega: { name: 'Collega di team', role: 'Account Executive senior', hue: 60 },
+    cliente: { name: 'Il tuo contatto', role: 'Cliente', hue: 210 },
+  };
+  CL.castOf = (sc, key) => (sc && sc.cast && sc.cast[key]) || CL.GENERIC_CAST[key] || { name: key, role: '', hue: 210 };
+  CL.shortName = (s) => String(s || '').replace(/\s*\(.*$/, '');
+  CL.playerName = '';
+  /* segnaposto nei testi mostrati: {nome} {client} {contact} {buyer} */
+  CL.fmt = (s, sc) => {
+    if (typeof s !== 'string' || s.indexOf('{') < 0) return s;
+    const ppl = (sc && sc.fc && sc.fc.people) || {};
+    return s.replace(/\{(nome|client|contact|buyer)\}/g, (m, k) => {
+      if (k === 'nome') return CL.playerName || 'collega';
+      if (k === 'client') return sc ? sc.client : 'il cliente';
+      if (k === 'contact') return CL.shortName(ppl.C) || 'il tuo contatto';
+      if (k === 'buyer') return CL.shortName(ppl.E) || 'chi decide';
+      return m;
+    });
+  };
+
   /* mulberry32 */
   CL.rng = (seed) => {
     let a = seed >>> 0;

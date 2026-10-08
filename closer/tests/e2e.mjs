@@ -5,6 +5,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { driveForecast, driveClosing } from './lib-ui.mjs';
 
 const require = createRequire(import.meta.url);
 let chromium;
@@ -39,6 +40,7 @@ await page.addInitScript((s) => { let a = s >>> 0; Math.random = () => { a = (a 
 
 await page.goto(url);
 await page.waitForFunction(() => window.CL && CL.booted);
+await page.evaluate(() => { CL.ui.settings.fast = true; });
 await shot('01-home-light');
 
 /* dark mode */
@@ -48,9 +50,11 @@ await page.evaluate(() => { CL.ui.settings.theme = 'light'; CL.ui.applyTheme(); 
 
 async function playDeal() {
   let guard = 0;
-  while ((await screen()) === 'play' && guard++ < 40) {
+  while ((await screen()) === 'play' && guard++ < 80) {
     const info = await page.evaluate((pol) => {
       const S = CL.ui.S;
+      if (S.phase === 'reveal' || S.phase === 'react') return { wait: true };
+      if (S.phase === 'intro') return { next: true };
       if (S.phase === 'choose') {
         const ord = S.order;
         const ok = ord.map((o, i) => ({ o, i })).filter((x) => !x.o.locked);
@@ -64,6 +68,7 @@ async function playDeal() {
       }
       return { act: 'next' };
     }, policy);
+    if (info.wait) { await page.waitForTimeout(40); continue; }
     if (info.act === 'choose') {
       await page.keyboard.press(String(info.i + 1));
       if (guard === 2) await shot('20-play-feedback');
@@ -85,6 +90,8 @@ let deals = 0, shotPlay = false, shotDebrief = false;
 for (let guard = 0; guard < 40; guard++) {
   const sc = await screen();
   if (sc === 'summary') break;
+  if (sc === 'forecast') { await shot('35-forecast-sheet'); await driveForecast(page, policy === 'best' ? 'honest' : 'random'); continue; }
+  if (sc === 'closing') { await shot('36-closing'); await driveClosing(page); continue; }
   if (sc === 'event') {
     await shot('30-event');
     await page.locator('.choice').first().click();
@@ -163,9 +170,11 @@ const mshot = async (n) => { if (shots) await mp.screenshot({ path: path.join(sh
 await mshot('70-m-home');
 await mp.evaluate(() => { CL.ui.startCareer(); CL.ui.go('pipeline'); });
 await mshot('71-m-pipeline');
-await mp.evaluate(() => CL.ui.startDeal(CL.getScenario('farmavita')));
+await mp.evaluate(() => { CL.ui.settings.fast = true; CL.ui.S.skipIntro = true; CL.ui.startDeal(CL.getScenario('farmavita')); });
+await mp.waitForFunction(() => CL.ui.S.phase === 'choose');
 await mshot('72-m-play');
 await mp.evaluate(() => CL.ui.playKey(0));
+await mp.waitForFunction(() => CL.ui.S.phase === 'feedback');
 await mshot('73-m-feedback');
 const overflow = await mp.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
 if (overflow) errors.push('overflow orizzontale su mobile');

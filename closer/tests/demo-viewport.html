@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Demo · Viewport in prima persona</title>
+<link rel="stylesheet" href="../src/style.css">
+<link rel="stylesheet" href="../src/viewport.css">
+<style>
+  body { padding-bottom: 48px; }
+  .dm-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 18px 6px; }
+  .dm-head h1 { font: 800 30px/1 var(--font-display); font-stretch: 75%; text-transform: uppercase; }
+  .dm-head .grow { flex: 1 1 auto; }
+  .dm-seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dm-seg .btn { min-height: 32px; padding: 3px 11px; font-size: 13px; }
+  .dm-seg .btn[aria-pressed="true"] { background: var(--accent-tint); border-color: var(--accent); color: var(--accent); }
+  .dm-ctl { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 22px; padding: 14px 16px; margin-top: 12px; }
+  .dm-ctl .lbl { font: 600 11px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); margin-bottom: 8px; display: block; }
+  .dm-stage { margin-top: 12px; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow); }
+  .dm-stats { font: 500 12px/1.5 var(--font-mono); color: var(--ink-2); margin-top: 10px; }
+  .dm-stats b { color: var(--ink); }
+  .dm-h2 { font: 800 24px/1 var(--font-display); font-stretch: 75%; text-transform: uppercase; margin: 30px 0 4px; }
+  .dm-bg { margin-top: 18px; }
+  .dm-bg h3 { font: 600 12px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-2); margin: 0 0 8px; }
+  .dm-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+  .dm-cell { display: block; padding: 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); text-align: left; }
+  .dm-cell:hover, .dm-cell[aria-current="true"] { border-color: var(--accent); }
+  .dm-cell span { display: block; padding: 4px 8px 5px; font: 500 11px/1.3 var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); }
+  .dm-note { color: var(--ink-2); font-size: 13.5px; max-width: 80ch; margin-top: 6px; }
+  @media (max-width: 560px) { .dm-head h1 { font-size: 24px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="dm-head">
+    <h1>Viewport in prima persona</h1>
+    <div class="grow"></div>
+    <div class="dm-seg" id="dm-theme" role="group" aria-label="Tema"></div>
+  </div>
+  <p class="dm-note">Matrice 9 sfondi × 7 viste e scena grande con 0–5 persone. Il parlante si cambia senza ridisegnare la scena. Clic su una miniatura per portarla nella scena grande.</p>
+
+  <div class="dm-stage" id="dm-stage"></div>
+  <div class="dm-stats" id="dm-stats" aria-live="polite"></div>
+
+  <div class="card dm-ctl">
+    <div><span class="lbl">Vista</span><div class="dm-seg" id="dm-view" role="group" aria-label="Vista"></div></div>
+    <div><span class="lbl">Sfondo</span><div class="dm-seg" id="dm-bg" role="group" aria-label="Sfondo"></div></div>
+    <div><span class="lbl">Persone</span><div class="dm-seg" id="dm-n" role="group" aria-label="Numero di persone"></div></div>
+    <div><span class="lbl">Parlante</span><div class="dm-seg" id="dm-spk" role="group" aria-label="Parlante"></div></div>
+  </div>
+
+  <h2 class="dm-h2">Matrice sfondi × viste</h2>
+  <p class="dm-note">Tre persone in ogni miniatura. In <b>call</b>, <b>desk</b>, <b>phone</b> e <b>mail</b> l’ambiente è la tua postazione (ufficio, o ufficio di sera per lo sfondo night) e i riquadri mostrano l’ambiente dell’interlocutore; in <b>meeting</b>, <b>walk</b> e <b>car</b> l’ambiente è quello del tema.</p>
+  <div id="dm-matrix"></div>
+</div>
+
+<script src="../src/js/00-core.js"></script>
+<script src="../src/js/40-ui-base.js"></script>
+<script src="../src/js/45-ui-viewport.js"></script>
+<script>
+(function () {
+  'use strict';
+  var UI = CL.ui, h = UI.h;
+  var BGS = UI.viewportBgs, VIEWS = UI.viewportViews;
+  var CAST = [
+    { key: 'elisa', name: 'Elisa Marchetti', role: 'VP Operations', hue: 205, stance: 'champion' },
+    { key: 'sala', name: 'Bruno Sala', role: 'CIO', hue: 28, stance: 'skeptic' },
+    { key: 'villa', name: 'Roberto Villa', role: 'CFO · Economic Buyer', hue: 150, stance: 'neutral' },
+    { key: 'chiara', name: 'Chiara Neri', role: 'Responsabile Acquisti', hue: 320, stance: 'ally' },
+    { key: 'anna', name: 'Anna Ferrante', role: 'Direttrice Qualità', hue: 265, stance: 'unknown' }
+  ];
+  var THEMES = {
+    lab: ['#0e7c86', '#4fd1c5'], factory: ['#b4531a', '#f0a25e'], night: ['#4a55c2', '#8f9bff'], public: ['#3f7a5a', '#8fd0a4'],
+    retail: ['#a2306b', '#ef86b9'], clinic: ['#2a6fc2', '#7db8ff'], port: ['#2c6a8f', '#76c0e8'], control: ['#1c8a7a', '#e0a43a'], office: ['#2346d4', '#7f9aff']
+  };
+  var WHERE = { call: 'Videocall · Teams', meeting: 'Incontro · sede cliente', walk: 'Visita allo stabilimento', desk: 'La tua scrivania', phone: 'Telefono', mail: 'Posta in arrivo', car: 'In auto' };
+  var CAP = { call: 'Chiamata · 12:41', meeting: '', walk: 'Giro dei reparti', desk: 'CRM · 14 trattative', phone: 'In chiamata · 04:12', mail: 'Email · 18:20', car: 'A 40 km dall’arrivo' };
+  var MAIL = { from: 'Elisa Marchetti', subj: 'Rif.: Offerta definitiva e tempi del board' };
+
+  function stateFor(bg, view, n, extra) {
+    var s = {
+      theme: { bg: bg, accent: THEMES[bg][0], accentDark: THEMES[bg][1] },
+      view: view, people: CAST.slice(0, n),
+      when: 'Lunedì · 09:10', where: WHERE[view], caption: CAP[view], mail: MAIL
+    };
+    if (extra) for (var k in extra) s[k] = extra[k];
+    return s;
+  }
+
+  /* ───── statistiche di performance ───── */
+  var times = [];
+  function timed(vp, st) {
+    var t0 = performance.now();
+    vp.set(st);
+    var dt = performance.now() - t0;
+    times.push(dt);
+    return dt;
+  }
+  function stats() {
+    var a = times.slice().sort(function (x, y) { return x - y; });
+    if (!a.length) return null;
+    var sum = a.reduce(function (p, c) { return p + c; }, 0);
+    return { n: a.length, avg: sum / a.length, p95: a[Math.floor(a.length * 0.95)], max: a[a.length - 1] };
+  }
+
+  /* ───── scena grande ───── */
+  var S = { bg: 'lab', view: 'call', n: 3, spk: 'elisa' };
+  var big = UI.makeViewport();
+  document.getElementById('dm-stage').appendChild(big.el);
+  var statsEl = document.getElementById('dm-stats');
+
+  function seg(id, items, get, on) {
+    var box = document.getElementById(id);
+    box.replaceChildren.apply(box, items.map(function (it) {
+      var b = h('button', { class: 'btn btn--sm', type: 'button', 'aria-pressed': 'false', 'data-v': String(it.v), onclick: function () { on(it.v); } }, it.t);
+      return b;
+    }));
+    return function sync() {
+      var cur = String(get());
+      Array.prototype.forEach.call(box.children, function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === cur)); });
+    };
+  }
+  var syncs = [];
+  function refresh() {
+    var dt = timed(big, stateFor(S.bg, S.view, S.n));
+    big.speak(S.spk === 'none' ? null : S.spk);
+    syncs.forEach(function (f) { f(); });
+    spkSync();
+    var st = stats();
+    statsEl.innerHTML = 'set() ultima <b>' + dt.toFixed(1) + ' ms</b> · media <b>' + st.avg.toFixed(1) + ' ms</b> · p95 <b>' + st.p95.toFixed(1) + ' ms</b> su ' + st.n + ' chiamate · persone <b>' + S.n + '</b> · vista <b>' + S.view + '</b> · sfondo <b>' + S.bg + '</b>';
+  }
+  syncs.push(seg('dm-view', VIEWS.map(function (v) { return { v: v, t: v }; }), function () { return S.view; }, function (v) { S.view = v; refresh(); }));
+  syncs.push(seg('dm-bg', BGS.map(function (v) { return { v: v, t: v }; }), function () { return S.bg; }, function (v) { S.bg = v; refresh(); }));
+  syncs.push(seg('dm-n', [0, 1, 2, 3, 4, 5].map(function (v) { return { v: v, t: String(v) }; }), function () { return S.n; }, function (v) { S.n = v; if (S.spk !== 'none' && S.spk !== 'you' && !CAST.slice(0, v).some(function (p) { return p.key === S.spk; })) S.spk = v ? CAST[0].key : 'none'; refresh(); }));
+  var spkItems = [{ v: 'none', t: 'Nessuno' }, { v: 'you', t: 'Tu' }].concat(CAST.map(function (p) { return { v: p.key, t: p.name.split(' ')[0] }; }));
+  var spkSync = seg('dm-spk', spkItems, function () { return S.spk; }, function (v) {
+    S.spk = v;
+    big.speak(v === 'none' ? null : v);
+    spkSync();
+  });
+
+  /* ───── tema ───── */
+  var themeSync = seg('dm-theme', [{ v: 'light', t: 'Chiaro' }, { v: 'dark', t: 'Scuro' }, { v: 'auto', t: 'Auto' }], function () { return themeVal; }, function (v) { setTheme(v); });
+  var themeVal = 'light';
+  function setTheme(v) {
+    themeVal = v;
+    if (v === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', v);
+    themeSync();
+  }
+
+  /* ───── matrice ───── */
+  var mx = document.getElementById('dm-matrix');
+  var minis = [];
+  var tM = performance.now();
+  BGS.forEach(function (bg) {
+    var row = h('div', { class: 'dm-row' });
+    VIEWS.forEach(function (view) {
+      var vp = UI.makeViewport();
+      vp.el.classList.add('vp--mini');
+      vp.set(stateFor(bg, view, 3));
+      vp.speak('elisa');
+      var cell = h('button', { class: 'dm-cell', type: 'button', 'aria-label': bg + ' · ' + view, onclick: function () { S.bg = bg; S.view = view; S.n = Math.max(S.n, 1); refresh(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }, vp.el, h('span', null, bg + ' · ' + view));
+      row.appendChild(cell);
+      minis.push({ bg: bg, view: view, vp: vp });
+    });
+    mx.appendChild(h('section', { class: 'dm-bg' }, h('h3', null, bg), row));
+  });
+  var matrixMs = performance.now() - tM;
+
+  window.__demo = {
+    S: S, big: big, minis: minis, matrixMs: matrixMs, stateFor: stateFor, CAST: CAST,
+    show: function (o) { Object.assign(S, o || {}); if (o && o.theme) setTheme(o.theme); refresh(); },
+    setTheme: setTheme, stats: stats, times: times
+  };
+  setTheme('light');
+  refresh();
+})();
+</script>
+</body>
+</html>

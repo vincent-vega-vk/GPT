@@ -12,6 +12,11 @@
     if (S.screen === 'play') {
       if (num >= 0) UI.playKey(num);
       else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.playNext(); }
+    } else if (S.screen === 'forecast') {
+      if (num >= 0) UI.fcKey(num);
+      else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.fcAdvance(); }
+    } else if (S.screen === 'closing') {
+      if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.fcAdvance(); }
     } else if (S.screen === 'dojo') {
       if (num >= 0) UI.dojoKey(num);
       else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.dojoAdvance(); }

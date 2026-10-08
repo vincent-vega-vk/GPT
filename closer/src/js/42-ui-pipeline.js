@@ -4,8 +4,8 @@
   const CL = g.CL, UI = CL.ui, h = UI.h, S = UI.S, C = CL.CONFIG;
 
   const resultOf = (run, sc) => run.results.find((r) => r.id === sc.id);
-  const STATUS_LABEL = { won: 'Vinto', lost: 'Perso', slip: 'Slitta', disq: 'Squalificato' };
-  const STATUS_CHIP = { won: 'chip--good', lost: 'chip--bad', slip: 'chip--warn', disq: '' };
+  const STATUS_LABEL = { won: 'Vinto', lost: 'Perso', slip: 'Slitta', disq: 'Squalificato', pending: 'In firma' };
+  const STATUS_CHIP = { won: 'chip--good', lost: 'chip--bad', slip: 'chip--warn', disq: '', pending: 'chip--accent' };
 
   UI.startDeal = (sc) => {
     S.sc = sc;
@@ -17,9 +17,11 @@
     UI.go('play');
   };
 
-  UI.nextAfterDeal = () => {
+  UI.nextAfterDeal = (afterMid) => {
     const run = S.run;
     if (run.mode === 'career') {
+      /* forecast call di metà trimestre: dalla settimana 6, una volta, se c'è qualcosa in sospeso */
+      if (!afterMid && !run.fc.calls.mid && CL.week(run) >= 6 && run.results.some((r) => r.status === 'pending')) return UI.startForecast('mid');
       const ev = CL.pickEvent(run);
       if (ev) return UI.go('event', { ev, evDone: null });
       if (!CL.canPlayAny(run) && !CL.canWaitForAny(run)) return UI.finishQuarter();
@@ -27,7 +29,14 @@
     UI.go('pipeline');
   };
 
+  /* fine delle decisioni: commit call finale → giorno di chiusura → riepilogo */
   UI.finishQuarter = () => {
+    const run = S.run;
+    if (!run.fc.calls.final && run.results.some((r) => r.status === 'pending')) return UI.startForecast('final');
+    UI.runClosing();
+  };
+
+  UI.endQuarter = () => {
     const run = S.run;
     S.sum = CL.summary(run);
     if (!run.saved) {
@@ -36,7 +45,7 @@
       const date = dt.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit' });
       S.newBadges = [];
       UI.saveRecords((rec) => {
-        rec.runs.push({ date, att: S.sum.att, rank: S.sum.rank.name, rep: run.rep, hard: run.hard });
+        rec.runs.push({ date, att: S.sum.att, rank: S.sum.rank.name, rep: run.rep, hard: run.hard, fc: S.sum.fc ? S.sum.fc.acc : null });
         rec.runs = rec.runs.slice(-30);
         S.sum.badges.forEach((id) => { if (!rec.badges[id]) { rec.badges[id] = date; S.newBadges.push(id); } });
       });
@@ -92,29 +101,35 @@
     const run = S.run, career = run.mode === 'career';
     const sum = CL.summary(run);
     const week = CL.week(run), energy = CL.energy(run);
+    const pend = run.results.filter((r) => r.status === 'pending');
+    const weighted = pend.reduce((a, r) => a + r.p * r.net, 0) + run.bonusAcv;
+    const wAtt = weighted / C.quota;
     const list = CL.scenarios.slice().sort((a, b) => a.window[0] - b.window[0]);
-    const scale = Math.max(1.5, sum.att * 1.05);
+    const scale = Math.max(1.5, wAtt * 1.05);
 
+    const nextCall = !run.fc.calls.mid && week < 6 ? 'Forecast call alla settimana 6' : !run.fc.calls.mid ? 'Forecast call: dopo il prossimo deal' : 'Commit call a fine trimestre';
     const hud = career ? h('section', { class: 'hud', 'aria-label': 'Stato del trimestre' },
       h('div', { class: 'card pad-sm cell' },
-        h('div', { class: 'eyebrow' }, 'Quota'),
-        h('div', { class: 'big' }, CL.fmtK(sum.total)),
-        h('div', { class: 'trackwrap' },
-          h('div', { class: 'track', role: 'img', 'aria-label': `Quota raggiunta al ${Math.round(sum.att * 100)}%` }, h('i', { class: sum.att >= 1 ? 'over' : '', style: { width: Math.min(100, (sum.att / scale) * 100) + '%' } }), h('span', { class: 'mark', style: { left: (1 / scale) * 100 + '%' } })),
+        h('div', { class: 'eyebrow' }, run.hard ? 'In firma' : 'Forecast ponderato'),
+        run.hard
+          ? h('div', { class: 'big' }, `${pend.length} ${pend.length === 1 ? 'trattativa' : 'trattative'}`)
+          : h('div', { class: 'big' }, CL.fmtK(weighted)),
+        run.hard ? h('div', { class: 'track' }) : h('div', { class: 'trackwrap' },
+          h('div', { class: 'track', role: 'img', 'aria-label': `Forecast ponderato al ${Math.round(wAtt * 100)}% della quota` }, h('i', { class: wAtt >= 1 ? 'over' : '', style: { width: Math.min(100, (wAtt / scale) * 100) + '%' } }), h('span', { class: 'mark', style: { left: (1 / scale) * 100 + '%' } })),
           h('span', { class: 'marklbl', style: { left: (1 / scale) * 100 + '%' } }, '100%')),
-        h('div', { class: 'sub', style: { marginTop: '18px' } }, `${Math.round(sum.att * 100)}% di ${CL.fmtK(C.quota)}`)),
+        h('div', { class: 'sub', style: { marginTop: run.hard ? '10px' : '18px' } }, run.hard ? `Quota ${CL.fmtK(C.quota)}. L’esito si saprà a fine trimestre.` : `${Math.round(wAtt * 100)}% di ${CL.fmtK(C.quota)} · si decide a fine trimestre`)),
       h('div', { class: 'card pad-sm cell' },
         h('div', { class: 'eyebrow' }, 'Tempo'),
         h('div', { class: 'big' }, `Sett. ${week}`),
         h('div', { class: 'track' }, h('i', { style: { width: Math.min(100, (run.spent / C.energy) * 100) + '%' } })),
-        h('div', { class: 'sub' }, `${Math.max(0, energy)} di ${C.energy} settimane di lavoro rimaste`)),
+        h('div', { class: 'sub' }, `${Math.max(0, energy)} di ${C.energy} settimane rimaste · ${nextCall}`)),
       h('div', { class: 'card pad-sm cell' },
         h('div', { class: 'eyebrow' }, 'Jolly'),
         h('div', { class: 'jollies' }, Object.keys(CL.JOLLY).map((k) => h('span', { class: 'jl' + (run.jolly[k] ? '' : ' zero'), title: CL.JOLLY[k].desc }, UI.ic(k), CL.JOLLY[k].short, h('b', null, '×' + run.jolly[k])))),
         h('div', { class: 'sub' }, 'Quantità limitate: usali dove pesano.')),
       h('div', { class: 'card pad-sm cell' },
-        h('div', { class: 'eyebrow' }, 'Reputazione'),
-        h('div', { class: 'big' }, run.rep),
+        h('div', { class: 'eyebrow' }, 'Reputazione · Marta'),
+        h('div', { class: 'big' }, run.rep, h('small', { class: 'mono', style: { fontSize: '14px', marginLeft: '10px', color: 'var(--ink-3)' } }, 'Marta ' + run.mgr)),
         h('div', { class: 'track' }, h('i', { style: { width: run.rep + '%', background: run.rep < 40 ? 'var(--bad)' : run.rep < 70 ? 'var(--warn)' : 'var(--good)' } })),
         h('div', { class: 'sub' }, run.rep >= 80 ? 'Marta si fida del tuo forecast.' : run.rep >= 50 ? 'Nella media. Le scorciatoie si vedono.' : 'Sotto osservazione.'))) : null;
 
@@ -130,7 +145,7 @@
             Array.from({ length: C.weeks }, (_, i) => {
               const w = i + 1, inside = w >= sc.window[0] && w <= sc.window[1];
               const cls = ['cell'];
-              if (inside) { cls.push('in'); if (r) cls.push(r.status === 'won' ? 'won' : r.status === 'lost' ? 'lost' : r.status === 'slip' ? 'slip' : 'done'); }
+              if (inside) { cls.push('in'); if (r) cls.push(r.status === 'won' ? 'won' : r.status === 'lost' ? 'lost' : r.status === 'slip' ? 'slip' : r.status === 'pending' ? 'pend' : 'done'); }
               if (w === sc.window[0]) cls.push('first');
               if (w === sc.window[1]) cls.push('last');
               if (w === week) cls.push('now');
@@ -142,7 +157,7 @@
     const cards = list.map((sc) => {
       const av = CL.avail(run, sc), r = resultOf(run, sc);
       let badge;
-      if (r) badge = h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status] + (r.status === 'won' ? ' · ' + CL.fmtK(r.acv) : ''));
+      if (r) badge = h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status] + (r.status === 'won' ? ' · ' + CL.fmtK(r.acv) : r.status === 'pending' ? ' · ' + CL.fmtK(r.net) : ''));
       else if (av.state === 'early') badge = h('span', { class: 'chip' }, UI.ic('lock'), `Dalla sett. ${av.from}`);
       else if (av.state === 'expired') badge = h('span', { class: 'chip chip--bad' }, 'Scaduto');
       else if (av.state === 'poor') badge = h('span', { class: 'chip chip--warn' }, 'Poca energia');
@@ -195,7 +210,7 @@
       h('div', { class: 'sec-head' }, h('div', { class: 'grow' }, h('div', { class: 'eyebrow' }, 'Tra una trattativa e l’altra'), h('h1', { class: 'sec-title', 'data-focus': '', style: { marginTop: '8px' } }, ev.title))),
       h('section', { class: 'card stage' },
         h('div', { class: 'where' }, UI.ic('clock'), ev.where),
-        UI.sceneEls(ev.scene, cast),
+        UI.sceneEls(ev.scene, cast, null),
         done
           ? h('div', null,
             h('div', { class: 'fb' }, h('div', { class: 'hd' }, done.log.length ? done.log.map((l) => h('span', { class: 'delta' }, l)) : h('span', { class: 'delta' }, 'nessun effetto')), h('div', { class: 'bd' }, h('p', null, done.text), h('div', { style: { height: '12px' } }))),
@@ -213,7 +228,8 @@
       `ACV chiuso ${CL.fmtK(sum.total)} su ${CL.fmtK(C.quota)} · commissione stimata ${euro(sum.commission)}`,
       `${sum.wins} vinte · ${sum.losses} perse · ${sum.slips} slittate · ${sum.dq} squalificate`,
       `Sconto medio sulle vinte ${sum.avgDisc.toFixed(1)}% · qualità decisioni ${Math.round((sum.avgQ / 3) * 100)}%`,
-    ].join('\n');
+      sum.fc && sum.fc.n ? `Affidabilità del forecast ${Math.round(sum.fc.acc * 100)}% · fiducia di Marta ${run.mgr}` : null,
+    ].filter(Boolean).join('\n');
   };
 
   UI.screens.summary = () => {
@@ -222,7 +238,7 @@
     const stampCls = sum.att >= 1 ? 'stamp--won' : sum.att >= 0.7 ? 'stamp--slip' : 'stamp--lost';
     const euro = (k) => '€' + Math.round(k * 1000).toLocaleString('it-IT');
     const rows = run.results.map((r) => h('tr', null,
-      h('td', null, h('b', null, r.title), h('div', { class: 'small faint' }, r.client)),
+      h('td', null, h('b', null, r.title), h('div', { class: 'small faint' }, r.client), r.shock ? h('div', { class: 'small', style: { marginTop: '4px', color: r.shock.kind === 'pos' ? 'var(--good)' : r.shock.hit ? 'var(--bad)' : 'var(--ink-2)' } }, (r.shock.kind === 'pos' ? 'Fortuna: ' : r.shock.hit ? 'Colpito da: ' : 'Protetto da: ') + CL.fmt(r.shock.title, CL.getScenario(r.id))) : null),
       h('td', null, h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
       h('td', { class: 'r mono' }, r.status === 'disq' ? '—' : CL.fmtK(r.listFinal || 0)),
       h('td', { class: 'r mono' }, r.status === 'disq' ? '—' : (r.disc || 0).toFixed(0) + '%'),
@@ -249,6 +265,13 @@
         h('div', { class: 'stat' }, h('dt', null, 'Qualità decisioni'), h('dd', null, Math.round((sum.avgQ / 3) * 100) + '%')),
         h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC medio'), h('dd', null, sum.avgMp.toFixed(1), h('small', null, '/8'))),
         h('div', { class: 'stat' }, h('dt', null, 'Settimane usate'), h('dd', null, run.spent))),
+      sum.fc && sum.fc.n ? h('section', { class: 'card pad mt-16' },
+        h('div', { class: 'eyebrow' }, 'Forecast con Marta'),
+        h('div', { class: 'row gap-24 wrapx', style: { marginTop: '10px', alignItems: 'flex-end' } },
+          h('div', null, h('div', { class: 'attain', style: { fontSize: '64px' } }, Math.round(sum.fc.acc * 100) + '%'), h('div', { class: 'small muted' }, 'affidabilità del forecast')),
+          h('p', { class: 'muted', style: { maxWidth: '56ch' } }, sum.fc.acc >= 0.85 ? 'Hai dichiarato ciò che poi è successo. Il forecast è il tuo biglietto da visita: Marta ti ha riconosciuto un bonus del 8% sulla commissione.' : sum.fc.acc >= 0.7 ? 'Forecast solido, con qualche scarto. Bonus del 3% sulla commissione.' : sum.fc.acc < 0.4 ? 'Il forecast è lontano dalla realtà: commissione ridotta dell’8% e credibilità da ricostruire.' : 'Forecast nella media: né un merito né un problema, finché non si ripete.')),
+        sum.fc.sandbagged ? h('p', { class: 'small', style: { marginTop: '8px', color: 'var(--warn)' } }, 'Hai chiamato basso una trattativa che poi hai vinto. Sorprendere in alto non è un merito: è un dato nascosto.') : null) : null,
+      (sum.shocksHit || sum.shocksAbsorbed) ? h('p', { class: 'small muted mt-16' }, `Il giorno di chiusura hai assorbito ${sum.shocksAbsorbed} shock negativi senza danni e ne hai subiti ${sum.shocksHit}. ${sum.shocksAbsorbed >= sum.shocksHit ? 'La preparazione paga.' : 'Più relazioni e più paper pronto, meno sorprese.'}`) : null,
       h('section', { class: 'card pad mt-16' },
         h('div', { class: 'eyebrow' }, 'Le tue trattative'),
         rows.length ? h('div', { class: 'tblwrap', style: { marginTop: '10px' } }, h('table', { class: 'tbl' },
