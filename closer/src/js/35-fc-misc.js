@@ -7,16 +7,27 @@
    Regole di scrittura (il motore pesca ogni riga a caso, in modo indipendente dalla risposta scelta):
    - le reazioni di un blocco devono reggere dopo QUALUNQUE variante dello stesso blocco: mai citare parole o dettagli
      di una sola risposta del giocatore; parlano di ciò che dice il CRM, non di ciò che è stato detto;
-   - segnaposto per blocco (12-forecast.js): sandbag, risk, unworked → {client} {claim} {truth} {acv} {nome};
+   - segnaposto per blocco (12-forecast.js): sandbag, risk, unworked → {client} {claim} {acv} {nome};
      coverage, wrap, open, sheet, closing.intro/fc* → solo {nome}; closing.won/lost/slip → solo {client} e {acv};
      {who} compare solo in risk.name, sempre a inizio frase (il motore lo sostituisce con sc.fc.risk);
-   - nelle reazioni {claim} è la categoria DOPO la risoluzione (dopo “correct” coincide con {truth});
+   - {truth} (la categoria che i dati sostengono, cioè la fascia di probabilità nascosta in modalità “Senza rete”) non
+     compare in nessuna riga, reazioni comprese (si leggono prima del verdetto): per dire dove va la chiamata si usano
+     formule che non nominano la fascia (“dove la sostengono i dati”, “più in alto”);
+   - {claim} è la categoria dichiarata dal giocatore: nelle domande di Marta e nelle reazioni sì (nelle reazioni è quella
+     dichiarata PRIMA della risoluzione, il motore la sostituisce prima di aggiornare la categoria), nelle opzioni no;
+   - le opzioni di uno stesso blocco non hanno segnaposto (né {claim} né {client}), hanno lo stesso numero di frasi,
+     nessun punto interrogativo e nessuna categoria nominata: si distinguono per il contenuto, non per la forma
+     (eccezione: risk.name, che inizia con la frase di sc.fc.risk);
    - niente {p}: in modalità “senza rete” la probabilità resta nascosta;
    - {client} mai prima di un punto (nomi come “S.r.l.”) e mai con un participio che concordi con lui;
      {nome} mai a inizio frase (il fallback è “collega”);
    - nessun aggettivo o participio che concordi con il genere del giocatore; le sole forme femminili sono di Marta;
    - le opzioni del giocatore di uno stesso blocco hanno lunghezza e registro simili: la risposta giusta non si
-     riconosce dal tono; risk.name conta anche la frase di sc.fc.risk (circa 100-175 caratteri) che il motore aggiunge;
+     riconosce dal tono; risk.name conta anche la frase di sc.fc.risk che il motore aggiunge: perché la risposta che
+     nomina il rischio non risulti sempre la più lunga (o la più corta), quella frase dovrebbe stare tra 125 e 170
+     caratteri (overconf e vague sono tarate su 205-245);
+   - niente contatti informali con chi decide (alcuni scenari sono gare pubbliche): formule valide in contesto
+     privato e pubblico (“nei canali previsti”, “il tavolo giusto”);
    - closing.won/lost/slip vengono lette di seguito per più trattative: niente “anche”, “ancora”, “un’altra”;
    - le trattative non lavorate (unworked) esistono solo nella call di metà trimestre; dopo un “plan” la scadenza
      è fissata a tre settimane. */
@@ -87,37 +98,37 @@
     /* ─────────── Sandbagging: hai chiamato più in basso di quanto i dati sostengono ─────────── */
     sandbag: {
       q: [
-        `Hai messo {client} in {claim}. I dati della scheda, a casa mia, si chiamano {truth}. Perché tieni così bassa una trattativa da {acv}?`,
-        `Un forecast tenuto basso è scorretto quanto uno gonfiato, solo più comodo. {client} sta in {claim}, i dati dicono {truth}. Spiegami da dove viene la differenza.`,
-        `Questa è al contrario del solito. {client} in {claim}, con una scheda che ha tutto per essere {truth}. Se la tieni bassa per avere una sorpresa da raccontare, con me non funziona.`,
-        `Dimmi se sbaglio, {nome}: {client} in {claim}, {acv} sul tavolo e un CRM che la legge {truth}. Se firma, fai bella figura. Se non firma, avevi avvisato. In entrambi i casi hai coperto te, non me.`,
-        `{client}: chiamata {claim}, lettura dei dati {truth}. O mi manca un pezzo che hai solo tu, o stai tenendo una carta nel cassetto. Quale delle due?`,
+        `Hai messo {client} in {claim}. I dati della scheda, a casa mia, sostengono una chiamata più alta. Perché tieni così bassa una trattativa da {acv}?`,
+        `Un forecast tenuto basso è scorretto quanto uno gonfiato, solo più comodo. {client} sta in {claim}, ma i dati dicono di più. Spiegami da dove viene la differenza.`,
+        `Questa è al contrario del solito. {client} in {claim}, con una scheda che ha tutto per stare più in alto. Se la tieni bassa per avere una sorpresa da raccontare, con me non funziona.`,
+        `Dimmi se sbaglio, {nome}: {client} in {claim}, {acv} sul tavolo e un CRM che la legge più in alto. Se firma, fai bella figura. Se non firma, avevi avvisato. In entrambi i casi hai coperto te, non me.`,
+        `{client}: chiamata {claim}, lettura dei dati più alta. O mi manca un pezzo che hai solo tu, o stai tenendo una carta nel cassetto. Quale delle due?`,
       ],
       correct: [
-        `Hai ragione: l’avevo tenuta bassa per prudenza, ma i dati dicono {truth}. La alzo adesso e ne rispondo, così ci lavori anche tu. Meglio una correzione mia che una tua.`,
-        `Ho abbassato per prudenza e non per ragioni: guardando la scheda, {client} sta in {truth}. Preferisco dirtelo io che farmelo dire dal CRM, quindi correggo.`,
-        `Non ho un buon motivo per averla tenuta bassa. Volevo stare al riparo, ma i fatti dicono {truth} e tenerli sotto non aiuta nessuno. Alzo la chiamata e scrivo la ragione nel CRM.`,
-        `Avevo paura di dover spiegare uno slittamento, e per questo ho abbassato. Ma i fatti per {truth} ci sono. Porto la chiamata lì e ne rispondo, anche davanti al CRO.`,
+        `Hai ragione: l’avevo tenuta bassa per prudenza, ma i dati reggono una chiamata più alta. La alzo adesso e ne rispondo, così ci lavori anche tu. Meglio una correzione mia che una tua, davanti al CRO.`,
+        `Ho abbassato per prudenza e non per ragioni: guardando la scheda, la trattativa sta più in alto di dove l’ho messa. Preferisco dirtelo io che farmelo dire dal CRM. Correggo oggi e scrivo il perché nella scheda.`,
+        `Non ho un buon motivo per averla tenuta bassa. Volevo stare al riparo, ma i fatti sostengono di più e tenerli sotto non aiuta nessuno. Alzo la chiamata e annoto la ragione nel CRM, senza giri di parole.`,
+        `Avevo paura di dover spiegare uno slittamento, e per questo ho abbassato. Ma i fatti per una chiamata più alta ci sono. La porto lì e ne rispondo, anche davanti al CRO, con le carte in mano.`,
       ],
       stay: [
-        `Preferisco sotto-promettere e sorprendere: se firma, è una buona notizia per tutti; se slitta, non abbiamo promesso niente al CRO. Per ora {client} resta in {claim}.`,
-        `La mia lettura è più prudente della scheda: ci sono variabili che il CRM non vede. Finché il contratto non è firmato, per me {client} resta in {claim}.`,
-        `I numeri dicono {truth}, ma io li vedo da dentro e non mi convincono del tutto. Il mio compito è non promettere più di quello che consegno: la lascio in {claim}.`,
+        `Preferisco sotto-promettere e sorprendere. Se firma, è una buona notizia per tutti; se slitta, non abbiamo promesso niente al CRO. Per ora la trattativa resta dov’è, e lo dico senza giri di parole.`,
+        `La mia lettura è più prudente della scheda: ci sono variabili che il CRM non vede. Finché il contratto non è firmato, tengo la categoria bassa. Per me la trattativa resta dov’è, a costo di sembrare troppo prudente.`,
+        `I numeri dicono di più, ma io li vedo da dentro e non mi convincono del tutto. Il mio compito è non promettere più di quello che consegno. La lascio dov’è, e ne riparliamo a firma avvenuta.`,
       ],
       vague: [
-        `Non saprei, la vedo in movimento e potrebbe andare in un senso o nell’altro. Non vorrei sbilanciarmi: lascerei la categoria com’è e vediamo come evolve nei prossimi giorni.`,
-        `Dipende da un paio di cose che devono ancora chiarirsi. Più che sulla categoria, mi concentrerei sui prossimi passi, e quando c’è qualcosa di certo aggiorno il foglio.`,
-        `È una di quelle trattative che si capiscono strada facendo. Una categoria oggi sarebbe una fotografia sfocata: tengo il foglio com’è e ti dico appena mette a fuoco.`,
+        `Non saprei, la vedo in movimento e potrebbe andare in un senso o nell’altro. Non vorrei sbilanciarmi adesso. Lascerei la categoria com’è e vediamo come evolve nei prossimi giorni, senza forzare nulla.`,
+        `Dipende da un paio di cose che devono ancora chiarirsi. Più che sulla categoria, mi concentrerei sui prossimi passi. Quando c’è qualcosa di certo aggiorno il foglio, e ti avviso prima di chiunque altro.`,
+        `È una di quelle trattative che si capiscono strada facendo. Una categoria oggi sarebbe una fotografia sfocata. Tengo il foglio com’è e ti dico appena mette a fuoco, senza aspettare la chiusura.`,
       ],
       react: {
         correct: [
-          `Ecco. Questa è la correzione che mi serve: detta da te e non scoperta da me. {client} va in {truth}, e se ci metti il nome sopra, io ci metto il mio quando parlo con il CRO.`,
-          `Apprezzo, e non è scontato: abbassare è comodo, rialzare costa. D’ora in poi, se la scheda e il foglio non coincidono, chiamami tu per primo. Segnato in {truth}.`,
-          `Bene. Una chiamata onesta vale più di una chiamata prudente. Adesso che {client} è in {truth}, dimmi cosa serve per portarla a casa: se c’è un ostacolo, lo guardo con te.`,
+          `Ecco. Questa è la correzione che mi serve: detta da te e non scoperta da me. La chiamata su {client} sale dove la sostengono i dati, e se ci metti il nome sopra, io ci metto il mio quando parlo con il CRO.`,
+          `Apprezzo, e non è scontato: abbassare è comodo, rialzare costa. D’ora in poi, se la scheda e il foglio non coincidono, chiamami tu per primo. La segno più in alto.`,
+          `Bene. Una chiamata onesta vale più di una chiamata prudente. Adesso che la chiamata su {client} sta dove la sostengono i dati, dimmi cosa serve per portarla a casa: se c’è un ostacolo, lo guardo con te.`,
         ],
         stay: [
           `Capisco il riflesso, ma non lo condivido. Se tieni bassa una trattativa che i dati sostengono, non mi proteggi: mi togli informazioni. Lo segno, e se firma ne riparliamo.`,
-          `La prudenza è una virtù finché non diventa un alibi. Il CRM dice {truth}, tu dici {claim}: per ora lascio la tua chiamata, ma la annoto. Se firma, mi spieghi perché non me l’avevi detto.`,
+          `La prudenza è una virtù finché non diventa un alibi. Il CRM la legge più in alto, tu la tieni in {claim}: per ora lascio la tua chiamata, ma la annoto. Se firma, mi spieghi perché non me l’avevi detto.`,
           `Se poi firma, il CRO vede un forecast sbagliato per difetto, e per me pesa quanto uno sbagliato per eccesso. Lo registro, e a fine trimestre rifacciamo il conto.`,
         ],
         vague: [
@@ -138,26 +149,26 @@
         `Mi piace quando le chiamate tornano, e subito mi insospettisco. Qual è la cosa che su {client} ti toglie il sonno? E quanto la senti vicina?`,
       ],
       name: [
-        `{who} Ho un passo in agenda per verificarlo; se si blocca, scendo io di categoria.`,
-        `{who} Il piano B è nel CRM: se non vedo un segnale, abbasso io la categoria.`,
-        `{who} So chi deve fare cosa e per quando; se non si muove, ti chiedo aiuto.`,
-        `{who} Mi faccio mettere in copia sul passaggio critico e fisso una data.`,
-        `{who} Chiedo al cliente una risposta secca: se non mi convince, scendo di categoria.`,
+        `{who} Ho un passo in agenda per verificarlo. Se si blocca, scendo io di categoria.`,
+        `{who} Il piano B è già nel CRM. Se non vedo un segnale, abbasso io la categoria.`,
+        `{who} So chi deve fare cosa e per quando. Se qualcosa non si muove, ti chiedo aiuto.`,
+        `{who} Mi faccio mettere in copia sul passaggio critico. Poi fisso una data, scritta.`,
+        `{who} Chiedo al cliente una risposta secca. Se non mi convince, scendo di categoria.`,
       ],
       overconf: [
-        `Su {client} non vedo nessun rischio concreto: il cliente è allineato, i tempi sono quelli e il percorso è lineare. Resta la parte formale, e da qui alla chiusura non c’è niente che possa saltare, nemmeno a cercarlo.`,
-        `Per me nessun rischio da segnalare. Abbiamo fatto tutto quello che c’era da fare e il cliente ha dato segnali chiari a ogni passaggio, anche sui punti scomodi. Se proprio devo cercarne uno, direi la sfortuna, e quella non si pianifica.`,
-        `Nessun rischio che valga la pena nominare: sono tutti d’accordo, ho ricontrollato più volte e non c’è un punto aperto. Per me questa firma è questione di giorni, e non voglio inventare una preoccupazione solo per riempire il foglio.`,
+        `Non vedo nessun rischio concreto: il cliente è allineato e i tempi sono quelli, senza una sola riserva. Il percorso è lineare. Resta la parte formale, e da qui alla chiusura non c’è niente che possa saltare, nemmeno a cercarlo.`,
+        `Per me nessun rischio da segnalare. Abbiamo fatto tutto quello che c’era da fare e il cliente ha dato segnali chiari a ogni passaggio. Se proprio devo cercarne uno, direi la sfortuna, e quella non si pianifica.`,
+        `Nessun rischio che valga la pena nominare: sono tutti d’accordo, ho ricontrollato più volte, anche stamattina, e non c’è un punto aperto. Per me questa firma è questione di giorni. Non voglio inventare una preoccupazione per riempire il foglio.`,
       ],
       vague: [
-        `Rischi ce ne sono sempre, in qualsiasi trattativa. Il cliente ha i suoi tempi e io faccio la mia parte, ma finché non firmano non si può escludere niente. Mi sembra più onesto non indicare un punto solo, che poi sembrerebbe l’unico.`,
-        `Può succedere di tutto: un cambio di priorità, un ritardo interno, un imprevisto. Sono cose che non dipendono da me, quindi le tengo d’occhio e vediamo come va. Difficile dire quale sia la più probabile senza sbagliare mira.`,
-        `Diciamo che la variabile principale è il tempo. Se le cose procedono come ora va tutto bene, altrimenti vedremo. Un punto preciso non saprei indicarlo, ma tengo d’occhio come si muove il cliente e ti avviso se cambia qualcosa.`,
+        `Rischi ce ne sono sempre, in qualsiasi trattativa. Il cliente ha i suoi tempi e io faccio la mia parte, ma finché non firmano non si può escludere niente. Indicare un punto solo mi sembra poco onesto, perché sembrerebbe l’unico.`,
+        `Può succedere di tutto: un cambio di priorità, un ritardo interno, un imprevisto. Sono cose che non dipendono da me, quindi le tengo d’occhio. Difficile dire quale sia la più probabile senza sbagliare mira.`,
+        `Diciamo che la variabile principale è il tempo. Se le cose procedono come ora va tutto bene, altrimenti vedremo. Un punto preciso non saprei indicarlo, ma tengo d’occhio ogni giorno come si muove il cliente e ti avviso se cambia qualcosa.`,
       ],
       react: {
         name: [
-          `Questa sì che è una risposta: un rischio con un nome e una mossa. Lo copio nella scheda tale e quale. Se qualcosa si muove, scrivimi: ti do una mano dal mio livello.`,
-          `Il rischio l’hai guardato in faccia, e ci hai già messo una mossa sopra. Segno la mitigazione nel CRM e, se serve, faccio io la telefonata a chi decide.`,
+          `Questa sì che è una risposta: un rischio con un nome e una mossa. Lo copio nella scheda tale e quale. Se qualcosa si muove, scrivimi: ti do una mano, nei canali previsti.`,
+          `Il rischio l’hai guardato in faccia, e ci hai già messo una mossa sopra. Segno la mitigazione nel CRM e, se serve, porto io il tema al tavolo giusto.`,
           `È il tipo di preoccupazione che voglio sentire: specifica, gestita, senza drammi. La chiamata resta dov’è, con una nota in più. Se ti serve un appoggio, dimmelo prima che il problema si veda.`,
         ],
         overconf: [
@@ -183,24 +194,24 @@
         `Passo in rassegna il foglio e mi fermo su {client} in {claim}. La scheda è ferma e non risultano contatti con il cliente da settimane. Prima che tiri conclusioni io: qual è la situazione?`,
       ],
       honest: [
-        `Non l’ho lavorata. Ho dato priorità alle trattative in corso e questa è rimasta con la categoria che aveva nel CRM, senza che nessuno la guardasse. Non regge: la porto in Pipeline.`,
-        `La categoria l’ho ereditata dal CRM senza guardarla. Non ho parlato con nessuno di {client}, quindi Commit o Best Case non hanno senso. La porto in Pipeline.`,
-        `Non so dove siamo con {client}: ho seguito le altre e questa è rimasta in disparte. Il foglio dice una cosa che non so dimostrare, quindi la metto in Pipeline.`,
-        `In mano non ho niente di concreto. Tra le trattative che ho scelto di seguire questa non c’era, e la categoria non la so difendere. Va in Pipeline finché non ci lavoro.`,
+        `Non l’ho lavorata. Ho dato priorità alle trattative in corso e questa è rimasta con la categoria che aveva nel CRM, senza che nessuno la guardasse. Non regge: la porto più in basso, dove la so difendere.`,
+        `La categoria l’ho ereditata dal CRM senza guardarla. Non ho parlato con nessuno del cliente, quindi una categoria alta non ha senso. La porto più in basso finché non la lavoro davvero.`,
+        `Non so dove siamo con il cliente. Ho seguito le altre e questa è rimasta in disparte. Il foglio dice una cosa che non so dimostrare, quindi la porto più in basso, dove posso difenderla con i fatti.`,
+        `In mano non ho niente di concreto. Tra le trattative che ho scelto di seguire questa non c’era, e la categoria non la so difendere. Va più in basso finché non ci lavoro, e lo metto per iscritto.`,
       ],
       bluff: [
-        `L’ho lavorata, ma in parallelo: due call con il referente nelle ultime settimane. Non ho ancora aggiornato il CRM, e quello è un mio ritardo. Il quadro è buono, la categoria regge.`,
-        `Ci sto lavorando sotto traccia: il cliente preferisce parlare per telefono e non lasciare mail. Ho un buon livello di confidenza, quindi la categoria che vedi è quella giusta.`,
-        `Sì, ci sono dentro. Una call a inizio trimestre e qualche messaggio dopo; l’attività non è registrata perché le conversazioni sono state informali. Il percorso è avviato.`,
+        `L’ho lavorata, ma in parallelo: due scambi con il referente nelle ultime settimane. Non ho ancora aggiornato il CRM, e quello è un mio ritardo. Il quadro è buono, la categoria regge e il resto lo registro oggi.`,
+        `Ci sto lavorando sotto traccia: il cliente preferisce scambi brevi e pochi documenti scritti. Ho un buon livello di confidenza. La categoria che vedi è quella giusta, e le note le aggiorno appena posso.`,
+        `Sì, ci sono dentro. Un incontro a inizio trimestre e qualche messaggio dopo; l’attività non è registrata perché gli scambi sono stati brevi. Il percorso è avviato e la categoria è quella giusta.`,
       ],
       plan: [
-        `Non l’ho ancora lavorata, ma non la mollo: entro tre settimane ho un incontro con il referente e una prima bozza di piano condiviso. Intanto non la considero Commit.`,
-        `È rimasta indietro. Mi impegno a portarla a un primo incontro e a un piano scritto con il cliente entro tre settimane. Se non succede, la togli tu dal foglio.`,
-        `Me ne occupo entro tre settimane: chiamo il referente questa settimana, fisso un incontro e ti riporto cosa ho trovato. Per ora la lascio dov’è, con quella scadenza.`,
+        `Non l’ho ancora lavorata, ma non la mollo. Entro tre settimane faccio il primo giro con chi segue la pratica e scrivo una prima bozza di piano. Per ora la considero un’ipotesi, non un impegno.`,
+        `È rimasta indietro, lo ammetto. Mi impegno a farle fare un primo giro e a scrivere un piano con le date entro tre settimane. Se non succede, la togli tu dal foglio, senza che io debba chiederlo.`,
+        `Me ne occupo entro tre settimane. Questa settimana individuo chi segue la pratica, fisso un primo passo e ti riporto cosa ho trovato. Per ora la lascio dov’è, con quella scadenza scritta.`,
       ],
       react: {
         honest: [
-          `Meglio una trattativa onesta in Pipeline che una gonfiata nelle caselle alte. Grazie. Se vuoi riprenderla, dimmi quando: ti aiuto a preparare il primo contatto, che di solito è la parte più lenta.`,
+          `Meglio una trattativa onesta in Pipeline che una gonfiata nelle caselle alte. Grazie. Se vuoi riprenderla, dimmi quando: ti aiuto a preparare il primo passo, che di solito è la parte più lenta.`,
           `Detto senza giri, e questo conta. La sposto in Pipeline, che è dove sta. Se tra un paio di settimane trovi due ore per {client}, dimmelo e ne rifacciamo il punto insieme.`,
           `Ok, chiaro. Capita: il CRM è pieno di numeri ereditati che nessuno ha più riguardato. La metto in Pipeline, e se vale la pena tornarci lo decidiamo insieme.`,
         ],
@@ -216,7 +227,7 @@
         ],
         plan: [
           `D’accordo, ti prendo in parola: tre settimane. Scrivo la data sulla scheda. Un impegno con una scadenza vale più di cento buone intenzioni. Intanto Commit no: al massimo Best Case.`,
-          `Va bene, hai tre settimane per un primo incontro e un piano scritto con il cliente. Se mi porti quello, ne riparliamo volentieri. Se la scadenza passa in silenzio, la categoria la decido io.`,
+          `Va bene, hai tre settimane per un primo passo concreto e un piano scritto, con le date. Se mi porti quello, ne riparliamo volentieri. Se la scadenza passa in silenzio, la categoria la decido io.`,
           `Una data e non un “appena posso”: questo mi rassicura. Segno tre settimane sulla scheda, e il CRM ha una memoria più lunga della mia.`,
         ],
       },
@@ -231,21 +242,21 @@
         `Una domanda sola, senza trabocchetti: quanto regge il tuo numero? Non voglio un “ce la faremo”. Voglio un piano con dentro anche delle rinunce.`,
       ],
       honest: [
-        `Il numero regge solo se le trattative più grosse arrivano in firma. Concentro il tempo su quelle, dove un decisore è davvero coinvolto, e lascio perdere quelle ferme.`,
-        `Non do il numero per scontato: dipende da poche trattative, e su quelle metto ogni ora utile. Almeno una la declasso, e te lo dico adesso invece di lasciartelo scoprire dal CRM.`,
-        `La copertura c’è solo sulla carta. Per renderla vera smetto di rincorrere le trattative senza un passo concreto e metto le ore su quelle in cui il cliente ha già una data. Le altre le declasso.`,
-        `Il margine è più sottile di come appare nel foglio. Taglio dal mio tempo le trattative ferme, ne lavoro a fondo una o due e ti aggiorno quando qualcosa si muove davvero.`,
+        `Il numero regge solo se le trattative più grosse arrivano in firma. Concentro il tempo su quelle, dove un decisore è davvero coinvolto. Le trattative ferme le lascio perdere, e te lo dico adesso.`,
+        `Non do il numero per scontato: dipende da poche trattative, e su quelle metto ogni ora utile. Almeno una la declasso già questa settimana. Te lo dico adesso invece di lasciartelo scoprire dal CRM a fine mese.`,
+        `La copertura c’è solo sulla carta. Per renderla vera smetto di rincorrere le trattative senza un passo concreto. Metto le ore su quelle in cui il cliente ha già una data, e le altre le declasso.`,
+        `Il margine è più sottile di come appare nel foglio. Taglio dal mio tempo le trattative ferme e ne lavoro a fondo una o due, quelle con una data. Ti aggiorno quando qualcosa si muove davvero, non prima.`,
       ],
       optimistic: [
-        `Ce la faccio. Ho abbastanza trattative vive e il cliente è con me: se vanno tutte come previsto, la quota è mia. Non vedo ragioni per toglierne una adesso, sarebbe solo uno spreco.`,
-        `La quota è coperta: tra Commit e Best Case i numeri ci sono. Basta che nessun cliente ritardi, e mi sembra improbabile. Non rinuncio a niente: lo sprint finale fa sempre la differenza.`,
-        `Sì, arrivo alla quota. Ho margine e ho già visto trimestri messi peggio chiudersi in due giorni. Se mi lasci lavorare su tutte, le porto a casa. Togliere trattative adesso significherebbe solo perdere occasioni.`,
-        `La somma torna: tra Commit e Best Case c’è margine anche per uno slittamento. Se qualcosa slitta, il resto compensa. Non vedo la necessità di cambiare il piano adesso, né di togliere tempo a nessuna trattativa.`,
+        `Ce la faccio. Ho abbastanza trattative vive e il cliente è con me: se vanno tutte come previsto, la quota è mia. Non vedo ragioni per toglierne una adesso, sarebbe solo uno spreco di tempo e di slancio.`,
+        `La quota è coperta: sommando tutto quello che ho in mano, i numeri ci sono. Basta che nessun cliente ritardi, e mi sembra improbabile. Non rinuncio a niente: lo sprint finale fa sempre la differenza.`,
+        `Sì, arrivo alla quota, perché ho margine e ho già visto trimestri messi peggio chiudersi in due giorni. Se mi lasci lavorare su tutte, le porto a casa. Togliere trattative adesso significherebbe solo perdere occasioni.`,
+        `La somma torna: c’è margine anche per uno slittamento. Se qualcosa slitta, il resto compensa. Non vedo la necessità di cambiare il piano adesso, né di togliere tempo a nessuna trattativa, nemmeno a una sola.`,
       ],
       vague: [
         `Dipende da come si muovono le cose. Alcune sono avanti, altre meno, vediamo nei prossimi giorni. Le variabili sono troppe per dare una risposta secca, e non vorrei dartene una che poi cambia.`,
         `Direi che siamo in linea con le attese. Qualcosa slitterà e qualcos’altro arriverà prima, di solito va a compensarsi. Per ora non toccherei il piano e non vorrei togliere tempo a nessuna trattativa.`,
-        `Sono ottimista, ma preferisco non dire un numero: se poi cambia qualcosa mi chiedi il conto. Intanto lascerei il foglio com’è, e ci aggiorniamo quando le cose si sono chiarite un po’.`,
+        `Sono ottimista, ma preferisco non dire un numero. Se poi cambia qualcosa mi chiedi il conto. Intanto lascerei il foglio com’è, e ci aggiorniamo quando le cose si sono chiarite un po’ di più.`,
       ],
       react: {
         honest: [

@@ -182,7 +182,7 @@
         hint: `Undici giorni, tre binari paralleli, un solo regista: tu.`,
         tip: `Il paper process si governa a ritroso dalla data di firma: un referente per binario (sicurezza, legale, firma e acquisti), una cadenza di sincronizzazione breve e scadenze condivise. Chi aspetta che i documenti camminino da soli perde il trimestre.`,
         choices: [
-          ch('a', 1, `Giro la cartella ai nostri Legal e Sicurezza: sono loro a dover rispondere. Io inoltro a Elena i riscontri man mano che arrivano e resto a disposizione.`,
+          ch('a', 1, `Giro i 320 quesiti alla nostra Sicurezza e le 14 redline al nostro Legal: sono loro a dover rispondere. Inoltro a Elena i riscontri man mano che arrivano.`,
             `Delegare tutto ai tecnici sembra efficiente e non lo è: nessuno possiede la data. Il paper process ha un solo regista, e finché non sei tu i documenti restano dove li hai lasciati.`,
             { c: -8, u: -4, r: 10 }, {
               say: `Elena, giro tutto ai nostri Legal e alla Sicurezza: sono loro a dover rispondere. Appena ho i riscontri te li inoltro.`,
@@ -251,11 +251,11 @@
         hint: `Un errore sulla sicurezza costa più di un ritardo. Una risposta ottimista è un errore.`,
         tip: `Nella sicurezza la precisione vale più della velocità. Condividi evidenze (certificazioni, report, trust center), concorda una sessione dal vivo e non rispondere mai “conforme” a un controllo che non sai dimostrare: in un questionario contrattuale è una dichiarazione che ti vincola.`,
         choices: [
-          ch('a', 0, `Rispondo io a tutte le domande in due giorni: “conforme” dove sono ragionevolmente sicuro, “non applicabile” dove la domanda non mi è chiara, e consegno entro giovedì.`,
+          ch('a', 0, `Rispondo io a tutte le domande in due giorni: “conforme” dove ho pochi dubbi, “non applicabile” dove la domanda non mi è chiara, e consegno entro giovedì.`,
             `In un questionario contrattuale “conforme” è una dichiarazione che ti vincola, e “non applicabile” detto per comodità ne è la gemella. Il danno non è una riga: è la credibilità di tutte le altre.`,
             { t: -12, v: -4, c: -4, r: 18 }, {
               integ: -10, set: { falseClaim: true },
-              say: `Mi prendo io l’intero questionario. Due giorni, risposte mie: dove sono ragionevolmente certo scrivo “conforme”, dove la domanda non è chiara “non applicabile”. Consegno giovedì.`,
+              say: `Mi prendo io l’intero questionario. Due giorni, risposte mie: dove ho pochi dubbi scrivo “conforme”, dove la domanda non è chiara “non applicabile”. Consegno giovedì.`,
               react: [
                 { n: `Giovedì, alle due del pomeriggio, mandi il file compilato fino all’ultima riga. Alle tre il telefono squilla.`, sfx: 'phone' },
                 { w: 'riva', a: `senza fretta`, t: `Ho trovato due incongruenze in un’ora. Alla riga 214 mi scrivete “conforme” per la cifratura dei backup, e il vostro ingegnere dice che quel controllo non c’è.` },
@@ -272,15 +272,15 @@
               react: [
                 { w: 'riva', a: `si appoggia allo schienale`, t: `Questo è più utile di un modulo. Novanta minuti, domani alle nove.` },
                 { n: `Il giorno dopo, nella sala vetrata, Davide disegna l’architettura su un foglio da lavagna. Riva interrompe poco e annota molto. Alle undici metà delle domande è chiusa.` },
-                { think: `Parlano la stessa lingua. Io non devo tradurre: devo solo stare zitto al momento giusto.` },
+                { think: `Parlano la stessa lingua. Io non devo tradurre: devo solo tacere al momento giusto.` },
               ],
               next: 'n3',
             }),
-          ch('c', 2, `Gli chiedo di consegnarmi per prime le domande critiche e le altre in seguito: chiudiamo subito ciò che pesa di più e il resto a ondate.`,
+          ch('c', 2, `Gli chiedo di consegnarmi per prime le domande critiche, su accessi e cifratura, e le altre in seguito: subito ciò che pesa di più, il resto a ondate.`,
             `Il triage fa risparmiare tempo dove pesa di più, ma lascia duecentosessanta domande in coda mentre la data resta ferma. È un buon compromesso che non cambia la pendenza del problema.`,
             { t: 2, c: 4, r: -6 }, {
               set: { secOk: true },
-              say: `Dottor Riva, per non farle perdere tempo: mi consegni prima le domande critiche, quelle che per lei pesano di più, e le altre in seguito.`,
+              say: `Dottor Riva, per non farle perdere tempo: mi consegni prima le domande critiche, su accessi e cifratura, e le altre in seguito. Ciò che pesa di più lo chiudiamo subito.`,
               react: [
                 { w: 'riva', a: `dopo averci pensato`, t: `Accetto il triage. Le prime sessanta sono quelle che contano: le voglio chiuse in due giorni.` },
                 { n: `Annota le sessanta righe su un foglio a parte e le sottolinea. Le altre duecentosessanta restano nel file, e la data in cima alla lavagna non si sposta.` },
@@ -318,14 +318,14 @@
         hint: `Entrambi hanno un vincolo di policy. Si cerca una struttura, non una vittoria.`,
         tip: `Due policy incompatibili si risolvono con una struttura intermedia: cap standard + super-cap per i rischi più critici + evidenza assicurativa. “Illimitato” non è approvabile, e un “no” secco chiude il tavolo.`,
         choices: [
-          ch('a', 0, `Accetto la responsabilità illimitata: la chiusura del trimestre pesa più di una clausola, e con il nostro Legal me la vedo io, a cose fatte.`,
+          ch('a', 0, `Accetto la responsabilità illimitata: i €410k del trimestre pesano più di una clausola, e con il nostro Legal me la vedo io, a cose fatte.`,
             `Hai promesso una clausola che non puoi dare. Il costo non è la clausola: è che il nostro Legal la blocca, e prima o poi a Greco toccherà sentirsi dire che la tua parola non vale. Due giorni persi e una credibilità da ricostruire.`,
             { t: -4, c: -6, r: 14 }, {
               integ: -6,
               say: `Dottoressa, accettiamo la responsabilità illimitata. Per noi la data conta più della clausola: al nostro Legal ci penso io.`,
               react: [
                 { w: 'greco', a: `prende nota`, t: `Bene. Ne prendo atto.` },
-                { n: `La risposta del Legal di Nexora arriva in un’ora, senza giri di parole: la clausola non è approvabile, non lo sarà, e non è mai stata in discussione.` },
+                { n: `La risposta di Ilaria Corti, del Legal di Nexora, arriva in un’ora, senza giri di parole: la clausola non è approvabile, non lo sarà, e non è mai stata in discussione.` },
                 { think: `Ho firmato con la voce un assegno che non è mio. Adesso devo trovare chi lo copre.` },
               ],
               next: 'n4',
@@ -337,7 +337,7 @@
               say: `Dottoressa, capisco che il mandato sia questo e non le chiedo di aggirarlo. Le propongo una struttura che il Consiglio possa difendere: per la responsabilità ordinaria un cap pari a dodici mesi di canone; per le violazioni di dati personali un super-cap a tre volte il canone; e allego la polizza cyber di Nexora, così il rischio più grave ha una copertura molto più alta.`,
               react: [
                 { w: 'greco', a: `dopo una pausa, la penna ferma`, t: `Una struttura difendibile davanti al Consiglio. Alleghi la polizza. E sul super-cap voglio un quattro.` },
-                { n: `Mezz’ora dopo il Legal di Nexora risponde: tre e mezzo, non di più.` },
+                { n: `Mezz’ora dopo Ilaria Corti, il legale di Nexora, risponde: tre e mezzo, non di più.` },
                 { w: 'greco', t: `Tre e mezzo. Si chiude.` },
                 { think: `Nessuno ha vinto. È l’unica forma in cui questa clausola poteva uscire da qui.` },
               ],
@@ -349,13 +349,13 @@
               jolly: 'legal', mp: ['P'], set: { liabilityOk: true },
               say: `Dottoressa, il nostro avvocato è disponibile oggi stesso: le propongo una call tra voi due, un’ora, per chiudere la clausola da giurista a giurista.`,
               react: [
-                { n: `Alle due del pomeriggio nel riquadro compare l’avvocato di Nexora, con il testo già aperto. Greco lo guarda, poi guarda te, poi riabbassa gli occhi sul blocco.` },
+                { n: `Alle due del pomeriggio nel riquadro compare Ilaria Corti, il legale di Nexora, con il testo già aperto. Greco la guarda, poi guarda te, poi riabbassa gli occhi sul blocco.` },
                 { w: 'greco', a: `dopo cinquanta minuti`, t: `Super-cap a tre e mezzo, allegato assicurativo. Sono d’accordo.` },
                 { think: `Quando due avvocati parlano la stessa lingua, io posso uscire dalla stanza.` },
               ],
               next: 'n4',
             }),
-          ch('d', 1, `Rispondo con un no netto: la policy di Nexora non prevede deroghe e non c’è margine di trattativa, né da parte mia né del nostro Legal. Meglio chiarirlo subito.`,
+          ch('d', 1, `Rispondo con un no netto: la policy di Nexora, dodici mesi di canone, non prevede deroghe, né da parte mia né del nostro Legal. Meglio chiarirlo subito.`,
             `Un no secco chiude il tavolo senza lasciare un’alternativa: Greco non ha mandato per cambiare la sua policy, e tu non ne hai proposta un’altra. Hai fermato la trattativa, non l’hai difesa.`,
             { t: -6, c: -6, r: 10 }, {
               say: `Dottoressa, la policy di Nexora non prevede deroghe. Non ho margine su questo punto, e preferisco dirlo subito.`,
@@ -387,7 +387,7 @@
         tip: `Quando il cliente trova un problema reale, riconoscilo e porta una soluzione contrattuale. Un’opzione “EU-only” con SLA ridotto è un’offerta commerciale, non una scusa. Un’omissione, invece, trasforma un problema di compliance in uno di integrità.`,
         choices: [
           ch('a', 0, `Ritiro quel documento dal portale e ne carico una versione corretta, senza il riferimento al supporto extra-UE: così la questione si chiude subito.`,
-            `Ritirare un documento tracciato è peggio del problema che nasconde: da un tema di compliance sei passato a un tema di integrità, che per un CISO non ha rimedio. Un’omissione si scopre sempre, e costa più della verità.`,
+            `Ritirare un documento tracciato è peggio del problema che nasconde: da un tema di compliance si passa a un tema di integrità, che per un CISO non ha rimedio. Un’omissione si scopre sempre, e costa più della verità.`,
             { t: -16, v: -6, c: -8, r: 20 }, {
               integ: -12, set: { concealed: true },
               say: `Ritiro l’addendum dal portale e ne carico una versione senza il paragrafo sul supporto di secondo livello. A Riva scrivo soltanto: “In allegato la versione aggiornata”.`,
@@ -410,7 +410,7 @@
               ],
               next: 'n5',
             }),
-          ch('c', 1, `Prometto che entro sei mesi cambieremo il fornitore di supporto, ma per ora non possiamo cambiarlo: chiedo di procedere così, sulla mia parola, per non perdere altro tempo.`,
+          ch('c', 1, `Prometto che entro sei mesi cambieremo il fornitore di supporto, ma per ora non si può: chiedo di procedere sulla mia parola, per non perdere altro tempo.`,
             `Una promessa futura non risolve un vincolo di oggi: Riva deve approvare ciò che esiste, non ciò che prometti. Hai assunto un impegno che non puoi garantire e lasciato il problema dov’era.`,
             { t: -4, c: -2, r: 8 }, {
               integ: -3,
@@ -421,11 +421,11 @@
               ],
               next: 'n5',
             }),
-          ch('d', 2, `Gli chiedo un giorno per verificare cosa possiamo garantire davvero, senza anticipare risposte né soluzioni, e poi torno con una proposta.`,
+          ch('d', 2, `Gli chiedo un giorno, fino a domattina alle nove, per verificare cosa possiamo garantire senza anticipare soluzioni, e poi torno con una proposta scritta.`,
             `Prendere tempo è meno grave che improvvisare, e il giorno dopo la soluzione giusta è sul tavolo. Il costo sono ventiquattro ore sul calendario, in un momento in cui ogni binario conta.`,
             { t: 2, c: 2, r: -6 }, {
               set: { residencyOk: true },
-              say: `Dottor Riva, mi dia un giorno: voglio verificare cosa possiamo garantire davvero prima di risponderle, senza anticipare nulla che poi non regga.`,
+              say: `Dottor Riva, mi dia un giorno, fino a domattina alle nove: voglio verificare cosa possiamo garantire davvero prima di risponderle, senza anticipare nulla che poi non regga. Poi le porto una proposta scritta.`,
               react: [
                 { w: 'riva', a: `dopo averci pensato`, t: `Un giorno. Non di più.` },
                 { n: `Chiudi la mail e chiami Davide e il Legal: per ventiquattro ore la tua unica pratica è questa.` },
@@ -537,10 +537,10 @@
               ].filter(Boolean),
               next: 'END',
             }),
-          ch('b', 1, `Mando una mail di conferma a tutti con i punti da chiudere entro domattina e confido che ciascuno faccia la sua parte, senza altri solleciti.`,
+          ch('b', 1, `Mando una mail a tutti e quattro con i punti da chiudere entro le nove di domattina e confido che ciascuno faccia la sua parte, senza altri solleciti.`,
             `Una mail dice a tutti che qualcosa va fatto, non chi lo fa. Il giorno dopo manca l’ordine d’acquisto e la firma non è abilitata: ritardi piccoli che, a fine trimestre, pesano come grandi.`,
             { c: -4, r: 6 }, {
-              say: `Elena, vi mando una mail riepilogativa con i punti da chiudere entro domattina. Conto su ciascuno di voi.`,
+              say: `Elena, vi mando una mail riepilogativa con i punti da chiudere entro le nove di domattina. Conto su ciascuno di voi.`,
               react: [
                 { w: 'bruni', t: `Ricevuta. Buona serata, e grazie.` },
                 { n: `Alle 18:00 il turno cambia e il video-wall si riaccende di altre luci. La tua mail resta nella posta di quattro persone che hanno già staccato.` },
@@ -548,7 +548,7 @@
               ],
               next: 'END',
             }),
-          ch('c', 2, `Preparo una checklist condivisa con tutte le voci dell’ultimo giorno e la invio a tutti, chiedendo di compilarla e di segnalarmi eventuali blocchi entro domattina.`,
+          ch('c', 2, `Preparo una checklist condivisa con le quattro voci dell’ultimo giorno e la invio a tutti, chiedendo di compilarla e di segnalarmi i blocchi entro domattina.`,
             `La checklist ordina il lavoro, ma senza un impegno assunto in tempo reale resta un documento. Funziona a metà: ciò che nessuno si è preso, nessuno lo fa.`,
             { c: 4, r: -2 }, {
               say: `Elena, vi mando una checklist condivisa con tutte le voci dell’ultimo giorno: ordine, anagrafica, firma digitale, backup. Chi può la compila stasera, gli altri domattina, e se qualcosa si blocca mi scrivete subito.`,
@@ -558,10 +558,10 @@
               ],
               next: 'END',
             }),
-          ch('d', 0, `Spingo Elena a chiudere comunque stasera: il contratto è a posto, e prima che qualcuno trovi altri problemi è meglio avere la firma in mano.`,
+          ch('d', 0, `Spingo Elena a chiudere comunque stasera, entro il cambio turno: il contratto è a posto, e prima che qualcuno trovi altro è meglio avere la firma in mano.`,
             `Spingere un cliente regolato a firmare in fretta vuol dire dirgli di non guardare bene. Per un’azienda che registra ogni bullone è esattamente il segnale sbagliato.`,
             { t: -6, c: -2, r: 8 }, {
-              say: `Elena, chiudiamo stasera. Il contratto è pronto, e ogni ora che passa è un’occasione in più per riaprire qualcosa: facciamo firmare adesso, prima che qualcuno trovi altro da chiedere.`,
+              say: `Elena, chiudiamo stasera, entro il cambio turno. Il contratto è pronto, e ogni ora che passa è un’occasione in più per riaprire qualcosa: facciamo firmare adesso, prima che qualcuno trovi altro da chiedere.`,
               react: [
                 { w: 'bruni', a: `irrigidita`, t: `Non voglio firmare nulla che non sia a posto. Se c’è un problema, lo voglio vedere prima della firma, non dopo.` },
                 { think: `Ho appena chiesto di firmare in fretta a una persona che, tra mezz’ora, firma un registro di consegne.` },
@@ -669,7 +669,7 @@
           hint: `Nell’emergenza del cliente il tuo deal è l’ultima cosa di cui vogliono parlare. I giorni, però, continuano a scorrere.`,
           tip: `Nelle emergenze del cliente non si vende: si protegge il rapporto e si riprogramma. Offri aiuto concreto senza chiedere nulla in cambio, alleggerisci le sue scadenze e ridisegna il calendario con chi non è coinvolto. Chi usa l’incidente come argomento commerciale se lo sente ricordare per anni.`,
           choices: [
-            ch('a', 3, `Scrivo a Elena una riga di vicinanza, senza chiedere nulla, e riscrivo il calendario con gli altri referenti perché lo trovi pronto al ritorno.`,
+            ch('a', 3, `Scrivo a Elena una riga di vicinanza, senza chiedere nulla, e riscrivo il calendario con gli altri referenti perché lo trovi pronto lunedì sera.`,
               (d) => (d.flags.warroom
                 ? `Hai fatto due cose che non si escludono: hai tenuto il tuo deal fuori dalla sua notte e hai usato il margine che la war room ti aveva dato. Tornando, Elena troverà un calendario già riscritto.`
                 : `Vicinanza senza richieste è la mossa giusta, ma il calendario lo devi riscrivere da zero e senza margine ogni giorno perso costa. Non è colpa dell’incidente: è che il piano, prima, non c’era.`),
@@ -754,11 +754,11 @@
                 say: `Elena, dì al vice che le tre sono accettate: foro, termini di pagamento e riservatezza. Ma voglio tutte le redline chiuse entro domani sera.`,
                 react: [
                   { w: 'bruni', t: `Glielo dico subito. Per le sei di domani dovrebbe avere tutto.` },
-                  { n: `Nella chat con il Legal di Nexora arriva una sola riga: “Ho visto. Non mi piace, ma si può fare.”` },
+                  { n: `Nella chat con Ilaria Corti, del Legal di Nexora, arriva una sola riga: “Ho visto. Non mi piace, ma si può fare.”` },
                   { think: `Ho comprato un giorno e pagato tre clausole. Il prezzo è giusto solo se domani sera sono davvero chiuse.` },
                 ],
               }),
-            ch('c', 1, `Aspetto che Sofia guarisca e uso questi giorni per preparare la nostra risposta alle ultime redline, così sarà pronta quando rientra.`,
+            ch('c', 1, `Aspetto che Sofia guarisca e uso questi giorni per preparare la nostra risposta alle tredici redline aperte, così sarà pronta quando rientra.`,
               `Aspettare significa farsi guidare dal calendario di chi è malato: preparare le risposte è utile, ma non sposta nessuno al di là del banco del Legale. Il binario si ferma, e tu con lui.`,
               (d) => (d.flags.liabilityOk ? { u: -2, c: -2, r: 2 } : { u: -5, c: -4, r: 6 }), {
                 next: 'RET',
@@ -768,7 +768,7 @@
                   { think: `Dieci giorni di febbre contro i tre che restano sul calendario.` },
                 ],
               }),
-            ch('d', 0, `Mando le nostre ultime modifiche a tutto l’Ufficio Legale con una riga: se entro domani non arrivano osservazioni, le consideriamo accettate, così non perdiamo un altro giorno.`,
+            ch('d', 0, `Mando le nostre ultime modifiche a tutto l’Ufficio Legale: se entro domani non arrivano osservazioni, le consideriamo accettate, e non perdiamo un altro giorno.`,
               `Il silenzio-assenso con un Legale che lavora a ranghi ridotti non è una scorciatoia: è un modo di dire che non ti importa leggere la risposta. Il testo non cambia, ma il tono con cui verrai letto sì.`,
               { t: -6, c: -4, r: 10 }, {
                 next: 'RET',
@@ -791,7 +791,7 @@
             { n: `Martedì mattina, le nove meno dieci. Teams squilla mentre la lavagna si accende: è Elena, in piedi, con il cappotto ancora addosso.`, sfx: 'phone' },
             { w: 'bruni', a: `entusiasta, un po’ trafelata`, t: `Una notizia buona, per una volta. Il Direttore Generale mi ha scritto da Francoforte: vuole i tre binari chiusi entro mercoledì sera, così il 31 firma senza correre. E dice che, se serve, chiama lui Sicurezza e Legale.` },
             d.flags.warroom
-              ? { think: `Il calendario a ritroso ha già un margine per ogni binario: un giorno in meno si può reggere. E un direttore che offre di telefonare è una leva che da solo non mi sarei mai guadagnato.` }
+              ? { think: `Il calendario a ritroso ha già un margine per ogni binario: un giorno in meno si può reggere. E un direttore che offre di telefonare è una leva che con le mie sole forze non avrei mai avuto.` }
               : { think: `Un giorno in meno e un calendario che non esiste. Il direttore mi offre una leva, ma senza date non so nemmeno dove metterla.` },
             redInFirstTwo(d) === 0
               ? { n: `Sulla lavagna nessuna carta di Sicurezza e Legale è rossa. Il peso del direttore, adesso, serve soprattutto a sbloccare la Firma.` }
@@ -959,12 +959,12 @@
         {
           id: 'bozza_legal', if: () => true, has: (d) => !!d.flags.liabilityOk && !d.flags.sideLetter,
           q: `La bozza di contratto è approvata dal nostro Legal? Dimmi chi ha letto la versione che andrà in firma.`,
-          evidence: `Sì: cap a dodici mesi, super-cap a tre e mezzo e polizza allegata, approvati dal nostro Legal. Ho la mail di conferma e il testo con le modifiche.`,
-          honest: `La versione finale non l’ha ancora vista il nostro Legal, e senza la loro conferma scritta non la considero approvata. Per me è Best Case.`,
+          evidence: `Sì: cap a dodici mesi, super-cap a tre e mezzo, polizza allegata. Li ha approvati Ilaria Corti, del Legal, e Greco ha detto sì: i termini in firma.`,
+          honest: `La versione finale non l’ha ancora vista il nostro Legal, e senza la loro conferma scritta non la considero approvata. La chiedo oggi al Legal.`,
           bluff: `Approvata. Il nostro Legal ha letto tutto il testo e anche Greco, per Meridiana, ha dato l’ok: manca solo la firma, il resto è una formalità.`,
-          vague: `Il Legal ci sta lavorando e mi dicono che va bene. Obiezioni non ne ho ricevute, e a Meridiana nessuno ha sollevato dubbi sul testo.`,
+          vague: `Il Legal ci sta lavorando e mi dicono che va bene. Obiezioni non me ne sono ancora arrivate, e a Meridiana nessuno mi ha scritto per dubbi sul testo.`,
           react: {
-            evidence: `Questo mi basta: tre e mezzo, polizza allegata, conferma scritta. Per il Legal è chiusa, resta la firma.`,
+            evidence: `Questo mi basta: tre e mezzo, polizza allegata, l’ok di Greco e quello di Ilaria. Per il Legal è chiusa, resta la firma.`,
             honest: `Grazie per averlo detto. Chiedi al Legal una conferma scritta entro domani: se la porti, lo riporto in Commit.`,
             bluffCaught: `Ho chiesto al Legal mezz’ora fa: la versione finale non l’hanno ancora vista. Un’approvazione a voce non è un’approvazione.`,
             bluffPassed: `Va bene, lo segno. Ma la mail del Legal la voglio nel CRM entro domani, altrimenti scendo di categoria io.`,
@@ -974,10 +974,10 @@
         {
           id: 'chi_firma', if: () => true, has: (d) => !!d.flags.signOk,
           q: `Chi firma, e con quale delega? Voglio nome, ruolo e importo massimo, non “il direttore”.`,
-          evidence: `Paolo Operti, Direttore Finanziario, con delega valida fino a €500k: l’importo dell’ordine ci sta dentro. Ho il nome, il tetto e la conferma di Elena.`,
-          honest: `Il firmatario naturale è il Direttore Generale, in trasferta fino al 30. Per una seconda firma non ho ancora una delega scritta: per me è Best Case.`,
+          evidence: `Paolo Operti, Direttore Finanziario, con delega valida fino a €500k: l’importo dell’ordine ci sta dentro. Ho nome, tetto e la conferma di Elena.`,
+          honest: `Il firmatario naturale è il Direttore Generale, in trasferta fino al 30. Per un secondo firmatario non ho ancora la delega scritta: non lo conto.`,
           bluff: `Firma il Direttore Generale, rientra il 30. Se fa tardi c’è un secondo procuratore: me l’ha confermato Elena, la delega la raccolgo in settimana.`,
-          vague: `Firma il direttore, rientra il 30. Elena mi ha detto che sulla firma non ci sono problemi e che sa già a chi rivolgersi, se serve.`,
+          vague: `Firma il Direttore Generale, rientra il 30. Elena mi ha detto che sulla firma non ci sono problemi e che sa già a chi rivolgersi, nel caso servisse.`,
           react: {
             evidence: `Nome, ruolo e tetto di delega: è esattamente ciò che mi serve da un Commit. Grazie.`,
             honest: `Meglio che tu lo dica adesso e non il 30. Ti do tre giorni: chiedi a Elena una delega scritta, e poi rimettiamo la categoria.`,
@@ -989,12 +989,12 @@
         {
           id: 'sicurezza_riva', if: () => true, has: (d) => !!d.flags.secOk && !!d.flags.residencyOk && !d.flags.falseClaim && !d.flags.concealed,
           q: `Il questionario di sicurezza è chiuso e accettato da Riva? Chiuso da voi non basta: voglio sapere se l’ha accettato lui.`,
-          evidence: `Sì: le sezioni sono chiuse con lui, la residenza dei dati è risolta con l’opzione EU-only e ho la sua conferma in mail. Te la inoltro.`,
-          honest: `Le risposte sono consegnate, ma l’accettazione scritta di Riva non c’è ancora, e su un paio di punti ho lavoro da fare con lui. Per me è Best Case.`,
+          evidence: `Per ciò che pesa, sì: con Riva ho chiuso le domande critiche e la residenza dei dati. Il resto va avanti secondo i tempi concordati con lui.`,
+          honest: `Le risposte sono consegnate, ma l’accettazione scritta di Riva non c’è ancora e su un paio di punti c’è lavoro da fare. Non lo do per chiuso.`,
           bluff: `Chiuso e accettato. Riva ha visto tutto, per lui non ci sono punti aperti e la valutazione è praticamente in archivio: aspetto solo il timbro.`,
-          vague: `Con Riva va bene: ci siamo parlati a lungo, ha fatto tutte le domande che voleva e mi è sembrato soddisfatto di come abbiamo risposto.`,
+          vague: `Con Riva va bene: ci siamo parlati a lungo, ha fatto tutte le domande che voleva e alla fine mi è sembrato soddisfatto di come abbiamo risposto.`,
           react: {
-            evidence: `Bene: una conferma scritta del CISO è proprio ciò che serve. Inoltrala e la allego alla scheda.`,
+            evidence: `Bene: critiche chiuse e residenza risolta con il CISO bastano per un Commit. Fatti scrivere due righe da lui e le allego alla scheda.`,
             honest: `Giusto distinguere “consegnato” da “accettato”. Chiedigli la conferma per iscritto entro due giorni; se la porti, risalgo.`,
             bluffCaught: `Ho letto le note del CRM: nessuna accettazione di Riva e almeno un punto ancora aperto con la Sicurezza. Così non si regge in Commit.`,
             bluffPassed: `Va bene, per ora lo scrivo. Ma voglio la mail di Riva con quelle parole, entro venerdì.`,
@@ -1007,7 +1007,7 @@
     endings: {
       won: `Il 31, alle 10:12, la notifica di firma digitale si accende sul secondo schermo. L’ordine d’acquisto porta il numero 4417. Dall’Ufficio Legale di Meridiana arriva una sola riga: “Pulito.” Davide ti manda la foto del questionario completo, con una stella accanto alla sezione crittografia. Sulla lavagna le tre colonne sono verdi, e il conto dei giorni segna zero.`,
       lost: `All’ultimo giorno qualcosa non torna, e a Meridiana nessuno ha più il tempo, o il mandato, per sistemarlo. Il deal non muore: passa a una “revisione approfondita” che durerà sei mesi. Sulla lavagna una colonna resta rossa, e a mezzanotte la data in cima si spegne.`,
-      slip: `Non è un no: è un non adesso. L’accordo si firma il 2 gennaio, a uffici riaperti: la carta è la stessa, il trimestre no. Sulla lavagna la data in cima si spegne a mezzanotte, con il lavoro fatto e la firma ancora da mettere.`,
+      slip: `Non è un no: è un non adesso. L’accordo si firma lunedì 3 gennaio, a uffici riaperti: la carta è la stessa, il trimestre no. Sulla lavagna la data in cima si spegne a mezzanotte, con il lavoro fatto e la firma ancora da mettere.`,
     },
     lessons: [
       { if: (d) => d.flags.warroom, good: true, t: `Hai governato il paper process a ritroso, con un referente per binario e una data per ciascuno: è ciò che separa un deal chiuso da uno “quasi chiuso”.` },

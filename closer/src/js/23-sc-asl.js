@@ -70,6 +70,9 @@
     teaches: [`Gara pubblica`, `Par condicio`, `Partner e conflitti`, `Offerta tecnica vs prezzo`, `Condotta corretta`],
     list: 750, cost: 3, window: [3, 10], stars: 4, lep: 20, slip: 0.4, dqRefund: 1,
     noWild: ['davide_recalled'],   // imprevisti generici che stonano con questo scenario
+    /* shock generici che stonano con una gara pubblica: niente trattative di prezzo o di sconto, business case, urgenze al board,
+       champion che cambiano incarico, concorrenti che si ritirano da una “fase finale” (le buste sono già aperte) */
+    noShock: ['g_freeze', 'g_buyer_change', 'g_champion_moves', 'g_price_cut', 'g_board_postpones', 'g_last_haggle', 'g_board_accelerates', 'g_second_department', 'g_rival_withdraws'],
     crm: { cat: `Best Case`, prob: 50 },
     cast: CAST,
 
@@ -191,7 +194,7 @@
               { k: 'eco', label: `Offerta economica`, max: 30, us: e.ecoUs, them: e.ecoVx },
             ],
             total: e.total,
-            caption: e.rib > 20 ? `Ribasso oltre il 20%: il punteggio c’è, ma scatta la verifica di anomalia.`
+            caption: e.rib > (d.sc && d.sc.lep != null ? d.sc.lep : 20) ? `Ribasso oltre quanto regge il margine: il punteggio c’è, ma rischi la verifica di anomalia.`
               : f.lobbied ? `Con un contatto riservato agli atti, il punteggio può non bastare.`
                 : (f.backchannel || f.coffee) ? `Un contatto fuori dal portale non toglie punti, ma dà a Vertex un motivo di ricorso.`
                   : e.priced ? `Stima interna: la commissione decide, e un ricorso può ribaltare tutto.`
@@ -227,7 +230,7 @@
         hint: `È l’unica finestra in cui puoi incidere in modo legittimo, e il verbale lo leggeranno tutti. C’è una linea che non si attraversa.`,
         tip: `Nella consultazione si portano contributi neutrali (esiti misurabili, standard aperti, KPI, suddivisione in lotti), non requisiti cuciti sul proprio prodotto. Un capitolato “su misura” è il modo più rapido per vedere la gara impugnata: vale la par condicio.`,
         choices: [
-          ch('a', 0, `Porto tre requisiti tecnici precisi, maturati sul campo in altre installazioni: servono a evitare che il capitolato si fermi a una soluzione di livello inferiore.`,
+          ch('a', 0, `Porto tre requisiti maturati in altre installazioni (radiofrequenza, riconciliazione di lotto, un unico responsabile): il capitolato non deve fermarsi a una soluzione inferiore.`,
             `Un requisito che solo il tuo prodotto soddisfa non è un contributo: è una gara cucita addosso a te. Il verbale è pubblico, i concorrenti lo leggeranno con la matita in mano, e il primo motivo di ricorso lo hai scritto tu.`,
             { t: -6, c: -2, r: 16 }, {
               integ: -10, set: { tailored: true }, next: 'n2',
@@ -239,7 +242,7 @@
               ],
             }),
           ch('b', 3, `Porto un contributo sugli esiti: obiettivi di servizio misurabili (scorte, rotture, consegne), standard aperti, lotti per presidio, tempi di attivazione realistici.`,
-            `Hai portato misure e standard che valgono per chiunque: è così che si plasma una gara senza forzarla. Alcuni tuoi KPI finiscono nel capitolato e ti sei fatto riconoscere come interlocutore serio, non come venditore.`,
+            `Hai portato misure e standard che valgono per chiunque: è così che si plasma una gara senza forzarla. Alcuni tuoi KPI finiscono nel capitolato e l’ASL ti riconosce come interlocutore serio, non come venditore.`,
             { t: 10, v: 8, u: 4, c: 10, r: -6 }, {
               mp: ['Dc', 'Dp'], next: 'n2',
               say: `Grazie, dottoressa. Suggerirei di scrivere il capitolato per obiettivi: scorte minime garantite, rotture di stock sotto una soglia, tempi di consegna ai reparti. Standard aperti per l’interoperabilità, perché nessun fornitore parta avvantaggiato. I lotti, per presidio, per favorire la partecipazione. E tempi di attivazione realistici: meglio un avvio graduale di una data impossibile.`,
@@ -249,7 +252,7 @@
                 { think: `Per iscritto, dal portale. Giusto: quello che propongo devono poterlo leggere tutti.` },
               ],
             }),
-          ch('c', 3, `Porto Davide: un’architettura di riferimento aperta e una demo con dati sintetici, a disposizione di tutti gli operatori presenti alla consultazione.`,
+          ch('c', 3, `Porto Davide: un’architettura di riferimento aperta, con interfacce documentate, e una demo su dati sintetici per tutti gli operatori presenti alla consultazione.`,
             `Una demo su dati sintetici, aperta a tutti, mostra maturità senza dare a nessuno un vantaggio. Nel verbale Davide diventa l’interlocutore tecnico di riferimento: è visibilità guadagnata nel modo che la gara ammette.`,
             { t: 8, v: 10, c: 8, r: -8 }, {
               jolly: 'se', mp: ['Dc', 'Dp'], next: 'n2',
@@ -261,7 +264,7 @@
                 { think: `Una demo che non ho riservato a nessuno. Nessuno potrà dire che ho avuto una corsia mia.` },
               ],
             }),
-          ch('d', 1, `Non intervengo: ascolto gli altri operatori e mi riservo di partecipare al bando, quando sarà pubblicato, con le regole che ci saranno scritte, senza scoprire le carte.`,
+          ch('d', 1, `Rinuncio ai miei cinque minuti: ascolto gli altri dieci operatori e mi riservo di partecipare al bando con le regole che saranno scritte, senza scoprire le carte.`,
             `Restare fuori dalla consultazione è rinunciare all’unica leva che la gara concede in modo legittimo: leggerai regole già scritte, senza aver potuto spiegare dove ti escludono.`,
             { v: -4, c: -6, r: 8 }, {
               next: 'n2',
@@ -293,7 +296,7 @@
         hint: `Un partner con due cappelli è un rischio di riservatezza e di lealtà. Cosa metti per iscritto, prima di raccontargli qualcosa?`,
         tip: `Il partner locale pesa sul punteggio tecnico (presenza sul territorio, referenze). Ma uno con legami col concorrente è un rischio: tutelati con esclusiva di partecipazione, riservatezza scritta e obiettivi condivisi.`,
         choices: [
-          ch('a', 0, `Firmo oggi alle sue condizioni: il territorio è decisivo e se aspetto Moro può accordarsi con Vertex. Le tutele le definiamo a rapporto avviato, con calma.`,
+          ch('a', 0, `Firmo oggi alle sue condizioni (esclusiva di zona, 18% sul servizio): il territorio è decisivo e se aspetto Moro può accordarsi con Vertex. Le tutele dopo, con calma.`,
             `Hai condiviso la tua strategia con chi ha un piede nell’altra squadra senza un solo vincolo scritto. Il partner locale serve, ma la riservatezza si firma prima di raccontare, non dopo.`,
             { v: -2, c: -4, r: 14 }, {
               next: 'n3',
@@ -305,7 +308,7 @@
                 { think: `Qualcuno, da Sinergia, ha parlato. E non ho scritto niente che gli impedisse di farlo.` },
               ],
             }),
-          ch('b', 3, `Firmo solo con esclusiva per questa gara, riservatezza scritta e divieto di raggruppamento col concorrente, in cambio del 15% sul servizio e di un co-marketing sul territorio.`,
+          ch('b', 3, `Firmo solo con esclusiva per questa gara, riservatezza scritta e divieto di raggrupparsi con Vertex, in cambio del 15% sul servizio e di un co-marketing sul territorio.`,
             `Hai tenuto il partner locale e chiuso la porta di servizio: esclusiva, riservatezza e divieto di raggruppamento proteggono il vantaggio senza rinunciare al territorio. È un accordo che regge anche a una lettura ostile.`,
             { t: 4, v: 4, c: 10, r: -8 }, {
               mp: ['Co'], next: 'n3',
@@ -327,13 +330,13 @@
                 { think: `Ho evitato un rischio e comprato un limite.` },
               ],
             }),
-          ch('d', 1, `Vado da solo con un servizio diretto, senza terzi: nessun margine da cedere, nessun problema di riservatezza e il controllo di ogni intervento sul territorio.`,
-            `Sei libero e riservato, ma costruire in tre mesi una presenza locale costa tempo e personale. Il punteggio sul territorio ne soffre: hai scelto di non dipendere da nessuno e di pagare la differenza.`,
+          ch('d', 1, `Faccio da me, con un servizio diretto senza terzi: tecnici nostri, nessun margine da cedere, nessun problema di riservatezza e il controllo di ogni intervento sul territorio.`,
+            `Nessun vincolo e nessuna fuga di notizie, ma costruire in tre mesi una presenza locale costa tempo e personale. Il punteggio sul territorio ne soffre: hai scelto di non dipendere da nessuno e di pagare la differenza.`,
             { v: -4, c: 4, r: 4 }, {
               next: 'n3',
-              say: `Stefano, la ringrazio ma per questa gara faccio da solo: un servizio diretto, senza terzi.`,
+              say: `Stefano, la ringrazio ma per questa gara faccio da me: un servizio diretto, senza terzi.`,
               react: [
-                { w: 'moro', a: `alza le spalle`, t: `Contento lei. Ma una presenza in tre mesi non si costruisce con una cartellina.` },
+                { w: 'moro', a: `alza le spalle`, t: `Faccia pure da sé. Ma una presenza in tre mesi non si costruisce con una cartellina.` },
                 { n: `Il mese dopo la tua scrivania si riempie di candidature per due tecnici di zona, del preventivo per un’officina in affitto e di quello per tre furgoni. Costi che nessuno aveva messo in conto.` },
                 { think: `Nessun problema di fedeltà. Resta il problema di essere assenti.` },
               ],
@@ -368,7 +371,7 @@
                 { think: `Annotato, con data e ora. La prima cosa che ho fatto a bando aperto è stata quella che non si fa.` },
               ],
             }),
-          ch('b', 3, `Presento una richiesta di chiarimento formale: chiedo di ammettere soluzioni funzionalmente equivalenti su standard aperti, motivando con concorrenza e proporzionalità.`,
+          ch('b', 3, `Presento un quesito di chiarimento formale: chiedo di ammettere soluzioni funzionalmente equivalenti su standard aperti, motivando con concorrenza e proporzionalità.`,
             `Un chiarimento formale non è un favore: è una risposta pubblica, uguale per tutti. Aiuta anche Vertex, ma ti ha reso l’operatore che usa il canale giusto e ti ha riaperto la porta del requisito.`,
             { t: 6, v: 4, c: 10, r: -12 }, {
               mp: ['Dc'], set: { clarified: true }, next: 'n4',
@@ -376,10 +379,10 @@
               react: [
                 { n: `Due giorni dopo, sul portale, compare la risposta: numerata, datata, visibile a tutti i concorrenti.` },
                 { mail: { from: `Portale gara · Area chiarimenti`, subj: `Risposta al quesito n. 7` }, t: `In relazione al quesito, si precisa che sono ammesse soluzioni funzionalmente equivalenti, purché l’operatore dimostri il raggiungimento dei medesimi risultati. La presente risposta è pubblicata a beneficio di tutti gli operatori.` },
-                { think: `Vale per tutti, anche per Vertex. Ma adesso il requisito non mi chiude più la porta, e io sono quello che ha chiesto bene.` },
+                { think: `Vale per tutti, anche per Vertex. Ma adesso il requisito non mi chiude più la porta, e la domanda giusta l’ho fatta io.` },
               ],
             }),
-          ch('c', 3, `Faccio scrivere alla nostra legale una richiesta di chiarimento puntuale, con riferimenti normativi e giurisprudenza, valutando con lei anche un’eventuale diffida a tutela.`,
+          ch('c', 3, `Faccio scrivere alla nostra legale un quesito puntuale, con riferimenti normativi e giurisprudenza, e valuto con lei una diffida a tutela, da usare solo se serve.`,
             `Funziona e regge a qualunque lettura, ma costa un jolly: poteva bastare un chiarimento ben scritto da te e da Davide. La legale serve quando c’è da difendere un testo, non quando basta scriverne uno semplice.`,
             { t: 4, v: 4, c: 10, r: -14 }, {
               jolly: 'legal', mp: ['Dc'], set: { clarified: true }, next: 'n4',
@@ -420,7 +423,7 @@
         hint: `Il 70% dei punti non si vince con il prezzo. Cosa può misurare, davvero, la commissione?`,
         tip: `Nel criterio dell’offerta economicamente più vantaggiosa ciò che distingue è la qualità dell’offerta tecnica: migliorie misurabili, referenze verificabili, un piano di attivazione credibile. Il prezzo pesa meno di quanto ti viene istintivo pensare.`,
         choices: [
-          ch('a', 0, `Tengo il tecnico essenziale e investo sul prezzo: se siamo i più bassi, i 30 punti economici sono nostri e la commissione ha un confronto semplice da fare.`,
+          ch('a', 0, `Tengo il tecnico essenziale (quattro cartelle, servizio standard) e investo sul prezzo: se siamo i più bassi, i 30 punti economici sono nostri e il confronto è semplice.`,
             `Tecnico minimo e prezzo spinto ti tolgono sul 70% quello che speri di guadagnare sul 30%. Un prezzo troppo basso, per di più, espone al sospetto di offerta anomala e ti consuma ogni margine.`,
             { v: -6, c: -2, r: 10 }, {
               next: 'n5',
@@ -430,8 +433,8 @@
                 { think: `Sto per giocarmi il settanta per cento della gara per rincorrere il trenta.` },
               ],
             }),
-          ch('b', 3, `Concentro l’offerta sulle migliorie che pesano: attivazione in 90 giorni su due presidi pilota, formazione certificata, presenza locale h24, tre referenze verificabili.`,
-            `Sei andato dove la griglia dà punti: poche migliorie, ciascuna misurabile e verificabile. La commissione sa leggerle e tu sai difenderle, riga per riga.`,
+          ch('b', 3, `Punto su quattro migliorie misurabili: attivazione in 90 giorni su due presidi pilota, formazione certificata, presenza locale h24, tre referenze verificabili.`,
+            `Hai puntato dove la griglia dà punti: poche migliorie, ciascuna misurabile e verificabile. La commissione sa leggerle e tu sai difenderle, riga per riga.`,
             { t: 6, v: 14, u: 4, c: 8, r: -6 }, {
               mp: ['M'], set: { techStrong: true }, next: 'n5',
               say: `Davide, mettiamo tutte le risorse su quattro cose: un piano di attivazione in novanta giorni su due presidi pilota, la formazione certificata del personale, un presidio locale h24 e tre referenze sanitarie che la commissione possa verificare.`,
@@ -443,7 +446,7 @@
                 { think: `Il documento che esce è denso, verificabile, senza una promessa vaga. Su almeno tre criteri so di poter prendere il punteggio pieno.` },
               ],
             }),
-          ch('c', 2, `Metto sul tavolo tutte le migliorie che riusciamo a immaginare, anche le più costose: la commissione deve vedere quanto siamo disposti a dare a questa ASL.`,
+          ch('c', 2, `Metto sul tavolo ogni miglioria immaginabile, anche le più costose, dai furgoni in più alla formazione per reparto: la commissione deve vedere quanto offriamo.`,
             `La commissione non premia ciò che non sa misurare: ventidue migliorie su cui nessuno può fare il conto diluiscono le sei che contano, e il costo lo paghi tu.`,
             { v: 4, c: 2, r: 2 }, {
               set: { techStrong: true }, next: 'n5',
@@ -475,14 +478,14 @@
           { n: `Le otto passate. L’ufficio si è svuotato, il piano ha le luci a metà e i corridoi si accendono solo al tuo passaggio. Sul portale la busta economica: un solo campo da compilare, la percentuale di ribasso sul listino. Sotto, un bottone grigio: “Firma e invia”. In alto, un conto alla rovescia: 47:52:10.` },
           { n: `L’offerta economica si presenta una volta sola. Niente secondo round, niente rilanci: le buste si aprono in seduta pubblica, davanti a tutti i concorrenti.` },
           { w: 'davide', a: `gira lo schermo, con il foglio di calcolo aperto`, t: `Con questo perimetro il margine regge fino a circa il 20% sul listino. Oltre, ogni imprevisto in attivazione diventa una perdita.` },
-          { n: `Sul foglio di Davide una curva sale ripida fino al venti per cento e poi si appiattisce. Poco oltre, una riga rossa: “soglia di anomalia”.` },
+          { n: `Sul foglio di Davide una curva sale ripida fino al venti per cento e poi si appiattisce. Poco oltre, una riga rossa: “il margine non regge”. A matita, in un angolo: “anomalia? dipende dalle altre offerte, non la conosciamo”.` },
           { if: (d) => d.flags.techStrong, think: `Ho un tecnico solido: il prezzo non deve comprare la gara. Deve soltanto non perderla.` },
           { if: (d) => !d.flags.techStrong, think: `Il tecnico è debole, e la tentazione di compensare con il prezzo è fortissima.` },
           { think: `Non so cosa offrirà Vertex. Nessuno lo sa: è questo il punto. Ogni punto in più lo pago io, ogni punto in meno lo regalo a loro.` },
         ],
         prompt: `Quale ribasso offri?`,
         hint: `Il 30% di punteggio economico non vale un margine azzerato. Ma un ribasso timido regala punti.`,
-        tip: `In gara il prezzo si congela alla consegna. Scegli il ribasso che dà un punteggio competitivo senza avvicinarti alla soglia di anomalia né al limite del tuo margine.`,
+        tip: `In gara il prezzo si congela alla consegna. Scegli il ribasso che dà un punteggio competitivo senza spingerti verso la verifica di anomalia (la soglia vera non la conosci: dipende dalle altre offerte) né verso il limite del tuo margine.`,
         choices: [
           ch('a', 1, `Offro un ribasso del 5%: un prezzo che protegge il margine, senza esporci a verifiche né a sorprese in attivazione.`,
             `Prudente e redditizio, ma con il 5% il punteggio economico è basso e regali a Vertex un vantaggio facile: gli basta offrire poco più di te per passarti su una categoria che potevi presidiare.`,
@@ -518,14 +521,14 @@
               ],
             }),
           ch('d', 0, `Offro un ribasso del 32%: con un prezzo così nessuno può starci dietro, e i costi li recuperiamo in attivazione e nel servizio.`,
-            `Oltre il 20% la commissione apre la verifica di anomalia: dovrai giustificare costi e margini, voce per voce. E anche se vinci, il progetto parte in perdita: un prezzo così non è una strategia, è una scommessa.`,
+            `Un ribasso così, ben oltre quanto regge il nostro margine, può portare la commissione ad aprire la verifica di anomalia: dovrai giustificare costi e margini, voce per voce. E anche se vinci, il progetto parte in perdita: un prezzo così non è una strategia, è una scommessa.`,
             { v: -6, c: -4, r: 14, d: 32 }, {
               next: 'n6',
               say: `Trentadue per cento. Con un prezzo così nessuno può starci dietro: i costi li recuperiamo in attivazione e nel servizio.`,
               react: [
                 { w: 'davide', a: `si ferma con la penna a mezz’aria`, t: `Trentadue? Questo non è un prezzo, è un’ipotesi. Ogni sistemazione in attivazione la paghiamo di tasca nostra.` },
                 { n: `Il campo diventa rosso e compare un avviso: “L’offerta potrà essere sottoposta a verifica di congruità”. Confermi. Invii.` },
-                { think: `Mi sono comprato i punti con il margine. Adesso dovrò dimostrare che il numero è onesto.` },
+                { think: `Ho pagato i punti con il margine. Adesso dovrò dimostrare che il numero è onesto.` },
               ],
             }),
         ],
@@ -565,7 +568,7 @@
                 { think: `Se mi chiedono cos’è successo, non dovrò ricordare: basterà aprire la cartella.` },
               ],
             }),
-          ch('b', 1, `Chiamo l’ufficio gare dell’ASL per sapere “a che punto siamo”: una telefonata di cortesia, nessuna richiesta, giusto per non restare all’oscuro.`,
+          ch('b', 1, `Chiamo l’ufficio gare dell’ASL per sapere “a che punto siamo”: due minuti di cortesia, nessuna richiesta, giusto per non restare all’oscuro in questi 35 giorni.`,
             `Nel periodo sensibile la RUP non può dare informazioni oltre quelle pubbliche: una telefonata “di cortesia” non porta nulla e lascia solo una traccia.`,
             { t: -2, r: 4 }, {
               next: 'END',
@@ -576,7 +579,7 @@
                 { think: `Volevo sapere. Ho solo fatto sapere a loro che non so aspettare.` },
               ],
             }),
-          ch('c', 0, `Chiedo a Moro, che conosce bene l’ASL, di organizzare un incontro informale prima dell’avvio: così partiamo già allineati sulle prime settimane.`,
+          ch('c', 0, `Chiedo a Moro, che conosce bene l’ASL, di organizzare un incontro informale con la RUP prima dell’avvio: così partiamo già allineati sulle prime settimane.`,
             `Un incontro informale per interposta persona, nello stand-still, è esattamente ciò che un ricorso cerca. Hai trasformato un caffè in una prova di ingerenza.`,
             { t: -4, r: 14 }, {
               integ: -6, set: { lobbied: true }, next: 'END',
@@ -590,7 +593,7 @@
                 { think: `“Anche per interposta persona.” Lo sapevano già, o lo scrivono sempre. In ogni caso adesso c’è un caffè in più nel fascicolo di qualcun altro.` },
               ],
             }),
-          ch('d', 2, `Resto fermo: controllo ogni giorno il portale e la PEC, e non faccio altro finché il termine non scade, perché ogni mossa in più è un rischio.`,
+          ch('d', 2, `Resto fermo: controllo il portale e la PEC ogni mattina e ogni sera, e non faccio altro finché il termine non scade, perché ogni mossa in più è un rischio.`,
             `Corretto, ma passivo: non commetti errori e non prepari difese. Se il ricorso arriva, il fascicolo che ti protegge è ancora da costruire, e in fretta.`,
             { c: 0 }, {
               mp: ['P'], next: 'END',
@@ -637,7 +640,7 @@
                   { think: `La riga rossa è la formazione. Chi la scopre per ultimo, perde quei punti.` },
                 ],
               }),
-            ch('b', 2, `Pubblico un quesito sul punto che resta ambiguo: la regola sul piano dei docenti vale anche per il personale messo a disposizione da terzi? La risposta sarà valida per tutti.`,
+            ch('b', 2, `Pubblico un quesito sul punto ambiguo: il piano nominativo dei docenti vale anche per il personale messo a disposizione da terzi? La risposta sarà valida per tutti.`,
               `Corretto e a prova di contestazione: il dubbio era reale e ora la risposta è pubblica per tutti. Ma copre un punto solo, il resto della rettifica non è stato confrontato riga per riga, e intanto la settimana scorre.`,
               { t: 2, c: 4, r: -2 }, {
                 next: 'RET',
@@ -647,7 +650,7 @@
                   { think: `Avevo ragione sul dubbio. Ho speso due giorni per averne la prova, e il resto del testo è ancora da leggere.` },
                 ],
               }),
-            ch('c', 1, `Considero la rettifica una formalità: il piano di offerta resta quello, e uso la proroga per respirare e rivedere con calma i numeri del prezzo.`,
+            ch('c', 1, `Considero la rettifica una formalità: il piano di offerta resta quello, e uso i sette giorni in più per respirare e rivedere con calma i numeri del prezzo.`,
               (d) => (d.flags.clarified
                 ? `Il chiarimento ti ha già coperto sul punto più delicato, ma l’articolo 12 è cambiato e il tuo piano non lo sa: una settimana regalata a chi ha letto.`
                 : `Una rettifica non è una formalità: cambia i punti e cambia ciò che è ammesso. Trattarla così significa scoprire la regola nuova quando la commissione ti toglierà i punti.`),
@@ -659,7 +662,7 @@
                   { think: `Ho appena detto che leggere gli atti è una perdita di tempo.` },
                 ],
               }),
-            ch('d', 0, `Scrivo due righe a Marco Fenu, conosciuto in consultazione, per capire se la regola dell’articolo 12 sia stata pensata per qualcuno in particolare.`,
+            ch('d', 0, `Scrivo due righe a Marco Fenu, conosciuto in consultazione, per capire se la regola dell’articolo 12 sia stata pensata per qualche operatore in particolare.`,
               `Una mail a un funzionario fuori dal portale è un contatto riservato, anche se la domanda sembra innocente. Fenu l’ha girata alla RUP, come doveva: adesso è agli atti che hai cercato un canale laterale.`,
               { t: -6, c: -4, r: 10 }, {
                 integ: -4, set: { backchannel: true }, next: 'RET',
@@ -693,7 +696,7 @@
           hint: `La partita si gioca sul portale, davanti a tutti. Una domanda pubblica pesa più di qualunque informazione raccolta in privato.`,
           tip: `Quando un concorrente muove nel canale pubblico, si risponde nello stesso canale: con un quesito motivato o con la prova già pronta. Scoprire chi ha scritto cosa, fuori dal portale, non cambia il testo e lascia una traccia.`,
           choices: [
-            ch('a', 3, `Entro stasera pubblico un quesito formale sul punto, motivato su concorrenza e proporzionalità, e faccio partire con Davide la raccolta delle prove.`,
+            ch('a', 3, `Entro stasera pubblico un quesito formale sul punto, motivato su concorrenza e proporzionalità, e faccio partire subito con Davide la raccolta delle prove.`,
               (d) => (d.flags.clarified
                 ? `Hai risposto nello stesso canale e senza perdere tempo: il quesito precisa le modalità di prova per tutti e la raccolta parte in parallelo. Il gradino resta, ma lo sali con un passo di vantaggio.`
                 : `A un giorno dalla chiusura il quesito arriva tardi per ottenere ciò che volevi: l’ASL confermerà. Ma resta agli atti che hai contestato il requisito nei termini, e in un eventuale ricorso conta.`),
@@ -708,7 +711,7 @@
                   { think: `Il quesito ha un numero e un’ora. Se mai servirà, un giudice potrà rileggerlo.` },
                 ],
               }),
-            ch('b', 2, `Preparo la documentazione che regge l’interpretazione più severa e non faccio altri quesiti: lavoro come se la risposta fosse definitiva.`,
+            ch('b', 2, `Preparo la documentazione che regge l’interpretazione più severa, cominciando dalle prove, e non faccio altri quesiti: lavoro come se la risposta fosse definitiva.`,
               (d) => (d.flags.clarified
                 ? `Lavorare sull’ipotesi peggiore è prudente e, con l’equivalenza ammessa, regge: ma rinunci a precisare le modalità di prova e giochi sulla tua sola interpretazione.`
                 : `Prepararsi al peggio è razionale, ma senza un quesito non resta traccia di aver contestato: se il requisito escludente andrà impugnato, avrai meno da mostrare.`),
@@ -721,7 +724,7 @@
                 ],
               }),
             ch('c', 1, `Segnalo alla RUP che il quesito di quell’operatore è pretestuoso e scritto per favorire un solo concorrente, e chiedo che la risposta venga riesaminata.`,
-              `Contestare il quesito di un altro operatore è lecito, ma suona come la mossa di chi non ha risposte proprie. Una risposta pubblicata non si riesamina per segnalazione, e il tuo nome finisce nel fascicolo come quello che si lamenta.`,
+              `Contestare il quesito di un altro operatore è lecito, ma suona come la mossa di chi non ha risposte proprie. Una risposta pubblicata non si riesamina per segnalazione, e il tuo nome finisce nel fascicolo come quello di chi si lamenta.`,
               { t: -4, c: -2, r: 6 }, {
                 next: 'RET',
                 say: `Trasmetto una segnalazione: il quesito 14 appare pretestuoso e formulato per favorire un solo operatore. Chiedo che la risposta venga riesaminata.`,
@@ -730,7 +733,7 @@
                   { think: `Ho protestato nello stesso canale in cui l’altro ha mosso. E lui ha mosso meglio.` },
                 ],
               }),
-            ch('d', 0, `Faccio sentire in ASL, tramite un conoscente dell’ufficio gare, chi ha posto il quesito e cosa si dice in giro: se so chi si muove, so come rispondere e dove insistere.`,
+            ch('d', 0, `Chiedo a un conoscente dell’ufficio gare dell’ASL di sentire chi ha posto il quesito e cosa si dice in giro: se so chi si muove, so come rispondere e dove insistere.`,
               `Dare la caccia all’autore di un quesito anonimo, per interposta persona, non cambia il testo e crea una traccia: se emerge, l’ASL leggerà che Nexora cercava informazioni fuori dal portale.`,
               { t: -4, c: -2, r: 10 }, {
                 integ: -4, set: { backchannel: true }, next: 'RET',
@@ -798,7 +801,7 @@
                 ],
               }),
             ch('d', 2, `Declino per me, ma gli dico che è libero di vedere chi vuole: non posso impedirglielo. Gli chiedo solo di non parlare di gara a nome di Nexora.`,
-              `Hai tenuto pulito te stesso ma non il perimetro: finché il tuo partner è libero di vedere la RUP, quello che fa conta anche per te. Dichiarare le regole è il passo che manca.`,
+              `Le tue mani restano pulite, ma il perimetro no: finché il tuo partner è libero di vedere la RUP, quello che fa conta anche per te. Dichiarare le regole è il passo che manca.`,
               { t: 2, c: 2, r: 3 }, {
                 next: 'RET',
                 say: `Stefano, per me no, grazie. Lei è libero di vedere chi vuole, ci mancherebbe. Le chiedo solo una cosa: di gara, a nome di Nexora, non si parla.`,
@@ -831,7 +834,7 @@
           hint: `Un’integrazione non è l’occasione per cambiare l’offerta: è l’occasione per dimostrare che ciò che hai scritto regge.`,
           tip: `Il soccorso istruttorio permette di completare o chiarire, mai di modificare. Si risponde entro il termine, solo a ciò che è richiesto, con documenti numerati e protocollati: la completezza è un segnale di affidabilità che la commissione ricorda.`,
           choices: [
-            ch('a', 3, `Rispondo entro due giorni, punto per punto, con documenti numerati e un indice che rimanda a ogni richiesta: né più né meno di quanto è stato chiesto.`,
+            ch('a', 3, `Rispondo entro due giorni, punto per punto, con documenti numerati e un indice che rimanda a ogni richiesta: niente di più di quanto è stato chiesto.`,
               (d) => (d.flags.techStrong && d.mp.has('M')
                 ? `Avevi le prove e le hai consegnate come si deve: la completezza non è eccesso di zelo, è un segnale di affidabilità, e la commissione lo ricorderà quando assegnerà i punti.`
                 : `Hai risposto a ciò che era richiesto, nei tempi e senza decorazioni. Le prove erano meno pronte di quanto avresti voluto, ma la precisione ha compensato.`),
@@ -844,8 +847,8 @@
                   { think: `Una risposta completa non si nota mentre la scrivi. Si nota quando manca.` },
                 ],
               }),
-            ch('b', 2, `Chiedo due giorni di proroga per raccogliere tutto con calma, e rispondo il quinto giorno con la documentazione completa e ordinata.`,
-              `Una proroga si può chiedere, ma il termine è uguale per tutti e la commissione non la concede per comodità. Hai risposto per intero e nei tempi, ma al limite, e senza mostrare di essere pronto.`,
+            ch('b', 2, `Chiedo due giorni di proroga per raccogliere tutto con calma, e rispondo il quinto giorno con la documentazione completa, ordinata in una cartella unica.`,
+              `Una proroga si può chiedere, ma il termine è uguale per tutti e la commissione non la concede per comodità. Hai risposto per intero e nei tempi, ma al limite, e senza mostrare che il fascicolo fosse già pronto.`,
               { t: 1, v: 2, c: 2, r: -2 }, {
                 next: 'RET',
                 say: `Dottoressa, chiedo cortesemente due giorni di proroga per raccogliere e ordinare tutta la documentazione. Garantisco una risposta completa entro il termine prorogato.`,
@@ -855,7 +858,7 @@
                   { think: `Due giorni che non ho avuto e dieci minuti di margine che mi sono bastati. Dovevo cominciare il primo giorno.` },
                 ],
               }),
-            ch('c', 0, `Ne approfitto per migliorare l’offerta: allego due schede tecniche nuove e una referenza in più, che la commissione apprezzerà.`,
+            ch('c', 0, `Ne approfitto per migliorare l’offerta: allego due schede tecniche aggiornate e una referenza in più, che la commissione apprezzerà senz’altro.`,
               `Le integrazioni completano, non cambiano: una scheda nuova è una modifica dell’offerta dopo l’apertura delle buste, e la par condicio la vieta. Hai offerto alla commissione un motivo per scartare ciò che era valido.`,
               { t: -4, v: -2, c: -4, r: 12 }, {
                 next: 'RET',
@@ -895,7 +898,7 @@
           hint: `Un errore ammesso presto costa un’ora. Uno nascosto può costare l’esclusione.`,
           tip: `Un errore materiale si rimedia per iscritto e nei tempi, con un atto che richiami il protocollo precedente e lo sostituisca. Una telefonata “per sistemare” non ha valore e attira l’attenzione.`,
           choices: [
-            ch('a', 3, `Rimedio per iscritto: nuova PEC entro stasera, con il file firmato, che richiama il protocollo della prima e la sostituisce integralmente. Tengo copia di entrambe.`,
+            ch('a', 3, `Rimedio per iscritto: nuova PEC entro stasera, con il file firmato, che richiama il protocollo della prima e la sostituisce. Tengo copia di entrambe.`,
               (d) => (d.m.control >= 55
                 ? `Sapevi esattamente cosa era partito e quando, e hai ricostruito tutto in dieci minuti: errore, rimedio, protocollo. Un errore corretto per iscritto e nei termini è una pagina nel fascicolo, non un problema.`
                 : `Hai rimediato nel modo che regge davanti a un giudice: atto scritto, protocollo richiamato, sostituzione dichiarata. Meno ordine avevi prima, più merito ha averlo fatto subito.`),
@@ -908,7 +911,7 @@
                   { think: `Mi è costato mezz’ora e la faccia davanti a Davide. Va bene così.` },
                 ],
               }),
-            ch('b', 2, `Preparo con calma la PEC corretta, la faccio rileggere a Davide e la invio domattina all’apertura degli uffici: meglio una sola correzione, fatta bene.`,
+            ch('b', 2, `Preparo con calma la PEC corretta, la faccio rileggere a Davide e la invio domattina appena aprono gli uffici: meglio una sola correzione, fatta bene.`,
               `Una notte di ritardo non fa danni finché il termine non è scaduto, ma lasci per ore agli atti un documento sbagliato che nessuno ha ancora corretto: quando l’errore è tuo, il tempo di rimedio è il primo costo.`,
               { c: 2, r: -2 }, {
                 next: 'RET',
@@ -973,40 +976,45 @@
 
     /* ───── forecast con Marta ───── */
     fc: {
-      skipGaps: ['E', 'C'],   // in una gara non si incontra il decisore e non c’è un champion: il divario non può cadere lì
+      /* in una gara non si incontra il decisore e non c’è un champion; piano di chiusura, business case, pain e criteri non si concordano
+         col cliente (li dettano bando e disciplinare, pubblici): le domande generiche su queste lettere presuppongono contatti che qui sono vietati */
+      skipGaps: ['E', 'C', 'Dp', 'M', 'I', 'Dc'],
       crm: `Best Case al 50%: “se passiamo il tecnico, la gara è nostra”`,
+      /* solo nomi propri (il banco generico li incastra dopo “con”, “chiamo io”…); per P la persona è la nostra legale, mai chi sta dall’altra parte del portale */
       people: {
         E: `Ettore Ruggeri (Direttore Generale)`, C: `Marco Fenu (Direttore Sistemi Informativi)`,
-        Dp: `Laura Bellandi (RUP) e il calendario di gara`, P: `Laura Bellandi (RUP) e l’ufficio contratti dell’ASL`,
-        M: `Marco Fenu e la commissione giudicatrice`, I: `Marco Fenu e i direttori dei presidi`,
-        Dc: `Laura Bellandi (RUP) e il disciplinare di gara`, Co: `Vertex Systems, già fornitore di altre ASL della regione`,
+        Dp: `Davide Ferri`, P: `Ilaria Corti`,
+        M: `Davide Ferri`, I: `Marco Fenu`,
+        Dc: `Laura Bellandi`, Co: `Vertex Systems`,
       },
       risk: `Il rischio vero è che un contatto fuori dal portale o un requisito su misura rendano l’aggiudicazione impugnabile, e che la gara si fermi nello stand-still.`,
       custom: [
         {
           id: 'atti_dossier', if: () => true, has: (d) => d.mp.has('P') && d.integ >= 0,
           q: `Se domani Vertex ricorre e il suo avvocato chiede ogni scambio con l’ASL, tu cosa consegni? Dimmi dov’è il fascicolo, chi lo tiene e se ogni pezzo ha un protocollo.`,
-          evidence: `Ogni scambio è passato dal portale o dalla PEC, con ricevuta e protocollo, e le ricevute le ho tutte. Ti giro oggi stesso l’elenco dei protocolli, con la nostra legale in copia.`,
-          honest: `Il materiale c’è, ma l’ordine no: l’indice con i protocolli non l’ha ancora visto nessuno. Lo completo entro venerdì e lo faccio rivedere alla nostra legale.`,
-          bluff: `Fascicolo completo, protocollo per protocollo. La nostra legale l’ha già visto e non ha rilievi: se serve, domani è pronto per l’accesso agli atti.`,
-          vague: `Abbiamo sempre usato i canali ufficiali, la legale è informata di tutto e non c’è mai stato un rilievo: non vedo dove possa esserci un problema.`,
+          evidence: `Sì: portale e PEC, ogni invio con la sua ricevuta e il suo protocollo. L’elenco lo estraggo dal portale e te lo giro oggi stesso, completo di numeri.`,
+          honest: `Il materiale c’è, ma l’ordine no: l’indice con i protocolli non l’ha ancora visto nessuno. Lo completo entro venerdì e lo rivedo con la nostra legale.`,
+          bluff: `Fascicolo completo, protocollo per protocollo. La nostra legale l’ha già visto e non ha rilievi: se serve, è pronto già domani per un accesso agli atti.`,
+          vague: `Abbiamo sempre usato i canali ufficiali, la nostra legale è informata di tutto e non c’è mai stato un rilievo: non vedo dove possa esserci un problema.`,
           react: {
-            evidence: `Portale, PEC, protocolli, la legale in copia: questa è una risposta che mi fa dormire. Girami l’elenco e per me la trattativa resta dove l’hai messa.`,
+            evidence: `Portale, PEC, ricevute, protocolli: questa è una risposta che mi fa dormire. Girami l’elenco e per me la trattativa resta dove l’hai messa.`,
             honest: `Va bene così: un fascicolo incompleto che sai di avere vale più di uno completo che credi di avere. Venerdì voglio l’indice, e il tempo della legale te lo trovo io.`,
-            bluffCaught: `Ho chiesto all’ufficio gare l’elenco dei protocolli inviati: ne mancano quattro nel tuo fascicolo. L’errore si sistema, la sicurezza con cui mi hai garantito il contrario no. Rifacciamo il punto, con i numeri.`,
+            bluffCaught: `Ho confrontato l’elenco dei protocolli partiti dal nostro account sul portale con il tuo fascicolo: ne mancano quattro. L’errore si sistema, la sicurezza con cui mi hai garantito il contrario no. Rifacciamo il punto, con i numeri.`,
             bluffPassed: `D’accordo, lo scrivo. Ma lunedì voglio vedere l’indice con i numeri di protocollo: una gara non si difende a parole.`,
             vague: `“Non vedo dove possa esserci un problema” è la frase che precede quasi tutti i ricorsi. Portami un indice, non un’impressione.`,
           },
         },
         {
-          id: 'contatti_rup', if: () => true, has: (d) => !d.flags.lobbied && !d.flags.backchannel && !d.flags.coffee,
+          id: 'contatti_rup', if: () => true,
+          /* P esclude la telefonata “di cortesia” dello stand-still (n6/b), che non lascia flag: così “nessun contatto con la RUP” è vero per ogni percorso */
+          has: (d) => !d.flags.lobbied && !d.flags.backchannel && !d.flags.coffee && d.mp.has('P'),
           q: `Hai avuto contatti con la RUP fuori dal portale da quando c’è il bando? Telefonate, caffè, messaggi, anche tramite altri: dimmelo adesso, non voglio scoprirlo dallo studio di Vertex.`,
-          evidence: `Nessuno. Dal bando in poi solo portale, quesiti e PEC. La nostra legale tiene il registro delle comunicazioni: una riga per scambio, con data e protocollo.`,
-          honest: `A memoria non ti garantisco niente. Rileggo il registro riga per riga con la nostra legale e, se c’è un contatto da dichiarare, lo dichiaro io per primo, entro venerdì.`,
-          bluff: `Nessuno. Dopo la pubblicazione ho scritto solo sul portale e ogni scambio è registrato: se Vertex vuole controllare, trova un registro pulito.`,
-          vague: `Con la RUP i rapporti sono ottimi, ma sempre nei limiti: ho tenuto la distanza giusta e non c’è niente di cui preoccuparsi.`,
+          evidence: `Con la RUP nessuno: dal bando in poi, con lei, solo portale, quesiti e PEC. Ogni scambio ha data e protocollo, e oggi stesso ti giro tutte le ricevute del portale.`,
+          honest: `A memoria non ti garantisco niente. Rileggo il registro riga per riga con la nostra legale e, se c’è un contatto da dichiarare, lo dichiaro io per primo.`,
+          bluff: `Nessuno. Dopo la pubblicazione ho scritto solo sul portale e ogni scambio è registrato con la sua data: se Vertex vuole controllare, trova un registro pulito.`,
+          vague: `Con la RUP i rapporti sono ottimi, ma sempre nei limiti: ho tenuto la distanza giusta fin dal primo giorno e non c’è niente di cui preoccuparsi per il ricorso.`,
           react: {
-            evidence: `Registro con data e protocollo, tenuto dalla legale: perfetto. È la risposta che voglio avere in tasca se un domani me lo chiede il CRO. Per me la chiamata regge.`,
+            evidence: `Solo portale, quesiti e PEC, ognuno con data e protocollo: perfetto. È la risposta che voglio avere in tasca se un domani me lo chiede il CRO. Per me la chiamata regge.`,
             honest: `Grazie di averlo detto tu e non il TAR. Se c’è qualcosa, si governa: nota al fascicolo, nessun altro contatto, e per prudenza ti abbasso di una categoria finché non vediamo il registro.`,
             bluffCaught: `Il registro delle comunicazioni dell’ASL si può chiedere, e un contatto fuori dal portale ha sempre una data e un’ora. Non mi interessa l’errore, mi interessa che tu me l’abbia negato. Ripartiamo da capo.`,
             bluffPassed: `Ok, lo scrivo. Se un giorno trovo una riga diversa nel loro registro, la leggeremo insieme davanti al CRO. Spero di no.`,
@@ -1017,9 +1025,9 @@
           id: 'chiarimento_pubblico', if: () => true, has: (d) => !!d.flags.clarified,
           q: `Il requisito dell’articolo 7.3, quello che favorisce Vertex, è stato sciolto per tutti, sul portale? Dammi il numero del quesito, non la tua lettura.`,
           evidence: `Sì: quesito e risposta sono sul portale, con numero e data, visibili a tutti gli operatori. L’ASL ha ammesso le soluzioni equivalenti. Ti mando il link adesso.`,
-          honest: `Il numero non te lo cito con certezza. Apro il portale oggi e ti scrivo cosa risulta pubblicato sul 7.3 e cosa no: finché non lo vedo, per me il requisito resta un rischio aperto.`,
+          honest: `Il numero adesso non te lo so dire. Apro il portale oggi e ti scrivo cosa risulta pubblicato sul 7.3: finché non lo vedo, per me il requisito resta un rischio aperto.`,
           bluff: `Sì, è pubblico: l’ASL ha risposto sul portale ammettendo le soluzioni equivalenti, per tutti gli operatori. Ti mando il numero appena rientro in ufficio.`,
-          vague: `La questione è chiara a tutti i partecipanti, la RUP è molto trasparente e Davide ha già letto tutto: sul punto non vedo rischi per noi.`,
+          vague: `La questione è chiara a tutti i partecipanti, la RUP è molto trasparente e Davide ha già letto tutto il disciplinare e le risposte: sul punto non vedo rischi per noi.`,
           react: {
             evidence: `Quesito, numero, data, risposta per tutti: più pulito di così non si può. È ciò che separa un Best Case sperato da uno fondato.`,
             honest: `Apprezzo che tu non l’abbia girata. Il numero lo voglio entro venerdì: se c’è, lo scrivo nel CRM; se non c’è, mi dici se esiste ancora una finestra per un quesito. Io tengo il tempo, tu tieni la penna.`,
@@ -1041,7 +1049,7 @@
       { if: (d) => d.flags.lobbied, good: false, t: `Un contatto riservato durante la procedura ti ha esposto al rischio di esclusione. In gara pubblica la correttezza non è un valore: è una condizione di accesso.` },
       { if: (d) => d.flags.tailored, good: false, t: `Il requisito “su misura” è finito agli atti e ha reso il capitolato attaccabile. Si influenza una gara con contributi neutrali, non con vantaggi mascherati.` },
       { if: (d) => d.flags.techStrong, good: true, t: `Hai investito nel 70% dei punti che contano davvero: l’offerta tecnica. Il prezzo ha fatto il resto.` },
-      { if: (d) => d.disc >= 25, good: false, t: `Un ribasso così aggressivo espone a verifica di anomalia e annulla il margine. Vincere in perdita non è vincere.` },
+      { if: (d) => d.disc >= 25, good: false, t: `Un ribasso così aggressivo può esporre a una verifica di anomalia e annulla il margine. Vincere in perdita non è vincere.` },
     ],
   });
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -323,18 +323,18 @@
         hint: `Un pilota non è una prova: è un contratto di prova con un esito concordato.`,
         tip: `Un pilota gratuito e aperto raramente si converte. Proponi un pilota a corrispettivo ridotto con obiettivi misurabili scritti, un Economic Buyer che firma i criteri e un percorso di conversione già concordato.`,
         choices: [
-          ch('a', 0, `Certo, ci stiamo: venti negozi per tre mesi, a nostre spese e senza vincoli per Lumina. Poi guardiamo i numeri insieme e decidiamo quando Lumina è pronta, senza fretta e senza pressioni.`,
+          ch('a', 0, `Certo, ci stiamo: venti negozi per tre mesi, a nostre spese e senza vincoli, con Davide in negozio due giorni a settimana. Poi guardiamo i numeri e decidiamo quando Lumina è pronta, senza fretta.`,
             `Hai accettato il pilota più facile da dire sì e più difficile da convertire. Senza soglie scritte né un passo successivo, il successo non ha una definizione: ognuno ne darà una propria, e quella di Rossi sarà la più prudente.`,
             { t: 2, v: -2, u: -8, c: -8, r: 12 }, {
               set: { freePilot: true }, next: 'n3',
-              say: `Ci stiamo, Silvia. Venti negozi per tre mesi, a nostre spese e senza vincoli per Lumina. Alla fine guardiamo i numeri insieme e decidiamo.`,
+              say: `Ci stiamo, Silvia. Venti negozi per tre mesi, a nostre spese e senza vincoli per Lumina, con Davide in negozio due giorni a settimana. Alla fine guardiamo i numeri insieme e decidiamo.`,
               react: [
                 { w: 'silvia', a: `sollevata`, t: `Perfetto. Dico ad Alberto di preparare i venti negozi.` },
                 { n: `Sul blocco, sotto “GRATIS”, non c’è altro: nessun nome di chi decide, nessuna cifra, nessuna data dopo il terzo mese.` },
                 { think: `Novanta giorni di lavoro regalati. E nessuno ha ancora detto che cosa dovrebbe succedere alla fine.` },
               ],
             }),
-          ch('b', 3, `Ci sto, ma a pagamento ridotto: dodici negozi, quattro settimane di allestimento e dodici di test, quattro criteri misurabili firmati da Longo. Se li raggiungiamo, il pilota diventa credito sul contratto.`,
+          ch('b', 3, `Ci sto, ma a pagamento ridotto: dodici negozi, quattro settimane di allestimento e dodici di test, quattro criteri misurabili firmati da Longo. Se li raggiungiamo, è tutto credito sul contratto.`,
             `Hai spostato il pilota da favore a patto: soglie misurabili, una firma di chi paga e la conversione già scritta. Per Longo, adesso, non è più un esperimento di Silvia ma un impegno suo.`,
             { t: 6, v: 8, u: 4, c: 14, r: -8 }, {
               mp: ['E', 'Dc'], set: { criteriaSet: true, ebEngaged: true }, next: 'n3',
@@ -345,7 +345,7 @@
                 { think: `Quattro righe e una firma a penna. Per la prima volta questo pilota ha un proprietario.` },
               ],
             }),
-          ch('c', 2, `Propongo una prova di valore di quattro settimane, offline, sui vostri dati storici: con il nostro motore previsionale simuliamo le rotture dei negozi e le confrontiamo con quelle reali, senza toccare niente.`,
+          ch('c', 2, `Propongo una prova di valore di quattro settimane, offline, sui vostri dati storici: il nostro motore previsionale simula le rotture dei negozi e le confronta con quelle reali, senza toccare niente.`,
             `Hai ridotto il rischio e accorciato i tempi, e Silvia è convinta. Ma una simulazione non ha toccato nessun negozio: per Rossi resta un’obiezione aperta, perché in negozio non è girato niente.`,
             { t: 4, v: 8, c: 4, r: -2 }, {
               mp: ['M'], set: { proofOfValue: true }, next: 'n3',
@@ -356,7 +356,7 @@
                 { think: `Domanda giusta. E io, per rispondergli, non ho niente.` },
               ],
             }),
-          ch('d', 1, `Dico di no a qualsiasi pilota: ai clienti come Lumina proponiamo soltanto il contratto completo, con un piano di avvio serio per tutti i negozi e un unico referente da parte nostra.`,
+          ch('d', 1, `Dico di no a qualsiasi pilota: ai clienti come Lumina proponiamo soltanto il contratto completo, con un piano di avvio serio per tutti i centoquaranta negozi e un unico referente da parte nostra.`,
             `Una linea di principio comprensibile, ma Silvia aveva portato la proposta come l’unico modo di convincere il CIO. Rifiutarla significa lasciarla da sola con Rossi, senza niente in mano.`,
             { t: -4, u: -4, c: -2, r: 8 }, {
               next: 'n3',
@@ -489,7 +489,7 @@
                 { think: `Due mesi in più di Davide nei negozi. E la scadenza di Vertex non si sposta di un giorno.` },
               ],
             }),
-          ch('d', 0, `Ridefinisco il criterio: le rotture vanno misurate su un altro periodo, quello dopo le prime settimane di assestamento, e su quello il target risulta raggiunto. Cambia la finestra, non i dati.`,
+          ch('d', 0, `Ridefinisco il criterio: le rotture vanno misurate dopo le prime settimane di assestamento, e su quel periodo il target risulta raggiunto. Cambia la finestra, non i dati.`,
             `Ritoccare un criterio concordato è la scorciatoia più cara che esista: il cliente la legge come manipolazione, e la fiducia costruita fin qui crolla in un colpo solo.`,
             { t: -12, v: -6, c: -6, r: 16 }, {
               integ: -8, set: { manipulated: true }, next: 'n5',
@@ -537,7 +537,7 @@
                 { think: `Ho appena detto che il mio prodotto vale metà di quello che scrivevo. E lui lo ha scritto.` },
               ],
             }),
-          ch('b', 3, `Gli propongo di mettere sullo stesso foglio il costo di restare e quello di cambiare: 2,3 milioni di vendite perse l’anno, un terzo recuperabile, ritorno in nove mesi.`,
+          ch('b', 3, `Gli propongo un solo foglio con il costo di restare e quello di cambiare: 2,3 milioni di vendite perse l’anno, un terzo recuperabile, ritorno in nove mesi.`,
             `Hai spostato la domanda dal prezzo al valore, con i numeri di Silvia e non con i tuoi: a Longo non chiedi di fidarsi di un fornitore, ma di verificare una cifra del suo COO. Messa accanto a un costo di restare con una cifra sopra, la proroga a metà prezzo smette di essere un risparmio.`,
             { t: 6, v: 14, u: 10, c: 4, r: -6 }, {
               mp: ['E', 'M'], set: { ebEngaged: true }, next: 'n6',
@@ -795,7 +795,7 @@
           hint: `Un boicottaggio è quasi sempre un costo che nessuno ha ascoltato. Chi lo paga, e quanto vale per lui?`,
           tip: `Quando chi dovrebbe usare il sistema lo rifiuta, non ti serve un mandato: ti serve capire quale fatica gli stai chiedendo e togliergliene più di quanta ne aggiungi. L’adozione si costruisce dal negozio, non dalla direzione.`,
           choices: [
-            ch('a', 3, `Mi siedo con lui e gli chiedo che cosa gli fa perdere più tempo. Poi gli lascio scegliere i tre punti dell’inventario che il sistema deve togliergli dalle spalle.`,
+            ch('a', 3, `Mi siedo con lui e gli chiedo cosa gli fa perdere più tempo. Poi gli lascio scegliere i tre punti dell’inventario che il sistema deve togliergli dalle spalle.`,
               (d) => (d.flags.criteriaSet
                 ? `Hai trasformato un avversario in coautore: Brivio sceglie i tre punti, e il criterio sull’adozione smette di essere un obbligo e diventa una cosa sua. Con quei criteri firmati, ogni punto ottenuto vale doppio.`
                 : `Hai ascoltato prima di chiedere: Brivio sceglie i tre punti e gli addetti vedono che il sistema serve a loro. Senza una soglia scritta il risultato resta locale, ma è un negozio che adotta davvero.`),
@@ -808,7 +808,7 @@
                   { think: `Mezz’ora ogni sera sui resi. Un problema vero, e non era in nessun nostro piano.` },
                 ],
               }),
-            ch('b', 2, `Porto Davide in negozio per una mattina: affianca gli addetti ai palmari e toglie di mezzo i primi tre attriti tecnici: senza chiedere niente a Brivio, i problemi li risolviamo noi.`,
+            ch('b', 2, `Porto Davide in negozio per una mattina: affianca gli addetti ai palmari e toglie di mezzo i primi tre attriti tecnici, senza chiedere niente a Brivio.`,
               `Davide risolve gli attriti tecnici e gli addetti ci prendono la mano. Ma il direttore, che era il nodo, resta spettatore: un sostegno efficace ma indiretto.`,
               { t: 3, c: 3, r: -2 }, {
                 next: 'RET',
@@ -818,21 +818,21 @@
                   { w: 'brivio', a: `senza sciogliere le braccia`, t: `Ho visto. Vedremo se dura.` },
                 ],
               }),
-            ch('c', 1, `Chiedo a Silvia di comunicare ai direttori dei negozi pilota che l’uso del palmare è obbligatorio: il mandato è della direzione e non si discute oltre.`,
+            ch('c', 1, `Chiedo a Silvia di comunicare ai direttori dei negozi pilota che da lunedì l’uso del palmare è obbligatorio: il mandato è della direzione e non si discute oltre.`,
               `Il mandato ottiene la scansione ma non l’adozione: Brivio scansiona il minimo per rispettare l’ordine e il resto dell’inventario torna a mano. Hai risolto il numero e aggravato il clima.`,
               { t: -4, c: 2, r: 6 }, {
                 next: 'RET',
-                say: `Silvia, scrivi tu ai direttori dei negozi pilota che l’uso del palmare è obbligatorio. Il mandato è della direzione.`,
+                say: `Silvia, scrivi tu ai direttori dei negozi pilota che da lunedì l’uso del palmare è obbligatorio. Il mandato è della direzione.`,
                 react: [
                   { w: 'silvia', a: `dopo tre giorni, girandoti la risposta`, t: `Brivio mi ha scritto: “Obbligatorio. Va bene. Scansiono il minimo che serve, il resto come sempre”.` },
                   { think: `Ho ottenuto una cifra, non un cambiamento. E ho messo Silvia in mezzo.` },
                 ],
               }),
-            ch('d', 0, `Gli dico che i dati del suo negozio sono tra i peggiori del gruppo e che Silvia lo sa: se non collabora, finirà nel rapporto che arriva a Longo.`,
+            ch('d', 0, `Gli dico che i dati del suo negozio sono tra i peggiori del gruppo e che Silvia lo sa: se non collabora, finirà nel rapporto che arriva a Longo a fine mese.`,
               `Una minaccia davanti a due addetti fabbrica un nemico che sa dove sono i punti deboli del sistema. Brivio racconterà la scena ai suoi colleghi prima di sera.`,
               { t: -8, c: -4, r: 10 }, {
                 next: 'RET',
-                say: `Brivio, i dati del suo negozio sono tra i peggiori del gruppo e Silvia lo sa. Se non collabora, finirà nel rapporto che arriva a Longo.`,
+                say: `Brivio, i dati del suo negozio sono tra i peggiori del gruppo e Silvia lo sa. Se non collabora, finirà nel rapporto che arriva a Longo a fine mese.`,
                 react: [
                   { w: 'brivio', a: `a bassa voce, ma si sente`, t: `Nel rapporto. Bene. Lo scriva pure, ci metta anche i resi di ieri sera.` },
                   { think: `Ho minacciato un direttore davanti ai suoi dipendenti. Entro sera lo sanno tutti i negozi.` },
@@ -1018,10 +1018,10 @@
         {
           id: 'criteri_firmati', if: (d) => !!(d.flags.criteriaSet || d.flags.freePilot), has: (d) => !!d.flags.criteriaSet,
           q: `Il metro con cui si giudica il pilota: l’ha firmato Longo, o è un’intesa con Silvia e basta?`,
-          evidence: `L’ha firmato lui: quattro criteri con le soglie, accuratezza, rotture, tempi di inventario e adozione, e la sua firma in calce. La scansione è nel CRM.`,
-          honest: `Firmato no. Le soglie, dove ci sono, sono un’intesa con Silvia: Longo non ha messo la sua firma su niente. Finché non c’è, per me è un Best Case.`,
-          bluff: `Sì, firmato da lui: quattro criteri con le soglie e la sua firma in calce. L’originale ce l’ha Silvia, domani ti mando la scansione.`,
-          vague: `Longo è informato di tutto e i criteri sono quelli che chiedeva Silvia. Non ci sono stati dissensi e il clima è buono.`,
+          evidence: `L’ha firmato lui: accuratezza delle giacenze più 20%, rotture meno 15%, tempi di inventario meno 30%, adozione all’80%, con la sua firma. Ho la scansione.`,
+          honest: `Solo un’intesa con Silvia: venti negozi per tre mesi, nessuna soglia scritta, nessuna firma di Longo. Così non regge: i criteri vanno scritti e firmati.`,
+          bluff: `Sì, firmato da lui: quattro criteri con le soglie e la sua firma a penna in calce. L’originale è rimasto a Silvia, domani mattina ti mando la scansione.`,
+          vague: `Longo è informato di tutto e i criteri sono quelli che chiedeva Silvia. Non ci sono stati dissensi, il clima è buono e ci risentiamo a inizio settimana.`,
           react: {
             evidence: `Soglie scritte e firma di chi paga: è quello che trasforma un pilota in un contratto. Girami la scansione e la aggancio al CRM.`,
             honest: `Grazie per la chiarezza. Allora il compito di questa settimana è farli firmare a Longo: senza quella riga un pilota è un favore. Ti tengo in Best Case fino ad allora.`,
@@ -1033,28 +1033,28 @@
         {
           id: 'rossi_bordo', if: () => true, has: (d) => !!d.flags.coexist && d.m.trust >= 60,
           q: `Rossi: alleato, neutrale o lealista di Vertex con buone maniere? Mi serve una frase sua, non la tua lettura.`,
-          evidence: `Alleato è troppo, ma ha messo il suo team a guidare l’architettura: tre nomi suoi nel gruppo di lavoro. Ti giro la mail con cui li ha indicati.`,
-          honest: `Per ora non ho una riga sua che dica che è con noi. È cortese, ascolta, ma di scritto non c’è niente: per ora lo considero ancora un lealista di Vertex con buone maniere.`,
+          evidence: `Alleato è troppo. Ma sul piano con il suo team alla guida mi ha detto: “Questa è un’idea che posso difendere”. Poi ha disegnato l’architettura su un foglio.`,
+          honest: `Una frase sua che dica che è con noi non ce l’ho. È cortese e ascolta, ma di scritto non c’è niente: per me resta un lealista di Vertex con buone maniere.`,
           bluff: `È con noi: sull’integrazione ragiona come uno sponsor interno e ci ha già dato l’ok tecnico. Una mail formale non c’è, ma ne abbiamo parlato più volte.`,
-          vague: `Rossi è un professionista, e se il progetto è giusto non si metterà di traverso. Con lui il clima è buono, lo sento spesso.`,
+          vague: `Rossi è un professionista, e se il progetto è giusto non si metterà di traverso. Con lui il clima è buono, lo sento spesso e finora non ha posto alcun veto.`,
           react: {
-            evidence: `Con nomi e un team assegnato, è un sì vero. Lo segno così e lo ripetiamo davanti a Longo.`,
-            honest: `Giusta etichetta: neutrale a voce non è un sì. Ti tengo in Best Case e ti aiuto a portarlo al passo dopo.`,
+            evidence: `Una frase sua, sul piano con il suo team al comando dell’architettura: questo è un sì vero. Lo segno così e lo ripetiamo davanti a Longo.`,
+            honest: `Giusta etichetta: la cortesia a voce non è un sì. Ti tengo in Best Case e ti aiuto a portarlo al passo dopo.`,
             bluffCaught: `L’ultima nota su Rossi, nel tuo CRM, è “cordiale”. Non vedo nessun “ok tecnico”. Ripartiamo dai fatti.`,
             bluffPassed: `Va bene, lo scrivo. Ma voglio una mail di Rossi con quelle parole, e la voglio prima del giorno della firma.`,
             vague: `“Non si metterà di traverso” è la frase di chi non ha mai visto un CIO bloccare un contratto a una settimana dalla firma. Dammi un fatto.`,
           },
         },
         {
-          id: 'ondate_contratto', if: (d) => !!d.flags.giveGet, has: (d) => d.mp.has('Dp') && d.mp.has('P'),
-          q: `L’offerta con date e pagamenti è già in una bozza di contratto, o è solo la tua proposta e un’intesa a voce?`,
-          evidence: `La bozza c’è: quaranta negozi prima del Black Friday, gli altri a gennaio, pagamenti legati alle ondate. Il legale di Lumina l’ha ricevuta lunedì.`,
-          honest: `È la mia proposta, e Longo l’ha letta. Una bozza di contratto con date e pagamenti non c’è ancora: la porto al legale di Lumina questa settimana. Intanto non la spingo oltre il Best Case.`,
-          bluff: `La bozza c’è: date e pagamenti sono scritti e il legale di Lumina ce l’ha da lunedì. Manca solo la sua revisione.`,
-          vague: `L’offerta è condivisa, Longo ne ha parlato con Silvia e mi pare convinto. Sui tempi del contratto non vedo problemi.`,
+          id: 'ondate_contratto', if: (d) => !!d.flags.giveGet, has: (d) => !!d.flags.giveGet && !d.flags.deskApproved,
+          q: `L’offerta con date e pagamenti l’ha vista Longo e ti ha risposto nel merito, o è solo la tua proposta e un’intesa a voce con Silvia?`,
+          evidence: `Sì: lunedì, nel suo ufficio, la lavagna era cancellata, con la sola riga “Black Friday”. Longo mi ha detto: “La stagione è il mio vincolo, non il prezzo”.`,
+          honest: `È la mia proposta e un’intesa con Silvia: Longo non ha ancora risposto. Una bozza con date e pagamenti non c’è, la porto al legale di Lumina entro venerdì.`,
+          bluff: `Sì, Longo ha risposto nel merito: date e pagamenti sono già in una bozza e il legale di Lumina ce l’ha da lunedì. Manca solo la sua revisione, poi si chiude.`,
+          vague: `L’offerta è condivisa, Longo ne ha parlato con Silvia e mi pare convinto. Sui tempi del contratto non vedo problemi: alla stagione ci tiene lui per primo.`,
           react: {
-            evidence: `Date, ondate, pagamenti e il legale che ha già la bozza. È così che si ferma un rinvio prima che nasca.`,
-            honest: `Bene che tu lo dica. Una proposta letta non è un contratto: porta la clausola al legale di Lumina e aggiorna il CRM con la data.`,
+            evidence: `Un CFO che risponde con la data della stagione e non con il prezzo ha già scelto il suo criterio. Adesso fallo diventare una bozza con le date: è così che si ferma un rinvio prima che nasca.`,
+            honest: `Bene che tu lo dica. Una proposta non è un contratto: porta la clausola al legale di Lumina e aggiorna il CRM con la data.`,
             bluffCaught: `Ho guardato la cartella condivisa: di una bozza con date e pagamenti non c’è traccia. Parliamone con calma, ma lo sposto di una categoria finché non esiste.`,
             bluffPassed: `Ok. Mandami la bozza con date e pagamenti entro domani. Se non c’è, ci riaggiorniamo.`,
             vague: `“Longo ne ha parlato” non è una clausola. Se non c’è un paragrafo, l’offerta non esiste.`,

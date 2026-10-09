@@ -38,6 +38,7 @@
     teaches: [`Qualificazione`, `Compelling event`, `Accesso al decisore`, `Right-sizing`, `Quando andarsene`],
     list: 900, cost: 3, window: [1, 12], stars: 4, lep: 15, slip: 0.45, dqRefund: 2,
     noWild: ['leaked_mail', 'contact_away', 'new_decider'],   // imprevisti generici che stonano con questo scenario
+    noShock: ['g_rival_withdraws', 'g_price_cut'],   // shock generici che stonano con questo scenario (qui nessuno ha mai nominato Vertex, non c’è una fase finale né un’offerta concorrente: il vero concorrente è il “non fare niente”)
     crm: { cat: `Commit`, prob: 90 },
     cast: CAST,
 
@@ -189,7 +190,7 @@
         hint: `Un deal grande non è un deal sano. Cosa sai davvero, oggi?`,
         tip: `La dimensione di un deal non lo qualifica. Quattordici mesi, nove demo e nessun accesso al decisore sono segnali di deal zombie. La domanda giusta è: ci sono budget, decisore e un motivo per decidere adesso?`,
         choices: [
-          ch('a', 0, `Lo teniamo in Commit. Mirko è sicuro e, dopo quattordici mesi, siamo a un passo: sono questioni di settimane, non di mesi. L’ho sentito stamattina.`,
+          ch('a', 0, `Lo teniamo in Commit. Mirko è sicuro e, dopo quattordici mesi, ci siamo quasi: sono questioni di settimane, non di mesi. L’ho sentito stamattina.`,
             `Hai trasformato l’entusiasmo di Mirko in una cifra da €900k scritta a tuo nome. Se le cose non cambiano, a fine trimestre dovrai spiegare perché un Commit così è sparito.`,
             { r: 6 }, {
               integ: -4, set: { inflated: true }, next: 'n2',
@@ -209,7 +210,7 @@
                 { think: `Ho cambiato una speranza con una verifica. Adesso la verifica va fatta.` },
               ],
             }),
-          ch('c', 1, `Gli do una spinta sul prezzo: 25% di sconto se firma entro fine mese. Su un deal fermo da quattordici mesi, un incentivo così lo smuove.`,
+          ch('c', 1, `Gli do una spinta sul prezzo: 25% di sconto se firma entro fine mese. Su un deal fermo da quattordici mesi, un incentivo così lo smuove di sicuro.`,
             `Hai speso lo sconto prima di capire cosa blocca il deal: non è fermo per il prezzo, è fermo perché nessuno ha approvato un budget. Per ora hai solo insegnato a Mirko che il tuo prezzo si muove.`,
             { v: -4, c: -4, r: 4, d: 25 }, {
               next: 'n2',
@@ -219,17 +220,17 @@
                 { n: `Nel pomeriggio Mirko ti ringrazia con un vocale di un minuto: lo sconto è bellissimo, ma senza un budget approvato non saprebbe a chi girarlo.` },
               ],
             }),
-          ch('d', 2, `Lo porto in Best Case e chiedo a Mirko di farmi incontrare il suo capo. Se l’AD si fa vedere, ne riparliamo con più elementi.`,
+          ch('d', 2, `Lo porto in Best Case e chiedo a Mirko di farmi incontrare il suo capo entro due settimane. Se l’AD si fa vedere, ne riparliamo con più elementi.`,
             `Una mossa equilibrata: dichiari prudenza e cerchi l’accesso al decisore. Ma non hai ancora una qualifica solida.`,
             { c: 4, r: -2 }, {
               next: 'n2',
-              say: `Lo porto in Best Case, Marta, e chiedo a Mirko di farmi incontrare il suo capo. Se l’AD si fa vedere, ne riparliamo con più elementi.`,
+              say: `Lo porto in Best Case, Marta, e chiedo a Mirko di farmi incontrare il suo capo entro due settimane. Se l’AD si fa vedere, ne riparliamo con più elementi.`,
               react: [
                 { w: 'marta', a: `segna sul CRM`, t: `Best Case. Almeno una categoria onesta. Ma l’AD non l’hai mai visto, e tutto dipende dalla porta che ti apre Mirko.` },
                 { think: `Cerco la porta giusta. Non so ancora cosa dirò quando si aprirà.` },
               ],
             }),
-          ch('dq', 1, `Lo chiudo. Quattordici mesi senza budget non sono una trattativa, sono un’abitudine: il tempo che libero lo metto sui deal sani.`,
+          ch('dq', 1, `Lo chiudo. Quattordici mesi senza budget non sono una trattativa, sono un’abitudine: le ore che libero le metto sui deal con una firma in vista.`,
             `Squalificare è una mossa legittima, ma qui arriva prima della verifica: l’istinto è buono, l’ordine delle cose no. Non saprai mai cosa c’era sotto.`,
             { }, {
               next: 'DQ',
@@ -275,17 +276,17 @@
                 { think: `Il motivo per decidere è sempre stato lì. Nessuno l’aveva ancora detto ad alta voce.` },
               ],
             }),
-          ch('b', 1, `Mirko, mi dai una data? Quando arriva, di preciso, il budget? Così la metto in calendario con Marta e lavoriamo a ritroso da lì.`,
+          ch('b', 1, `Mirko, mi dai una data? Lo metto in calendario con Marta e da lì lavoriamo a ritroso insieme. Quando arriva, di preciso, il budget? Almeno il mese?`,
             `Una data vaga è l’anticamera del trimestre successivo: hai chiesto il quando prima di capire il perché, e Mirko non aveva niente di più preciso da darti.`,
             { u: -2, c: -2, r: 4 }, {
               next: 'n3b',
-              say: `Mirko, mi dai una data? Quando arriva, di preciso, il budget? Così la metto in calendario con Marta e lavoriamo a ritroso da lì.`,
+              say: `Mirko, mi dai una data? Lo metto in calendario con Marta e da lì lavoriamo a ritroso insieme. Quando arriva, di preciso, il budget? Almeno il mese?`,
               react: [
                 { w: 'mirko', a: `sicuro`, t: `Entro fine anno, probabilmente. Fine anno, fine anno, ma la data precisa ancora non la so.` },
                 { think: `“Probabilmente.” Una data che si scrive al condizionale. L’ho chiesta prima di sapere perché dovrebbe arrivare.` },
               ],
             }),
-          ch('c', 0, `Ti mando oggi la proposta finale, già con il nostro miglior sconto. Così hai in mano tutto quello che serve per convincere Aldo, senza aspettare altre demo.`,
+          ch('c', 0, `Ti mando oggi la proposta finale, già con il nostro miglior sconto. Hai in mano tutto quello che serve per convincere Aldo, senza altre demo.`,
             `Senza una storia e senza un business case, la proposta finisce nella cartella “più avanti” e lo sconto è già bruciato. Hai consegnato un’arma senza munizioni.`,
             { v: -4, c: -6, r: 8, d: 15 }, {
               next: 'n3b',
@@ -306,7 +307,7 @@
                 { think: `Non ha detto di no. Ha detto che non può. È una differenza piccola.` },
               ],
             }),
-          ch('dq', 2, `Mirko, non ci sono le condizioni per chiudere in questo trimestre. Preferisco dirtelo che inseguire una firma che non c’è. Ci risentiamo quando c’è un motivo per decidere.`,
+          ch('dq', 2, `Mirko, non ci sono le condizioni per chiudere ora. Meglio dirtelo che inseguire una firma che non c’è. Ci risentiamo quando c’è un motivo per decidere.`,
             `Corretto nel metodo, prematuro nei tempi: non avevi ancora esplorato cosa fosse cambiato in azienda, e uscire prima di saperlo vuol dire non scoprire mai cosa c’era sotto.`,
             { }, {
               next: 'DQ',
@@ -333,7 +334,7 @@
         hint: `L’ennesima demo non è un motivo per decidere. Hai una seconda occasione per scoprirlo, oppure puoi andartene bene.`,
         tip: `Quando manca un motivo per decidere, hai due opzioni valide: ripartire dalla scoperta (cosa è cambiato, cosa costa non decidere) oppure uscire con eleganza lasciando una checklist di condizioni. Quello che non funziona è un’altra demo.`,
         choices: [
-          ch('a', 3, `Mirko, preferisco liberare il tuo tempo e il mio finché non c’è un motivo per decidere. Ti lascio tre condizioni: budget approvato, AD coinvolto, scadenza reale.`,
+          ch('a', 3, `Mirko, preferisco liberare il tuo tempo e il mio finché manca un motivo per decidere. Ti lascio tre condizioni: un budget approvato, Aldo coinvolto, una scadenza reale.`,
             `Hai chiuso con una checklist di tre condizioni e senza rancore: la porta resta aperta e le energie tornano sui deal sani. È una squalifica fatta bene.`,
             { t: 4 }, {
               integ: 4, next: 'DQ',
@@ -343,11 +344,11 @@
                 { think: `Ho chiuso con le porte aperte. È la cosa meglio riuscita di tutta questa trattativa.` },
               ],
             }),
-          ch('b', 2, `Mirko, prima di una decima demo mi aiuti a capire una cosa? Cosa è cambiato da voi negli ultimi mesi, e quanto vi costa, ogni mese, non decidere?`,
+          ch('b', 2, `Mirko, prima di una decima demo mi aiuti a capire una cosa? Cosa è cambiato da voi negli ultimi mesi, e quanto vi costa, ogni mese, non decidere? Anche a spanne.`,
             `Lo scopri tardi, dopo una settimana persa, ma lo scopri: la domanda sul costo di non decidere funziona anche alla seconda occasione.`,
             { t: 2, v: 6, u: 16, c: 2, r: -2 }, {
               mp: ['I', 'C', 'Co'], set: { event: true }, next: 'n4',
-              say: `Mirko, prima della decima demo mi aiuti a capire una cosa? Cosa è cambiato da voi, negli ultimi mesi? E cosa vi costa, davvero, non decidere?`,
+              say: `Mirko, prima della decima demo mi aiuti a capire una cosa? Cosa è cambiato da voi, negli ultimi mesi? E cosa vi costa, davvero, non decidere? Anche a spanne.`,
               react: [
                 { w: 'mirko', a: `sorpreso`, t: `Beh… a settembre abbiamo perso TrasportiNord, per i ritardi nel tracking. Aldo era una furia.` },
                 { think: `Dopo nove demo. Lo scopro oggi.` },
@@ -364,7 +365,7 @@
                 { think: `Dieci demo. Stessa fine delle altre nove.` },
               ],
             }),
-          ch('d', 1, `Mirko, prima della demo ti propongo un’altra cosa: uno sconto aggressivo per chi firma entro fine mese, così Aldo ha un motivo per muoversi e chiudiamo nel trimestre.`,
+          ch('d', 1, `Mirko, prima della demo ti propongo un’altra cosa: uno sconto aggressivo per chi firma entro fine mese, così Aldo ha un motivo per muoversi e chiudiamo in tempo.`,
             `Uno sconto funziona quando il prezzo è l’ostacolo. Qui l’ostacolo è che nessuno ha stanziato un euro: venti per cento di niente resta niente, e hai insegnato a Mirko che il tuo listino è trattabile.`,
             { v: -4, c: -2, r: 4, d: 20 }, {
               next: 'END',
@@ -405,7 +406,7 @@
                 { think: `Venti minuti. Gliene sono bastati cinque.` },
               ],
             }),
-          ch('b', 1, `Le faccio vedere l’ultima versione della demo: tracking in tempo reale, ottimizzazione dei percorsi, cruscotto per il responsabile del traffico, mappa dei mezzi. Sono quindici minuti, e le mostro tutto.`,
+          ch('b', 1, `Le faccio vedere l’ultima versione della demo: tracking in tempo reale, ottimizzazione dei percorsi, cruscotto per il responsabile del traffico. Sono quindici minuti, e le mostro tutto dal vivo.`,
             `Hai ripetuto una demo a chi la conosceva già, nel tempo in cui potevi scoprire cosa gli sta a cuore. L’accesso c’è stato, ma lo hai speso a presentare invece che a capire.`,
             { t: -2, c: 2 }, {
               mp: ['E'], set: { ebEngaged: true }, next: 'n5',
@@ -417,7 +418,7 @@
               ],
             }),
           ch('c', 2, `Le propongo di sentire la nostra Sales Director, Marta Colombo: può parlarle da pari, sul rischio di perdere altri clienti come TrasportiNord. Fisso io il momento che le va meglio.`,
-            `Il livello del contatto è piaciuto e ti sei guadagnato un secondo appuntamento. Ma il tema resta il tuo, non il suo: Marta potrà parlargli da pari solo di ciò che Aldo sente come un problema proprio.`,
+            `Il livello del contatto è piaciuto e hai guadagnato un secondo appuntamento. Ma il tema resta il tuo, non il suo: Marta potrà parlargli da pari solo di ciò che Aldo sente come un problema proprio.`,
             { t: 6, c: 4, r: -2 }, {
               jolly: 'exec', mp: ['E'], set: { ebEngaged: true }, next: 'n5',
               say: `Signor Fabbri, le propongo di sentire la nostra Sales Director, Marta Colombo: può parlarle da pari, sul rischio di perdere altri clienti. Fisso io il momento che le va meglio.`,
@@ -426,11 +427,11 @@
                 { think: `Mi ha dato un secondo appuntamento. Non una ragione per non fare niente.` },
               ],
             }),
-          ch('d', 0, `Le propongo il 30% di sconto se firma entro fine trimestre. È la condizione migliore che abbiamo mai concesso su questo sistema, e darebbe a Mirko qualcosa da portare in consiglio.`,
+          ch('d', 0, `Le propongo il 30% di sconto se firma entro fine trimestre: è la condizione migliore che abbiamo mai concesso su questo sistema. Non darebbe a Mirko qualcosa da portare in consiglio?`,
             `Con un decisore indifferente lo sconto non crea urgenza, la svaluta: Aldo ha letto la tua fretta e ha messo in dubbio il valore del prodotto prima ancora di conoscerlo.`,
             { t: -6, v: -6, c: -4, r: 8, d: 30 }, {
               mp: ['E'], set: { ebEngaged: true }, next: 'n5',
-              say: `Signor Fabbri, le propongo il trenta per cento di sconto se firma entro fine trimestre. È la condizione migliore che Nexora abbia mai concesso su questo sistema.`,
+              say: `Signor Fabbri, le propongo il trenta per cento di sconto se firma entro fine trimestre. È la condizione migliore che Nexora abbia mai concesso su questo sistema. Non darebbe a Mirko qualcosa da portare in consiglio?`,
               react: [
                 { w: 'aldo', a: `senza scomporsi`, t: `Trenta per cento. E se me lo offrono a questo prezzo, quanto vale?` },
                 { n: `Mirko, in disparte, sposta lo sguardo sul tappeto.` },
@@ -456,7 +457,7 @@
         hint: `Un deal da €900k che non si può firmare vale zero. Uno da €340k che si firma vale €340k.`,
         tip: `Right-sizing: quando il budget non regge il perimetro, riduci il perimetro, non il prezzo. Una prima fase con risultati misurabili (land) crea il caso per l’espansione (expand) e porta la firma nel trimestre.`,
         choices: [
-          ch('a', 0, `Insisto sul perimetro completo: il valore sta nel sistema integrato. Se togliamo dei pezzi, togliamo anche i risultati che stiamo promettendo, e il progetto non risolverebbe più il suo problema.`,
+          ch('a', 0, `Insisto sul perimetro completo: il valore sta nel sistema integrato. Togliendo dei pezzi togliamo anche i risultati che promettiamo, e il progetto non risolve più il problema.`,
             `Hai difeso un perimetro che non si poteva firmare: se il budget non regge, il valore dell’integrazione non conta, perché nessuno può comprarlo.`,
             { u: -10, c: -6, r: 10 }, {
               next: 'n6',
@@ -467,7 +468,7 @@
                 { think: `Ho difeso con ostinazione un perimetro che nessuno può firmare.` },
               ],
             }),
-          ch('b', 3, `Propongo una Fase 1 mirata: tracking in tempo reale e consegne dei tre clienti più a rischio. €340k l’anno, obiettivi misurabili in sei mesi, estensione a prezzo bloccato.`,
+          ch('b', 3, `Propongo una Fase 1 mirata: tracking in tempo reale e consegne dei tre clienti più a rischio. €340k l’anno, obiettivi misurabili entro sei mesi, estensione a prezzo bloccato.`,
             `Hai ridotto il perimetro, non il prezzo: una prima fase misurabile e firmabile, con un’opzione che tiene aperto il resto. Un sogno da €900k è diventato un deal da €340k che si può firmare.`,
             { t: 6, v: 12, u: 8, c: 16, r: -8, l: -560 }, {
               mp: ['Dc', 'Dp'], set: { rightsized: true }, next: 'n6',
@@ -479,7 +480,7 @@
                 { think: `Da novecento a trecentoquaranta. È il primo numero che qualcuno, lì dentro, dice di poter firmare.` },
               ],
             }),
-          ch('c', 1, `Rivedo il prezzo: tolgo il 40% sul totale, quindi €540k l’anno per lo stesso perimetro. Così la cifra si avvicina a quello che può spendere, e le tengo tutto dentro.`,
+          ch('c', 1, `Rivedo il prezzo: tolgo il 40% sul totale, quindi €540k l’anno per lo stesso perimetro. Così la cifra si avvicina a quello che può spendere, e le lascio tutti i moduli.`,
             `Il problema era il perimetro, non il prezzo: tagliare il 40% sullo stesso perimetro lascia ad Aldo una cifra comunque fuori portata e un valore svalutato.`,
             { v: -8, c: -4, r: 6, d: 40 }, {
               next: 'n6',
@@ -489,7 +490,7 @@
                 { think: `Ho tolto soldi, non pezzi. Lui parlava di spenderli “in un colpo”: il colpo è rimasto uguale.` },
               ],
             }),
-          ch('d', 2, `Prendo tempo e torno con una proposta articolata, a fasi, in cui spiego cosa si può staccare e cosa no. Gliela mando entro venerdì, con costi e tempi di ciascuna fase.`,
+          ch('d', 2, `Prendo tempo e torno con una proposta articolata, a fasi, in cui spiego cosa si può staccare e cosa no. Gliela mando entro venerdì, con costi e tempi per ciascuna fase.`,
             `Una risposta ragionevole, ma cede l’iniziativa a lui: senza una data tua, nessuno ti aspetta con urgenza.`,
             { u: -4, c: -2 }, {
               next: 'n6',
@@ -533,7 +534,7 @@
                 { think: `Per la prima volta le date non sono solo mie.` },
               ],
             }),
-          ch('b', 1, `Le lascio il tempo che serve, nessuna fretta. Preferisco che Mirko e il direttore finanziario validino tutto con calma, e quando hanno finito ne riparliamo insieme, senza rincorse.`,
+          ch('b', 1, `Le lascio il tempo che serve, nessuna fretta. Meglio che Mirko e il direttore finanziario validino tutto con calma, e quando hanno finito ne riparliamo, senza rincorse.`,
             `Aspettare senza date non è cortesia: se nessuno è responsabile del calendario, decide il passo più lento. Il tuo trimestre ha una scadenza, la loro validazione no.`,
             { u: -8, c: -6, r: 8 }, {
               next: 'END',
@@ -543,11 +544,11 @@
                 { n: `Passano due settimane. Poi quattro. Nel CRM, alla riga di Logistica Adriatica, la data di chiusura prevista si sposta da sola.` },
               ],
             }),
-          ch('c', 2, `Le chiedo un impegno scritto, anche una mail breve: firma entro il 28. Così so cosa riferire in azienda e posso già far partire il contratto con i nostri legali.`,
+          ch('c', 2, `Le chiedo un impegno scritto, anche una mail di due righe: firma entro il 28. Così so cosa riferire in azienda e posso già far partire il contratto con i nostri legali.`,
             `Un impegno unilaterale senza piano condiviso è solo una richiesta: la data resta tua, e al cliente manca il percorso per raggiungerla.`,
             { c: 4, r: -2 }, {
               mp: ['P'], next: 'END',
-              say: `Signor Fabbri, le chiedo un impegno scritto: firma entro il 28. Così so cosa riferire in azienda e posso già muovere il contratto.`,
+              say: `Signor Fabbri, le chiedo un impegno scritto, anche una mail di due righe: firma entro il 28. Così so cosa riferire in azienda e posso già muovere il contratto.`,
               react: [
                 { w: 'aldo', a: `secco`, t: `Non posso garantire la data prima della validazione. Un impegno scritto al buio non lo firmo.` },
                 { think: `Gli ho chiesto una promessa. Non gli ho offerto un percorso.` },
@@ -596,13 +597,13 @@
           hint: `Una notizia bella arriva sempre senza carte. Cosa servirebbe per crederci?`,
           tip: `Un contatto entusiasta traduce ogni segnale in un sì. Prima di cambiare forecast o contratto, separa i fatti (chi ha detto cosa, per iscritto) dall’interpretazione: è il momento in cui i deal zombie si gonfiano.`,
           choices: [
-            ch('a', 3, `Bellissima notizia, Mirko, se è scritta. Mi giri il documento e mi dici chi ha approvato, per quale cifra e da quando vale?`,
+            ch('a', 3, `Bella notizia, Mirko, se è scritta. Mi giri il documento? Voglio vedere chi ha approvato, per quale cifra, su quale voce di bilancio e da quando vale.`,
               (d) => (d.node === 'n5'
                 ? `Hai separato quello che Aldo ha detto da quello che Mirko ha sentito: “preparami il conto” è un compito, non un via libera. Così ti presenti a mercoledì con la realtà in mano, non con l’entusiasmo.`
                 : `Hai chiesto la carta prima di festeggiare. La “voce di budget” era una previsione da valutare, non un impegno: una notizia vale quanto il documento che c’è sotto.`),
               (d) => ({ t: 3, c: d.mp.has('E') ? 7 : 5, r: -5 }), {
                 next: 'RET',
-                say: `Mirko, che bella notizia. Facciamo una cosa: mi giri il documento? Voglio capire chi ha approvato, per quale cifra e da quando vale, così so come muovermi.`,
+                say: `Mirko, che bella notizia. Facciamo una cosa: mi giri il documento? Voglio capire chi ha approvato, per quale cifra, su quale voce di bilancio e da quando vale, così so come muovermi.`,
                 react: (d) => (d.node === 'n5'
                   ? [
                     { w: 'mirko', a: `un po’ spiazzato`, t: `Beh, a voce. Mi ha detto di preparargli il conto di tutto e di tornare da lui. Per me è un sì, eh.` },
@@ -613,9 +614,9 @@
                     { think: `“Da valutare.” Ecco la parte che dentro “nel budget” non c’era.` },
                   ]),
               }),
-            ch('b', 0, `Fantastico, Mirko! Preparo subito il contratto completo, i novecentomila per intero: così domani lo trovi pronto da portare ad Aldo e non perdiamo altro tempo.`,
+            ch('b', 0, `Fantastico, Mirko! Preparo subito il contratto completo, i novecentomila per intero: domani lo trovi pronto. Lo porti tu ad Aldo? Così non perdiamo altro tempo.`,
               (d) => (d.node === 'n5'
-                ? `Hai trasformato un “preparami il conto” in un contratto da €900k: darai ad Aldo un perimetro che non può firmare, proprio mentre sta ancora decidendo se interessarsi. Ti sei complicato la strada verso un perimetro firmabile.`
+                ? `Hai trasformato un “preparami il conto” in un contratto da €900k: darai ad Aldo un perimetro che non può firmare, proprio mentre sta ancora decidendo se interessarsi. Hai reso più lunga la strada verso un perimetro firmabile.`
                 : `Hai preparato un contratto su una frase detta in macchina. Se la “voce di budget” non è un impegno, hai speso ore e una promessa implicita su qualcosa che non esiste ancora.`),
               (d) => ({ t: -3, c: d.mp.has('E') ? -4 : -7, r: d.mp.has('E') ? 6 : 10 }), {
                 next: 'RET',
@@ -636,11 +637,11 @@
                   { think: `Le ho passato una certezza che ho ricevuto anch’io, a voce, in macchina, da una persona che non firma.` },
                 ],
               }),
-            ch('d', 2, `Mirko, ti ringrazio e ci credo, ma ho bisogno di vederlo scritto prima di muovermi. Mandami domattina quello che hai e ne parliamo con calma.`,
+            ch('d', 2, `Mirko, ti ringrazio e ci credo, ma ho bisogno di vederlo scritto prima di muovermi. Mandami domattina quello che hai e ne parliamo alle nove, senza fretta.`,
               `Prudente e corretto, ma passivo: aspetti che la carta arrivi invece di chiedere subito chi, quanto e da quando. Il dubbio lo risolvi comunque, solo un po’ più tardi.`,
               { t: 1, c: 2 }, {
                 next: 'RET',
-                say: `Mirko, ti ringrazio e ci credo davvero, ma ho bisogno di vederlo scritto prima di muovermi. Mandami domattina quello che hai e ne parliamo con calma.`,
+                say: `Mirko, ti ringrazio e ci credo davvero, ma ho bisogno di vederlo scritto prima di muovermi. Mandami domattina quello che hai e ne parliamo alle nove, senza fretta.`,
                 react: (d) => (d.node === 'n5'
                   ? [
                     { w: 'mirko', a: `un po’ deluso`, t: `Va bene, va bene… Pensavo ti facesse più piacere. Domattina ti giro la mail.` },
@@ -670,7 +671,7 @@
           hint: `Chi ti offre un’informazione sta decidendo di fidarsi di te. Cosa gli chiedi, e cosa ne farai dopo?`,
           tip: `Un ex cliente è la fonte più onesta del costo del problema, ma va trattato da fonte: gli si chiede cosa ha visto, non cosa nasconde. I numeri che servono al caso sono del cliente e tuoi; quelli di terzi si usano solo con il loro permesso e senza nomi.`,
           choices: [
-            ch('a', 3, `Accetto la mezz’ora e gli chiedo cosa ha visto, non i conti della sua azienda. Se i numeri sono suoi e li condivide, li uso con Aldo, senza citarlo.`,
+            ch('a', 3, `Accetto la mezz’ora e gli chiedo cosa ha visto sul campo, non i conti della sua azienda. Se i numeri sono suoi e li condivide, li uso con Aldo, senza mai citarlo.`,
               (d) => (d.flags.inflated
                 ? `Hai trattato Paolo da testimone, non da fonte da sfruttare: ti dà il quadro dal lato di chi ha subito il problema. Con il Commit che hai già dato a Marta, è la prova che ti mancava.`
                 : `Hai trattato Paolo da testimone, non da fonte da sfruttare: ti dà il quadro dal lato di chi ha subito il problema, e un numero che non viene né da te né da Mirko. Basta non citarlo.`),
@@ -682,7 +683,7 @@
                   { think: `Trentuno consegne. Un numero che non viene da me né da Mirko.` },
                 ],
               }),
-            ch('b', 0, `Accetto, ma gli chiedo i dati interni di TrasportiNord: volumi, margini, contratti. Con quelli il caso per Aldo diventa a prova di obiezione e non dipende da Mirko.`,
+            ch('b', 0, `Accetto, ma gli chiedo i dati interni di TrasportiNord: volumi, margini, contratti. Con quelli il caso per Aldo resta a prova di obiezione e non dipende da Mirko.`,
               `Hai chiesto a un ex cliente informazioni riservate della sua azienda: anche se le avesse date, il caso per Aldo si sarebbe appoggiato su dati che non potevi usare. Una fonte onesta va trattata onestamente.`,
               { t: -6, v: 3, c: -2, r: 8 }, {
                 integ: -3, next: 'RET',
@@ -692,17 +693,17 @@
                   { think: `Ho fatto il passo più lungo della gamba, e lui l’ha sentito subito.` },
                 ],
               }),
-            ch('c', 2, `Lo ringrazio e gli propongo di sentirsi con Mirko, che conosce meglio l’azienda. Lascio a lui la decisione di come usare quello che ne esce.`,
+            ch('c', 2, `Lo ringrazio e gli propongo di sentirsi con Mirko, che conosce meglio l’azienda e può fissare la chiamata. Lascio a lui decidere come usare quello che ne esce.`,
               `Corretto passare l’informazione a chi può usarla, ma ti togli di mezzo proprio dove avresti potuto capire di più: quello che Paolo dirà a Mirko resta di Mirko.`,
               { t: 1, v: 3, c: -3, r: 1 }, {
                 next: 'RET',
-                say: `Paolo, la ringrazio. Le presento Mirko Tesei, che conosce Logistica Adriatica dall’interno: sentitevi voi due, e poi sarà lui a decidere come usare quello che ne esce.`,
+                say: `Paolo, la ringrazio. Le presento Mirko Tesei, che conosce Logistica Adriatica dall’interno e può fissare la chiamata: sentitevi voi due, e poi sarà lui a decidere come usare quello che ne esce.`,
                 react: [
                   { w: 'paolo', t: `Va bene. Con Mirko non ho problemi a parlare, se serve a qualcosa.` },
                   { n: `Giri la mail a Mirko con due righe. Risponde dopo mezz’ora con tre punti esclamativi, e nient’altro.` },
                 ],
               }),
-            ch('d', 1, `Lo ringrazio e non do seguito. È un ex di un cliente perso, non un interlocutore: la domenica sera preferisco non lavorare su opinioni, e il caso per Aldo lo costruisco con quello che ho.`,
+            ch('d', 1, `Lo ringrazio e non do seguito: è un ex di un cliente perso, non un interlocutore. Il caso per Aldo lo costruisco con quello che ho, senza opinioni di seconda mano.`,
               `Hai lasciato scivolare la persona che aveva già contato i danni dal lato del cliente: il motivo per decidere resta quello che ti ha detto Mirko, senza una cifra che lo regga.`,
               { u: -2, v: -2, r: 4 }, {
                 next: 'RET',
@@ -732,46 +733,46 @@
           hint: `Una mattina storta può essere l’occasione migliore per vedere il problema in azione. Cosa ti serve portare via?`,
           tip: `Quando un imprevisto cancella il piano, guarda cosa mostra al suo posto. Vedere dal vivo come il cliente gestisce il problema vale più di una visita ben organizzata: quello che osservi diventa il caso. Ma osservare non è un pretesto per vendere.`,
           choices: [
-            ch('a', 3, `Resto. Chiedo a Rosa di farmi sedere in sala operativa fino alle dieci e guardo come lavorano, quaderno alla mano, segnando dove si perde tempo.`,
+            ch('a', 3, `Resto. Chiedo a Rosa di farmi sedere in sala operativa fino alle dieci e osservo come lavorano, quaderno alla mano, segnando dove si perde tempo e cosa va a voce.`,
               (d) => (d.flags.ebEngaged
                 ? `Hai trasformato un’uscita a vuoto in una scena che nessuna slide avrebbe saputo costruire: poche righe precise, scritte da chi c’era, da portare ad Aldo. E Rosa, che sa chi ti manda, ti ha lasciato guardare.`
                 : `Hai trasformato un’uscita a vuoto in una scena che nessuna slide avrebbe saputo costruire: poche righe precise, scritte da chi c’era, da portare nel caso.`),
               (d) => ({ t: 4, v: d.mp.has('M') ? 8 : 10, u: 7, c: 4 }), {
                 set: { fogSeen: true }, next: 'RET',
-                say: `Mirko, non scusarti: resto. Rosa, se non disturbo, mi siedo in un angolo della sala operativa fino alle dieci e guardo come lavorate. Non faccio domande, prendo solo nota di dove si perde tempo.`,
+                say: `Mirko, non scusarti: resto. Rosa, se non disturbo, mi siedo in un angolo della sala operativa fino alle dieci e guardo come lavorate. Non faccio domande, prendo solo nota di dove si perde tempo e di cosa va a voce.`,
                 react: [
                   { w: 'rosa', a: `chiusa la chiamata, senza voltarsi`, t: `Si metta lì. Ma non mi chieda niente finché non ho trovato il camion quarantuno.` },
                   { n: `Alle dieci hai quattro righe sul quaderno: due camion cercati a voce, una consegna annunciata al cliente con tre ore di errore, una telefonata persa per colpa di un numero scritto a mano.` },
                   { think: `Quattro righe. Il caso lo sta scrivendo la nebbia.` },
                 ],
               }),
-            ch('b', 2, `Riprogrammiamo il sopralluogo per la settimana prossima, con il terminal aperto. Intanto torno in ufficio e preparo il materiale per mercoledì, così non perdiamo la mattina.`,
+            ch('b', 2, `Riprogrammiamo il sopralluogo alla settimana prossima, a terminal aperto. Intanto torno in ufficio e preparo tutto il materiale di mercoledì, senza perdere la mattina.`,
               `Scelta ordinata e sicura: non perdi niente, ma non guadagni niente. Hai lasciato dov’era l’unica scena che avrebbe raccontato il problema meglio di te.`,
               { t: 1, c: 2 }, {
                 next: 'RET',
                 say: `Va bene, Mirko. Riprogrammiamo il sopralluogo per la settimana prossima, con il terminal aperto. Io intanto torno in ufficio e preparo il materiale per mercoledì, così la mattina non va persa.`,
                 react: [
-                  { w: 'mirko', t: `Va bene, lo rifaccio fissare io. Grazie di essere venuto, eh.` },
+                  { w: 'mirko', t: `Va bene, lo rifaccio fissare io. Grazie per la pazienza, eh.` },
                   { n: `Torni in macchina. La nebbia si apre solo a mezzogiorno, quando non serve più a nessuno.` },
                 ],
               }),
-            ch('c', 1, `Visto che salta, uso la mattina per scrivere ad Aldo: la nebbia dimostra che senza tracking siete ciechi. Un argomento così non lo trovo più.`,
+            ch('c', 1, `Visto che salta, uso la mattina per scrivere ad Aldo: la nebbia dimostra che senza tracking siete ciechi. Un argomento così non lo ritrovo, lo mando subito.`,
               `Il collegamento è giusto, il tempismo no: dire a un AD con i camion fermi che “avete bisogno di noi” trasforma il suo problema in un tuo argomento di vendita.`,
               { t: -4, u: 3, r: 6 }, {
                 next: 'RET',
-                say: `Mirko, visto che il sopralluogo salta, scrivo due righe ad Aldo: la nebbia dimostra quello di cui parliamo da mesi. Un argomento più a pennello di questo non lo trovo.`,
+                say: `Mirko, visto che il sopralluogo salta, scrivo subito due righe ad Aldo: la nebbia dimostra quello di cui parliamo da mesi. Un argomento più a pennello di questo non lo trovo.`,
                 react: [
                   { w: 'mirko', a: `a disagio`, t: `Ma Aldo oggi ha tre camion fermi e la banca che lo chiama… Non è proprio il momento, eh.` },
                   { think: `Ho usato la sua giornata peggiore come slide.` },
                 ],
               }),
-            ch('d', 0, `Il giro lo faccio comunque: conosco qualcuno al terminal e un pass si trova. Una mattina così, vista da vicino, vale più di una visita organizzata.`,
+            ch('d', 0, `Il giro lo faccio comunque: conosco qualcuno al terminal e un pass si trova in giornata. Una mattina così, vista da vicino, vale più di una visita organizzata.`,
               `Hai trattato un divieto di sicurezza come un ostacolo da aggirare, davanti all’uomo che ti ha fatto entrare. La fiducia che stavi costruendo con Mirko vale molto più di un giro al terminal.`,
               { t: -6, c: -4, r: 8 }, {
                 integ: -2, next: 'RET',
                 say: `Mirko, il giro lo faccio lo stesso: chiamo un conoscente al terminal e mi faccio dare un pass. Una mattina così, vista da vicino, vale più di una visita organizzata.`,
                 react: [
-                  { w: 'mirko', a: `serio`, t: `No, ferma. Le banchine sono chiuse per sicurezza, non per dispetto. Se ti vedono in giro senza autorizzazione, il guaio ce l’ho io.` },
+                  { w: 'mirko', a: `serio`, t: `No, aspetta. Le banchine sono chiuse per sicurezza, non per dispetto. Se ti vedono in giro senza autorizzazione, il guaio ce l’ho io.` },
                   { think: `Un’area chiusa per sicurezza non si apre con una telefonata. Mirko ha già abbastanza guai.` },
                 ],
               }),
@@ -786,8 +787,8 @@
             { n: `Venerdì, le quattro e mezza. Mirko ti ha chiesto di passare a lasciargli le ultime carte. Siete nel corridoio, davanti alla porta di Aldo, quando si apre ed esce un uomo grande e abbronzato, con la cravatta allentata e le mani di chi ha guidato un camion per vent’anni.` },
             { w: 'mirko', a: `a mezza voce`, t: `Lorenzo Fabbri, il fratello di Aldo. Socio al trenta per cento. Segue altre cose, ma sui soldi dell’azienda ha sempre un’opinione.` },
             { w: 'lorenzo', a: `senza presentarsi`, t: d.flags.rightsized
-              ? `Tu sei quello del software. Aldo mi ha detto che spendiamo trecentoquarantamila euro l’anno per vedere dove sono i camion. Io i camion li ho guidati: so dove sono, li chiamo. E il figlio di un mio amico, a Cesena, dice che con un gestionale si fa lo stesso per un terzo.`
-              : `Tu sei quello del software. Sono mesi che Mirko porta gente a fare demo. Quanto ci costerebbe, tutta questa roba? E perché non lo facciamo con il figlio di un mio amico, a Cesena, che ce lo fa per un terzo?` },
+              ? `Il software è roba tua, allora. Aldo mi ha detto che spendiamo trecentoquarantamila euro l’anno per vedere dove sono i camion. Io i camion li ho guidati: so dove sono, li chiamo. E il figlio di un mio amico, a Cesena, dice che con un gestionale si fa lo stesso per un terzo.`
+              : `Il software è roba tua, allora. Sono mesi che Mirko porta gente a fare demo. Quanto ci costerebbe, tutta questa roba? E perché non lo facciamo con il figlio di un mio amico, a Cesena, che ce lo fa per un terzo?` },
             d.mp.has('M')
               ? { think: `Ho il conto di TrasportiNord. Se lo uso bene, Lorenzo non mi sta chiedendo il prezzo: mi sta chiedendo il perché.` }
               : { think: `Non ho ancora un conto che parli la sua lingua. Mi chiede il prezzo, e io non ho il perché in tasca.` },
@@ -796,7 +797,7 @@
           hint: `Chi non ha mai visto il caso ragiona in prezzo. Come lo porti a ragionare in rischio?`,
           tip: `Nelle aziende di famiglia il potere informale conta quanto l’organigramma: un socio che compare a un passo dalla firma può fermare tutto. Trattalo da stakeholder: ascolta cosa teme, non difenderti, e dagli un modo di arrivare da solo alla stessa conclusione di chi decide.`,
           choices: [
-            ch('a', 3, `Lorenzo, fa bene a chiedere. Mi dica cosa vorrebbe vedere perché la spesa le sembri giustificata: lo metto nel caso che stiamo preparando.`,
+            ch('a', 3, `Gli dico che fa bene a chiedere e gli chiedo cosa vorrebbe vedere perché la spesa gli sembri giustificata: lo metto nel caso che stiamo preparando.`,
               (d) => (d.flags.rightsized
                 ? `Hai trattato Lorenzo da stakeholder, non da ostacolo: la Fase 1 regge meglio se chi la discute è stato ascoltato prima che qualcuno gliela difenda. La sua domanda diventa una porta, non un blocco.`
                 : `Hai ascoltato invece di difenderti: Lorenzo non cerca lo sconto, vuole capire se la spesa protegge i clienti. Senza una Fase 1 definita, però, hai poche cifre da mettergli davanti.`),
@@ -808,7 +809,7 @@
                   { think: `Non mi ha chiesto lo sconto. Mi ha chiesto un perché.` },
                 ],
               }),
-            ch('b', 1, `Gli spiego che un gestionale di quel tipo non regge trecento consegne al giorno: senza integrazioni né garanzie, a conti fatti costerebbe di più.`,
+            ch('b', 1, `Gli spiego che un gestionale di quel tipo non regge trecento consegne al giorno: senza integrazioni né garanzie, a conti fatti costerebbe ben di più.`,
               `Smontare un concorrente che non conosci, davanti a chi lo ha già scelto nella sua testa, non convince: lo irrigidisce. Hai difeso il tuo prodotto prima di capire cosa teme Lorenzo.`,
               { t: -5, c: -3, r: 6 }, {
                 set: { fratelloKo: true }, next: 'RET',
@@ -848,7 +849,7 @@
           scene: (d) => [
             { n: `Alle sei e cinquanta il piazzale è un parcheggio dove nessuno parcheggia. Trentadue camion in fila, motori spenti, cabine al buio. Davanti al cancello una dozzina di autisti con i giubbotti catarifrangenti e un cartello scritto a mano: “Turni di notte: pagateli”.` },
             { n: `Mirko ti aveva scritto alle sei: “Non venire, c’è sciopero”. Il messaggio lo leggi adesso, fermo davanti al cancello, con le carte per Aldo sotto il braccio.` },
-            { w: 'franco', a: `si stacca dal gruppo, sguardo diretto`, t: `Lei è quello del sistema nuovo? Quello dei localizzatori sui camion? In mensa non si parla d’altro. Dicono che ci vogliono controllare anche in bagno.` },
+            { w: 'franco', a: `si stacca dal gruppo, sguardo diretto`, t: `Il sistema nuovo, quello dei localizzatori sui camion: è roba sua? In mensa non si parla d’altro. Dicono che ci vogliono controllare anche in bagno.` },
             d.flags.rightsized
               ? { think: `Il progetto che Aldo ha detto di poter approvare gira su questi camion. Se qui dentro lo scambiano per una sorveglianza, nessun contratto sopravvive al primo mese.` }
               : { think: `Il tracking vive o muore su questi camion. E io ho parlato con tutti, tranne che con chi li guida.` },
@@ -857,7 +858,7 @@
           hint: `Chi usa un sistema ogni giorno può farlo funzionare o affondarlo. Cosa puoi dire senza promettere ciò che non controlli?`,
           tip: `Nei progetti di tracking gli utenti finali sono stakeholder, non comparse: se temono il controllo, il progetto muore dopo la firma. Ascolta prima di rassicurare, e prometti solo ciò che puoi garantire per iscritto.`,
           choices: [
-            ch('a', 3, `La ascolto: cosa temete, esattamente? Poi le dico cosa può fare il sistema e cosa no, e propongo un vostro rappresentante nel gruppo di progetto.`,
+            ch('a', 3, `Lo ascolto: gli chiedo cosa teme, esattamente. Poi gli dico cosa può fare il sistema e cosa no, e propongo un loro rappresentante nel gruppo di progetto.`,
               (d) => (d.flags.rightsized
                 ? `Hai trattato gli autisti da utenti da coinvolgere, non da convincere: il tracking della Fase 1 si gioca qui, sul piazzale, molto più che nella stanza di Aldo. Franco non è più una minaccia al rollout.`
                 : `Hai trattato gli autisti da utenti da coinvolgere, non da convincere: il tracking si gioca qui, sul piazzale, molto più che nella stanza di Aldo. Franco non è più una minaccia al rollout, ma il perimetro resta tutto da definire.`),
@@ -880,7 +881,7 @@
                   { think: `Ho promesso una cosa che non dipende da me.` },
                 ],
               }),
-            ch('c', 2, `Non è il momento: lo saluto, lascio le carte a Mirko e me ne vado. Se ne parla a sciopero finito, con calma, con Aldo e Mirko presenti.`,
+            ch('c', 2, `Non è il momento: lo saluto, lascio le carte in portineria per Mirko e me ne vado. Se ne parla a sciopero finito, con calma, con Aldo e Mirko presenti.`,
               `Rispettare il picchetto è corretto, ma la domanda sul controllo resta aperta, e prima o poi qualcuno dovrà rispondere. Se non sei tu, sarà qualcun altro, con meno informazioni.`,
               { t: 1, c: 1 }, {
                 next: 'RET',
@@ -891,7 +892,7 @@
                 ],
               }),
             ch('d', 0, `Scrivo subito ad Aldo che c’è un malumore da gestire e che posso presentare il sistema agli autisti, con una riunione in mensa questa mattina.`,
-              `Sfruttare uno sciopero per presentare il tuo prodotto è un errore di lettura: per gli autisti sei parte del problema, per Aldo sei uno che non sa leggere il momento.`,
+              `Sfruttare uno sciopero per presentare il tuo prodotto è un errore di lettura: per gli autisti sei parte del problema, per Aldo non sai leggere il momento.`,
               { t: -5, c: -4, r: 7 }, {
                 next: 'RET',
                 say: `Scrivo subito ad Aldo: c’è un malumore da gestire, e io posso presentare il sistema agli autisti con una riunione in mensa, questa mattina stessa.`,
@@ -943,10 +944,10 @@
         {
           id: 'budget_approvato', if: () => true, has: (d) => !!(d.flags.rightsized && d.flags.mutualPlan && d.mp.has('E')),
           q: `Hai visto il budget approvato, o è il “lo troviamo” di Mirko? Dimmi dov’è scritto e chi l’ha firmato.`,
-          evidence: `Aldo ha detto davanti a me che la Fase 1 da €340k la può approvare, e ha girato il piano con le date al direttore finanziario. Il piano con le date è in mano a Mirko, che ne è il referente.`,
-          honest: `No: ho il “lo troviamo” di Mirko e, nel migliore dei casi, qualcosa detto a voce da Aldo. Il budget scritto non l’ho visto. Fino ad allora non lo chiamo Commit.`,
-          bluff: `Sì, il budget c’è: Aldo l’ha confermato e Mirko ha già il codice di spesa. Manca solo la firma formale.`,
-          vague: `Mirko dice che a fine anno il budget si trova, e di lui mi fido: sono quattordici mesi che lavoriamo insieme.`,
+          evidence: `Aldo, davanti a me, ha detto che la Fase 1 da €340k la può approvare e che gira le date del piano al direttore finanziario. Il referente del piano è Mirko.`,
+          honest: `No: ho il “lo troviamo” di Mirko e, al più, qualcosa detto a voce da Aldo. Un budget scritto non l’ho visto: non so su quale voce sia, né chi l’abbia approvato.`,
+          bluff: `Sì, il budget c’è: Aldo l’ha confermato a voce e Mirko ha già il codice di spesa. Manca solo la firma formale, che arriva con la validazione del finanziario.`,
+          vague: `Mirko dice che a fine anno il budget si trova, e di lui mi fido: in quattordici mesi non mi ha mai raccontato una cosa per un’altra, e mi pare molto tranquillo.`,
           react: {
             evidence: `Questo è un fatto: Aldo che dice “posso approvarlo” davanti a te, più un piano con le date che ha girato lui. Mandamelo, e per me resta dov’è.`,
             honest: `Grazie, è la risposta che mi serve. Allora Best Case, e ti dico io come arrivare alla riga di bilancio: lo chiedi al direttore finanziario, non a Mirko.`,
@@ -958,13 +959,13 @@
         {
           id: 'chi_firma', if: () => true, has: (d) => !!(d.flags.ebEngaged && d.mp.has('M')),
           q: `Chi firma, e quando l’hai incontrato? Con le parole sue, non quelle di Mirko.`,
-          evidence: `Aldo Fabbri, l’AD. L’ho incontrato nella sua sede: venti minuti. Mi ha detto che il problema gli è costato il dieci per cento del fatturato e mi ha chiesto un caso con i numeri per il 15.`,
-          honest: `Aldo l’ho visto una volta, per venti minuti. Una sua frase di sostegno o una data scritta da lui non le ho. Fino ad allora non lo chiamo Commit.`,
-          bluff: `Aldo è con noi: l’ho incontrato e mi ha detto che il progetto si fa. Sulla firma non vedo problemi.`,
-          vague: `Aldo è un tipo pratico: quando decide, decide in fretta. Mirko dice che è dalla nostra parte.`,
+          evidence: `Aldo Fabbri, l’AD. Venti minuti di persona: mi ha detto che il problema gli è costato il dieci per cento del fatturato, e ha chiesto a Mirko un caso con i numeri per il 15.`,
+          honest: `Non ho mai sentito Aldo dire che firma: ho quel che mi riporta Mirko e, al più, pochi minuti con lui. Non ho una data scritta da lui, né un suo impegno da mostrarti.`,
+          bluff: `Aldo è con noi: l’ho incontrato e mi ha detto che il progetto si fa, con le sue parole. Sulla firma non vedo problemi, aspetta solo il caso con i numeri e poi decide.`,
+          vague: `Aldo è un tipo pratico: quando decide, decide in fretta, e Mirko mi garantisce che è dalla nostra parte. In azienda il clima è buono e non ho avuto un solo segnale contrario.`,
           react: {
             evidence: `Un numero suo, detto a te, e una data. Questo è un decisore che hai davvero incontrato. Segnati la data del 15 e portami l’esito.`,
-            honest: `Venti minuti e nessun impegno: grazie per averlo detto. Allora Best Case, e prepariamo insieme cosa portargli la prossima volta.`,
+            honest: `Pochi minuti e nessun impegno: grazie per averlo detto. Allora Best Case, e prepariamo insieme cosa portargli la prossima volta.`,
             bluffCaught: `Nel CRM la nota su Aldo dice “indifferente, troppi progetti”. Non c’è nessun “il progetto si fa”. Rifacciamolo con i fatti.`,
             bluffPassed: `Va bene, lo scrivo. Ma voglio una frase di Aldo per iscritto, anche tre righe di Mirko che la riportano, entro giovedì.`,
             vague: `“Mirko dice che è dalla nostra parte” è la voce di Mirko, non quella di Aldo. Portami una frase sua, con la data.`,
@@ -973,12 +974,12 @@
         {
           id: 'data_perdita', if: () => true, has: (d) => !!(d.flags.event && d.mp.has('M') && d.flags.mutualPlan),
           q: `Qual è la data in cui, se non firmano, perdono qualcosa? Una data loro, non il nostro fine trimestre.`,
-          evidence: `Una scadenza esterna precisa no, ma un costo sì: a settembre hanno perso il dieci per cento del fatturato con TrasportiNord, e Aldo ha chiesto il conto sugli altri tre clienti grandi. Il 28 è la data del piano che ha girato lui al finanziario: se salta, si scivola di un trimestre con lo stesso rischio aperto.`,
-          honest: `Una data loro non ce l’ho. Ho il nostro fine trimestre, ma per il cliente nessuno ha scritto cosa si perde se slitta. Finché è così non lo chiamo Commit.`,
-          bluff: `Il 28: dopo quella data il progetto non rientra nel budget dell’anno e Aldo l’ha detto chiaramente. Per loro è una scadenza vera.`,
-          vague: `Hanno fretta anche loro, si vede: Mirko dice che prima si firma e meglio è per tutti.`,
+          evidence: `Una data esterna no, ma un costo sì: a settembre hanno perso il dieci per cento del fatturato con TrasportiNord. Il 28 è nel piano che Aldo ha girato: se salta, si slitta.`,
+          honest: `Una data loro non ce l’ho. Ho il nostro fine trimestre, ma per il cliente nessuno ha scritto cosa si perde se slitta. Oggi ho solo il mio calendario, non il loro.`,
+          bluff: `Il 28: dopo quella data il progetto esce dal budget dell’anno e Aldo l’ha detto chiaramente. Per loro è una scadenza vera, il finanziario chiude le variazioni il 30.`,
+          vague: `Hanno fretta anche loro, si vede: Mirko dice che prima si firma e meglio è per tutti, e nelle ultime riunioni in azienda non si parla d’altro che del tracking.`,
           react: {
-            evidence: `Questa è la risposta che cerco: un costo vero, un nome e una data scritta da lui. Una scadenza loro, non solo nostra. Per me regge.`,
+            evidence: `Questa è la risposta che cerco: un costo vero, un nome e una data nel piano che ha girato lui. Una scadenza loro, non solo nostra. Per me regge.`,
             honest: `Bene che tu lo dica. Una scadenza senza una conseguenza è solo un desiderio. Mettiamoci questa settimana a trovarla insieme, partendo da Aldo.`,
             bluffCaught: `Sul CRM non c’è nessuna nota di Aldo sul budget dell’anno. C’è una tua riga di qualche settimana fa, e basta. Non mi serve una scadenza perfetta: mi serve una vera.`,
             bluffPassed: `Ok. Ma voglio il nome di chi, da loro, lo ha confermato. Entro giovedì, o lo sposto io.`,

@@ -68,7 +68,7 @@
         { n: `Lunedì mattina, l’open space è ancora mezzo vuoto e il condizionatore ti soffia sulla nuca. Sul secondo schermo la dashboard di salute dell’account BioNova: adozione 35%, NPS 4, due ticket critici aperti da sessanta giorni. I riquadri sono tutti rossi.` },
         { think: `Nel CRM il rinnovo è automatico: Commit, 85%. La dashboard dice un’altra cosa, e la dashboard non ha niente da difendere.` },
         { n: `Scorri la cronologia dei contatti. L’ultima nota di Elena, lo sponsor storico, è di luglio: “Passo il testimone”. Sotto, nessun nome nuovo. Nessun incontro con Giorgio Landi, il VP che ha preso il suo posto.` },
-        { chat: { from: 'marta', app: 'Slack' }, t: `BioNova è nel mio commit con il tuo nome: €240k di rinnovo più €80k di espansione. Ho appena aperto la dashboard e non va d’accordo con il CRM. Chi dei due ha ragione, {nome}?`, sfx: 'ping' },
+        { chat: { from: 'marta', app: 'Teams' }, t: `BioNova è nel mio commit con il tuo nome: €240k di rinnovo più €80k di espansione. Ho appena aperto la dashboard e non va d’accordo con il CRM. Chi dei due ha ragione, {nome}?`, sfx: 'ping' },
         { think: `Ha ragione la dashboard. Il punto è cosa faccio con le sei settimane che restano.` },
         { n: `Alle nove meno cinque Luca Bassi, che segue l’account per la Customer Success, si ferma accanto alla scrivania con il portatile aperto sul braccio. Ha l’aria di chi aspetta da giorni il momento di dirti una cosa.` },
       ],
@@ -185,7 +185,7 @@
         hint: `Prima di vendere qualsiasi cosa devi sapere dov’è la ferita e chi la sente.`,
         tip: `Su un account in sofferenza la prima mossa forte è di servizio: capire, riparare, mostrare. Vendere un’espansione a chi ha due ticket aperti da sessanta giorni brucia credibilità e accelera il churn.`,
         choices: [
-          ch('a', 0, `Finisco la presentazione del modulo trial e la mando a Landi oggi: gli mostro dove stiamo andando, così guarda avanti invece di fermarsi sui ticket.`,
+          ch('a', 0, `Completo le due slide e il prezzo che mancano al modulo trial e mando tutto a Landi oggi: gli mostro dove stiamo andando, così guarda avanti e non ai ticket.`,
             `Hai letto un problema di sostanza come un problema di immagine e hai risposto con una proposta. Per un VP che eredita due ticket aperti il tempismo pesa quanto il contenuto: quella mail è diventata la prova che Nexora vende prima di riparare.`,
             { t: -10, v: -6, c: -4, r: 14 }, {
               set: { tonedeaf: true }, next: 'n2',
@@ -196,7 +196,7 @@
                 { think: `Gli ho confermato esattamente quello che temeva di noi.` },
               ],
             }),
-          ch('b', 3, `Convoco Luca e Davide per capire perché l’adozione è al 35%, cosa tiene aperti i ticket e cosa aveva promesso Elena. Il piano lo scrivo prima di chiamare Landi.`,
+          ch('b', 3, `Convoco Luca e Davide: perché l’adozione è al 35%, cosa tiene aperti i due ticket, cosa aveva promesso Elena. Il piano lo scrivo prima di chiamare Landi.`,
             `In due ore hai trasformato un sintomo in due cause riparabili. Arrivare da Landi con una diagnosi invece che con una promessa cambia il tipo di conversazione che puoi avere.`,
             { t: 4, v: 6, c: 8, r: -8 }, {
               mp: ['I'], set: { diagnosed: true }, next: 'n2',
@@ -208,7 +208,7 @@
                 { think: `Non è un account che non funziona. È un account che nessuno ha guardato.` },
               ],
             }),
-          ch('c', 2, `Chiamo Landi oggi stesso per presentarmi e fissare un incontro. I dati li porto dopo: prima gli serve una voce, non un allegato, e un nome a cui rivolgersi.`,
+          ch('c', 2, `Chiamo Landi oggi stesso per presentarmi e fissare un incontro di un’ora questa settimana. I dati li porto dopo: prima gli serve una voce, non solo un allegato.`,
             `Hai ottenuto il contatto, che è già qualcosa, ma ti presenti a mani vuote davanti a un VP che decide con i numeri. Una prima impressione non si ripete, e questa ha la forma di una richiesta di tempo.`,
             { t: 2, c: 4, r: 2 }, {
               next: 'n2',
@@ -219,11 +219,11 @@
                 { think: `Ho la sua attenzione per un minuto. La prima impressione è già andata.` },
               ],
             }),
-          ch('d', 1, `Offro subito uno sconto sul rinnovo, prima che qualcuno lo chieda: se il prezzo non è un problema, il contratto è al riparo e si lavora sul resto.`,
+          ch('d', 1, `Preparo la proposta di rinnovo con il 10% di sconto già dentro, prima che lo chieda qualcuno: se il prezzo non è un problema, il contratto è al riparo.`,
             `Hai trasformato una questione di valore in una di prezzo senza che nessuno l’avesse chiesta. Gli Acquisti hanno imparato la cosa più utile di tutta la trattativa: il tuo prezzo si muove anche prima che glielo chiedano.`,
             { v: -6, c: -2, r: 4, d: 10 }, {
               next: 'n2',
-              say: `Luca, preparo subito una proposta di rinnovo con uno sconto già dentro. Se il prezzo non è un problema, il contratto è al riparo.`,
+              say: `Luca, preparo subito una proposta di rinnovo con il 10% di sconto già dentro. Se il prezzo non è un problema, il contratto è al riparo.`,
               react: [
                 { n: `Giri la bozza a Sara Monti, degli Acquisti, per anticiparla. Risponde in venti minuti.` },
                 { mail: { from: `Sara Monti · Acquisti BioNova`, subj: `Re: Proposta di rinnovo` }, t: `Apprezzo la rapidità. Se concedete subito, forse concedete ancora.` },
@@ -254,7 +254,7 @@
         hint: `Non difenderti. Prendi in carico il problema, con nomi e date.`,
         tip: `Quando un nuovo sponsor eredita un’esperienza deludente, la mossa vincente è “own it”: riconoscere, assumersi la responsabilità e proporre un piano 30-60-90 con responsabili nominati e metriche. Non cerchi una difesa, cerchi una seconda possibilità.`,
         choices: [
-          ch('a', 0, `Quello che ha ereditato non dipendeva solo da noi: il team di Elena non ha mai chiesto formazione, e senza richieste è difficile intervenire anche volendo.`,
+          ch('a', 0, `Quello che ha ereditato non dipendeva solo da noi: il team di Elena non ha mai chiesto formazione in due anni, e senza richieste è difficile intervenire anche volendo.`,
             `Spiegare il passato per difenderti è la reazione più naturale e la più sbagliata: Landi non cerca un colpevole, cerca un fornitore che si prenda il problema. In più hai attaccato la sua predecessora davanti a lui.`,
             { t: -10, c: -4, r: 14 }, {
               integ: -2, next: 'n3',
@@ -265,7 +265,7 @@
                 { think: `Elena non è qui a rispondere. E lui se n’è accorto.` },
               ],
             }),
-          ch('b', 3, `Ha ragione, e ce ne assumiamo la responsabilità. Piano a 30-60-90: ticket chiusi in 14 giorni da Davide e Luca, formazione ai due team, una review al mese con lei.`,
+          ch('b', 3, `Ha ragione, e ce ne assumiamo la responsabilità. Piano a 30-60-90: ticket chiusi in 14 giorni da Davide e Luca, formazione ai due team, review mensile con lei.`,
             `Hai trasformato un’accusa in un piano con responsabili e scadenze, e hai dato a Landi qualcosa che può misurare. Non è fiducia, è tempo: e adesso il primo mese è una scadenza che ti riguarda.`,
             { t: 10, v: 8, c: 10, r: -12 }, {
               mp: ['Dc', 'E'], set: { ownedIssues: true }, next: 'n3',
@@ -276,7 +276,7 @@
                 { think: `Una finestra, non un sì. Un mese per meritarlo.` },
               ],
             }),
-          ch('c', 2, `Capisco la frustrazione. Faccio trattare i due ticket con priorità assoluta e ne riparliamo fra qualche settimana, quando avrà potuto vedere cosa è cambiato.`,
+          ch('c', 2, `Capisco la frustrazione. Faccio salire i due ticket in cima alla coda del supporto e ne riparliamo fra qualche settimana, quando avrà potuto vedere cosa è cambiato.`,
             `Risposta pronta e rispettosa, ma resta un impegno senza forma: niente date, niente nomi, niente metriche. Landi ha un problema in meno da temere e nessuna ragione in più per credere in noi.`,
             { t: 2, c: 2, r: -4 }, {
               mp: ['E'], set: { ownedIssues: true }, next: 'n3',
@@ -287,7 +287,7 @@
                 { think: `Ho risposto a quello che ha detto, non a quello che gli serve per fidarsi.` },
               ],
             }),
-          ch('d', 2, `Chiedo a Marta, la nostra Sales Director, di scriverle personalmente a nome di Nexora per impegnarsi sul piano di recupero e sui tempi dei due ticket.`,
+          ch('d', 2, `Chiedo a Marta, la nostra Sales Director, di scriverle personalmente a nome di Nexora per impegnarsi sul piano di recupero e sui tempi di chiusura dei due ticket.`,
             `Mettere in campo un executive mostra serietà, ma da solo è una promessa in più: Landi vuole fatti che può misurare. Funziona meglio quando arriva dopo un piano, non al posto del piano.`,
             { t: 6, c: 4, r: -4 }, {
               jolly: 'exec', mp: ['E'], next: 'n3',
@@ -320,7 +320,7 @@
         hint: `I numeri d’uso non sono valore. Il valore è nell’esito misurato dal suo team.`,
         tip: `Una value realization review parte dagli obiettivi originali, confronta i risultati misurati dal cliente e proietta il valore futuro. L’uso (login, utenti attivi) è solo un indicatore; il risultato (ore, errori, lotti rilasciati) è la prova.`,
         choices: [
-          ch('a', 1, `Gli mostro i dati di utilizzo: login, utenti attivi, moduli usati. In un mese sono saliti di 17 punti e il trend è netto in tutti e due i team formati.`,
+          ch('a', 1, `Gli mostro i dati di utilizzo: login, utenti attivi, moduli usati. In un mese l’adozione è salita dal 35 al 52%, con un trend netto nei due team formati.`,
             `Il grafico è esatto ma risponde a una domanda che Landi non ha fatto: l’uso misura l’attività, non l’esito. Per lui il valore è ciò che il suo team riesce a fare in meno tempo e con meno errori.`,
             { t: -2, c: -2 }, {
               next: 'n4',
@@ -331,7 +331,7 @@
                 { think: `Matteo ha il registro dei lotti aperto davanti. Il valore sta lì dentro, non nel mio grafico.` },
               ],
             }),
-          ch('b', 3, `Ricostruisco con il suo team tre risultati: lotti rilasciati il 22% più in fretta, errori di etichettatura quasi dimezzati, 300 ore l’anno di riconciliazione in meno.`,
+          ch('b', 3, `Ricostruisco con il suo team tre risultati: rilascio lotti più rapido del 22%, errori di etichettatura quasi dimezzati, 300 ore l’anno di riconciliazione in meno.`,
             `Hai portato il valore dentro il suo team, con numeri che il cliente ha misurato e può ripetere ai suoi superiori. Quando il valore smette di essere una tua affermazione e diventa una sua conferma, cambia chi lo difende.`,
             { t: 8, v: 14, u: 6, c: 6, r: -8 }, {
               mp: ['M', 'C'], next: 'n4',
@@ -343,7 +343,7 @@
                 { think: `Il valore adesso è suo. Non devo più difenderlo io.` },
               ],
             }),
-          ch('c', 2, `Apro la presentazione sulla roadmap: i nuovi moduli, le date di rilascio, dove va il prodotto nei prossimi dodici mesi e cosa cambierà per il suo team.`,
+          ch('c', 2, `Apro la presentazione sulla roadmap: i nuovi moduli, le date di rilascio, dove va il prodotto nei prossimi dodici mesi e cosa cambierà per il team di supply clinica.`,
             `La roadmap è materiale buono nel momento sbagliato: Landi chiede cosa è già successo e tu gli parli di cosa succederà. Il futuro si vende dopo che il passato è stato riconosciuto come valore.`,
             { v: 2 }, {
               next: 'n4',
@@ -354,7 +354,7 @@
                 { think: `Quattro slide sul futuro, e il registro dei lotti è ancora lì, aperto sul tavolo.` },
               ],
             }),
-          ch('d', 3, `Gli propongo una telefonata con il VP Operations di un’altra biotech che ha vissuto un percorso simile: partenza difficile, ripresa, risultati al secondo anno.`,
+          ch('d', 3, `Gli propongo una telefonata con il VP Operations di un’altra biotech: partenza difficile, ripresa, risultati al secondo anno, un percorso simile al suo.`,
             `Una conversazione tra pari toglie al cliente la sensazione di essere un caso unico e fa parlare qualcuno senza interesse commerciale. È un jolly ben speso: porta prova esterna dove la tua parola, da sola, non basta.`,
             { t: 8, v: 8, c: 2, r: -6 }, {
               jolly: 'ref', mp: ['C'], next: 'n4',
@@ -386,7 +386,7 @@
         hint: `Un confronto di prezzo senza un confronto di valore premia solo chi sconta di più.`,
         tip: `Contro un’offerta più bassa porta il confronto su perimetro e rischio di migrazione, e proponi una struttura legata ai risultati: non uno sconto netto, ma un prezzo che riconosce l’adozione. Ti sposti sul valore, e il cliente ottiene ciò che cerca: un incentivo.`,
         choices: [
-          ch('a', 0, `Accetto di allinearci: riduco il rinnovo del 30%, così la comparazione non parte e il contratto resta nostro senza altre trattative né altri rischi.`,
+          ch('a', 0, `Accetto di allinearci: riduco il rinnovo del 30%, cioè €72k, così la comparazione non parte e il contratto resta nostro senza altre trattative né altri rischi.`,
             `Allineare il prezzo senza aver confrontato i perimetri dice al cliente che quel numero era un margine, non un valore. E su un account che ha appena smesso di sanguinare, ogni punto concesso si ripresenterà al prossimo rinnovo.`,
             { t: -2, v: -12, c: -4, d: 30 }, {
               next: 'n5',
@@ -397,7 +397,7 @@
                 { think: `Settantadue mila euro regalati prima di aver capito cosa comprano.` },
               ],
             }),
-          ch('b', 3, `Propongo un biennale legato all’adozione: canone base –8%, più una parte variabile se arrivano al 70% di adozione e i ticket critici si chiudono in meno di cinque giorni.`,
+          ch('b', 3, `Propongo un biennale: canone base –8% più una parte variabile, dovuta se l’adozione arriva al 70% e i ticket critici si chiudono in meno di cinque giorni.`,
             `Hai trasformato lo sconto in un patto: il cliente paga di più solo se ottiene di più, e il rischio smette di essere solo tuo. È la mossa che sposta la discussione dal prezzo al valore.`,
             { t: 6, v: 6, c: 10, r: -10, d: 8 }, {
               mp: ['Co'], set: { giveGet: true }, next: 'n5',
@@ -408,7 +408,7 @@
                 { think: `Non ho tagliato un prezzo. Ho dato loro un modo di misurarci.` },
               ],
             }),
-          ch('c', 2, `Chiedo a Sara di vedere l’offerta concorrente, così confrontiamo perimetro e condizioni punto per punto prima di parlare di prezzo o di sconti.`,
+          ch('c', 2, `Chiedo a Sara di mostrarmi l’offerta concorrente, così confrontiamo perimetro, condizioni e costo di migrazione punto per punto prima di parlare di prezzo.`,
             `Hai spostato la conversazione dal prezzo al perimetro, e l’ammissione di Sara è un argomento solido. Ma un argomento non è una controproposta: finché non offri una struttura, il confronto resta un calcolo sul prezzo.`,
             { v: 4, c: 2 }, {
               mp: ['Co'], next: 'n5',
@@ -418,7 +418,7 @@
                 { think: `Non ho il documento, ma ho un argomento. Non è ancora una proposta.` },
               ],
             }),
-          ch('d', 1, `Rispondo che il prezzo non si tocca: il valore è già nel contratto e il perimetro dell’altra offerta non è confrontabile con il nostro, quindi non c’è nulla da allineare.`,
+          ch('d', 1, `Rispondo che i €240k del rinnovo non si toccano: il valore è già nel contratto e il perimetro dell’altra offerta non è confrontabile con il nostro.`,
             `Un no con un argomento dichiarato e non dimostrato: dici che il perimetro non è confrontabile, ma non hai visto l’altra offerta e non porti un confronto. Così consegni agli Acquisti l’unica strada che gli resta, la comparazione.`,
             { t: -4, c: -4, r: 10 }, {
               next: 'n5',
@@ -452,7 +452,7 @@
         hint: `Rinnovo ed espansione sono due decisioni, con tempi diversi.`,
         tip: `Separa le decisioni: rinnovo certo ora, espansione legata a milestone. Un’opzione scritta a prezzo bloccato che si attiva a un obiettivo dà al cliente comfort e a te visibilità sulla pipeline.`,
         choices: [
-          ch('a', 0, `Propongo il pacchetto unico: rinnovo più espansione, €320k a listino, con firma entro fine trimestre. Una decisione sola, un solo budget, un solo passaggio con il suo CFO.`,
+          ch('a', 0, `Propongo il pacchetto unico: rinnovo più espansione, €320k a listino, firma entro fine trimestre. Una decisione, un budget, un solo passaggio dal suo CFO.`,
             `Hai legato espansione e rinnovo: due decisioni con tempi e rischi diversi. Quando una vacilla trascina l’altra, e Landi ha appena detto che il suo criterio per la seconda non è ancora soddisfatto.`,
             { t: -8, c: -4, r: 12 }, {
               next: 'n6',
@@ -474,7 +474,7 @@
                 { think: `Non ho venduto un modulo. Gli ho dato una scala da salire.` },
               ],
             }),
-          ch('c', 2, `Rimandiamo l’espansione all’anno prossimo: adesso ci concentriamo solo sul rinnovo e sul piano, senza forzare nulla, e ne riparliamo a risultati ottenuti.`,
+          ch('c', 2, `Rimandiamo l’espansione da €80k all’anno prossimo: adesso ci concentriamo solo sul rinnovo e sul piano, senza forzare nulla, e ne riparliamo a risultati ottenuti.`,
             `Scelta prudente, che protegge il rinnovo ma lascia aperta la porta al primo concorrente con un pilota: Landi ha dichiarato un bisogno e tu non gli hai dato un percorso per soddisfarlo. L’opzione scritta costava meno di questa attesa.`,
             { t: 2, c: 4, r: -4, l: -80 }, {
               next: 'n6',
@@ -485,7 +485,7 @@
                 { think: `Prudente. Ma ho lasciato fermo un modulo che Landi aveva appena nominato.` },
               ],
             }),
-          ch('d', 1, `Le offro il modulo trial gratis per un anno se firma un rinnovo biennale: per noi è un investimento sul rapporto, per lei un rischio in meno.`,
+          ch('d', 1, `Le offro il modulo trial, €80k a listino, gratis per un anno se firma un biennale: per noi è un investimento sul rapporto, per lei un rischio in meno.`,
             `Hai ceduto un modulo da €80k per assicurarti un rinnovo, senza chiedere altro che una firma. Uno scambio legato a un obiettivo avrebbe protetto lo stesso contratto lasciando intatto il valore del modulo.`,
             { v: -4, d: 25 }, {
               next: 'n6',
@@ -516,7 +516,7 @@
         hint: `Il tuo prossimo rischio di churn nasce da uno sponsor unico.`,
         tip: `Dopo un churn evitato il lavoro è non ricrearlo: relazioni su più livelli (utenti chiave, IT, finanza, executive), un Executive Sponsor Nexora e una business review trimestrale con KPI condivisi.`,
         choices: [
-          ch('a', 3, `Con Landi definisco tre sponsor lato BioNova (supply, qualità, IT), un executive sponsor Nexora e una business review trimestrale con KPI condivisi, nel contratto.`,
+          ch('a', 3, `Con Landi definisco tre sponsor (supply, qualità, IT), un executive sponsor Nexora e una review trimestrale con KPI condivisi, nell’allegato al contratto.`,
             `Hai trasformato un rinnovo in una struttura: più persone, più livelli, una cadenza e un allegato che sopravvive anche a un cambio di ruolo. È la differenza tra uno sponsor e un’assicurazione.`,
             { t: 6, c: 10, r: -10 }, {
               mp: ['P'], set: { threaded: true }, next: 'END',
@@ -527,7 +527,7 @@
                 { think: `Adesso l’account non ha più un solo punto di rottura.` },
               ],
             }),
-          ch('b', 1, `Chiudo il rinnovo e basta: una volta firmato il contratto, il resto passa alla Customer Success, che ha le persone e il tempo per seguirlo meglio di me.`,
+          ch('b', 1, `Chiudo il rinnovo e basta: appena firmato, l’account passa alla Customer Success di Luca Bassi, che ha le persone e il tempo per seguirlo meglio di me.`,
             `Hai guadagnato il trimestre e perso l’account: il rischio che vi ha lasciati scoperti quando Elena se n’è andata, uno sponsor unico, è ancora lì, con un altro nome. Passare la palla alla Customer Success senza una struttura non è una strategia.`,
             { c: -4, r: 6 }, {
               mp: ['P'], next: 'END',
@@ -547,7 +547,7 @@
                 { think: `Una riga in calendario tra dodici mesi. E nel frattempo chi guarda questo account?` },
               ],
             }),
-          ch('d', 2, `Faccio strutturare al Deal Desk un contratto triennale a prezzo bloccato, con un programma di customer success dedicato, così l’account è al sicuro per tre anni.`,
+          ch('d', 2, `Faccio strutturare al Deal Desk un triennale a prezzo bloccato, con un programma di customer success dedicato: l’account resta al sicuro per tre anni.`,
             `Triennale e programma dedicato mettono l’account al sicuro sulla carta, ma la mossa viene letta come commerciale: manca la parte relazionale che ha causato il problema. Il contratto protegge il prezzo, non lo sponsor.`,
             { t: 2, c: 6, r: -4 }, {
               jolly: 'desk', mp: ['P'], set: { deskApproved: true }, next: 'END',
@@ -581,7 +581,7 @@
                 : { n: `Hai visto Landi per la prima volta ieri, e i primi due ticket sono ancora aperti. Questo è il terzo.` },
             d.flags.ownedIssues
               ? { think: `Ho detto a Landi che me ne occupo io. Questo è il primo guasto dopo quelle parole: se lo scopre dal sistema prima che da me, valgono zero.` }
-              : { think: `Se Landi lo scopre dal sistema prima che da me, sono ancora una volta quello che arriva dopo.` },
+              : { think: `Se Landi lo scopre dal sistema prima che da me, sono ancora una volta chi arriva dopo.` },
           ],
           prompt: `Un nuovo ticket critico, e Landi non lo sa ancora. Cosa fai per prima cosa?`,
           hint: `La notizia peggiore è quella che il cliente scopre da solo.`,
@@ -599,7 +599,7 @@
                   { n: `Alle 17:55 Davide ti scrive una riga: causa trovata, correzione in test. Alle diciotto in punto richiami Landi.` },
                 ],
               }),
-            ch('b', 2, `Metto Davide e Luca sul ticket con la massima priorità e scrivo a BioNova solo quando ho la causa: preferisco dare una risposta, non un aggiornamento a vuoto.`,
+            ch('b', 2, `Metto Davide e Luca sul ticket con la massima priorità e scrivo a BioNova solo quando ho la causa: preferisco una risposta vera a un aggiornamento a vuoto.`,
               `Il guasto si risolve, ma lo racconti a lavoro finito: nel frattempo Landi può averlo scoperto da solo, e un silenzio di poche ore pesa più del guasto. Corretto sul piano tecnico, meno su quello della fiducia.`,
               (d) => ({ t: -1, c: 2, r: d.flags.diagnosed ? -3 : 2 }), {
                 next: 'RET', set: { ticketFixed: true },
@@ -609,7 +609,7 @@
                   { mail: { from: `Giorgio Landi`, subj: `Ticket critico etichettatura` }, t: `Ho visto il ticket sul sistema alle cinque. Per fortuna lo avete chiuso in giornata. La prossima volta preferisco saperlo da voi.` },
                 ],
               }),
-            ch('c', 1, `Rispondo al tecnico che ha aperto il ticket con la procedura standard e i tempi previsti dal contratto: per me è un ticket come gli altri.`,
+            ch('c', 1, `Rispondo al tecnico con la procedura standard: presa in carico, tempi del contratto, aggiornamento entro domani. Per me è un ticket come gli altri.`,
               `Un ticket critico dopo due ticket critici non è un ticket come gli altri: per il cliente fa parte della stessa storia. La procedura standard è corretta, e proprio per questo suona come una risposta a una pratica e non a una persona.`,
               { t: -5, c: -3, r: 8 }, {
                 next: 'RET',
@@ -619,7 +619,7 @@
                   { w: 'luca', a: `a bassa voce`, t: `Dentro i tempi, sì. Ma a Landi non basta più.` },
                 ],
               }),
-            ch('d', 0, `Chiedo a Luca di classificarlo a priorità due finché non capiamo la causa: segnarlo critico adesso peggiora solo i numeri della dashboard.`,
+            ch('d', 0, `Chiedo a Luca di classificarlo a priorità due finché non capiamo la causa: segnarlo critico adesso peggiora solo i numeri della dashboard dell’account.`,
               `Declassare un ticket per tenere pulito un indicatore non è prudenza, è maquillage: se Landi lo scopre, e prima o poi lo scopre, perde fiducia nell’intera dashboard. La gravità la decide l’impatto sul cliente, non il colore di un riquadro.`,
               { t: -8, c: -4, r: 12 }, {
                 integ: -3, next: 'RET',
@@ -652,7 +652,7 @@
           hint: `Un commento duro è un’informazione gratuita: capisci cosa dice di vero prima di decidere a chi rispondere.`,
           tip: `La risposta migliore a un utente arrabbiato è andare a vedere il suo lavoro: un’osservazione sul campo vale più di dieci risposte scritte. Ma l’accesso passa dal responsabile: concordalo con Landi prima di avvicinare l’utente.`,
           choices: [
-            ch('a', 2, `Chiedo a Luca di rintracciare il tecnico e fisso mezz’ora nel suo reparto con Davide: voglio guardarlo lavorare e capire dove perde il tempo.`,
+            ch('a', 2, `Chiedo a Luca di rintracciare il tecnico e fisso mezz’ora nel suo reparto con Davide: voglio guardarlo stampare un lotto di etichette e capire dove perde tempo.`,
               `Andare a guardare il lavoro è la mossa giusta; farlo senza passare da Landi è un passo falso di forma: in un’azienda regolata nessuno avvicina un dipendente senza il via libera del suo responsabile. Utile sul campo, meno nella relazione.`,
               (d) => ({ t: 3, v: 3, c: 2, r: d.flags.diagnosed ? -4 : -2 }), {
                 next: 'RET',
@@ -663,7 +663,7 @@
                   { w: 'landi', a: `per messaggio, la sera`, t: `Mi dicono che siete stati in reparto senza avvisarmi. Il risultato mi interessa. Il metodo no: la prossima volta mi avvisi prima.` },
                 ],
               }),
-            ch('b', 3, `Vado da Landi per primo con una risposta pronta: riconosco il problema, dico cosa verifichiamo in reparto e quando torniamo con un esito. Gli chiedo il permesso.`,
+            ch('b', 3, `Vado da Landi per primo: riconosco il problema e chiedo il permesso di passare mezza giornata in reparto con Davide, con un esito da portargli entro venerdì.`,
               `Hai riconosciuto il problema senza difenderti, hai detto cosa verificare e quando tornare con un esito, e hai chiesto il permesso prima di entrare nel suo reparto. Così si lavora con un cliente regolato anche quando la notizia è brutta: il commento diventa un accesso con il suo consenso.`,
               (d) => ({ t: 7, v: 4, c: 6, r: d.flags.ownedIssues ? -6 : -3 }), {
                 next: 'RET',
@@ -673,7 +673,7 @@
                   { think: `Un commento che sembrava un’accusa è diventato un accesso.` },
                 ],
               }),
-            ch('c', 0, `Rispondo al reparto con una nota: i passaggi per stampare le etichette sono tutti nella documentazione, e dopo la formazione non dovrebbero più creare problemi.`,
+            ch('c', 0, `Rispondo al reparto con una nota: i passaggi per stampare le etichette sono nella documentazione e, dopo la formazione, non dovrebbero più creare problemi.`,
               `Difendere il prodotto contro un utente che dice di perdere tempo significa dirgli che sbaglia lui. Anche se la documentazione è corretta, un tecnico che non la trova ha comunque un problema, e adesso sa che a Nexora non interessa.`,
               { t: -8, v: -3, c: -3, r: 10 }, {
                 next: 'RET',
@@ -683,7 +683,7 @@
                   { think: `Gli ho spiegato dove sbaglia. Non gli ho chiesto cosa gli serve.` },
                 ],
               }),
-            ch('d', 1, `Lascio la gestione a Luca: i commenti degli utenti sono materia della Customer Success, io mi concentro sul rinnovo con Landi, che è il motivo per cui sono qui.`,
+            ch('d', 1, `Lascio la gestione a Luca: i commenti degli utenti sono materia della Customer Success, io resto sul rinnovo con Landi, che è il motivo per cui sono qui.`,
               `È una divisione dei ruoli comprensibile, ma sbagliata proprio ora: Landi ha chiesto la risposta a te, e un commento sull’uso quotidiano è esattamente il tipo di segnale che decide un rinnovo. Delegare significa che a rispondere sarà un altro, non che la domanda sparisca.`,
               { t: -3, c: -3, r: 4 }, {
                 next: 'RET',
@@ -715,7 +715,7 @@
           hint: `È la loro vetrina, non la tua: aiutali a fare bella figura e la tua parte arriva da sola.`,
           tip: `Quando un cliente sceglie di parlare in pubblico dei risultati, è il massimo del consenso: non va sfruttato, va protetto. Aiutare a verificare numeri e affermazioni rende l’intervento solido e lega chi parla a chi l’ha aiutato; chiedere visibilità lo trasforma in una vetrina commerciale.`,
           choices: [
-            ch('a', 3, `Offro a Matteo il supporto di Davide per verificare i numeri e le affermazioni sul sistema: la presentazione è la sua e deve reggere alle domande della sala.`,
+            ch('a', 3, `Offro a Matteo il supporto di Davide per verificare i numeri e le affermazioni sul sistema: la presentazione è sua e deve reggere alle domande della sala.`,
               (d) => (d.mp.has('M')
                 ? `Hai protetto il momento del cliente invece di appropriartene: con numeri già confermati, il lavoro di Davide li rende a prova di domanda in sala. Matteo non è più solo un conoscente utile, diventa la voce pubblica del risultato.`
                 : `Senza numeri già confermati il tuo aiuto pesa ancora di più: Matteo arriva sul palco con cifre verificate invece di impressioni, e sa a chi lo deve. Una voce pubblica che si fida di Nexora è il secondo sponsor che ti mancava.`),
@@ -728,7 +728,7 @@
                   { think: `Gli ho tolto due errori davanti a una sala piena. Questo lo ricorderà più a lungo di un logo.` },
                 ],
               }),
-            ch('b', 1, `Mi offro di intervenire con loro: dieci minuti dal palco su come abbiamo lavorato insieme, Nexora e BioNova, con il loro nome accanto al mio.`,
+            ch('b', 1, `Mi offro di intervenire con loro: dieci minuti dal palco su come abbiamo lavorato insieme, Nexora e BioNova, con il loro nome accanto al mio nelle slide.`,
               `Trasformare il loro intervento in un caso studio di fornitore ne cambia la natura: davanti a una platea di colleghi, un cliente che parla accanto al suo vendor perde credibilità, e Landi potrebbe leggerlo come uno sfruttamento del suo team.`,
               { t: -4, c: -3, r: 6 }, {
                 next: 'RET',
@@ -738,7 +738,7 @@
                   { think: `Volevo una vetrina e ho rischiato di rovinare la loro.` },
                 ],
               }),
-            ch('c', 2, `Chiedo a Luca di preparare una pagina di dati d’uso anonimizzati, da mettere a disposizione del team se vogliono usarla nelle loro slide al convegno.`,
+            ch('c', 2, `Chiedo a Luca di preparare una pagina di dati d’uso anonimizzati, da mettere a disposizione del team di Matteo se vogliono usarla nelle loro slide al convegno.`,
               `Un gesto utile e sobrio: metti a disposizione senza imporre. Ma resta passivo, aspetti che siano loro a chiedere: la verifica dei numeri e delle affermazioni, che è ciò che li protegge davvero, non l’hai offerta.`,
               { t: 3, v: 2, c: 1 }, {
                 next: 'RET',
@@ -748,7 +748,7 @@
                   { n: `La pagina è pronta in giornata. Nessuno la chiederà prima del convegno.` },
                 ],
               }),
-            ch('d', 1, `Non mi intrometto: è il loro momento e un fornitore che si avvicina troppo rischia di rovinarlo. Faccio gli auguri e basta, e li lascio lavorare.`,
+            ch('d', 1, `Non mi intrometto: è il loro momento e un fornitore che si avvicina troppo rischia di rovinarlo. Faccio gli auguri a Matteo e basta, e li lascio lavorare.`,
               `Rispettare il loro momento è un istinto corretto, ma qui sfocia nella distanza: non offrire niente significa lasciare Matteo da solo davanti a una platea, con il tuo sistema nelle slide. Aiutare senza chiedere è diverso dall’essere assenti.`,
               { t: -2, u: -2, c: -2 }, {
                 next: 'RET',
@@ -777,14 +777,14 @@
           hint: `Un’opportunità e un favore possono arrivare nello stesso messaggio: non è detto che vadano accettati insieme.`,
           tip: `Tenere separati i piani è la mossa matura: Orsa è un nuovo cliente da trattare con le sue regole, BioNova un cliente la cui riservatezza non è tua da scambiare. Un’informazione di seconda mano su un decisore non vale il rischio che si sappia di averla usata.`,
           choices: [
-            ch('a', 3, `Accetto il caffè per parlare di Orsa come possibile cliente, ma separo i piani: di BioNova non ti chiedo e non ti racconto niente. Ne parlo anche con Marta.`,
+            ch('a', 3, `Accetto il caffè per parlare di Orsa come possibile cliente, ma separo i piani: di BioNova non ti chiedo e non ti racconto niente. Ne parlo con Marta.`,
               `Hai preso l’opportunità e lasciato il favore: Orsa è un logo nuovo da costruire con le sue regole, BioNova resta riservata. Avvisare Marta completa il lavoro: se un giorno qualcuno chiede chi parlava con chi, la risposta è già scritta.`,
               (d) => ({ t: d.mp.has('C') ? 4 : 2, c: 2, r: -2 }), {
                 next: 'RET',
                 say: `Elena, che sorpresa, grazie. Il caffè volentieri: di Orsa parliamo con piacere, come di un possibile cliente nuovo. Di BioNova invece non ti chiedo niente e non ti racconto niente. Lo dico a te e lo dirò a Marta, per essere trasparenti con tutti.`,
                 react: [
                   { chat: { from: 'elena', app: 'WhatsApp' }, t: `Hai ragione, scusami: l’ho messa giù male. Giovedì alle 18 va bene?` },
-                  { chat: { from: 'marta', app: 'Slack' }, t: `Hai fatto bene a dirmelo: così non resta nessuna zona grigia. Tienimi aggiornata su Orsa, è un bel nome.` },
+                  { chat: { from: 'marta', app: 'Teams' }, t: `Hai fatto bene a dirmelo: così non resta nessuna zona grigia. Tienimi al corrente su Orsa, è un bel nome.` },
                 ],
               }),
             ch('b', 1, `Accetto il caffè e ti chiedo di raccontarmi com’era la situazione da dentro: capire il retroscena mi aiuta a impostare meglio il rapporto con Landi.`,
@@ -797,7 +797,7 @@
                   { think: `Ho appena comprato un’informazione. Il prezzo lo conoscerò dopo.` },
                 ],
               }),
-            ch('c', 2, `Rispondo con calore ma senza fissare nulla: dopo il rinnovo di BioNova riparliamo di Orsa. Meglio non mescolare le due cose proprio adesso, per tutti.`,
+            ch('c', 2, `Rispondo con calore ma senza fissare nulla: dopo il rinnovo di BioNova riparliamo di Orsa con calma. Meglio non mescolare le due cose adesso, per tutti.`,
               `Una scelta prudente e corretta: ringrazi, non prometti niente e non apri il fronte delle informazioni. Perdi un po’ di slancio su Orsa, ma tieni il rapporto con Elena e BioNova al riparo da ogni ombra.`,
               { t: 1, r: -1 }, {
                 next: 'RET',
@@ -806,7 +806,7 @@
                   { chat: { from: 'elena', app: 'WhatsApp' }, t: `Capisco perfettamente. Quando vuoi, io ci sono.` },
                 ],
               }),
-            ch('d', 1, `Non rispondo: se Landi sapesse che sento l’ex sponsor potrebbe leggerla male, e il silenzio è la scelta più prudente finché il rinnovo è aperto.`,
+            ch('d', 1, `Non rispondo per ora: se Landi sapesse che sento l’ex sponsor potrebbe leggerla male, e il silenzio è la scelta più prudente finché il rinnovo è aperto.`,
               `Il silenzio sembra prudente, ma rinuncia a un’opportunità vera e lascia Elena a pensare che Nexora l’abbia dimenticata appena è uscita dal giro. Si potevano tenere separati i piani senza tacere.`,
               { t: -1, c: -2 }, {
                 next: 'RET',
@@ -858,7 +858,7 @@
                   { think: `Non ho parlato del loro pilota. Ho parlato di cosa deve dimostrare.` },
                 ],
               }),
-            ch('b', 2, `Chiedo a Davide un confronto tecnico su rischio di migrazione e validazione GxP, da portare a Landi come analisi di supporto, non come contromossa.`,
+            ch('b', 2, `Chiedo a Davide un confronto tecnico scritto su rischio di migrazione e validazione GxP, da portare a Landi come analisi di supporto, non come contromossa.`,
               `Un confronto tecnico serio è un contributo alla loro decisione, non una difesa: se è onesto, diventa anche un argomento. Ma lasci a Landi il compito di fissare i criteri, e chi non li fissa li subisce.`,
               { t: 2, v: 2, c: 3, r: -2 }, {
                 next: 'RET',
@@ -868,7 +868,7 @@
                   { n: `Landi lo legge e risponde con una riga: “Utile. Lo allego alla valutazione.”` },
                 ],
               }),
-            ch('c', 0, `Rispondo con la stessa moneta: offro un pilota gratuito di tre mesi del nostro modulo trial, prima che Vertex ci metta piede nei laboratori.`,
+            ch('c', 0, `Rispondo con la stessa moneta: offro un pilota gratuito di tre mesi del nostro modulo trial, a costo zero per BioNova, prima che Vertex arrivi nei laboratori.`,
               `Hai accettato di competere sul loro terreno, il gratis, e hai svalutato il modulo che stavi per vendere. Se hai già un’opzione scritta, hai appena detto che il suo prezzo era negoziabile.`,
               (d) => ({ v: -6, t: -2, c: -2, r: d.flags.expansion ? 8 : 5 }), {
                 next: 'RET',
@@ -878,11 +878,11 @@
                   { think: `Matteo adesso ha due “gratis” sul tavolo e nessun motivo per scegliere il mio.` },
                 ],
               }),
-            ch('d', 1, `Faccio notare a Matteo che Vertex ha avuto problemi con altri clienti biotech e che un pilota gratuito spesso costa molto in migrazione.`,
+            ch('d', 1, `Faccio notare a Matteo che Vertex ha avuto problemi con altri clienti biotech e che un pilota gratuito spesso costa molto in migrazione e riconvalide.`,
               `Un’insinuazione senza prove sul concorrente è un boomerang: chi ascolta riconosce la mossa e ne ricava un dubbio su chi la fa. Il costo di migrazione è un argomento vero, ma va documentato, non evocato.`,
               { t: -6, c: -2, r: 8 }, {
                 next: 'RET',
-                say: `Matteo, ti dico quello che so: Vertex ha avuto problemi con altri clienti biotech, e un pilota gratuito spesso costa molto in migrazione. Penserei bene prima di fidarmi.`,
+                say: `Matteo, ti dico quello che so: Vertex ha avuto problemi con altri clienti biotech, e un pilota gratuito spesso costa molto in migrazione e in riconvalide. Penserei bene prima di fidarmi.`,
                 react: [
                   { w: 'matteo', a: `con calma`, t: `Hai dei riferimenti? “Ho sentito dire” non lo posso portare a Landi.` },
                   { think: `Ho un sospetto e nessun documento, e l’ho detto ad alta voce.` },
@@ -928,10 +928,10 @@
         {
           id: 'sponsor_oltre_landi', if: () => true, has: (d) => !!d.flags.threaded,
           q: `Quanti sponsor hai in BioNova oltre a Landi? Dammi i nomi, non il numero.`,
-          evidence: `Tre, con nome e obiettivo: supply, qualità e IT. Sono nell’allegato al rinnovo e la business review trimestrale è già in calendario. Te lo giro.`,
-          honest: `Uno solo che decide: Landi. Matteo Brambilla ci è vicino, ma su qualità e IT non ho ancora un nome e nessuno parla per noi quando io non ci sono. Finché i nomi non sono scritti nel piano, per me resta Best Case.`,
-          bluff: `Ne ho tre: supply, qualità e IT. Landi li ha già coinvolti e sono tutti allineati sul piano.`,
-          vague: `Landi è molto presente e il resto del team ci conosce. Non mi preoccupa restare scoperto.`,
+          evidence: `Tre ruoli nell’allegato al rinnovo: supply, qualità e IT, ciascuno con un obiettivo, più la review trimestrale. Il nome per la qualità lo aggiunge Landi.`,
+          honest: `Uno solo che decide: Landi. Matteo Brambilla ci è vicino, ma su qualità e IT non ho nomi e nessuno parla per noi se io non ci sono. Il piano non è scritto.`,
+          bluff: `Ne ho tre: supply, qualità e IT. Landi li ha già coinvolti uno per uno, sono tutti allineati sul piano e la review trimestrale è già fissata in calendario.`,
+          vague: `Landi è molto presente e il suo team ci conosce da due anni, adesso anche meglio. Non mi preoccupa restare scoperti: ne riparliamo con calma dopo la firma.`,
           react: {
             evidence: `Questo è un account più forte di quello che avevo in testa un mese fa. Mandami l’allegato: lo cito io, quando il CRO chiede come evitiamo un altro caso BioNova.`,
             honest: `Grazie per averlo detto: è esattamente il rischio che ha già colpito questo account una volta. Best Case, e questa settimana ci sediamo a scrivere i nomi che mancano.`,
@@ -943,12 +943,12 @@
         {
           id: 'ticket_chiusi', if: () => true, has: (d) => !!d.flags.ownedIssues,
           q: `I ticket critici sono chiusi o solo in lavorazione? E con “chiusi” intendo chiusi da loro, non dichiarati chiusi da noi.`,
-          evidence: `Chiusi e confermati: Landi ha firmato la chiusura di entrambi dopo il test del suo team. Ho la mail e il verbale della review del giorno trenta.`,
-          honest: `Chiusi dal nostro lato. Il team di Landi li ha testati, ma la conferma scritta non c’è ancora. Per me restano “quasi chiusi” finché non arriva.`,
-          bluff: `Chiusi, tutti e due. Davide ha rilasciato la correzione e nel sistema risultano risolti.`,
-          vague: `Sono in buono stato, mi pare. Luca li segue ogni giorno e non mi risultano nuove segnalazioni.`,
+          evidence: `Sì: il report della review del giorno trenta li dà chiusi tutti e due, ed era sul tavolo davanti a Landi e a Matteo, senza obiezioni. Te lo inoltro subito.`,
+          honest: `Chiusi dal nostro lato: Davide e Luca hanno chiuso entrambi i ticket. Manca la conferma scritta di BioNova: per me restano “quasi chiusi” finché non arriva.`,
+          bluff: `Chiusi, tutti e due. Davide ha rilasciato la correzione e nel sistema risultano risolti: da BioNova non è arrivata nessuna riapertura né richiesta di verifica.`,
+          vague: `Sono in buono stato, mi pare. Luca li segue ogni giorno, Davide ci ha lavorato di persona e da BioNova non mi risultano nuove segnalazioni né solleciti.`,
           react: {
-            evidence: `Ecco la differenza tra chiuso e dichiarato chiuso. Con la firma di Landi il tema ticket esce dal mio radar: me la inoltri con la data.`,
+            evidence: `Un report guardato insieme al cliente pesa più di una riga nel nostro sistema. Inoltramelo: con quello il tema ticket esce dal mio radar.`,
             honest: `Distinzione giusta, e te ne do atto: nel CRM “chiuso” deve voler dire chiuso per loro. Chiedi la conferma entro giovedì e il tema è risolto.`,
             bluffCaught: `Nel sistema di BioNova uno dei due risulta ancora “in verifica”. Non è un dramma. Lo è dirmi “chiusi” quando potevi saperlo.`,
             bluffPassed: `Ok, lo registro come chiuso. Ma mandami la conferma di BioNova entro venerdì, altrimenti lo riapro io nel forecast.`,
@@ -958,12 +958,12 @@
         {
           id: 'clausola_adozione', if: () => true, has: (d) => !!d.flags.giveGet,
           q: `Com’è scritto il prezzo del rinnovo? Se c’è una parte legata all’adozione, voglio soglia, misura, data e cosa succede al prezzo se non la raggiungono. “L’abbiamo discussa” non mi basta.`,
-          evidence: `È nella bozza che Sara ha già in mano: adozione al 70% misurata sui dati del sistema a fine primo anno, ticket critici chiusi in meno di cinque giorni, e la parte variabile del prezzo scatta solo se le due soglie sono raggiunte.`,
-          honest: `Non ancora. Nella bozza c’è il prezzo, ma nessuna clausola sull’adozione: soglia, misura e data le devo ancora scrivere con Sara. Finché non sono sul foglio, per me è Best Case.`,
-          bluff: `È scritta, sì: soglia al 70%, misura sui dati del sistema, ticket in cinque giorni. Sara ha la bozza.`,
-          vague: `Con Sara il prezzo è a buon punto, e a Landi la struttura piace. Manca solo la formalità finale.`,
+          evidence: `È nella bozza già in mano a Sara e Landi: canone base –8% e parte variabile dovuta solo con adozione al 70% e ticket critici chiusi in meno di cinque giorni.`,
+          honest: `Non ancora. Soglia, misura e data della clausola sull’adozione le devo ancora definire con Sara. Finché non sono sul foglio, non te lo difendo come sicuro.`,
+          bluff: `È scritta, sì: soglia al 70% di adozione, misura sui dati del sistema, ticket chiusi in cinque giorni. Sara ha già la bozza e Landi l’ha letta, manca la firma.`,
+          vague: `Con Sara il prezzo è a buon punto e a Landi la struttura piace. Manca solo la formalità finale, di solito una questione di giorni dopo il passaggio dal CFO.`,
           react: {
-            evidence: `Questo è un Commit che si può difendere: soglia, misura, data e conseguenza sul prezzo. Mandami la bozza, la tengo con me fino alla firma.`,
+            evidence: `Soglie e conseguenza sul prezzo sono scritte, e questo lo difendo. Misura e data falle mettere nero su bianco con Sara. Mandami la bozza: la tengo con me fino alla firma.`,
             honest: `Grazie per avermelo detto così. Un’idea di struttura non è una clausola: oggi stesso fai partire la bozza e fissa una data con Sara. Fino ad allora, Best Case.`,
             bluffCaught: `Ho chiesto a Giulia del Deal Desk di aprire la bozza: di una clausola sull’adozione non c’è traccia. Non è un’accusa, è un controllo. Rifacciamolo con i fatti.`,
             bluffPassed: `Va bene, lo scrivo. Ma entro domani voglio vedere il paragrafo: se la soglia non è sul foglio, non è nel contratto.`,

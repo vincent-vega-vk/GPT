@@ -11,7 +11,8 @@
     rinaldi: { name: `Marco Rinaldi`, role: `Direttore Generale · firma`, hue: 150 },
     marta: { name: `Marta Colombo`, role: `La tua Sales Director`, hue: 348 },
     giulia: { name: `Giulia Ferraro`, role: `Deal Desk Nexora`, hue: 95 },
-    bruni: { name: `Stefano Bruni`, role: `Legale Nexora`, hue: 28 },
+    /* chiave storica: il legale di Nexora è Ilaria Corti in ogni scenario */
+    bruni: { name: `Ilaria Corti`, role: `Legale Nexora`, hue: 300 },
     /* il “tuo contatto” delle scene generiche è Paolo */
     cliente: { name: `Paolo Greco`, role: `Head of Supply Chain`, hue: 200 },
   };
@@ -126,12 +127,14 @@
           const f = d.flags || {}, disc = Number(d.disc) || 0;
           const ap = CL.approval({ sc: d.sc || sc0(), flags: f, disc });
           const p3 = (id) => picked(d, 'n3', id), p6 = (id) => picked(d, 'n6', id), pf = (id) => picked(d, 'wild:portale_firma', id);
+          /* lo sconto promesso è cumulativo: ogni concessione si somma alle precedenti. Con più di una, il foglio dice “in tutto” */
+          const tot = hist(d).filter((h) => h && h.delta && h.delta.disc > 0).length > 1 ? ` in tutto` : ``;
           let sOurs = `—`, sSt = 'open';
           if (disc <= 0) { sOurs = picked(d, 'wild:giulia_chiude', 'a') ? `3 pacchetti letti dal Deal Desk` : f.tradeSetup ? `da scambiare` : `—`; sSt = 'open'; }
-          else if (ap.status === 'blocked') { sOurs = `${Math.round(disc)}% (max ${ap.allowed}%)`; sSt = 'blocked'; }
-          else if (!f.giveGet && disc > 8) { sOurs = `${Math.round(disc)}% senza scambio`; sSt = 'lost'; }
-          else if (ap.status === 'approved') { sOurs = `${Math.round(disc)}% contro scambio`; sSt = 'traded'; }
-          else { sOurs = `${Math.round(disc)}%` + (picked(d, 'n4', 'c') || p6('a') || p6('d') || p6('b') ? ` con Analytics` : ''); sSt = f.giveGet ? 'won' : 'open'; }
+          else if (ap.status === 'blocked') { sOurs = `${Math.round(disc)}%${tot} (max ${ap.allowed}%)`; sSt = 'blocked'; }
+          else if (!f.giveGet && disc > 8) { sOurs = `${Math.round(disc)}%${tot} senza scambio`; sSt = 'lost'; }
+          else if (ap.status === 'approved') { sOurs = `${Math.round(disc)}%${tot} contro scambio`; sSt = 'traded'; }
+          else { sOurs = `${Math.round(disc)}%${tot}` + (picked(d, 'n4', 'c') || p6('a') || p6('d') || p6('b') ? ` con Analytics` : ''); sSt = f.giveGet ? 'won' : 'open'; }
           const sAsk = f.tradeSetup ? `30% (le bastano “due cifre”)` : f.insider ? `30% (da portare al DG)` : `30%`;
 
           const pAsk = f.tradeSetup ? `120 gg (ne servono 90)` : f.insider ? `120 gg · politica di gruppo` : `120 giorni`;
@@ -153,8 +156,8 @@
             lOurs = `condizioni standard`; lSt = 'blocked';
             rOurs = `condizioni standard`; rSt = 'blocked';
           } else if (p3('d')) {
-            lOurs = `bozza del legale`; lSt = 'open';
-            rOurs = `bozza del legale`; rSt = 'open';
+            lOurs = `bozza di Ilaria`; lSt = 'open';
+            rOurs = `bozza di Ilaria`; rSt = 'open';
           }
 
           const rows = [
@@ -198,7 +201,7 @@
           else if (p6('a')) v = ['skeptic', `Ha scoperto che la linea era elastica.`];
           else if (p6('d')) v = ['skeptic', `Ha riconosciuto la scadenza artificiale.`];
           else if (sl('a')) v = ['neutral', `Sta leggendo il tuo riepilogo con il legale e il direttore finanziario.`];
-          else if (sl('b')) v = ['skeptic', `Ha letto che sei pronto a scendere ancora, e lo ha annotato.`];
+          else if (sl('b')) v = ['skeptic', `Ha letto che sul prezzo c’è ancora margine, e lo ha annotato.`];
           else if (sl('c')) v = ['skeptic', `Ha contato le tue chiamate. Si fa sentire quando decide lei.`];
           else if (f.termsBleed) v = ['skeptic', `Ha ottenuto tutto. Sa che la linea cede.`];
           else if (p3('c')) v = ['skeptic', `Valuta la rimessa a gara.`];
@@ -208,6 +211,7 @@
           else if (vx('c')) v = ['skeptic', `Ti ha chiesto una prova scritta su Vertex. Non l’hai.`];
           else if (vx('b')) v = ['neutral', `Ti ha detto su cosa confronta le offerte: implementazione, servizio, tre anni.`];
           else if (vx('d')) v = ['neutral', `Aspetta il tuo confronto scritto per le otto.`];
+          else if (picked(d, 'n1', 'a') && (p2('a') || p2('c') || p2('d'))) v = ['skeptic', `Ha sommato le tue offerte: ${Math.round(d.disc)}% in tutto, più del 30% che chiedeva.`];
           else if (f.deskApproved) v = ['ally', `Sceglie dai pacchetti: ha smesso di negoziare contro di te.`];
           else if (p2('c')) v = ['neutral', `Ha preso nota del 12%. Il primo numero l’hai dato tu.`];
           else if (f.tradeSetup) v = ['neutral', `Ti ha detto cosa le serve: 90 giorni e due cifre.`];
@@ -266,7 +270,7 @@
                 { think: `Le ho dato un numero che non mi aveva chiesto, e nessuno scambio in cambio.` },
               ],
             }),
-          ch('b', 3, `Chiamo Paolo, il mio champion: voglio sapere quali di queste richieste sono vincoli veri e quali ancore, prima di muovermi.`,
+          ch('b', 3, `Chiamo Paolo, il mio champion: voglio sapere quali delle richieste sono vincoli veri e quali ancore, prima di muovermi.`,
             `Una telefonata di dieci minuti ha trasformato un ultimatum in una mappa. Con Paolo sai cosa è politica, cosa è principio e dove Valeria ha bisogno di un risultato da mostrare.`,
             { t: 6, v: 4, c: 10, r: -6 }, {
               mp: ['Dp'], set: { insider: true }, next: 'n2',
@@ -287,11 +291,11 @@
                 { think: `Ho chiesto un permesso prima ancora di avere un piano. E lei se n’è accorta in trenta secondi.` },
               ],
             }),
-          ch('d', 2, `Lascio passare qualche ora prima di rispondere, per non mostrare troppa fretta, e intanto preparo la strategia con calma.`,
-            `Una pausa dà l’idea di fermezza, ma il calendario non aspetta e le ore in cui Paolo avrebbe potuto aiutarti sono passate senza che tu le usassi. Qui il tempo lavora per chi compra.`,
+          ch('d', 2, `Aspetto un’ora prima di rispondere, per non mostrare fretta, e intanto preparo la strategia con calma: Valeria può attendere.`,
+            `Una pausa dà l’idea di fermezza, ma il calendario non aspetta e l’ora in cui Paolo avrebbe potuto aiutarti è passata senza che tu la usassi. Qui il tempo lavora per chi compra.`,
             { c: 2, u: -2 }, {
               next: 'n2',
-              say: `Chiudo la mail senza rispondere. Mi alzo, vado a prendermi un caffè e lascio che Valeria aspetti: nel frattempo ragiono con calma sulla strategia.`,
+              say: `Chiudo la mail senza rispondere. Mi alzo, vado a prendermi un caffè e lascio che Valeria aspetti un’ora: nel frattempo ragiono con calma sulla strategia.`,
               react: [
                 { n: `Alle 16:30 la macchinetta del caffè è l’unica cosa che fa ancora rumore al piano. Il telefono sulla scrivania resta nero.` },
                 { think: `Sembra fermezza. Intanto le ore passano, e di informazioni nuove non ne ho nemmeno una.` },
@@ -318,22 +322,24 @@
         hint: `Non discutere il numero. Discuti cosa serve a lei per portare un accordo al suo capo.`,
         tip: `Non contrattare il numero: contratta le variabili. Chiedi cosa le serve per portare un accordo al DG e proponi scambi uno a uno (Give-Get). Offrire opzioni invece di un sì/no ti restituisce la regia.`,
         choices: [
-          ch('a', 0, `Il trenta è fuori portata. Posso arrivare al quindici, ma è il mio ultimo prezzo: da lì non mi muovo, e se per lei va bene possiamo firmare già oggi.`,
-            `“Ultimo prezzo” alla prima battuta è un’etichetta a cui nessuno crede. Hai solo spostato l’ancora da trenta a ventidue, senza ottenere uno scambio.`,
+          ch('a', 0, `Sul prezzo posso aggiungere quindici punti, non uno di più: è il mio ultimo prezzo, da lì non mi muovo. Se a lei va bene così, firmiamo già stasera.`,
+            (d) => (picked(d, 'n1', 'a')
+              ? `Il quindici si somma al venti già detto: lo sconto promesso sale a trentacinque, più del trenta che chiedeva Valeria. E “ultimo prezzo” alla seconda offerta è un’etichetta a cui nessuno crede.`
+              : `“Ultimo prezzo” alla prima battuta è un’etichetta a cui nessuno crede. Hai solo spostato l’ancora da trenta a ventidue, senza ottenere uno scambio.`),
             { t: -2, c: -4, d: 15 }, {
               next: 'n3',
-              say: `Valeria, il trenta è fuori portata. Posso arrivare al quindici, ma è il mio ultimo prezzo: da lì non mi muovo. Se per lei va bene, possiamo firmare già oggi.`,
+              say: `Valeria, sul prezzo posso aggiungere quindici punti, non uno di più. È il mio ultimo prezzo: da lì non mi muovo. Se per lei va bene, firmiamo già stasera.`,
               react: (d) => (picked(d, 'n1', 'a')
                 ? [
-                  { w: 'valeria', a: `rileggendo il blocco`, t: `Poco fa mi parlava di venti, adesso di quindici e di “ultimo prezzo”. Se ventidue le va bene, chiudiamo.` },
-                  { think: `Venti, poi quindici, e questo lo chiamo ultimo. Quello che dico ha già smesso di pesare.` },
+                  { w: 'valeria', a: `rileggendo il blocco`, t: `Venti poco fa, quindici adesso, e lo chiama “ultimo prezzo”. Sommati fanno trentacinque: più di quanto avessi chiesto io. Lo annoto così.` },
+                  { think: `Venti, poi altri quindici, e questo lo chiamo ultimo. Ho trattato al posto suo, e contro di me.` },
                 ]
                 : [
                   { w: 'valeria', a: `con un mezzo sorriso nella voce`, t: `Capisco. E se arrivassimo a ventidue?` },
                   { think: `“Ultimo prezzo”. L’ho detto alla prima battuta, e lei l’ha sentito come un invito.` },
                 ]),
             }),
-          ch('b', 3, `Il trenta dipende da cosa ricevo in cambio: durata, tempi di firma, una referenza. E a lei, per portare un accordo a Rinaldi, che cosa serve?`,
+          ch('b', 3, `Quel trenta dipende da cosa ricevo in cambio: durata, tempi di firma, una referenza. Mi dica invece cosa serve a lei per portare un accordo a Rinaldi.`,
             `Hai trasformato un 30% secco in uno scambio e scoperto i bisogni veri di Valeria. Quando chiedi cosa le serve, smette di recitare la parte e comincia a lavorare con te.`,
             { t: 4, v: 4, c: 10, r: -4 }, {
               set: { tradeSetup: true }, next: 'n3',
@@ -344,31 +350,43 @@
                 { think: `Non è più un trenta contro un quindici. È una lista di bisogni, e adesso ce l’ho.` },
               ],
             }),
-          ch('c', 2, `La capisco. Le propongo il 12% a fronte di un impegno triennale: è un numero che riesco a difendere con la mia direzione e che regge nel tempo anche per voi.`,
-            `Una proposta già agganciata a una contropartita è una mossa solida. Aprire per primo, però, significa che il negoziato parte dal tuo numero e non dal suo.`,
+          ch('c', 2, `La capisco. Le propongo dodici punti a fronte di un impegno triennale: un numero che riesco a difendere con la mia direzione e che regge anche per voi.`,
+            (d) => (picked(d, 'n1', 'a')
+              ? `Il triennale è una buona contropartita, ma i dodici punti si sommano al venti già promesso: sei a trentadue, oltre la richiesta di Valeria, e la contropartita copre solo una parte del conto.`
+              : `Una proposta già agganciata a una contropartita è una mossa solida. Aprire per primo, però, significa che il negoziato parte dal tuo numero e non dal suo.`),
             { c: 2, d: 12 }, {
               set: { giveGet: true }, next: 'n3',
-              say: `Capisco la sua posizione, Valeria. Le propongo il dodici per cento a fronte di un impegno triennale: è un numero che riesco a difendere con la mia direzione e che regge nel tempo anche per voi.`,
+              say: `Capisco la sua posizione, Valeria. Le propongo dodici punti a fronte di un impegno triennale: è un numero che riesco a difendere con la mia direzione e che regge nel tempo anche per voi.`,
               react: (d) => (picked(d, 'n1', 'a')
                 ? [
-                  { w: 'valeria', a: `scrive`, t: `Dodici, tre anni. Poco fa mi parlava di venti: lo riporto, ma non le garantisco che basti.` },
-                  { think: `Venti, poi dodici, in due ore. Per lei il numero che conta è il primo che ha sentito.` },
+                  { w: 'valeria', a: `scrive`, t: `Venti prima, adesso altri dodici con i tre anni: trentadue. Più di quanto avessi chiesto. Lo riporto così.` },
+                  { think: `Venti, poi altri dodici, in due ore. Per lei il numero che conta è la somma, e l’ho scritta io.` },
                 ]
                 : [
                   { w: 'valeria', a: `scrive`, t: `Dodici, tre anni. Lo riporto.` },
                   { think: `Dodici con tre anni. Solido, ma ho aperto io: da qui si parte dal mio numero.` },
                 ]),
             }),
-          ch('d', 3, `Con Giulia del Deal Desk ho preparato tre pacchetti tra cui scegliere: A) 10% con fatturazione annuale; B) 15% con impegno triennale; C) 8% con prepagamento.`,
-            `Passare da “sì o no” ad “A, B o C” cambia il gioco: ogni sconto ha la sua contropartita e a scegliere è lei. Valeria prende il B e ti dice su cosa lavorare: ha smesso di negoziare contro di te.`,
+          ch('d', 3, `Con Giulia, del Deal Desk, ho preparato tre pacchetti tra cui scegliere: A) 10% con fatturazione annuale; B) 15% con triennale; C) 8% con anticipo.`,
+            (d) => (picked(d, 'n1', 'a')
+              ? `I pacchetti erano alternative, ma Valeria li somma al venti detto a voce: il B porta lo sconto a trentacinque, oltre la soglia che il Deal Desk aveva approvato. Il numero detto per primo pesa più dei pacchetti scritti.`
+              : `Passare da “sì o no” ad “A, B o C” cambia il gioco: ogni sconto ha la sua contropartita e a scegliere è lei. Valeria prende il B e ti dice su cosa lavorare: ha smesso di negoziare contro di te.`),
             { t: 4, v: 2, c: 12, r: -6, d: 15 }, {
               jolly: 'desk', set: { giveGet: true, deskApproved: true }, next: 'n3',
               say: `Nelle ultime ore ho lavorato con Giulia, del Deal Desk, a tre pacchetti. A: dieci per cento con fatturazione annuale. B: quindici per cento con impegno triennale. C: otto per cento con pagamento anticipato. Scegliamo insieme quello che regge davanti al suo Direttore Generale.`,
-              react: [
-                { n: `Valeria non risponde subito. Dal movimento della penna sul blocco capisci che sta facendo i conti.` },
-                { w: 'valeria', a: `dopo una pausa`, t: `Il B. Il B lo posso portare a Rinaldi. Su pagamento e penali dobbiamo ancora lavorare.` },
-                { think: `Ha scelto lei, tra tre scambi che andavano bene a me. Non ho dovuto dirle di no neanche una volta.` },
-              ],
+              react: (d) => (picked(d, 'n1', 'a')
+                ? [
+                  { n: `Sul telefono, accanto alla tastiera, resta aperta la mail di Giulia delle 17:10: “Schema approvato, tre pacchetti, ogni sconto con la sua contropartita”.` },
+                  { n: `Valeria non risponde subito. Dal movimento della penna sul blocco capisci che sta facendo i conti.` },
+                  { w: 'valeria', a: `dopo una pausa`, t: `Il B, insieme al venti che mi ha già dato: trentacinque. Lo porto a Rinaldi. Su pagamento e penali dobbiamo ancora lavorare.` },
+                  { think: `Il B era un’alternativa al venti, non un extra. Lei li ha sommati, e io non ho fatto in tempo a fermarla.` },
+                ]
+                : [
+                  { n: `Sul telefono, accanto alla tastiera, resta aperta la mail di Giulia delle 17:10: “Schema approvato, tre pacchetti, ogni sconto con la sua contropartita”.` },
+                  { n: `Valeria non risponde subito. Dal movimento della penna sul blocco capisci che sta facendo i conti.` },
+                  { w: 'valeria', a: `dopo una pausa`, t: `Il B. Il B lo posso portare a Rinaldi. Su pagamento e penali dobbiamo ancora lavorare.` },
+                  { think: `Ha scelto lei, tra tre scambi che andavano bene a me. Non ho dovuto dirle di no neanche una volta.` },
+                ]),
             }),
         ],
       },
@@ -391,19 +409,19 @@
         hint: `Le condizioni valgono denaro. Ogni concessione ha un controvalore per te e per loro.`,
         tip: `Termini di pagamento, penali e recesso sono prezzo mascherato. Valutali in euro, scambiali uno a uno, usa tetti (cap) e durate (lock-in) invece di rifiutare in blocco.`,
         choices: [
-          ch('a', 0, `Su pagamento, penali e recesso posso venirle incontro: li accetto così come sono, purché lo sconto resti fermo al 12%. È il numero su cui rispondo io, il resto lo sistemiamo.`,
+          ch('a', 0, `Su pagamento, penali e recesso posso venirle incontro: li accetto come sono, cioè 120 giorni, penali fino al 15% e recesso libero a 12 mesi, purché lo sconto resti dov’è.`,
             `Centoventi giorni di incasso, penali per circa ottantamila euro e un recesso a un anno valgono più dei punti di sconto che hai difeso, anche se nel listino non compaiono. Un contratto così il Deal Desk non lo approva.`,
             { v: -6, c: -4, r: 14 }, {
               set: { termsBleed: true }, next: 'n4',
-              say: `Valeria, su pagamento, penali e recesso posso venirle incontro: le accetto così come sono, purché lo sconto resti fermo al dodici per cento. È il numero su cui rispondo io, il resto lo sistemiamo.`,
+              say: `Valeria, su pagamento, penali e recesso posso venirle incontro: le accetto così come sono, centoventi giorni, penali fino al quindici per cento e recesso libero a dodici mesi, purché lo sconto resti dov’è. È il numero su cui rispondo io, il resto lo sistemiamo.`,
               react: [
                 { w: 'valeria', a: `con soddisfazione appena trattenuta`, t: `Ne prendo atto. Aggiorno la bozza stasera.` },
-                { n: `Giri gli appunti della chiamata al legale e al Deal Desk. Alle 18:50 il telefono vibra due volte di fila.` },
+                { n: `Giri gli appunti della chiamata a Ilaria, del Legal, e a Giulia, del Deal Desk. Alle 18:50 il telefono vibra due volte di fila.` },
                 { chat: { from: 'bruni', app: 'Teams' }, t: `Penali senza tetto e recesso libero a dodici mesi. Così non passa dal mio tavolo.` },
                 { w: 'giulia', a: `senza saluti`, t: `Dimmi che non hai detto sì a tutte e tre. Dimmelo adesso.` },
               ],
             }),
-          ch('b', 3, `Su ciascuna ho una proposta: pagamento a 90 giorni; penali con tetto al 5%, solo sui livelli critici; recesso dopo 24 mesi con penale. In cambio, triennale e firma entro domani.`,
+          ch('b', 3, `Su ciascuna ho una proposta: pagamento a 90 giorni; penali con tetto al 5%, solo sui livelli critici; recesso dopo 24 mesi con penale. In cambio, triennale e firma già domani.`,
             `Hai tradotto ogni richiesta in una variabile con un prezzo e le hai legate a un impegno di Valeria. È il cuore del give-get: ogni cosa che dai ha una cosa che ricevi.`,
             { t: 4, c: 8, r: -8 }, {
               mp: ['P'], set: { giveGet: true }, next: 'n4',
@@ -413,24 +431,24 @@
                 { think: `Non ha detto no a niente. Ha detto “lo porto”, che è il modo in cui si dice sì senza firmare.` },
               ],
             }),
-          ch('c', 1, `Le nostre condizioni standard non si toccano: pagamento, penali e recesso sono quelli di ogni cliente Nexora. Sul prezzo ho margine, sul resto no, e non apro un secondo tavolo.`,
+          ch('c', 1, `Le nostre condizioni standard non si toccano: pagamento a 30 giorni, penali nei limiti del contratto tipo, nessun recesso nel triennio. Sul prezzo ho margine, sul resto no.`,
             `Una rigidità senza alternative non ti fa perdere il prezzo: ti fa perdere il tavolo. Valeria ha già in mano un piano B, e la rimessa a gara è scritta nella sua mail del pomeriggio.`,
             { t: -4, u: -4, c: -4, r: 8 }, {
               next: 'n4',
-              say: `Valeria, le nostre condizioni standard non si toccano: pagamento, penali e recesso sono quelli di ogni cliente Nexora. Sul prezzo ho margine, sul resto no, e non apro un secondo tavolo.`,
+              say: `Valeria, le nostre condizioni standard non si toccano: pagamento a trenta giorni, penali nei limiti del contratto tipo, nessun recesso nel triennio, come per ogni cliente Nexora. Sul prezzo ho margine, sul resto no, e non apro un secondo tavolo.`,
               react: [
                 { w: 'valeria', a: `piano, senza alterarsi`, t: `Allora valuto se la rimessa a gara non ci convenga.` },
                 { think: `Ho difeso un contratto standard davanti a una persona che aveva già pronto il piano B. Chi aveva più alternative?` },
                 { n: `Un clic. La chiamata finisce senza saluti.` },
               ],
             }),
-          ch('d', 2, `Faccio intervenire il Legal fast-track di Nexora: entro stasera le mando clausole alternative su SLA e recesso, scritte apposta per essere approvate in fretta da voi.`,
+          ch('d', 2, `Attivo il Legal fast-track con Ilaria Corti, di Nexora: entro le 20:40 le mando clausole alternative bilanciate su SLA e recesso, scritte per essere approvate in fretta da voi.`,
             `Un testo equilibrato in due ore e una Valeria che ringrazia per la rapidità. È un buon uso del jolly, ma lo scambio economico resta ancora da fare.`,
             { t: 4, c: 8, r: -6 }, {
               jolly: 'legal', mp: ['P'], next: 'n4',
-              say: `Valeria, attivo il Legal fast-track di Nexora. Entro stasera le mando clausole alternative su SLA e recesso, scritte apposta per essere approvate in fretta da voi.`,
+              say: `Valeria, attivo il Legal fast-track di Nexora, con Ilaria Corti. Entro le otto e quaranta di stasera le mando clausole alternative su SLA e recesso, scritte apposta per essere approvate in fretta da voi.`,
               react: [
-                { w: 'valeria', a: `quasi cordiale`, t: `Se arriva stasera, lo leggo stanotte. Grazie per la rapidità.` },
+                { w: 'valeria', a: `quasi cordiale`, t: `Alle otto e quaranta va bene: lo leggo stanotte. Grazie per la rapidità.` },
                 { chat: { from: 'bruni', app: 'Teams' }, t: `Ho riscritto SLA e recesso in forma bilanciata: tetto sulle penali, preavviso sul recesso. Il testo ti arriva entro le 20:40.` },
                 { think: `Il testo sarà buono. Ma il prezzo di tutto questo, per ora, non l’ho scambiato con niente.` },
               ],
@@ -467,32 +485,32 @@
                 { think: `Non ha chiesto il prodotto neanche una volta.` },
               ],
             }),
-          ch('b', 1, `Nexora è leader nella pianificazione della domanda e lavora con gruppi alimentari come il vostro in tutta Europa. Le mando le referenze oggi stesso, se vuole.`,
+          ch('b', 1, `Nexora pianifica la domanda per oltre quaranta gruppi alimentari in Europa, due dei quali in Emilia. Le mando le referenze oggi stesso, così può sentirli.`,
             `Rinaldi ti ha chiesto cosa vedrà e quando, e tu gli hai parlato di Nexora. È educato, ma ha già capito che da te non avrà una risposta sul suo semestre.`,
             { t: 0, v: 0, c: 2 }, {
               mp: ['E'], set: { ebEngaged: true }, next: 'n5',
-              say: `Direttore, Nexora è leader nella pianificazione della domanda e lavora con gruppi alimentari come il vostro in tutta Europa. Le mando le referenze oggi stesso, se vuole.`,
+              say: `Direttore, Nexora pianifica la domanda per oltre quaranta gruppi alimentari in Europa, e due sono qui in Emilia. Le mando le referenze oggi stesso, così può sentirli lei.`,
               react: [
                 { w: 'rinaldi', a: `educatamente`, t: `Questo l’ho letto. Io le ho chiesto un’altra cosa.` },
                 { think: `Ho risposto alla domanda che avevo in testa, non a quella che mi ha fatto.` },
               ],
             }),
-          ch('c', 1, `Se firma oggi, le aggiungo gratuitamente il modulo Analytics. Di solito lo vendiamo a parte, ma per una firma di oggi lo metto in conto alla nostra relazione con voi.`,
+          ch('c', 1, `Se firma oggi, le aggiungo gratis il modulo Analytics per i primi dodici mesi. Di solito lo vendiamo a parte, ma per una firma di oggi lo metto in conto alla relazione.`,
             `Hai regalato un modulo senza ottenere nulla e hai detto a Valeria, che ascoltava, che sul resto c’è margine. A Rinaldi non hai risposto: il suo dubbio è rimasto intatto.`,
             { t: 2, v: -4, c: -2, d: 8 }, {
               mp: ['E'], set: { ebEngaged: true }, next: 'n5',
-              say: `Direttore, se firma oggi le aggiungo gratuitamente il modulo Analytics. Di solito lo vendiamo a parte, ma per una firma di oggi lo metto in conto alla nostra relazione con voi.`,
+              say: `Direttore, se firma oggi le aggiungo gratuitamente il modulo Analytics per i primi dodici mesi. Di solito lo vendiamo a parte, ma per una firma di oggi lo metto in conto alla nostra relazione con voi.`,
               react: [
                 { w: 'rinaldi', a: `con un mezzo sorriso`, t: `Gratis. Interessante.` },
                 { n: `Nel riquadro in ombra, Valeria non dice niente. Abbassa lo sguardo e scrive una riga sul blocco.` },
                 { think: `Un regalo per Rinaldi. Il conto, però, me lo presenterà Valeria.` },
               ],
             }),
-          ch('d', 2, `Posso far collegare Marta, la nostra Sales Director, perché si impegni personalmente sul go-live. Due persone del suo livello che rispondono del risultato, davanti a lei.`,
+          ch('d', 2, `Posso far collegare Marta Colombo, la nostra Sales Director, tra due minuti: si impegna di persona sul go-live. Due persone del suo livello, davanti a lei.`,
             `Rinaldi gradisce la presenza: due persone di pari grado, finalmente. Ma il suo dubbio sul primo semestre non l’hai risolto: l’impegno di Marta è di cortesia, non di sostanza.`,
             { t: 6, v: 2, c: 4 }, {
               jolly: 'exec', mp: ['E'], set: { ebEngaged: true }, next: 'n5',
-              say: `Direttore, se può farle piacere, Marta Colombo, la nostra Sales Director, può collegarsi adesso e impegnarsi personalmente sul go-live.`,
+              say: `Direttore, se può farle piacere, Marta Colombo, la nostra Sales Director, può collegarsi tra due minuti e impegnarsi personalmente sul go-live.`,
               react: [
                 { w: 'marta', a: `si collega, voce ferma`, t: `Buongiorno, Direttore. Sul go-live ci metto la faccia, e il mio nome sul piano.` },
                 { w: 'rinaldi', a: `annuendo`, t: `Fa piacere vedere due livelli al tavolo. Resta la mia domanda: cosa vedo nel primo semestre?` },
@@ -524,27 +542,27 @@
         hint: `Un forecast serve a prendere decisioni, non a farti sentire bene.`,
         tip: `Un forecast gonfiato brucia fiducia con chi decide risorse; uno sottostimato fa perdere opportunità di supporto. Dai un numero onesto, con ciò che manca e ciò che stai facendo per chiuderlo.`,
         choices: [
-          ch('a', 0, `Commit pieno, al cento per cento: Valeria ha il mandato di chiudere entro stasera e il Direttore Generale è con noi. Puoi scriverlo così al CRO, senza riserve.`,
+          ch('a', 0, `Commit pieno, al cento per cento: Valeria ha il mandato di chiudere entro stasera e Rinaldi è con noi dalla call delle nove. Scrivilo così al CRO, senza riserve.`,
             `Hai trasformato una sensazione in un impegno: se Valeria prende tempo, Marta avrà detto al CRO una cosa non vera sulla tua parola, e il tuo credito con il management è azzerato per i prossimi tre trimestri.`,
             { r: 4 }, {
               integ: -8, set: { forecastInflated: true }, next: 'n6',
-              say: `Marta, Commit pieno, cento per cento. Valeria ha il mandato di chiudere entro stasera e il Direttore Generale è con noi. Scrivilo pure così al CRO, senza riserve.`,
+              say: `Marta, Commit pieno, cento per cento. Valeria ha il mandato di chiudere entro stasera e Rinaldi è con noi dalla call delle nove. Scrivilo pure così al CRO, senza riserve.`,
               react: [
                 chatM(`Perfetto. Seicentoventimila come certi, con il tuo nome accanto. Alle 19 il numero lo dico io al CRO, con la mia faccia.`),
                 { think: `Ho dato per certo qualcosa che ho soltanto sentito dire.` },
               ],
             }),
-          ch('b', 3, `Commit con rischio, circa 70%: mi mancano il sì scritto di Valeria sul contratto e quello di Rinaldi. Ti dico cosa serve per arrivare al 90% e chi chiamo.`,
+          ch('b', 3, `Commit con rischio, circa 70%: mancano il sì scritto di Valeria sul contratto e la firma di Rinaldi. Ti dico cosa serve per arrivare al 90% e chi chiamo oggi.`,
             `Hai dato un numero con le sue evidenze e i suoi buchi, e un piano per colmarli. Marta può difenderlo in alto, e sa dove aiutarti: un forecast onesto è ciò che apre le porte quando servono.`,
             { c: 4, r: -4 }, {
               integ: 6, set: { forecastHonest: true }, next: 'n6',
-              say: `Marta, Commit con rischio, circa il settanta per cento. Mi mancano due cose: il sì scritto di Valeria sul contratto e quello di Rinaldi. Per portarlo al novanta le chiedo a entrambi nelle prossime ore, e ti dico io come va.`,
+              say: `Marta, Commit con rischio, circa il settanta per cento. Mi mancano due cose: il sì scritto di Valeria sul contratto e la firma di Rinaldi. Per portarlo al novanta le chiedo a entrambi nelle prossime ore, e ti dico io come va.`,
               react: [
                 chatM(`Meglio un settanta che regge che un novanta che mi piace. Lo porto così, con il rischio scritto. E se il CRO mi chiede chi può sbloccare la cosa, faccio il tuo nome.`),
                 { think: `Un numero con i buchi dichiarati. Non è comodo, ma è un numero che posso guardare in faccia.` },
               ],
             }),
-          ch('c', 1, `Mettilo in Best Case, intorno al 40%: preferisco restare basso e non esporre te con il CRO. Se poi chiude, è un regalo per tutti, e nessuno resta deluso.`,
+          ch('c', 1, `Mettilo in Best Case, intorno al 40%: preferisco restare molto basso e non esporre te con il CRO. Se poi chiude, è un regalo per tutti, e nessuno resta deluso.`,
             `Hai nascosto informazioni utili: se chiudi, il successo arriva a sorpresa, e Marta non ha potuto aiutarti con ciò che sapeva. Un forecast sottostimato è sleale quanto uno gonfiato.`,
             { c: -2 }, {
               integ: -3, next: 'n6',
@@ -585,7 +603,7 @@
             { think: `Ieri sera parlava di rimessa a gara, oggi dice novanta per cento. Qualcosa, dall’altra parte, è cambiato. Non so cosa.`, if: (dd) => picked(dd, 'n3', 'c') },
             { think: `Alle 19 Marta dirà al CRO che è tutto certo. Qualsiasi cosa chieda Valeria adesso, la pago due volte.`, if: (dd) => picked(dd, 'n5', 'a') },
             { think: `Marta voleva il mio numero alle 16. Sono le 16:20 e non le ho ancora scritto.`, if: (dd) => picked(dd, 'n5', 'd') },
-            { think: `Il tono è cambiato: niente ultimatum, niente numeri scanditi come ordini. Quando una buyer diventa gentile all’ultima ora, c’è sempre un motivo.` },
+            { think: `Il tono è cambiato: niente ultimatum, niente numeri scanditi come ordini. Quando chi compra diventa gentile all’ultima ora, c’è sempre un motivo.` },
           ];
         },
         prompt: `Ultima richiesta. Come la gestisci?`,
@@ -615,11 +633,11 @@
                 { think: `Metà modulo contro una firma stasera e un nome da mettere sul sito. Alle sette ci arrivo con un contratto, non con una promessa.` },
               ],
             }),
-          ch('c', 2, `Analytics non fa parte del perimetro di questo contratto. Dopo la firma le preparo una proposta dedicata, con condizioni pensate apposta per il vostro gruppo.`,
+          ch('c', 2, `Analytics non fa parte del perimetro di questo contratto. Dopo la firma le preparo una proposta dedicata entro metà gennaio, con condizioni pensate per il vostro gruppo.`,
             `Hai tenuto la linea: la richiesta era una verifica, e ha scoperto che c’è un limite. L’accordo slitta di qualche ora e il rischio sale, ma la tua posizione ne esce più solida.`,
             { c: 2, u: -4, r: 4 }, {
               next: 'END',
-              say: `Valeria, Analytics non fa parte del perimetro di questo contratto. Dopo la firma le preparo una proposta dedicata, con condizioni pensate per voi.`,
+              say: `Valeria, Analytics non fa parte del perimetro di questo contratto. Dopo la firma le preparo una proposta dedicata entro metà gennaio, con condizioni pensate per il vostro gruppo.`,
               react: [
                 { w: 'valeria', a: `insiste, senza durezza`, t: `Mi riesce difficile spiegarlo al Direttore Generale.` },
                 { w: 'valeria', a: `dopo un silenzio`, t: `Va bene. Aspetto la sua proposta dopo la firma.` },
@@ -653,13 +671,13 @@
             { think: `Paolo mi ha detto cosa è leva e cosa è scena. Se devo far approvare qualcosa, che sia soltanto ciò che serve davvero.`, if: (dd) => picked(dd, 'n1', 'b') },
             { think: `Il venti l’ho detto io a Valeria, a voce. A Giulia quel numero non l’ho mai fatto vedere.`, if: (dd) => picked(dd, 'n1', 'a') },
             { think: `Marta mi ha chiesto cosa do in cambio e non ho saputo dirglielo. A Giulia lo devo portare scritto, e in meno di due ore.`, if: (dd) => picked(dd, 'n1', 'c') },
-            { think: `Ho lasciato passare il pomeriggio, e adesso il tempo ce l’ha lei. Un’ora e mezza per decidere cosa chiederle.`, if: (dd) => picked(dd, 'n1', 'd') },
+            { think: `Ho lasciato passare un’ora, e adesso il tempo ce l’ha lei. Un’ora e mezza per decidere cosa chiederle.`, if: (dd) => picked(dd, 'n1', 'd') },
           ],
           prompt: `Giulia chiude alle sei. Cosa le chiedi?`,
           hint: `Un’approvazione serve se si sa cosa si approva. Prima dello sconto, pensa a cosa ricevi in cambio.`,
           tip: `Il Deal Desk approva meglio uno scambio che un numero: porta pacchetti con la contropartita scritta accanto, non una cifra da giustificare dopo. Una delega in bianco sembra comoda, ma diventa il tetto verso cui scivoli quando il cliente spinge.`,
           choices: [
-            ch('a', 3, `Ti porto entro le cinque e mezza tre pacchetti, ognuno con lo sconto e la sua contropartita scritta accanto. Da domani uso solo quelli, e solo contro qualcosa che Valeria mi dà.`,
+            ch('a', 3, `Ti porto entro le cinque e mezza tre pacchetti, ognuno con lo sconto e la contropartita scritta accanto. Da domani uso solo quelli, in cambio di qualcosa da Valeria.`,
               `Hai usato l’ora che il Deal Desk ti concede per fissare la cornice: ogni punto di sconto ha già il suo prezzo scritto e letto da chi lo deve approvare. Domani, davanti a Valeria, non dovrai inventare una contropartita.`,
               { t: 2, c: 8, r: -6 }, {
                 next: 'RET',
@@ -670,7 +688,7 @@
                 ],
               }),
             ch('b', 2, `Dammi un’approvazione quadro fino al 18%, da usare domani come mi serve: non ho il tempo di scrivere pacchetti, e Valeria non aspetta nessuno, nemmeno noi due.`,
-              `Un’approvazione quadro ti dà margine ma non una struttura: senza contropartite scritte, il 18% rischia di diventare il numero a cui ti avvicini da solo, per fretta. Meglio di niente, peggio di un pacchetto.`,
+              `Un’approvazione quadro ti dà margine ma non una struttura: senza contropartite scritte, il 18% rischia di diventare il numero a cui ti avvicini per fretta, prima ancora che Valeria lo chieda. Meglio di niente, peggio di un pacchetto.`,
               { c: 4, r: -1 }, {
                 next: 'RET',
                 say: `Giulia, non ho il tempo di scrivere pacchetti, e Valeria non aspetta nessuno, nemmeno noi due. Dammi un’approvazione quadro fino al diciotto per cento, da usare domani come mi serve.`,
@@ -679,21 +697,21 @@
                   { think: `Un diciotto in tasca e nessuna contropartita. È un margine, non una strategia.` },
                 ],
               }),
-            ch('c', 1, `Non voglio rubarti l’ultima ora dell’anno: domani ho la mia soglia al 12% e, se serve, ti chiamo. Lascia che sia io a decidere cosa portarti, e quando.`,
-              `Hai scambiato un po’ di pudore con un buco: oltre il 12% ti serve il Deal Desk, e a fine anno il Deal Desk risponde dopo pranzo. Se Valeria spinge, deciderai da solo, e da solo risponderai.`,
+            ch('c', 1, `Non voglio rubarti l’ultima ora dell’anno: domani ho la mia soglia al 12% e, se serve, ti chiamo io dopo pranzo. Lascia che sia io a decidere cosa portarti, e quando.`,
+              `Hai scambiato un po’ di pudore con un buco: oltre il 12% ti serve il Deal Desk, e a fine anno il Deal Desk risponde dopo pranzo. Se Valeria spinge, deciderai senza nessuno accanto e ne risponderai di persona.`,
               { c: -4, r: 6 }, {
                 next: 'RET',
-                say: `Giulia, non voglio rubarti l’ultima ora dell’anno. Domani ho la mia soglia al dodici per cento e, se serve, ti chiamo. Lascia che sia io a decidere cosa portarti, e quando.`,
+                say: `Giulia, non voglio rubarti l’ultima ora dell’anno. Domani ho la mia soglia al dodici per cento e, se serve, ti chiamo io dopo pranzo. Lascia che sia io a decidere cosa portarti, e quando.`,
                 react: [
                   { w: 'giulia', a: `asciutta`, t: `Come vuoi. Ma qualunque cosa sopra il dodici, dopo le sei, la vedo domani a pranzo. Non prima.` },
                   { think: `Ho evitato di disturbarla. Adesso il tempo che ho per decidere dura quanto una telefonata di Valeria.` },
                 ],
               }),
-            ch('d', 0, `Lasciami mano libera fino al 25% per domani sera. So come muovermi, e non voglio tornare da te ogni volta che Valeria rilancia o guarda l’orologio.`,
-              `Una delega in bianco è l’opposto di ciò per cui esiste il Deal Desk, e Giulia lo sa. Ti sei bruciato un po’ di credito con lei, e ti porti dietro un numero che alla prima occasione uscirà dalla tua bocca.`,
+            ch('d', 0, `Lasciami mano libera fino al 25% per tutta la giornata di domani. So come muovermi, e non voglio tornare da te ogni volta che Valeria rilancia o guarda l’orologio.`,
+              `Una delega in bianco è l’opposto di ciò per cui esiste il Deal Desk, e Giulia lo sa. Hai bruciato un po’ di credito con lei, e ti porti dietro un numero che alla prima occasione uscirà dalla tua bocca.`,
               { t: -2, c: -4, r: 8 }, {
                 next: 'RET',
-                say: `Giulia, lasciami mano libera fino al venticinque per cento per domani sera. So come muovermi, e non voglio tornare da te ogni volta che Valeria rilancia o guarda l’orologio.`,
+                say: `Giulia, lasciami mano libera fino al venticinque per cento per tutta la giornata di domani. So come muovermi, e non voglio tornare da te ogni volta che Valeria rilancia o guarda l’orologio.`,
                 react: [
                   { w: 'giulia', a: `secca`, t: `No. Mano libera non esiste, né per te né per Marta. Portami un pacchetto, o una cifra con la sua contropartita, e ne parliamo.` },
                   { think: `Ho chiesto un permesso in bianco a chi, di mestiere, non ne firma.` },
@@ -740,7 +758,7 @@
                   { think: `Non vedrò la loro offerta, ma ho i suoi criteri. Da un numero contro un numero siamo passati a una tabella: è il terreno su cui voglio stare.` },
                 ],
               }),
-            ch('c', 1, `Le dico che Vertex ha una storia di implementazioni in ritardo e di costi extra: l’ho visto in altri clienti, e il prezzo basso si paga dopo la firma.`,
+            ch('c', 1, `Le dico che Vertex ha una storia di implementazioni in ritardo e costi extra: l’ho visto in altri clienti, e il prezzo basso si paga dopo la firma.`,
               `Hai parlato male di un concorrente senza una prova in mano. Valeria ora ha un motivo per non fidarsi di te, e un’occasione per ripeterlo a Rinaldi.`,
               { t: -6, c: -2, r: 6 }, {
                 next: 'RET',
@@ -750,11 +768,11 @@
                   { think: `Una voce, non un fatto. E l’ho detta a chi decide cosa credere.` },
                 ],
               }),
-            ch('d', 2, `Prendo nota e le preparo per domani alle otto un confronto scritto, punto per punto, da portare al Direttore Generale in riunione.`,
+            ch('d', 2, `Prendo nota e le preparo per domani alle otto un confronto scritto, punto per punto, da portare al Direttore Generale in riunione, con costi e tempi.`,
               `Una risposta composta e professionale: eviti di inseguire il prezzo e prometti un confronto serio. Ma arriva dopo, e per stanotte il dubbio resta sul tavolo di Valeria.`,
               { t: 2, v: 2, u: -2, r: 2 }, {
                 next: 'RET',
-                say: `Valeria, prendo nota e la ringrazio. Le preparo per domani alle otto un confronto scritto, punto per punto, che potrà portare al Direttore Generale.`,
+                say: `Valeria, prendo nota e la ringrazio. Le preparo per domani alle otto un confronto scritto, punto per punto, con costi e tempi, che potrà portare al Direttore Generale.`,
                 react: [
                   { w: 'valeria', a: `asciutta`, t: `Apprezzo la precisione. Alle otto e mezza ho il Direttore Generale in agenda: lo prepari bene.` },
                   { think: `Un documento promesso per domattina. Stanotte si dorme poco, ma il confronto lo scrivo io.` },
@@ -790,19 +808,19 @@
                   { think: `Se rispondo, ho perso il mio champion. Se non rispondo, ho appena confessato di avere una talpa.` },
                 ],
               }),
-            ch('b', 3, `Non lo cito con nessuno. Lo uso per decidere dove tenere la linea e dove cedere, e domattina lo verifico con Rinaldi.`,
+            ch('b', 3, `Non lo cito con nessuno. Lo uso per decidere dove tenere la linea e dove cedere, e domattina, alle nove, lo verifico con Rinaldi stesso.`,
               (d) => (d.flags.insider
                 ? `Hai trattato la confidenza per ciò che è: un dato da pesare, non una carta da giocare. Paolo ha visto come la usi e si fida di te ancora di più; la verifica con Rinaldi, domani, ti dirà quanto vale.`
                 : `Hai trattato la confidenza per ciò che è: un dato da pesare. Non hai ancora una relazione solida con Paolo, ma questa mossa la costruisce: la prossima volta ti dirà di più.`),
               (d) => ({ t: d.flags.insider ? 6 : 3, c: 6, r: -4 }), {
                 next: 'RET',
-                say: `Grazie, Paolo. Non l’ho sentita da te e non la cito con nessuno. Mi serve per capire dove tenere la linea e dove cedere. Domattina la verifico io, dalla bocca di Rinaldi.`,
+                say: `Grazie, Paolo. Non l’ho sentita da te e non la cito con nessuno. Mi serve per capire dove tenere la linea e dove cedere. Domattina, alle nove, la verifico io, dalla bocca di Rinaldi.`,
                 react: [
-                  { w: 'paolo', a: `sollevato`, t: `Bravo. Con Rinaldi parla di risultati, non di gare: se lo senti, capisci da solo se ho ragione.` },
+                  { w: 'paolo', a: `sollevato`, t: `Giusto così. Con Rinaldi parla di risultati, non di gare: se lo senti, capisci subito se ho ragione.` },
                   { think: `Una confidenza è un dato, non un fatto. Intanto so dove ho spazio.` },
                 ],
               }),
-            ch('c', 1, `Alzo la posta: da domani tolgo ogni concessione dal tavolo e non scendo di un punto. Se la gara è un bluff, non c’è motivo di cedere ancora.`,
+            ch('c', 1, `Alzo la posta: da domani tolgo ogni concessione dal tavolo e non scendo di un punto. Se la gara è un bluff, non c’è motivo di cedere.`,
               `Hai scambiato una voce per una certezza e ci hai scommesso sopra il trimestre. Un irrigidimento a freddo è proprio ciò che serve a Valeria per giustificare la gara che Rinaldi non vuole.`,
               { t: -4, u: -6, c: -4, r: 8 }, {
                 next: 'RET',
@@ -812,7 +830,7 @@
                   { think: `Una frase sentita al telefono, e io ci sto costruendo sopra la serata.` },
                 ],
               }),
-            ch('d', 2, `Lo ringrazio ma non cambio niente: continuo a trattare come se la gara fosse un’ipotesi vera, e la confidenza resta una voce.`,
+            ch('d', 2, `Lo ringrazio ma non cambio niente: continuo a trattare come se la gara fosse un’ipotesi vera, e la confidenza resta una voce da verificare.`,
               `Prudente e rispettoso della fonte, ma la confidenza resta sprecata: sapere che la gara non è la carta di Rinaldi ti avrebbe permesso di tenere meglio la linea. Non rischi niente e non guadagni niente.`,
               { t: 2, c: 2, r: -2 }, {
                 next: 'RET',
@@ -840,7 +858,7 @@
           hint: `Cinque minuti non servono per spiegare: servono per ottenere una cosa sola, che resti anche quando il telefono si spegne.`,
           tip: `Con un decisore in movimento una richiesta precisa e verificabile vale più di una conversazione: un sì scritto, un nome per la firma, una data. Quello che resta su carta è ciò che il manager e il cliente possono usare dopo.`,
           choices: [
-            ch('a', 3, `Lo chiamo e chiedo una cosa sola: due righe scritte, anche su WhatsApp, con il suo sì e il nome di chi firma se lui non è raggiungibile.`,
+            ch('a', 3, `Lo chiamo e chiedo una cosa sola: due righe scritte, anche su WhatsApp, con il suo sì e il nome di chi firma se lui non è disponibile.`,
               (d) => (picked(d, 'n4', 'a')
                 ? `Con cinque minuti e una richiesta sola hai trasformato un sì a voce in un documento. Per Marta e per Valeria è un’altra categoria di prova.`
                 : `Anche con un piano meno forte, una richiesta precisa ti porta a casa un sì scritto, seppur condizionato. Con Rinaldi le richieste vaghe si perdono, quelle da due righe si eseguono.`),
@@ -859,7 +877,7 @@
                     { think: `Un sì con riserva. Non è tutto, ma è su carta.` },
                   ]),
               }),
-            ch('b', 1, `Gli lascio un vocale con il riassunto del piano e gli chiedo di richiamarmi appena atterra, quando ha un momento più calmo per parlarne.`,
+            ch('b', 1, `Gli lascio un vocale con il riassunto del piano e gli chiedo di richiamarmi appena atterra, dopo le tre, quando ha un momento più calmo.`,
               `Un vocale a chi sta salendo su un aereo è un messaggio in bottiglia. Hai lasciato scorrere l’unica finestra utile: un eventuale sì scritto arriverà dopo le tre, a numero già dato a Marta.`,
               { u: -4, c: -2 }, {
                 next: 'RET',
@@ -869,11 +887,11 @@
                   { think: `Un vocale a un uomo che sta per imbarcarsi. Lo ascolterà alle tre, forse.` },
                 ],
               }),
-            ch('c', 1, `Gli chiedo di sbloccare subito lo sconto: se mi dà il via sul 12% adesso, risparmiamo tempo a tutti, Valeria compresa, e chiudiamo in giornata.`,
+            ch('c', 1, `Gli chiedo di sbloccare subito lo sconto: se mi dà il via adesso, risparmiamo tempo a tutti, Valeria compresa, e chiudiamo in giornata.`,
               `Hai usato l’unica finestra con l’Economic Buyer per parlare di prezzo, scavalcando Valeria, con cui il prezzo si tratta. Rinaldi non ama essere trattato come un ufficio acquisti.`,
               { t: -6, c: -6, r: 6 }, {
                 next: 'RET',
-                say: `Direttore, le chiedo una cosa pratica: se mi dà il via sul dodici per cento adesso, risparmiamo tempo a tutti, Valeria compresa.`,
+                say: `Direttore, le chiedo una cosa pratica: se mi dà il via sullo sconto adesso, risparmiamo tempo a tutti, Valeria compresa.`,
                 react: [
                   { w: 'rinaldi', a: `secco`, t: `Queste cose le tratto con Valeria. Non mi chiami per il prezzo.` },
                   { think: `Cinque minuti rari, e li ho usati per saltare Valeria. Lui se n’è accorto prima che finissi la frase.` },
@@ -907,7 +925,7 @@
           ],
           prompt: `Valeria è sparita da due ore. Cosa fai?`,
           hint: `Un silenzio, a fine trimestre, è informazione. Ma da solo non ti dice se è un problema o un procedimento.`,
-          tip: `Quando il buyer sparisce, il tuo lavoro è rendere facile il suo prossimo passo: un riepilogo breve, già pronto da girare a chi firma, vale più di dieci solleciti. Insistere o regalare nuove concessioni parla soltanto della tua ansia.`,
+          tip: `Quando chi compra sparisce, il tuo lavoro è rendere facile il suo prossimo passo: un riepilogo breve, già pronto da girare a chi firma, vale più di dieci solleciti. Insistere o regalare nuove concessioni parla soltanto della tua ansia.`,
           choices: [
             ch('a', 3, `Le mando un riepilogo di cinque righe con posizioni, scambi e scadenza di stasera, pronto da girare a Rinaldi. Intanto chiedo a Paolo dov’è.`,
               (d) => (d.mp.has('P')
@@ -926,18 +944,18 @@
                   { think: `Il silenzio non era un “no”: era una riunione. E adesso il mio riepilogo è sul tavolo.` },
                 ],
               }),
-            ch('b', 0, `Le scrivo che, pur di sbloccare la situazione, posso rivedere ancora il prezzo prima delle 16, se mi dice che cosa le serve.`,
+            ch('b', 0, `Le scrivo che, pur di sbloccare la situazione, posso rivedere ancora il prezzo di qualche punto prima delle 16, se mi dice che cosa le serve.`,
               `Hai pagato il silenzio con una concessione. Valeria vede un fornitore che cede appena l’orologio si avvicina, e impara che aspettare conviene.`,
               { t: -4, v: -6, c: -6, r: 4, d: 6 }, {
                 next: 'RET',
-                say: `Valeria, per sbloccare la situazione posso rivedere ancora il prezzo prima delle sedici. Mi dica solo che cosa le serve.`,
+                say: `Valeria, per sbloccare la situazione posso rivedere ancora il prezzo di qualche punto prima delle sedici. Mi dica solo che cosa le serve.`,
                 react: [
                   { n: `Il messaggio risulta letto alle 14:41. Nessuna risposta.` },
                   { think: `Ho offerto un altro sconto a una persona che non mi ha neanche risposto.` },
                 ],
               }),
-            ch('c', 1, `La chiamo ogni quarto d’ora e lascio messaggi sul fisso e sul cellulare, e scrivo anche alla sua segretaria, finché non risponde.`,
-              `L’insistenza non ti fa vincere tempo, te ne fa perdere: Valeria non è sparita per un problema di raggiungibilità, e la tua pressione la irrigidisce. Un buyer che si sente inseguito rallenta, non accelera.`,
+            ch('c', 1, `La chiamo ogni quarto d’ora, lascio messaggi sul fisso e sul cellulare, scrivo anche alla sua segretaria e continuo finché non risponde.`,
+              `L’insistenza non ti fa vincere tempo, te ne fa perdere: Valeria non è sparita per un problema di raggiungibilità, e la tua pressione la irrigidisce. Chi compra e si sente inseguito rallenta, non accelera.`,
               { t: -6, c: -4, r: 6 }, {
                 next: 'RET',
                 say: `Provo a chiamare Valeria ogni quarto d’ora, sul fisso e sul cellulare, e scrivo anche alla sua segretaria finché qualcuno non risponde.`,
@@ -946,7 +964,7 @@
                   { think: `Se torna online, si ricorderà di me così: quello che chiamava ogni quindici minuti.` },
                 ],
               }),
-            ch('d', 2, `Aspetto senza forzare e uso il tempo per rifinire allegati e bozza del contratto, così quando riappare è tutto pronto da firmare in un colpo solo.`,
+            ch('d', 2, `Aspetto senza forzare e uso il tempo per rifinire allegati e bozza del contratto, così quando riappare è tutto pronto da firmare subito.`,
               `Una scelta serena e produttiva: non alimenti il silenzio e prepari il terreno. Ti manca solo un passo in più: dare a Valeria qualcosa di già pronto da usare con Rinaldi.`,
               { c: 2, u: -2, r: -2 }, {
                 next: 'RET',
@@ -974,7 +992,7 @@
           hint: `La scadenza è la mezzanotte. Chi dipende da un solo canale, a fine trimestre, ha già perso una parte del tempo.`,
           tip: `L’iter contrattuale non finisce con la bozza finale: comprende i canali di firma, i procuratori e un piano B scritto prima del bisogno. Un canale di riserva concordato per iscritto vale più di una promessa di ripristino.`,
           choices: [
-            ch('a', 3, `Chiedo a Valeria e al legale di Terrasole di concordare adesso un canale di riserva: firma digitale qualificata e invio via PEC, approvato per iscritto.`,
+            ch('a', 3, `Chiedo a Valeria e al legale di Terrasole di concordare adesso un canale di riserva: firma digitale qualificata e invio via PEC, per iscritto.`,
               (d) => (d.mp.has('P')
                 ? `Con l’iter contrattuale già impostato, il canale di riserva è una formalità da mettere per iscritto: sai chi firma, con quale procura, e il documento è pronto. La manutenzione diventa una nota a margine.`
                 : `Il canale di riserva è la mossa giusta, ma arriva tardi: devi scoprire adesso chi può firmare e con quale procura. Stai costruendo il piano B con il cronometro acceso.`),
@@ -987,8 +1005,8 @@
                   { think: `Un piano B concordato prima del bisogno. È l’unico che non dipende dal portale.` },
                 ],
               }),
-            ch('b', 2, `Chiamo l’IT di Terrasole e chiedo un aggiornamento ogni mezz’ora sull’orario reale di ripristino, e intanto tengo tutto pronto per l’invio.`,
-              `Una mossa ordinata: ti informi, sei pronto e non perdi la testa. Ma dipende ancora da un solo canale, e “entro le sei” non è un impegno.`,
+            ch('b', 2, `Chiamo l’IT di Terrasole e chiedo un aggiornamento ogni mezz’ora sull’orario reale di ripristino, e intanto tengo il contratto pronto per l’invio.`,
+              `Una mossa ordinata: ti informi, ti tieni pronto e non perdi la testa. Ma dipende ancora da un solo canale, e “entro le sei” non è un impegno.`,
               { c: 2, u: -2, r: -2 }, {
                 next: 'RET',
                 say: `Chiamo l’IT di Terrasole: voglio sapere quando riapre davvero il servizio e li prego di avvisarmi ogni mezz’ora. Nel frattempo tengo tutto pronto per l’invio.`,
@@ -1007,7 +1025,7 @@
                   { think: `Un banner arancione e un “forse”: su questo ho appoggiato un contratto da seicentoventimila euro.` },
                 ],
               }),
-            ch('d', 0, `Scrivo a Marta che il contratto è di fatto firmato: Rinaldi ha dato il suo sì e la firma digitale è soltanto una formalità, la facciamo entro stasera.`,
+            ch('d', 0, `Scrivo a Marta che il contratto è di fatto firmato: Rinaldi ha dato il suo sì e la firma digitale è solo una formalità, la facciamo entro stasera.`,
               `Hai dichiarato “di fatto firmato” un contratto che non lo è, per proteggere il forecast. Una formalità, a fine giornata, è ciò che decide se hai chiuso il trimestre o no.`,
               { c: -4, r: 8 }, {
                 integ: -4, next: 'RET',
@@ -1029,7 +1047,7 @@
         hit: (d) => !(d.mp.has('P') && (d.mp.has('Dp') || d.flags.procuraNota)),
         dp: -0.32, dpProt: -0.03,
         hitText: `Alle 18:05 arriva una mail di due righe dalla segreteria di Rinaldi: “Il Direttore Generale preferisce firmare il 2 gennaio, a ufficio aperto e con calma”. Nessuno ha mai chiarito chi potrebbe firmare al suo posto, e non c’è un piano B per la firma. A mezzanotte il trimestre chiude con il contratto di Terrasole in un cassetto.`,
-        protText: `Alle 18:05 la segreteria di Rinaldi scrive che il Direttore Generale preferirebbe firmare il 2 gennaio. Ma sai già chi può firmare al suo posto, e il contratto è pronto. Valeria gira la mail al direttore finanziario con una riga sola: “Firmi lei”. Costa un’ora e un po’ di tensione, non il trimestre.`,
+        protText: `Alle 18:05 la segreteria di Rinaldi scrive che il Direttore Generale preferirebbe firmare il 2 gennaio. Ma il contratto è pronto in ogni riga e, a Terrasole, chi può firmare al suo posto lo sanno tutti. Valeria gira la mail al direttore finanziario con una riga sola: “Firmi lei”. Costa un’ora e un po’ di tensione, non il trimestre.`,
       },
       {
         id: 'ordini_bloccati', title: `Il sistema ordini del cliente si blocca`, kind: 'neg', w: 1,
@@ -1062,48 +1080,48 @@
       risk: `Il rischio vero è che gli Acquisti usino la rimessa a gara fino all’ultimo minuto, oppure che la firma di Rinaldi non arrivi entro la mezzanotte del 31.`,
       custom: [
         {
-          id: 'desk_scritto', if: (d) => d.disc > 12, has: (d) => !!d.flags.deskApproved,
-          q: `Hai promesso oltre il dodici per cento, che è la soglia che puoi dare da solo. Lo sconto è approvato dal Deal Desk per iscritto, o è un “ci siamo sentiti”?`,
-          evidence: `Sì: Giulia, del Deal Desk, ha approvato per iscritto lo schema a pacchetti, sconto e contropartite insieme. La mail è nel fascicolo, te la inoltro.`,
-          honest: `A voce: con Giulia ne abbiamo parlato, ma l’approvazione scritta non ce l’ho ancora. Fino a quando non arriva, tengo il numero in Best Case.`,
-          bluff: `Approvato, sì. Giulia mi ha dato l’ok e la mail è nel mio archivio: se vuoi la ritrovo e te la giro subito dopo la call.`,
-          vague: `Il Deal Desk è informato e non ha sollevato problemi. Di solito sono rapidi.`,
+          id: 'desk_scritto', if: (d) => d.disc > 12, has: (d) => !!d.flags.deskApproved && d.disc <= CL.approval(d).allowed,
+          q: `Hai promesso oltre il dodici per cento, che è la soglia che puoi concedere in autonomia. Lo sconto è approvato dal Deal Desk per iscritto, o è un “ci siamo sentiti”?`,
+          evidence: `Sì: lo schema a pacchetti è di Giulia, del Deal Desk, che lo ha approvato con sconto e contropartite insieme. Il documento te lo giro dopo la call.`,
+          honest: `Non ancora: il numero l’ho detto io, e dal Deal Desk non ho un’approvazione scritta che lo copra. Finché non arriva, lo considero da confermare.`,
+          bluff: `Approvato, sì. Giulia mi ha dato l’ok e la mail è nel mio archivio: se vuoi la ritrovo e te la giro subito dopo la call, con le tre contropartite.`,
+          vague: `Il Deal Desk è informato e finora non ha sollevato problemi: a fine anno sono rapidi, la conferma la aspetto entro stasera. Lo sconto non mi preoccupa.`,
           react: {
             evidence: `Perfetto, è esattamente ciò che chiedo. Schema, contropartite e approvazione nello stesso documento: per me resta in {claim}.`,
-            honest: `Grazie per la chiarezza. Chiamo io Giulia e le chiedo di darti la risposta in giornata: finché non arriva ti tengo in {claim}.`,
-            bluffCaught: `Ho sentito Giulia mezz’ora fa: nessuna approvazione scritta, solo una chiacchierata. Non ti voglio mettere in difficoltà, ma da qui in poi mi servono i documenti, non i ricordi.`,
+            honest: `Grazie per la chiarezza. Chiamo io Giulia e le chiedo di darti la risposta in giornata. Intanto il numero lo porto con la riserva scritta, e ti protegge.`,
+            bluffCaught: `Ho sentito Giulia mezz’ora fa: per questo sconto non c’è nessuna approvazione scritta. Non ti voglio mettere in difficoltà, ma da qui in poi mi servono i documenti, non i ricordi.`,
             bluffPassed: `Va bene, ti credo. Ma la mail la voglio entro domattina: se non arriva, il numero lo rivedo io.`,
-            vague: `“Non ha sollevato problemi” non è un’approvazione. Il sì del Deal Desk si legge nella firma di Giulia, in fondo a una mail: per ora ti sposto in {claim}.`,
+            vague: `“Non ha sollevato problemi” non è un’approvazione. Il sì del Deal Desk si legge nella firma di Giulia, in fondo a una mail: per ora ti abbasso di una categoria.`,
           },
         },
         {
           id: 'rinaldi_scritto', if: () => true, has: (d) => !!d.flags.rinaldiScritto,
           q: `Rinaldi ti ha dato il sì per iscritto, o è un “ci siamo” detto in una call?`,
-          evidence: `Per iscritto: due righe su WhatsApp, prima che si imbarcasse, con il suo sì. Te lo giro in screenshot, con data e ora.`,
-          honest: `A voce, in una call da dieci minuti: non ho niente di scritto. Finché non lo ottengo, per me resta Best Case.`,
+          evidence: `Per iscritto: due righe su WhatsApp, prima che si imbarcasse, con il suo sì. Te lo giro in screenshot, con data e ora, dopo la call.`,
+          honest: `A voce, in una call da dieci minuti: non ho niente di scritto. Finché non lo ottengo, il suo sì lo considero ancora da confermare.`,
           bluff: `Per iscritto, sì. Mi ha scritto prima del volo che approva: ho il messaggio sul telefono, ti giro lo screenshot subito dopo la call.`,
-          vague: `Rinaldi è con noi, me l’ha detto lui e Paolo me lo conferma. Non è uno che torna indietro.`,
+          vague: `Rinaldi è con noi, me l’ha detto lui in persona stamattina. Non è uno che torna indietro, e Valeria lo sa: la firma è questione di ore.`,
           react: {
             evidence: `Ottimo. Uno screenshot con data e ora vale più di dieci “siamo vicini”. Lo allego al forecast: per me resta in {claim}.`,
             honest: `Grazie per la franchezza. Un sì a voce, a questo livello, vale un sì condizionato. Chiamo io la sua segreteria e chiedo che mettano due righe per iscritto, a nome mio e tuo.`,
             bluffCaught: `Nel CRM l’ultima nota su Rinaldi è “call di dieci minuti”. Nessun messaggio, nessuna mail in copia. Non mi serve che sia perfetto: mi serve che sia vero.`,
             bluffPassed: `Ok, per ora resta in {claim}. Ma lo screenshot lo voglio prima della call con il CRO. Senza, lo ritiro io.`,
-            vague: `“Non è uno che torna indietro” descrive il carattere, non prova nulla per iscritto. Mi serve una mail con la sua firma sotto: per ora ti sposto in {claim}.`,
+            vague: `“Non è uno che torna indietro” descrive il carattere, non prova nulla per iscritto. Mi serve una mail con la sua firma sotto: per ora ti abbasso di una categoria.`,
           },
         },
         {
-          id: 'procura_firma', if: () => true, has: (d) => !!d.flags.procuraNota || (d.mp.has('P') && d.mp.has('Dp')),
+          id: 'procura_firma', if: () => true, has: (d) => !!d.flags.rinaldiScritto,
           q: `Chi firma, esattamente, e con quale procura? Se il giorno della firma Rinaldi non risponde al telefono, il contratto resta fermo o c’è un’altra firma valida?`,
-          evidence: `Firma Rinaldi. Se non risponde, firma il direttore finanziario con procura: il nome e il canale di firma li ho, e la bozza del contratto è pronta.`,
+          evidence: `Sì: nel messaggio di Rinaldi c’è scritto che, se non risponde, firma il direttore finanziario con procura. Te lo giro: chi firma, e quando, è nero su bianco.`,
           honest: `Firma Rinaldi. Una seconda firma valida non l’ho verificata: ho dato per scontato che ci sia una procura, ma non ho il documento. La chiedo oggi a Valeria.`,
           bluff: `Firma Rinaldi e, in sua assenza, il direttore finanziario con procura speciale. Il documento ce l’ha il legale di Terrasole, me lo ha confermato Valeria.`,
-          vague: `Il contratto lo firma chi deve firmarlo da loro: il Direttore Generale o chi per lui. Sono aspetti che si sistemano all’ultimo.`,
+          vague: `Il contratto lo firma chi deve firmarlo da loro: il Direttore Generale o chi per lui. Sono aspetti formali, si sistemano all’ultimo e con Valeria non ci sono problemi.`,
           react: {
-            evidence: `Questo è un forecast. Un nome, una procura, e chi l’ha vista. Se Rinaldi quel giorno è in volo, so già che non è un problema: resta in {claim}.`,
-            honest: `Meglio saperlo ora che alle sette di sera del 31. Oggi stesso chiedi a Valeria il nome del procuratore e una copia della procura; finché non l’hai, la categoria è {claim}.`,
+            evidence: `Questo è un forecast. Chi firma, in quale caso e chi l’ha scritto. Se Rinaldi quel giorno è in volo, so già che non è un problema: resta in {claim}.`,
+            honest: `Meglio saperlo ora che alle sette di sera del 31. Oggi stesso chiedi a Valeria il nome del procuratore e una copia della procura; finché non l’hai, il numero lo porto con la riserva.`,
             bluffCaught: `Nel fascicolo di Terrasole non c’è nessuna procura. Ti ho chiesto una cosa verificabile, e la risposta non lo era.`,
             bluffPassed: `Va bene. Ma entro domani mi serve la copia della procura nel CRM: se manca, quel deal nel forecast lo ritrovo come “rischio firma”.`,
-            vague: `“Si sistemano all’ultimo” è la frase che precede i post-mortem. Voglio un nome e un documento: per ora ti sposto in {claim}.`,
+            vague: `“Si sistemano all’ultimo” è la frase che precede i post-mortem. Voglio un nome e un documento: per ora ti abbasso di una categoria.`,
           },
         },
       ],

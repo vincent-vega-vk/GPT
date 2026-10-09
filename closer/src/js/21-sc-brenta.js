@@ -179,7 +179,7 @@
                 { think: `Mi ha offerto un’ora della sua vita e io ho guardato l’orologio.` },
               ],
             }),
-          ch('b', 3, `Volentieri, Presidente. Mi racconta la storia della sua prima macchina? E cosa, oggi, fa perdere più tempo a lei e ai suoi capi reparto?`,
+          ch('b', 3, `Volentieri, Presidente. Mi racconti la storia della sua prima macchina e mi dica cosa, oggi, fa perdere tempo a lei e ai suoi capi reparto.`,
             `La storia di una macchina è la storia dell’uomo che la possiede. Chiedendogli cosa gli fa perdere tempo hai trasformato una cortesia in ascolto utile: il dolore l’hai sentito dal fondatore, che è chi decide.`,
             { t: 12, v: 6, u: 6, c: 4, r: -2 }, {
               next: 'n2',
@@ -358,7 +358,7 @@
         hint: `La fiducia è un capitale. Non spenderlo con una promessa che non puoi mantenere.`,
         tip: `Il momento in cui il cliente si fida di più è quello in cui è più facile sbagliare: una promessa irrealistica oggi diventa un contenzioso domani. Meglio una tabella di marcia onesta in due fasi, con un risultato visibile per la fiera.`,
         choices: [
-          ch('a', 0, `Per marzo ce la facciamo, Presidente. Non si preoccupi: ci metto io la faccia, la stretta di mano vale più di qualsiasi cronoprogramma.`,
+          ch('a', 0, `Per marzo ce la facciamo, Presidente. Non si preoccupi: ci metto la faccia, e la stretta di mano vale più di qualsiasi cronoprogramma.`,
             `Hai comprato la firma con una data che il piano non regge. Davide lo sa, Francesca lo intuisce, e la promessa pesa su ogni passaggio successivo: tutto il progetto poggia sulla parola.`,
             { t: 8, v: -4, c: -4, r: 16 }, {
               integ: -10, set: { overpromise: true }, next: 'n5',
@@ -421,7 +421,7 @@
         hint: `Trattare è un rito: se cedi subito perdi rispetto. Ogni “no” deve portare con sé una vittoria che lui possa raccontare.`,
         tip: `Con un negoziatore di vecchia scuola lo sconto è questione d’onore. Dagli una vittoria raccontabile, un gesto invece di un taglio, legata a un impegno (pagamento a fasi, durata, referenza). Vuole sentirsi di aver trattato bene.`,
         choices: [
-          ch('a', 0, `Ci tengo a lavorare con lei, Presidente, e a una stretta di mano non si dice di no. Venticinque per cento, e chiudiamo oggi, senza altre carte.`,
+          ch('a', 0, `Ci tengo a lavorare con lei, e a una stretta di mano non si dice di no. Va bene il venticinque per cento, e chiudiamo oggi, senza altre carte.`,
             `Concedere subito il massimo toglie al titolare la trattativa, che per lui è un rito d’onore, e a te la contropartita. Un venticinque per cento senza nulla in cambio è oltre la soglia e senza copertura: il Deal Desk ti chiederà conto.`,
             { t: -2, v: -10, c: -4, d: 25 }, {
               next: (d) => (d.flags.overpromise ? 'n5x' : 'n6'),
@@ -702,7 +702,7 @@
           hint: `Un cliente che parla dei propri costi ti regala la metrica più credibile che potrai avere: la sua. Come la raccogli senza rubare la scena a Gianni?`,
           tip: `Quando parla il cliente del tuo cliente, la tua parte è lasciare la scena a chi ospita e porre una sola domanda che trasformi la lamentela in un numero. Vendere in quel momento significa rubare la scena al padrone di casa e rovinare l’unica frase vera che stai ascoltando.`,
           choices: [
-            ch('a', 3, `Con garbo, chiedo a Maran quanto gli costa in numeri un giorno di linea ferma per un ritardo di Brenta. Poi mi segno la cifra.`,
+            ch('a', 3, `Chiedo a Maran una cosa sola: quanto gli costa in numeri un giorno di linea ferma per un ritardo di Brenta. Mi segno la cifra.`,
               (d) => (invitedByGianni(d)
                 ? `La domanda giusta, nel momento giusto, con il padrone di casa che ti ha invitato: ottieni una cifra del cliente di Gianni, la metrica più credibile che potessi sperare.`
                 : `Anche dal corridoio la domanda funziona e ottieni una cifra. Ma senza l’invito di Gianni pesa meno, e Maran la dà più per cortesia che per fiducia.`),
@@ -747,7 +747,7 @@
                   { think: `Ho promesso un risultato davanti a un cliente che non conosco, in casa di un uomo che si fida solo delle persone.` },
                 ].filter(Boolean),
               }),
-            ch('d', 1, `Mi allontano un momento per chiamare Davide e prepararmi alle domande tecniche: se Gianni mi coinvolge, voglio essere pronto.`,
+            ch('d', 1, `Mi allontano un momento per chiamare Davide e prepararmi alle domande tecniche: se Gianni mi coinvolge, voglio le risposte pronte.`,
               `Prepararsi è giusto, ma lo fai nel momento sbagliato: mentre il cliente più importante parla, tu sei altrove a occuparti di te. Il dato più prezioso della mattina passa senza di te.`,
               { u: -2, c: -2, r: 2 },
               {
@@ -967,7 +967,7 @@
                 ],
               }),
             ch('d', 1, `Dico a Francesca che la firma può aspettare i dieci giorni del comitato: meglio un leasing fatto bene che una corsa, e in famiglia nessuno si sente spinto.`,
-              `La pazienza è una virtù, ma in una trattativa senza data diventa deriva: la firma aspetta e, nel frattempo, il concorrente locale ha una settimana per telefonare a Gianni. Hai tolto la tua urgenza insieme a quella della banca.`,
+              `La pazienza è una virtù, ma in una trattativa senza data diventa deriva: la firma aspetta e, nel frattempo, il concorrente locale ha dieci giorni per telefonare a Gianni. Hai tolto la tua urgenza insieme a quella della banca.`,
               { u: -6, c: -3, r: 4 },
               {
                 next: 'RET',
@@ -1041,12 +1041,12 @@
         {
           id: 'sergio_dentro', if: () => true, has: (d) => !!d.flags.sergioOn,
           q: `Sergio è dentro, o è solo uno che non ti ha ancora detto di no? Il direttore di produzione, in una meccanica, è quello che decide se il sistema si usa o resta nel cassetto.`,
-          evidence: `È dentro: nel pilota ha un ruolo suo, e si parte dai suoi fogli di avanzamento. Non è più uno che aspetta di vedere come va, adesso ha voce in capitolo.`,
+          evidence: `È dentro: ha capito che il sistema gli toglie i fogli, e il pilota parte da lì. Non è più uno che aspetta di vedere come va, adesso ha voce in capitolo.`,
           honest: `Non ho niente di scritto da lui: so che non mi ha detto di no, ma un sì vero non l’ho ancora in mano. Finché non si espone, per me non è ancora dentro.`,
           bluff: `È dentro: ho fatto una demo con i loro dati, ha riconosciuto che gli risparmia i fogli e ha dato la disponibilità a guidare il reparto pilota, per iscritto.`,
           vague: `Sergio è uno diretto: se avesse qualcosa contro, me l’avrebbe detto in faccia. In reparto ci siamo visti più volte e non mi ha detto niente: per me è a favore.`,
           react: {
-            evidence: `Un capo reparto con un ruolo nel pilota e un punto di partenza suo: è proprio quello che manca a metà dei miei Commit. Lo segno.`,
+            evidence: `Un capo reparto che ha capito dove il sistema gli serve e da lì fa partire il pilota: è proprio quello che manca a metà dei miei Commit. Lo segno.`,
             honest: `Hai fatto bene a dirlo: “non mi ha detto di no” non è un sì, ed è l’errore più comune quando c’è di mezzo un capo reparto. Fissa un’ora con lui, in reparto, prima di venerdì. Se serve, ti accompagna Davide.`,
             bluffCaught: `Nella scheda di Brenta, a Sergio non corrisponde niente: nessun ruolo, nessuna riga sua, nessun nome nel piano. Meglio saperlo ora che in produzione: lo rimetto in Best Case e ci lavoriamo.`,
             bluffPassed: `Va bene, mi basta. Ma portami una riga di Sergio, anche una mail di due parole, entro giovedì: sulla produzione non voglio fidarmi nemmeno di me stessa.`,

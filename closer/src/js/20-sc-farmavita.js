@@ -53,8 +53,8 @@
           const f = d.flags, has = (k) => d.mp.has(k);
           return [
             P('elisa', f.bypassed ? 'skeptic' : has('C') ? 'champion' : 'ally', f.bypassed ? `Si è sentita scavalcata.` : has('C') ? `Vende per te, e adesso ha un piano.` : `Entusiasta, ma non ancora testata.`),
-            P('sala', f.overclaimGxp ? 'hostile' : f.gxpPath ? 'ally' : f.cioMeeting ? 'neutral' : 'skeptic', f.overclaimGxp ? `Ti ha colto in fallo sulla validazione.` : f.gxpPath ? `Ha scritto i suoi tre criteri. Ti ascolta.` : f.cioMeeting ? `Ha visto il tuo materiale. Non è convinto.` : `Freddo: “il vendor attuale funziona”.`),
-            P('villa', f.ebEngaged && f.bizCase ? 'ally' : f.ebEngaged ? 'neutral' : 'unknown', f.ebEngaged && f.bizCase ? `Ha i tuoi numeri e li sta valutando.` : f.ebEngaged ? `Ti ha dato venti minuti, non un sì.` : f.cfoAccess ? `Elisa sta cercando di fissare un incontro.` : `Mai incontrato.`),
+            P('sala', f.overclaimGxp ? 'hostile' : f.gxpPath ? 'ally' : f.cioMeeting ? 'neutral' : 'skeptic', f.overclaimGxp ? `Ha trovato il buco nella tua frase sulla validazione.` : f.gxpPath ? `Ha scritto i suoi tre criteri. Ti ascolta.` : f.cioMeeting ? `Ha visto il tuo materiale. Non è convinto.` : `Freddo: “il vendor attuale funziona”.`),
+            P('villa', f.ebEngaged && f.bizCase ? 'ally' : f.ebEngaged ? 'neutral' : 'unknown', f.ebEngaged && f.bizCase ? `Ha i tuoi numeri e li sta valutando.` : f.ebEngaged ? `Ti ha concesso un incontro, non un sì.` : f.cfoAccess ? `Elisa sta cercando di fissare un incontro.` : `Mai incontrato.`),
             P('chiara', f.giveGet ? 'neutral' : visited(d, 'n5') ? 'skeptic' : 'unknown', f.giveGet ? `Ha scambiato sconto contro durata.` : visited(d, 'n5') ? `Chiede il 20% e prezzo bloccato.` : `Non è ancora in scena.`),
             P('anna', f.overclaimGxp ? 'hostile' : f.gxpPath ? 'neutral' : 'unknown', f.overclaimGxp ? `Pretende evidenza di convalida completa.` : f.gxpPath ? `Sa cosa fa e cosa non fa il prodotto.` : `Non l’hai ancora incontrata.`),
           ];
@@ -65,7 +65,7 @@
         build: (d) => {
           const f = d.flags, has = (k) => d.mp.has(k);
           return [
-            { k: 'budget', label: `Budget approvato`, crm: `Sì, a novembre`, real: has('Dp') ? `Da votare il 14/11, piano scritto` : `Da votare: data non verificata`, st: has('Dp') ? 'warn' : 'bad' },
+            { k: 'budget', label: `Budget approvato`, crm: `Sì, a novembre`, real: has('Dp') ? (f.plan ? `Da votare il 14/11, piano scritto` : `Da votare il 14/11, percorso mappato`) : `Da votare: data non verificata`, st: has('Dp') ? 'warn' : 'bad' },
             { k: 'eb', label: `Economic Buyer allineato`, crm: `Sì`, real: f.ebEngaged ? (f.bizCase ? `Incontrato, numeri sul tavolo` : `Incontrato una volta`) : `Mai incontrato`, st: f.ebEngaged ? (f.bizCase ? 'good' : 'warn') : 'bad' },
             { k: 'gxp', label: `Criteri GxP definiti`, crm: `Sì`, real: f.gxpPath ? `Tre criteri scritti con l’IT` : f.overclaimGxp ? `Hai promesso ciò che il prodotto non ha` : `Non definiti`, st: f.gxpPath ? 'good' : f.overclaimGxp ? 'bad' : 'bad' },
             { k: 'comp', label: `Alternative mappate`, crm: `Nessuna`, real: has('Co') ? `Vendor attuale fino al 2028` : `Non mappate`, st: has('Co') ? 'good' : 'warn' },
@@ -170,10 +170,10 @@
         hint: `“Lo gestisco io” significa che il rischio è in mani che non controlli. Come lo rendi visibile e gestibile?`,
         tip: `Delegare il rischio principale al champion senza visibilità è la prima causa di deal che deragliano in silenzio. Dagli materiale per vendere al posto tuo, e porta chi è tecnico a parlare con chi è tecnico.`,
         choices: [
-          ch('a', 0, `D’accordo, tu conosci l’azienda meglio di me. Aspetto un tuo segnale e non muovo nulla.`,
+          ch('a', 0, `D’accordo, tu conosci l’azienda meglio di me. Aspetto un tuo segnale e mi occupo d’altro.`,
             `Tre settimane di silenzio. Quando Elisa riprova con Sala, il CIO ha già raccolto obiezioni da un altro fornitore. Hai delegato il rischio più grosso senza avere alcuna visibilità.`,
             { t: -2, u: -6, c: -10, r: 12 }, {
-              say: `D’accordo, Elisa: conosci l’azienda meglio di me. Aspetto un tuo segnale e non muovo nulla.`,
+              say: `D’accordo, Elisa: conosci l’azienda meglio di me. Aspetto un tuo segnale e mi occupo d’altro.`,
               react: [
                 { w: 'elisa', t: `Perfetto. Ti faccio sapere io.` },
                 { n: `Tre settimane dopo, il tuo telefono non ha ricevuto nessun segnale. Quando Elisa riprova con Sala, il CIO ha già incontrato un altro fornitore.` },
@@ -242,7 +242,7 @@
               ],
               next: (d) => (d.flags.cfoAccess ? 'n4' : 'n4b'),
             }),
-          ch('b', 3, `La compliance non si negozia. Cosa dovrebbe essere vero perché un cambio, per lei, sia sicuro?`,
+          ch('b', 3, `La compliance non si negozia. Mi dica che cosa dovrebbe essere vero perché un cambio sia sicuro.`,
             `Sala elenca tre criteri: audit trail conforme ad Annex 11 e Part 11, zero fermi di produzione, rollback garantito. Ora hai i criteri di decisione nero su bianco e un piano a ondate che li soddisfa tutti e tre.`,
             { t: 8, v: 8, c: 8, r: -10 }, {
               mp: ['Dc', 'Co'], set: { gxpPath: true, cfoAccess: true },
@@ -361,7 +361,7 @@
               ],
               next: 'n5',
             }),
-          ch('b', 3, `Dai dati di Elisa, il capitale fermo in quarantena vale milioni. Possiamo validarlo insieme?`,
+          ch('b', 3, `Dai dati di Elisa il capitale fermo in quarantena vale milioni: proviamo a validarlo insieme.`,
             `Villa contesta il 18%, ma subito dopo: “Se i numeri reggono con i nostri dati, il budget non è un problema”. Hai ottenuto metriche condivise e il permesso di tornare.`,
             { t: 8, v: 14, u: 8, c: 8, r: -6 }, {
               mp: ['M', 'E'], set: { ebEngaged: true, bizCase: true },
@@ -373,7 +373,7 @@
               ],
               next: 'n5',
             }),
-          ch('c', 2, `Le porto un ROI calculator con le medie di settore: in venti minuti stimiamo il ritorno.`,
+          ch('c', 2, `Le porto un ROI calculator con le medie di settore: in venti minuti stimiamo insieme il ritorno.`,
             `Villa: “Medie di settore, non le nostre”. Apprezza lo sforzo ma non si sbilancia. Ti concede una seconda call, se porti dati FarmaVita.`,
             { t: 2, v: 5, c: 3 }, {
               mp: ['E'], set: { ebEngaged: true },
@@ -384,7 +384,7 @@
               ],
               next: 'n5',
             }),
-          ch('d', 0, `Se approva entro fine mese, le garantisco subito il 15% di sconto sul listino di €480.000 l’anno.`,
+          ch('d', 0, `Se approva entro fine mese, le garantisco il 15% di sconto sul listino di €480.000 l’anno.`,
             `Villa sorride: “Interessante. E perché il 15%? Se ne chiedo di più, a cosa serve il resto?”. Hai svalutato il prodotto prima ancora di averne spiegato il valore.`,
             { t: -4, v: -10, c: -2, d: 15 }, {
               mp: ['E'], set: { ebEngaged: true },
@@ -489,7 +489,7 @@
               ],
               next: 'n6',
             }),
-          ch('c', 1, `Chiedo a Elisa di calmare la Qualità entro lunedì: dopotutto il progetto è già approvato.`,
+          ch('c', 1, `Chiedo a Elisa di calmare la Qualità entro lunedì: dopotutto il progetto è praticamente approvato.`,
             `Elisa non vuole farsi carico della tua imprecisione. La Qualità ottiene la documentazione dal contratto standard e non dalle tue parole: il danno è contenuto, non rimosso.`,
             { t: -4, c: -4, r: 4 }, {
               say: `Elisa, puoi parlare tu con la Qualità entro lunedì? Il progetto è praticamente approvato, è solo una questione di formalità.`,
@@ -546,7 +546,7 @@
               ],
               next: 'END',
             }),
-          ch('c', 1, `Faccio presente che l’offerta è valida solo fino al 31 del mese, per accelerare.`,
+          ch('c', 1, `Faccio presente che l’offerta è valida solo fino al 31 del mese, per accelerare i tempi.`,
             `Elisa lo gira a Villa: “È una pressione senza ragione”. Una scadenza finta non regge con chi conosce il processo e ti costa fiducia.`,
             { t: -6, c: -2, u: 2 }, {
               integ: -3,
@@ -634,7 +634,7 @@
             }),
             ch('b', 1, `Il modulo è descritto, ma altrove: rileggete il capitolo quattro, dalla pagina trentuno.`, `Il team IT trova il capitolo quattro, ma la descrizione è insufficiente: sembri sulla difensiva, e hai perso un’occasione.`, { t: -4, c: -2, r: 6 }, {
               next: 'RET',
-              say: `Il modulo è descritto: guardate il capitolo quattro, dalla pagina trentuno.`,
+              say: `Il modulo è descritto, ma altrove: rileggete il capitolo quattro, dalla pagina trentuno.`,
               react: [{ w: 'sala', a: `asciutto`, t: `Il capitolo quattro non copre quel caso. Mi aspettavo una risposta, non un rimando.` }, { think: `Ho difeso un documento invece di ascoltare chi lo legge.` }],
             }),
             ch('c', 2, `Giro la richiesta a Davide perché la risolva con il loro team IT, senza passare da me.`, `Davide risolve il tema tecnico, ma il team IT percepisce che hai delegato la relazione: la risposta è corretta, il rapporto non cresce.`, { t: 0, v: 2, c: 2 }, {
@@ -644,7 +644,7 @@
             }),
             ch('d', 0, `Rispondo che non è un problema: il modulo lo integriamo noi e basta, voi non dovete fare nulla.`, `La risposta suona come una promessa vaga. Sala la legge e scrive in margine: “Che significa ‘e basta’?”.`, { t: -8, v: -4, r: 10 }, {
               next: 'RET',
-              say: `Non è un problema: il modulo lo integriamo noi, voi non dovete fare nulla.`,
+              say: `Non è un problema: il modulo lo integriamo noi e basta, voi non dovete fare nulla.`,
               react: [{ w: 'sala', a: `rileggendo`, t: `“Non dovete fare nulla.” In un sito GxP è la frase che mi preoccupa di più.` }, { think: `Ho promesso senza sapere cosa.` }],
             }),
           ],
@@ -657,14 +657,14 @@
           when: `Mercoledì · 12:10`, view: 'walk', where: `Atrio · sede FarmaVita · mercoledì 12:10`,
           scene: (d) => [
             { n: `Esci dall’ascensore con il badge ospite ancora al collo. Nell’atrio, due metri davanti a te, riconosci un uomo con una cartellina di pelle: Roberto Villa.` },
-            { w: 'villa', a: `senza fermarsi`, t: `Lei è quello di Nexora, vero? Elisa mi ha parlato di lei. Ho trenta secondi.` },
+            { w: 'villa', a: `senza fermarsi`, t: `Lei è di Nexora, vero? Elisa mi ha parlato di lei. Ho trenta secondi.` },
             { think: d.mp.has('M') ? `Ho un numero: i lotti in quarantena. Trenta secondi bastano, se li uso bene.` : `Non ho un numero suo. Ho solo il nome del prodotto. Trenta secondi sono pochissimi.` },
           ],
           prompt: `Hai trenta secondi con il CFO. Cosa fai?`,
           hint: `Trenta secondi non sono una presentazione: sono una domanda ben posta.`,
           tip: `Con un decisore in movimento non si presenta il prodotto: si pone una domanda sui suoi numeri e si chiede il permesso di tornare. Chi parla di funzioni si brucia, chi chiede dati si rende memorabile.`,
           choices: [
-            ch('a', 3, `Gli faccio una domanda sui suoi numeri e gli chiedo quindici minuti per validarli insieme.`, (d) => d.mp.has('M') ? `Con un numero in tasca, la tua domanda è precisa: Villa rallenta, fissa un appuntamento e annota il tuo nome.` : `Anche senza un numero tuo, la domanda sul capitale in quarantena funziona: Villa rallenta e ti concede un appuntamento.`, (d) => ({ t: 6, v: d.mp.has('M') ? 8 : 4, c: 8, r: -4 }), {
+            ch('a', 3, `Gli faccio una domanda sui suoi numeri e gli chiedo quindici minuti per validarli.`, (d) => d.mp.has('M') ? `Con un numero in tasca, la tua domanda è precisa: Villa rallenta, fissa un appuntamento e annota il tuo nome.` : `Anche senza un numero tuo, la domanda sul capitale in quarantena funziona: Villa rallenta e ti concede un appuntamento.`, (d) => ({ t: 6, v: d.mp.has('M') ? 8 : 4, c: 8, r: -4 }), {
               mp: ['E'], set: { ebEngaged: true },
               next: 'RET',
               say: `Dottor Villa, una domanda sola: quanto capitale tiene fermo oggi in quarantena, fra un lotto e l’altro? Se mi dà quindici minuti, le dico quanto potrebbe liberarne e le chiedo di verificare i numeri con i vostri dati.`,
@@ -679,10 +679,10 @@
             ch('c', 2, `Mi presento e gli dico che sono a disposizione per qualsiasi cosa, senza chiedere nulla.`, `Villa apprezza la discrezione, ma non ricorderà la conversazione: nessuna richiesta, nessun seguito.`, { t: 2, c: 0 }, {
               mp: ['E'], set: { ebEngaged: true },
               next: 'RET',
-              say: `Piacere, dottor Villa. Sono a sua disposizione, se Elisa o lei avete bisogno di qualcosa.`,
+              say: `Piacere, dottor Villa. Sono a sua disposizione, se a lei o a Elisa serve qualcosa.`,
               react: [{ w: 'villa', a: `con un cenno`, t: `Grazie. Buona giornata.` }, { n: `Si allontana verso l’ascensore. L’incontro è durato quanto un saluto.` }],
             }),
-            ch('d', 0, `Gli chiedo subito se possiamo parlare di prezzo, così arrivo prima che entri in riunione.`, `Villa si ferma, si volta, ti guarda: “Prezzo di cosa, esattamente?”. Hai saltato il valore e consegnato il prezzo.`, { t: -8, v: -6, c: -4, r: 8 }, {
+            ch('d', 0, `Gli chiedo subito se possiamo parlare di prezzo, prima che entri in riunione e sparisca.`, `Villa si ferma, si volta, ti guarda: “Prezzo di cosa, esattamente?”. Hai saltato il valore e consegnato il prezzo.`, { t: -8, v: -6, c: -4, r: 8 }, {
               set: { ebEngaged: false },
               next: 'RET',
               say: `Dottor Villa, so che ha poco tempo: possiamo parlare di prezzo prima che entri in riunione?`,
@@ -740,12 +740,12 @@
           hint: `Contro un concorrente che ti precede non servono insinuazioni: servono criteri chiari.`,
           tip: `Quando un concorrente entra nel perimetro, non parlare di lui: rendi più nitidi i criteri del cliente e verifica che siano tuoi punti di forza. Chi denigra perde, chi chiarisce guadagna.`,
           choices: [
-            ch('a', 3, `Chiedo a Sala quali criteri userà per confrontare i fornitori e mi allineo subito a quelli.`, (d) => d.flags.gxpPath ? `Con i tre criteri già scritti, il confronto è a tuo favore: Sala ti apre la griglia di valutazione e ti chiede conferma.` : `Sala ti detta tre criteri al volo: diventano il terreno su cui ti confronti, senza che tu abbia denigrato nessuno.`, (d) => ({ t: 6, v: 6, c: 8, r: -6 }), {
+            ch('a', 3, `Chiedo a Sala con quali criteri confronterà i fornitori e mi allineo subito a quelli.`, (d) => d.flags.gxpPath ? `Con i tre criteri già scritti, il confronto è a tuo favore: Sala ti apre la griglia di valutazione e ti chiede conferma.` : `Sala ti detta tre criteri al volo: diventano il terreno su cui ti confronti, senza che tu abbia denigrato nessuno.`, (d) => ({ t: 6, v: 6, c: 8, r: -6 }), {
               mp: ['Dc', 'Co'], next: 'RET',
               say: `Giusto che veda cosa c’è sul mercato, dottor Sala. Mi aiuta a capire con quali criteri confronterà i fornitori? Così le porto solo ciò che serve a decidere, e le dico dove siamo forti e dove no.`,
               react: [{ w: 'sala', a: `sorpreso`, t: `Non me l’aspettavo. Ma è la cosa più utile che mi abbia detto.` }, { think: `Non ho parlato del concorrente. Ho parlato del suo criterio.` }],
             }),
-            ch('b', 0, `Gli dico quello che so: Vertex ha avuto problemi di affidabilità in altri clienti pharma.`, `Sala ti guarda: “Ha prove?”. Non ne hai. La frase ti fa passare per chi parla male dei concorrenti.`, { t: -10, c: -4, r: 14 }, {
+            ch('b', 0, `Gli dico quello che so: Vertex ha avuto problemi di affidabilità con altri clienti.`, `Sala ti guarda: “Ha prove?”. Non ne hai. La frase ti fa passare per chi parla male dei concorrenti.`, { t: -10, c: -4, r: 14 }, {
               integ: -4, next: 'RET',
               say: `Dottor Sala, le dico quello che so: Vertex ha avuto problemi di affidabilità con altri clienti pharma.`,
               react: [{ w: 'sala', a: `fermo`, t: `Ha prove? Documenti, riferimenti?` }, { think: `Ho una voce, non un fatto. Ho appena perso metà della mia credibilità.` }],
