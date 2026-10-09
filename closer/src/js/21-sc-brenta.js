@@ -33,7 +33,7 @@
     teaches: [`Aziende familiari`, `Concorrente locale`, `Stakeholder resistente`, `Promesse realistiche`],
     list: 260, cost: 2, window: [1, 10], stars: 2, lep: 15, slip: 0.35,
     noWild: ['rival_offer'],   // imprevisti generici che stonano con questo scenario
-    noShock: ['g_price_cut', 'g_rival_withdraws'],   // shock generici che stonano con questo scenario
+    noShock: ['g_price_cut', 'g_rival_withdraws', 'g_buyer_change', 'g_champion_moves'],   // shock generici che stonano con questo scenario (il CFO è Francesca, figlia del fondatore: non lascia né cambia incarico)
     crm: { cat: `Best Case`, prob: 50 },
     cast: CAST,
 
@@ -68,7 +68,7 @@
               : gSt === 'champion' ? `Parla di te agli amici. Ormai la partita è anche sua.`
                 : gSt === 'ally' ? `Si fida: con te parla da persona, non da cliente.`
                   : gSt === 'neutral' ? `Ti ascolta, ma la mano non l’ha ancora stretta davvero.`
-                    : `Cortese e lontano: per lui sei ancora “uno di Nexora”.`;
+                    : `Cortese e lontano: per lui Nexora è ancora solo un biglietto da visita.`;
           /* Francesca: ha bisogno di numeri e di una data che regga */
           const numeri = has('Co') || has('M');
           const late = visited(d, 'n5x'); /* si accorge solo dopo il piano di Davide, non appena scelta la mossa che porta a n5x */
@@ -110,7 +110,7 @@
             { k: 'sergio', t: `Nov`, label: f.sergioOn ? `Sergio alla guida del pilota` : f.sergioHostile ? `Sergio fuori dal pilota, in attesa` : `Portare Sergio dentro il pilota`, st: f.sergioOn ? 'done' : f.sergioHostile ? 'late' : 'todo' },
             { k: 'paper', t: `Dic`, label: f.paperReady ? `Piano firmato, leasing avviato in banca` : `Piano di progetto e leasing in banca`, st: f.paperReady ? 'done' : visited(d, 'n6') ? 'late' : 'todo' },
             { k: 'pilot', t: `Mar`, label: f.overpromise ? `Fiera: tutto in produzione, come promesso` : f.phased ? `Il reparto pilota alla fiera` : `Il reparto pilota, da definire`, st: f.overpromise ? 'late' : 'todo' },
-            { k: 'ext', t: `Giu`, label: `L’estensione agli altri reparti`, st: 'todo' },
+            { k: 'ext', t: `Giu`, label: `L’estensione ai reparti principali`, st: 'todo' },
             { k: 'golive', t: `Ago`, label: `Go-live nei tre stabilimenti`, st: 'todo' },
           ];
           const first = items.findIndex((x) => x.st === 'todo');
@@ -167,7 +167,7 @@
         hint: `Con il fondatore la relazione è la porta d’ingresso. Ma l’obiettivo resta capire il business.`,
         tip: `Nelle aziende familiari l’Economic Buyer compra la persona prima del progetto. Dedica tempo vero alla relazione e usalo per scoprire il dolore, non solo per fare simpatia.`,
         choices: [
-          ch('a', 0, `La ringrazio, Presidente, ma ho poco tempo: se per lei va bene parto dai numeri con Francesca, e il giro lo facciamo la prossima volta.`,
+          ch('a', 0, `La ringrazio, Presidente, ma ho poco tempo oggi: se per lei va bene parto dai numeri con Francesca, e il giro lo facciamo la prossima volta.`,
             `Con un fondatore la fretta si legge come disinteresse. L’invito al giro non era una cortesia: era il colloquio, e hai chiesto di saltarlo.`,
             { t: -10, c: -4, r: 8 }, {
               next: 'n2',
@@ -179,7 +179,7 @@
                 { think: `Mi ha offerto un’ora della sua vita e io ho guardato l’orologio.` },
               ],
             }),
-          ch('b', 3, `Volentieri, Presidente. Mi racconta la storia della prima macchina? E mi dice cosa, oggi, fa perdere più tempo a lei e ai suoi capi reparto?`,
+          ch('b', 3, `Volentieri, Presidente. Mi racconta la storia della sua prima macchina? E cosa, oggi, fa perdere più tempo a lei e ai suoi capi reparto?`,
             `La storia di una macchina è la storia dell’uomo che la possiede. Chiedendogli cosa gli fa perdere tempo hai trasformato una cortesia in ascolto utile: il dolore l’hai sentito dal fondatore, che è chi decide.`,
             { t: 12, v: 6, u: 6, c: 4, r: -2 }, {
               next: 'n2',
@@ -203,8 +203,8 @@
                 { think: `Piacevole. Ma al reparto non ho chiesto niente che non potesse dirmi chiunque.` },
               ],
             }),
-          ch('d', 1, `Volentieri. Mentre camminiamo le racconto in dieci minuti cosa fa la nostra piattaforma, così arriviamo in ufficio con un’idea chiara.`,
-            `Un pitch in mezzo al reparto dice “ho già deciso cosa ti serve”. Gianni non voleva una presentazione: voleva capire se sei uno che guarda le macchine prima del listino.`,
+          ch('d', 1, `Volentieri, Presidente. Mentre camminiamo le racconto in dieci minuti cosa fa la piattaforma, così arriviamo in ufficio con un’idea chiara.`,
+            `Un pitch in mezzo al reparto dice “ho già deciso cosa ti serve”. Gianni non voleva una presentazione: voleva capire se guardi le macchine prima del listino.`,
             { t: -2, c: -2, r: 4 }, {
               next: 'n2',
               say: `Volentieri, Presidente. Mentre camminiamo le racconto in dieci minuti cosa fa la nostra piattaforma, così arriviamo in ufficio che ha già un’idea.`,
@@ -224,7 +224,7 @@
           { n: `Mercoledì, dopo pranzo. Il reparto ha un altro rumore: meno fretta, più ritmo. Strisce gialle sul pavimento, bancali di barre d’acciaio, l’odore dolciastro dell’emulsione che si attacca ai vestiti. Un operaio stropiccia un disegno e se lo infila nella tuta.` },
           { n: `Francesca te lo aveva detto: senza Sergio il progetto resta sulla carta. È lui che farà usare, o ignorare, il sistema ai capi reparto.` },
           { n: `Sergio Dal Bianco ti aspetta accanto al centro di lavoro, con una cartellina di fogli di avanzamento sotto il braccio e una matita dietro l’orecchio. Due capi reparto, poco distanti, fingono di controllare un pezzo.` },
-          { w: 'sergio', a: `incrocia le braccia`, t: `Questi sistemi complicano la vita. Il vecchio gestionale lo conosco a memoria, e quando si pianta so dove mettere le mani. Poi arriva uno con la valigetta e mi spiega cosa devo fare.` },
+          { w: 'sergio', a: `incrocia le braccia`, t: `Questi sistemi complicano la vita. Il vecchio gestionale lo conosco a memoria, e quando si pianta so dove mettere le mani. Poi arriva qualcuno con la valigetta e mi spiega cosa devo fare.` },
           { think: `Non parla di me. Parla di tutti quelli che sono arrivati prima di me con una valigetta.` },
           { think: `E i due che fingono di guardare il pezzo sentono tutto. Quello che dico adesso, domani lo sa tutto il reparto.` },
         ],
@@ -232,7 +232,7 @@
         hint: `Chi dovrà usare il sistema ogni giorno può fargli o non fargli vivere la vita. Trattalo da protagonista, non da ostacolo.`,
         tip: `Un utente influente che teme di perdere controllo diventa sabotatore se lo ignori e alleato se gli dai la regia del pilota. Fai emergere i suoi tre problemi quotidiani e costruisci il primo risultato su quelli.`,
         choices: [
-          ch('a', 1, `Capisco la diffidenza, Sergio. Ma la direzione ha già deciso di modernizzare e i benefici sono evidenti: meglio capire insieme come farlo bene.`,
+          ch('a', 1, `Capisco la diffidenza, Sergio. Ma la direzione ha deciso di modernizzare e i benefici sono evidenti: meglio capire insieme come farlo bene.`,
             `Dire a chi teme di perdere il controllo che “la decisione è già presa” gli conferma che il sistema arriva dall’alto. Sergio non si opporrà: semplicemente non lo userà.`,
             { t: -6, c: -4, r: 10 }, {
               set: { sergioHostile: true }, next: 'n3',
@@ -243,7 +243,7 @@
                 { think: `Ho appena trasformato un possibile alleato in un sabotatore educato.` },
               ],
             }),
-          ch('b', 3, `Nessuno conosce questo reparto meglio di lei, Sergio. Mi dica le tre cose che le fanno perdere più tempo: da lì nasce il primo pilota, e lo disegna lei.`,
+          ch('b', 3, `Nessuno conosce questo reparto meglio di lei. Mi dica le tre cose che oggi le fanno perdere più tempo: il pilota parte da lì, e lo disegna lei.`,
             `Una domanda sui suoi problemi e un ruolo da protagonista spostano Sergio da ostacolo a proprietario. I suoi quattro punti dolenti diventano il perimetro del pilota e i criteri con cui verrà giudicato.`,
             { t: 8, v: 8, c: 6, r: -8 }, {
               mp: ['Dc'], set: { sergioOn: true }, next: 'n3',
@@ -255,18 +255,18 @@
                 { think: `Il pilota non è più mio. È suo.` },
               ],
             }),
-          ch('c', 2, `Sergio, porto qui Davide con i vostri dati: ordini, cicli macchina, fermi. Così vede com’è sulla sua commessa, non su una demo da fiera.`,
+          ch('c', 2, `Sergio, porto qui Davide con i vostri dati: ordini, cicli macchina, fermi. Così vede com’è sulla sua commessa di ieri, non su una demo da fiera.`,
             `La demo sui suoi dati funziona perché parla di fogli e di fermi, non di funzioni. Resta una presentazione fatta a Sergio, non con lui: il pilota non è ancora suo.`,
             { t: 6, v: 10, c: 2, r: -4 }, {
               jolly: 'se', mp: ['Dc'], set: { sergioOn: true }, next: 'n3',
-              say: `Sergio, porto qui Davide, il nostro Solution Engineer, con i vostri dati: ordini, cicli macchina, fermi. Così vede com’è sulla sua commessa, non su una demo da fiera.`,
+              say: `Sergio, porto qui Davide, il nostro Solution Engineer, con i vostri dati: ordini, cicli macchina, fermi. Così vede com’è sulla sua commessa di ieri, non su una demo da fiera.`,
               react: [
                 { w: 'davide', a: `con il portatile appoggiato su un bancale`, t: `Questa è la commessa di ieri. Qui la fase è finita alle quattro, qui no. Lo vede chi vuole, senza telefonare a nessuno.` },
                 { w: 'sergio', a: `dopo un po’, a malincuore`, t: `Questo mi risparmia i fogli. Sono centodiciotto a turno, li conto io.` },
                 { think: `“Mi risparmia”. Per lui è quasi un applauso.` },
               ],
             }),
-          ch('d', 1, `Preferisco non farle perdere tempo: ne parlo con Gianni e Francesca. Se la direzione è convinta, il reparto si adegua senza discussioni.`,
+          ch('d', 1, `Preferisco non farle perdere tempo, Sergio: ne parlo con Gianni e con Francesca. Se la direzione è convinta, il reparto si adegua senza discussioni.`,
             `Andare sopra la testa di chi deve far vivere il sistema ti dà una direzione convinta e un reparto in attesa. Il progetto avanza sulla carta e si ferma dove avviene il lavoro.`,
             { t: -4, c: -2, r: 8 }, {
               set: { sergioHostile: true }, next: 'n3',
@@ -295,11 +295,11 @@
         hint: `Il prezzo più basso quasi mai confronta cose uguali. E parlare male del concorrente di un amico del titolare è una trappola.`,
         tip: `Chiedi un confronto a parità di perimetro, rischi e crescita (Competition + Metrics). Non denigrare mai: parlare male di un fornitore amico del titolare è la via più breve per perdere.`,
         choices: [
-          ch('a', 0, `Allineiamo il prezzo: ti rifaccio la nostra offerta con il 35% di sconto, così il confronto smette di essere un problema e tuo padre decide con serenità.`,
+          ch('a', 0, `Allineiamo il prezzo: ti rifaccio in giornata la nostra offerta con il 35% di sconto, così il confronto smette di essere un problema e tuo padre decide con serenità.`,
             `Pareggiare il prezzo senza aver capito cosa si sta confrontando regala margine e svaluta il listino. A una CFO dice che il prezzo era negoziabile fin dall’inizio, e che probabilmente lo è anche il resto.`,
             { t: -8, v: -12, c: -4, d: 35 }, {
               next: 'n4',
-              say: `Facciamo così, Francesca: ti rifaccio la nostra offerta allo stesso prezzo, con il 35% di sconto. Il confronto smette di essere un problema.`,
+              say: `Facciamo così, Francesca: ti rifaccio in giornata la nostra offerta allo stesso prezzo, con il 35% di sconto. Il confronto smette di essere un problema.`,
               react: [
                 { w: 'francesca', a: `sbianca`, t: `Il 35% in un giorno?` },
                 { w: 'francesca', a: `dopo un attimo, piano`, t: `Se scendi così in fretta, quanto vale davvero il prezzo da cui sei partito?` },
@@ -317,7 +317,7 @@
                 { think: `Ho criticato un amico del titolare. Se arriva a Gianni, sono fuori.` },
               ],
             }),
-          ch('c', 3, `Prima del prezzo confrontiamo il perimetro: produzione, magazzino, contabilità, macchine. Poi una tabella a cinque anni, con estensioni e un terzo stabilimento.`,
+          ch('c', 3, `Prima del prezzo confrontiamo il perimetro: produzione, magazzino, contabilità, macchine. Poi una tabella a cinque anni, con estensioni e terzo stabilimento.`,
             `Hai spostato la gara dal prezzo al perimetro, senza dire una parola contro nessuno. È il confronto che una CFO può portare al padre: numeri suoi, scritti da lei.`,
             { t: 6, v: 12, c: 8, r: -6 }, {
               mp: ['Co', 'M'], next: 'n4',
@@ -329,7 +329,7 @@
                 { think: `Ora ha una cifra, non una sensazione. Qualcosa da portare a suo padre senza tradire nessuno.` },
               ],
             }),
-          ch('d', 3, `Ti metto in contatto con la direttrice amministrativa di una meccanica veneta come voi: due anni fa ha cambiato gestionale, dopo aver provato una soluzione locale.`,
+          ch('d', 3, `Ti metto in contatto con la direttrice amministrativa di una meccanica veneta come voi: ha cambiato gestionale due anni fa, dopo aver provato quello locale.`,
             `Una conversazione tra pari dà a Francesca la risposta che le serviva, senza che tu tocchi il prezzo o il concorrente. Il jolly referenza è speso bene: la credibilità, qui, non la costruisci tu.`,
             { t: 10, v: 8, c: 4, r: -6 }, {
               jolly: 'ref', mp: ['Co'], next: 'n4',
@@ -348,7 +348,7 @@
         where: `Ufficio del Presidente · lunedì 16:00`,
         scene: [
           { n: `Lunedì, le quattro del pomeriggio. Dalle finestre dell’ufficio del Presidente entra già la luce della sera. Alle pareti, coppe di tornei di bocce e di una vita di fiere, e foto sbiadite: Gianni giovane davanti al primo capannone, la squadra dell’officina, una stretta di mano sotto uno striscione.` },
-          { chat: { from: 'davide', app: 'WhatsApp' }, t: `Sono qui fuori. Ho rifatto i conti tre volte: sei mesi, in due fasi. Per marzo non c’è verso con tutto, dillo chiaro.`, sfx: 'ping' },
+          { chat: { from: 'davide', app: 'WhatsApp' }, t: `Sono qui fuori. Ho rifatto i conti tre volte: nove mesi, in due fasi. Per marzo non c’è verso con tutto, dillo chiaro.`, sfx: 'ping' },
           { n: `La fiera di marzo è fra quattro mesi.` },
           { w: 'gianni', a: `bonario, ma deciso`, t: `Senta, io i contratti da cento pagine non li firmo. Mi fido delle persone. Mi dica: quando siamo in produzione? Voglio vedere tutto funzionare per la fiera di marzo.` },
           { n: `Sulla scrivania un calendario di carta, con la fiera cerchiata in rosso. Francesca è seduta di lato, una cartellina chiusa sulle ginocchia, e guarda il padre, non te.` },
@@ -358,7 +358,7 @@
         hint: `La fiducia è un capitale. Non spenderlo con una promessa che non puoi mantenere.`,
         tip: `Il momento in cui il cliente si fida di più è quello in cui è più facile sbagliare: una promessa irrealistica oggi diventa un contenzioso domani. Meglio una tabella di marcia onesta in due fasi, con un risultato visibile per la fiera.`,
         choices: [
-          ch('a', 0, `Per marzo ce la facciamo, Presidente. Non si preoccupi: ci metto io la faccia, e tra noi la stretta di mano vale più di qualsiasi cronoprogramma.`,
+          ch('a', 0, `Per marzo ce la facciamo, Presidente. Non si preoccupi: ci metto io la faccia, la stretta di mano vale più di qualsiasi cronoprogramma.`,
             `Hai comprato la firma con una data che il piano non regge. Davide lo sa, Francesca lo intuisce, e la promessa pesa su ogni passaggio successivo: tutto il progetto poggia sulla parola.`,
             { t: 8, v: -4, c: -4, r: 16 }, {
               integ: -10, set: { overpromise: true }, next: 'n5',
@@ -370,18 +370,18 @@
                 { think: `Lo so. Lo sapevo mentre lo dicevo.` },
               ],
             }),
-          ch('b', 3, `Il progetto completo richiede sei mesi, Presidente. Ma per marzo le porto una prima fase già in produzione, sul reparto che sceglie lei.`,
-            `Hai trasformato un vincolo in un obiettivo onesto: sei mesi per il progetto, un risultato visibile per la fiera. Al titolare non serve la data più vicina, serve poterla raccontare.`,
+          ch('b', 3, `Il progetto completo richiede nove mesi, Presidente. Ma per marzo le porto una prima fase già in produzione, sul reparto che sceglie lei.`,
+            `Hai trasformato un vincolo in un obiettivo onesto: nove mesi per il progetto, un risultato visibile per la fiera. Al titolare non serve la data più vicina, serve poterla raccontare.`,
             { t: 10, v: 8, u: 8, c: 8, r: -8 }, {
               mp: ['Dp'], set: { phased: true }, next: 'n5',
-              say: `Presidente, le dico le cose come stanno: il progetto completo richiede sei mesi. Ma per la fiera le garantisco una prima fase già operativa sul reparto che sceglie lei, con commesse e avanzamento in tempo reale. Alla fiera mostra un risultato vero.`,
+              say: `Presidente, le dico le cose come stanno: il progetto completo richiede nove mesi. Ma per la fiera le garantisco una prima fase già operativa sul reparto che sceglie lei, con commesse e avanzamento in tempo reale. Alla fiera mostra un risultato vero.`,
               react: [
                 { w: 'gianni', a: `dopo un silenzio, guardando la foto del primo capannone`, t: `Mi piace chi mi dice le cose come stanno.` },
                 { w: 'gianni', t: `Il reparto più critico, allora: se funziona lì, funziona dappertutto. E ai clienti alla fiera dico di venire a vederlo.` },
                 { think: `Un vincolo diventato un obiettivo. E lui ha già in mente chi invitare.` },
               ],
             }),
-          ch('c', 2, `Prepariamo una lettera d’intenti di una pagina con i punti essenziali. Il contratto completo lo seguono Francesca e il mio ufficio legale.`,
+          ch('c', 2, `Prepariamo una lettera d’intenti di una sola pagina con i punti essenziali. Il contratto completo lo seguono Francesca e il mio ufficio legale.`,
             `La lettera d’intenti rispetta il suo stile e dà a Francesca la regia della parte formale. Ma non risponde alla domanda che Gianni ti ha fatto, e un titolare vecchio stile le domande se le ricorda.`,
             { t: 4, c: 4, r: 2 }, {
               mp: ['P'], next: 'n5',
@@ -421,7 +421,7 @@
         hint: `Trattare è un rito: se cedi subito perdi rispetto. Ogni “no” deve portare con sé una vittoria che lui possa raccontare.`,
         tip: `Con un negoziatore di vecchia scuola lo sconto è questione d’onore. Dagli una vittoria raccontabile, un gesto invece di un taglio, legata a un impegno (pagamento a fasi, durata, referenza). Vuole sentirsi di aver trattato bene.`,
         choices: [
-          ch('a', 0, `Ci tengo a lavorare con lei, Presidente, e a una stretta di mano non si dice di no. Va bene: venticinque per cento, e chiudiamo oggi stesso, senza altre carte.`,
+          ch('a', 0, `Ci tengo a lavorare con lei, Presidente, e a una stretta di mano non si dice di no. Venticinque per cento, e chiudiamo oggi, senza altre carte.`,
             `Concedere subito il massimo toglie al titolare la trattativa, che per lui è un rito d’onore, e a te la contropartita. Un venticinque per cento senza nulla in cambio è oltre la soglia e senza copertura: il Deal Desk ti chiederà conto.`,
             { t: -2, v: -10, c: -4, d: 25 }, {
               next: (d) => (d.flags.overpromise ? 'n5x' : 'n6'),
@@ -445,11 +445,11 @@
                 { think: `Gli ho dato qualcosa da raccontare agli amici: “ho trattato bene”.` },
               ],
             }),
-          ch('c', 2, `Posso arrivare al 12%, Presidente, ma l’offerta vale fino a venerdì prossimo: dopo, la riporto ai numeri di partenza. Lo faccio per lei.`,
+          ch('c', 2, `Posso arrivare al 12%, Presidente, ma l’offerta vale fino a venerdì prossimo alle diciassette: dopo, la riporto ai numeri di partenza. Lo faccio per lei.`,
             `Il dodici è dentro la tua soglia, ma lo concedi con una sola contropartita, e debole: la scadenza è tua, non sua. A un titolare che tratta per onore suona come una pressione, e se la ricorderà.`,
             { t: -2, c: 4, d: 12 }, {
               next: (d) => (d.flags.overpromise ? 'n5x' : 'n6'),
-              say: `Posso fare il dodici, Presidente, ma a una condizione: la firma entro venerdì prossimo. Dopo, devo riportare l’offerta ai numeri di partenza. Lo faccio per lei.`,
+              say: `Posso fare il dodici, Presidente, ma a una condizione: la firma entro venerdì prossimo, alle diciassette. Dopo, devo riportare l’offerta ai numeri di partenza. Lo faccio per lei.`,
               react: [
                 { w: 'gianni', a: `valuta, masticando le parole`, t: `Il dodici. Va bene il dodici.` },
                 { n: `Stringe la mano, ma lo sguardo gli scivola sul calendario di carta, sui giorni che mancano a venerdì.` },
@@ -477,7 +477,7 @@
         scene: [
           { n: `Lunedì, alle nove, nella sala riunioni di Brenta il proiettore getta sul muro un diagramma di Gantt. Davide ha le maniche rimboccate e un caffè mai toccato accanto al portatile.` },
           { w: 'davide', a: `ruota lo schermo verso di voi`, t: `Collaudo, formazione, migrazione dei dati, il fermo degli ordini nei giorni di inventario. Più stretto di così non si può senza rompere qualcosa.` },
-          { n: `Il piano dice agosto per l’intero progetto e giugno per la prima fase.` },
+          { n: `Il piano dice agosto per l’intero progetto e giugno per i reparti principali.` },
           { w: 'francesca', a: `a disagio, senza guardare lo schermo`, t: `Papà dice che gli avevi garantito marzo. Ora il piano dice giugno. Come glielo spiego?` },
           { think: `Marzo l’ho detto io, con la mano. Giugno l’ha scritto Davide, con i fatti.` },
         ],
@@ -513,7 +513,7 @@
               integ: -6, next: 'n6',
               say: `Presentiamo il ritardo come una complicazione emersa dalla pianificazione tecnica: Davide ha trovato dei vincoli che prima non si vedevano.`,
               react: [
-                { w: 'davide', a: `due ore dopo, al telefono`, t: `Dei vincoli che prima non si vedevano? Il primo giorno ti ho detto sei mesi, e ce l’ho per iscritto.` },
+                { w: 'davide', a: `due ore dopo, al telefono`, t: `Dei vincoli che prima non si vedevano? Il primo giorno ti ho detto nove mesi, e ce l’ho per iscritto.` },
                 { n: `Gianni non dice niente, ma ha sentito il tono. E il tono, con un uomo che si fida delle persone, vale più della spiegazione.` },
               ],
             }),
@@ -584,7 +584,7 @@
                 { think: `Un pezzo l’ho chiuso. L’altro l’ho lasciato appoggiato al muro.` },
               ],
             }),
-          ch('d', 0, `Il ruolo di Sergio lo definiamo dopo la firma: adesso non complichiamo il contratto, c’è già abbastanza da far quadrare con la banca.`,
+          ch('d', 0, `Il ruolo di Sergio lo definiamo dopo la firma: adesso non complichiamo il contratto, c’è già abbastanza da far quadrare con la banca e con il leasing.`,
             `Rimandare il ruolo di chi deve usare il sistema significa lasciarlo fuori dal progetto proprio quando conta. Sergio lo legge come un messaggio e risponde nel solo modo che ha: aspettando che il sistema inciampi.`,
             { t: -4, c: -6, r: 12 }, {
               set: { sergioOn: false, sergioHostile: true }, next: 'END',
@@ -629,7 +629,7 @@
           hint: `Un guasto dal vivo è un dato che nessun questionario ti darà. Dove sta il costo vero: nel pezzo fermo, o nel tempo che serve a scoprirlo?`,
           tip: `Vedere il dolore dal vivo vale più di dieci interviste: segui la catena dell’informazione dal fermo macchina alla consegna e chiedi chi lo scopre, quando e cosa costa. Chi prosegue per cortesia perde un dato; chi si ferma e domanda a chi lavora lo guadagna, senza trasformare il guasto in una presentazione.`,
           choices: [
-            ch('a', 3, `Chiedo a Gianni un minuto: con il capo squadra seguo la commessa dal fermo macchina fino alla consegna, e mi faccio dire a ogni passaggio chi lo scopre e quando.`,
+            ch('a', 3, `Chiedo a Gianni un minuto: con il capo squadra seguo la commessa dal fermo fino alla consegna, e mi faccio dire a ogni passaggio chi lo scopre e quando.`,
               (d) => (warmN1(d)
                 ? `Con Gianni già dalla tua parte il fermo diventa una lezione: segui l’informazione dalla macchina alla consegna e fai spiegare il costo a chi lo vive.`
                 : `Fermarsi quando il titolare vorrebbe proseguire è una piccola scommessa: ti ascolta perché la domanda riguarda il suo dolore, non il tuo prodotto.`),
@@ -638,12 +638,12 @@
                 next: 'RET',
                 say: `Presidente, mi concede un minuto? Vorrei seguire questa commessa da qui fino alla consegna: chi scopre che la macchina è ferma, chi lo dice al cliente, e quando. Con il suo capo squadra, se possibile.`,
                 react: [
-                  { w: 'gianni', a: `con un mezzo sorriso`, t: `Fermarsi quando una macchina si ferma. Non l’avevo mai visto fare, a uno di fuori.` },
+                  { w: 'gianni', a: `con un mezzo sorriso`, t: `Fermarsi quando una macchina si ferma. Non l’avevo mai visto fare, a chi viene da fuori.` },
                   { n: `Il capo squadra ti racconta la catena: il pezzo è per un cliente di Treviso, la consegna è giovedì, e il fermo lo scoprirà l’ufficio spedizioni giovedì mattina. Venerdì il cliente telefonerà a Gianni. Di schede così, a turno, in reparto ne passano centodiciotto.` },
                   { think: `Il guasto dura un’ora. Il resto sono due giorni, e nessuno li ha mai contati.` },
                 ],
               }),
-            ch('b', 2, `Proseguo con Gianni, ma annoto il fermo e a fine mattina chiedo a Francesca quante volte succede al mese e cosa costa alle consegne.`,
+            ch('b', 2, `Proseguo con Gianni, ma annoto l’ora del fermo e a fine mattina chiedo a Francesca quante volte succede in un mese e quanto costa alle consegne in ritardo.`,
               `Non perdi il filo e porti il fermo a chi ha i numeri: è una buona via laterale. Ma il momento in cui il reparto raccontava il dolore a caldo l’hai lasciato passare.`,
               { t: 2, v: 4, u: 2, c: 2 },
               {
@@ -654,8 +654,8 @@
                   { think: `Un dato di seconda mano. Meglio di niente, peggio che vederlo.` },
                 ],
               }),
-            ch('c', 0, `Colgo l’occasione per mostrare a Gianni cosa farebbe la nostra piattaforma: un allarme sul telefono del capo reparto, subito, e la commessa riprogrammata da sola.`,
-              `Il guasto è suo, e Gianni lo vive come un vanto di quarant’anni incrinato in pubblico. Trasformare il suo dolore nel tuo prodotto, davanti ai suoi operai, ti fa passare da ospite a venditore.`,
+            ch('c', 0, `Ne approfitto per mostrare a Gianni cosa farebbe la piattaforma: un allarme sul telefono del capo reparto, subito, e la commessa riprogrammata da sola.`,
+              `Il guasto è suo, e Gianni lo vive come un vanto di quarant’anni incrinato in pubblico. Trasformare il suo dolore nel tuo prodotto, davanti ai suoi operai, ti fa passare da ospite a chi ha un listino da piazzare.`,
               { t: -6, v: -2, c: -2, r: 8 },
               {
                 next: 'RET',
@@ -666,7 +666,7 @@
                   { think: `Ho parlato di allarmi a un uomo che sta ancora guardando la sua macchina.` },
                 ],
               }),
-            ch('d', 1, `Faccio finta di niente e proseguo con Gianni: non voglio mettere in imbarazzo il padrone di casa davanti ai suoi operai, né perdere il filo.`,
+            ch('d', 1, `Faccio finta di niente e proseguo con Gianni: non voglio mettere in imbarazzo il padrone di casa davanti ai suoi operai, né perdere il filo del giro.`,
               `Il tatto è apprezzato, ma il dato è perso: il momento in cui la macchina era ferma e la gente raccontava il problema non torna. Il dolore, quando si vede dal vivo, vale più di un’intervista.`,
               { t: 1, v: -2, u: -2, r: 2 },
               {
@@ -755,7 +755,7 @@
                 say: `Mi allontano un momento per sentire Davide su una cosa tecnica. Torno subito.`,
                 react: [
                   { n: `Quando torni davanti alla porta del Presidente, Maran ha finito. Sul tavolo c’è una tazzina vuota, e Gianni ti guarda con una domanda che non fa.` },
-                  { think: `Ho preparato le risposte. Mi sono perso la domanda.` },
+                  { think: `Ho preparato le risposte e ho perso la domanda.` },
                 ],
               }),
           ],
@@ -780,7 +780,7 @@
           hint: `In un’azienda familiare il tempo passato a tavola non è tempo perso. Ma due ore possono costare un lavoro che lunedì serve: come le usi, o come le difendi?`,
           tip: `In una PMI familiare il pranzo è parte del processo di vendita: lì si capisce chi decide con chi e di cosa ha davvero paura il fondatore. Ma il tempo ha un costo reale: conviene decidere cosa si porta a tavola e cosa si lascia indietro.`,
           choices: [
-            ch('a', 3, `Accetto volentieri: telefono in tasca, e tra il primo e il secondo gli chiedo come ha deciso l’ultimo grande investimento e chi c’era allora a tavola con lui.`,
+            ch('a', 3, `Accetto volentieri: telefono in tasca, e tra il primo e il secondo gli chiedo come ha deciso l’ultimo investimento e chi c’era allora a tavola con lui.`,
               `Accetti il tempo e lo usi per capire come decide l’uomo che firma, e con chi. Paghi due ore di calendario e ricevi una mappa del potere raccontata dal fondatore in persona.`,
               (d) => ({ t: d.m.trust >= 40 ? 10 : 8, v: 2, u: -3, c: 6, r: -2 }),
               {
@@ -795,7 +795,7 @@
                   { think: `Mi ha detto chi decide: lui, con quattro persone intorno. Una è Sergio, un’altra è il concorrente.` },
                 ],
               }),
-            ch('b', 2, `Accetto, ma prima chiedo a Davide di mandare a Francesca la bozza del piano, così il pomeriggio non resta indietro. In trattoria porto il quaderno e le domande.`,
+            ch('b', 2, `Accetto, ma prima chiedo a Davide di mandare a Francesca la bozza del piano, così il pomeriggio non resta indietro. In trattoria porto il quaderno.`,
               `Salvi il lavoro e tieni il pranzo: è un buon compromesso. Ma il quaderno sul tavolo dice a Gianni che stai lavorando, non che stai mangiando con lui.`,
               { t: 5, v: 2, u: -2, c: 2 },
               {
@@ -804,27 +804,27 @@
                 react: [
                   { n: `Mandi due righe a Davide e, nella trattoria, tra il pane e l’olio, appoggi il quaderno sul tavolo.` },
                   { w: 'gianni', a: `guardando il quaderno`, t: `Lavora anche a tavola, lei. Io no: a tavola si mangia.` },
-                  { think: `Mi sono portato il lavoro a pranzo. A lui è sembrato un segno di fretta.` },
+                  { think: `Il lavoro l’ho portato a pranzo. A lui è sembrato un segno di fretta.` },
                 ],
               }),
-            ch('c', 1, `Accetto e uso il pranzo per chiudere: tra l’antipasto e il caffè gli rimetto davanti il piano di Davide e la data possibile per la firma.`,
+            ch('c', 1, `Accetto e uso il pranzo per chiudere: tra l’antipasto e il caffè gli rimetto davanti il piano di Davide, con le tappe, e la data possibile per la firma.`,
               `Un pranzo di relazione trasformato in riunione commerciale: Gianni sente che l’hai portato a tavola per vendergli. Il tempo l’hai speso, e la fiducia che ne sarebbe nata l’hai rimandata.`,
               { t: -4, v: 2, u: 2, c: 2, r: 4 },
               {
                 next: 'RET',
-                say: `Presidente, già che siamo qui le faccio vedere due cose: il piano di Davide e la data possibile per la firma.`,
+                say: `Presidente, già che siamo qui le faccio vedere due cose: il piano di Davide, con le tappe, e la data possibile per la firma.`,
                 react: [
                   { w: 'gianni', a: `appoggia la forchetta`, t: `A tavola si mangia e si chiacchiera, le carte vengono dopo. Gliel’avevo detto sulla porta.` },
                   { n: `Il resto del pranzo è cortese e corto. Il caffè arriva senza dolce.` },
                   { think: `Il pranzo era il lavoro. L’ho trasformato in una riunione, e lui se n’è accorto.` },
                 ],
               }),
-            ch('d', 1, `Ringrazio ma declino: oggi devo chiudere il piano con Davide prima di lunedì. Gli propongo un caffè in piedi, alle cinque, in ufficio.`,
+            ch('d', 1, `Ringrazio ma declino: oggi devo chiudere il piano con Davide prima di lunedì. Gli propongo un caffè in piedi, alle cinque, in ufficio, per dieci minuti.`,
               `Proteggi il lavoro e perdi un’occasione: in una PMI familiare un invito rifiutato pesa più di un piano in ritardo. Funziona solo se il rapporto è già solido; altrimenti è un segnale di distanza.`,
               (d) => ({ t: d.m.trust >= 55 ? -2 : -6, v: 4, u: 2, c: 4, r: 2 }),
               {
                 next: 'RET',
-                say: `Presidente, la ringrazio, ma oggi devo chiudere il piano con Davide prima di lunedì. Se vuole, ci vediamo per un caffè in piedi alle cinque, in ufficio.`,
+                say: `Presidente, la ringrazio, ma oggi devo chiudere il piano con Davide prima di lunedì. Se vuole, ci vediamo per un caffè in piedi alle cinque, in ufficio, dieci minuti.`,
                 react: [
                   { w: 'gianni', a: `dopo un attimo, rimettendo le chiavi in tasca`, t: `Come vuole. Mangio da solo, allora. Non è la prima volta.` },
                   { w: 'davide', a: `a bassa voce`, t: `Ce l’avremmo fatta lo stesso, sai. Ma hai perso un pranzo con lui.` },
@@ -841,7 +841,7 @@
           when: `Mercoledì · 08:40`, view: 'walk', where: `Reparto produzione · mercoledì 08:40`,
           scene: (d) => [
             { n: `Mercoledì mattina presto, il reparto è ancora quasi vuoto. Su un tavolo da lavoro, tra una pila di bolle e un termos di caffè, c’è un portatile che non è tuo, con un adesivo azzurro sul coperchio: InfoSistemi Nordest.` },
-            { w: 'pegoraro', a: `a voce alta, già con la mano tesa`, t: `Ah, lei è il collega di Nexora! Renzo Pegoraro, piacere. Non si disturbi, siamo qui solo a far vedere due cose a Sergio. Una prova gratuita, trenta giorni, niente impegno: se non va bene la spegniamo e ci stringiamo la mano lo stesso.` },
+            { w: 'pegoraro', a: `a voce alta, già con la mano tesa`, t: `Ah, lei è di Nexora! Renzo Pegoraro, piacere. Non si disturbi, siamo qui solo a far vedere due cose a Sergio. Una prova gratuita, trenta giorni, niente impegno: se non va bene la spegniamo e ci stringiamo la mano lo stesso.` },
             { w: 'pegoraro', a: `strizzando l’occhio`, t: `E per marzo, mi hanno detto, Gianni aspetta tutto in funzione. Noi? In due settimane si accende e va: poi si cresce.`, if: (x) => !!x.flags.overpromise },
             d.flags.sergioOn
               ? { w: 'sergio', a: `a mezza voce, solo a te`, t: `È venuto senza avvisare. Gianni lo sa: gli ha telefonato Renzo ieri sera. Io gli ho detto che il pilota è già deciso. Il portatile l’ha lasciato lo stesso.` }
@@ -929,7 +929,7 @@
           hint: `La banca non è una tua controparte, ma è sulla tua strada. Cosa può fare un fornitore che non sia premere o regalare?`,
           tip: `Quando un terzo ritarda, il fornitore ha tre leve legittime: ridurre l’esposizione (fasi e pagamenti a tappe), semplificare il fascicolo che l’altro deve leggere e tenere informato chi decide. Regalare sconto o forzare la banca sposta il problema, non lo risolve.`,
           choices: [
-            ch('a', 3, `Propongo di spezzare l’ordine: il pilota parte subito con fondi vostri, il resto aspetta il leasing. Intanto preparo con Davide una pagina sola per il comitato.`,
+            ch('a', 3, `Propongo di spezzare l’ordine: il pilota parte subito con fondi vostri, il resto aspetta il leasing. Intanto preparo con Davide una pagina per il comitato.`,
               (d) => (d.flags.giveGet
                 ? `Con il pagamento a fasi il pilota è finanziabile in autonomia: spezzare l’ordine toglie peso alla banca e tempo al ritardo. Il fascicolo di una pagina semplifica la vita a chi deve decidere.`
                 : `Spezzare l’ordine e semplificare il fascicolo è la risposta giusta. Senza pagamenti a fasi, però, il pilota da solo pesa sulle tasche di Gianni più di quanto dovrebbe, e lui lo sentirà.`),
@@ -955,7 +955,7 @@
                   { think: `Meglio che mi lasci in copia. Meglio ancora se me lo chiede lei.` },
                 ],
               }),
-            ch('c', 0, `Offro un ulteriore 3% se Gianni firma comunque lunedì, senza aspettare la banca: così il ritardo non diventa un ostacolo e il pilota parte subito.`,
+            ch('c', 0, `Offro un ulteriore 3% se Gianni firma comunque lunedì, senza aspettare il comitato: così il ritardo non diventa un ostacolo e il pilota parte subito.`,
               `Regalare sconto per un problema che non è tuo non risolve il ritardo della banca: lo compra. E ti toglie margine proprio quando il cliente aveva bisogno di un’idea, non di un taglio.`,
               { t: -3, v: -6, c: -3, r: 4, d: 3 },
               {
@@ -966,12 +966,12 @@
                   { think: `Ho pagato un ritardo che non era mio, e non l’ho nemmeno accorciato.` },
                 ],
               }),
-            ch('d', 1, `Dico a Francesca che per noi la firma può aspettare la banca: meglio un leasing fatto bene che una corsa, e nessuno in famiglia si sente spinto.`,
+            ch('d', 1, `Dico a Francesca che la firma può aspettare i dieci giorni del comitato: meglio un leasing fatto bene che una corsa, e in famiglia nessuno si sente spinto.`,
               `La pazienza è una virtù, ma in una trattativa senza data diventa deriva: la firma aspetta e, nel frattempo, il concorrente locale ha una settimana per telefonare a Gianni. Hai tolto la tua urgenza insieme a quella della banca.`,
               { u: -6, c: -3, r: 4 },
               {
                 next: 'RET',
-                say: `Francesca, per noi la firma può aspettare la banca. Meglio un leasing fatto bene che una corsa: così nessuno si sente spinto.`,
+                say: `Francesca, per noi la firma può aspettare i dieci giorni del comitato. Meglio un leasing fatto bene che una corsa: così nessuno si sente spinto.`,
                 react: [
                   { w: 'francesca', t: `Allora aspettiamo. Ma papà non è uno che sa aspettare, e Renzo lo chiama ogni mattina.` },
                   { think: `Ho tolto fretta alla banca. L’ho tolta anche a me.` },
@@ -1026,13 +1026,13 @@
         {
           id: 'gianni_testimoni', if: () => true, has: (d) => !!(d.flags.giveGet && d.flags.paperReady),
           q: `Dimmi una cosa su Gianni: il sì te l’ha dato davanti a Francesca, o solo a te? Nelle aziende di famiglia ho imparato che una stretta di mano in due si dimentica, in tre no.`,
-          evidence: `Davanti a lei: venerdì ha chiuso con pagamento a fasi con Francesca seduta di fronte, e il piano di progetto è già alla banca. Ti inoltro la mail di Francesca.`,
-          honest: `A voce, e solo con me: da Francesca non ho ancora niente di scritto. Finché il sì non passa anche da lei, per me resta Best Case.`,
-          bluff: `Davanti a lei, certo: c’era Francesca quando ci siamo stretti la mano, e il piano è già in banca. Ti giro la mail appena la ritrovo.`,
-          vague: `Gianni è uno che la parola la rispetta. Il sì tra me e lui c’è; chi altro ci fosse, onestamente, non è il punto.`,
+          evidence: `Davanti a lei: venerdì ha detto sì al pagamento a fasi con Francesca seduta di fronte, e il piano di progetto è già alla banca. Chiedilo pure a lei.`,
+          honest: `A voce: da Francesca non ho ancora niente di scritto. Finché il sì non passa anche da lei, smetto di darlo per fatto e per ora lo porto più in basso.`,
+          bluff: `Davanti a lei, certo: c’era Francesca quando ci siamo stretti la mano, e il piano è già in banca. Ti giro la mail appena la ritrovo, non è un problema.`,
+          vague: `Gianni è uno che la parola la rispetta: in due settimane non mi ha mai detto una cosa per un’altra. Il sì tra noi c’è; chi altro ci fosse non è il punto.`,
           react: {
-            evidence: `Bene: due persone, una formula, una banca. È il primo sì che riesco a mettere nel CRM senza virgolette. Mandami la mail oggi e lo lascio dove l’hai messo.`,
-            honest: `Grazie. Un sì detto a uno solo è una bella frase, ma la banca non la legge. Questa settimana vai da Francesca e fatti ripetere il sì davanti a un foglio. Intanto resta dov’è.`,
+            evidence: `Bene: due persone, una formula, una banca. È il primo sì che riesco a mettere nel CRM senza virgolette. Scrivilo nella scheda con il nome di Francesca e lo lascio dove l’hai messo.`,
+            honest: `Grazie. Un sì che non passa da un foglio è una bella frase, ma la banca non la legge. Questa settimana vai da Francesca e fatti ripetere il sì davanti a un foglio. Intanto resta dov’è.`,
             bluffCaught: `Nel CRM su Brenta c’è una nota sola, scritta da te: “stretta di mano, ottimo clima”. Nessuna mail di Francesca. Non ti faccio la predica: ti chiedo di non scrivere “davanti a lei” se non l’hai ancora chiesto a lei.`,
             bluffPassed: `Ok, lo scrivo. Ma venerdì voglio la mail di Francesca, anche due righe: se arriva, ti chiedo scusa io. Se non arriva, lo rivedo senza chiederti il permesso.`,
             vague: `“Non è il punto” è esattamente il punto. Con le aziende di famiglia il sì conta se lo sente anche chi tiene i conti. Torna da Francesca e fatti dare una riga.`,
@@ -1041,14 +1041,14 @@
         {
           id: 'sergio_dentro', if: () => true, has: (d) => !!d.flags.sergioOn,
           q: `Sergio è dentro, o è solo uno che non ti ha ancora detto di no? Il direttore di produzione, in una meccanica, è quello che decide se il sistema si usa o resta nel cassetto.`,
-          evidence: `È dentro: ha riconosciuto che il sistema gli toglie i fogli di mezzo, e il pilota parte dai problemi che ha scelto lui. Con i capi squadra non parla più di “solita moda”.`,
-          honest: `Non ancora. Non mi ha detto di no, ma non l’ho mai messo a capo di niente, e ai suoi parla ancora di “solita moda”. Finché non ha un ruolo, lo tengo fuori dal Commit.`,
-          bluff: `È dentro: ho fatto una demo con i loro dati, ha riconosciuto che gli risparmia i fogli e ha dato la disponibilità a guidare il reparto pilota.`,
-          vague: `Sergio è uno diretto: se avesse qualcosa contro, me l’avrebbe detto. Non mi ha detto niente, quindi per me è a favore.`,
+          evidence: `È dentro: nel pilota ha un ruolo suo, e si parte dai suoi fogli di avanzamento. Non è più uno che aspetta di vedere come va, adesso ha voce in capitolo.`,
+          honest: `Non ho niente di scritto da lui: so che non mi ha detto di no, ma un sì vero non l’ho ancora in mano. Finché non si espone, per me non è ancora dentro.`,
+          bluff: `È dentro: ho fatto una demo con i loro dati, ha riconosciuto che gli risparmia i fogli e ha dato la disponibilità a guidare il reparto pilota, per iscritto.`,
+          vague: `Sergio è uno diretto: se avesse qualcosa contro, me l’avrebbe detto in faccia. In reparto ci siamo visti più volte e non mi ha detto niente: per me è a favore.`,
           react: {
-            evidence: `Un capo reparto che parla del pilota come di una cosa sua: è proprio quello che manca a metà dei miei Commit. Lo segno.`,
+            evidence: `Un capo reparto con un ruolo nel pilota e un punto di partenza suo: è proprio quello che manca a metà dei miei Commit. Lo segno.`,
             honest: `Hai fatto bene a dirlo: “non mi ha detto di no” non è un sì, ed è l’errore più comune quando c’è di mezzo un capo reparto. Fissa un’ora con lui, in reparto, prima di venerdì. Se serve, ti accompagna Davide.`,
-            bluffCaught: `Nella scheda di Brenta, a Sergio non corrisponde niente: nessun ruolo, nessuna riunione, nessun nome nel piano. Meglio saperlo ora che in produzione: lo rimetto in Best Case e ci lavoriamo.`,
+            bluffCaught: `Nella scheda di Brenta, a Sergio non corrisponde niente: nessun ruolo, nessuna riga sua, nessun nome nel piano. Meglio saperlo ora che in produzione: lo rimetto in Best Case e ci lavoriamo.`,
             bluffPassed: `Va bene, mi basta. Ma portami una riga di Sergio, anche una mail di due parole, entro giovedì: sulla produzione non voglio fidarmi nemmeno di me stessa.`,
             vague: `“Non mi ha detto niente” non è un favore, è un silenzio. In reparto, il silenzio di un direttore di produzione è l’inizio del sabotaggio più educato. Dammi una frase sua.`,
           },
@@ -1056,12 +1056,12 @@
         {
           id: 'marzo_contratto', if: () => true, has: (d) => !!(d.flags.phased && !d.flags.overpromise && d.flags.paperReady),
           q: `Il go-live a marzo è nel contratto, o è una frase detta in ufficio con una stretta di mano? I contratti si leggono tra due anni, le strette di mano si ricordano già a gennaio.`,
-          evidence: `È nel piano di progetto, quello che ha visto anche la banca: marzo vale per il reparto pilota, non per tutto, e c’è scritto chi lo consegna e chi lo collauda. Il resto del progetto ha agosto, anche quello per iscritto.`,
-          honest: `A parole: Gianni ricorda “marzo” e basta. Su cosa c’è e cosa non c’è a marzo non ho ancora un suo sì scritto. Fino ad allora lo tengo in Best Case.`,
-          bluff: `È tutto nel piano allegato al contratto, con le date per fase. Gianni l’ha letto e ha detto che per lui va bene così: marzo vale per il pilota.`,
+          evidence: `È nel piano di progetto che ha visto anche la banca: marzo vale per il reparto pilota, non per tutto. Il resto del progetto ha agosto, per iscritto.`,
+          honest: `A parole: Gianni ricorda “marzo” e basta. Su cosa c’è e cosa non c’è a marzo non ho ancora un suo sì scritto, e intanto non lo difendo come sicuro.`,
+          bluff: `È tutto nel piano allegato al contratto, con le date per fase. Gianni l’ha letto ieri e ha detto che per lui va bene così: marzo vale per il pilota.`,
           vague: `Marzo lo abbiamo chiaro tutti: Gianni sa che il progetto richiede il suo tempo e che il pilota è la parte per la fiera. Ne abbiamo parlato più volte.`,
           react: {
-            evidence: `Perfetto: la data che il cliente ricorda coincide con quella che c’è scritta. È la parte più rara di un forecast. Mandami la pagina e lo tratto come un Commit con i piedi per terra.`,
+            evidence: `Perfetto: il pilota a marzo e il resto ad agosto, scritti nello stesso posto. È la parte più rara di un forecast. Mandami la pagina e lo tratto come un Commit con i piedi per terra.`,
             honest: `Grazie per la chiarezza. “A parole” su una data è un debito: lo paghi tu, con gli interessi, quando Gianni se la ricorda. Mettila nel piano con il suo nome sotto e poi ne riparliamo.`,
             bluffCaught: `Ho il piano davanti: non c’è nessuna data di marzo per il pilota, e nessuna firma di Gianni. Se l’hai data per scritta ti capisco, ma la differenza tra una frase e una riga la paghiamo in due.`,
             bluffPassed: `Ok, ti credo. Ma voglio la pagina del piano con la data del pilota entro mercoledì: su una promessa di fiera non faccio atti di fede.`,
