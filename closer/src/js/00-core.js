@@ -27,16 +27,18 @@
   CL.shortName = (s) => String(s || '').replace(/\s*\(.*$/, '');
   CL.playerName = '';
   /* segnaposto nei testi mostrati: {nome} {client} {contact} {buyer} */
+  /* "S.p.A.." → "S.p.A." (il punto della ragione sociale più quello della frase); i puntini di sospensione restano */
+  CL.tidyDots = (t) => (typeof t === 'string' ? t.replace(/([^.])\.\.(?!\.)/g, '$1.') : t);
   CL.fmt = (s, sc) => {
     if (typeof s !== 'string' || s.indexOf('{') < 0) return s;
     const ppl = (sc && sc.fc && sc.fc.people) || {};
-    return s.replace(/\{(nome|client|contact|buyer)\}/g, (m, k) => {
+    return CL.tidyDots(s.replace(/\{(nome|client|contact|buyer)\}/g, (m, k) => {
       if (k === 'nome') return CL.playerName || 'collega';
       if (k === 'client') return sc ? sc.client : 'il cliente';
       if (k === 'contact') return CL.shortName(ppl.C) || 'il tuo contatto';
       if (k === 'buyer') return CL.shortName(ppl.E) || 'chi decide';
       return m;
-    });
+    }));
   };
 
   /* mulberry32 */

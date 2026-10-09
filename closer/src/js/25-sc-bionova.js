@@ -923,7 +923,7 @@
     fc: {
       crm: `Commit all’85%: “il rinnovo è automatico, il cliente non ha mai disdetto”`,
       people: { E: `Giorgio Landi (VP R&D Operations)`, C: `Giorgio Landi`, Dp: `Giorgio Landi e Matteo Brambilla (supply clinica)`, P: `Sara Monti (Acquisti) e il legale di BioNova`, M: `Giorgio Landi, con i dati del suo team di supply`, I: `Matteo Brambilla e il suo team di supply clinica`, Dc: `Giorgio Landi (adozione e ticket) e Sara Monti (prezzo e perimetro)`, Co: `il fornitore concorrente che ha presentato l’offerta, e l’opzione di non rinnovare` },
-      risk: `Il rischio vero è che Landi, l’unico sponsor, cambi ruolo o venga riassegnato prima della firma, oppure che gli Acquisti portino il rinnovo in comparazione sul prezzo mentre un ticket critico è ancora aperto.`,
+      risk: `Il rischio vero è che Landi, l’unico sponsor, cambi ruolo prima della firma, oppure che gli Acquisti portino il rinnovo in comparazione mentre un ticket critico è aperto.`,
       custom: [
         {
           id: 'sponsor_oltre_landi', if: () => true, has: (d) => !!d.flags.threaded,

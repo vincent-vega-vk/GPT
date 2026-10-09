@@ -33,7 +33,7 @@
     teaches: [`Aziende familiari`, `Concorrente locale`, `Stakeholder resistente`, `Promesse realistiche`],
     list: 260, cost: 2, window: [1, 10], stars: 2, lep: 15, slip: 0.35,
     noWild: ['rival_offer'],   // imprevisti generici che stonano con questo scenario
-    noShock: ['g_price_cut', 'g_rival_withdraws', 'g_buyer_change', 'g_champion_moves'],   // shock generici che stonano con questo scenario (il CFO è Francesca, figlia del fondatore: non lascia né cambia incarico)
+    noShock: ['g_price_cut', 'g_rival_withdraws', 'g_buyer_change', 'g_champion_moves', 'g_board_postpones', 'g_last_haggle', 'g_signer_away', 'g_board_accelerates'],   // shock generici che stonano con questo scenario (il CFO è Francesca, figlia del fondatore: non lascia né cambia incarico)
     crm: { cat: `Best Case`, prob: 50 },
     cast: CAST,
 

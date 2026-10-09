@@ -795,7 +795,7 @@
     fc: {
       crm: `Commit all’80%: “il board approva a novembre”`,
       people: { E: `Roberto Villa (CFO)`, C: `Elisa Marchetti`, Dp: `Elisa Marchetti e il legale di FarmaVita`, P: `Chiara Neri (Acquisti) e il legale`, M: `Roberto Villa, con i dati di FarmaVita`, I: `Elisa Marchetti (Operations)`, Dc: `Bruno Sala (CIO) e Anna Ferrante (Qualità)`, Co: `il vendor storico, con contratto fino al 2028` },
-      risk: `Il rischio vero è che il voto del board slitti, oppure che IT e Qualità blocchino la convalida GxP.`,
+      risk: `Il rischio vero è che il voto del board slitti a dopo il 14 novembre, oppure che IT e Qualità blocchino la convalida GxP con una richiesta in più.`,
       custom: [
         {
           /* has: bizCase + ebEngaged + cfoAccess identificano solo la call n4/b (Villa discute i numeri di persona):

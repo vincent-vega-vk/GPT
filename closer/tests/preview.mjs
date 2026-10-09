@@ -69,7 +69,7 @@ if (flag('shocks')) {
     const sc = CL.getScenario(id), host = document.createElement('div');
     host.style.cssText = 'position:fixed;inset:0;z-index:999;background:var(--bg);overflow:auto;padding:20px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));align-content:start';
     const mkd = (rich) => { const d = CL.newDeal(sc, {}); if (rich) { CL.MP.forEach((m) => d.mp.add(m.k)); Object.keys(d.m).forEach((k) => { d.m[k] = k === 'risk' ? 15 : 85; }); const src = JSON.stringify(sc, (k, v) => (typeof v === 'function' ? v.toString() : v)); (src.match(/flags\.(\w+)/g) || []).forEach((m) => { d.flags[m.slice(6)] = true; }); } return d; };
-    (sc.shocks || []).concat(CL.shocksGeneric || []).forEach((s) => [false, true].forEach((rich) => { const d = mkd(rich); const hit = s.hit ? !!s.hit(d) : true; const dp = hit ? s.dp : (s.dpProt != null ? s.dpProt : 0); host.appendChild(CL.ui.shockCard({ id: s.id, title: s.title, kind: s.kind, hit, dp, text: hit ? s.hitText : s.protText }, sc)); }));
+    (sc.shocks || []).concat((CL.shocksGeneric || []).filter((g) => (sc.noShock || []).indexOf(g.id) < 0)).forEach((s) => [false, true].forEach((rich) => { const d = mkd(rich); const hit = s.hit ? !!s.hit(d) : true; const dp = hit ? s.dp : (s.dpProt != null ? s.dpProt : 0); host.appendChild(CL.ui.shockCard({ id: s.id, title: s.title, kind: s.kind, hit, dp, text: hit ? s.hitText : s.protText }, sc)); }));
     document.body.appendChild(host);
   }, scId);
   await settle(300);

@@ -38,11 +38,12 @@ Più il **Dojo delle obiezioni**: 16 obiezioni reali, 8 per giro, 4 risposte cia
 - **Sconto e soglia LEP**: fino alla soglia lo sconto è autonomo; oltre servono contropartite (give-get) o il Deal Desk. Senza approvazione il Deal Desk blocca lo sconto promesso e il cliente se ne accorge.
 - **Jolly** (limitati): Sales Engineer ×3, Executive Sponsor ×2, Referenza ×2, Deal Desk ×2, Legal ×1. Spesso esiste un'alternativa gratuita quasi altrettanto buona: il gioco premia l'uso efficiente.
 - **Reputazione**: promesse irrealistiche, omissioni, side letter e forecast gonfiati pagano subito e costano dopo (a volte nello stesso scenario, con una conseguenza ritardata).
-- **Forecast**: due revisioni con Marta (a metà e a fine trimestre). Le sue domande dipendono da *dove la tua dichiarazione si distanzia dalla verità* (deal sovrastimati, sandbagging, lettere MEDDPICC scoperte). Rispondi con dati, non con speranza: la fiducia di Marta si guadagna e si perde, e sopra/sotto soglia sblocca o taglia risorse (Executive Sponsor extra).
+- **Forecast**: due revisioni con Marta (a metà trimestre, dalla settimana 6 e dopo una trattativa conclusa, e a fine trimestre). Le sue domande dipendono da *dove la tua dichiarazione si distanzia dalla verità* (deal sovrastimati, sandbagging, lettere MEDDPICC scoperte). Rispondi con dati, non con speranza: la fiducia di Marta si guadagna e si perde, e sopra/sotto soglia sblocca o taglia risorse (Executive Sponsor extra).
 - **Interludi**: eventi casuali tra un deal e l'altro (pipeline review, promo del concorrente, opportunità lampo, la tentazione di una promessa di roadmap…).
 - **Commissione**: 6% fino alla quota, 12% oltre, più un kicker per l'accuratezza del forecast. Quota €1,7 M. **Senza rete** (cruscotto nascosto) vale +10%. **Pressione** aggiunge un timer a ogni decisione.
 - Le opzioni sono **mescolate** a ogni mossa: la risposta giusta non sta mai nello stesso posto. Tasti: `1`–`5` scelgono, `Invio` continua (o completa la scena in corso), `Esc` chiude le finestre.
-- **Impostazioni**: nome, difficoltà, timer, suoni e ambiente sonoro, tema chiaro/scuro, imprevisti on/off, modalità veloce (scene senza animazione di battitura).
+- **Senza rete**: probabilità, indicatori, widget valutativi, qualità delle mosse e reputazione restano nascosti fino al verdetto del giorno di chiusura; la valutazione completa delle mosse compare nel riepilogo. Commissione +10%.
+- **Impostazioni**: nome, difficoltà, timer, suoni e ambiente sonoro, tema chiaro/scuro, imprevisti e shock on/off, modalità veloce (scene senza animazione di battitura).
 
 ## Struttura del progetto
 
@@ -74,7 +75,8 @@ closer/
 └─ tests/
    ├─ validate.mjs        # struttura degli scenari + calibrazione (percorso migliore/peggiore/casuale)
    ├─ validate-banks.mjs  # banche testuali v2 (wild, shock, forecast); --strict controlla ogni scenario
-   ├─ mechanics-check.mjs # diff della meccanica di uno scenario rispetto a una versione git (deve restare invariata)
+   ├─ mechanics-check.mjs # diff della meccanica di uno scenario (nodi, imprevisti, shock) rispetto a una versione git: deve restare invariata
+   ├─ lengthbias.mjs      # indizi di forma: la risposta giusta non si riconosce da lunghezza, domanda finale o nome della categoria
    ├─ simulate.mjs        # Monte Carlo del trimestre per profili di abilità
    ├─ preview.mjs         # anteprima visiva: screenshot di intro, scene, imprevisti, shock, cruscotto
    ├─ e2e.mjs             # Playwright: trimestre, forecast, dojo, allenamento, mobile, screenshot
@@ -89,7 +91,8 @@ Il motore (`00`, `10`, `12`) non tocca il DOM: gli scenari e le simulazioni gira
 node build.mjs            # rigenera dist/closer.html
 node tests/validate.mjs   # valida i contenuti (grafo dei nodi, jolly, MEDDPICC, calibrazione)
 node tests/validate-banks.mjs --strict   # copertura v2 di ogni scenario (wild, shock, forecast, widget)
-node tests/mechanics-check.mjs farmavita # la meccanica non è cambiata rispetto a git HEAD
+node tests/mechanics-check.mjs farmavita --ref=<commit> # la meccanica non è cambiata rispetto a un commit
+node tests/lengthbias.mjs --strict       # nessun indizio di forma sulle risposte (nodi, domande di Marta, dojo)
 node tests/simulate.mjs   # distribuzione dei risultati per profilo di abilità
 node tests/preview.mjs --sc=asl --out=/tmp/anteprima [--policy=best|random|q0] [--mobile] [--dark] [--wild=<id>] [--shocks] [--hud] [--fc]
 npm test                  # tutto, incluso il test UI (richiede Playwright e Chromium)

@@ -1,7 +1,7 @@
 {
   "name": "closer-ae-simulator",
-  "version": "1.0.0",
-  "description": "CLOSER: simulatore del ruolo di Account Executive. Otto trattative enterprise, un trimestre, una quota.",
+  "version": "2.0.0",
+  "description": "CLOSER: simulatore del ruolo di Account Executive in prima persona. Otto trattative enterprise, forecast con la manager, imprevisti e shock, un trimestre, una quota.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,8 @@
     "validate": "node tests/validate.mjs",
     "simulate": "node tests/simulate.mjs",
     "test:ui": "node build.mjs && node tests/e2e.mjs && node tests/robust.mjs",
-    "test": "node tests/validate.mjs && node build.mjs && node tests/e2e.mjs && node tests/robust.mjs"
+    "test": "node tests/validate.mjs && node tests/validate-banks.mjs --strict && node tests/lengthbias.mjs --strict && node build.mjs && node tests/e2e.mjs && node tests/robust.mjs",
+    "forme": "node tests/lengthbias.mjs --strict"
   },
   "license": "UNLICENSED"
 }

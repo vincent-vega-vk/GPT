@@ -58,7 +58,7 @@
         UI.avatar({ name: q.who, hue: 20 + ((D.i * 47) % 300) }),
         h('div', null, h('div', { class: 'small' }, h('b', null, q.who)), h('div', { class: 'small faint' }, q.ctx))),
       h('h1', { class: 'quote', 'data-focus': '' }, `“${q.line}”`),
-      h('p', { class: 'muted' }, 'Qual è la risposta migliore? Ascolta, chiarisci, poi riformula.'),
+      h('p', { class: 'muted' }, 'Qual è la risposta migliore?'),
       timerBar,
       h('div', { class: 'opts', role: 'group', 'aria-label': 'Le tue risposte' }, opts),
       slot);

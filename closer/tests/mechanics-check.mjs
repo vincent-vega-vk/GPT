@@ -24,6 +24,10 @@ async function dump(dir) {
     o.top.caps = (sc.caps || []).map((c) => [c.id, c.max, ser(c.if)]);
     o.top.lessons = (sc.lessons || []).map((l) => [l.good, ser(l.if)]);
     o.top.endings = Object.keys(sc.endings || {}).sort();
+    /* imprevisti dello scenario: scelte (meccanica) e condizioni; shock e domande di Marta: condizioni ed effetti */
+    o.wild = {}; (sc.wild || []).forEach((w) => { o.wild[w.id] = { after: ser(w.after), if: ser(w.if), w: w.w || 1, choices: {} }; (w.node.choices || []).forEach((c) => { o.wild[w.id].choices[c.id] = { q: c.q, fx: ser(c.fx), mp: ser(c.mp), mpx: ser(c.mpx), set: ser(c.set), integ: c.integ || 0, jolly: c.jolly || null, next: ser(c.next), if: ser(c.if) }; }); });
+    o.shocks = {}; (sc.shocks || []).forEach((s2) => { o.shocks[s2.id] = { kind: s2.kind, dp: s2.dp, dpProt: s2.dpProt, w: s2.w || 1, hit: ser(s2.hit), if: ser(s2.if) }; });
+    o.fcc = {}; ((sc.fc && sc.fc.custom) || []).forEach((c) => { o.fcc[c.id] = { if: ser(c.if) }; });
     for (const [nid, n] of Object.entries(sc.nodes)) {
       o.nodes[nid] = { enter: ser(n.enter), t: ser(n.t), ifs: n.choices.map((c) => ser(c.if)), choices: {} };
       n.choices.forEach((c) => {
@@ -60,6 +64,9 @@ if (argv[0] === '--dump') {
     if (!a) { console.log(`(${id}: assente nel riferimento, salto)`); continue; }
     if (!b) { diffs++; console.error(`  ✗ ${id}: scenario scomparso`); continue; }
     Object.keys(a.top).forEach((k) => cmp(`${id}.${k}`, a.top[k], b.top[k]));
+    /* imprevisti, shock, domande di Marta (se il riferimento li contiene) */
+    Object.keys(a.wild || {}).forEach((wid) => { const aw = a.wild[wid], bw = (b.wild || {})[wid]; if (!bw) { diffs++; console.error(`  ✗ ${id}/wild:${wid}: imprevisto scomparso`); return; } ['after', 'if', 'w'].forEach((k) => cmp(`${id}/wild:${wid}.${k}`, aw[k], bw[k])); Object.keys(aw.choices).forEach((cid) => { const bc = bw.choices[cid]; if (!bc) { diffs++; console.error(`  ✗ ${id}/wild:${wid}/${cid}: scelta scomparsa`); return; } Object.keys(aw.choices[cid]).forEach((k) => cmp(`${id}/wild:${wid}/${cid}.${k}`, aw.choices[cid][k], bc[k])); }); });
+    Object.keys(a.shocks || {}).forEach((sid) => { const bs = (b.shocks || {})[sid]; if (!bs) { diffs++; console.error(`  ✗ ${id}/shock:${sid}: shock scomparso`); return; } Object.keys(a.shocks[sid]).forEach((k) => cmp(`${id}/shock:${sid}.${k}`, a.shocks[sid][k], bs[k])); });
     Object.keys(a.nodes).forEach((nid) => {
       const an = a.nodes[nid], bn = b.nodes[nid];
       if (!bn) { diffs++; console.error(`  ✗ ${id}/${nid}: nodo scomparso`); return; }

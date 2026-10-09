@@ -45,7 +45,7 @@
       acv: e ? CL.fmtK(e.net || 0) : '', p: e ? Math.round(e.p * 100) + '%' : '', nome: CL.playerName || 'collega',
       contact: CL.shortName(ppl.C), buyer: CL.shortName(ppl.E),
     }, extra || {});
-    return s.replace(/\{(\w+)\}/g, (m, k) => (ctx[k] != null ? ctx[k] : m));
+    return CL.tidyDots(s.replace(/\{(\w+)\}/g, (m, k) => (ctx[k] != null ? ctx[k] : m)));
   };
 
   const pick = (arr, rnd) => (arr && arr.length ? arr[Math.floor(rnd() * arr.length)] : '');
@@ -63,7 +63,7 @@
     const sc = CL.getScenario(res.id), skip = (sc && sc.fc && sc.fc.skipGaps) || [];   /* lettere che in questo scenario non si possono guadagnare */
     const miss = order.find((k) => !have.has(k) && skip.indexOf(k) < 0);
     if (miss) return miss;
-    if (res.blocked || res.overLep) return 'disc';
+    if ((res.blocked || res.overLep) && skip.indexOf('disc') < 0) return 'disc';
     return 'meters';
   };
   CL.fcGapNote = (e, gap) => {
@@ -160,7 +160,7 @@
       c.has = has;
       c.q = f(cu.q);
       if (has) add('evidence', 'evidence', f(cu.evidence), [cu.react.evidence]);
-      add('honest', 'honest', f(cu.honest), [cu.react.honest]);
+      if (!has) add('honest', 'honest', f(cu.honest), [cu.react.honest]);   /* chi ha l'evidenza non può dire onestamente "non ce l'ho" */
       if (!has) add('bluff', 'bluff', f(cu.bluff), null);
       add('vague', 'vague', f(cu.vague), [cu.react.vague]);
       c.bank = { react: { bluffCaught: [cu.react.bluffCaught], bluffPassed: [cu.react.bluffPassed] } };

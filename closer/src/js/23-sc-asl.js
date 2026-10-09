@@ -978,7 +978,7 @@
     fc: {
       /* in una gara non si incontra il decisore e non c’è un champion; piano di chiusura, business case, pain e criteri non si concordano
          col cliente (li dettano bando e disciplinare, pubblici): le domande generiche su queste lettere presuppongono contatti che qui sono vietati */
-      skipGaps: ['E', 'C', 'Dp', 'M', 'I', 'Dc'],
+      skipGaps: ['E', 'C', 'Dp', 'M', 'I', 'Dc', 'disc'],
       crm: `Best Case al 50%: “se passiamo il tecnico, la gara è nostra”`,
       /* solo nomi propri (il banco generico li incastra dopo “con”, “chiamo io”…); per P la persona è la nostra legale, mai chi sta dall’altra parte del portale */
       people: {

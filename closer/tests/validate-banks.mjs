@@ -223,7 +223,7 @@ for (const sc of CL.scenarios) {
   /* esclusioni dai banchi generici (id inesistenti = refuso silenzioso) */
   (sc.noWild || []).forEach((id) => { if (!(CL.wildGeneric || []).some((x) => x.id === id)) err(w(`noWild: imprevisto generico inesistente "${id}"`)); });
   (sc.noShock || []).forEach((id) => { if (!(CL.shocksGeneric || []).some((x) => x.id === id)) err(w(`noShock: shock generico inesistente "${id}"`)); });
-  ((sc.fc && sc.fc.skipGaps) || []).forEach((k) => { if (!MP.includes(k)) err(w(`fc.skipGaps: lettera MEDDPICC inesistente "${k}"`)); });
+  ((sc.fc && sc.fc.skipGaps) || []).forEach((k) => { if (!MP.includes(k) && k !== 'disc') err(w(`fc.skipGaps: lettera MEDDPICC inesistente "${k}"`)); });
   /* nodi e scelte */
   for (const [nid, n] of Object.entries(sc.nodes)) {
     if (strict) {

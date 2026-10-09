@@ -1013,7 +1013,7 @@
         Dc: `Alberto Rossi (CIO) e Silvia Conti`,
         Co: `Vertex Systems, in casa da nove anni`,
       },
-      risk: `Il rischio vero è che Rossi, con la proroga di Vertex in mano, convinca Longo a “valutare con calma” fino a stagione inoltrata, e che a quel punto il caso regga solo sulla parola di Silvia.`,
+      risk: `Il rischio vero è che Rossi, con la proroga di Vertex in mano, convinca Longo a “valutare con calma” fino a stagione inoltrata, e che il caso resti sulla parola di Silvia.`,
       custom: [
         {
           id: 'criteri_firmati', if: (d) => !!(d.flags.criteriaSet || d.flags.freePilot), has: (d) => !!d.flags.criteriaSet,
