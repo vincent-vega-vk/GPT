@@ -65,7 +65,7 @@
     $('setStart').onclick = () => {
       diff = $('setDiff').value; len = +$('setLen').value; const seedV = $('setSeed').value;
       S = E.newGame({ player: chosen, difficulty: diff, length: len, seed: seedV ? +seedV : undefined, mandateLen: +$('setMandate').value, vision: $('setVision').value || null });
-      sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap();
+      sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap(); focusOn(S.player);
       const pm = me(); toast(`Benvenuto, leader di ${flagName(S.player)}. ${pm.regime === 'democrazia' ? `Il tuo mandato dura ${pm.politics.mandateLen} turni: alle elezioni del T${pm.politics.nextElection} dovrai avere il consenso dalla tua parte.` : 'Governi un regime non democratico: la tua sopravvivenza dipende dalla lealtà delle élite.'} Premi <b>Fine turno</b> quando sei pronto.`);
     };
   }
@@ -650,6 +650,11 @@
     try { GEO.anim.init({ canvas: fxCanvas, proj: (lon, lat) => proj(lon, lat), provPos, nationColor: (id) => (S && S.nations[id] ? S.nations[id].color : '#888'), flag: (id) => (S && S.nations[id] ? S.nations[id].flag : ''), unitSize: () => unitR(), isMine: (id) => S && id === S.player }); } catch (e) { console.warn('anim init', e); fxCanvas = null; }
   }
   function resizeMap() { initFx(); const r = $('mapWrap').getBoundingClientRect(); const dpr = window.devicePixelRatio || 1; mapW = r.width; mapH = r.height; canvas.width = mapW * dpr; canvas.height = mapH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if (fxCanvas) { fxCanvas.width = mapW * dpr; fxCanvas.height = mapH * dpr; if (GEO.anim.resize) GEO.anim.resize(mapW, mapH, dpr); } const sc = Math.min(mapW / 360, mapH / 144) * 1.04; base = { s: sc, ox: (mapW - 360 * sc) / 2, oy: (mapH - 144 * sc) / 2 }; drawMap(); }
+  function focusOn(id, kOverride) {
+    if (!S || !mapW || !bboxes[id]) return; const b = bboxes[id]; const lp = labelPt[id] || [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2];
+    const span = Math.max(b[2] - b[0], (b[3] - b[1]) * 2.2, 14); const k = kOverride || Math.max(1, Math.min(4.5, 360 / span / 2.4));
+    view.k = 1; view.tx = 0; view.ty = 0; const [x, y] = proj(lp[0], lp[1]); view.k = k; view.tx = mapW / 2 - x * k; view.ty = mapH / 2 - y * k; clampView(); drawMap();
+  }
   function zoomAt(mx, my, factor) { const k2 = Math.max(1, Math.min(8, view.k * factor)); const f = k2 / view.k; view.tx = mx - (mx - view.tx) * f; view.ty = my - (my - view.ty) * f; view.k = k2; clampView(); drawMap(); }
   function clampView() { if (view.k === 1) { view.tx = 0; view.ty = 0; return; } view.tx = Math.min(0, Math.max(mapW - mapW * view.k, view.tx)); view.ty = Math.min(0, Math.max(mapH - mapH * view.k, view.ty)); }
   let drag = null;
@@ -880,7 +885,8 @@
     const id = hitNation(mx, my); if (id && S.nations[id]) { sel = id; rightTab = 'nazione'; renderRight(); drawMap(); }
   });
   canvas.addEventListener('contextmenu', (e) => { if (milSel) { e.preventDefault(); selectUnit(null); } });
-  const ctl = document.createElement('div'); ctl.id = 'mapCtl'; ctl.innerHTML = `<select id="mapMode">${Object.entries(MODES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select><button class="small" id="btnLines">Linee: tutte</button><button class="small zb" id="btnZoomIn" title="Zoom avanti">+</button><button class="small zb" id="btnZoomOut" title="Zoom indietro">&minus;</button><button class="small" id="btnAnim" title="Animazioni della risoluzione">🎬 ${animOn ? 'on' : 'off'}</button>`; $('mapWrap').appendChild(ctl);
+  const ctl = document.createElement('div'); ctl.id = 'mapCtl'; ctl.innerHTML = `<select id="mapMode">${Object.entries(MODES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select><button class="small" id="btnLines">Linee: tutte</button><button class="small zb" id="btnZoomIn" title="Zoom avanti">+</button><button class="small zb" id="btnZoomOut" title="Zoom indietro">&minus;</button><button class="small" id="btnFocus" title="Centra sul tuo paese">📍</button><button class="small" id="btnAnim" title="Animazioni della risoluzione">🎬 ${animOn ? 'on' : 'off'}</button>`; $('mapWrap').appendChild(ctl);
+  $('btnFocus').onclick = () => focusOn(S.player);
   $('btnAnim').onclick = () => { animOn = !animOn; try { localStorage.setItem('geo_anim', animOn ? 'on' : 'off'); } catch (e) { /* ignora */ } $('btnAnim').textContent = `🎬 ${animOn ? 'on' : 'off'}`; };
   $('mapMode').onchange = () => { mapMode = $('mapMode').value; drawMap(); };
   $('btnZoomIn').onclick = () => zoomAt(mapW / 2, mapH / 2, 1.3); $('btnZoomOut').onclick = () => zoomAt(mapW / 2, mapH / 2, 0.75);
@@ -890,7 +896,7 @@
   // ---------- Salvataggi ----------------------------------------------------
   const KEY = 'geopolitica2026_save';
   function save(auto) { try { localStorage.setItem(KEY, E.serialize(S)); if (!auto) toast('Partita salvata nel browser.'); } catch (e) { if (!auto) toast('Salvataggio fallito: ' + e.message); } }
-  function load() { try { const j = localStorage.getItem(KEY); if (!j) return toast('Nessun salvataggio trovato.'); S = E.deserialize(j); sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap(); toast('Partita caricata.'); } catch (e) { toast('Caricamento fallito: ' + e.message); } }
+  function load() { try { const j = localStorage.getItem(KEY); if (!j) return toast('Nessun salvataggio trovato.'); S = E.deserialize(j); sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap(); focusOn(S.player); toast('Partita caricata.'); } catch (e) { toast('Caricamento fallito: ' + e.message); } }
 
   // ---------- Render generale --------------------------------------------------
   function renderAll() { if (!S) return; renderHud(); renderLeft(); renderRight(); renderNews(); drawMap(); $('btnEnd').disabled = !!S.gameOver; }
@@ -916,7 +922,8 @@
 
   window.GEO_UI = { proj: (lon, lat) => proj(lon, lat), state: () => S, labelPt: (id) => labelPt[id], setMode: (m) => { mapMode = m; $('mapMode').value = m; drawMap(); } };
   // Avvio
-  if (localStorage.getItem(KEY)) {
+  let hasSave = false; try { hasSave = !!localStorage.getItem(KEY); } catch (e) { hasSave = false; }
+  if (hasSave) {
     openModal({ title: '🌐 Geopolitica 2026', onClose: null, body: '<p>È presente una partita salvata nel browser.</p>', foot: '<button id="stNew">Nuova partita</button><button id="stLoad" class="primary">Continua la partita</button>' });
     $('stNew').onclick = showSetup; $('stLoad').onclick = load;
   } else showSetup();

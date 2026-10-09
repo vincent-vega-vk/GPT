@@ -19,6 +19,11 @@
     if (t.suzerain === n.id || n.suzerain === target) return 0;
     const reach = E.canReach(s, n.id, target); if (!reach.ok) return 0;
     // Spedizioni oltremare senza rivendicazioni: solo con marina forte e un motivo (sanzioni, alleato del nemico, stato fragile)
+    if (reach.naval && E.MIL(s)) { // le flotte devono essere vicine alla costa nemica
+      const M = GEO.military; const fleets = M.unitsOf(s, n.id).filter(u => u.type === 'F').map(u => u.loc);
+      const coastSeas = new Set(); M.controlled(s, target).forEach(p => (M.provInfo(p).seas || []).forEach(z => coastSeas.add(z)));
+      const d = M.distances(fleets, 'F', 2); if (![...coastSeas].some(z => d.has(z))) return 0;
+    }
     if (reach.naval && !claim) { const motive = E.isSanctioning(s, target, n.id) || E.enemiesOf(s, n.id).some(e => E.alliesOf(s, target).includes(e)) || t.stability < 35; if (n.navy < 60 || !motive || rel > -60) return 0; }
     if (E.warsOf(s, n.id).length >= (P.aggression > 0.7 ? 2 : 1)) return 0;
     // Rapporto di forze con alleati probabili
@@ -169,7 +174,7 @@
       if (o) { if (target(o)) E.queueProposal(s, { from: me, type: 'nonaggressione', terms: {}, text: `${n.flag} ${n.name} propone un patto di non aggressione.` }); else E.propose(s, me, o, 'nonaggressione'); }
     } else if (roll < 0.88 && P.aggression > 0.45) {
       // Ultimatum a vicino debole
-      const weak = others.filter(x => rel(x) < -20 && E.milPower(n) > E.milPower(s.nations[x]) * 3 && E.canReach(s, me, x).ok && !E.hasTreaty(s, me, x, 'nonaggressione') && s.nations[x].nukes === 0 && E.alliesOf(s, x).length < 2);
+      const weak = others.filter(x => rel(x) < -20 && E.milPower(n) > E.milPower(s.nations[x]) * 3 && E.canReach(s, me, x).mult === 1 && !E.hasTreaty(s, me, x, 'nonaggressione') && s.nations[x].nukes === 0 && E.alliesOf(s, x).length < 2);
       if (weak.length && R() < 0.5) { const x = E.pick(weak); const t = s.nations[x]; const region = t.regions.filter(r => !r.capital && (r.controller || x) === x)[0]; if (target(x)) E.queueProposal(s, { from: me, type: 'ultimatum', terms: { kind: 'tributo' }, text: `${n.flag} ${n.name} ti lancia un ultimatum: paga un tributo (3% del PIL) o sarà guerra.` }); else if (region) E.propose(s, me, x, 'ultimatum', { kind: 'regione', region: region.name }); }
     } else if (roll < 0.95 && n.treasury > 150 && P.greed > 0.5) {
       // Aiuti economici per comprare influenza

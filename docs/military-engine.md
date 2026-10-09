@@ -23,7 +23,7 @@ Movimenti ammessi:
 `s.units = [{ id, owner, type: 'A'|'F', loc, suppressed?: bool }]`, `s.unitSeq` contatore. **Una sola unità per provincia o mare**, come in Diplomacy.
 
 Capacità (ricalcolate a ogni turno):
-- eserciti: `clamp(round(n.army / 15), 1, 8)`;
+- eserciti: `clamp(round(n.army / 12), 1, 9)`;
 - flotte: `clamp(round(n.navy / 20), 0, 6)` se la nazione ha almeno una provincia costiera, altrimenti 0;
 - stormi aerei (non sulla mappa, solo ordini): `clamp(round(n.air / 25), 0, 4)`.
 
@@ -68,7 +68,7 @@ Regole di Diplomacy (edizione 2000, compatibili con i casi base del DATC):
 - Un'unità non può sloggiare un'unità **amica** (stessa nazione, o nazione con cui non è in guerra). I supporti di una nazione non contano per sloggiare una sua unità o di un suo alleato.
 - Movimenti circolari (A→B, B→C, C→A) riescono tutti se nessuno è ostacolato.
 - Convoglio: fallisce se una flotta della catena viene sloggiata. Un esercito convogliato non taglia il supporto di unità che attaccano una flotta del proprio convoglio. Paradossi: regola di Szykman (il convoglio paradossale non avviene).
-- **Capitale**: una capitale vuota il cui proprietario è in guerra ha una guarnigione implicita di forza 1 (2 se il proprietario ha la Guardia pretoriana o la visione Fortezza). Un'unità del proprietario che tiene la propria capitale ha +1 di tenuta.
+- **Capitale**: una capitale vuota il cui proprietario è in guerra ha una guarnigione implicita di forza 2 (3 se il proprietario ha la Guardia pretoriana o la visione Fortezza): per prenderla serve un attacco supportato. Un'unità del proprietario che tiene la propria capitale ha +1 di tenuta.
 - **Visione Fortezza**: +1 di tenuta alle unità del proprietario nelle province di casa.
 - Il combattimento è **deterministico**: nessun dado.
 

@@ -515,7 +515,7 @@
     const n = s.nations && s.nations[id];
     if (!n || n.destroyed) return { army: 0, fleet: 0, air: 0, A: 0, F: 0, total: 0 };
     const coastal = M.ready() ? M.provincesOf(id).some(p => node(p).kind === 'coast') : true;
-    const army = clamp(Math.round((n.army || 0) / 15), 1, 8);
+    const army = clamp(Math.round((n.army || 0) / 12), 1, 9);
     const fleet = coastal ? clamp(Math.round((n.navy || 0) / 20), 0, 6) : 0;
     const air = clamp(Math.round((n.air || 0) / 25), 0, 4);
     return { army, fleet, air, A: army, F: fleet, total: army + fleet };
@@ -568,7 +568,7 @@
       if (!n || n.destroyed || M.controller(s, prov) !== owner || irradiated(s, prov)) return null;
       const E = Eng(); const wars = E && E.warsOf ? E.warsOf(s, owner).length : (s.wars || []).filter(w => w.attackers.includes(owner) || w.defenders.includes(owner)).length;
       if (!wars) return null;
-      return { owner, strength: 1 + ((n.perks && n.perks.guard) || n.vision === 'fortress' ? 1 : 0) };
+      return { owner, strength: 2 + ((n.perks && n.perks.guard) || n.vision === 'fortress' ? 1 : 0) };
     };
     return { graph: G(), atWar, friendly: (a, b) => a === b || !atWar(a, b), isAlly, canEnter, canSupport, denyReason, holdBonus, attackBonus: () => 0, airBonus: airBonus || {}, garrison, provName: M.provName };
   }
@@ -631,13 +631,15 @@
   // 5. INTERFACCIA: mosse e supporti legali
   // =====================================================================
   function convoyReach(s, u, ctx) {
-    // mari raggiungibili attraverso flotte proprie o alleate, a partire dalla costa dell'esercito
+    // coste raggiungibili attraverso flotte proprie o alleate in mare, a partire dalla costa dell'esercito:
+    // Map destinazione -> rotta più breve (array di mari, nell'ordine), da usare per gli ordini di convoglio
     const out = new Map(); const nd = node(u.loc); if (!nd || nd.kind !== 'coast' || u.type !== 'A') return out;
     const fleetAt = new Map((s.units || []).filter(f => f.type === 'F' && (f.owner === u.owner || ctx.isAlly(f.owner, u.owner))).map(f => [f.loc, f]));
-    const seen = new Set(); const q = [];
-    nd.fleetAdj.forEach(z => { if (node(z).kind === 'sea' && fleetAt.has(z)) { seen.add(z); q.push(z); } });
-    for (let h = 0; h < q.length; h++) node(q[h]).fleetAdj.forEach(z => { if (!seen.has(z) && node(z).kind === 'sea' && fleetAt.has(z)) { seen.add(z); q.push(z); } });
-    seen.forEach(z => node(z).fleetAdj.forEach(p => { if (node(p).kind === 'coast' && p !== u.loc && !out.has(p)) out.set(p, z); }));
+    const prev = new Map(); const q = [];
+    nd.fleetAdj.forEach(z => { if (node(z).kind === 'sea' && fleetAt.has(z) && !prev.has(z)) { prev.set(z, null); q.push(z); } });
+    for (let h = 0; h < q.length; h++) node(q[h]).fleetAdj.forEach(z => { if (!prev.has(z) && node(z).kind === 'sea' && fleetAt.has(z)) { prev.set(z, q[h]); q.push(z); } });
+    const routeTo = (z) => { const r = []; for (let x = z; x != null; x = prev.get(x)) r.unshift(x); return r; };
+    q.forEach(z => node(z).fleetAdj.forEach(p => { if (node(p).kind === 'coast' && p !== u.loc && !out.has(p)) out.set(p, routeTo(z)); }));
     return out;
   }
   M.legalMoves = (s, unitId, opts) => {
@@ -645,7 +647,7 @@
     const nd = node(u.loc); if (!nd) return [];
     const ctx = gameCtx(s); const out = [];
     (u.type === 'A' ? nd.armyAdj : nd.fleetAdj).forEach(p => { if (ctx.canEnter(u.owner, p)) out.push(opts && opts.detailed ? { to: p, convoy: false } : p); });
-    if (u.type === 'A') convoyReach(s, u, ctx).forEach((z, p) => { if (!nd._a.has(p) && ctx.canEnter(u.owner, p)) out.push(opts && opts.detailed ? { to: p, convoy: true } : p); });
+    if (u.type === 'A') convoyReach(s, u, ctx).forEach((route, p) => { if (!nd._a.has(p) && ctx.canEnter(u.owner, p)) out.push(opts && opts.detailed ? { to: p, convoy: true, route } : p); });
     return out;
   };
   M.legalSupports = (s, unitId) => {
@@ -675,7 +677,8 @@
     });
     return out;
   };
-  M.convoyRoute = (s, unitId, to) => { const u = M.unitById(s, unitId); if (!u) return null; const r = convoyReach(s, u, gameCtx(s)); return r.has(to) ? r.get(to) : null; };
+  // rotta di mari per convogliare l'esercito fino a `to` (le flotte su questi mari devono ricevere l'ordine convoy), o null
+  M.convoyRoute = (s, unitId, to) => { const u = M.unitById(s, unitId); if (!u) return null; const r = convoyReach(s, u, gameCtx(s)); return r.has(to) ? r.get(to).slice() : null; };
   M.describeOrder = (s, unitId, o) => {
     const u = M.unitById(s, unitId); const t = u ? (u.type === 'F' ? 'F' : 'A') : '?'; const at = u ? M.provName(u.loc) : '?'; const P = M.provName;
     if (!o || o.type === 'hold') return `${t} ${at} tiene`;
@@ -712,8 +715,12 @@
     const idx = controlIndex(s); const A = idx.get(from), B = idx.get(to);
     if (!A || !B) return { ok: false, mult: 0 };
     for (const p of A) for (const q of node(p).armyAdj) if (B.has(q)) return { ok: true, mult: 1 };
-    const fleets = (s.units || []).some(u => u.owner === from && u.type === 'F');
-    if (fleets) for (const q of B) if (node(q).kind === 'coast') return { ok: true, mult: 0.6, naval: true };
+    // via mare: servono flotte entro 2 mari da una costa del bersaglio (niente proiezioni di potenza globali gratuite)
+    const fleets = (s.units || []).filter(u => u.owner === from && u.type === 'F').map(u => u.loc);
+    if (fleets.length) {
+      const coastSeas = []; for (const q of B) { const nd = node(q); if (nd.kind === 'coast') nd.fleetAdj.forEach(z => { if (node(z).kind === 'sea') coastSeas.push(z); }); }
+      if (coastSeas.length) { const d = distances(fleets, x => node(x).fleetAdj, 2); if (coastSeas.some(z => d.has(z))) return { ok: true, mult: 0.6, naval: true }; }
+    }
     return { ok: false, mult: 0 };
   };
 
@@ -806,7 +813,7 @@
   };
   const honorProb = (s, ai, other) => {
     const E = Eng(); const n = s.nations[ai]; const P = (GEO.PERSONAS && GEO.PERSONAS[n.persona]) || { loyalty: 0.5 };
-    const rel = E && E.getRel ? E.getRel(s, ai, other) : 50;
+    const rel = E && E.getRel ? E.getRel(s, ai, other) : 0;
     return clamp(0.55 + P.loyalty * 0.4 + (rel - 50) / 200, 0.05, 0.98);
   };
   M.honorProbability = honorProb;
@@ -824,18 +831,16 @@
         return;
       }
       const honor = rand() < honorProb(s, ai, g.from); let possible = true;
-      if (honor) {
-        if (g.kind === 'support_move') {
-          let u = g.unit && M.unitById(s, g.unit);
-          if (!u || u.owner !== ai || !(u.type === 'A' ? hasA(node(u.loc), g.params.to) : hasF(node(u.loc), g.params.to))) u = supporterFor(s, ai, g.params.to, g.params.unitFrom, ctx);
-          if (u) orders[u.id] = { unit: u.id, type: 'support', target: g.params.unitFrom, to: g.params.to }; else possible = false;
-        } else if (g.kind === 'support_hold') {
-          let u = g.unit && M.unitById(s, g.unit);
-          if (!u || u.owner !== ai || !(u.type === 'A' ? hasA(node(u.loc), g.params.prov) : hasF(node(u.loc), g.params.prov))) u = M.unitsOf(s, ai).find(x => x.loc !== g.params.prov && (x.type === 'A' ? hasA(node(x.loc), g.params.prov) : hasF(node(x.loc), g.params.prov)));
-          if (u) orders[u.id] = { unit: u.id, type: 'support', target: g.params.prov }; else possible = false;
-        } else if (g.kind === 'dmz') {
-          M.unitsOf(s, ai).forEach(u => { const o = orders[u.id]; if (o && o.type === 'move' && o.to === g.params.prov) orders[u.id] = { unit: u.id, type: 'hold' }; });
-        }
+      if (g.kind === 'support_move' || g.kind === 'support_hold') {
+        // l'unità capace si cerca comunque: se l'IA non ne ha più nessuna, l'accordo è impossibile, non tradito
+        const dest = g.kind === 'support_move' ? g.params.to : g.params.prov;
+        const reaches = (x) => !!x && x.owner === ai && x.loc !== dest && (x.type === 'A' ? hasA(node(x.loc), dest) : hasF(node(x.loc), dest));
+        let u = g.unit ? M.unitById(s, g.unit) : null;
+        if (!reaches(u)) u = g.kind === 'support_move' ? supporterFor(s, ai, dest, g.params.unitFrom, ctx) : (M.unitsOf(s, ai).find(reaches) || null);
+        possible = !!u;
+        if (honor && u) orders[u.id] = g.kind === 'support_move' ? { unit: u.id, type: 'support', target: g.params.unitFrom, to: dest } : { unit: u.id, type: 'support', target: dest };
+      } else if (g.kind === 'dmz' && honor) {
+        M.unitsOf(s, ai).forEach(u => { const o = orders[u.id]; if (o && o.type === 'move' && o.to === g.params.prov) orders[u.id] = { unit: u.id, type: 'hold' }; });
       }
       checks.push({ g, honor, possible });
     });
@@ -852,7 +857,7 @@
         else if (g.kind === 'dmz') kept = !Object.keys(orders).some(id => { const u = M.unitById(s, id); const o = orders[id]; return u && u.owner === ai && o && o.type === 'move' && o.to === g.params.prov; });
       }
       if (kept) { events.push({ phase: 'diplomacy', type: 'agreement', from: ai, to: g.from, kind: g.kind, honored: true }); return; }
-      if (!broken && honor && possible === false) { events.push({ phase: 'diplomacy', type: 'agreement', from: ai, to: g.from, kind: g.kind, honored: false, impossible: true }); return; }
+      if (!broken && possible === false) { events.push({ phase: 'diplomacy', type: 'agreement', from: ai, to: g.from, kind: g.kind, honored: false, impossible: true }); return; }
       const text = `${natLabel(s, ai)} non rispetta l'accordo (${M.AGREEMENTS[g.kind]}${g.params.prov ? ' su ' + M.provName(g.params.prov) : g.params.to ? ' verso ' + M.provName(g.params.to) : ''}) con ${natLabel(s, g.from)}.`;
       events.push({ phase: 'diplomacy', type: 'betrayal', from: ai, to: g.from, kind: g.kind, text });
       if (E && E.changeRel) E.changeRel(s, ai, g.from, -30);
@@ -900,7 +905,9 @@
   function retreatTarget(s, u, d, occupied, standoffs, ctx) {
     const nd = node(u.loc); if (!nd) return null;
     const cap = capitalProv(u.owner); const dCap = cap ? distances([cap], nbAll) : new Map();
-    const cands = (u.type === 'A' ? nd.armyAdj : nd.fleetAdj).filter(p => !occupied.has(p) && !standoffs.has(p) && (p !== d.from || d.viaConvoy) && ctx.canEnter(u.owner, p));
+    // niente ritirate in una capitale nemica presidiata dalla guarnigione: si prende solo combattendo
+    const garrisoned = (p) => { const gr = ctx.garrison(p); return !!gr && !ctx.friendly(gr.owner, u.owner); };
+    const cands = (u.type === 'A' ? nd.armyAdj : nd.fleetAdj).filter(p => !occupied.has(p) && !standoffs.has(p) && (p !== d.from || d.viaConvoy) && ctx.canEnter(u.owner, p) && !garrisoned(p));
     const score = (p) => { const pn = node(p); if (pn.kind === 'sea') return 1; const c = M.controller(s, p); if (c === u.owner) return pn.nation === u.owner ? 4 : 3; if (ctx.isAlly(u.owner, c)) return 2; return 0; };
     cands.sort((a, b) => score(b) - score(a) || (dCap.get(a) ?? 99) - (dCap.get(b) ?? 99) || (a < b ? -1 : 1));
     return cands[0] || null;

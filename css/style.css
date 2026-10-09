@@ -2,6 +2,7 @@
   --bg: #0b1020; --bg2: #121a2e; --bg3: #1a2440; --line: #26314f; --text: #e6ebf5; --muted: #8f9bb8;
   --accent: #f5b942; --blue: #4f8cff; --red: #ff5c5c; --green: #3ddc84; --orange: #ff9f43; --purple: #b388ff;
   --radius: 10px; --font: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; }
