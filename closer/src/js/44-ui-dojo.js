@@ -13,16 +13,20 @@
   };
 
   let timer = null;
-  const stop = () => { if (timer) { cancelAnimationFrame(timer.raf); timer = null; } };
+  const stop = () => { if (timer) { cancelAnimationFrame(timer.raf); if (timer.vis) document.removeEventListener('visibilitychange', timer.vis); timer = null; } };
   UI.stopDojoTimer = stop;
 
   function startTimer(bar, secs, onEnd) {
     stop();
-    const total = secs * 1000, end = performance.now() + total;
-    timer = { raf: 0 };
+    const total = secs * 1000;
+    timer = { raf: 0, end: performance.now() + total, hiddenAt: 0 };
+    /* il tempo non scorre con la scheda in background */
+    timer.vis = () => { if (!timer) return; if (document.hidden) timer.hiddenAt = performance.now(); else if (timer.hiddenAt) { timer.end += performance.now() - timer.hiddenAt; timer.hiddenAt = 0; } };
+    document.addEventListener('visibilitychange', timer.vis);
     const tick = (t) => {
       if (!timer) return;
-      const left = end - t, f = Math.max(0, left / total);
+      if (UI.modalOpen()) { timer.end += 16; timer.raf = requestAnimationFrame(tick); return; }
+      const left = timer.end - t, f = Math.max(0, left / total);
       bar.firstChild.style.transform = `scaleX(${f})`;
       bar.classList.toggle('low', f < 0.25);
       if (left <= 0) { stop(); onEnd(); return; }
@@ -78,7 +82,7 @@
       slot.replaceChildren(h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-next': '', onclick: next }, last ? 'Vedi il risultato' : 'Prossima obiezione', UI.ic('next'))));
       D.picks.push({ line: q.line, chosen: o.t, g: o.g, best: q.opts.find((x) => x.g === 3).t });
       const b = slot.querySelector('button'); if (b) b.focus({ preventScroll: true });
-      b && b.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      b && UI.scrollTo(b, 'nearest');
       if (timedOut) slot.prepend(h('p', { class: 'small', style: { color: 'var(--bad)' } }, 'Tempo scaduto: risposta d’istinto.'));
     }
     function pick(i) { if (D.phase !== 'ask') return; stop(); reveal(i, false); }

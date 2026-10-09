@@ -18,6 +18,7 @@
   };
 
   UI.nextAfterDeal = (afterMid) => {
+    afterMid = afterMid === true;   /* i gestori di click passano l'evento: conta solo un true esplicito */
     const run = S.run;
     if (run.mode === 'career') {
       /* forecast call di metà trimestre: dalla settimana 6, una volta, se c'è qualcosa in sospeso */
@@ -122,7 +123,7 @@
         h('div', { class: 'eyebrow' }, 'Tempo'),
         h('div', { class: 'big' }, `Sett. ${week}`),
         h('div', { class: 'track' }, h('i', { style: { width: Math.min(100, (run.spent / C.energy) * 100) + '%' } })),
-        h('div', { class: 'sub' }, `${Math.max(0, energy)} di ${C.energy} settimane rimaste · ${nextCall}`)),
+        h('div', { class: 'sub' }, `${Math.max(0, energy)} ${Math.max(0, energy) === 1 ? 'settimana rimasta' : 'settimane rimaste'} su ${C.energy} · ${nextCall}`)),
       h('div', { class: 'card pad-sm cell' },
         h('div', { class: 'eyebrow' }, 'Jolly'),
         h('div', { class: 'jollies' }, Object.keys(CL.JOLLY).map((k) => h('span', { class: 'jl' + (run.jolly[k] ? '' : ' zero'), title: CL.JOLLY[k].desc }, UI.ic(k), CL.JOLLY[k].short, h('b', null, '×' + run.jolly[k])))),
@@ -155,7 +156,7 @@
         }))) : null;
 
     const cards = list.map((sc) => {
-      const av = CL.avail(run, sc), r = resultOf(run, sc);
+      const av = CL.avail(run, sc), r = career ? resultOf(run, sc) : null;   /* in allenamento ogni scenario resta rigiocabile */
       let badge;
       if (r) badge = h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status] + (r.status === 'won' ? ' · ' + CL.fmtK(r.acv) : r.status === 'pending' ? ' · ' + CL.fmtK(r.net) : ''));
       else if (av.state === 'early') badge = h('span', { class: 'chip' }, UI.ic('lock'), `Dalla sett. ${av.from}`);
@@ -176,7 +177,8 @@
             h('span', { class: 'chip' }, h('span', { class: 'stars' }, UI.stars(sc.stars))))),
         h('div', { class: 'row gap-8 wrapx' },
           h('span', { class: 'chip' + (scouted && sc.crm.prob >= 80 ? ' chip--warn' : '') }, `CRM ${sc.crm.cat} ${sc.crm.prob}%`),
-          scouted ? h('span', { class: 'chip chip--accent' }, UI.ic('search'), 'ispezionato') : null));
+          scouted ? h('span', { class: 'chip chip--accent' }, UI.ic('search'), 'ispezionato') : null,
+          career && !r && run.promised && run.promised[sc.id] ? h('span', { class: 'chip chip--warn', title: 'Hai promesso a Marta di lavorare questa trattativa: se non lo fai, costa reputazione e fiducia.' }, UI.ic('flag'), `Promessa a Marta · entro sett. ${run.promised[sc.id]}`) : null));
     });
 
     const noReady = !CL.canPlayAny(run);
@@ -186,8 +188,8 @@
         h('header', null, h('div', { class: 'grow' }, h('h3', { class: 'display', style: { fontSize: '30px' } }, 'Chiudere il trimestre?'))),
         h('div', { class: 'body' }, h('p', { class: 'muted' }, run.results.length ? 'Le trattative non giocate restano nel CRM del prossimo trimestre. Il risultato attuale diventa definitivo.' : 'Non hai giocato nessuna trattativa: il risultato sarà zero.')),
         h('footer', null,
-          h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { close(); UI.finishQuarter(); } }, 'Chiudi il trimestre'),
-          h('button', { class: 'btn', onclick: close }, 'Continua a lavorare')))) }, UI.ic('flag'), 'Chiudi il trimestre'),
+          h('button', { class: 'btn btn--primary', onclick: () => { close(); UI.finishQuarter(); } }, 'Chiudi il trimestre'),
+          h('button', { class: 'btn', 'data-autofocus': '', onclick: close }, 'Continua a lavorare')))) }, UI.ic('flag'), 'Chiudi il trimestre'),
       h('span', { class: 'small faint' }, noReady ? 'Nessuna trattativa giocabile adesso.' : '')) : h('div', { class: 'row gap-12 mt-24' }, h('button', { class: 'btn', onclick: () => UI.go('home') }, UI.ic('back'), 'Torna al menu'));
 
     return h('main', { class: 'wrap' },
@@ -206,6 +208,8 @@
     const ev = S.ev;
     const cast = ev.cast || {};
     const done = S.evDone;
+    if (S.evFor !== ev) { S.evFor = ev; S.evOrder = CL.shuffle(ev.choices, S.run.rnd); }   /* la migliore non sta sempre al primo posto */
+    const hardEv = !!S.run.hard;
     return h('main', { class: 'wrap', style: { maxWidth: '780px' } },
       h('div', { class: 'sec-head' }, h('div', { class: 'grow' }, h('div', { class: 'eyebrow' }, 'Tra una trattativa e l’altra'), h('h1', { class: 'sec-title', 'data-focus': '', style: { marginTop: '8px' } }, ev.title))),
       h('section', { class: 'card stage' },
@@ -213,9 +217,13 @@
         UI.sceneEls(ev.scene, cast, null),
         done
           ? h('div', null,
-            h('div', { class: 'fb' }, h('div', { class: 'hd' }, done.log.length ? done.log.map((l) => h('span', { class: 'delta' }, l)) : h('span', { class: 'delta' }, 'nessun effetto')), h('div', { class: 'bd' }, h('p', null, done.text), h('div', { style: { height: '12px' } }))),
+            (() => {
+              /* senza rete: niente reputazione né valutazione fino al verdetto; restano tempo, jolly ed esiti concreti */
+              const log = hardEv ? done.log.filter((l) => !/reputazione|di partenza/.test(l)) : done.log;
+              return h('div', { class: 'fb' }, h('div', { class: 'hd' }, log.length ? log.map((l) => h('span', { class: 'delta' }, l)) : h('span', { class: 'delta' }, hardEv ? 'scelta registrata' : 'nessun effetto')), h('div', { class: 'bd' }, h('p', null, hardEv ? 'Senza rete: la valutazione di questa scelta arriva con il riepilogo del trimestre.' : done.text), h('div', { style: { height: '12px' } })));
+            })(),
             h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { S.ev = null; S.evDone = null; if (!CL.canPlayAny(S.run) && !CL.canWaitForAny(S.run)) UI.finishQuarter(); else UI.go('pipeline'); } }, 'Continua', UI.ic('next'))))
-          : h('div', { class: 'choices' }, ev.choices.map((c, i) => h('button', { class: 'choice', onclick: () => { UI.sfx('pick'); S.evDone = CL.applyEvent(S.run, ev, c.id); UI.render(); } }, h('span', { class: 'k' }, i + 1), h('span', { class: 'tx' }, c.t))))));
+          : h('div', { class: 'choices' }, S.evOrder.map((c, i) => h('button', { class: 'choice', onclick: () => { UI.sfx('pick'); S.evDone = CL.applyEvent(S.run, ev, c.id); UI.render(); } }, h('span', { class: 'k' }, i + 1), h('span', { class: 'tx' }, c.t))))));
   };
 
   /* ───── Riepilogo del trimestre ───── */
@@ -227,7 +235,7 @@
       `${sum.rank.name} · Reputazione ${run.rep}${run.hard ? ' · senza rete' : ''}`,
       `ACV chiuso ${CL.fmtK(sum.total)} su ${CL.fmtK(C.quota)} · commissione stimata ${euro(sum.commission)}`,
       `${sum.wins} vinte · ${sum.losses} perse · ${sum.slips} slittate · ${sum.dq} squalificate`,
-      `Sconto medio sulle vinte ${sum.avgDisc.toFixed(1)}% · qualità decisioni ${Math.round((sum.avgQ / 3) * 100)}%`,
+      `Sconto medio sulle vinte ${sum.avgDisc.toFixed(1).replace('.', ',')}% · qualità decisioni ${Math.round((sum.avgQ / 3) * 100)}%`,
       sum.fc && sum.fc.n ? `Affidabilità del forecast ${Math.round(sum.fc.acc * 100)}% · fiducia di Marta ${run.mgr}` : null,
     ].filter(Boolean).join('\n');
   };
@@ -261,15 +269,23 @@
         h('div', { class: 'stat' }, h('dt', null, 'Commissione'), h('dd', null, euro(sum.commission))),
         h('div', { class: 'stat' }, h('dt', null, 'Reputazione'), h('dd', null, run.rep, h('small', null, '/100'))),
         h('div', { class: 'stat' }, h('dt', null, 'Vinte / perse'), h('dd', null, `${sum.wins} / ${sum.losses}`, sum.slips ? h('small', null, `${sum.slips} slittate`) : null)),
-        h('div', { class: 'stat' }, h('dt', null, 'Sconto medio'), h('dd', null, sum.avgDisc.toFixed(1) + '%')),
+        h('div', { class: 'stat' }, h('dt', null, 'Sconto medio'), h('dd', null, sum.avgDisc.toFixed(1).replace('.', ',') + '%')),
         h('div', { class: 'stat' }, h('dt', null, 'Qualità decisioni'), h('dd', null, Math.round((sum.avgQ / 3) * 100) + '%')),
-        h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC medio'), h('dd', null, sum.avgMp.toFixed(1), h('small', null, '/8'))),
+        h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC medio'), h('dd', null, sum.avgMp.toFixed(1).replace('.', ','), h('small', null, '/8'))),
         h('div', { class: 'stat' }, h('dt', null, 'Settimane usate'), h('dd', null, run.spent))),
       sum.fc && sum.fc.n ? h('section', { class: 'card pad mt-16' },
         h('div', { class: 'eyebrow' }, 'Forecast con Marta'),
         h('div', { class: 'row gap-24 wrapx', style: { marginTop: '10px', alignItems: 'flex-end' } },
           h('div', null, h('div', { class: 'attain', style: { fontSize: '64px' } }, Math.round(sum.fc.acc * 100) + '%'), h('div', { class: 'small muted' }, 'affidabilità del forecast')),
-          h('p', { class: 'muted', style: { maxWidth: '56ch' } }, sum.fc.acc >= 0.85 ? 'Hai dichiarato ciò che poi è successo. Il forecast è il tuo biglietto da visita: Marta ti ha riconosciuto un bonus del 8% sulla commissione.' : sum.fc.acc >= 0.7 ? 'Forecast solido, con qualche scarto. Bonus del 3% sulla commissione.' : sum.fc.acc < 0.4 ? 'Il forecast è lontano dalla realtà: commissione ridotta dell’8% e credibilità da ricostruire.' : 'Forecast nella media: né un merito né un problema, finché non si ripete.')),
+          h('p', { class: 'muted', style: { maxWidth: '56ch' } }, (() => {
+            /* il testo segue ciò che il motore applica davvero (il kicker richiede almeno due trattative nel forecast) */
+            const k = sum.kicker || 1, a = sum.fc.acc;
+            if (k > 1.05) return 'Hai dichiarato ciò che poi è successo. Il forecast è il tuo biglietto da visita: Marta ti ha riconosciuto un bonus dell’8% sulla commissione.';
+            if (k > 1) return 'Forecast solido, con qualche scarto. Bonus del 3% sulla commissione.';
+            if (k < 1) return 'Il forecast è lontano dalla realtà: commissione ridotta dell’8% e credibilità da ricostruire.';
+            if (sum.fc.n < 2) return a >= 0.7 ? 'Con una sola trattativa nel forecast Marta non applica né bonus né malus alla commissione: la tua credibilità conta dalla prossima volta.' : 'Con una sola trattativa nel forecast non c’è né bonus né malus sulla commissione, ma Marta ricorda quanto è andata lontana la chiamata.';
+            return 'Forecast nella media: né un merito né un problema, finché non si ripete.';
+          })())),
         sum.fc.sandbagged ? h('p', { class: 'small', style: { marginTop: '8px', color: 'var(--warn)' } }, 'Hai chiamato basso una trattativa che poi hai vinto. Sorprendere in alto non è un merito: è un dato nascosto.') : null) : null,
       (sum.shocksHit || sum.shocksAbsorbed) ? h('p', { class: 'small muted mt-16' }, `Il giorno di chiusura hai assorbito ${sum.shocksAbsorbed} shock negativi senza danni e ne hai subiti ${sum.shocksHit}. ${sum.shocksAbsorbed >= sum.shocksHit ? 'La preparazione paga.' : 'Più relazioni e più paper pronto, meno sorprese.'}`) : null,
       h('section', { class: 'card pad mt-16' },
@@ -277,6 +293,19 @@
         rows.length ? h('div', { class: 'tblwrap', style: { marginTop: '10px' } }, h('table', { class: 'tbl' },
           h('thead', null, h('tr', null, h('th', null, 'Trattativa'), h('th', null, 'Esito'), h('th', { class: 'r' }, 'Listino'), h('th', { class: 'r' }, 'Sconto'), h('th', { class: 'r' }, 'ACV'), h('th', { class: 'r' }, 'Prob.'))),
           h('tbody', null, rows))) : h('p', { class: 'muted mt-8' }, 'Nessuna trattativa giocata.')),
+      run.hard && run.results.some((r) => r.review && r.review.length) ? h('section', { class: 'card pad mt-16' },
+        h('div', { class: 'eyebrow' }, 'La valutazione delle tue mosse'),
+        h('p', { class: 'small muted', style: { margin: '6px 0 10px' } }, 'In “senza rete” resta nascosta fino al verdetto. Ora puoi rivederla, trattativa per trattativa.'),
+        run.results.filter((r) => r.review && r.review.length).map((r) => {
+          const scr = CL.getScenario(r.id), fm = (t) => CL.fmt(t, scr);
+          return h('details', { class: 'rv' },
+            h('summary', null, h('b', null, r.title), h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
+            h('ul', { class: 'rvl' }, r.review.map((m, i) => h('li', null,
+              h('div', { class: 'rvh' }, h('span', { class: 'n mono' }, m.wild ? '!!' : String(i + 1).padStart(2, '0')), h('span', { class: 'tt' }, fm(m.say || m.t)), h('span', { class: 'q ' + CL.QUALITY[m.q].cls }, CL.QUALITY[m.q].label)),
+              h('p', { class: 'small' }, fm(m.r)),
+              m.tip ? h('p', { class: 'small muted' }, fm(m.tip)) : null))),
+            (r.lessons || []).length ? h('div', { class: 'ls' }, r.lessons.map((l) => h('p', { class: l.good ? 'good' : 'bad' }, fm(l.t)))) : null);
+        })) : null,
       h('section', { class: 'card pad mt-16' },
         h('div', { class: 'eyebrow' }, 'Badge'),
         h('div', { class: 'badges' }, CL.badgeDefs.map((b) => {

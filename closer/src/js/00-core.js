@@ -62,12 +62,12 @@
   CL.store = {
     key: 'closer.v1',
     read() {
-      try { return JSON.parse(g.localStorage.getItem(CL.store.key)) || {}; } catch (e) { return {}; }
+      try { const v = JSON.parse(g.localStorage.getItem(CL.store.key)); return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; } catch (e) { return {}; }
     },
     write(obj) {
       try { g.localStorage.setItem(CL.store.key, JSON.stringify(obj)); return true; } catch (e) { return false; }
     },
-    patch(fn) { const o = CL.store.read(); fn(o); CL.store.write(o); return o; },
+    patch(fn) { const o = CL.store.read(); try { fn(o); } catch (e) { /* dati salvati in forma inattesa: si ignorano */ } CL.store.write(o); return o; },
   };
 
   /* k€ → stringa italiana */

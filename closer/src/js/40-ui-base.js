@@ -99,11 +99,15 @@
     if (UI.settings.theme === 'auto') { if (hostTheme) r.setAttribute('data-theme', hostTheme); else r.removeAttribute('data-theme'); }
     else r.setAttribute('data-theme', UI.settings.theme);
   };
-  UI.records = () => {
-    const o = CL.store.read();
-    return Object.assign({ runs: [], badges: {}, dojo: { best: 0 } }, o.records || {});
+  const normRecords = (rec) => {
+    const r = Object.assign({ runs: [], badges: {}, dojo: { best: 0 } }, rec && typeof rec === 'object' ? rec : {});
+    if (!Array.isArray(r.runs)) r.runs = [];
+    if (!r.badges || typeof r.badges !== 'object' || Array.isArray(r.badges)) r.badges = {};
+    if (!r.dojo || typeof r.dojo !== 'object') r.dojo = { best: 0 };
+    return r;
   };
-  UI.saveRecords = (fn) => CL.store.patch((o) => { o.records = Object.assign({ runs: [], badges: {}, dojo: { best: 0 } }, o.records || {}); fn(o.records); });
+  UI.records = () => normRecords(CL.store.read().records);
+  UI.saveRecords = (fn) => CL.store.patch((o) => { o.records = normRecords(o.records); fn(o.records); });
 
   /* ───── Audio (WebAudio, solo dopo un gesto e se attivo) ───── */
   let actx = null;
@@ -183,10 +187,21 @@
       scrim.remove(); openModals--; document.removeEventListener('keydown', onKey, true);
       if (prev && prev.focus) { try { prev.focus(); } catch (e) { /* noop */ } }
     };
-    const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); close(); } };
+    const onKey = (e) => {
+      if (e.key === 'Escape') { e.stopPropagation(); close(); return; }
+      if (e.key === 'Tab') {   /* il focus resta dentro la finestra */
+        const els = Array.from(box.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter((x) => x.offsetParent !== null);
+        if (!els.length) return;
+        const first = els[0], last = els[els.length - 1];
+        if (e.shiftKey && (document.activeElement === first || !box.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && (document.activeElement === last || !box.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+      }
+    };
     scrim.addEventListener('mousedown', (e) => { if (e.target === scrim) close(); });
     const box = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true' });
     box.appendChild(build(close));
+    const ttl = box.querySelector('h3, h2, h1');
+    if (ttl) { ttl.id = ttl.id || 'mdl' + Math.random().toString(36).slice(2, 7); box.setAttribute('aria-labelledby', ttl.id); } else box.setAttribute('aria-label', 'Finestra di dialogo');
     scrim.appendChild(box);
     document.body.appendChild(scrim);
     openModals++; document.addEventListener('keydown', onKey, true);
@@ -226,7 +241,8 @@
       S.run && S.run.mode === 'career' && S.screen !== 'home' && S.screen !== 'summary'
         ? h('div', { class: 'row gap-8 small muted', 'aria-label': 'Stato trimestre' },
           h('span', { class: 'row gap-4' }, UI.ic('clock'), `Sett. ${CL.week(S.run)}/${CL.CONFIG.weeks}`),
-          h('span', { class: 'row gap-4' }, UI.ic('shield'), `Rep. ${S.run.rep}`))
+          /* senza rete la reputazione resta nascosta mentre decidi: le sue variazioni rivelerebbero la qualità delle mosse */
+          S.run.hard && ['play', 'forecast', 'closing', 'event', 'debrief'].includes(S.screen) ? null : h('span', { class: 'row gap-4' }, UI.ic('shield'), `Rep. ${S.run.rep}`))
         : null,
       h('button', { class: 'iconbtn', 'aria-label': 'Come si gioca', title: 'Come si gioca', onclick: () => UI.howto() }, UI.ic('info')),
       h('button', { class: 'iconbtn', 'aria-label': 'Audio', 'aria-pressed': String(UI.settings.sound), title: 'Audio', onclick: () => { UI.settings.sound = !UI.settings.sound; UI.saveSettings(); UI.sfx('pick'); UI.syncTopbar(); if (UI.ambience) UI.ambience.refresh(); if (S.screen === 'home') UI.render(); } }, UI.ic(UI.settings.sound ? 'vol' : 'mute')),

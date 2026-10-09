@@ -41,11 +41,19 @@
   const scrollBy = (dy) => { if (Math.abs(dy) > 2) window.scrollBy({ top: dy, behavior: reduced() || UI.settings.fast ? 'auto' : 'smooth' }); };
   /* mode: 'start' = l'elemento sotto la zona fissa; 'nearest' = il minimo scorrimento perché sia tutto visibile */
   UI.scrollTo = (el, mode) => {
-    if (!el) return;
+    if (!el || !el.isConnected) return;
     const r = el.getBoundingClientRect(), top = stickyTop() + 8, bottom = window.innerHeight - 14;
     if (mode === 'start') return scrollBy(r.top - top);
     if (r.top < top) return scrollBy(r.top - top);
     if (r.bottom > bottom) return scrollBy(Math.min(r.bottom - bottom, r.top - top));
+  };
+  /* mostra un blocco (dalla domanda alle risposte): se ci sta tutto, parte dall'inizio; altrimenti garantisce la parte finale (le risposte) */
+  UI.scrollBlock = (first, last) => {
+    if (!first || !last || !first.isConnected || !last.isConnected) return;
+    const a = first.getBoundingClientRect(), b = last.getBoundingClientRect(), top = stickyTop() + 8, bottom = window.innerHeight - 14;
+    if (a.top >= top && b.bottom <= bottom) return;
+    if (b.bottom - a.top <= bottom - top) return scrollBy(a.top - top);
+    scrollBy(b.bottom - bottom);
   };
 
   const speakerOf = (l) => (l.you ? 'you' : l.w ? l.w : l.chat ? l.chat.from : null);
@@ -115,9 +123,9 @@
     }
 
     /* widget firma dello scenario */
-    const specs = (sc.hud || []).slice(0, 3);
+    const specs = (sc.hud || []).filter((x) => !hard || x.type === 'clock').slice(0, 3);   /* senza rete: restano solo i widget puramente descrittivi (il tempo) */
     specs.forEach((spec, i) => {
-      const host = h('div', { class: 'hudw' + (i === 0 ? '' : ' extra') });
+      const host = h('div', { class: 'hudw extra' });
       refs.hud.push({ spec, host, data: null });
       el.appendChild(host);
     });
@@ -137,9 +145,9 @@
     const extra = h('div', { class: 'extra xgrid' });
     if (!hard) {
       refs.mpCap = h('div', { class: 'mpcap' }, 'Tocca una voce per leggerne il significato.');
-      const grid = h('div', { class: 'mps', role: 'list' });
+      const grid = h('div', { class: 'mps', role: 'group', 'aria-label': 'Checklist MEDDPICC' });
       CL.MP.forEach((m) => {
-        const b = h('button', { class: 'mp', role: 'listitem', title: m.full, onclick: () => { refs.mpCap.textContent = m.full; } }, m.label);
+        const b = h('button', { class: 'mp', title: m.full, 'aria-label': `${m.label}: non acquisito`, onclick: () => { refs.mpCap.textContent = m.full; } }, m.label);
         refs.mp[m.k] = b; grid.appendChild(b);
       });
       extra.appendChild(h('div', null, h('h4', null, 'MEDDPICC · cosa sai davvero'), grid, refs.mpCap));
@@ -205,6 +213,7 @@
           const on = deal.mp.has(m.k), b = refs.mp[m.k];
           const wasOn = prevMp ? prevMp.has(m.k) : on;
           b.classList.toggle('on', on);
+          b.setAttribute('aria-label', `${m.label}: ${on ? 'acquisito' : 'non acquisito'}`);
           if (on && !wasOn) { b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
         });
       }
@@ -237,11 +246,14 @@
   function startTimer(bar, secs, onEnd) {
     UI.stopTimer();
     const total = secs * 1000;
-    tm = { end: performance.now() + total, raf: 0, hiddenAt: 0 };
+    tm = { end: performance.now() + total, raf: 0, hiddenAt: 0, last: performance.now() };
     tm.vis = () => { if (document.hidden) tm.hiddenAt = performance.now(); else if (tm.hiddenAt) { tm.end += performance.now() - tm.hiddenAt; tm.hiddenAt = 0; } };
     document.addEventListener('visibilitychange', tm.vis);
     const tick = (t) => {
       if (!tm) return;
+      /* le finestre aperte (regole, conferma di uscita) fermano il tempo */
+      if (UI.modalOpen()) { tm.end += t - tm.last; tm.last = t; tm.raf = requestAnimationFrame(tick); return; }
+      tm.last = t;
       const left = tm.end - t, fr = Math.max(0, left / total);
       bar.firstChild.style.transform = `scaleX(${fr})`;
       bar.classList.toggle('low', fr < 0.25);
@@ -281,6 +293,8 @@
     S.phase = 'reveal';
     if (sc.intro && !S.skipIntro) showIntro(); else showNode();
     S.skipIntro = false;
+    /* a schermata montata: porta in vista la scena (su mobile il cruscotto compatto la precede) */
+    requestAnimationFrame(() => { if (S.screen === 'play' && stage.isConnected) UI.scrollTo(stage, 'start'); });
     return root;
   };
 
@@ -338,7 +352,7 @@
     UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) }).then((ok) => {
       if (!ok || tok !== S.nodeTok) return;
       S.phase = 'intro';
-      go.hidden = false;
+      go.hidden = false; UI.scrollTo(go, 'nearest');
       const b = go.querySelector('button'); if (b) b.focus({ preventScroll: true });
     });
   }
@@ -386,7 +400,7 @@
     S.phase = 'choose';
     prompt.hidden = false; box.hidden = false;
     if (timerBar) { timerBar.hidden = false; startTimer(timerBar, node.t || 30, onTimeout); }
-    UI.scrollTo(box, 'nearest');
+    UI.scrollBlock(prompt, box);
   }
 
   function onTimeout() {
@@ -423,6 +437,7 @@
     const hb = UI.$('.hint', S.stage); if (hb) hb.hidden = true;
     const tb = UI.$('.timer', S.stage); if (tb) tb.remove();
     S.dash.update(prevM, prevMp);
+    if (!run.hard) UI.syncTopbar();
     UI.sfx(run.hard ? 'pick' : 'q' + rec.q);
     paintDots();
     const youLine = { you: true, t: o.c.say || o.c.t };
@@ -434,7 +449,7 @@
     const slot = UI.$('#fbslot', S.stage);
     slot.replaceChildren(fb);
     const btn = UI.$('[data-next]', slot);
-    if (btn) btn.focus({ preventScroll: true });
+    if (btn && !UI.modalOpen()) btn.focus({ preventScroll: true });
     UI.scrollTo(fb, 'nearest');
   }
 
@@ -456,7 +471,7 @@
     return h('div', { class: 'fb', role: 'status' },
       h('div', { class: 'hd' }, chips.length ? chips : h('span', { class: 'small faint' }, wasWild ? 'Imprevisto gestito' : 'Esito della mossa')),
       hard
-        ? h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Senza rete'), 'Valutazione e lezione nel debrief.')
+        ? h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Senza rete'), run.mode === 'career' ? 'Valutazione e lezione dopo il verdetto del giorno di chiusura, nel riepilogo.' : 'Valutazione e lezione nel debrief.')
         : h('div', null,
           h('div', { class: 'bd' }, h('span', { class: 'eyebrow' }, 'Lettura della mossa'), h('p', null, f(rec.r))),
           h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Lezione dal campo'), f(node.tip))),
@@ -465,20 +480,24 @@
         h('button', { class: 'btn btn--primary', 'data-next': '', onclick: advance }, last ? 'Chiudi la trattativa' : 'Continua', UI.ic('next'))));
   }
 
+  /* la trattativa è conclusa (ultima scelta fatta): sigilla o risolve e passa al debrief */
+  function conclude() {
+    const deal = S.deal, run = S.run, sc = S.sc;
+    UI.stopTimer();
+    const sealed = CL.seal(deal);
+    let res;
+    if (run.mode === 'career') res = sealed;
+    else res = CL.finish(deal, run, run.rnd);
+    CL.commitDeal(run, sc, res);
+    S.res = res;
+    S.fx = false;
+    return UI.go('debrief');
+  }
+
   function advance() {
     if (S.phase !== 'feedback') return;
     const deal = S.deal, run = S.run, sc = S.sc;
-    if (deal.over) {
-      UI.stopTimer();
-      const sealed = CL.seal(deal);
-      let res;
-      if (run.mode === 'career') res = sealed;
-      else res = CL.finish(deal, run, run.rnd);
-      CL.commitDeal(run, sc, res);
-      S.res = res;
-      S.fx = false;
-      return UI.go('debrief');
-    }
+    if (deal.over) return conclude();
     const last = deal.hist[deal.hist.length - 1];
     let twist = null;
     if (last.entered && last.entered.delta) {
@@ -490,31 +509,47 @@
   }
 
   UI.leaveDeal = () => {
+    if (S.screen !== 'play' || !S.deal) return;
     const run = S.run, career = run.mode === 'career';
+    /* una trattativa già conclusa non si abbandona: si chiude (altrimenti diventerebbe un deal perso) */
+    if (S.deal.over && (S.phase === 'feedback' || S.phase === 'react')) { UI.skipReveal(); S.phase = 'feedback'; return conclude(); }
     if (!career) { UI.stopTimer(); return UI.go('pipeline'); }
     UI.modal((close) => h('div', null,
       h('header', null, h('div', { class: 'grow' }, h('h3', { class: 'display', style: { fontSize: '28px' } }, 'Abbandonare la trattativa?'))),
       h('div', { class: 'body' }, h('p', { class: 'muted' }, `Nel trimestre un deal abbandonato conta come perso e le ${S.sc.cost} settimane restano spese. Se il deal non è qualificabile, la mossa giusta è squalificarlo con una scelta: costa meno.`)),
       h('footer', null,
-        h('button', { class: 'btn btn--primary', onclick: () => { close(); UI.stopTimer(); const res = CL.forfeit(S.deal); CL.commitDeal(run, S.sc, res); S.res = res; S.fx = true; UI.go('debrief'); } }, 'Abbandona (deal perso)'),
+        h('button', { class: 'btn btn--primary', onclick: () => { close(); if (S.screen !== 'play' || run.results.some((r) => r.id === S.sc.id)) return; UI.stopTimer(); const res = CL.forfeit(S.deal); CL.commitDeal(run, S.sc, res); S.res = res; S.fx = true; UI.go('debrief'); } }, 'Abbandona (deal perso)'),
         h('button', { class: 'btn', 'data-autofocus': '', onclick: close }, 'Continua la trattativa'))));
   };
 
   /* ───── Debrief ───── */
+  /* la mossa con q più alto del nodo (preferendo quelle senza jolly), se quella scelta non lo era */
+  const bestOf = (rec) => {
+    try {
+      const nid = String(rec.node || '');
+      const node = nid.indexOf('wild:') === 0 ? ((S.sc.wild || []).concat(CL.wildGeneric || []).find((w) => 'wild:' + w.id === nid) || {}).node : S.sc.nodes[nid];
+      if (!node) return null;
+      const mq = Math.max(...node.choices.map((c) => c.q));
+      if (rec.q >= mq) return null;
+      const c = node.choices.filter((x) => x.q === mq);
+      return c.find((x) => !x.jolly) || c[0];
+    } catch (e) { return null; }
+  };
   const trunc = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s);
   UI.screens.debrief = () => {
     if (UI.ambience) UI.ambience.stop();
     const res = S.res, deal = S.deal, sc = S.sc, run = S.run, career = run.mode === 'career';
     const st = res.status;
     const pending = st === 'pending';
+    const mask = !!run.hard && pending;   /* senza rete: fino al verdetto restano nascosti tetto, meter, MEDDPICC e valutazione delle mosse */
     const stampTxt = { won: 'Firmato', lost: 'Perso', slip: 'Slitta', disq: 'Squalificato' }[st];
-    const ending = !pending && sc.endings ? (sc.endings[st] || sc.endings.lost) : '';
+    const ending = res.forfeited ? 'Hai abbandonato la trattativa: il cliente non ha mai ricevuto una proposta definitiva e le settimane investite restano spese.' : !pending && sc.endings ? (sc.endings[st] || sc.endings.lost) : '';
     const net = res.listFinal ? Math.round(res.listFinal * (1 - (res.disc || 0) / 100)) : 0;
     const comm = res.acv * CL.CONFIG.rate1;
     const goodL = (sc.lessons || []).filter((l) => l.if(deal) && l.good), badL = (sc.lessons || []).filter((l) => l.if(deal) && !l.good);
     const energyLine = !career ? null
       : st === 'disq' ? `Hai speso 1 settimana e ne hai recuperate ${res.refund}.`
-        : res.momentum ? `Costo: ${sc.cost} settimane, ma una conduzione eccellente ti restituisce 1 settimana di slancio.` : `Costo: ${sc.cost} settimane.`;
+        : res.momentum && !mask ? `Costo: ${sc.cost} settimane, ma una conduzione eccellente ti restituisce 1 settimana di slancio.` : `Costo: ${sc.cost} settimane.`;
 
     if (!S.fx) {
       S.fx = true;
@@ -529,15 +564,17 @@
 
     const tl = deal.hist.map((rec, i) => {
       const Q = CL.QUALITY[rec.q];
+      const alt = mask ? null : bestOf(rec);
       const body = h('div', { class: 'dt', hidden: true },
         h('p', null, h('b', null, 'Hai detto: '), f(rec.say || rec.t)),
-        h('p', { style: { marginTop: '6px' } }, h('b', null, 'Lettura: '), f(rec.r)),
-        h('p', { class: 'muted', style: { marginTop: '6px' } }, h('b', null, 'Lezione: '), f(rec.tip)));
+        alt ? h('p', { style: { marginTop: '6px' } }, h('b', null, 'La mossa più forte: '), f(alt.t)) : null,
+        mask ? null : h('p', { style: { marginTop: '6px' } }, h('b', null, 'Lettura: '), f(rec.r)),
+        mask ? null : h('p', { class: 'muted', style: { marginTop: '6px' } }, h('b', null, 'Lezione: '), f(rec.tip)));
       return h('li', null,
         h('button', { 'aria-expanded': 'false', onclick: (e) => { body.hidden = !body.hidden; e.currentTarget.setAttribute('aria-expanded', String(!body.hidden)); } },
           h('span', { class: 'n' }, rec.wild ? '!!' : String(i + 1).padStart(2, '0')),
-          h('span', { class: 'tt' }, (rec.wild ? 'Imprevisto · ' : '') + trunc(f(rec.t), 190)),
-          h('span', { class: 'q ' + Q.cls }, Q.label)),
+          h('span', { class: 'tt' }, (rec.wild ? 'Imprevisto' + (rec.wildTitle ? ' · ' + f(rec.wildTitle) : '') + ' — ' : '') + trunc(f(rec.t), 190)),
+          mask ? null : h('span', { class: 'q ' + Q.cls }, Q.label)),
         body);
     });
 
@@ -555,23 +592,30 @@
           h('div', { style: { padding: '8px 12px' } }, h('span', { class: 'stamp anim stamp--' + st }, stampTxt)),
           h('div', null,
             h('p', { style: { fontSize: '17px', maxWidth: '62ch' } }, f(ending)),
-            st !== 'disq' ? h('p', { class: 'small muted', style: { marginTop: '10px' } }, (res.pe >= 1 ? `Probabilità finale ${Math.round((res.pFinal != null ? res.pFinal : res.p) * 100)}%: sopra il 90% la firma è praticamente certa.` : `Probabilità finale ${Math.round((res.pFinal != null ? res.pFinal : res.p) * 100)}%. Estrazione: ${Math.round(res.roll * 100)} su 100${st === 'won' ? ', sotto la soglia: hai vinto.' : ', sopra la soglia: ' + (st === 'slip' ? 'il deal slitta.' : 'il deal è perso.')}`)) : null,
+            st !== 'disq' && !res.forfeited ? h('p', { class: 'small muted', style: { marginTop: '10px' } }, (() => {
+              const pf = Math.round((res.pFinal != null ? res.pFinal : res.p) * 100), pe = Math.round(Math.min(1, res.pe) * 100);
+              if (res.pe >= 1) return `Probabilità finale ${pf}%: sopra il 90% la firma è praticamente certa.`;
+              const thr = pe > pf ? `Probabilità finale ${pf}% (con la spinta di una trattativa ben condotta, soglia effettiva ${pe}%).` : `Probabilità finale ${pf}%.`;
+              return `${thr} Estrazione: ${Math.round(res.roll * 100)} su 100${st === 'won' ? ', sotto la soglia: hai vinto.' : ', sopra la soglia: ' + (st === 'slip' ? 'il deal slitta.' : 'il deal è perso.')}`;
+            })()) : null,
             energyLine ? h('p', { class: 'small muted', style: { marginTop: '4px' } }, energyLine) : null)),
       shock ? h('section', { class: 'mt-16' }, UI.shockCard(shock, sc)) : null,
-      st !== 'disq' ? h('dl', { class: 'stats' },
+      st !== 'disq' && !res.forfeited ? h('dl', { class: 'stats' },
         h('div', { class: 'stat' }, h('dt', null, pending ? 'ACV se firma' : 'ACV netto'), h('dd', null, pending ? CL.fmtK(res.net) : st === 'won' ? CL.fmtK(res.acv) : '—', !pending && st !== 'won' ? h('small', null, `se vinto: ${CL.fmtK(net)}`) : null)),
         h('div', { class: 'stat' }, h('dt', null, 'Sconto applicato'), h('dd', null, (res.disc || 0).toFixed(0) + '%', h('small', null, `LEP ${res.lep}%`))),
         h('div', { class: 'stat' }, h('dt', null, 'Commissione base'), h('dd', null, st === 'won' ? '€' + Math.round(comm * 1000).toLocaleString('it-IT') : pending ? 'a fine trimestre' : '—')),
-        h('div', { class: 'stat' }, h('dt', null, 'Qualità decisioni'), h('dd', null, Math.round((res.avgQ / 3) * 100) + '%')),
-        h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC'), h('dd', null, `${res.mp}/8`)),
+        mask ? null : h('div', { class: 'stat' }, h('dt', null, 'Qualità decisioni'), h('dd', null, Math.round((res.avgQ / 3) * 100) + '%')),
+        mask ? null : h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC'), h('dd', null, `${res.mp}/8`)),
         h('div', { class: 'stat' }, h('dt', null, 'Imprevisti'), h('dd', null, String(res.wilds || 0), h('small', null, `rep. ${UI.signed(res.integ)} · ora ${run.rep}`)))) : null,
       res.blocked ? h('div', { class: 'note mt-16' }, h('b', null, 'Deal Desk. '), `Avevi promesso il ${Math.round(res.promised)}% senza contropartite sufficienti: ne è stato approvato il ${res.disc}%. Il cliente ha notato la retromarcia e la probabilità ne ha risentito.`) : null,
-      res.cap ? h('div', { class: 'note mt-16' }, h('b', null, `Limite ${Math.round(res.cap.max * 100)}%. `), f(res.cap.why)) : null,
+      res.cap && !mask ? h('div', { class: 'note mt-16' }, h('b', null, `Limite ${Math.round(res.cap.max * 100)}%. `), f(res.cap.why)) : null,
       h('div', { class: 'two' },
         h('section', { class: 'card pad' },
           h('div', { class: 'eyebrow' }, 'Le tue mosse'),
           h('ul', { class: 'tl' }, tl)),
-        h('section', { class: 'card pad' },
+        mask
+          ? h('section', { class: 'card pad' }, h('div', { class: 'eyebrow' }, 'Valutazione'), h('p', { class: 'muted', style: { marginTop: '10px' } }, 'Senza rete: tetto, meter, MEDDPICC e valutazione delle mosse restano nascosti fino al verdetto. Li trovi nel riepilogo, dopo il giorno di chiusura.'))
+          : h('section', { class: 'card pad' },
           h('div', { class: 'eyebrow' }, 'Il quadro finale'),
           h('div', { style: { marginTop: '10px' } }, CL.METERS.map((m) => h('div', { class: 'mrow', style: { gridTemplateColumns: '78px minmax(0,1fr) 30px' } }, h('span', { class: 'l' }, m.label), h('div', { class: 'bar' }, h('i', { class: m.k === 'risk' ? 'risk' : '', style: { width: deal.m[m.k] + '%' } })), h('span', { class: 'n' }, Math.round(deal.m[m.k]))))),
           h('div', { class: 'mps mt-16' }, CL.MP.map((m) => h('div', { class: 'mp' + (deal.mp.has(m.k) ? ' on' : ''), title: m.full }, m.label))),
@@ -580,20 +624,21 @@
             badL.map((l) => h('p', { class: 'bad' }, f(l.t))),
             !goodL.length && !badL.length ? h('p', { class: 'muted' }, 'Nessun elemento determinante: una trattativa neutra.') : null))),
       h('div', { class: 'row gap-12 wrapx mt-24' },
-        career ? h('button', { class: 'btn btn--primary btn--lg', 'data-autofocus': '', onclick: UI.nextAfterDeal }, 'Prosegui', UI.ic('next'))
+        career ? h('button', { class: 'btn btn--primary btn--lg', 'data-autofocus': '', onclick: () => UI.nextAfterDeal() }, 'Prosegui', UI.ic('next'))
           : [h('button', { class: 'btn btn--primary btn--lg', onclick: () => UI.startDeal(sc) }, UI.ic('refresh'), 'Rigioca lo scenario'), h('button', { class: 'btn', onclick: () => UI.go('pipeline') }, 'Altro scenario')]),
       h('p', { class: 'footer' }, S.hints ? `Suggerimenti usati: ${S.hints}. ` : '', run.timeouts ? `Decisioni scadute: ${run.timeouts}.` : ''));
   };
 
   /* scheda di uno shock (usata nel debrief di allenamento e nel giorno di chiusura) */
-  UI.shockCard = (shock, sc) => {
+  UI.shockCard = (shock, sc, opts) => {
     const kind = shock.kind === 'pos' ? 'pos' : 'neg';
     const pct = Math.round(shock.dp * 100);
-    return h('div', { class: 'shock shock--' + kind + (shock.hit ? ' hit' : ' prot') },
+    const veil = !!(opts && opts.hard);   /* senza rete: la scheda racconta, non quantifica e non anticipa l'esito */
+    return h('div', { class: 'shock shock--' + kind + (veil ? '' : shock.hit ? ' hit' : ' prot') },
       h('div', { class: 'hd' },
-        h('span', { class: 'eyebrow' }, kind === 'neg' ? 'Shock del giorno di chiusura' : shock.hit ? 'Colpo di fortuna' : 'Occasione mancata'),
-        h('span', { class: 'chip ' + (kind === 'pos' ? (shock.hit ? 'chip--good' : 'chip--warn') : shock.hit ? 'chip--bad' : 'chip--good') }, kind === 'pos' ? (shock.hit ? 'A tuo favore' : 'Non sfruttata') : shock.hit ? 'Colpito' : 'Protetto'),
-        pct ? h('span', { class: 'delta ' + (pct > 0 ? 'up' : 'down') }, `Probabilità ${UI.signed(pct)} punti`) : h('span', { class: 'delta' }, 'Nessun effetto')),
+        h('span', { class: 'eyebrow' }, kind === 'neg' ? 'Shock del giorno di chiusura' : veil || shock.hit ? 'Colpo di fortuna' : 'Occasione mancata'),
+        veil ? null : h('span', { class: 'chip ' + (kind === 'pos' ? (shock.hit ? 'chip--good' : 'chip--warn') : shock.hit ? 'chip--bad' : 'chip--good') }, kind === 'pos' ? (shock.hit ? 'A tuo favore' : 'Non sfruttata') : shock.hit ? 'Colpito' : 'Protetto'),
+        veil ? null : (pct ? h('span', { class: 'delta ' + (pct > 0 ? 'up' : 'down') }, `Probabilità ${UI.signed(pct)} punti`) : h('span', { class: 'delta' }, 'Nessun effetto'))),
       h('h4', null, CL.fmt(shock.title, sc)),
       h('p', null, CL.fmt(shock.text, sc)));
   };

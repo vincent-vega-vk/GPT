@@ -111,7 +111,7 @@
 
   /* ───── Briefing del trimestre ───── */
   UI.screens.briefing = () => {
-    const nm = UI.settings.name || 'benvenuto';
+    const nm = UI.settings.name || '';
     return h('main', { class: 'wrap' },
       h('div', { class: 'sec-head' }, h('div', { class: 'grow' }, h('div', { class: 'eyebrow' }, 'Lunedì · settimana 1'), h('h1', { class: 'sec-title', 'data-focus': '', style: { marginTop: '8px' } }, 'Il tuo trimestre'))),
       h('section', { class: 'card pad' },
@@ -119,7 +119,7 @@
           UI.avatar({ name: 'Marta Colombo', hue: 348 }),
           h('div', null,
             h('div', { class: 'small' }, h('b', null, 'Marta Colombo'), h('span', { class: 'faint' }, '  ·  La tua Sales Director')),
-            h('p', { style: { marginTop: '8px', fontSize: '16.5px', maxWidth: '68ch' } }, `Ciao ${nm}. Questo trimestre la quota è ${CL.fmtK(C.quota)} di nuovo ACV. Hai tredici settimane, ma tempo per lavorare bene quattro o cinque trattative, non tutte e otto. Scegli quelle che meritano le tue settimane, e quelle che no.`),
+            h('p', { style: { marginTop: '8px', fontSize: '16.5px', maxWidth: '68ch' } }, `${nm ? 'Ciao ' + nm + '. ' : 'Ci siamo. '}Questo trimestre la quota è ${CL.fmtK(C.quota)} di nuovo ACV. Hai tredici settimane, ma tempo per lavorare bene quattro o cinque trattative, non tutte e otto. Scegli quelle che meritano le tue settimane, e quelle che no.`),
             h('p', { class: 'muted', style: { marginTop: '10px', maxWidth: '68ch' } }, 'Un consiglio: un “Commit” nel CRM non è un fatto, è un’opinione. Ispeziona un deal prima di investirci: costa zero.'))),
         h('div', { class: 'kv' },
           h('div', null, h('dt', null, 'Quota'), h('dd', null, CL.fmtK(C.quota))),

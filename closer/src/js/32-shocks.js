@@ -21,6 +21,7 @@
       title: `Congelamento degli acquisti`,
       kind: 'neg',
       w: 1,
+      if: (d) => !tender(d),   /* in una gara pubblica non si negozia con chi decide: lo shock non ha senso */
       /* protetto: contratto già nel circuito di firma e un costo del rinvio dimostrabile (urgenza o valore) */
       hit: (d) => !d.mp.has('P') || (d.m.urgency < 50 && d.m.value < 55),
       dp: -0.30,
@@ -33,6 +34,7 @@
       title: `Cambio di chi firma`,
       kind: 'neg',
       w: 1,
+      if: (d) => !tender(d),   /* in una gara pubblica non si negozia con chi decide: lo shock non ha senso */
       /* protetto: Economic Buyer e champion insieme, oppure la mappa del processo con un buon controllo */
       hit: (d) => !has(d, 'E', 'C') && !(d.mp.has('Dp') && d.m.control >= 60),
       dp: -0.32,
@@ -71,6 +73,7 @@
       title: `Rinvio della delibera`,
       kind: 'neg',
       w: 1,
+      if: (d) => !tender(d),   /* in una gara pubblica non si negozia con chi decide: lo shock non ha senso */
       hit: (d) => !has(d, 'Dp', 'P'),
       dp: -0.30,
       dpProt: -0.03,

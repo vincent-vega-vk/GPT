@@ -252,8 +252,11 @@
     const pr = CL.prob(d), ap = pr.ap;
     return Object.assign(base, {
       status: 'pending', acv: 0, p: pr.p, disc: ap.eff, promised: d.disc, blocked: ap.status === 'blocked', lep: ap.lep, cap: pr.cap,
-      listFinal: d.list, overLep: ap.eff > ap.lep, net: Math.round(d.list * (1 - ap.eff / 100)),
+      listFinal: d.list, overLep: d.disc > ap.lep, net: Math.round(d.list * (1 - ap.eff / 100)),
       snap: { m: Object.assign({}, d.m), mp: Array.from(d.mp), flags: Object.assign({}, d.flags), disc: d.disc, list: d.list },
+      /* la valutazione delle mosse resta qui: in "senza rete" il debrief la nasconde fino al verdetto e il riepilogo la mostra */
+      review: d.hist.map((h) => ({ t: h.t, say: h.say, q: h.q, r: h.r, tip: h.tip, wild: !!h.wild })),
+      lessons: (sc.lessons || []).filter((l) => { try { return l.if(d); } catch (e) { return false; } }).map((l) => ({ good: !!l.good, t: l.t })),
     });
   };
 
@@ -357,11 +360,11 @@
   };
 
   /* giorno di chiusura: tutte le trattative in sospeso vengono risolte (aiuto del manager, shock, tiro) */
-  CL.closeQuarter = (run, rnd) => {
+  CL.closeQuarter = (run, rnd, opts) => {
     const log = [];
     run.results.forEach((res, i) => {
       if (res.status !== 'pending') return;
-      const fin = CL.settle(res, run, rnd);
+      const fin = CL.settle(res, run, rnd, opts);
       run.results[i] = fin;
       log.push(fin);
     });

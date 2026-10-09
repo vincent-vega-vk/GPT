@@ -135,6 +135,10 @@ await page.waitForTimeout(500);
 await shot('40-summary');
 const sum = await page.evaluate(() => { const s = CL.ui.S.sum; return { att: s.att, rank: s.rank.name, wins: s.wins, losses: s.losses, dq: s.dq, comm: s.commission, rep: CL.ui.S.run.rep, badges: s.badges }; });
 console.log('Trimestre:', JSON.stringify(sum), 'deal giocati:', deals);
+/* la forecast call di metà trimestre deve esistere quando, dalla settimana 6, c'è qualcosa in firma (regressione: l'evento click veniva scambiato per afterMid) */
+const fcCalls = await page.evaluate(() => { const r = CL.ui.S.run; return { mid: !!r.fc.calls.mid, final: !!r.fc.calls.final, midWeek: r.fc.calls.mid ? r.fc.calls.mid.week : null }; });
+console.log('Forecast call:', JSON.stringify(fcCalls));
+if (policy === 'best' && !fcCalls.mid) { console.error('ERRORE: la forecast call di metà trimestre non è mai partita'); process.exit(1); }
 
 /* ───── Dojo ───── */
 await page.evaluate(() => CL.ui.go('home'));

@@ -21,7 +21,8 @@
     CL.scenarios.forEach((sc) => {
       const res = run.results.find((r) => r.id === sc.id);
       if (res && res.status === 'pending') {
-        out.push({ id: sc.id, sc, state: 'pending', p: res.p, net: res.net, res, truth: CL.truthCat(res.p), cat: null, crm: null });
+        const carried = (run.fc && run.fc.flags && run.fc.flags[sc.id]) || {};   /* segni lasciati dalla call di metà trimestre */
+        out.push(Object.assign({ id: sc.id, sc, state: 'pending', p: res.p, net: res.net, res, truth: CL.truthCat(res.p), cat: null, crm: null }, carried));
       } else if (!res && kind === 'mid') {
         const av = CL.avail(run, sc);
         if (av.state === 'expired') return;
@@ -82,7 +83,7 @@
     const list = [];
 
     entries.filter((e) => e.state === 'pending' && mism(e) >= 1).sort((a, b) => mism(b) - mism(a)).forEach((e) => list.push(mk('evidence', e, { gap: CL.fcGap(e), sev: 4 + mism(e) })));
-    entries.filter((e) => e.state === 'open' && rank(e.cat) >= 2).forEach((e) => list.push(mk('unworked', e, { sev: 4 })));
+    entries.filter((e) => e.state === 'open' && rank(e.cat) >= 2 && CL.avail(run, e.sc).state !== 'early').forEach((e) => list.push(mk('unworked', e, { sev: 4 })));   /* una trattativa non ancora apribile non si può rimproverare di non averla lavorata */
     entries.filter((e) => e.state === 'pending' && mism(e) <= -1 && e.p >= 0.55).forEach((e) => list.push(mk('sandbag', e, { sev: 3 })));
     entries.filter((e) => e.state === 'pending' && mism(e) === 0 && rank(e.cat) >= 2).forEach((e) => {
       const pd = CL.pseudoDeal(e.res);
@@ -182,8 +183,11 @@
     let reacts = o.reacts;
     const gapKey = c.gap || 'E';
     switch (c.type + ':' + o.id) {
-      case 'evidence:honest':
-        eff.rep = 3; eff.mgr = 6; eff.cat = e.truth; eff.boost = HELP[gapKey] || 0.05; eff.score = 1; eff.help = true; break;
+      case 'evidence:honest': {
+        /* ammettere dopo essere stati sfidati vale meno che aver chiamato giusto al primo colpo, e meno ancora se lo scarto era grande */
+        const miss = RANK[e.cat] - RANK[e.truth];
+        eff.rep = miss >= 2 ? 1 : 2; eff.mgr = miss >= 2 ? 2 : 4; eff.cat = e.truth; eff.boost = (HELP[gapKey] || 0.05) * 0.5; eff.score = miss >= 2 ? 0.5 : 0.8; eff.help = true; break;
+      }
       case 'evidence:bluff': {
         const caught = rnd() < 0.85; eff.caught = caught;
         if (caught) { eff.rep = -8; eff.mgr = -15; eff.cat = e.truth; eff.weeks = 1; eff.score = -1; reacts = B.react && B.react.bluffCaught; }
@@ -234,8 +238,8 @@
     if (eff.rep) run.rep = CL.clamp(run.rep + eff.rep, 0, 100);
     if (eff.mgr) bump(run, 'mgr', eff.mgr);
     if (eff.boost && e) run.boost[e.id] = Math.min(0.15, (run.boost[e.id] || 0) + eff.boost);
-    if (eff.cat && e) e.cat = eff.cat;
-    eff.lines = reacts && reacts.length ? [reactFrom(reacts)] : [];
+    eff.lines = reacts && reacts.length ? [reactFrom(reacts)] : [];   /* prima di aggiornare la categoria: {claim} è ciò che avevi dichiarato */
+    if (eff.cat && e) { if (eff.cat !== e.cat) e.corrected = true; e.was = e.was || e.cat; e.cat = eff.cat; }
     return eff;
   };
 
@@ -246,16 +250,23 @@
       entries: entries.map((e) => ({ id: e.id, state: e.state, cat: e.cat, truth: e.truth, p: e.p, net: e.net, bluffed: !!e.bluffed, sandbagged: !!e.sandbagged, overconf: !!e.overconf, promised: !!e.promised })),
     };
     run.fc.calls[kind] = call;
+    run.fc.flags = run.fc.flags || {};
+    entries.forEach((e) => { if (e.bluffed || e.sandbagged || e.overconf) run.fc.flags[e.id] = Object.assign(run.fc.flags[e.id] || {}, { bluffed: !!(e.bluffed || (run.fc.flags[e.id] || {}).bluffed), sandbagged: !!(e.sandbagged || (run.fc.flags[e.id] || {}).sandbagged), overconf: !!(e.overconf || (run.fc.flags[e.id] || {}).overconf) }); });
     const sum = (cat) => entries.filter((e) => e.state === 'pending' && e.cat === cat).reduce((a, e) => a + e.net, 0);
     const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
     const quality = avg >= 0.55 ? 'good' : avg >= 0 ? 'mixed' : 'bad';
+    /* premio alle voci chiamate giuste al primo colpo (senza essere state corrette dopo una sfida) */
+    const rightFirst = entries.filter((e) => e.state === 'pending' && !e.corrected && e.cat === e.truth).length;
+    if (rightFirst) { bump(run, 'mgr', Math.min(6, rightFirst * 2)); run.rep = CL.clamp(run.rep + Math.min(3, rightFirst), 0, 100); }
+    /* concessione o taglio di risorse: solo alla call di metà trimestre (alla finale non servirebbero più a niente) */
     let grant = null;
-    if (run.mgr >= 80 && !run.fc.granted) { run.fc.granted = true; run.jolly.exec += 1; grant = { kind: 'exec', text: '+1 Executive Sponsor' }; }
+    if (kind !== 'mid') { /* nessun effetto sulle risorse alla commit call finale */ }
+    else if (run.mgr >= 80 && !run.fc.granted) { run.fc.granted = true; run.jolly.exec += 1; grant = { kind: 'exec', text: '+1 Executive Sponsor' }; }
     else if (run.mgr < 35 && !run.fc.cut) {
       const k = ['desk', 'se', 'ref', 'exec'].find((x) => run.jolly[x] > 0);
       if (k) { run.fc.cut = true; run.jolly[k] -= 1; grant = { kind: 'cut', text: '−1 ' + CL.JOLLY[k].name }; }
     }
-    return { commit: sum('commit'), best: sum('best'), pipe: sum('pipe'), quality, avg, grant };
+    return { commit: sum('commit'), best: sum('best'), pipe: sum('pipe'), quality, avg, grant, rightFirst };
   };
 
   /* ───── affidabilità del forecast (dopo il giorno di chiusura) ───── */

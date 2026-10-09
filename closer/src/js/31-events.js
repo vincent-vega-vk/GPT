@@ -31,7 +31,7 @@
     {
       id: 'quickwin', title: `Opportunità lampo`, where: `Messaggio · mercoledì 12:30`,
       scene: [
-        { n: `Un partner ti segnala una PMI che vuole il modulo base e sembra decisa a firmare. Valore: circa €70k, ma ti chiede una settimana di attenzione.` },
+        { n: `Un partner ti segnala una PMI che vuole il modulo base e sembra decisa a firmare. Valore: circa €60k, ma ti chiede una settimana di attenzione.` },
       ],
       choices: [
         { id: 'a', t: `La prendo: una settimana, una firma piccola ma quasi sicura.`, r: `La PMI è pratica e diretta. In cinque giorni raccogli firma e anticipo.`, eff: { energy: 1, quick: { acv: 60, p: 0.85 } } },

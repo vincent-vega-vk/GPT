@@ -39,7 +39,7 @@
     const setVp = (caption) => { if (vp) vp.set({ theme: { bg: 'office' }, view: 'call', people: [{ key: 'marta', name: MARTA.name, role: MARTA.role, hue: MARTA.hue, stance: undefined }], when: `Settimana ${CL.week(run)}`, where: label, caption: caption || '' }); };
     const head = h('div', { class: 'dealhead' },
       h('div', null, h('div', { class: 'eyebrow' }, `Settimana ${CL.week(run)} · ${kind === 'mid' ? 'pipeline review' : 'commit call'}`), h('h2', { 'data-focus': '', style: { marginTop: '6px' } }, kind === 'mid' ? 'Forecast con Marta' : 'La commit call')),
-      h('div', { class: 'dots mgr', title: 'Fiducia di Marta' }, h('span', { class: 'small muted' }, 'Fiducia di Marta'), h('b', { class: 'mono', id: 'mgrv' }, String(run.mgr))));
+      hard ? null : h('div', { class: 'dots mgr', title: 'Fiducia di Marta' }, h('span', { class: 'small muted' }, 'Fiducia di Marta'), h('b', { class: 'mono', id: 'mgrv' }, String(run.mgr))));
     const root = h('main', { class: 'wrap playroot fcroot' }, head, h('div', { class: 'fcgrid' }, h('div', { class: 'stagecol' }, vpHost, stage)));
     stage.addEventListener('click', (e) => { if (!e.target.closest('button, a, input, textarea') && S.skip) UI.skipReveal(); });
 
@@ -78,11 +78,12 @@
       }));
       const wrap = h('div', { class: 'fcsheet' },
         h('div', { class: 'eyebrow' }, 'Foglio di forecast · assegna una categoria a ogni trattativa'),
+        h('dl', { class: 'fclegend' }, CL.CATS.map((c) => h('div', null, h('dt', null, c.label), h('dd', null, c.hint)))),
         list, totals,
         h('div', { class: 'next', style: { marginTop: '14px' } }, submit));
       upd();
       area.replaceChildren(wrap);
-      wrap.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      UI.scrollTo(wrap, 'nearest');
       return once(wrap, '.next button').then(() => { wrap.querySelectorAll('button').forEach((b) => { b.disabled = true; }); });
     }
 
@@ -97,7 +98,7 @@
       const opts = CL.shuffle(ch.opts, rnd);
       const box = h('div', { class: 'choices', role: 'group', 'aria-label': 'La tua risposta' }, opts.map((o, i) => h('button', { class: 'choice', 'data-id': o.id }, h('span', { class: 'k', 'aria-hidden': 'true' }, i + 1), h('span', { class: 'tx' }, o.t))));
       area.replaceChildren(box);
-      box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      UI.scrollBlock(host.lastElementChild, box);
       S.fcOpts = opts;
       S.fcPhase = 'choose';
       const picked = await new Promise((res) => {
@@ -107,23 +108,26 @@
       });
       if (gone()) return;
       box.remove();
+      const catBefore = e ? e.cat : null;
       const eff = CL.fcResolve(run, ch, picked.id, rnd);
       X.scores.push(eff.score);
-      setMgr();
-      UI.sfx(eff.score > 0.4 ? 'q3' : eff.score < -0.2 ? 'q0' : 'q1');
+      if (!hard) setMgr();
+      UI.sfx(hard ? 'pick' : eff.score > 0.4 ? 'q3' : eff.score < -0.2 ? 'q0' : 'q1');
       await UI.reveal(host, [{ you: true, t: picked.t }].concat(eff.lines.map((t) => ({ w: 'marta', t }))), { sc: null, vp });
       if (gone()) return;
       const chips = [];
-      if (eff.rep) chips.push(chipEl(`Reputazione ${UI.signed(eff.rep)}`, eff.rep > 0 ? 'up' : 'down'));
-      if (eff.mgr) chips.push(chipEl(`Fiducia di Marta ${UI.signed(eff.mgr)}`, eff.mgr > 0 ? 'up' : 'down'));
-      if (e && eff.cat && eff.cat !== X.before) chips.push(h('span', { class: 'chip chip--accent' }, `Categoria: ${CL.catLabel(ch.was || e.cat)} → ${CL.catLabel(e.cat)}`));
+      if (!hard) {
+        if (eff.rep) chips.push(chipEl(`Reputazione ${UI.signed(eff.rep)}`, eff.rep > 0 ? 'up' : 'down'));
+        if (eff.mgr) chips.push(chipEl(`Fiducia di Marta ${UI.signed(eff.mgr)}`, eff.mgr > 0 ? 'up' : 'down'));
+        if (e && eff.cat && catBefore !== e.cat) chips.push(h('span', { class: 'chip chip--accent' }, `Categoria: ${CL.catLabel(catBefore)} → ${CL.catLabel(e.cat)}`));
+      } else if (e && eff.cat && catBefore !== e.cat) chips.push(h('span', { class: 'chip chip--accent' }, 'Categoria corretta'));
       if (eff.boost && e) chips.push(h('span', { class: 'chip chip--good' }, UI.ic('users'), hard ? `Marta ti dà una mano su ${e.sc.client}` : `Marta ti dà una mano su ${e.sc.client}: +${Math.round(eff.boost * 100)} punti`));
       if (eff.weeks) chips.push(h('span', { class: 'chip chip--bad' }, UI.ic('clock'), 'Deal review forzata: −1 settimana'));
-      if (eff.caught === false) chips.push(h('span', { class: 'chip chip--warn' }, 'Per ora la bugia regge'));
+      if (eff.caught === false && !hard) chips.push(h('span', { class: 'chip chip--warn' }, 'Per ora la bugia regge'));
       const fin = h('div', { class: 'fcfb' }, h('div', { class: 'hd' }, chips.length ? chips : h('span', { class: 'small faint' }, 'Nessun effetto')), h('div', { class: 'next', style: { padding: '0 14px 14px' } }, h('button', { class: 'btn btn--primary', 'data-next': '' }, 'Continua', UI.ic('next'))));
       area.replaceChildren(fin);
       fin.querySelector('button').focus({ preventScroll: true });
-      fin.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      UI.scrollTo(fin, 'nearest');
       S.fcPhase = 'fb';
       await new Promise((res) => { S.fcNext = res; fin.querySelector('button').addEventListener('click', res, { once: true }); });
       S.fcNext = null;
@@ -161,13 +165,14 @@
         h('div', { class: 'fctot' },
           h('div', null, h('span', { class: 'eyebrow' }, 'Commit'), h('b', null, CL.fmtK(fin.commit + run.bonusAcv))),
           h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(fin.best))),
-          h('div', null, h('span', { class: 'eyebrow' }, 'Fiducia di Marta'), h('b', null, String(run.mgr))),
-          h('div', null, h('span', { class: 'eyebrow' }, 'Reputazione'), h('b', null, String(run.rep)))),
+          hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Fiducia di Marta'), h('b', null, String(run.mgr))),
+          hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Reputazione'), h('b', null, String(run.rep)))),
+        fin.rightFirst && !hard ? h('div', { class: 'note good' }, h('b', null, `Chiamate giuste al primo colpo: ${fin.rightFirst}. `), 'Marta lo mette a verbale: la fiducia si costruisce prima di essere sfidati, non dopo.') : null,
         fin.grant ? h('div', { class: 'note ' + (fin.grant.kind === 'cut' ? 'bad' : 'good') }, fin.grant.kind === 'cut' ? h('b', null, 'Marta ritira un po’ di supporto. ') : h('b', null, 'Marta ti dà più credito. '), fin.grant.text) : null,
         h('div', { class: 'next', style: { marginTop: '14px' } }, h('button', { class: 'btn btn--primary btn--lg', 'data-next': '' }, kind === 'mid' ? 'Torna al lavoro' : 'Vai al giorno di chiusura', UI.ic('next'))));
       area.replaceChildren(done);
       done.querySelector('[data-next]').focus({ preventScroll: true });
-      done.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      UI.scrollTo(done, 'nearest');
       S.fcPhase = 'end';
       await once(done, '[data-next]');
       if (gone()) return;
@@ -191,7 +196,7 @@
     const run = S.run;
     if (!run.results.some((r) => r.status === 'pending') && !run.closing) { run.closing = []; return UI.endQuarter(); }
     if (!run.closing) {
-      CL.closeQuarter(run, run.rnd);
+      CL.closeQuarter(run, run.rnd, { shocks: UI.settings.wild !== false });
       S.fcLines = CL.fcSettle(run);
     }
     S.clo = { tok: ++S.nodeTok };
@@ -213,7 +218,7 @@
     const root = h('main', { class: 'wrap playroot fcroot' }, head, h('div', { class: 'fcgrid' }, h('div', { class: 'stagecol' }, vpHost, stage)));
     stage.addEventListener('click', (e) => { if (!e.target.closest('button, a, input, textarea') && S.skip) UI.skipReveal(); });
     const gone = () => tok !== S.nodeTok || S.screen !== 'closing';
-    const chat = (t) => ({ chat: { from: 'marta', app: 'Slack' }, t, sfx: 'ping' });
+    const chat = (t) => ({ chat: { from: 'marta', app: 'Teams' }, t, sfx: 'ping' });
     const reveal = (lines) => UI.reveal(host, lines, { sc: null, vp });
     const cats = {};
     const call = run.fc && run.fc.calls && run.fc.calls.final;
@@ -234,12 +239,13 @@
           cats[res.id] ? h('div', { class: 'mt-8' }, h('span', { class: 'chip ' + (cats[res.id] === 'commit' ? 'chip--good' : cats[res.id] === 'best' ? 'chip--warn' : '') }, 'Nel tuo forecast: ' + CL.catLabel(cats[res.id]))) : null);
         host.appendChild(h('div', { class: 'fcctx' }, UI.ic('flag'), `${sc.client}`));
         area.appendChild(card);
-        card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        UI.scrollTo(card, 'nearest');
         if (res.shock) {
           await wait(700);
           if (gone()) return;
           UI.sfx(res.shock.kind === 'pos' ? 'ping' : 'alert');
-          area.appendChild(UI.shockCard(res.shock, sc));
+          const sk = UI.shockCard(res.shock, sc, { hard });
+          area.appendChild(sk); UI.scrollTo(sk, 'nearest');
           await wait(1200);
           if (gone()) return;
         } else {
@@ -247,12 +253,12 @@
           await wait(600);
         }
         if (!hard) {
-          const p0 = Math.round(res.p * 100), p1 = Math.round((res.pFinal != null ? res.pFinal : res.p) * 100);
+          const p0 = Math.round(res.p * 100), p1 = Math.round(Math.min(1, res.pe != null ? res.pe : (res.pFinal != null ? res.pFinal : res.p)) * 100);   /* probabilità reale dell'estrazione */
           area.appendChild(h('div', { class: 'cloc-p' }, h('span', { class: 'small muted' }, 'Probabilità'), h('b', { class: 'mono' }, p0 + '%'), UI.ic('next'), h('b', { class: 'mono ' + (p1 >= p0 ? 'up' : 'down') }, p1 + '%'), res.boost ? h('span', { class: 'chip chip--good' }, 'aiuto di Marta') : null));
         }
         const open = h('div', { class: 'next', style: { marginTop: '14px' } }, h('button', { class: 'btn btn--primary btn--lg', 'data-next': '' }, 'Apri la busta', UI.ic('next')));
         area.appendChild(open);
-        const b = open.querySelector('button'); b.focus({ preventScroll: true });
+        const b = open.querySelector('button'); b.focus({ preventScroll: true }); UI.scrollTo(open, 'nearest');
         S.fcPhase = 'open';
         await new Promise((r) => { S.fcNext = r; b.addEventListener('click', r, { once: true }); });
         S.fcNext = null;
@@ -272,7 +278,7 @@
         if (gone()) return;
         const nx = h('div', { class: 'next', style: { marginTop: '14px' } }, h('button', { class: 'btn btn--primary', 'data-next': '' }, i + 1 < log.length ? 'Prossima trattativa' : 'Il forecast e il riepilogo', UI.ic('next')));
         area.appendChild(nx);
-        const nb = nx.querySelector('button'); nb.focus({ preventScroll: true });
+        const nb = nx.querySelector('button'); nb.focus({ preventScroll: true }); UI.scrollTo(nx, 'nearest');
         S.fcPhase = 'fb';
         await new Promise((r) => { S.fcNext = r; nb.addEventListener('click', r, { once: true }); });
         S.fcNext = null;
@@ -297,7 +303,7 @@
         h('div', { class: 'next', style: { marginTop: '14px' } }, h('button', { class: 'btn btn--primary btn--lg', 'data-next': '' }, 'Vai al riepilogo', UI.ic('next'))));
       area.replaceChildren(panel);
       panel.querySelector('[data-next]').focus({ preventScroll: true });
-      panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      UI.scrollTo(panel, 'nearest');
       await once(panel, '[data-next]');
       if (gone()) return;
       UI.endQuarter();
