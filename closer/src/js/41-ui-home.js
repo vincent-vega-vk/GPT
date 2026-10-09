@@ -72,7 +72,7 @@
   UI.screens.home = () => {
     const rec = UI.records();
     const best = rec.runs.slice().sort((a, b) => b.att - a.att)[0];
-    const scCount = CL.scenarios.length;
+    const scCount = new Set(CL.scenarios.map((s) => s.family)).size;   /* le trattative di un trimestre: una per famiglia */
     return h('main', { class: 'wrap' },
       h('section', { class: 'hero' },
         h('div', null,
@@ -129,7 +129,7 @@
         h('div', { class: 'kv' },
           h('div', null, h('dt', null, 'Quota'), h('dd', null, CL.fmtK(C.quota))),
           h('div', null, h('dt', null, 'Settimane'), h('dd', null, C.weeks)),
-          h('div', null, h('dt', null, 'Trattative'), h('dd', null, CL.scenarios.length)),
+          h('div', null, h('dt', null, 'Trattative'), h('dd', null, S.run ? CL.pool(S.run).length : new Set(CL.scenarios.map((s) => s.family)).size)),
           h('div', null, h('dt', null, 'Commissione'), h('dd', null, `${Math.round(C.rate1 * 100)}% / ${Math.round(C.rate2 * 100)}%`)),
           h('div', null, h('dt', null, 'Modalità'), h('dd', null, UI.settings.hard ? 'Senza rete' : 'Con cruscotto'))),
         h('div', { class: 'mt-16' },

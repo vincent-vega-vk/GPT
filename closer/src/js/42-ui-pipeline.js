@@ -107,7 +107,7 @@
     const pend = run.results.filter((r) => r.status === 'pending');
     const weighted = pend.reduce((a, r) => a + r.p * r.net, 0) + run.bonusAcv;
     const wAtt = weighted / C.quota;
-    const list = CL.scenarios.slice().sort((a, b) => a.window[0] - b.window[0]);
+    const list = CL.pool(run).slice().sort((a, b) => (career ? a.window[0] - b.window[0] : (a.tier === b.tier ? a.family.localeCompare(b.family) || a.label.localeCompare(b.label) : (a.tier === 'real' ? -1 : 1))));   /* in allenamento: prima i casi da campo */
     const scale = Math.max(1.5, wAtt * 1.05);
 
     const nextCall = !run.fc.calls.mid && week < 6 ? 'Forecast call alla settimana 6' : !run.fc.calls.mid ? 'Forecast call: dopo il prossimo deal' : 'Commit call a fine trimestre';
@@ -176,6 +176,7 @@
           h('div', null, h('div', { class: 'eyebrow' }, 'Listino'), h('div', { class: 'acv' }, CL.fmtK(sc.list))),
           h('div', { class: 'meta', style: { justifyContent: 'flex-end' } },
             career ? h('span', { class: 'chip' }, UI.ic('clock'), `${sc.cost} sett.`) : null,
+            !career ? h('span', { class: 'chip' + (sc.tier === 'real' ? ' chip--accent' : '') }, sc.tier === 'real' ? 'Caso da campo' : 'Guidato') : null,
             h('span', { class: 'chip' }, h('span', { class: 'stars' }, UI.stars(sc.stars))))),
         h('div', { class: 'row gap-8 wrapx' },
           h('span', { class: 'chip' + (scouted && sc.crm.prob >= 80 ? ' chip--warn' : '') }, `CRM ${sc.crm.cat} ${sc.crm.prob}%`),
