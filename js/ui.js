@@ -78,7 +78,8 @@
       <p><b>Obiettivo.</b> Diventare la prima potenza mondiale entro la fine della partita. Il <b>Punteggio di potenza</b> somma PIL effettivo, forza militare, tecnologia, stabilità, alleati e territorio. Vittorie anticipate: <b>Egemonica</b> (punteggio +60% sul secondo), <b>Tecnologica</b> (tutte le tecnologie ≥ 9), <b>Diplomatica</b> (tu e i tuoi alleati > 62% del PIL mondiale). Sconfitta: capitolazione o rivoluzione.</p>
       <h3>🏛️ Governo</h3><p>Ogni trimestre disponi di un bilancio pari al 2,5% del PIL. Ripartiscilo tra Difesa, Ricerca, Welfare, Infrastrutture e Diplomazia. Il moltiplicatore di spesa sopra 1,0 stimola la crescita ma gonfia il debito; sotto 1,0 accumula tesoro. Debito > 100% del PIL frena la crescita; > 160% rischia una crisi.</p>
       <h3>🔬 Tecnologia</h3><p>Scegli un focus di ricerca: l'80% dei punti va lì, il resto si spalma. L'<b>IA</b> non può superare <i>Semiconduttori + 3</i> senza accesso ai chip (produttori con livello ≥ 8 che non ti sanzionano). Difesa aerea e Ipersonici decidono quanti missili vanno a segno. Spazio ≥ 6 rivela le intenzioni ostili, ≥ 9 gli ordini nemici.</p>
-      <h3>🪖 Militare & balistica</h3><p>Gli ordini militari si risolvono <b>simultaneamente</b> a fine turno, come in Diplomacy. <b>Invasione</b>: serve confine terrestre, vicinanza marittima o marina ≥ 35. La capitale è attaccabile solo dopo aver preso metà delle altre regioni; se cade, lo stato capitola. <b>Attacco missilistico</b>: danneggia economia, esercito e stabilità, intercettato in base alla Difesa aerea. <b>Attacco nucleare</b>: devastante, ma scatena rappresaglia (MAD), sanzioni mondiali, risoluzioni ONU e fallout che deprime l'economia globale.</p>
+      <h3>🪖 Guerra in stile Diplomacy</h3><p>Il mondo è diviso in <b>192 province</b> e <b>43 zone di mare</b>. Ogni nazione schiera <b>eserciti ★</b> (solo terra) e <b>flotte ⚓</b> (mari e coste), una sola unità per provincia. Il numero di unità dipende da esercito e marina, quindi dal bilancio della Difesa. A ogni turno dai un ordine a ogni unità: <b>muovi</b> (clic sull'unità, poi sulla destinazione), <b>supporta</b> (<kbd>S</kbd>: aggiunge +1 a un attacco o a una difesa adiacente), <b>convoglia</b> (<kbd>C</kbd>: le flotte in mare trasportano un esercito oltremare) o <b>tieni</b> (<kbd>T</kbd>). Gli ordini di tutti si risolvono <b>simultaneamente</b>: vince la forza maggiore (1 + supporti), il pareggio è uno stallo, un attacco alla provincia di chi supporta ne <b>taglia il supporto</b>. Le unità sconfitte si ritirano o vengono distrutte. Un esercito che entra in territorio nemico lo conquista; presa la capitale (difesa da una guarnigione implicita) il paese capitola. Puoi entrare solo in territorio nemico, tuo o alleato (accesso militare). Gli <b>stormi aerei</b> danno +1 o annullano il supporto aereo nemico. I <b>missili</b> su una provincia sopprimono (≥ 10 colpi) o distruggono (≥ 40) l'unità che la tiene; le <b>testate nucleari</b> spazzano via tutto e irradiano la regione per 5 turni. Dopo "Fine turno" la risoluzione viene riprodotta in animazione: puoi saltarla o rivederla.</p>
+      <h3>🗡️ Accordi e tradimenti</h3><p>Come in Diplomacy puoi chiedere a un'altra nazione di supportare un tuo attacco, difendere una tua provincia, smilitarizzare un confine o concederti l'accesso militare. L'IA accetta in base a relazioni, nemici comuni e personalità, e al momento della verità può <b>tradirti</b>: lo scoprirai solo nella risoluzione.</p>
       <h3>🤝 Diplomazia</h3><p>Accordi commerciali, patti di non aggressione, alleanze difensive, ultimatum, aiuti, sanzioni, embargo sui chip, spionaggio, destabilizzazione, cyberattacchi. Le IA valutano relazioni, reputazione, interessi e paura. Violare un patto distrugge la reputazione. La NATO, il CSTO e l'AUKUS sono blocchi di difesa: attaccare un membro significa affrontare tutti. Le aggressioni senza <i>casus belli</i> (rivendicazione o sanzioni subite) provocano sanzioni e un voto all'ONU, dove i cinque membri permanenti hanno il veto.</p>
       <h3>📈 Borsa</h3><p>Investi il tesoro in indici nazionali, settori (Tech, Energia, Difesa, Agro, Finanza, Oro) e materie prime (petrolio, gas, grano, chip, terre rare). Le guerre gonfiano la Difesa e l'Oro, gli shock petroliferi l'Energia, le sanzioni ai produttori i prezzi delle materie prime. Sai in anticipo cosa farai: usalo.</p>
       <h3>📰 Eventi</h3><p>Elezioni, scandali, cyberattacchi, proteste, scoperte, pandemie, crisi finanziarie, colpi di stato: ogni scelta ha conseguenze. Le proposte delle altre nazioni arrivano a inizio turno.</p>
@@ -96,6 +97,7 @@
   // ---------- HUD -----------------------------------------------------------
   function renderHud() {
     const p = me(); const rank = E.rankOf(S, S.player);
+    const pbar = $('phaseBar'); if (pbar && !pbar.children.length) pbar.innerHTML = [['dip', '🤝 Diplomazia'], ['ord', '🎯 Ordini'], ['ris', '⚔️ Risoluzione'], ['rit', '🏃 Ritirate'], ['agg', '🛠️ Aggiustamenti']].map(([k, l], i) => `${i ? '<i>›</i>' : ''}<span data-ph="${k}" class="${k === 'ord' ? 'on' : ''}">${l}</span>`).join('');
     const port = E.portfolioValue(S);
     $('hud').innerHTML = `<span class="chip">📅 <b>${E.dateLabel(S)}</b> · turno ${S.turn}/${S.maxTurns}</span>
       <span class="chip">${p.flag} <b>${p.name}</b> · #${rank}</span>
@@ -256,12 +258,46 @@
       ${p.nuclearProgram !== undefined && p.nukes === 0 ? `<div class="box info">☢️ Programma nucleare segreto: ${Math.round(p.nuclearProgram * 100)}%. Difesa > 40% del bilancio lo accelera.</div>` : ''}
       <h4>Guerre in corso</h4>
       ${wars.length ? wars.map(w => `<div class="box" style="padding:6px 8px"><b>${w.label}</b><br><span class="small">Attaccanti: ${w.attackers.map(flagName).join(', ')}<br>Difensori: ${w.defenders.map(flagName).join(', ')}</span></div>`).join('') : '<div class="small muted">In pace. Per attaccare, dichiara guerra dal pannello della nazione.</div>'}
-      <h4>Ordini per questo turno</h4>
-      ${S.orders.length ? S.orders.map((o, i) => `<div class="order"><span>${orderLabel(o)}</span><button class="small danger" data-rm="${i}">✕</button></div>`).join('') : '<div class="small muted">Nessun ordine. Gli ordini si risolvono simultaneamente a fine turno.</div>'}
-      ${enemies.length ? `<h4>Nuovo ordine</h4><div class="row"><select id="ordTarget">${enemies.map(e => `<option value="${e}">${flagName(e)}</option>`).join('')}</select></div>
-      <div class="actions-grid"><button id="ordInvade">⚔️ Invasione</button><button id="ordStrike">🚀 Attacco missilistico</button><button id="ordCyber">💻 Cyberattacco</button><button id="ordNuke" class="danger" ${p.nukes ? '' : 'disabled'}>☢️ Attacco nucleare</button></div>` : ''}`;
+      ${E.MIL(S) ? forcesBlock(p) : ''}
+      <h4>Ordini speciali per questo turno</h4>
+      ${S.orders.length ? S.orders.map((o, i) => `<div class="order"><span>${orderLabel(o)}</span><button class="small danger" data-rm="${i}">✕</button></div>`).join('') : '<div class="small muted">Nessun ordine speciale. Gli ordini si risolvono simultaneamente a fine turno.</div>'}
+      ${enemies.length ? `<h4>Missili, testate e cyber</h4><div class="row"><select id="ordTarget">${enemies.map(e => `<option value="${e}">${flagName(e)}</option>`).join('')}</select></div>
+      <div class="actions-grid"><button id="ordStrike">🚀 Attacco missilistico</button><button id="ordCyber">💻 Cyberattacco</button><button id="ordNuke" class="danger" ${p.nukes ? '' : 'disabled'}>☢️ Attacco nucleare</button></div>` : ''}`;
   }
-  const orderLabel = (o) => ({ invade: `⚔️ Invasione di ${o.region} (${flagName(o.target)})${o.allIn ? ' — assalto totale' : ''}`, strike: `🚀 ${o.count} missili su ${flagName(o.target)}`, nuke: `☢️ ${o.count} testate su ${flagName(o.target)}`, cyber: `💻 Cyberattacco a ${flagName(o.target)}`, mobilize: '🪖 Mobilitazione generale' }[o.type]);
+  function forcesBlock(p) {
+    const M = GEO.military; const c = M.caps(S, S.player); const units = M.unitsOf(S, S.player); const gov = E.playerGoverns(S, S.player);
+    const nA = units.filter(u => u.type === 'A').length, nF = units.filter(u => u.type === 'F').length;
+    const orders = S.milOrders || {};
+    const rows = units.map(u => { const o = orders[u.id]; const selc = milSel === u.id; return `<div class="unit-row ${selc ? 'sel' : ''}" data-unit="${u.id}"><span class="ut">${u.type === 'F' ? '⚓' : '★'}</span><span class="un">${M.provName(u.loc)}</span><span class="uo ${o ? '' : 'muted'}">${o ? esc(M.describeOrder(S, u.id, o).replace(/^[AF] [^→]*?(→| tiene| sostiene| convoglia)/, (m, g) => g === '→' ? '→' : g.trim())) : 'tiene (default)'}</span>${o ? `<button class="small" data-unclear="${u.id}" title="Annulla ordine">✕</button>` : ''}</div>`; }).join('');
+    const air = Array.from({ length: c.air }, (_, i) => { const a = (S.airOrders || [])[i] || {}; return `<div class="row small"><span>✈️ Stormo ${i + 1}</span><select data-airmode="${i}" ${gov ? '' : 'disabled'}><option value="">a terra</option><option value="support" ${a.mode === 'support' ? 'selected' : ''}>supporto a</option><option value="cover" ${a.mode === 'cover' ? 'selected' : ''}>copertura su</option></select><select data-airtgt="${i}" ${gov ? '' : 'disabled'}>${a.mode === 'cover' ? airCoverOptions(a.prov) : units.map(u => `<option value="${u.id}" ${a.unit === u.id ? 'selected' : ''}>${u.type === 'F' ? '⚓' : '★'} ${M.provName(u.loc)}</option>`).join('')}</select></div>`; }).join('');
+    const sel = milSel ? M.unitById(S, milSel) : null;
+    const allies = E.alive(S).filter(id => id !== S.player && !E.playerGoverns(S, id) && !E.atWar(S, S.player, id) && E.getRel(S, S.player, id) > 10).sort((a, b) => E.getRel(S, S.player, b) - E.getRel(S, S.player, a));
+    const myMoves = units.filter(u => orders[u.id] && orders[u.id].type === 'move');
+    const agr = (S.agreements || []).filter(g => g.from === S.player && (g.turn === S.turn || g.kind === 'access'));
+    return `<h4>Forze sulla mappa</h4>
+      <div class="stat-grid"><div class="stat"><div class="l">★ Eserciti</div><div class="v">${nA}/${c.army}</div></div><div class="stat"><div class="l">⚓ Flotte</div><div class="v">${nF}/${c.fleet}</div></div><div class="stat"><div class="l">✈️ Stormi aerei</div><div class="v">${c.air}</div></div><div class="stat"><div class="l">Ordini dati</div><div class="v">${Object.keys(orders).filter(k => M.unitById(S, k)).length}/${units.length}</div></div></div>
+      <div class="small muted" style="margin:6px 0">Clicca una tua unità sulla mappa o qui sotto, poi la destinazione. <kbd>M</kbd> muovi · <kbd>S</kbd> supporta · <kbd>C</kbd> convoglia · <kbd>T</kbd> tieni · <kbd>Esc</kbd> annulla. Un'unità senza ordine tiene la posizione.</div>
+      ${sel ? `<div class="box info" style="padding:8px"><b>${sel.type === 'F' ? '⚓ Flotta' : '★ Esercito'} a ${M.provName(sel.loc)}</b><div class="mode-bar"><button class="small ${milMode === 'move' ? 'primary' : ''}" data-mmode="move">Muovi</button><button class="small ${milMode === 'support' ? 'primary' : ''}" data-mmode="support">Supporta</button>${sel.type === 'F' && !PROV[sel.loc] ? `<button class="small ${milMode === 'convoy' ? 'primary' : ''}" data-mmode="convoy">Convoglia</button>` : ''}<button class="small" data-mmode="hold">Tieni</button><button class="small" data-mmode="none">Annulla</button></div><div class="small muted">${{ move: 'Clicca una provincia evidenziata.', support: milSupTarget ? 'Clicca l’unità supportata (difesa) o la sua destinazione.' : 'Clicca l’unità da supportare.', convoy: milSupTarget ? 'Clicca la costa di sbarco.' : 'Clicca l’esercito da convogliare.' }[milMode]}</div></div>` : ''}
+      <div class="unit-list">${rows || '<div class="small muted">Nessuna unità.</div>'}</div>
+      ${gov && units.length ? `<div class="row" style="margin-top:6px"><button class="small" id="ordAllHold">Tutti tengono</button><button class="small" id="ordClearAll">Cancella ordini</button><button class="small" id="btnReplay" ${S.lastResolution ? '' : 'disabled'}>▶ Rivedi ultimo turno</button></div>` : ''}
+      ${c.air ? `<h4>Stormi aerei</h4><div class="small muted">Supporto: +1 alla forza di un'unità entro 2 passi dal tuo territorio o da un alleato. Copertura: annulla un supporto aereo nemico su quella provincia.</div>${air}` : ''}
+      ${gov && allies.length ? `<h4>🤝 Accordi militari</h4><div class="small muted">Come in Diplomacy: chiedi aiuto, ma l’IA può tradirti. Lealtà e relazioni decidono se manterrà la parola.</div>
+        <div class="row"><select id="agrNation">${allies.map(id => `<option value="${id}">${flagName(id)} (${E.getRel(S, S.player, id)})</option>`).join('')}</select></div>
+        <div class="row"><select id="agrKind"><option value="support_move">Supporta un mio movimento</option><option value="support_hold">Supporta una mia difesa</option><option value="dmz">Zona smilitarizzata</option><option value="access">Accesso militare (8 turni)</option></select>
+        <select id="agrParam">${myMoves.map(u => `<option value="move:${u.id}">${M.describeOrder(S, u.id, orders[u.id])}</option>`).join('')}${units.map(u => `<option value="hold:${u.loc}">difesa di ${M.provName(u.loc)}</option>`).join('')}</select><button class="small primary" id="agrSend">Chiedi</button></div>
+        ${agr.length ? agr.map(g => `<div class="small">• ${flagName(g.to)}: ${GEO.military.AGREEMENTS[g.kind]}${g.params && g.params.to ? ' verso ' + M.provName(g.params.to) : g.params && g.params.prov ? ' su ' + M.provName(g.params.prov) : ''}</div>`).join('') : ''}` : ''}
+      ${lastTurnBlock()}`;
+  }
+  function airCoverOptions(cur) { const M = GEO.military; const enemies = E.enemiesOf(S, S.player); const provs = new Set(); M.unitsOf(S, S.player).forEach(u => { provs.add(u.loc); (M.legalMoves(S, u.id) || []).forEach(x => provs.add(x)); }); enemies.forEach(e => M.unitsOf(S, e).forEach(u => provs.add(u.loc))); return [...provs].map(p => `<option value="${p}" ${cur === p ? 'selected' : ''}>${M.provName(p)}</option>`).join(''); }
+  function lastTurnBlock() {
+    const R = S.lastResolution; if (!R || !R.events) return '';
+    const mine = R.events.filter(e => e.owner === S.player || e.from === S.player || e.to === S.player || (e.type === 'battle' && e.attackers && e.attackers.some(id => (R.before || []).some(u => u.id === id && u.owner === S.player))));
+    if (!mine.length) return '';
+    const M = GEO.military; const icon = { move: '➡️', bounce: '↩️', dislodge: '💥', retreat: '🏃', destroy: '☠️', capture: '🚩', build: '🛠️', disband: '📦', strike: '🚀', nuke: '☢️', betrayal: '🗡️', invalid: '⚠️', battle: '⚔️' };
+    const txt = (e) => ({ move: () => `${M.provName(e.from)} → ${M.provName(e.to)} ${e.ok ? '<span class="good">riuscito</span>' : '<span class="bad">fallito</span>'}`, bounce: () => `stallo verso ${M.provName(e.to)}`, dislodge: () => `unità sloggiata da ${M.provName(e.at)}`, retreat: () => `ritirata ${M.provName(e.from)} → ${M.provName(e.to)}`, destroy: () => `unità distrutta a ${M.provName(e.at)}`, capture: () => `${M.provName(e.prov)} passa a ${flagName(e.to)}`, build: () => `nuova unità a ${M.provName(e.at)}`, disband: () => `unità sciolta a ${M.provName(e.at)}`, strike: () => `${e.hits} missili a segno su ${M.provName(e.prov)}`, nuke: () => `testate su ${M.provName(e.prov)}`, betrayal: () => esc(e.text || 'tradimento'), invalid: () => esc(e.reason || 'ordine non valido'), battle: () => `battaglia a ${M.provName(e.at)}` }[e.type] || (() => e.type))();
+    return `<h4>Esito del turno precedente</h4>${mine.filter(e => e.type !== 'hold' && e.type !== 'support').slice(0, 14).map(e => `<div class="small">${icon[e.type] || '•'} ${txt(e)}</div>`).join('')}`;
+  }
+  const orderLabel = (o) => ({ invade: `⚔️ Invasione di ${o.region} (${flagName(o.target)})${o.allIn ? ' — assalto totale' : ''}`, strike: `🚀 ${o.count} missili su ${flagName(o.target)}${o.prov && GEO.military ? ' (' + GEO.military.provName(o.prov) + ')' : ''}`, nuke: `☢️ ${o.count} testate su ${flagName(o.target)}${o.prov && GEO.military ? ' (' + GEO.military.provName(o.prov) + ')' : ''}`, cyber: `💻 Cyberattacco a ${flagName(o.target)}`, mobilize: '🪖 Mobilitazione generale' }[o.type]);
 
   function marketPanel(p) {
     const M = S.market; const H = S.portfolio.holdings;
@@ -293,11 +329,24 @@
     const mob = $('ordMobilize'); if (mob) mob.onclick = () => { if (me().treasury < 15) return toast('Tesoro insufficiente.'); E.addOrder(S, { type: 'mobilize', cost: 15 }); renderAll(); };
     document.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { E.removeOrder(S, +b.dataset.rm); renderAll(); });
     const tgt = () => $('ordTarget').value;
-    const inv = $('ordInvade'); if (inv) inv.onclick = () => orderInvade(tgt());
     const st = $('ordStrike'); if (st) st.onclick = () => orderStrike(tgt());
     const cy = $('ordCyber'); if (cy) cy.onclick = () => { E.addOrder(S, { type: 'cyber', target: tgt() }); renderAll(); };
     const nk = $('ordNuke'); if (nk) nk.onclick = () => orderNuke(tgt());
     const bp = $('btnProposals'); if (bp) bp.onclick = showProposals;
+    document.querySelectorAll('[data-unit]').forEach(r => r.onclick = (ev) => { if (ev.target.closest('button')) return; if (!E.playerGoverns(S, S.player)) return; selectUnit(r.dataset.unit === milSel ? null : r.dataset.unit); renderLeft(); });
+    document.querySelectorAll('[data-unclear]').forEach(b => b.onclick = () => { setOrder(b.dataset.unclear, null); renderLeft(); drawMap(); });
+    document.querySelectorAll('[data-mmode]').forEach(b => b.onclick = () => { const m = b.dataset.mmode; if (m === 'none') selectUnit(null); else if (m === 'hold') { setOrder(milSel, { type: 'hold' }); selectUnit(null); } else selectUnit(milSel, m); renderLeft(); });
+    const ah = $('ordAllHold'); if (ah) ah.onclick = () => { GEO.military.unitsOf(S, S.player).forEach(u => setOrder(u.id, { type: 'hold' })); renderLeft(); drawMap(); };
+    const ca = $('ordClearAll'); if (ca) ca.onclick = () => { S.milOrders = {}; renderLeft(); drawMap(); };
+    const rp = $('btnReplay'); if (rp) rp.onclick = () => replayLast();
+    document.querySelectorAll('[data-airmode]').forEach(sel => sel.onchange = () => { const i = +sel.dataset.airmode; S.airOrders = S.airOrders || []; const m = sel.value; if (!m) S.airOrders[i] = null; else S.airOrders[i] = { owner: S.player, type: 'air', mode: m, ...(m === 'support' ? { unit: (GEO.military.unitsOf(S, S.player)[0] || {}).id } : { prov: (GEO.military.unitsOf(S, S.player)[0] || {}).loc }) }; S.airOrders = S.airOrders.filter((x, k) => x || k < S.airOrders.length); renderLeft(); });
+    document.querySelectorAll('[data-airtgt]').forEach(sel => sel.onchange = () => { const i = +sel.dataset.airtgt; const a = (S.airOrders || [])[i]; if (!a) return; if (a.mode === 'cover') a.prov = sel.value; else a.unit = sel.value; });
+    const ag = $('agrSend'); if (ag) ag.onclick = () => {
+      const to = $('agrNation').value, kind = $('agrKind').value, par = $('agrParam').value || ''; const [pk, pv] = par.split(':'); let params = {};
+      if (kind === 'support_move') { if (pk !== 'move') return toast('⚠️ Prima dai a una tua unità un ordine di movimento, poi chiedi il supporto.'); const o = S.milOrders[pv]; const u = GEO.military.unitById(S, pv); params = { unitFrom: u.loc, to: o.to }; }
+      else if (kind === 'support_hold' || kind === 'dmz') { params = { prov: pk === 'hold' ? pv : (GEO.military.unitById(S, pv) || {}).loc }; }
+      const r = GEO.military.requestAgreement(S, S.player, to, kind, params); renderAll(); toast(r.ok ? `🤝 ${flagName(to)} accetta: ${GEO.military.AGREEMENTS[kind]}.` : `${flagName(to)} rifiuta: ${r.reason}`);
+    };
     const PL = GEO.politics;
     const act = (fn) => { const r = fn(); renderAll(); if (!r.ok) toast(`⚠️ ${r.reason}`); };
     const pd = $('payDebt'); if (pd) pd.onclick = () => act(() => PL.payDebt(S, S.player, +$('debtAmt').value));
@@ -316,27 +365,20 @@
     const sa = $('sellAll'); if (sa) sa.onclick = () => { Object.keys(S.portfolio.holdings).forEach(k => E.trade(S, k, -1e12)); renderAll(); };
   }
 
-  function orderInvade(target) {
-    const t = N(target); const reach = E.canReach(S, S.player, target);
-    if (!reach.ok) return toast(`Non puoi raggiungere ${t.name}: serve un confine, vicinanza marittima o marina ≥ 35.`);
-    const regions = t.regions.filter(r => (r.controller || target) === target);
-    const p = me();
-    const ratio = (E.milPower(p) * reach.mult) / Math.max(1, E.milPower(t) * 1.5);
-    openModal({ title: `⚔️ Invasione di ${flagName(target)}`, body: `<p>Rapporto di forze stimato: <b class="${ratio > 1.3 ? 'good' : ratio > 0.9 ? 'warn' : 'bad'}">${ratio.toFixed(2)}</b> ${reach.naval ? '(sbarco anfibio: −40%)' : ''}. La capitale ★ è attaccabile solo dopo aver preso metà delle altre regioni.</p>
-      <div class="row"><label>Regione obiettivo <select id="invRegion">${regions.map(r => `<option value="${r.name}">${r.capital ? '★ ' : ''}${r.name} (${Math.round(r.share * 100)}% PIL)</option>`).join('')}</select></label></div>
-      <div class="row"><label><input type="checkbox" id="invAllIn"> Assalto totale (+25% potenza, perdite +40%)</label></div>`, foot: `<button id="invNo">Annulla</button><button id="invOk" class="danger">Ordina l'offensiva</button>` });
-    $('invNo').onclick = closeModal; $('invOk').onclick = () => { E.addOrder(S, { type: 'invade', target, region: $('invRegion').value, allIn: $('invAllIn').checked }); closeModal(); renderAll(); };
-  }
   function orderStrike(target) {
     const p = me(); const t = N(target);
     const intercept = Math.max(2, Math.min(92, Math.round((t.tech.defense * 0.08 + t.tech.space * 0.01 - p.tech.hyper * 0.05) * 100)));
-    openModal({ title: `🚀 Attacco missilistico su ${flagName(target)}`, body: `<p>Hai <b>${p.missiles}</b> missili. Intercettazione stimata: <b>${intercept}%</b>. Ogni missile a segno: −0,12% PIL, −0,25 esercito, −0,2 stabilità al bersaglio.</p><div class="row"><label>Numero missili <input type="number" id="strikeN" value="${Math.min(p.missiles, 50)}" min="1" max="${p.missiles}"></label></div>`, foot: `<button id="sNo">Annulla</button><button id="sOk" class="danger">Ordina il lancio</button>` });
-    $('sNo').onclick = closeModal; $('sOk').onclick = () => { const n = Math.max(1, Math.min(p.missiles, +$('strikeN').value)); E.addOrder(S, { type: 'strike', target, count: n }); closeModal(); renderAll(); };
+    openModal({ title: `🚀 Attacco missilistico su ${flagName(target)}`, body: `<p>Hai <b>${p.missiles}</b> missili. Intercettazione stimata: <b>${intercept}%</b>. Ogni missile a segno danneggia PIL, esercito e stabilità del bersaglio. Sulla provincia scelta: con ≥ 10 colpi l'unità nemica è <b>soppressa</b> (supporto tagliato), con ≥ 40 è <b>distrutta</b>.</p>${provSelect(target, 'strikeProv')}<div class="row"><label>Numero missili <input type="number" id="strikeN" value="${Math.min(p.missiles, 50)}" min="1" max="${p.missiles}"></label></div>`, foot: `<button id="sNo">Annulla</button><button id="sOk" class="danger">Ordina il lancio</button>` });
+    $('sNo').onclick = closeModal; $('sOk').onclick = () => { const n = Math.max(1, Math.min(p.missiles, +$('strikeN').value)); const pv = $('strikeProv') ? $('strikeProv').value : undefined; E.addOrder(S, { type: 'strike', target, count: n, prov: pv }); closeModal(); renderAll(); };
+  }
+  function provSelect(target, id) {
+    if (!E.MIL(S)) return ''; const M = GEO.military; const provs = new Set(M.controlled(S, target)); M.unitsOf(S, target).forEach(u => provs.add(u.loc));
+    return `<div class="row"><label>Provincia bersaglio <select id="${id}">${[...provs].map(pv => { const u = M.unitAt(S, pv); return `<option value="${pv}" ${PROV[pv] && PROV[pv].capital && PROV[pv].nation === target ? 'selected' : ''}>${M.provName(pv)}${u ? ` — ${u.type === 'F' ? '⚓' : '★'} ${S.nations[u.owner].flag}` : ''}</option>`; }).join('')}</select></label></div>`;
   }
   function orderNuke(target) {
     const p = me(); const t = N(target);
-    openModal({ title: `☢️ ATTACCO NUCLEARE su ${flagName(target)}`, body: `<div class="box alert"><b>Attenzione.</b> ${t.nukes > 0 ? `${t.name} possiede ${t.nukes} testate: la rappresaglia è certa (distruzione reciproca assicurata).` : `${t.name} non ha armi nucleari${E.alliesOf(S, target).some(a => N(a).nukes > 50) ? ', ma un suo alleato nucleare potrebbe rispondere' : ''}.`} Il mondo intero ti sanzionerà, la tua reputazione crollerà, l'ONU voterà contro di te, il fallout deprimerà l'economia globale per anni e la tua stabilità interna precipiterà.</div><div class="row"><label>Testate <input type="number" id="nukeN" value="${Math.min(p.nukes, 5)}" min="1" max="${p.nukes}"></label></div>`, foot: `<button id="nNo" class="primary">Torna indietro</button><button id="nOk" class="danger">Autorizzo il lancio</button>` });
-    $('nNo').onclick = closeModal; $('nOk').onclick = () => { const n = Math.max(1, Math.min(p.nukes, +$('nukeN').value)); closeModal(); confirmDlg('Conferma finale', `Confermi il lancio di ${n} testate nucleari su ${t.name}? Non si torna indietro.`, 'LANCIO', () => { E.addOrder(S, { type: 'nuke', target, count: n }); renderAll(); }, true); };
+    openModal({ title: `☢️ ATTACCO NUCLEARE su ${flagName(target)}`, body: `<div class="box alert"><b>Attenzione.</b> ${t.nukes > 0 ? `${t.name} possiede ${t.nukes} testate: la rappresaglia è certa (distruzione reciproca assicurata).` : `${t.name} non ha armi nucleari${E.alliesOf(S, target).some(a => N(a).nukes > 50) ? ', ma un suo alleato nucleare potrebbe rispondere' : ''}.`} Il mondo intero ti sanzionerà, la tua reputazione crollerà, l'ONU voterà contro di te, il fallout deprimerà l'economia globale per anni e la tua stabilità interna precipiterà.</div>${provSelect(target, 'nukeProv')}<div class="row"><label>Testate <input type="number" id="nukeN" value="${Math.min(p.nukes, 5)}" min="1" max="${p.nukes}"></label></div>`, foot: `<button id="nNo" class="primary">Torna indietro</button><button id="nOk" class="danger">Autorizzo il lancio</button>` });
+    $('nNo').onclick = closeModal; $('nOk').onclick = () => { const n = Math.max(1, Math.min(p.nukes, +$('nukeN').value)); const pv = $('nukeProv') ? $('nukeProv').value : undefined; closeModal(); confirmDlg('Conferma finale', `Confermi il lancio di ${n} testate nucleari su ${t.name}? Non si torna indietro.`, 'LANCIO', () => { E.addOrder(S, { type: 'nuke', target, count: n, prov: pv }); renderAll(); }, true); };
   }
 
   // ---------- Pannello destro -----------------------------------------------
@@ -496,14 +538,34 @@
   }
 
   // ---------- Fine turno -----------------------------------------------------
+  let animOn = true, animSpeed = 1;
+  try { animOn = localStorage.getItem('geo_anim') !== 'off'; animSpeed = +(localStorage.getItem('geo_anim_speed') || 1); } catch (e) { /* storage non disponibile */ }
+  const PHASE_OF = { strike: 'ris', nuke: 'ris', air: 'ris', move: 'ris', battle: 'ris', retreat: 'rit', capture: 'agg', adjust: 'agg', diplomacy: 'dip' };
+  function setPhase(ph) { const key = ph ? (PHASE_OF[ph] || ph) : 'ord'; document.querySelectorAll('#phaseBar span').forEach(x => x.classList.toggle('on', x.dataset.ph === key)); const pb = $('pbPhase'); if (pb && ph) pb.textContent = { strike: '🚀 Attacchi missilistici', nuke: '☢️ Attacchi nucleari', air: '✈️ Operazioni aeree', move: '➡️ Movimenti simultanei', battle: '⚔️ Battaglie', retreat: '🏃 Ritirate', capture: '🚩 Conquiste', adjust: '🛠️ Aggiustamenti', diplomacy: '🗡️ Accordi e tradimenti' }[ph] || ph; }
+  function showPlaybackBar() {
+    let bar = $('playbackBar'); if (!bar) { bar = document.createElement('div'); bar.id = 'playbackBar'; $('mapWrap').appendChild(bar); }
+    bar.innerHTML = `<span class="ph" id="pbPhase">Risoluzione del turno…</span>${[0.5, 1, 2, 4].map(v => `<button class="small ${v === animSpeed ? 'primary' : ''}" data-spd="${v}">${v}×</button>`).join('')}<button class="small primary" id="pbSkip">Salta ⏭</button>`;
+    bar.querySelectorAll('[data-spd]').forEach(b => b.onclick = () => { animSpeed = +b.dataset.spd; try { localStorage.setItem('geo_anim_speed', animSpeed); } catch (e) { /* ignora */ } if (GEO.anim.setSpeed) GEO.anim.setSpeed(animSpeed); bar.querySelectorAll('[data-spd]').forEach(x => x.classList.toggle('primary', +x.dataset.spd === animSpeed)); });
+    $('pbSkip').onclick = () => { if (GEO.anim.skip) GEO.anim.skip(); };
+  }
+  function hidePlaybackBar() { const bar = $('playbackBar'); if (bar) bar.remove(); }
+  function playResolution(res) {
+    if (!GEO.anim || !GEO.anim.play || !res) return Promise.resolve();
+    playing = true; milSel = null; milTargets = []; drawMap(); showPlaybackBar(); setPhase('strike');
+    let p; try { p = GEO.anim.play(res, { speed: animSpeed, onPhase: (ph) => setPhase(ph) }); } catch (e) { console.warn(e); p = Promise.resolve(); }
+    return Promise.resolve(p).catch(e => console.warn(e)).then(() => { playing = false; hidePlaybackBar(); setPhase(null); drawMap(); });
+  }
+  function replayLast() { if (!S || !S.lastResolution || playing) return; playResolution(S.lastResolution).then(() => renderAll()); }
   function endTurn() {
-    if (!S || S.gameOver) return;
+    if (!S || S.gameOver || playing) return;
     if (S.pendingEvents.length) return showEvents(() => endTurn());
+    milSel = null; milTargets = []; milSupTarget = null;
     E.endTurn(S);
     save(true);
-    renderAll();
-    if (S.gameOver) return showGameOver();
-    showTurnReport(() => showAlerts(() => showEvents(() => showProposals())));
+    const after = () => { renderAll(); if (S.gameOver) return showGameOver(); showTurnReport(() => showAlerts(() => showEvents(() => showProposals()))); };
+    const R = S.lastResolution;
+    const worth = R && R.turn === S.turn - 1 && (R.events || []).some(e => e.type !== 'hold' && e.type !== 'support' && e.type !== 'invalid');
+    if (animOn && worth && GEO.anim) { renderHud(); renderNews(); playResolution(R).then(after); } else after();
   }
   function showAlerts(then) {
     if (!S.alerts || !S.alerts.length) { if (then) then(); return; }
@@ -552,7 +614,8 @@
 
   // ---------- Mappa (confini reali Natural Earth) ----------------------------
   const canvas = $('map'); const ctx = canvas.getContext('2d');
-  let mapW = 0, mapH = 0, hover = null, mapMode = 'stato';
+  let mapW = 0, mapH = 0, hover = null, hoverProv = null, mapMode = 'stato';
+  let milSel = null, milMode = 'move', milTargets = [], milSupTarget = null, playing = false, fxCanvas = null;
   const view = { k: 1, tx: 0, ty: 0 };
   let base = { s: 1, ox: 0, oy: 0 };
   const proj = (lon, lat) => [(base.ox + (lon + 180) * base.s) * view.k + view.tx, (base.oy + (84 - lat) * base.s) * view.k + view.ty];
@@ -564,7 +627,29 @@
   Object.assign(labelPt, { USA: [-98, 39.5], CAN: [-105, 60], RUS: [95, 62], FRA: [2.5, 46.5], NOR: [9, 61.5], CHL: [-70.5, -27], ARG: [-64, -37], IDN: [113, -1], PHL: [122, 12], MYS: [102, 4], NZL: [172, -42], JPN: [138, 36.5], GBR: [-2, 53.5], ITA: [12.5, 42.5], VNM: [106, 16], GRC: [22, 39.5], HRV: [16, 45] });
   const pointInRing = (x, y, r) => { let inside = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside; } return inside; };
   const isoAt = (lon, lat) => { for (const iso of Object.keys(WORLD)) { const b = bboxes[iso]; if (lon < b[0] || lon > b[2] || lat < b[1] || lat > b[3]) continue; if (WORLD[iso].some(r => pointInRing(lon, lat, r))) return iso; } return null; };
-  function resizeMap() { const r = $('mapWrap').getBoundingClientRect(); const dpr = window.devicePixelRatio || 1; mapW = r.width; mapH = r.height; canvas.width = mapW * dpr; canvas.height = mapH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); const sc = Math.min(mapW / 360, mapH / 144) * 1.04; base = { s: sc, ox: (mapW - 360 * sc) / 2, oy: (mapH - 144 * sc) / 2 }; drawMap(); }
+  // ---- Province: celle di Voronoi degli ancoraggi, ritagliate sul poligono reale del paese ----
+  const PROV = GEO.PROVINCES || {}, SEAS = GEO.SEAS || {};
+  const provByNation = {}; Object.values(PROV).forEach(p => (provByNation[p.nation] = provByNation[p.nation] || []).push(p));
+  const clipHalf = (poly, a, b) => { // tiene i punti più vicini ad a che a b
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, nx = b[0] - a[0], ny = b[1] - a[1];
+    const f = (q) => (q[0] - mx) * nx + (q[1] - my) * ny; const out = [];
+    for (let i = 0; i < poly.length; i++) { const P = poly[i], Q = poly[(i + 1) % poly.length]; const fp = f(P), fq = f(Q); if (fp <= 0) out.push(P); if ((fp <= 0) !== (fq <= 0)) { const t = fp / (fp - fq); out.push([P[0] + (Q[0] - P[0]) * t, P[1] + (Q[1] - P[1]) * t]); } }
+    return out;
+  };
+  const CELLS = {};
+  Object.entries(provByNation).forEach(([nat, list]) => {
+    const b = bboxes[nat] || [-180, -60, 180, 84]; const box = [[b[0] - 1, b[1] - 1], [b[2] + 1, b[1] - 1], [b[2] + 1, b[3] + 1], [b[0] - 1, b[3] + 1]];
+    list.forEach(p => { let poly = box; list.forEach(q => { if (q !== p && poly.length) poly = clipHalf(poly, [p.lon, p.lat], [q.lon, q.lat]); }); CELLS[p.id] = poly; });
+  });
+  const provAt = (lon, lat) => { const iso = isoAt(lon, lat); if (iso && provByNation[iso]) { let best = null, bd = 1e9; provByNation[iso].forEach(p => { const d = (p.lon - lon) ** 2 + (p.lat - lat) ** 2; if (d < bd) { bd = d; best = p.id; } }); return best; } if (iso) return null; let best = null, bd = 1e9; Object.values(SEAS).forEach(z => { const d = (z.lon - lon) ** 2 + (z.lat - lat) ** 2; if (d < bd) { bd = d; best = z.id; } }); return bd < 900 ? best : null; };
+  const provPos = (id) => PROV[id] ? [PROV[id].lon, PROV[id].lat] : SEAS[id] ? [SEAS[id].lon, SEAS[id].lat] : null;
+  const provName = (id) => PROV[id] ? PROV[id].name : SEAS[id] ? SEAS[id].name : id;
+  const provCtrl = (id) => { const p = PROV[id]; if (!p || !S) return null; const r = S.nations[p.nation].regions[p.idx]; return (r && r.controller) || p.nation; };
+  function initFx() {
+    if (fxCanvas || !GEO.anim || !GEO.anim.init) return; fxCanvas = $('fx'); if (!fxCanvas) return;
+    try { GEO.anim.init({ canvas: fxCanvas, proj: (lon, lat) => proj(lon, lat), provPos, nationColor: (id) => (S && S.nations[id] ? S.nations[id].color : '#888'), flag: (id) => (S && S.nations[id] ? S.nations[id].flag : ''), unitSize: () => unitR(), isMine: (id) => S && id === S.player }); } catch (e) { console.warn('anim init', e); fxCanvas = null; }
+  }
+  function resizeMap() { initFx(); const r = $('mapWrap').getBoundingClientRect(); const dpr = window.devicePixelRatio || 1; mapW = r.width; mapH = r.height; canvas.width = mapW * dpr; canvas.height = mapH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if (fxCanvas) { fxCanvas.width = mapW * dpr; fxCanvas.height = mapH * dpr; if (GEO.anim.resize) GEO.anim.resize(mapW, mapH, dpr); } const sc = Math.min(mapW / 360, mapH / 144) * 1.04; base = { s: sc, ox: (mapW - 360 * sc) / 2, oy: (mapH - 144 * sc) / 2 }; drawMap(); }
   function zoomAt(mx, my, factor) { const k2 = Math.max(1, Math.min(8, view.k * factor)); const f = k2 / view.k; view.tx = mx - (mx - view.tx) * f; view.ty = my - (my - view.ty) * f; view.k = k2; clampView(); drawMap(); }
   function clampView() { if (view.k === 1) { view.tx = 0; view.ty = 0; return; } view.tx = Math.min(0, Math.max(mapW - mapW * view.k, view.tx)); view.ty = Math.min(0, Math.max(mapH - mapH * view.k, view.ty)); }
   let drag = null;
@@ -618,13 +703,14 @@
       ctx.strokeStyle = playable ? 'rgba(10,14,28,.9)' : 'rgba(40,50,80,.8)'; ctx.lineWidth = playable ? 0.9 : 0.6; ctx.stroke();
     });
     // occupazioni (strisce nel colore dell'occupante) e irradiazioni
-    E.alive(S).forEach(id => {
+    if (Object.keys(PROV).length) drawProvinces(); else E.alive(S).forEach(id => {
       const n = N(id); if (!WORLD[id]) return;
       const occ = n.regions.filter(r => r.controller && r.controller !== id);
       if (occ.length) { const by = occ.sort((a, b) => b.share - a.share)[0].controller; const share = E.occupiedShare(n); ctx.save(); pathOf(id); ctx.clip(); const b = bboxes[id]; const [x0, y0] = proj(b[0], b[3]), [x1, y1] = proj(b[2], b[1]); ctx.strokeStyle = N(by).color; ctx.lineWidth = 2; const step = 7; for (let x = x0 - (y1 - y0); x < x1; x += step) { ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + (y1 - y0), y1); ctx.stroke(); } ctx.restore(); ctx.save(); pathOf(id); ctx.clip(); ctx.fillStyle = `rgba(255,60,60,${0.15 + share * 0.3})`; ctx.fillRect(0, 0, mapW, mapH); ctx.restore(); }
       if (n.regions.some(r => r.irradiatedUntil && r.irradiatedUntil > S.turn)) { ctx.save(); pathOf(id); ctx.clip(); ctx.fillStyle = 'rgba(200,255,80,.18)'; ctx.fillRect(0, 0, mapW, mapH); ctx.restore(); }
     });
     // evidenziazioni
+    if (hoverProv && CELLS[hoverProv] && WORLD[PROV[hoverProv].nation]) { ctx.save(); pathOf(PROV[hoverProv].nation); ctx.clip(); cellPath(hoverProv); ctx.fillStyle = 'rgba(255,255,255,.10)'; ctx.fill(); ctx.restore(); }
     if (hover && WORLD[hover]) { pathOf(hover); ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 1.5; ctx.stroke(); }
     if (sel && WORLD[sel]) { pathOf(sel); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.5; ctx.stroke(); }
     if (WORLD[S.player]) { pathOf(S.player); ctx.strokeStyle = '#f5b942'; ctx.lineWidth = 2; ctx.stroke(); }
@@ -645,8 +731,76 @@
       const icons = (E.warsOf(S, id).length ? '⚔️' : '') + (n.nukes > 0 ? '☢' : '') + (n.suzerain ? '⛓' : '') + (n.regions.some(r => r.irradiatedUntil > S.turn) ? '☣' : '');
       if (icons) { ctx.font = `${Math.max(9, fs - 1)}px sans-serif`; ctx.fillStyle = '#fff'; ctx.fillText(icons, x, y + fs); }
     });
+    if (E.MIL(S)) { drawLegalTargets(); if (!playing) { drawOrders(); drawUnits(); } updateAmbient(); }
     if (view.k > 1) { ctx.font = '11px sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillText(`zoom ${view.k.toFixed(1)}× · doppio clic per resettare`, mapW - 10, mapH - 36); }
     renderLegend();
+  }
+  function cellPath(id) { const c = CELLS[id]; ctx.beginPath(); c.forEach(([lon, lat], i) => { const [x, y] = proj(lon, lat); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); }
+  function stripes(color, bb) { const [x0, y0] = proj(bb[0], bb[3]), [x1, y1] = proj(bb[2], bb[1]); ctx.strokeStyle = color; ctx.lineWidth = 2; const h = y1 - y0; for (let x = x0 - h; x < x1; x += 7) { ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + h, y1); ctx.stroke(); } }
+  function drawProvinces() {
+    Object.entries(provByNation).forEach(([nat, list]) => {
+      const n = S.nations[nat]; if (!WORLD[nat] || !n) return;
+      ctx.save(); pathOf(nat); ctx.clip();
+      list.forEach(p => {
+        const r = n.regions[p.idx]; const ctrl = (r && r.controller) || nat;
+        if (ctrl !== nat) {
+          if (mapMode === 'stato') { cellPath(p.id); ctx.fillStyle = nationStatus(ctrl).c; ctx.fill(); }
+          ctx.save(); cellPath(p.id); ctx.clip(); ctx.fillStyle = 'rgba(255,60,60,.18)'; ctx.fillRect(0, 0, mapW, mapH); stripes(S.nations[ctrl] ? S.nations[ctrl].color : '#ff5c5c', bboxes[nat]); ctx.restore();
+        }
+        if (r && r.irradiatedUntil > S.turn) { cellPath(p.id); ctx.fillStyle = 'rgba(200,255,80,.28)'; ctx.fill(); }
+      });
+      ctx.strokeStyle = 'rgba(6,10,20,.6)'; ctx.lineWidth = 0.7; list.forEach(p => { cellPath(p.id); ctx.stroke(); });
+      ctx.restore();
+    });
+    if (view.k >= 1.3) {
+      Object.values(PROV).forEach(p => { const [x, y] = proj(p.lon, p.lat); if (p.capital) { ctx.fillStyle = '#ffe08a'; star(x, y - 9, 4.5); } else if (p.sc) { ctx.beginPath(); ctx.arc(x, y - 8, 2.2, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,224,138,.85)'; ctx.fill(); } });
+    }
+    if (view.k >= 2) {
+      ctx.font = `italic ${Math.min(12, 8 + view.k)}px Segoe UI, sans-serif`; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(140,170,220,.55)';
+      Object.values(SEAS).forEach(z => { const [x, y] = proj(z.lon, z.lat); ctx.fillText(z.name, x, y + 16); });
+    }
+    if (view.k >= 3) {
+      ctx.font = `${Math.min(11, 6 + view.k)}px Segoe UI, sans-serif`; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(230,235,245,.75)';
+      Object.values(PROV).forEach(p => { const [x, y] = proj(p.lon, p.lat); ctx.fillText(p.name, x, y + 14); });
+    }
+  }
+  function star(x, y, r) { ctx.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r; ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } ctx.closePath(); ctx.fill(); }
+  // ---- Unità e ordini ----
+  const unitR = () => 5 + Math.min(9, view.k * 1.6);
+  const unitXY = (u) => { const pp = provPos(u.loc); return pp ? proj(pp[0], pp[1]) : null; };
+  function drawUnitToken(u, x, y, opts = {}) {
+    const n = S.nations[u.owner]; const r = unitR() * (opts.scale || 1);
+    if (GEO.anim && GEO.anim.drawUnit) { try { GEO.anim.drawUnit(ctx, x, y, u, { color: n ? n.color : '#888', flag: n ? n.flag : '', size: r, selected: opts.selected, mine: u.owner === S.player, alpha: opts.alpha }); return; } catch (e) { /* fallback sotto */ } }
+    ctx.save(); ctx.globalAlpha = opts.alpha ?? 1; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 4;
+    ctx.fillStyle = n ? n.color : '#888'; ctx.strokeStyle = u.owner === S.player ? '#ffe08a' : '#0b1020'; ctx.lineWidth = opts.selected ? 3 : 1.6;
+    ctx.beginPath(); if (u.type === 'F') { ctx.moveTo(x - r * 1.2, y - r * 0.2); ctx.lineTo(x + r * 1.2, y - r * 0.2); ctx.lineTo(x + r * 0.7, y + r * 0.6); ctx.lineTo(x - r * 0.7, y + r * 0.6); ctx.closePath(); } else { ctx.roundRect ? ctx.roundRect(x - r, y - r * 0.75, r * 2, r * 1.5, r * 0.4) : ctx.rect(x - r, y - r * 0.75, r * 2, r * 1.5); }
+    ctx.fill(); ctx.shadowBlur = 0; ctx.stroke(); ctx.fillStyle = '#fff'; ctx.font = `bold ${Math.round(r * 0.95)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(u.type === 'F' ? '⚓' : '★', x, y); ctx.restore();
+  }
+  function drawUnits() {
+    (S.units || []).forEach(u => { const xy = unitXY(u); if (!xy) return; drawUnitToken(u, xy[0], xy[1], { selected: milSel === u.id }); });
+  }
+  function arrowXY(x1, y1, x2, y2, color, w = 2.5, dash) { const ang = Math.atan2(y2 - y1, x2 - x1); const back = unitR() + 2; const ex = x2 - Math.cos(ang) * back, ey = y2 - Math.sin(ang) * back; ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(ex, ey); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(ex + Math.cos(ang) * 6, ey + Math.sin(ang) * 6); ctx.lineTo(ex - 6 * Math.cos(ang - 0.5), ey - 6 * Math.sin(ang - 0.5)); ctx.lineTo(ex - 6 * Math.cos(ang + 0.5), ey - 6 * Math.sin(ang + 0.5)); ctx.closePath(); ctx.fill(); ctx.restore(); }
+  function drawOrders() {
+    const orders = S.milOrders || {}; const byId = {}; (S.units || []).forEach(u => byId[u.id] = u);
+    Object.entries(orders).forEach(([uid, o]) => {
+      const u = byId[uid]; if (!u) return; const a = unitXY(u); if (!a) return;
+      if (o.type === 'move') { const b = provPos(o.to); if (b) { const [x, y] = proj(b[0], b[1]); arrowXY(a[0], a[1], x, y, 'rgba(255,224,138,.95)', 3); } }
+      else if (o.type === 'support') { const t = provPos(o.target), d = provPos(o.to || o.target); if (t && d) { const [tx, ty] = proj(t[0], t[1]); const [dx, dy] = proj(d[0], d[1]); const mx = o.to && o.to !== o.target ? (tx + dx) / 2 : tx, my = o.to && o.to !== o.target ? (ty + dy) / 2 : ty; ctx.save(); ctx.strokeStyle = 'rgba(120,200,255,.9)'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(mx, my); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.arc(mx, my, 4, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); } }
+      else if (o.type === 'convoy') { const f = provPos(o.from), t = provPos(o.to); if (f && t) { const [fx, fy] = proj(f[0], f[1]); const [tx, ty] = proj(t[0], t[1]); ctx.save(); ctx.strokeStyle = 'rgba(80,220,200,.9)'; ctx.lineWidth = 2; ctx.setLineDash([2, 4]); ctx.beginPath(); ctx.moveTo(fx, fy); ctx.quadraticCurveTo(a[0], a[1], tx, ty); ctx.stroke(); ctx.restore(); } }
+      else if (o.type === 'hold') { ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(a[0], a[1], unitR() + 4, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
+    });
+  }
+  function updateAmbient() {
+    if (!GEO.anim || !GEO.anim.setAmbient || !fxCanvas) return;
+    try {
+      const fronts = []; if (!playing) (S.units || []).forEach(u => { if (E.warsOf(S, u.owner).length && PROV[u.loc] && [...PROV[u.loc].adj, ...PROV[u.loc].corridors].some(q => { const c = provCtrl(q); return c && E.atWar(S, u.owner, c); })) fronts.push(u.loc); });
+      const orders = playing ? [] : Object.values(S.milOrders || {}).map(o => { const u = GEO.military.unitById(S, o.unit); return u ? { ...o, from: o.type === 'convoy' ? o.from : u.loc, at: u.loc, owner: u.owner } : null; }).filter(Boolean);
+      GEO.anim.setAmbient({ orders, fronts: [...new Set(fronts)], selected: playing ? null : (milSel ? (GEO.military.unitById(S, milSel) || {}).loc : null) });
+    } catch (e) { /* effetti ambientali facoltativi */ }
+  }
+  function drawLegalTargets() {
+    if (!milSel || !milTargets.length) return;
+    ctx.save(); milTargets.forEach(id => { const pp = provPos(id); if (!pp) return; const [x, y] = proj(pp[0], pp[1]); ctx.beginPath(); ctx.arc(x, y, unitR() + 5, 0, Math.PI * 2); ctx.fillStyle = milMode === 'support' ? 'rgba(120,200,255,.18)' : milMode === 'convoy' ? 'rgba(80,220,200,.18)' : 'rgba(255,224,138,.18)'; ctx.fill(); ctx.strokeStyle = milMode === 'support' ? 'rgba(120,200,255,.9)' : milMode === 'convoy' ? 'rgba(80,220,200,.9)' : 'rgba(255,224,138,.9)'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]); }); ctx.restore();
   }
   function renderLegend() {
     const L = { stato: [['#f5b942', 'Tu'], ['#4f8cff', 'Alleati'], ['#ff5c5c', 'Nemici'], ['#ff9f43', 'Sanzioni'], ['#3ddc84', 'Partner'], ['#4b5a7e', 'Neutrali'], ['#1b2338', 'Stati minori']],
@@ -655,22 +809,79 @@
       pil: [['#24304f', 'Povero'], ['#3b82f6', 'Medio'], ['#f5b942', 'Ricco']], clima: [['#3ddc84', 'Basse'], ['#ff5c5c', 'Alte (pro capite)']], guerre: [['#ff5c5c', 'Aggressore'], ['#ff9f43', 'Difensore'], ['#39415c', 'In pace']] }[mapMode] || [];
     $('mapLegend').innerHTML = L.map(([c, l]) => `<span style="--c:${c}">${l}</span>`).join('') + '<span style="--c:#ff5c5c">▨ occupazione</span><span style="--c:#c8ff50">☣ irradiata</span>';
   }
+  function provTip(id) {
+    const p = PROV[id]; const ctrl = provCtrl(id); const u = E.MIL(S) ? GEO.military.unitAt(S, id) : null;
+    return `<hr style="margin:5px 0"><b>${p.capital ? '★ ' : ''}${p.name}</b>${p.sc ? ' <span class="acc">● centro</span>' : ''}${ctrl !== p.nation ? `<br><span class="bad">occupata da ${flagName(ctrl)}</span>` : ''}${u ? `<br>${u.type === 'F' ? '⚓ Flotta' : '★ Esercito'} di ${flagName(u.owner)}` : ''}${p.seas.length ? `<br><span class="muted">costa: ${p.seas.map(z => SEAS[z].name).join(', ')}</span>` : ''}`;
+  }
+  function unitAtScreen(mx, my) { let best = null, bd = (unitR() + 4) ** 2; (S.units || []).forEach(u => { const xy = unitXY(u); if (!xy) return; const d = (xy[0] - mx) ** 2 + (xy[1] - my) ** 2; if (d < bd) { bd = d; best = u; } }); return best; }
+  const MIL = () => GEO.military;
+  function legalTargets(uid, mode) {
+    try {
+      if (mode === 'support') { const ls = MIL().legalSupports ? MIL().legalSupports(S, uid) : []; return [...new Set((ls || []).map(x => typeof x === 'string' ? x : (x.target || x.prov)).filter(Boolean))]; }
+      if (mode === 'convoy') { const lc = MIL().legalConvoys ? MIL().legalConvoys(S, uid) : []; return [...new Set(lc.map(x => x.from))]; }
+      const lm = MIL().legalMoves ? MIL().legalMoves(S, uid) : []; return (lm || []).map(x => typeof x === 'string' ? x : (x.to || x.prov)).filter(Boolean);
+    } catch (e) { console.warn(e); return []; }
+  }
+  function selectUnit(uid, mode = 'move') { milSel = uid; milMode = mode; milSupTarget = null; milTargets = uid ? legalTargets(uid, mode) : []; drawMap(); if (leftTab === 'mil') renderLeft(); }
+  function setOrder(uid, order) { if (MIL() && MIL().setOrder) { MIL().setOrder(S, uid, order || null); return; } S.milOrders = S.milOrders || {}; if (!order) delete S.milOrders[uid]; else S.milOrders[uid] = { unit: uid, ...order }; }
+  function orderClick(prov, clickedUnit) {
+    const u = S.units.find(x => x.id === milSel); if (!u) return selectUnit(null);
+    if (prov === u.loc && milMode !== 'convoy') { setOrder(u.id, { type: 'hold' }); selectUnit(null); renderLeft(); return; }
+    if (milMode === 'move') {
+      if (milTargets.includes(prov)) { setOrder(u.id, { type: 'move', to: prov }); selectUnit(null); renderLeft(); return; }
+      if (clickedUnit && clickedUnit.owner === S.player) return selectUnit(clickedUnit.id);
+      const reason = PROV[prov] && !E.atWar(S, S.player, provCtrl(prov)) && provCtrl(prov) !== S.player && !E.alliesOf(S, S.player).includes(provCtrl(prov)) ? `${flagName(provCtrl(prov))} è neutrale: dichiara guerra o ottieni l'accesso militare prima di entrare.` : 'Destinazione non raggiungibile da questa unità.';
+      toast(`⚠️ ${reason}`); return;
+    }
+    if (milMode === 'support') {
+      if (!milSupTarget) {
+        const tu = MIL().unitAt(S, prov); if (!tu || !milTargets.includes(prov)) { toast('⚠️ Scegli un’unità da supportare tra quelle evidenziate.'); return; }
+        const tOrder = (S.milOrders || {})[tu.id];
+        if (tu.owner === S.player && tOrder && tOrder.type === 'move') { setOrder(u.id, { type: 'support', target: tu.loc, to: tOrder.to }); selectUnit(null); renderLeft(); return; }
+        const canHold = (MIL().legalSupports(S, u.id) || []).some(x => x.kind === 'hold' && x.target === tu.loc);
+        milSupTarget = tu.loc; milTargets = [...(canHold ? [tu.loc] : []), ...legalTargetsForSupportedMove(u.id, tu)]; toast(`Supporto a ${provName(tu.loc)}: clicca di nuovo sull’unità per sostenerne la difesa, oppure sulla provincia verso cui avanzerà.`); drawMap(); return;
+      }
+      if (!milTargets.includes(prov)) { toast('⚠️ Supporto non valido verso questa provincia.'); return; }
+      if (prov === milSupTarget) setOrder(u.id, { type: 'support', target: milSupTarget }); else setOrder(u.id, { type: 'support', target: milSupTarget, to: prov });
+      selectUnit(null); renderLeft(); return;
+    }
+    if (milMode === 'convoy') {
+      if (!milSupTarget) { if (!milTargets.includes(prov)) { toast('⚠️ Scegli un esercito (tuo o alleato) su una costa del mare in cui si trova la flotta.'); return; } milSupTarget = prov; milTargets = [...new Set((MIL().legalConvoys(S, u.id) || []).filter(x => x.from === prov).map(x => x.to))]; toast('Ora clicca la costa di sbarco.'); drawMap(); return; }
+      if (!milTargets.includes(prov)) { toast('⚠️ Costa di sbarco non raggiungibile con questo convoglio.'); return; }
+      setOrder(u.id, { type: 'convoy', from: milSupTarget, to: prov }); const army = MIL().unitAt(S, milSupTarget); if (army && army.owner === S.player && !(S.milOrders[army.id] && S.milOrders[army.id].type === 'move')) setOrder(army.id, { type: 'move', to: prov });
+      selectUnit(null); renderLeft();
+    }
+  }
+  function legalTargetsForSupportedMove(supId, tu) { return [...new Set((MIL().legalSupports(S, supId) || []).filter(x => x.kind === 'move' && x.target === tu.loc).map(x => x.to))]; }
   function hitNation(mx, my) { const [lon, lat] = invProj(mx, my); return isoAt(lon, lat); }
   canvas.addEventListener('mousemove', (e) => {
     if (!S) return; const r = canvas.getBoundingClientRect(); const tt = $('tooltip');
     if (drag && e.buttons === 1) { const dx = e.clientX - drag.x, dy = e.clientY - drag.y; if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true; if (drag.moved) { view.tx = drag.tx + dx; view.ty = drag.ty + dy; clampView(); drawMap(); tt.classList.add('hidden'); return; } }
+    const [hlon, hlat] = invProj(e.clientX - r.left, e.clientY - r.top);
+    const hp = Object.keys(PROV).length ? provAt(hlon, hlat) : null;
     const iso = hitNation(e.clientX - r.left, e.clientY - r.top);
-    if (iso !== hover) { hover = iso; drawMap(); }
+    if (iso !== hover || hp !== hoverProv) { hover = iso; hoverProv = hp; drawMap(); }
+    if (hp && SEAS[hp] && !iso) { const u = GEO.military && GEO.military.unitAt ? GEO.military.unitAt(S, hp) : null; tt.innerHTML = `<b>🌊 ${SEAS[hp].name}</b>${u ? `<br>${u.type === 'F' ? '⚓ Flotta' : '★ Esercito'} di ${flagName(u.owner)}` : '<br><span class="muted">nessuna flotta</span>'}`; tt.classList.remove('hidden'); tt.style.left = Math.min(e.clientX - r.left + 14, mapW - 270) + 'px'; tt.style.top = Math.min(e.clientY - r.top + 14, mapH - 110) + 'px'; return; }
     if (!iso) { tt.classList.add('hidden'); return; }
     const n = N(iso);
     if (!n) { tt.innerHTML = `<b>${GEO.WORLD_NAMES[iso] || iso}</b> <span class="muted">stato minore</span>`; }
     else { const rel = E.getRel(S, S.player, iso); const st = nationStatus(iso); const pr = GEO.PROFILES[iso] || {};
-      tt.innerHTML = `<b>${n.flag} ${n.name}</b> <span class="muted">#${E.rankOf(S, iso)} · ${st.l}</span><br><span class="muted">${pr.capital || ''} · ${n.regime}${n.vision ? ' · ' + GEO.VISIONS[n.vision].icon : ''}</span><br>PIL ${fmt(E.effGdp(S, n))} mld (${pct(n.lastGrowth)}) · Stab. ${fmt(n.stability)} · Infl. ${fmt(n.inflation, 1)}%<br>Mil. ${fmt(E.milPower(n))} · ☢️ ${n.nukes} · Tech ${E.avgTech(n).toFixed(1)}<br>${iso !== S.player ? `Relazioni: <span style="color:${relColor(rel)}">${rel} (${relLabel(rel)})</span>` : `Punteggio ${E.score(S, n)}`}${E.warsOf(S, iso).length ? `<br><span class="bad">In guerra: ${E.enemiesOf(S, iso).map(x => N(x).flag).join(' ')}</span>` : ''}`; }
+      tt.innerHTML = `<b>${n.flag} ${n.name}</b> <span class="muted">#${E.rankOf(S, iso)} · ${st.l}</span><br><span class="muted">${pr.capital || ''} · ${n.regime}${n.vision ? ' · ' + GEO.VISIONS[n.vision].icon : ''}</span><br>PIL ${fmt(E.effGdp(S, n))} mld (${pct(n.lastGrowth)}) · Stab. ${fmt(n.stability)} · Infl. ${fmt(n.inflation, 1)}%<br>Mil. ${fmt(E.milPower(n))} · ☢️ ${n.nukes} · Tech ${E.avgTech(n).toFixed(1)}<br>${iso !== S.player ? `Relazioni: <span style="color:${relColor(rel)}">${rel} (${relLabel(rel)})</span>` : `Punteggio ${E.score(S, n)}`}${E.warsOf(S, iso).length ? `<br><span class="bad">In guerra: ${E.enemiesOf(S, iso).map(x => N(x).flag).join(' ')}</span>` : ''}${hp && PROV[hp] ? provTip(hp) : ''}`; }
     tt.classList.remove('hidden'); tt.style.left = Math.min(e.clientX - r.left + 14, mapW - 270) + 'px'; tt.style.top = Math.min(e.clientY - r.top + 14, mapH - 110) + 'px';
   });
   canvas.addEventListener('mouseleave', () => { $('tooltip').classList.add('hidden'); hover = null; drawMap(); });
-  canvas.addEventListener('click', (e) => { if (!S || (drag && drag.moved)) return; const r = canvas.getBoundingClientRect(); const id = hitNation(e.clientX - r.left, e.clientY - r.top); if (id && S.nations[id]) { sel = id; rightTab = 'nazione'; renderRight(); drawMap(); } });
-  const ctl = document.createElement('div'); ctl.id = 'mapCtl'; ctl.innerHTML = `<select id="mapMode">${Object.entries(MODES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select><button class="small" id="btnLines">Linee: tutte</button><button class="small zb" id="btnZoomIn" title="Zoom avanti">+</button><button class="small zb" id="btnZoomOut" title="Zoom indietro">&minus;</button>`; $('mapWrap').appendChild(ctl);
+  canvas.addEventListener('click', (e) => {
+    if (!S || (drag && drag.moved) || playing) return; const r = canvas.getBoundingClientRect(); const mx = e.clientX - r.left, my = e.clientY - r.top;
+    if (E.MIL(S) && E.playerGoverns(S, S.player)) {
+      const cu = unitAtScreen(mx, my); const [lon, lat] = invProj(mx, my); const prov = cu ? cu.loc : provAt(lon, lat);
+      if (milSel && prov) { orderClick(prov, cu); return; }
+      if (cu && cu.owner === S.player) { selectUnit(cu.id); leftTab = 'mil'; renderLeft(); return; }
+    }
+    const id = hitNation(mx, my); if (id && S.nations[id]) { sel = id; rightTab = 'nazione'; renderRight(); drawMap(); }
+  });
+  canvas.addEventListener('contextmenu', (e) => { if (milSel) { e.preventDefault(); selectUnit(null); } });
+  const ctl = document.createElement('div'); ctl.id = 'mapCtl'; ctl.innerHTML = `<select id="mapMode">${Object.entries(MODES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select><button class="small" id="btnLines">Linee: tutte</button><button class="small zb" id="btnZoomIn" title="Zoom avanti">+</button><button class="small zb" id="btnZoomOut" title="Zoom indietro">&minus;</button><button class="small" id="btnAnim" title="Animazioni della risoluzione">🎬 ${animOn ? 'on' : 'off'}</button>`; $('mapWrap').appendChild(ctl);
+  $('btnAnim').onclick = () => { animOn = !animOn; try { localStorage.setItem('geo_anim', animOn ? 'on' : 'off'); } catch (e) { /* ignora */ } $('btnAnim').textContent = `🎬 ${animOn ? 'on' : 'off'}`; };
   $('mapMode').onchange = () => { mapMode = $('mapMode').value; drawMap(); };
   $('btnZoomIn').onclick = () => zoomAt(mapW / 2, mapH / 2, 1.3); $('btnZoomOut').onclick = () => zoomAt(mapW / 2, mapH / 2, 0.75);
   $('btnLines').onclick = () => { lineMode = (lineMode + 1) % 3; $('btnLines').textContent = ['Linee: tutte', 'Linee: le mie', 'Linee: nessuna'][lineMode]; drawMap(); };
@@ -695,7 +906,13 @@
   $('btnExport').onclick = () => { if (!S) return; const blob = new Blob([E.serialize(S)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `geopolitica2026_${S.player}_T${S.turn}.json`; a.click(); };
   $('btnImport').onclick = () => $('fileImport').click();
   $('fileImport').onchange = (e) => { const f = e.target.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => { try { S = E.deserialize(rd.result); sel = null; closeModal(); $('game').classList.remove('hidden'); renderAll(); resizeMap(); toast('Salvataggio importato.'); } catch (err) { toast('File non valido.'); } }; rd.readAsText(f); e.target.value = ''; };
-  document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.ctrlKey && S && $('modal').classList.contains('hidden')) endTurn(); if (e.key === 'Escape' && !$('modal').classList.contains('hidden') && $('modalX')) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (S && milSel && $('modal').classList.contains('hidden') && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      const k = e.key.toLowerCase();
+      if (k === 'escape') { selectUnit(null); return; }
+      if (k === 'm') selectUnit(milSel, 'move'); if (k === 's') selectUnit(milSel, 'support'); if (k === 'c') selectUnit(milSel, 'convoy');
+      if (k === 'h' || k === 't') { setOrder(milSel, { type: 'hold' }); selectUnit(null); renderLeft(); }
+    } if (e.key === 'Enter' && e.ctrlKey && S && $('modal').classList.contains('hidden')) endTurn(); if (e.key === 'Escape' && !$('modal').classList.contains('hidden') && $('modalX')) closeModal(); });
 
   window.GEO_UI = { proj: (lon, lat) => proj(lon, lat), state: () => S, labelPt: (id) => labelPt[id], setMode: (m) => { mapMode = m; $('mapMode').value = m; drawMap(); } };
   // Avvio

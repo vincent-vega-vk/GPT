@@ -48,7 +48,7 @@ aside { background: var(--bg2); border-right: 1px solid var(--line); }
 #mapLegend { position: absolute; left: 10px; bottom: 10px; background: rgba(10,15,30,.85); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 11px; display: flex; gap: 10px; flex-wrap: wrap; pointer-events: none; }
 #mapLegend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; background: var(--c); }
 #mapCtl { position: absolute; right: 10px; top: 10px; display: flex; gap: 4px; } #mapCtl .zb { width: 34px; height: 28px; padding: 0; font-weight: 700; font-size: 16px; line-height: 1; }
-#tooltip { position: absolute; pointer-events: none; background: rgba(12,18,36,.96); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; max-width: 260px; z-index: 5; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+#tooltip { position: absolute; pointer-events: none; opacity: .96; background: rgba(12,18,36,.96); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; max-width: 260px; z-index: 5; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
 #newsWrap { height: 200px; border-top: 1px solid var(--line); background: var(--bg2); display: flex; flex-direction: column; flex-shrink: 0; }
 #newsBar { display: flex; gap: 4px; padding: 5px 10px; border-bottom: 1px solid var(--line); align-items: center; flex-wrap: wrap; }
 #newsBar button { padding: 2px 8px; font-size: 11px; }
@@ -128,3 +128,19 @@ kbd { background: var(--bg3); border: 1px solid var(--line); padding: 1px 5px; b
 #mapCtl select { background: rgba(10,15,30,.9); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; font-size: 12px; }
 #mapCtl { background: rgba(10,15,30,.6); padding: 4px; border-radius: 10px; }
 .news-item.policy { border-color: var(--purple); } .news-item.politics { border-color: var(--accent); } .news-item.achievement { border-color: #fff; background: rgba(245,185,66,.12); }
+
+.unit-list { display: flex; flex-direction: column; gap: 3px; max-height: 260px; overflow-y: auto; }
+.unit-row { display: flex; align-items: center; gap: 6px; padding: 4px 7px; background: var(--bg3); border: 1px solid var(--line); border-radius: 7px; cursor: pointer; font-size: 12.5px; transition: border-color .15s, background .15s; }
+.unit-row:hover { border-color: var(--muted); } .unit-row.sel { border-color: var(--accent); background: rgba(245,185,66,.1); }
+.unit-row .ut { width: 18px; text-align: center; } .unit-row .un { flex: 0 0 40%; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .unit-row .uo { flex: 1; color: #ffe08a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mode-bar { display: flex; gap: 4px; flex-wrap: wrap; margin: 6px 0 4px; }
+#fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+#phaseBar { position: absolute; left: 10px; top: 10px; z-index: 4; display: flex; gap: 2px; align-items: center; font-size: 11px; background: rgba(10,15,30,.6); padding: 4px; border-radius: 999px; pointer-events: none; }
+#phaseBar span { padding: 3px 8px; border-radius: 999px; background: var(--bg3); color: var(--muted); border: 1px solid var(--line); transition: all .25s; white-space: nowrap; }
+#phaseBar span.on { background: var(--accent); color: #1a1200; border-color: #d99e2b; font-weight: 700; box-shadow: 0 0 12px rgba(245,185,66,.5); }
+#phaseBar i { color: var(--line); font-style: normal; }
+#playbackBar { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); z-index: 6; background: rgba(10,15,30,.92); border: 1px solid var(--accent); border-radius: 12px; padding: 6px 10px; display: flex; gap: 8px; align-items: center; box-shadow: 0 8px 30px rgba(0,0,0,.6); animation: pbIn .35s ease-out; }
+#playbackBar .ph { font-weight: 700; color: var(--accent); min-width: 150px; text-align: center; font-size: 13px; }
+@keyframes pbIn { from { opacity: 0; transform: translate(-50%, -12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.modal-card { animation: modalIn .22s cubic-bezier(.2,.9,.3,1.2); } @keyframes modalIn { from { opacity: 0; transform: scale(.94) translateY(8px); } to { opacity: 1; transform: none; } }
+.chip b { transition: color .3s; }

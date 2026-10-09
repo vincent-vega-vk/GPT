@@ -43,6 +43,14 @@
     return clamp(p, 0, 0.5);
   };
 
+  // Provincia bersaglio di uno strike: un'unità nemica a contatto con le nostre unità, altrimenti la capitale
+  AI.strikeProv = (s, me, enemy) => {
+    if (!E.MIL(s)) return undefined;
+    const mineLocs = new Set(GEO.military.unitsOf(s, me).map(u => u.loc));
+    const near = GEO.military.unitsOf(s, enemy).filter(u => GEO.PROVINCES[u.loc] && [...GEO.PROVINCES[u.loc].adj, ...GEO.PROVINCES[u.loc].corridors, ...GEO.PROVINCES[u.loc].seas].some(x => mineLocs.has(x)));
+    if (near.length) return near[Math.floor(R() * near.length)].loc;
+    return E.capitalProv(s, enemy);
+  };
   AI.turn = (s, n, orders) => {
     if (n.destroyed) return;
     const P = GEO.PERSONAS[n.persona];
@@ -86,11 +94,10 @@
         regions.forEach(r => { const val = r.share * (r.capital ? 0.6 : 1) * ratio * (n.claims && n.claims[e] && Array.isArray(n.claims[e]) && n.claims[e].includes(r.name) ? 2 : 1); if (!best || val > best.val) best = { val, target: e, region: r.name, ratio }; });
       });
       const willAttack = best && (best.ratio > 0.95 || (P.aggression > 0.7 && best.ratio > 0.7) || (n.claims && n.claims[best.target] && best.ratio > 0.8)) && n.readiness > 45 && n.exhaustion < 75;
-      if (willAttack) { orders.push({ type: 'invade', from: n.id, target: best.target, region: best.region }); n.plannedOrder = { type: 'invade', target: best.target, region: best.region }; }
-      else if (n.readiness < 70) orders.push({ type: 'mobilize', from: n.id });
+      if (n.readiness < 70 && (!willAttack || E.MIL(s))) orders.push({ type: 'mobilize', from: n.id });
       // Missili
       enemies.forEach(e => {
-        if (n.missiles >= 60 && R() < 0.6 + P.aggression * 0.3) { const count = Math.min(n.missiles, Math.round(20 + n.missiles * (0.08 + P.aggression * 0.08))); orders.push({ type: 'strike', from: n.id, target: e, count }); if (!n.plannedOrder) n.plannedOrder = { type: 'strike', target: e }; }
+        if (n.missiles >= 60 && R() < 0.6 + P.aggression * 0.3) { const count = Math.min(n.missiles, Math.round(20 + n.missiles * (0.08 + P.aggression * 0.08))); orders.push({ type: 'strike', from: n.id, target: e, count, prov: AI.strikeProv(s, n.id, e) }); if (!n.plannedOrder) n.plannedOrder = { type: 'strike', target: e }; }
         if (n.tech.cyber >= 6 && R() < 0.35) orders.push({ type: 'cyber', from: n.id, target: e });
       });
       // Nucleare: solo se la capitale è minacciata o persona imprevedibile allo stremo

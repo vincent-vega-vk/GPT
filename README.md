@@ -17,7 +17,7 @@ Un gioco di strategia geopolitica ispirato a *Diplomacy*, giocabile direttamente
 | 📈 Borsa | Indice mondiale, 33 indici nazionali, 6 settori (Tech, Energia, Difesa, Agro, Finanza, Oro) e 5 materie prime (petrolio, gas, grano, chip, terre rare). I prezzi reagiscono a guerre, sanzioni, shock, tecnologia. Investi il tesoro sapendo in anticipo cosa farai. |
 | 🔬 Tecnologia | 9 rami: IA, Semiconduttori, Energia, Spazio, Cyber, Ipersonici, Biotech, Quantistica, Difesa antimissile. Dipendenza dai chip ed embarghi tecnologici, spionaggio, intelligence satellitare. |
 | 🤝 Diplomazia | Accordi commerciali, patti di non aggressione, alleanze difensive, blocchi (NATO, UE, BRICS+, SCO, CSTO, AUKUS, QUAD, OPEC+...), ultimatum, aiuti, sanzioni, destabilizzazione, cyberattacchi, Consiglio di Sicurezza ONU con veto dei P5. |
-| ⚔️ Guerra | Ordini simultanei a fine turno (come in Diplomacy): invasioni regione per regione, capitolazioni con riparazioni e stati satellite, insurrezioni nei territori occupati, salve missilistiche con intercettazione e saturazione, cyberattacchi, armi nucleari con rappresaglia (MAD), ombrello nucleare e triade. Un attacco nucleare **stermina milioni di persone** e irradia regioni per 5 turni; solo dopo inizia il ripopolamento. |
+| ⚔️ Guerra | **Engine in stile Diplomacy**: 192 province e 43 mari su confini reali, eserciti e flotte (una unità per provincia), ordini di movimento, supporto e convoglio risolti simultaneamente con l'algoritmo di Kruijswijk (stalli, tagli del supporto, scontri frontali, movimenti circolari, convogli, regola di Szykman), ritirate, conquiste, capitolazione alla caduta della capitale, aggiustamenti delle unità in base al bilancio militare, stormi aerei, missili che sopprimono o distruggono unità, accordi con l'IA che può tradire. Risoluzione riprodotta in **animazione** (missili balistici, esplosioni, testate nucleari, movimenti, battaglie, conquiste). Inoltre: invasioni regione per regione, capitolazioni con riparazioni e stati satellite, insurrezioni nei territori occupati, salve missilistiche con intercettazione e saturazione, cyberattacchi, armi nucleari con rappresaglia (MAD), ombrello nucleare e triade. Un attacco nucleare **stermina milioni di persone** e irradia regioni per 5 turni; solo dopo inizia il ripopolamento. |
 | 💀 Brutalità | Inflazione e iperinflazione, default sovrano, carestie, profughi dalle guerre vicine, attentati (anche mortali), terrorismo, scioperi, golpe militari, operazioni coperte delle IA ostili, ultimatum ai deboli. |
 | 📰 Eventi | Elezioni, scandali, proteste, scoperte, pandemie, crisi finanziarie, shock petroliferi, colpi di stato, carestie, svolte nell'IA... con scelte che hanno conseguenze. |
 | 🏆 Vittoria | Egemonica, Tecnologica, Diplomatica o per punteggio alla scadenza. Sconfitta per capitolazione o rivoluzione. |
@@ -33,6 +33,11 @@ js/data.js        nazioni, relazioni, trattati, eventi, tecnologie, mappa
 js/engine.js      motore: economia, mercati, ricerca, guerra, diplomazia, ONU, eventi
 js/politics.js    mandati, elezioni, regimi, opposizione/esilio, politiche, visioni, inflazione, tesoro
 js/world.js       confini reali dei paesi (Natural Earth 110m, dominio pubblico)
+js/provinces.js   grafo province/mari (GENERATO da tools/build_provinces.js da data/provinces/*.json)
+js/military.js    engine militare stile Diplomacy (aggiudicazione, ritirate, conquiste, aggiustamenti, accordi)
+js/military_ai.js ordini militari delle nazioni IA
+js/anim.js        animazioni della risoluzione e gettoni delle unità
+docs/military-engine.md  specifica dell'engine militare
 js/ai.js          decisioni delle nazioni IA (bilancio, guerre, pace, proposte)
 js/ui.js          interfaccia, mappa su canvas con zoom, pannelli, modali
 test/sim.js       simulazione headless per verificare la stabilità del motore
@@ -41,7 +46,9 @@ test/sim.js       simulazione headless per verificare la stabilità del motore
 Test del motore (richiede Node.js):
 
 ```
-node test/sim.js 6 40     # 6 partite da 40 turni con giocatore passivo
+node test/sim.js 6 40          # 6 partite da 40 turni con giocatore passivo
+node test/military.test.js     # test dell'aggiudicatore (casi ispirati al DATC)
+node tools/build_provinces.js  # rigenera js/provinces.js dopo aver modificato data/provinces/
 ```
 
 ## Note

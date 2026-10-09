@@ -1,9 +1,13 @@
 // Simulazione headless: gioca N partite con giocatore passivo per verificare la stabilità del motore.
 const path = require('path');
+require(path.join(__dirname, '../js/world.js'));
 require(path.join(__dirname, '../js/data.js'));
+require(path.join(__dirname, '../js/provinces.js'));
 require(path.join(__dirname, '../js/engine.js'));
 require(path.join(__dirname, '../js/politics.js'));
 require(path.join(__dirname, '../js/ai.js'));
+require(path.join(__dirname, '../js/military.js'));
+try { require(path.join(__dirname, '../js/military_ai.js')); } catch (e) { /* IA militare opzionale */ }
 const { GEO } = globalThis; const E = GEO.engine;
 
 const games = +process.argv[2] || 3; const turns = +process.argv[3] || 40;
