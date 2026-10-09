@@ -538,24 +538,41 @@
   }
 
   // ---------- Fine turno -----------------------------------------------------
-  let animOn = true, animSpeed = 1;
-  try { animOn = localStorage.getItem('geo_anim') !== 'off'; animSpeed = +(localStorage.getItem('geo_anim_speed') || 1); } catch (e) { /* storage non disponibile */ }
+  let animOn = true, animSpeed = 1.5, animScope = 'rilevanti';
+  try { animOn = localStorage.getItem('geo_anim') !== 'off'; animSpeed = +(localStorage.getItem('geo_anim_speed') || 1.5); animScope = localStorage.getItem('geo_anim_scope') || 'rilevanti'; } catch (e) { /* storage non disponibile */ }
+  // Riduce la riproduzione agli eventi che contano per il giocatore (missili e stormi di guerre lontane esclusi)
+  function relevantResolution(R) {
+    if (!R || animScope === 'tutte') return R;
+    const me = S.player; const circle = new Set([me, ...E.alliesOf(S, me), ...E.enemiesOf(S, me)]);
+    const unitOwner = {}; (R.before || []).forEach(u => unitOwner[u.id] = u.owner); (R.after || []).forEach(u => unitOwner[u.id] = u.owner);
+    const nationOfProv = (id) => (PROV[id] ? PROV[id].nation : null);
+    const touches = (e) => [e.owner, e.from, e.to, e.target, unitOwner[e.unit], unitOwner[e.suppressed], unitOwner[e.destroyed], nationOfProv(e.prov), nationOfProv(e.at)].some(x => x && circle.has(x)) || (e.destroyed && [].concat(e.destroyed).some(id => circle.has(unitOwner[id])));
+    const events = (R.events || []).filter(e => {
+      if (e.type === 'nuke' || e.type === 'capture' || e.type === 'betrayal') return true;
+      if (e.type === 'hold') return false;
+      if (e.type === 'invalid') return unitOwner[e.unit] === me;
+      if (e.type === 'battle') return [...(e.attackers || []), e.defender].some(id => id && circle.has(unitOwner[id])) || touches(e);
+      return touches(e);
+    });
+    return { ...R, events };
+  }
   const PHASE_OF = { strike: 'ris', nuke: 'ris', air: 'ris', move: 'ris', battle: 'ris', retreat: 'rit', capture: 'agg', adjust: 'agg', diplomacy: 'dip' };
   function setPhase(ph) { const key = ph ? (PHASE_OF[ph] || ph) : 'ord'; document.querySelectorAll('#phaseBar span').forEach(x => x.classList.toggle('on', x.dataset.ph === key)); const pb = $('pbPhase'); if (pb && ph) pb.textContent = { strike: '🚀 Attacchi missilistici', nuke: '☢️ Attacchi nucleari', air: '✈️ Operazioni aeree', move: '➡️ Movimenti simultanei', battle: '⚔️ Battaglie', retreat: '🏃 Ritirate', capture: '🚩 Conquiste', adjust: '🛠️ Aggiustamenti', diplomacy: '🗡️ Accordi e tradimenti' }[ph] || ph; }
   function showPlaybackBar() {
     let bar = $('playbackBar'); if (!bar) { bar = document.createElement('div'); bar.id = 'playbackBar'; $('mapWrap').appendChild(bar); }
-    bar.innerHTML = `<span class="ph" id="pbPhase">Risoluzione del turno…</span>${[0.5, 1, 2, 4].map(v => `<button class="small ${v === animSpeed ? 'primary' : ''}" data-spd="${v}">${v}×</button>`).join('')}<button class="small primary" id="pbSkip">Salta ⏭</button>`;
+    bar.innerHTML = `<span class="ph" id="pbPhase">Risoluzione del turno…</span><select id="pbScope" title="Quali eventi riprodurre"><option value="rilevanti" ${animScope === 'rilevanti' ? 'selected' : ''}>Eventi rilevanti</option><option value="tutte" ${animScope === 'tutte' ? 'selected' : ''}>Tutto il mondo</option></select>${[1, 1.5, 2, 4].map(v => `<button class="small ${v === animSpeed ? 'primary' : ''}" data-spd="${v}">${v}×</button>`).join('')}<button class="small primary" id="pbSkip">Salta ⏭</button>`;
     bar.querySelectorAll('[data-spd]').forEach(b => b.onclick = () => { animSpeed = +b.dataset.spd; try { localStorage.setItem('geo_anim_speed', animSpeed); } catch (e) { /* ignora */ } if (GEO.anim.setSpeed) GEO.anim.setSpeed(animSpeed); bar.querySelectorAll('[data-spd]').forEach(x => x.classList.toggle('primary', +x.dataset.spd === animSpeed)); });
     $('pbSkip').onclick = () => { if (GEO.anim.skip) GEO.anim.skip(); };
+    $('pbScope').onchange = () => { animScope = $('pbScope').value; try { localStorage.setItem('geo_anim_scope', animScope); } catch (e) { /* ignora */ } };
   }
   function hidePlaybackBar() { const bar = $('playbackBar'); if (bar) bar.remove(); }
   function playResolution(res) {
     if (!GEO.anim || !GEO.anim.play || !res) return Promise.resolve();
-    playing = true; milSel = null; milTargets = []; drawMap(); showPlaybackBar(); setPhase('strike');
+    playing = true; milSel = null; milTargets = []; $('mapWrap').classList.add('playing'); drawMap(); showPlaybackBar(); setPhase('strike');
     let p; try { p = GEO.anim.play(res, { speed: animSpeed, onPhase: (ph) => setPhase(ph) }); } catch (e) { console.warn(e); p = Promise.resolve(); }
-    return Promise.resolve(p).catch(e => console.warn(e)).then(() => { playing = false; hidePlaybackBar(); setPhase(null); drawMap(); });
+    return Promise.resolve(p).catch(e => console.warn(e)).then(() => { playing = false; $('mapWrap').classList.remove('playing'); hidePlaybackBar(); setPhase(null); drawMap(); });
   }
-  function replayLast() { if (!S || !S.lastResolution || playing) return; playResolution(S.lastResolution).then(() => renderAll()); }
+  function replayLast() { if (!S || !S.lastResolution || playing) return; playResolution(relevantResolution(S.lastResolution)).then(() => renderAll()); }
   function endTurn() {
     if (!S || S.gameOver || playing) return;
     if (S.pendingEvents.length) return showEvents(() => endTurn());
@@ -563,8 +580,8 @@
     E.endTurn(S);
     save(true);
     const after = () => { renderAll(); if (S.gameOver) return showGameOver(); showTurnReport(() => showAlerts(() => showEvents(() => showProposals()))); };
-    const R = S.lastResolution;
-    const worth = R && R.turn === S.turn - 1 && (R.events || []).some(e => e.type !== 'hold' && e.type !== 'support' && e.type !== 'invalid');
+    const R = S.lastResolution && S.lastResolution.turn === S.turn - 1 ? relevantResolution(S.lastResolution) : null;
+    const worth = R && (R.events || []).some(e => e.type !== 'hold' && e.type !== 'support' && e.type !== 'invalid');
     if (animOn && worth && GEO.anim) { renderHud(); renderNews(); playResolution(R).then(after); } else after();
   }
   function showAlerts(then) {
@@ -647,7 +664,7 @@
   const provCtrl = (id) => { const p = PROV[id]; if (!p || !S) return null; const r = S.nations[p.nation].regions[p.idx]; return (r && r.controller) || p.nation; };
   function initFx() {
     if (fxCanvas || !GEO.anim || !GEO.anim.init) return; fxCanvas = $('fx'); if (!fxCanvas) return;
-    try { GEO.anim.init({ canvas: fxCanvas, proj: (lon, lat) => proj(lon, lat), provPos, nationColor: (id) => (S && S.nations[id] ? S.nations[id].color : '#888'), flag: (id) => (S && S.nations[id] ? S.nations[id].flag : ''), unitSize: () => unitR(), isMine: (id) => S && id === S.player }); } catch (e) { console.warn('anim init', e); fxCanvas = null; }
+    try { GEO.anim.init({ canvas: fxCanvas, proj: (lon, lat) => proj(lon, lat), provPos, nationColor: (id) => (S && S.nations[id] ? S.nations[id].color : '#888'), flag: (id) => (S && S.nations[id] ? S.nations[id].flag : ''), unitSize: () => unitR(), isMine: (id) => S && id === S.player, nationName: (id) => (S && S.nations[id] ? S.nations[id].name : id), provName, nationPos: (id) => provPos(E.capitalProv(S, id)), provPath: (c, id) => { const cell = CELLS[id]; if (!cell) return false; c.beginPath(); cell.forEach(([lon, lat], i) => { const [x, y] = proj(lon, lat); i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.closePath(); return true; } }); } catch (e) { console.warn('anim init', e); fxCanvas = null; }
   }
   function resizeMap() { initFx(); const r = $('mapWrap').getBoundingClientRect(); const dpr = window.devicePixelRatio || 1; mapW = r.width; mapH = r.height; canvas.width = mapW * dpr; canvas.height = mapH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if (fxCanvas) { fxCanvas.width = mapW * dpr; fxCanvas.height = mapH * dpr; if (GEO.anim.resize) GEO.anim.resize(mapW, mapH, dpr); } const sc = Math.min(mapW / 360, mapH / 144) * 1.04; base = { s: sc, ox: (mapW - 360 * sc) / 2, oy: (mapH - 144 * sc) / 2 }; drawMap(); }
   function focusOn(id, kOverride) {
