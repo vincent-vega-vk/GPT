@@ -321,6 +321,7 @@
       snap: { m: Object.assign({}, d.m), mp: Array.from(d.mp), flags: Object.assign({}, d.flags), disc: d.disc, list: d.list },
       /* la valutazione delle mosse resta qui: in "senza rete" il debrief la nasconde fino al verdetto e il riepilogo la mostra */
       review: d.hist.map((h) => ({ t: h.t, say: h.say, q: h.q, r: h.r, tip: h.tip, wild: !!h.wild })),
+      worldNote: (() => { const w = (sc.worlds || []).find((x) => x.id === d.world); return w ? w.note || '' : ''; })(),
       lessons: (sc.lessons || []).filter((l) => { try { return l.if(d); } catch (e) { return false; } }).map((l) => ({ good: !!l.good, t: l.t })),
     });
   };

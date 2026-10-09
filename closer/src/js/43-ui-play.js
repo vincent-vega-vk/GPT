@@ -614,6 +614,7 @@
         mask ? null : h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC'), h('dd', null, `${res.mp}/8`)),
         h('div', { class: 'stat' }, h('dt', null, 'Imprevisti'), h('dd', null, String(res.wilds || 0), mask ? null : h('small', null, `rep. ${UI.signed(res.integ)} · ora ${run.rep}`)))) : null,
       res.blocked ? h('div', { class: 'note mt-16' }, h('b', null, 'Deal Desk. '), `Avevi promesso il ${Math.round(res.promised)}% senza contropartite sufficienti: ne è stato approvato il ${res.disc}%. Il cliente ha notato la retromarcia e la probabilità ne ha risentito.`) : null,
+      !mask && res.worldNote ? h('div', { class: 'note mt-16' }, h('b', null, 'Cosa era vero davvero. '), f(res.worldNote)) : null,
       res.cap && !mask ? h('div', { class: 'note mt-16' }, h('b', null, `Limite ${Math.round(res.cap.max * 100)}%. `), f(res.cap.why)) : null,
       h('div', { class: 'two' },
         h('section', { class: 'card pad' },

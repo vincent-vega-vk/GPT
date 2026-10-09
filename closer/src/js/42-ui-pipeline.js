@@ -307,6 +307,7 @@
               h('div', { class: 'rvh' }, h('span', { class: 'n mono' }, m.wild ? '!!' : String(i + 1).padStart(2, '0')), h('span', { class: 'tt' }, fm(m.say || m.t)), h('span', { class: 'q ' + CL.QUALITY[m.q].cls }, CL.QUALITY[m.q].label)),
               h('p', { class: 'small' }, fm(m.r)),
               m.tip ? h('p', { class: 'small muted' }, fm(m.tip)) : null))),
+            r.worldNote ? h('p', { class: 'small', style: { marginTop: '8px' } }, h('b', null, 'Cosa era vero davvero. '), fm(r.worldNote)) : null,
             (r.lessons || []).length ? h('div', { class: 'ls' }, r.lessons.map((l) => h('p', { class: l.good ? 'good' : 'bad' }, fm(l.t)))) : null);
         })) : null,
       h('section', { class: 'card pad mt-16' },
