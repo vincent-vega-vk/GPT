@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsDir = path.join(root, 'src', 'js');
-const files = fs.readdirSync(jsDir).filter((f) => /^(00|1\d|2\d|3\d)-.*\.js$/.test(f)).sort();
+const files = fs.readdirSync(jsDir).filter((f) => /^(00|[1-3]\d|60)-.*\.js$/.test(f)).sort();
 for (const f of files) await import(pathToFileURL(path.join(jsDir, f)).href);
 const CL = globalThis.CL;
 const arg = (k, d) => { const a = process.argv.find((x) => x.startsWith('--' + k + '=')); return a ? a.split('=')[1] : d; };
@@ -20,19 +20,19 @@ function chooseMove(d, run, pol, rnd) {
   const noDQ = all.filter((x) => x.c.next !== 'DQ');
   let pool;
   if (pol === 'best') {
-    const top = Math.max(...all.map((x) => x.c.q));
-    pool = all.filter((x) => x.c.q === top);
+    const top = Math.max(...all.map((x) => CL.qOf(x.c, d)));
+    pool = all.filter((x) => CL.qOf(x.c, d) === top);
     const free = pool.filter((x) => !x.c.jolly);
     pool = free.length ? free : pool;
-  } else if (pol === 'good') pool = noDQ.filter((x) => x.c.q >= 2);
-  else if (pol === 'ok') pool = noDQ.filter((x) => x.c.q >= 1);
+  } else if (pol === 'good') pool = noDQ.filter((x) => CL.qOf(x.c, d) >= 2);
+  else if (pol === 'ok') pool = noDQ.filter((x) => CL.qOf(x.c, d) >= 1);
   else pool = noDQ;
   if (!pool.length) pool = noDQ.length ? noDQ : all;
   return pool[Math.floor(rnd() * pool.length)].c.id;
 }
 
 function playDeal(run, sc, pol, rnd) {
-  const d = CL.newDeal(sc, CL.dealOpts(run));
+  const d = CL.newDeal(sc, Object.assign(CL.dealOpts(run), { rnd }));
   let guard = 0;
   while (!d.over && guard++ < 40) CL.pick(d, chooseMove(d, run, pol, rnd), run, NOWILD ? { wild: false } : { rnd });
   const res = CL.seal(d);
@@ -41,13 +41,13 @@ function playDeal(run, sc, pol, rnd) {
 }
 
 /* ───── pianificatore dei deal ───── */
-function plan() {
+function plan(run) {
   const est = { logistica: 340 * 0.85 * 0.8, bionova: 320 * 0.92 * 0.9 };
   const val = (sc) => est[sc.id] || sc.list * 0.88 * 0.92;
   let best = { v: -1, order: [] };
   (function rec(week, spent, used, order, v) {
     if (v > best.v) best = { v, order: order.slice() };
-    for (const s of CL.scenarios) {
+    for (const s of CL.pool(run)) {
       if (used.has(s.id)) continue;
       let w = week, sp = spent;
       while (w < s.window[0] && sp < C.energy) { sp++; w++; }
@@ -59,11 +59,11 @@ function plan() {
   })(1, 0, new Set(), [], 0);
   return best.order;
 }
-const PLAN = plan();
 function selectDeal(run, mode) {
-  const ready = CL.scenarios.filter((s) => CL.avail(run, s).state === 'ready');
+  const ready = CL.pool(run).filter((s) => CL.avail(run, s).state === 'ready');
   if (mode === 'plan') {
-    const id = PLAN.find((x) => !run.done[x]);
+    if (!run._plan) run._plan = plan(run);   /* il piano ottimo dipende dal palinsesto del trimestre */
+    const id = run._plan.find((x) => !run.done[x]);
     if (!id) return null;
     const sc = CL.getScenario(id);
     return CL.avail(run, sc).state === 'ready' ? sc : 'wait';
@@ -145,7 +145,6 @@ for (const [label, mp, dp, fp] of PROFILES) {
   const mean = atts.reduce((a, b) => a + b, 0) / atts.length;
   rows.push({ label, mean, p10: pct(atts, 0.1), p50: pct(atts, 0.5), p90: pct(atts, 0.9), wins: agg.wins / N, wilds: agg.wilds / N, hit: agg.hit / N, prot: agg.prot / N, pos: agg.pos / N, acc: acc.length ? acc.reduce((a, b) => a + b, 0) / acc.length : null, rep: agg.rep / N, mgr: agg.mgr / N });
 }
-console.log(`Piano ottimo: ${PLAN.join(' → ')}`);
 console.log(`Quota ${CL.fmtK(C.quota)} · energia ${C.energy} · ${N} trimestri per profilo${NOWILD ? ' · senza imprevisti' : ''}\n`);
 console.log('profilo                        media   p10    p50    p90  vitt. imprev. shock(colp/prot/pos) affid.  rep  Marta');
 rows.forEach((r) => console.log(`${r.label.padEnd(30)} ${(r.mean * 100).toFixed(0).padStart(4)}%  ${(r.p10 * 100).toFixed(0).padStart(4)}%  ${(r.p50 * 100).toFixed(0).padStart(4)}%  ${(r.p90 * 100).toFixed(0).padStart(4)}%  ${r.wins.toFixed(1).padStart(4)}  ${r.wilds.toFixed(1).padStart(5)}   ${r.hit.toFixed(2)}/${r.prot.toFixed(2)}/${r.pos.toFixed(2)}      ${r.acc == null ? '  —' : (r.acc * 100).toFixed(0).padStart(3) + '%'}  ${r.rep.toFixed(0).padStart(3)}  ${r.mgr.toFixed(0).padStart(4)}`));

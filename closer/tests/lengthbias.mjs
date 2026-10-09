@@ -9,7 +9,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsDir = path.join(root, 'src', 'js');
-const files = fs.readdirSync(jsDir).filter((f) => /^(00|1\d|2\d|3\d)-.*\.js$/.test(f)).sort();
+const files = fs.readdirSync(jsDir).filter((f) => /^(00|[1-3]\d|60)-.*\.js$/.test(f)).sort();
 for (const f of files) await import(pathToFileURL(path.join(jsDir, f)).href);
 const CL = globalThis.CL;
 const only = process.argv.find((a, i) => i > 1 && !a.startsWith('--'));
@@ -47,11 +47,15 @@ function analyse(title, groups, maxBest = 0.45, maxCorr = 0.35) {
 for (const sc of CL.scenarios) {
   if (only && sc.id !== only) continue;
   console.log('▸ ' + sc.id);
-  const groups = [];
-  const push = (label, choices) => groups.push({ label, items: choices.map((c) => ({ q: c.q, text: c.t, id: c.id })) });
-  Object.entries(sc.nodes).forEach(([nid, n]) => push(nid, n.choices));
-  (sc.wild || []).forEach((w) => push('wild:' + w.id, w.node.choices));
-  analyse('scelte dei nodi (' + groups.length + ' gruppi)', groups);
+  const worldIds = sc.worlds && sc.worlds.length ? sc.worlds.map((w) => w.id) : [null];
+  for (const wid of worldIds) {
+    const d0 = CL.newDeal(sc, { world: wid });
+    const groups = [];
+    const push = (label, choices) => groups.push({ label, items: choices.map((c) => ({ q: CL.qOf(c, d0), text: c.t, id: c.id })) });
+    Object.entries(sc.nodes).forEach(([nid, n]) => push(nid, n.choices));
+    (sc.wild || []).forEach((w) => push('wild:' + w.id, w.node.choices));
+    analyse((wid ? 'mondo ' + wid + ' · ' : '') + 'scelte dei nodi (' + groups.length + ' gruppi)', groups);
+  }
   /* domande di Marta */
   const cust = (sc.fc && sc.fc.custom) || [];
   let longestHonest = 0, catHonest = 0, catOther = 0, tot = 0;

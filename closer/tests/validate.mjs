@@ -8,7 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsDir = path.join(root, 'src', 'js');
 const verbose = process.argv.includes('--verbose');
 
-const files = fs.readdirSync(jsDir).filter((f) => /^(00|1\d|2\d|3\d)-.*\.js$/.test(f)).sort();
+const files = fs.readdirSync(jsDir).filter((f) => /^(00|[1-3]\d|60)-.*\.js$/.test(f)).sort();
 for (const f of files) await import(pathToFileURL(path.join(jsDir, f)).href);
 const CL = globalThis.CL;
 
@@ -34,7 +34,7 @@ function walkAll(d, mode, visit, depth = 0) {
 /* media di p con policy: sceglie a caso tra le scelte che soddisfano filtro(q) */
 function policyMean(d, mode, qmin, depth = 0) {
   const all = CL.choicesFor(d, null).filter((x) => mode === 'jolly' || !x.c.jolly);
-  let pool = all.filter((x) => x.c.q >= qmin);
+  let pool = all.filter((x) => CL.qOf(x.c, d) >= qmin);
   if (!pool.length) pool = all;
   let sum = 0;
   for (const { c } of pool) {
@@ -60,10 +60,10 @@ for (const sc of CL.scenarios) {
     const ids = new Set();
     (n.choices || []).forEach((c) => {
       if (ids.has(c.id)) err(`${where}: id scelta duplicato ${c.id}`); ids.add(c.id);
-      if (![0, 1, 2, 3].includes(c.q)) err(`${where}/${c.id}: q non valido`);
+      if (typeof c.q !== 'function' && ![0, 1, 2, 3].includes(c.q)) err(`${where}/${c.id}: q non valido`);
       if (!c.t || !c.r) err(`${where}/${c.id}: testo o risultato mancante`);
       for (const k of Object.keys(c.fx || {})) if (!FX_KEYS.has(k)) err(`${where}/${c.id}: fx sconosciuto ${k}`);
-      for (const k of [...(c.mp || []), ...(c.mpx || []), ...((n.enter && n.enter.mp) || [])]) if (!MP_KEYS.has(k)) err(`${where}/${c.id}: MEDDPICC sconosciuto ${k}`);
+      { const dd = CL.newDeal(sc, {}); const mpOf = (v) => (Array.isArray(v) ? v : typeof v === 'function' ? (v(dd) || []) : []); for (const k of [...mpOf(c.mp), ...mpOf(c.mpx), ...((n.enter && n.enter.mp) || [])]) if (!MP_KEYS.has(k)) err(`${where}/${c.id}: MEDDPICC sconosciuto ${k}`); }
       if (c.jolly && !CL.JOLLY[c.jolly]) err(`${where}/${c.id}: jolly sconosciuto ${c.jolly}`);
       if (c.next == null) err(`${where}/${c.id}: next mancante`);
       if (typeof c.next === 'string' && c.next !== 'END' && c.next !== 'DQ' && !sc.nodes[c.next]) err(`${where}/${c.id}: next → nodo inesistente ${c.next}`);
@@ -71,11 +71,19 @@ for (const sc of CL.scenarios) {
     });
     const free = (n.choices || []).filter((c) => !c.jolly);
     if (free.length < 2) err(`${where}: meno di 2 scelte senza jolly`);
-    if (!free.some((c) => c.q >= 2)) warn(`${where}: nessuna scelta q≥2 senza jolly`);
-    if ((n.choices || []).filter((c) => c.q === 3).length === 0) warn(`${where}: nessuna scelta q=3`);
+    const q0 = CL.newDeal(sc, {});
+    if (!free.some((c) => CL.qOf(c, q0) >= 2)) warn(`${where}: nessuna scelta q≥2 senza jolly (nello stato iniziale)`);
+    if ((n.choices || []).filter((c) => CL.qOf(c, q0) === 3).length === 0) warn(`${where}: nessuna scelta q=3 (nello stato iniziale)`);
   }
 
-  const start = CL.newDeal(sc, {});
+  if (sc.tier === 'real') {
+    ['label', 'teaser', 'family'].forEach((k) => { if (!sc[k]) err(`${sc.id}: manca ${k}`); });
+    if (!sc.worlds || sc.worlds.length < 2) err(`${sc.id}: un caso reale ha almeno due mondi nascosti`);
+  }
+  const worldIds = sc.worlds && sc.worlds.length ? sc.worlds.map((w) => w.id) : [null];
+  const seenUnion = { jolly: new Set(), nojolly: new Set() };
+  for (const wid of worldIds) {
+  const start = CL.newDeal(sc, { world: wid });
   for (const mode of ['jolly', 'nojolly']) {
     let best = { p: -1 }, worst = { p: 2 }, n = 0, wins = 0;
     const seen = new Set();
@@ -88,20 +96,20 @@ for (const sc of CL.scenarios) {
       if (p < worst.p) worst = { p };
       if (p >= 0.6) wins++;
     });
-    if (mode === 'jolly') {
-      Object.keys(sc.nodes).forEach((id) => { if (!seen.has(id)) err(`nodo non raggiungibile: ${id}`); });
-    }
+    seen.forEach((x) => seenUnion[mode].add(x));
     const rand = policyMean(start, mode, 0);
     const q2 = policyMean(start, mode, 2);
     const q3 = policyMean(start, mode, 3);
     rows.push({ id: sc.id, mode, paths: n, best: best.p, worst: worst.p, rand, q2, q3 });
-    console.log(`  ${mode.padEnd(8)} percorsi ${String(n).padStart(6)} · migliore ${(best.p * 100).toFixed(0).padStart(3)}% · peggiore ${(worst.p * 100).toFixed(0).padStart(3)}% · casuale ${(rand * 100).toFixed(0).padStart(3)}% · solo q≥2 ${(q2 * 100).toFixed(0).padStart(3)}% · solo q3 ${(q3 * 100).toFixed(0).padStart(3)}%`);
+    console.log(`  ${(wid ? wid + '/' : '') + mode.padEnd(8)} percorsi ${String(n).padStart(6)} · migliore ${(best.p * 100).toFixed(0).padStart(3)}% · peggiore ${(worst.p * 100).toFixed(0).padStart(3)}% · casuale ${(rand * 100).toFixed(0).padStart(3)}% · solo q≥2 ${(q2 * 100).toFixed(0).padStart(3)}% · solo q3 ${(q3 * 100).toFixed(0).padStart(3)}%`);
     if (verbose) console.log('    best: ' + best.path);
     if (mode === 'jolly') {
       if (best.p < 0.85) warn(`${sc.id}: il percorso migliore non supera l’85% (${(best.p * 100).toFixed(0)}%)`);
       if (worst.p > 0.1) warn(`${sc.id}: il percorso peggiore supera il 10%`);
     } else if (best.p < 0.78) warn(`${sc.id}: senza jolly il massimo è ${(best.p * 100).toFixed(0)}% (<78%)`);
   }
+  }
+  Object.keys(sc.nodes).forEach((id) => { if (!seenUnion.jolly.has(id)) err(`nodo non raggiungibile (in nessun mondo): ${id}`); });
 }
 
 console.log(`\nScenari: ${CL.scenarios.length} · errori: ${errors} · avvisi: ${warns}`);

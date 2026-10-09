@@ -284,7 +284,7 @@
     S.dots = dots;
     const head = h('div', { class: 'dealhead' },
       h('button', { class: 'iconbtn', 'aria-label': 'Esci dalla trattativa', onclick: () => UI.leaveDeal() }, UI.ic('back')),
-      h('div', null, h('div', { class: 'eyebrow' }, `${sc.client} · ${sc.sector}`), h('h2', { 'data-focus': '', style: { marginTop: '6px' } }, sc.title)),
+      h('div', null, h('div', { class: 'eyebrow' }, `${sc.client} · ${sc.sector}`), h('h2', { 'data-focus': '', style: { marginTop: '6px' } }, sc.label)),
       dots);
     const root = h('main', { class: 'wrap playroot' }, head, h('div', { class: 'play' }, h('div', { class: 'stagecol' }, vpHost, stage), dash.el));
     applyTheme(root, sc);
@@ -436,9 +436,10 @@
     const prm = UI.$('.prompt', S.stage); if (prm) prm.classList.add('done');
     const hb = UI.$('.hint', S.stage); if (hb) hb.hidden = true;
     const tb = UI.$('.timer', S.stage); if (tb) tb.remove();
-    S.dash.update(prevM, prevMp);
+    const late = lateCoach(run);
+    S.dash.update(late ? null : prevM, prevMp);
     if (!run.hard) UI.syncTopbar();
-    UI.sfx(run.hard ? 'pick' : 'q' + rec.q);
+    UI.sfx(late ? 'pick' : 'q' + rec.q);
     paintDots();
     const youLine = { you: true, t: o.c.say || o.c.t };
     const reactLines = rec.react || [];
@@ -453,8 +454,11 @@
     UI.scrollTo(fb, 'nearest');
   }
 
+  /* in carriera l'allenatore parla a fine trattativa (salvo impostazione): durante la scena si capisce com'è andata dai fatti, non da un voto */
+  const lateCoach = (run) => !!run.hard || (run.mode === 'career' && !UI.settings.coachEach);
+
   function feedbackEl(rec, node, wasWild) {
-    const run = S.run, deal = S.deal, hard = run.hard;
+    const run = S.run, deal = S.deal, hard = lateCoach(run);
     const Q = CL.QUALITY[rec.q];
     const chips = [];
     if (!hard) {
@@ -471,7 +475,9 @@
     return h('div', { class: 'fb', role: 'status' },
       h('div', { class: 'hd' }, chips.length ? chips : h('span', { class: 'small faint' }, wasWild ? 'Imprevisto gestito' : 'Esito della mossa')),
       hard
-        ? h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Senza rete'), run.mode === 'career' ? 'Valutazione e lezione dopo il verdetto del giorno di chiusura, nel riepilogo.' : 'Valutazione e lezione nel debrief.')
+        ? (run.hard
+          ? h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Senza rete'), run.mode === 'career' ? 'Valutazione e lezione dopo il verdetto del giorno di chiusura, nel riepilogo.' : 'Valutazione e lezione nel debrief.')
+          : h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Allenatore'), 'Il commento arriva a fine trattativa. Intanto guarda come ha reagito chi hai davanti: nella realtà nessuno ti dà un voto.'))
         : h('div', null,
           h('div', { class: 'bd' }, h('span', { class: 'eyebrow' }, 'Lettura della mossa'), h('p', null, f(rec.r))),
           h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Lezione dal campo'), f(node.tip))),

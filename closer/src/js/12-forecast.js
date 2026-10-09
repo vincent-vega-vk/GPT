@@ -18,7 +18,7 @@
   /* ───── voci del foglio ───── */
   CL.fcEntries = (run, kind) => {
     const out = [];
-    CL.scenarios.forEach((sc) => {
+    CL.pool(run).forEach((sc) => {
       const res = run.results.find((r) => r.id === sc.id);
       if (res && res.status === 'pending') {
         const carried = (run.fc && run.fc.flags && run.fc.flags[sc.id]) || {};   /* segni lasciati dalla call di metà trimestre */

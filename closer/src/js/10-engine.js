@@ -6,6 +6,23 @@
   const FX = { t: 'trust', v: 'value', u: 'urgency', c: 'control', r: 'risk' };
 
   CL.getScenario = (id) => CL.scenarios.find((s) => s.id === id);
+  /* la qualità di una mossa può dipendere dallo stato (mondo nascosto, flag): numero oppure funzione di d */
+  CL.qOf = (c, d) => { const q = typeof c.q === 'function' ? c.q(d) : c.q; return q === 0 || q === 1 || q === 2 || q === 3 ? q : Math.max(0, Math.min(3, Math.round(q || 0))); };
+
+  /* mondo nascosto di una trattativa: scelto a caso (pesi w) tra quelli di sc.worlds, evitando l'ultimo giocato; opts.world lo forza */
+  CL.pickWorld = (sc, opts) => {
+    const ws = sc.worlds;
+    if (!ws || !ws.length) return null;
+    opts = opts || {};
+    if (opts.world) return ws.find((w) => w.id === opts.world) || ws[0];
+    if (!opts.rnd) return ws[0];
+    let pool = ws.filter((w) => w.id !== opts.avoidWorld);
+    if (!pool.length) pool = ws;
+    let tot = 0; pool.forEach((w) => { tot += w.w || 1; });
+    let u = opts.rnd() * tot;
+    for (const w of pool) { if ((u -= (w.w || 1)) <= 0) return w; }
+    return pool[pool.length - 1];
+  };
 
   /* ───────────── DEAL ───────────── */
   CL.newDeal = (sc, opts) => {
@@ -33,7 +50,14 @@
       used: {},
       minP: 1, maxP: 0,
       wild: null, wildCount: 0, wildUsed: {},
+      world: null,
     };
+    const wd = CL.pickWorld(sc, opts);
+    if (wd) {
+      d.world = wd.id;
+      Object.assign(d.flags, wd.flags || {});
+      if (wd.mods) Object.keys(wd.mods).forEach((k) => { const key = FX[k] || k; if (d.m[key] != null) d.m[key] = CL.clamp(d.m[key] + wd.mods[k], 0, 100); });
+    }
     CL.enterNode(d);
     const p = CL.prob(d).p;
     d.minP = d.maxP = p;
@@ -46,7 +70,7 @@
     mp: new Set(d.mp), flags: Object.assign({}, d.flags),
     hist: d.hist.slice(), entered: Object.assign({}, d.entered),
     integ: d.integ, used: Object.assign({}, d.used), minP: d.minP, maxP: d.maxP, dipped: d.dipped,
-    wild: d.wild, wildCount: d.wildCount, wildUsed: Object.assign({}, d.wildUsed),
+    wild: d.wild, wildCount: d.wildCount, wildUsed: Object.assign({}, d.wildUsed), world: d.world,
   });
 
   /* il nodo corrente: un imprevisto (wild) ha la precedenza sul nodo dello scenario */
@@ -115,6 +139,40 @@
     return Array.isArray(raw) ? raw.filter((l) => !l.if || l.if(d)) : [];
   };
 
+  /* ───────────── FORTUNA ───────────── */
+  CL.LUCK = {
+    good: [
+      { t: 'Una persona che non ti aspettavi annuisce a metà frase, e il clima nella stanza cambia.', fx: { t: 4 } },
+      { t: 'Qualcuno, senza che tu glielo chieda, aggiunge un dato che va nella tua direzione.', fx: { v: 4 } },
+      { t: 'La risposta che temevi di dover aspettare arriva con un giorno di anticipo.', fx: { u: 4 } },
+      { t: 'Per una volta nessuno guarda l’orologio: hai il tempo di finire il ragionamento.', fx: { c: 4 } },
+      { t: 'Chi di solito ti mette in difficoltà oggi ha altro per la testa e lascia correre.', fx: { r: -4 } },
+      { t: 'Un commento a margine, quasi distratto, ti dà più credito di quanto ne avessi.', fx: { t: 3, c: 2 } },
+      { t: 'Il tuo interlocutore ritrova al volo una cosa che gli avevi mandato un mese fa.', fx: { v: 3, t: 2 } },
+    ],
+    bad: [
+      { t: 'A metà frase squilla il telefono di qualcuno; quando si riparte il filo è perso.', fx: { c: -4 } },
+      { t: 'Un collega del cliente che non conoscevi entra e fa una domanda che non avevi previsto.', fx: { r: 5 } },
+      { t: 'Qualcuno ricorda, a bassa voce, com’è finita l’ultima volta con un altro fornitore.', fx: { t: -4 } },
+      { t: 'La connessione salta due volte e il momento buono passa.', fx: { u: -4 } },
+      { t: 'Chi doveva essere lì non c’è: la conversazione ricade su chi non decide.', fx: { c: -3, u: -2 } },
+      { t: 'Una battuta che a te sembrava neutra viene presa nel verso sbagliato.', fx: { t: -5 } },
+      { t: 'Arriva una mail interna nello stesso momento e metà della stanza guarda lo schermo.', fx: { v: -3, u: -2 } },
+      { t: 'Qualcuno fa notare che il prezzo che hai in mente non è quello che ricordava.', fx: { r: 4, t: -2 } },
+    ],
+  };
+  CL.rollLuck = (d, c, rnd) => {
+    const v = c.var != null ? c.var : 1;   /* 0 = mossa prudente, 2 = mossa a rischio */
+    const tb = ((d.m.trust - 50) / 50) * 0.04;
+    const pGood = CL.clamp(0.05 + 0.02 * v + tb, 0.02, 0.2), pBad = CL.clamp(0.06 + 0.03 * v - tb, 0.02, 0.22);
+    const u = rnd();
+    const kind = u < pGood ? 'good' : u < pGood + pBad ? 'bad' : null;
+    if (!kind) return null;
+    const bank = (d.sc.luck && d.sc.luck[kind]) || CL.LUCK[kind];
+    const it = bank[Math.floor(rnd() * bank.length)];
+    return { kind, line: it.t, delta: applyFx(d, it.fx) };
+  };
+
   /* opts: { rnd } abilita gli imprevisti (wild); { wild:false } li esclude; { pWild } ne cambia la probabilità */
   CL.pick = (d, id, run, opts) => {
     opts = opts || {};
@@ -129,20 +187,27 @@
     if (c.jolly) d.used[c.jolly] = (d.used[c.jolly] || 0) + 1;
     const pBefore = CL.prob(d).p;
     const mBefore = Object.assign({}, d.m);
+    const q = CL.qOf(c, d);   /* la qualità si valuta sullo stato PRIMA della mossa */
     const delta = applyFx(d, CL.val(c.fx, d) || {});
     const gained = [], lost = [];
-    (c.mp || []).forEach((k) => { if (!d.mp.has(k)) { d.mp.add(k); gained.push(k); } });
-    (c.mpx || []).forEach((k) => { if (d.mp.delete(k)) lost.push(k); });
-    if (c.set) Object.assign(d.flags, c.set);
-    if (c.integ) {
-      d.integ += c.integ;
-      if (run) run.rep = CL.clamp(run.rep + c.integ, 0, 100);
+    /* mp, mpx, set e integ possono essere funzioni dello stato (il mondo nascosto cambia ciò che ottieni) */
+    const mpGain = CL.val(c.mp, d) || [], mpLose = CL.val(c.mpx, d) || [], setF = CL.val(c.set, d), integ = CL.val(c.integ, d) || 0;
+    mpGain.forEach((k) => { if (!d.mp.has(k)) { d.mp.add(k); gained.push(k); } });
+    mpLose.forEach((k) => { if (d.mp.delete(k)) lost.push(k); });
+    if (setF) Object.assign(d.flags, setF);
+    if (integ) {
+      d.integ += integ;
+      if (run) run.rep = CL.clamp(run.rep + integ, 0, 100);
     }
+    /* fortuna: a parità di mossa il mondo non reagisce sempre allo stesso modo (spenta se gli imprevisti sono spenti o senza generatore casuale) */
+    const luck = opts.rnd && opts.wild !== false && opts.luck !== false ? CL.rollLuck(d, c, opts.rnd) : null;
+    if (luck) Object.keys(luck.delta).forEach((k) => { delta[k] = (delta[k] || 0) + luck.delta[k]; });
     const next = inWild ? 'RET' : CL.val(c.next, d);
     if (!next) throw new Error('next mancante ' + d.sc.id + '/' + d.node + '/' + id);
     const rec = {
-      node: inWild ? 'wild:' + d.wild.id : d.node, id: c.id, q: c.q, t: c.t, say: c.say || null, r: CL.val(c.r, d), react: CL.reactLines(d, c),
-      tip: n.tip, delta, gained, lost, jolly: c.jolly || null, integ: c.integ || 0, pBefore, mBefore,
+      node: inWild ? 'wild:' + d.wild.id : d.node, id: c.id, q, t: c.t, say: c.say || null, r: CL.val(c.r, d), react: CL.reactLines(d, c).concat(luck ? [{ n: luck.line }] : []),
+      luck: luck ? { kind: luck.kind, line: luck.line } : null,
+      tip: n.tip, delta, gained, lost, jolly: c.jolly || null, integ, pBefore, mBefore,
       wild: inWild ? d.wild.id : null, wildTitle: inWild ? d.wild.title : null,
     };
     d.hist.push(rec);
@@ -241,7 +306,7 @@
 
   const baseResult = (d) => {
     const sc = d.sc;
-    return { id: sc.id, title: sc.title, client: sc.client, avgQ: CL.avgQ(d), mp: d.mp.size, hasE: d.mp.has('E'), hasC: d.mp.has('C'), minP: d.minP, dipped: !!d.dipped, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length, wilds: d.hist.filter((h) => h.wild).length };
+    return { id: sc.id, title: sc.title, label: sc.label, family: sc.family, world: d.world, client: sc.client, avgQ: CL.avgQ(d), mp: d.mp.size, hasE: d.mp.has('E'), hasC: d.mp.has('C'), minP: d.minP, dipped: !!d.dipped, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length, wilds: d.hist.filter((h) => h.wild).length };
   };
 
   /* chiude le decisioni: l'esito resta SIGILLATO (pending) fino al giorno di chiusura */
@@ -263,7 +328,7 @@
   /* stato "ricostruito" da un risultato sigillato, per testare shock e domande di forecast */
   CL.pseudoDeal = (res) => ({
     sc: CL.getScenario(res.id), m: Object.assign({}, res.snap.m), mp: new Set(res.snap.mp), flags: Object.assign({}, res.snap.flags),
-    disc: res.snap.disc, list: res.snap.list, hist: [], node: null, integ: res.integ, over: 'END', entered: {}, used: {}, wildUsed: {}, wildCount: 0, wild: null,
+    disc: res.snap.disc, list: res.snap.list, hist: [], node: null, world: res.world || null, integ: res.integ, over: 'END', entered: {}, used: {}, wildUsed: {}, wildCount: 0, wild: null,
   });
 
   /* ───────────── SHOCK DEL GIORNO DI CHIUSURA (variabili aleatorie dopo le decisioni) ───────────── */
@@ -311,6 +376,35 @@
     return r;
   };
 
+  /* ───────────── PALINSESTO DEL TRIMESTRE ───────────── */
+  /* una trattativa per famiglia: tra le varianti 'real' (se la famiglia ne ha) si sceglie quella vista meno di recente (seen[famiglia] = id, dal più recente) */
+  CL.drawPipeline = (rng, seen) => {
+    seen = seen || {};
+    const fams = {};
+    CL.scenarios.forEach((s) => { (fams[s.family] = fams[s.family] || []).push(s); });
+    const ids = [];
+    Object.keys(fams).forEach((f) => {
+      const real = fams[f].filter((s) => s.tier === 'real');
+      const cands = real.length ? real : fams[f];
+      const hist = seen[f] || [];
+      const rank = (s) => { const i = hist.indexOf(s.id); return i < 0 ? 99 : i; };   /* mai vista = 99, vista ora = 0 */
+      const top = Math.max(...cands.map(rank));
+      const pool = cands.filter((s) => rank(s) === top);
+      ids.push(pool[Math.floor(rng() * pool.length)].id);
+    });
+    return ids;
+  };
+  CL.noteSeen = (seen, ids) => {
+    const out = Object.assign({}, seen || {});
+    ids.forEach((id) => {
+      const s = CL.getScenario(id); if (!s) return;
+      out[s.family] = [id].concat((out[s.family] || []).filter((x) => x !== id)).slice(0, 6);
+    });
+    return out;
+  };
+  /* le trattative del trimestre (in allenamento: tutte) */
+  CL.pool = (run) => (run && run.pipe && !run.free ? run.pipe.map((id) => CL.getScenario(id)).filter(Boolean) : CL.scenarios);
+
   /* ───────────── TRIMESTRE ───────────── */
   CL.newRun = (opts) => {
     opts = opts || {};
@@ -322,6 +416,7 @@
       free: opts.mode === 'train', spent: 0, jolly, rep: C.repStart,
       results: [], done: {}, scouted: {}, eventsSeen: {}, eventLog: [], bonusAcv: 0, bonusDeals: [], timeouts: 0, mods: {},
       mgr: 60, boost: {}, fc: { calls: {} }, promised: {}, closing: null,
+      pipe: opts.mode === 'train' ? null : (opts.pipe || CL.drawPipeline(CL.rng((seed ^ 0x9e3779b9) >>> 0), opts.seen)),
     };
   };
   CL.energy = (run) => C.energy - run.spent;
@@ -340,8 +435,8 @@
     return { state: 'ready' };
   };
 
-  CL.canPlayAny = (run) => CL.scenarios.some((s) => CL.avail(run, s).state === 'ready');
-  CL.canWaitForAny = (run) => CL.energy(run) > 0 && CL.scenarios.some((s) => CL.avail(run, s).state === 'early');
+  CL.canPlayAny = (run) => CL.pool(run).some((s) => CL.avail(run, s).state === 'ready');
+  CL.canWaitForAny = (run) => CL.energy(run) > 0 && CL.pool(run).some((s) => CL.avail(run, s).state === 'early');
 
   CL.commitDeal = (run, sc, res) => {
     run.results.push(res);

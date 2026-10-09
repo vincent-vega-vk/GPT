@@ -4,7 +4,9 @@
   const CL = g.CL, UI = CL.ui, h = UI.h, S = UI.S, C = CL.CONFIG;
 
   UI.startCareer = () => {
-    S.run = CL.newRun({ mode: 'career', hard: UI.settings.hard, name: UI.settings.name });
+    const seen = CL.store.read().seen || {};
+    S.run = CL.newRun({ mode: 'career', hard: UI.settings.hard, name: UI.settings.name, seen });
+    CL.store.patch((o) => { o.seen = CL.noteSeen(o.seen, S.run.pipe); });   /* le varianti viste di recente tornano per ultime */
     S.deal = null;
     UI.go('briefing');
   };
@@ -103,6 +105,7 @@
           toggle('t-hard', 'Senza rete', 'Cruscotto, probabilità e qualità delle mosse nascosti fino al verdetto. Commissione +10%.', 'hard'),
           toggle('t-timer', 'Pressione', 'Ogni decisione ha 30 secondi. Se scade, rispondi d’istinto: e di solito è la risposta peggiore.', 'timer'),
           toggle('t-wild', 'Imprevisti', 'Eventi casuali dentro le trattative e shock il giorno di chiusura. Spenti, il gioco è un percorso tutto tuo.', 'wild'),
+          toggle('t-coach', 'Allenatore a ogni mossa', 'Dopo ogni scelta ricevi subito valutazione e lezione. Spento (come nella realtà) scopri com’è andata dai fatti e il commento arriva a fine trattativa. Vale per la carriera.', 'coachEach'),
           toggle('t-fast', 'Dialoghi rapidi', 'Le scene appaiono subito, senza il ritmo di lettura.', 'fast'),
           toggle('t-sound', 'Audio', 'Ambiente sonoro per scenario, squilli, timbri ed esiti.', 'sound')),
         h('div', { class: 'row gap-12 wrapx mt-24' },

@@ -69,7 +69,7 @@
         }, c.label)));
         return h('div', { class: 'fcrow' + (e.state === 'open' ? ' open' : '') },
           h('div', { class: 'who' },
-            h('b', null, e.sc.title), h('small', null, e.sc.client),
+            h('b', null, e.sc.label), h('small', null, e.sc.client),
             h('div', { class: 'row gap-4 wrapx', style: { marginTop: '6px' } },
               e.state === 'pending' ? h('span', { class: 'chip chip--accent' }, 'In firma · ' + CL.fmtK(e.net)) : h('span', { class: 'chip' }, 'Non lavorato'),
               e.state === 'open' ? h('span', { class: 'chip' + (e.crm === 'commit' ? ' chip--warn' : '') }, 'CRM: ' + CL.catLabel(e.crm)) : null,
@@ -161,7 +161,7 @@
       if (gone()) return;
       const done = h('div', { class: 'fcsheet final' },
         h('div', { class: 'eyebrow' }, 'Forecast consegnato al CRO'),
-        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.title), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (e.cat === 'commit' ? 'chip--good' : e.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(e.cat)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')))),
+        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.label), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (e.cat === 'commit' ? 'chip--good' : e.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(e.cat)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')))),
         h('div', { class: 'fctot' },
           h('div', null, h('span', { class: 'eyebrow' }, 'Commit'), h('b', null, CL.fmtK(fin.commit + run.bonusAcv))),
           h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(fin.best))),
@@ -234,7 +234,7 @@
         area.replaceChildren();
         const card = h('div', { class: 'cloc' },
           h('div', { class: 'eyebrow' }, `Trattativa ${i + 1} di ${log.length}`),
-          h('h3', { class: 'display', style: { fontSize: '34px', marginTop: '6px' } }, sc.title),
+          h('h3', { class: 'display', style: { fontSize: '34px', marginTop: '6px' } }, sc.label),
           h('div', { class: 'small muted' }, `${sc.client} · se firma ${CL.fmtK(res.net)} netti`),
           cats[res.id] ? h('div', { class: 'mt-8' }, h('span', { class: 'chip ' + (cats[res.id] === 'commit' ? 'chip--good' : cats[res.id] === 'best' ? 'chip--warn' : '') }, 'Nel tuo forecast: ' + CL.catLabel(cats[res.id]))) : null);
         host.appendChild(h('div', { class: 'fcctx' }, UI.ic('flag'), `${sc.client}`));
@@ -294,7 +294,7 @@
       const panel = h('div', { class: 'fcsheet final' },
         h('div', { class: 'eyebrow' }, 'Affidabilità del forecast'),
         rows.length ? h('div', { class: 'fcrows' }, rows.map((r) => h('div', { class: 'fcrow compact' },
-          h('div', { class: 'who' }, h('b', null, r.title), h('small', null, r.client)),
+          h('div', { class: 'who' }, h('b', null, r.label || r.title), h('small', null, r.client)),
           h('span', { class: 'chip ' + (r.cat === 'commit' ? 'chip--good' : r.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(r.cat)),
           h('span', { class: 'chip ' + (r.status === 'won' ? 'chip--good' : r.status === 'slip' ? 'chip--warn' : 'chip--bad') }, { won: 'Firmato', lost: 'Perso', slip: 'Slitta' }[r.status]),
           h('b', { class: 'mono' }, Math.round(r.pts * 100) + '%')))) : h('p', { class: 'muted' }, 'Nessuna trattativa nel forecast finale.'),

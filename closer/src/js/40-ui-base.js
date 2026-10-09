@@ -88,7 +88,7 @@
 
   /* ───── Stato & impostazioni ───── */
   const S = (UI.S = { screen: 'home', run: null, deal: null, sc: null, phase: 'choose', dojo: null, res: null, openDash: false });
-  const defaults = { name: '', hard: false, timer: false, sound: false, theme: 'auto', wild: true, fast: false };
+  const defaults = { name: '', hard: false, timer: false, sound: false, theme: 'auto', wild: true, fast: false, coachEach: false };
   UI.settings = Object.assign({}, defaults, (CL.store.read().settings || {}));
   UI.saveSettings = () => { CL.playerName = UI.settings.name || ''; CL.store.patch((o) => { o.settings = UI.settings; }); };
   CL.playerName = UI.settings.name || '';

@@ -13,7 +13,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
 
 async function dump(dir) {
-  const files = fs.readdirSync(dir).filter((f) => /^(00|1\d|2\d)-.*\.js$/.test(f)).sort();
+  const files = fs.readdirSync(dir).filter((f) => /^(00|1\d|2\d|60)-.*\.js$/.test(f)).sort();
   for (const f of files) await import(pathToFileURL(path.join(dir, f)).href);
   const CL = globalThis.CL;
   const ser = (v) => (typeof v === 'function' ? 'fn:' + v.toString().replace(/\s+/g, ' ') : JSON.stringify(v));
@@ -46,7 +46,7 @@ if (argv[0] === '--dump') {
   const ref = (argv.find((a) => a.startsWith('--ref=')) || '--ref=HEAD').split('=')[1];
   if (!target) { console.error('uso: node tests/mechanics-check.mjs <id|file> [--ref=HEAD]'); process.exit(2); }
   const jsDir = path.join(root, 'src', 'js');
-  const all = fs.readdirSync(jsDir).filter((f) => /^(00|1\d|2\d)-.*\.js$/.test(f)).sort();
+  const all = fs.readdirSync(jsDir).filter((f) => /^(00|1\d|2\d|60)-.*\.js$/.test(f)).sort();
   const scFile = all.find((f) => f === target || f.includes('-sc-' + target) || f.endsWith(target));
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'closer-ref-'));
   for (const f of all) {

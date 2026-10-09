@@ -1447,7 +1447,16 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   const CL = (g.CL = g.CL || {});
   CL.VERSION = '1.0.0';
   CL.scenarios = [];
-  CL.registerScenario = (s) => { CL.scenarios.push(s); return s; };
+  /* famiglia = tema professionale; tier 'real' = casi da campo (carriera), 'guided' = casi didattici (allenamento e, in mancanza d'altro, carriera);
+     label/teaser = ciò che il giocatore vede PRIMA del verdetto (il title didattico svela la trappola e compare solo a fine trattativa) */
+  CL.registerScenario = (s) => {
+    s.family = s.family || s.id;
+    s.tier = s.tier || 'guided';
+    s.label = s.label || s.client || s.title;
+    s.teaser = s.teaser || s.brief || s.hook;
+    CL.scenarios.push(s);
+    return s;
+  };
 
   /* Costruttore compatto di una scelta.
      fx: t=Fiducia v=Valore u=Urgenza c=Controllo r=Rischio d=Sconto(pt) l=Listino(k€)
@@ -1580,6 +1589,23 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   const FX = { t: 'trust', v: 'value', u: 'urgency', c: 'control', r: 'risk' };
 
   CL.getScenario = (id) => CL.scenarios.find((s) => s.id === id);
+  /* la qualità di una mossa può dipendere dallo stato (mondo nascosto, flag): numero oppure funzione di d */
+  CL.qOf = (c, d) => { const q = typeof c.q === 'function' ? c.q(d) : c.q; return q === 0 || q === 1 || q === 2 || q === 3 ? q : Math.max(0, Math.min(3, Math.round(q || 0))); };
+
+  /* mondo nascosto di una trattativa: scelto a caso (pesi w) tra quelli di sc.worlds, evitando l'ultimo giocato; opts.world lo forza */
+  CL.pickWorld = (sc, opts) => {
+    const ws = sc.worlds;
+    if (!ws || !ws.length) return null;
+    opts = opts || {};
+    if (opts.world) return ws.find((w) => w.id === opts.world) || ws[0];
+    if (!opts.rnd) return ws[0];
+    let pool = ws.filter((w) => w.id !== opts.avoidWorld);
+    if (!pool.length) pool = ws;
+    let tot = 0; pool.forEach((w) => { tot += w.w || 1; });
+    let u = opts.rnd() * tot;
+    for (const w of pool) { if ((u -= (w.w || 1)) <= 0) return w; }
+    return pool[pool.length - 1];
+  };
 
   /* ───────────── DEAL ───────────── */
   CL.newDeal = (sc, opts) => {
@@ -1607,7 +1633,14 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       used: {},
       minP: 1, maxP: 0,
       wild: null, wildCount: 0, wildUsed: {},
+      world: null,
     };
+    const wd = CL.pickWorld(sc, opts);
+    if (wd) {
+      d.world = wd.id;
+      Object.assign(d.flags, wd.flags || {});
+      if (wd.mods) Object.keys(wd.mods).forEach((k) => { const key = FX[k] || k; if (d.m[key] != null) d.m[key] = CL.clamp(d.m[key] + wd.mods[k], 0, 100); });
+    }
     CL.enterNode(d);
     const p = CL.prob(d).p;
     d.minP = d.maxP = p;
@@ -1620,7 +1653,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     mp: new Set(d.mp), flags: Object.assign({}, d.flags),
     hist: d.hist.slice(), entered: Object.assign({}, d.entered),
     integ: d.integ, used: Object.assign({}, d.used), minP: d.minP, maxP: d.maxP, dipped: d.dipped,
-    wild: d.wild, wildCount: d.wildCount, wildUsed: Object.assign({}, d.wildUsed),
+    wild: d.wild, wildCount: d.wildCount, wildUsed: Object.assign({}, d.wildUsed), world: d.world,
   });
 
   /* il nodo corrente: un imprevisto (wild) ha la precedenza sul nodo dello scenario */
@@ -1689,6 +1722,40 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     return Array.isArray(raw) ? raw.filter((l) => !l.if || l.if(d)) : [];
   };
 
+  /* ───────────── FORTUNA ───────────── */
+  CL.LUCK = {
+    good: [
+      { t: 'Una persona che non ti aspettavi annuisce a metà frase, e il clima nella stanza cambia.', fx: { t: 4 } },
+      { t: 'Qualcuno, senza che tu glielo chieda, aggiunge un dato che va nella tua direzione.', fx: { v: 4 } },
+      { t: 'La risposta che temevi di dover aspettare arriva con un giorno di anticipo.', fx: { u: 4 } },
+      { t: 'Per una volta nessuno guarda l’orologio: hai il tempo di finire il ragionamento.', fx: { c: 4 } },
+      { t: 'Chi di solito ti mette in difficoltà oggi ha altro per la testa e lascia correre.', fx: { r: -4 } },
+      { t: 'Un commento a margine, quasi distratto, ti dà più credito di quanto ne avessi.', fx: { t: 3, c: 2 } },
+      { t: 'Il tuo interlocutore ritrova al volo una cosa che gli avevi mandato un mese fa.', fx: { v: 3, t: 2 } },
+    ],
+    bad: [
+      { t: 'A metà frase squilla il telefono di qualcuno; quando si riparte il filo è perso.', fx: { c: -4 } },
+      { t: 'Un collega del cliente che non conoscevi entra e fa una domanda che non avevi previsto.', fx: { r: 5 } },
+      { t: 'Qualcuno ricorda, a bassa voce, com’è finita l’ultima volta con un altro fornitore.', fx: { t: -4 } },
+      { t: 'La connessione salta due volte e il momento buono passa.', fx: { u: -4 } },
+      { t: 'Chi doveva essere lì non c’è: la conversazione ricade su chi non decide.', fx: { c: -3, u: -2 } },
+      { t: 'Una battuta che a te sembrava neutra viene presa nel verso sbagliato.', fx: { t: -5 } },
+      { t: 'Arriva una mail interna nello stesso momento e metà della stanza guarda lo schermo.', fx: { v: -3, u: -2 } },
+      { t: 'Qualcuno fa notare che il prezzo che hai in mente non è quello che ricordava.', fx: { r: 4, t: -2 } },
+    ],
+  };
+  CL.rollLuck = (d, c, rnd) => {
+    const v = c.var != null ? c.var : 1;   /* 0 = mossa prudente, 2 = mossa a rischio */
+    const tb = ((d.m.trust - 50) / 50) * 0.04;
+    const pGood = CL.clamp(0.05 + 0.02 * v + tb, 0.02, 0.2), pBad = CL.clamp(0.06 + 0.03 * v - tb, 0.02, 0.22);
+    const u = rnd();
+    const kind = u < pGood ? 'good' : u < pGood + pBad ? 'bad' : null;
+    if (!kind) return null;
+    const bank = (d.sc.luck && d.sc.luck[kind]) || CL.LUCK[kind];
+    const it = bank[Math.floor(rnd() * bank.length)];
+    return { kind, line: it.t, delta: applyFx(d, it.fx) };
+  };
+
   /* opts: { rnd } abilita gli imprevisti (wild); { wild:false } li esclude; { pWild } ne cambia la probabilità */
   CL.pick = (d, id, run, opts) => {
     opts = opts || {};
@@ -1703,20 +1770,27 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     if (c.jolly) d.used[c.jolly] = (d.used[c.jolly] || 0) + 1;
     const pBefore = CL.prob(d).p;
     const mBefore = Object.assign({}, d.m);
+    const q = CL.qOf(c, d);   /* la qualità si valuta sullo stato PRIMA della mossa */
     const delta = applyFx(d, CL.val(c.fx, d) || {});
     const gained = [], lost = [];
-    (c.mp || []).forEach((k) => { if (!d.mp.has(k)) { d.mp.add(k); gained.push(k); } });
-    (c.mpx || []).forEach((k) => { if (d.mp.delete(k)) lost.push(k); });
-    if (c.set) Object.assign(d.flags, c.set);
-    if (c.integ) {
-      d.integ += c.integ;
-      if (run) run.rep = CL.clamp(run.rep + c.integ, 0, 100);
+    /* mp, mpx, set e integ possono essere funzioni dello stato (il mondo nascosto cambia ciò che ottieni) */
+    const mpGain = CL.val(c.mp, d) || [], mpLose = CL.val(c.mpx, d) || [], setF = CL.val(c.set, d), integ = CL.val(c.integ, d) || 0;
+    mpGain.forEach((k) => { if (!d.mp.has(k)) { d.mp.add(k); gained.push(k); } });
+    mpLose.forEach((k) => { if (d.mp.delete(k)) lost.push(k); });
+    if (setF) Object.assign(d.flags, setF);
+    if (integ) {
+      d.integ += integ;
+      if (run) run.rep = CL.clamp(run.rep + integ, 0, 100);
     }
+    /* fortuna: a parità di mossa il mondo non reagisce sempre allo stesso modo (spenta se gli imprevisti sono spenti o senza generatore casuale) */
+    const luck = opts.rnd && opts.wild !== false && opts.luck !== false ? CL.rollLuck(d, c, opts.rnd) : null;
+    if (luck) Object.keys(luck.delta).forEach((k) => { delta[k] = (delta[k] || 0) + luck.delta[k]; });
     const next = inWild ? 'RET' : CL.val(c.next, d);
     if (!next) throw new Error('next mancante ' + d.sc.id + '/' + d.node + '/' + id);
     const rec = {
-      node: inWild ? 'wild:' + d.wild.id : d.node, id: c.id, q: c.q, t: c.t, say: c.say || null, r: CL.val(c.r, d), react: CL.reactLines(d, c),
-      tip: n.tip, delta, gained, lost, jolly: c.jolly || null, integ: c.integ || 0, pBefore, mBefore,
+      node: inWild ? 'wild:' + d.wild.id : d.node, id: c.id, q, t: c.t, say: c.say || null, r: CL.val(c.r, d), react: CL.reactLines(d, c).concat(luck ? [{ n: luck.line }] : []),
+      luck: luck ? { kind: luck.kind, line: luck.line } : null,
+      tip: n.tip, delta, gained, lost, jolly: c.jolly || null, integ, pBefore, mBefore,
       wild: inWild ? d.wild.id : null, wildTitle: inWild ? d.wild.title : null,
     };
     d.hist.push(rec);
@@ -1815,7 +1889,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 
   const baseResult = (d) => {
     const sc = d.sc;
-    return { id: sc.id, title: sc.title, client: sc.client, avgQ: CL.avgQ(d), mp: d.mp.size, hasE: d.mp.has('E'), hasC: d.mp.has('C'), minP: d.minP, dipped: !!d.dipped, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length, wilds: d.hist.filter((h) => h.wild).length };
+    return { id: sc.id, title: sc.title, label: sc.label, family: sc.family, world: d.world, client: sc.client, avgQ: CL.avgQ(d), mp: d.mp.size, hasE: d.mp.has('E'), hasC: d.mp.has('C'), minP: d.minP, dipped: !!d.dipped, integ: d.integ, flags: Object.assign({}, d.flags), used: Object.assign({}, d.used), steps: d.hist.length, wilds: d.hist.filter((h) => h.wild).length };
   };
 
   /* chiude le decisioni: l'esito resta SIGILLATO (pending) fino al giorno di chiusura */
@@ -1837,7 +1911,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   /* stato "ricostruito" da un risultato sigillato, per testare shock e domande di forecast */
   CL.pseudoDeal = (res) => ({
     sc: CL.getScenario(res.id), m: Object.assign({}, res.snap.m), mp: new Set(res.snap.mp), flags: Object.assign({}, res.snap.flags),
-    disc: res.snap.disc, list: res.snap.list, hist: [], node: null, integ: res.integ, over: 'END', entered: {}, used: {}, wildUsed: {}, wildCount: 0, wild: null,
+    disc: res.snap.disc, list: res.snap.list, hist: [], node: null, world: res.world || null, integ: res.integ, over: 'END', entered: {}, used: {}, wildUsed: {}, wildCount: 0, wild: null,
   });
 
   /* ───────────── SHOCK DEL GIORNO DI CHIUSURA (variabili aleatorie dopo le decisioni) ───────────── */
@@ -1885,6 +1959,35 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     return r;
   };
 
+  /* ───────────── PALINSESTO DEL TRIMESTRE ───────────── */
+  /* una trattativa per famiglia: tra le varianti 'real' (se la famiglia ne ha) si sceglie quella vista meno di recente (seen[famiglia] = id, dal più recente) */
+  CL.drawPipeline = (rng, seen) => {
+    seen = seen || {};
+    const fams = {};
+    CL.scenarios.forEach((s) => { (fams[s.family] = fams[s.family] || []).push(s); });
+    const ids = [];
+    Object.keys(fams).forEach((f) => {
+      const real = fams[f].filter((s) => s.tier === 'real');
+      const cands = real.length ? real : fams[f];
+      const hist = seen[f] || [];
+      const rank = (s) => { const i = hist.indexOf(s.id); return i < 0 ? 99 : i; };   /* mai vista = 99, vista ora = 0 */
+      const top = Math.max(...cands.map(rank));
+      const pool = cands.filter((s) => rank(s) === top);
+      ids.push(pool[Math.floor(rng() * pool.length)].id);
+    });
+    return ids;
+  };
+  CL.noteSeen = (seen, ids) => {
+    const out = Object.assign({}, seen || {});
+    ids.forEach((id) => {
+      const s = CL.getScenario(id); if (!s) return;
+      out[s.family] = [id].concat((out[s.family] || []).filter((x) => x !== id)).slice(0, 6);
+    });
+    return out;
+  };
+  /* le trattative del trimestre (in allenamento: tutte) */
+  CL.pool = (run) => (run && run.pipe && !run.free ? run.pipe.map((id) => CL.getScenario(id)).filter(Boolean) : CL.scenarios);
+
   /* ───────────── TRIMESTRE ───────────── */
   CL.newRun = (opts) => {
     opts = opts || {};
@@ -1896,6 +1999,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       free: opts.mode === 'train', spent: 0, jolly, rep: C.repStart,
       results: [], done: {}, scouted: {}, eventsSeen: {}, eventLog: [], bonusAcv: 0, bonusDeals: [], timeouts: 0, mods: {},
       mgr: 60, boost: {}, fc: { calls: {} }, promised: {}, closing: null,
+      pipe: opts.mode === 'train' ? null : (opts.pipe || CL.drawPipeline(CL.rng((seed ^ 0x9e3779b9) >>> 0), opts.seen)),
     };
   };
   CL.energy = (run) => C.energy - run.spent;
@@ -1914,8 +2018,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     return { state: 'ready' };
   };
 
-  CL.canPlayAny = (run) => CL.scenarios.some((s) => CL.avail(run, s).state === 'ready');
-  CL.canWaitForAny = (run) => CL.energy(run) > 0 && CL.scenarios.some((s) => CL.avail(run, s).state === 'early');
+  CL.canPlayAny = (run) => CL.pool(run).some((s) => CL.avail(run, s).state === 'ready');
+  CL.canWaitForAny = (run) => CL.energy(run) > 0 && CL.pool(run).some((s) => CL.avail(run, s).state === 'early');
 
   CL.commitDeal = (run, sc, res) => {
     run.results.push(res);
@@ -2027,7 +2131,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   /* ───── voci del foglio ───── */
   CL.fcEntries = (run, kind) => {
     const out = [];
-    CL.scenarios.forEach((sc) => {
+    CL.pool(run).forEach((sc) => {
       const res = run.results.find((r) => r.id === sc.id);
       if (res && res.status === 'pending') {
         const carried = (run.fc && run.fc.flags && run.fc.flags[sc.id]) || {};   /* segni lasciati dalla call di metà trimestre */
@@ -12925,7 +13029,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 
   /* ───── Stato & impostazioni ───── */
   const S = (UI.S = { screen: 'home', run: null, deal: null, sc: null, phase: 'choose', dojo: null, res: null, openDash: false });
-  const defaults = { name: '', hard: false, timer: false, sound: false, theme: 'auto', wild: true, fast: false };
+  const defaults = { name: '', hard: false, timer: false, sound: false, theme: 'auto', wild: true, fast: false, coachEach: false };
   UI.settings = Object.assign({}, defaults, (CL.store.read().settings || {}));
   UI.saveSettings = () => { CL.playerName = UI.settings.name || ''; CL.store.patch((o) => { o.settings = UI.settings; }); };
   CL.playerName = UI.settings.name || '';
@@ -13113,7 +13217,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   const CL = g.CL, UI = CL.ui, h = UI.h, S = UI.S, C = CL.CONFIG;
 
   UI.startCareer = () => {
-    S.run = CL.newRun({ mode: 'career', hard: UI.settings.hard, name: UI.settings.name });
+    const seen = CL.store.read().seen || {};
+    S.run = CL.newRun({ mode: 'career', hard: UI.settings.hard, name: UI.settings.name, seen });
+    CL.store.patch((o) => { o.seen = CL.noteSeen(o.seen, S.run.pipe); });   /* le varianti viste di recente tornano per ultime */
     S.deal = null;
     UI.go('briefing');
   };
@@ -13212,6 +13318,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
           toggle('t-hard', 'Senza rete', 'Cruscotto, probabilità e qualità delle mosse nascosti fino al verdetto. Commissione +10%.', 'hard'),
           toggle('t-timer', 'Pressione', 'Ogni decisione ha 30 secondi. Se scade, rispondi d’istinto: e di solito è la risposta peggiore.', 'timer'),
           toggle('t-wild', 'Imprevisti', 'Eventi casuali dentro le trattative e shock il giorno di chiusura. Spenti, il gioco è un percorso tutto tuo.', 'wild'),
+          toggle('t-coach', 'Allenatore a ogni mossa', 'Dopo ogni scelta ricevi subito valutazione e lezione. Spento (come nella realtà) scopri com’è andata dai fatti e il commento arriva a fine trattativa. Vale per la carriera.', 'coachEach'),
           toggle('t-fast', 'Dialoghi rapidi', 'Le scene appaiono subito, senza il ritmo di lettura.', 'fast'),
           toggle('t-sound', 'Audio', 'Ambiente sonoro per scenario, squilli, timbri ed esiti.', 'sound')),
         h('div', { class: 'row gap-12 wrapx mt-24' },
@@ -13259,7 +13366,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 
   UI.startDeal = (sc) => {
     S.sc = sc;
-    S.deal = CL.newDeal(sc, CL.dealOpts(S.run));
+    const mem = CL.store.read().worlds || {};
+    S.deal = CL.newDeal(sc, Object.assign(CL.dealOpts(S.run), { rnd: S.run.rnd, avoidWorld: mem[sc.id] }));   /* il mondo nascosto cambia da una partita all'altra */
+    if (S.deal.world) CL.store.patch((o) => { o.worlds = Object.assign({}, o.worlds, { [sc.id]: S.deal.world }); });
     S.phase = 'choose';
     S.res = null;
     S.hints = 0;
@@ -13317,7 +13426,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
           h('header', null,
             h('div', { class: 'grow' },
               h('div', { class: 'eyebrow' }, `${sc.client} · ${sc.sector}`),
-              h('h2', { class: 'display', style: { fontSize: '38px', marginTop: '8px' } }, sc.title)),
+              h('h2', { class: 'display', style: { fontSize: '38px', marginTop: '8px' } }, sc.label)),
             h('button', { class: 'iconbtn', 'aria-label': 'Chiudi', onclick: close }, UI.ic('x'))),
           h('div', { class: 'body' },
             h('p', { style: { fontSize: '16px' } }, sc.brief),
@@ -13392,7 +13501,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         list.map((sc) => {
           const r = resultOf(run, sc);
           return [
-            h('span', { class: 'nm', title: sc.client }, sc.title),
+            h('span', { class: 'nm', title: sc.client }, sc.label),
             Array.from({ length: C.weeks }, (_, i) => {
               const w = i + 1, inside = w >= sc.window[0] && w <= sc.window[1];
               const cls = ['cell'];
@@ -13415,11 +13524,11 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       else badge = h('span', { class: 'chip chip--accent' }, career ? 'Disponibile' : 'Gioca');
       const scouted = run.scouted[sc.id];
       const disabled = !!r;
-      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.title}, ${sc.client}` },
+      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.label}, ${sc.client}` },
         h('div', { class: 'top' }, h('div', { class: 'eyebrow' }, sc.sector), badge),
-        h('h3', null, sc.title),
+        h('h3', null, sc.label),
         h('div', { class: 'small muted' }, sc.client),
-        h('p', { class: 'small', style: { color: 'var(--ink-2)' } }, sc.hook),
+        h('p', { class: 'small', style: { color: 'var(--ink-2)' } }, sc.teaser),
         h('div', { class: 'row', style: { marginTop: 'auto', justifyContent: 'space-between', alignItems: 'flex-end' } },
           h('div', null, h('div', { class: 'eyebrow' }, 'Listino'), h('div', { class: 'acv' }, CL.fmtK(sc.list))),
           h('div', { class: 'meta', style: { justifyContent: 'flex-end' } },
@@ -13496,7 +13605,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     const stampCls = sum.att >= 1 ? 'stamp--won' : sum.att >= 0.7 ? 'stamp--slip' : 'stamp--lost';
     const euro = (k) => '€' + Math.round(k * 1000).toLocaleString('it-IT');
     const rows = run.results.map((r) => h('tr', null,
-      h('td', null, h('b', null, r.title), h('div', { class: 'small faint' }, r.client), r.shock ? h('div', { class: 'small', style: { marginTop: '4px', color: r.shock.kind === 'pos' ? 'var(--good)' : r.shock.hit ? 'var(--bad)' : 'var(--ink-2)' } }, (r.shock.kind === 'pos' ? 'Fortuna: ' : r.shock.hit ? 'Colpito da: ' : 'Protetto da: ') + CL.fmt(r.shock.title, CL.getScenario(r.id))) : null),
+      h('td', null, h('b', null, r.label || r.title), h('div', { class: 'small faint' }, r.client + (r.label && r.label !== r.title ? ' · ' + r.title : '')), r.shock ? h('div', { class: 'small', style: { marginTop: '4px', color: r.shock.kind === 'pos' ? 'var(--good)' : r.shock.hit ? 'var(--bad)' : 'var(--ink-2)' } }, (r.shock.kind === 'pos' ? 'Fortuna: ' : r.shock.hit ? 'Colpito da: ' : 'Protetto da: ') + CL.fmt(r.shock.title, CL.getScenario(r.id))) : null),
       h('td', null, h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
       h('td', { class: 'r mono' }, r.status === 'disq' ? '—' : CL.fmtK(r.listFinal || 0)),
       h('td', { class: 'r mono' }, r.status === 'disq' ? '—' : (r.disc || 0).toFixed(0) + '%'),
@@ -13549,7 +13658,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         run.results.filter((r) => r.review && r.review.length).map((r) => {
           const scr = CL.getScenario(r.id), fm = (t) => CL.fmt(t, scr);
           return h('details', { class: 'rv' },
-            h('summary', null, h('b', null, r.title), h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
+            h('summary', null, h('b', null, r.label || r.title), h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
             h('ul', { class: 'rvl' }, r.review.map((m, i) => h('li', null,
               h('div', { class: 'rvh' }, h('span', { class: 'n mono' }, m.wild ? '!!' : String(i + 1).padStart(2, '0')), h('span', { class: 'tt' }, fm(m.say || m.t)), h('span', { class: 'q ' + CL.QUALITY[m.q].cls }, CL.QUALITY[m.q].label)),
               h('p', { class: 'small' }, fm(m.r)),
@@ -13867,7 +13976,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     S.dots = dots;
     const head = h('div', { class: 'dealhead' },
       h('button', { class: 'iconbtn', 'aria-label': 'Esci dalla trattativa', onclick: () => UI.leaveDeal() }, UI.ic('back')),
-      h('div', null, h('div', { class: 'eyebrow' }, `${sc.client} · ${sc.sector}`), h('h2', { 'data-focus': '', style: { marginTop: '6px' } }, sc.title)),
+      h('div', null, h('div', { class: 'eyebrow' }, `${sc.client} · ${sc.sector}`), h('h2', { 'data-focus': '', style: { marginTop: '6px' } }, sc.label)),
       dots);
     const root = h('main', { class: 'wrap playroot' }, head, h('div', { class: 'play' }, h('div', { class: 'stagecol' }, vpHost, stage), dash.el));
     applyTheme(root, sc);
@@ -14019,9 +14128,10 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     const prm = UI.$('.prompt', S.stage); if (prm) prm.classList.add('done');
     const hb = UI.$('.hint', S.stage); if (hb) hb.hidden = true;
     const tb = UI.$('.timer', S.stage); if (tb) tb.remove();
-    S.dash.update(prevM, prevMp);
+    const late = lateCoach(run);
+    S.dash.update(late ? null : prevM, prevMp);
     if (!run.hard) UI.syncTopbar();
-    UI.sfx(run.hard ? 'pick' : 'q' + rec.q);
+    UI.sfx(late ? 'pick' : 'q' + rec.q);
     paintDots();
     const youLine = { you: true, t: o.c.say || o.c.t };
     const reactLines = rec.react || [];
@@ -14036,8 +14146,11 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     UI.scrollTo(fb, 'nearest');
   }
 
+  /* in carriera l'allenatore parla a fine trattativa (salvo impostazione): durante la scena si capisce com'è andata dai fatti, non da un voto */
+  const lateCoach = (run) => !!run.hard || (run.mode === 'career' && !UI.settings.coachEach);
+
   function feedbackEl(rec, node, wasWild) {
-    const run = S.run, deal = S.deal, hard = run.hard;
+    const run = S.run, deal = S.deal, hard = lateCoach(run);
     const Q = CL.QUALITY[rec.q];
     const chips = [];
     if (!hard) {
@@ -14054,7 +14167,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     return h('div', { class: 'fb', role: 'status' },
       h('div', { class: 'hd' }, chips.length ? chips : h('span', { class: 'small faint' }, wasWild ? 'Imprevisto gestito' : 'Esito della mossa')),
       hard
-        ? h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Senza rete'), run.mode === 'career' ? 'Valutazione e lezione dopo il verdetto del giorno di chiusura, nel riepilogo.' : 'Valutazione e lezione nel debrief.')
+        ? (run.hard
+          ? h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Senza rete'), run.mode === 'career' ? 'Valutazione e lezione dopo il verdetto del giorno di chiusura, nel riepilogo.' : 'Valutazione e lezione nel debrief.')
+          : h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Allenatore'), 'Il commento arriva a fine trattativa. Intanto guarda come ha reagito chi hai davanti: nella realtà nessuno ti dà un voto.'))
         : h('div', null,
           h('div', { class: 'bd' }, h('span', { class: 'eyebrow' }, 'Lettura della mossa'), h('p', null, f(rec.r))),
           h('div', { class: 'lesson' }, h('span', { class: 'eyebrow' }, 'Lezione dal campo'), f(node.tip))),
@@ -16695,7 +16810,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         }, c.label)));
         return h('div', { class: 'fcrow' + (e.state === 'open' ? ' open' : '') },
           h('div', { class: 'who' },
-            h('b', null, e.sc.title), h('small', null, e.sc.client),
+            h('b', null, e.sc.label), h('small', null, e.sc.client),
             h('div', { class: 'row gap-4 wrapx', style: { marginTop: '6px' } },
               e.state === 'pending' ? h('span', { class: 'chip chip--accent' }, 'In firma · ' + CL.fmtK(e.net)) : h('span', { class: 'chip' }, 'Non lavorato'),
               e.state === 'open' ? h('span', { class: 'chip' + (e.crm === 'commit' ? ' chip--warn' : '') }, 'CRM: ' + CL.catLabel(e.crm)) : null,
@@ -16787,7 +16902,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       if (gone()) return;
       const done = h('div', { class: 'fcsheet final' },
         h('div', { class: 'eyebrow' }, 'Forecast consegnato al CRO'),
-        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.title), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (e.cat === 'commit' ? 'chip--good' : e.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(e.cat)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')))),
+        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.label), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (e.cat === 'commit' ? 'chip--good' : e.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(e.cat)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')))),
         h('div', { class: 'fctot' },
           h('div', null, h('span', { class: 'eyebrow' }, 'Commit'), h('b', null, CL.fmtK(fin.commit + run.bonusAcv))),
           h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(fin.best))),
@@ -16860,7 +16975,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         area.replaceChildren();
         const card = h('div', { class: 'cloc' },
           h('div', { class: 'eyebrow' }, `Trattativa ${i + 1} di ${log.length}`),
-          h('h3', { class: 'display', style: { fontSize: '34px', marginTop: '6px' } }, sc.title),
+          h('h3', { class: 'display', style: { fontSize: '34px', marginTop: '6px' } }, sc.label),
           h('div', { class: 'small muted' }, `${sc.client} · se firma ${CL.fmtK(res.net)} netti`),
           cats[res.id] ? h('div', { class: 'mt-8' }, h('span', { class: 'chip ' + (cats[res.id] === 'commit' ? 'chip--good' : cats[res.id] === 'best' ? 'chip--warn' : '') }, 'Nel tuo forecast: ' + CL.catLabel(cats[res.id]))) : null);
         host.appendChild(h('div', { class: 'fcctx' }, UI.ic('flag'), `${sc.client}`));
@@ -16920,7 +17035,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       const panel = h('div', { class: 'fcsheet final' },
         h('div', { class: 'eyebrow' }, 'Affidabilità del forecast'),
         rows.length ? h('div', { class: 'fcrows' }, rows.map((r) => h('div', { class: 'fcrow compact' },
-          h('div', { class: 'who' }, h('b', null, r.title), h('small', null, r.client)),
+          h('div', { class: 'who' }, h('b', null, r.label || r.title), h('small', null, r.client)),
           h('span', { class: 'chip ' + (r.cat === 'commit' ? 'chip--good' : r.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(r.cat)),
           h('span', { class: 'chip ' + (r.status === 'won' ? 'chip--good' : r.status === 'slip' ? 'chip--warn' : 'chip--bad') }, { won: 'Firmato', lost: 'Perso', slip: 'Slitta' }[r.status]),
           h('b', { class: 'mono' }, Math.round(r.pts * 100) + '%')))) : h('p', { class: 'muted' }, 'Nessuna trattativa nel forecast finale.'),

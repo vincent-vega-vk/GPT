@@ -9,7 +9,9 @@
 
   UI.startDeal = (sc) => {
     S.sc = sc;
-    S.deal = CL.newDeal(sc, CL.dealOpts(S.run));
+    const mem = CL.store.read().worlds || {};
+    S.deal = CL.newDeal(sc, Object.assign(CL.dealOpts(S.run), { rnd: S.run.rnd, avoidWorld: mem[sc.id] }));   /* il mondo nascosto cambia da una partita all'altra */
+    if (S.deal.world) CL.store.patch((o) => { o.worlds = Object.assign({}, o.worlds, { [sc.id]: S.deal.world }); });
     S.phase = 'choose';
     S.res = null;
     S.hints = 0;
@@ -67,7 +69,7 @@
           h('header', null,
             h('div', { class: 'grow' },
               h('div', { class: 'eyebrow' }, `${sc.client} · ${sc.sector}`),
-              h('h2', { class: 'display', style: { fontSize: '38px', marginTop: '8px' } }, sc.title)),
+              h('h2', { class: 'display', style: { fontSize: '38px', marginTop: '8px' } }, sc.label)),
             h('button', { class: 'iconbtn', 'aria-label': 'Chiudi', onclick: close }, UI.ic('x'))),
           h('div', { class: 'body' },
             h('p', { style: { fontSize: '16px' } }, sc.brief),
@@ -142,7 +144,7 @@
         list.map((sc) => {
           const r = resultOf(run, sc);
           return [
-            h('span', { class: 'nm', title: sc.client }, sc.title),
+            h('span', { class: 'nm', title: sc.client }, sc.label),
             Array.from({ length: C.weeks }, (_, i) => {
               const w = i + 1, inside = w >= sc.window[0] && w <= sc.window[1];
               const cls = ['cell'];
@@ -165,11 +167,11 @@
       else badge = h('span', { class: 'chip chip--accent' }, career ? 'Disponibile' : 'Gioca');
       const scouted = run.scouted[sc.id];
       const disabled = !!r;
-      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.title}, ${sc.client}` },
+      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.label}, ${sc.client}` },
         h('div', { class: 'top' }, h('div', { class: 'eyebrow' }, sc.sector), badge),
-        h('h3', null, sc.title),
+        h('h3', null, sc.label),
         h('div', { class: 'small muted' }, sc.client),
-        h('p', { class: 'small', style: { color: 'var(--ink-2)' } }, sc.hook),
+        h('p', { class: 'small', style: { color: 'var(--ink-2)' } }, sc.teaser),
         h('div', { class: 'row', style: { marginTop: 'auto', justifyContent: 'space-between', alignItems: 'flex-end' } },
           h('div', null, h('div', { class: 'eyebrow' }, 'Listino'), h('div', { class: 'acv' }, CL.fmtK(sc.list))),
           h('div', { class: 'meta', style: { justifyContent: 'flex-end' } },
@@ -246,7 +248,7 @@
     const stampCls = sum.att >= 1 ? 'stamp--won' : sum.att >= 0.7 ? 'stamp--slip' : 'stamp--lost';
     const euro = (k) => '€' + Math.round(k * 1000).toLocaleString('it-IT');
     const rows = run.results.map((r) => h('tr', null,
-      h('td', null, h('b', null, r.title), h('div', { class: 'small faint' }, r.client), r.shock ? h('div', { class: 'small', style: { marginTop: '4px', color: r.shock.kind === 'pos' ? 'var(--good)' : r.shock.hit ? 'var(--bad)' : 'var(--ink-2)' } }, (r.shock.kind === 'pos' ? 'Fortuna: ' : r.shock.hit ? 'Colpito da: ' : 'Protetto da: ') + CL.fmt(r.shock.title, CL.getScenario(r.id))) : null),
+      h('td', null, h('b', null, r.label || r.title), h('div', { class: 'small faint' }, r.client + (r.label && r.label !== r.title ? ' · ' + r.title : '')), r.shock ? h('div', { class: 'small', style: { marginTop: '4px', color: r.shock.kind === 'pos' ? 'var(--good)' : r.shock.hit ? 'var(--bad)' : 'var(--ink-2)' } }, (r.shock.kind === 'pos' ? 'Fortuna: ' : r.shock.hit ? 'Colpito da: ' : 'Protetto da: ') + CL.fmt(r.shock.title, CL.getScenario(r.id))) : null),
       h('td', null, h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
       h('td', { class: 'r mono' }, r.status === 'disq' ? '—' : CL.fmtK(r.listFinal || 0)),
       h('td', { class: 'r mono' }, r.status === 'disq' ? '—' : (r.disc || 0).toFixed(0) + '%'),
@@ -299,7 +301,7 @@
         run.results.filter((r) => r.review && r.review.length).map((r) => {
           const scr = CL.getScenario(r.id), fm = (t) => CL.fmt(t, scr);
           return h('details', { class: 'rv' },
-            h('summary', null, h('b', null, r.title), h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
+            h('summary', null, h('b', null, r.label || r.title), h('span', { class: 'chip ' + STATUS_CHIP[r.status] }, STATUS_LABEL[r.status])),
             h('ul', { class: 'rvl' }, r.review.map((m, i) => h('li', null,
               h('div', { class: 'rvh' }, h('span', { class: 'n mono' }, m.wild ? '!!' : String(i + 1).padStart(2, '0')), h('span', { class: 'tt' }, fm(m.say || m.t)), h('span', { class: 'q ' + CL.QUALITY[m.q].cls }, CL.QUALITY[m.q].label)),
               h('p', { class: 'small' }, fm(m.r)),

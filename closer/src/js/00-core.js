@@ -4,7 +4,16 @@
   const CL = (g.CL = g.CL || {});
   CL.VERSION = '1.0.0';
   CL.scenarios = [];
-  CL.registerScenario = (s) => { CL.scenarios.push(s); return s; };
+  /* famiglia = tema professionale; tier 'real' = casi da campo (carriera), 'guided' = casi didattici (allenamento e, in mancanza d'altro, carriera);
+     label/teaser = ciò che il giocatore vede PRIMA del verdetto (il title didattico svela la trappola e compare solo a fine trattativa) */
+  CL.registerScenario = (s) => {
+    s.family = s.family || s.id;
+    s.tier = s.tier || 'guided';
+    s.label = s.label || s.client || s.title;
+    s.teaser = s.teaser || s.brief || s.hook;
+    CL.scenarios.push(s);
+    return s;
+  };
 
   /* Costruttore compatto di una scelta.
      fx: t=Fiducia v=Valore u=Urgenza c=Controllo r=Rischio d=Sconto(pt) l=Listino(k€)
