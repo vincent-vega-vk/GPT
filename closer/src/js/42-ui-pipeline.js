@@ -130,11 +130,17 @@
         h('div', { class: 'eyebrow' }, 'Jolly'),
         h('div', { class: 'jollies' }, Object.keys(CL.JOLLY).map((k) => h('span', { class: 'jl' + (run.jolly[k] ? '' : ' zero'), title: CL.JOLLY[k].desc }, UI.ic(k), CL.JOLLY[k].short, h('b', null, '×' + run.jolly[k])))),
         h('div', { class: 'sub' }, 'Quantità limitate: usali dove pesano.')),
-      h('div', { class: 'card pad-sm cell' },
-        h('div', { class: 'eyebrow' }, 'Reputazione · Marta'),
-        h('div', { class: 'big' }, run.rep, h('small', { class: 'mono', style: { fontSize: '14px', marginLeft: '10px', color: 'var(--ink-3)' } }, 'Marta ' + run.mgr)),
-        h('div', { class: 'track' }, h('i', { style: { width: run.rep + '%', background: run.rep < 40 ? 'var(--bad)' : run.rep < 70 ? 'var(--warn)' : 'var(--good)' } })),
-        h('div', { class: 'sub' }, run.rep >= 80 ? 'Marta si fida del tuo forecast.' : run.rep >= 50 ? 'Nella media. Le scorciatoie si vedono.' : 'Sotto osservazione.'))) : null;
+      run.hard
+        ? h('div', { class: 'card pad-sm cell' },
+          h('div', { class: 'eyebrow' }, 'Reputazione · Marta'),
+          h('div', { class: 'big' }, '—'),
+          h('div', { class: 'track' }),
+          h('div', { class: 'sub' }, 'Senza rete: reputazione e fiducia di Marta restano nascoste fino al verdetto.'))
+        : h('div', { class: 'card pad-sm cell' },
+          h('div', { class: 'eyebrow' }, 'Reputazione · Marta'),
+          h('div', { class: 'big' }, run.rep, h('small', { class: 'mono', style: { fontSize: '14px', marginLeft: '10px', color: 'var(--ink-3)' } }, 'Marta ' + run.mgr)),
+          h('div', { class: 'track' }, h('i', { style: { width: run.rep + '%', background: run.rep < 40 ? 'var(--bad)' : run.rep < 70 ? 'var(--warn)' : 'var(--good)' } })),
+          h('div', { class: 'sub' }, run.rep >= 80 ? 'Marta si fida del tuo forecast.' : run.rep >= 50 ? 'Nella media. Le scorciatoie si vedono.' : 'Sotto osservazione.'))) : null;
 
     const cal = career ? h('section', { class: 'card calendar', 'aria-label': 'Calendario del trimestre' },
       h('div', { class: 'eyebrow', style: { marginBottom: '10px' } }, 'Calendario: finestre di disponibilità'),
@@ -181,7 +187,7 @@
         h('div', { class: 'row gap-8 wrapx' },
           h('span', { class: 'chip' + (scouted && sc.crm.prob >= 80 ? ' chip--warn' : '') }, `CRM ${sc.crm.cat} ${sc.crm.prob}%`),
           scouted ? h('span', { class: 'chip chip--accent' }, UI.ic('search'), 'ispezionato') : null,
-          career && !r && run.promised && run.promised[sc.id] ? h('span', { class: 'chip chip--warn', title: 'Hai promesso a Marta di lavorare questa trattativa: se non lo fai, costa reputazione e fiducia.' }, UI.ic('flag'), `Promessa a Marta · entro sett. ${run.promised[sc.id]}`) : null));
+          career && !r && run.promised && run.promised[sc.id] ? h('span', { class: 'chip chip--warn', title: 'Hai promesso a Marta di lavorare questa trattativa: se non lo fai, costa reputazione e fiducia.' }, UI.ic('flag'), `Promessa a Marta · entro sett. ${run.promised[sc.id]} (se manchi: −4 rep.)`) : null));
     });
 
     const noReady = !CL.canPlayAny(run);
@@ -189,7 +195,7 @@
       noReady && CL.canWaitForAny(run) ? h('button', { class: 'btn btn--primary', onclick: () => { CL.waitWeek(run); UI.go('pipeline'); } }, UI.ic('clock'), 'Aspetta una settimana (−1)') : null,
       h('button', { class: 'btn' + (noReady && !CL.canWaitForAny(run) ? ' btn--primary' : ''), onclick: () => UI.modal((close) => h('div', null,
         h('header', null, h('div', { class: 'grow' }, h('h3', { class: 'display', style: { fontSize: '30px' } }, 'Chiudere il trimestre?'))),
-        h('div', { class: 'body' }, h('p', { class: 'muted' }, run.results.length ? 'Le trattative non giocate restano nel CRM del prossimo trimestre. Il risultato attuale diventa definitivo.' : 'Non hai giocato nessuna trattativa: il risultato sarà zero.')),
+        h('div', { class: 'body' }, h('p', { class: 'muted' }, run.results.length ? 'Non giochi altre trattative: passi alla commit call con Marta e al giorno di chiusura. Le trattative non giocate restano nel CRM del prossimo trimestre.' : 'Non hai giocato nessuna trattativa: il risultato sarà zero.')),
         h('footer', null,
           h('button', { class: 'btn btn--primary', onclick: () => { close(); UI.finishQuarter(); } }, 'Chiudi il trimestre'),
           h('button', { class: 'btn', 'data-autofocus': '', onclick: close }, 'Continua a lavorare')))) }, UI.ic('flag'), 'Chiudi il trimestre'),
@@ -225,7 +231,7 @@
               const log = hardEv ? done.log.filter((l) => !/reputazione|di partenza/.test(l)) : done.log;
               return h('div', { class: 'fb' }, h('div', { class: 'hd' }, log.length ? log.map((l) => h('span', { class: 'delta' }, l)) : h('span', { class: 'delta' }, hardEv ? 'scelta registrata' : 'nessun effetto')), h('div', { class: 'bd' }, h('p', null, hardEv ? 'Senza rete: la valutazione di questa scelta arriva con il riepilogo del trimestre.' : done.text), h('div', { style: { height: '12px' } })));
             })(),
-            h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { S.ev = null; S.evDone = null; if (!CL.canPlayAny(S.run) && !CL.canWaitForAny(S.run)) UI.finishQuarter(); else UI.go('pipeline'); } }, 'Continua', UI.ic('next'))))
+            h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { S.ev = null; S.evDone = null; S.evFor = null; if (!CL.canPlayAny(S.run) && !CL.canWaitForAny(S.run)) UI.finishQuarter(); else UI.go('pipeline'); } }, 'Continua', UI.ic('next'))))
           : h('div', { class: 'choices' }, S.evOrder.map((c, i) => h('button', { class: 'choice', onclick: () => { UI.sfx('pick'); S.evDone = CL.applyEvent(S.run, ev, c.id); UI.render(); } }, h('span', { class: 'k' }, i + 1), h('span', { class: 'tx' }, c.t))))));
   };
 
@@ -290,7 +296,7 @@
             return 'Forecast nella media: né un merito né un problema, finché non si ripete.';
           })())),
         sum.fc.sandbagged ? h('p', { class: 'small', style: { marginTop: '8px', color: 'var(--warn)' } }, 'Hai chiamato basso una trattativa che poi hai vinto. Sorprendere in alto non è un merito: è un dato nascosto.') : null) : null,
-      (sum.shocksHit || sum.shocksAbsorbed) ? h('p', { class: 'small muted mt-16' }, `Il giorno di chiusura hai assorbito ${sum.shocksAbsorbed} shock negativi senza danni e ne hai subiti ${sum.shocksHit}. ${sum.shocksAbsorbed >= sum.shocksHit ? 'La preparazione paga.' : 'Più relazioni e più paper pronto, meno sorprese.'}`) : null,
+      (sum.shocksHit || sum.shocksAbsorbed) ? h('p', { class: 'small muted mt-16' }, `Il giorno di chiusura hai assorbito ${sum.shocksAbsorbed} ${sum.shocksAbsorbed === 1 ? 'shock negativo' : 'shock negativi'} senza danni e ne hai subiti ${sum.shocksHit}. ${sum.shocksAbsorbed >= sum.shocksHit ? 'La preparazione paga.' : 'Più relazioni e più paper pronto, meno sorprese.'}`) : null,
       h('section', { class: 'card pad mt-16' },
         h('div', { class: 'eyebrow' }, 'Le tue trattative'),
         rows.length ? h('div', { class: 'tblwrap', style: { marginTop: '10px' } }, h('table', { class: 'tbl' },

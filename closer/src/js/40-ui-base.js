@@ -233,6 +233,7 @@
   /* ───── Topbar ───── */
   UI.syncTopbar = () => {
     const bar = UI.$('#topbar');
+    const had = document.activeElement && bar.contains(document.activeElement) ? document.activeElement.getAttribute('aria-label') : null;   /* il focus non si perde ridisegnando la barra */
     bar.replaceChildren();
     const themeIcon = { auto: 'auto', light: 'sun', dark: 'moon' }[UI.settings.theme];
     bar.appendChild(h('div', { class: 'wrap' },
@@ -242,7 +243,7 @@
         ? h('div', { class: 'row gap-8 small muted', 'aria-label': 'Stato trimestre' },
           h('span', { class: 'row gap-4' }, UI.ic('clock'), `Sett. ${CL.week(S.run)}/${CL.CONFIG.weeks}`),
           /* senza rete la reputazione resta nascosta mentre decidi: le sue variazioni rivelerebbero la qualità delle mosse */
-          S.run.hard && ['play', 'forecast', 'closing', 'event', 'debrief'].includes(S.screen) ? null : h('span', { class: 'row gap-4' }, UI.ic('shield'), `Rep. ${S.run.rep}`))
+          S.run.hard ? null : h('span', { class: 'row gap-4' }, UI.ic('shield'), `Rep. ${S.run.rep}`))
         : null,
       h('button', { class: 'iconbtn', 'aria-label': 'Come si gioca', title: 'Come si gioca', onclick: () => UI.howto() }, UI.ic('info')),
       h('button', { class: 'iconbtn', 'aria-label': 'Audio', 'aria-pressed': String(UI.settings.sound), title: 'Audio', onclick: () => { UI.settings.sound = !UI.settings.sound; UI.saveSettings(); UI.sfx('pick'); UI.syncTopbar(); if (UI.ambience) UI.ambience.refresh(); if (S.screen === 'home') UI.render(); } }, UI.ic(UI.settings.sound ? 'vol' : 'mute')),
