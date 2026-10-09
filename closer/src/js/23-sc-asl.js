@@ -69,6 +69,7 @@
     scout: `L’unico momento in cui puoi incidere legittimamente è la consultazione: dopo la pubblicazione ogni contatto riservato col RUP è un rischio. Il partner locale più forte, Sinergia IT, ha anche un accordo di rivendita con Vertex.`,
     teaches: [`Gara pubblica`, `Par condicio`, `Partner e conflitti`, `Offerta tecnica vs prezzo`, `Condotta corretta`],
     list: 750, cost: 3, window: [3, 10], stars: 4, lep: 20, slip: 0.4, dqRefund: 1,
+    noWild: ['davide_recalled'],   // imprevisti generici che stonano con questo scenario
     crm: { cat: `Best Case`, prob: 50 },
     cast: CAST,
 
@@ -972,6 +973,7 @@
 
     /* ───── forecast con Marta ───── */
     fc: {
+      skipGaps: ['E', 'C'],   // in una gara non si incontra il decisore e non c’è un champion: il divario non può cadere lì
       crm: `Best Case al 50%: “se passiamo il tecnico, la gara è nostra”`,
       people: {
         E: `Ettore Ruggeri (Direttore Generale)`, C: `Marco Fenu (Direttore Sistemi Informativi)`,

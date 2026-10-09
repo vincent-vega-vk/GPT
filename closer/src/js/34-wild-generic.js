@@ -376,6 +376,7 @@
       id: 'rule_tailwind',
       title: `Una novità normativa accelera il progetto`,
       w: 1,
+      if: (d) => !tender(d) && !boxed(d),
       node: {
         when: `In giornata`,
         view: 'mail',

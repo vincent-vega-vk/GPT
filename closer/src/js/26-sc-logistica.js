@@ -37,6 +37,7 @@
     scout: `14 mesi di trattativa, 9 demo, nessun budget approvato e nessun accesso all’AD. Mirko è simpatico e sincero, ma non decide nulla. Il vero concorrente è il “non fare niente”.`,
     teaches: [`Qualificazione`, `Compelling event`, `Accesso al decisore`, `Right-sizing`, `Quando andarsene`],
     list: 900, cost: 3, window: [1, 12], stars: 4, lep: 15, slip: 0.45, dqRefund: 2,
+    noWild: ['leaked_mail', 'contact_away', 'new_decider'],   // imprevisti generici che stonano con questo scenario
     crm: { cat: `Commit`, prob: 90 },
     cast: CAST,
 

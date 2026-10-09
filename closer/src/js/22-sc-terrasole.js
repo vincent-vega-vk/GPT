@@ -62,6 +62,8 @@
     scout: `Il CRM dice Commit al 90%. In realtà: nessun contatto diretto con il Direttore Generale, la contrattualistica non è stata aperta, e Acquisti ha da sempre l’abitudine di spremere chiunque a ridosso della fine mese.`,
     teaches: [`Give-get`, `Ancoraggio`, `Pacchetti di offerta`, `Forecast onesto`, `Soglia LEP`],
     list: 620, cost: 2, window: [10, 13], stars: 3, lep: 12, slip: 0.25,
+    noWild: ['davide_recalled', 'new_decider', 'rival_offer'],   // imprevisti generici che stonano con questo scenario
+    noShock: ['g_freeze', 'g_board_accelerates', 'g_price_cut', 'g_rival_withdraws'],   // shock generici che stonano con questo scenario
     crm: { cat: `Commit`, prob: 90 },
     cast: CAST,
 

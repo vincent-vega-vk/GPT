@@ -51,6 +51,8 @@
     scout: `Il CRM tratta il rinnovo come automatico (Commit 85%). In realtà: nessun contatto con il nuovo VP, due ticket critici aperti, un’offerta concorrente in arrivo agli Acquisti. Lo sponsor unico se n’è andato e con lui la relazione.`,
     teaches: [`Account in difficoltà`, `Ownership`, `Value realization`, `Pricing a risultato`, `Multi-threading post-churn`],
     list: 320, cost: 2, window: [2, 11], stars: 2, lep: 15, slip: 0.2, dqRefund: 1,
+    noWild: ['rival_offer'],   // imprevisti generici che stonano con questo scenario
+    noShock: ['g_price_cut'],   // shock generici che stonano con questo scenario
     crm: { cat: `Commit`, prob: 85 },
     cast: CAST,
 

@@ -46,6 +46,8 @@
     scout: `Silvia ha il dolore ma non il budget. Rossi gioca a golf con l’account di Vertex. Longo non ti conosce. Nessuno ha ancora calcolato quanto costa il problema di stock.`,
     teaches: [`Displacement`, `Pilota con criteri di successo`, `Coesistenza`, `Risultati onesti`, `Costo dell’inazione`],
     list: 540, cost: 3, window: [1, 9], stars: 3, lep: 15, slip: 0.3,
+    noWild: ['rival_offer'],   // imprevisti generici che stonano con questo scenario
+    noShock: ['g_price_cut', 'g_rival_withdraws'],   // shock generici che stonano con questo scenario
     crm: { cat: `Best Case`, prob: 45 },
     cast: CAST,
 

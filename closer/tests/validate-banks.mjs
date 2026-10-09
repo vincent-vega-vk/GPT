@@ -220,6 +220,10 @@ for (const sc of CL.scenarios) {
       [d0, d1].forEach((d) => { ['if', 'has'].forEach((f) => { if (c[f]) { try { if (typeof c[f](d) !== 'boolean') err(`${where}.${f}: non boolean`); } catch (e) { err(`${where}.${f} lancia: ${e.message}`); } } }); });
     });
   }
+  /* esclusioni dai banchi generici (id inesistenti = refuso silenzioso) */
+  (sc.noWild || []).forEach((id) => { if (!(CL.wildGeneric || []).some((x) => x.id === id)) err(w(`noWild: imprevisto generico inesistente "${id}"`)); });
+  (sc.noShock || []).forEach((id) => { if (!(CL.shocksGeneric || []).some((x) => x.id === id)) err(w(`noShock: shock generico inesistente "${id}"`)); });
+  ((sc.fc && sc.fc.skipGaps) || []).forEach((k) => { if (!MP.includes(k)) err(w(`fc.skipGaps: lettera MEDDPICC inesistente "${k}"`)); });
   /* nodi e scelte */
   for (const [nid, n] of Object.entries(sc.nodes)) {
     if (strict) {

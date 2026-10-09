@@ -59,7 +59,8 @@
     if (res.cap) return 'cap';
     const have = new Set(res.snap.mp);
     const order = e.cat === 'commit' ? ORDER_COMMIT : ORDER_BEST;
-    const miss = order.find((k) => !have.has(k));
+    const sc = CL.getScenario(res.id), skip = (sc && sc.fc && sc.fc.skipGaps) || [];   /* lettere che in questo scenario non si possono guadagnare */
+    const miss = order.find((k) => !have.has(k) && skip.indexOf(k) < 0);
     if (miss) return miss;
     if (res.blocked || res.overLep) return 'disc';
     return 'meters';

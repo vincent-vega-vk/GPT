@@ -82,6 +82,7 @@
     return w.replace(/\s*[·,–-]\s*(?:(?:lunedì|martedì|mercoledì|giovedì|venerdì|sabato|domenica|giorno\s+\d+(?:\s+di\s+\d+)?|\d{1,2}[:.]\d{2})(?=[\s·]|$)[^·]*)$/i, '').trim() || w;
   };
 
+  const PHYS = { meeting: 1, walk: 1 };   /* viste in cui le persone sono fisicamente presenti */
   const deduceView = (where) => {
     const w = String(where || '').toLowerCase();
     if (/video|call|teams|zoom|meet/.test(w)) return 'call';
@@ -288,17 +289,23 @@
     const sc = S.sc, stances = S.dash ? S.dash.stances() : {};
     const keys = [];
     const add = (k) => { if (k && k !== 'you' && keys.indexOf(k) < 0) keys.push(k); };
-    lines.forEach((l) => { add(l.w); if (l.chat) add(l.chat.from); });
+    const view = node.view || deduceView(node.where);
+    /* chi scrive in chat o per email non è nella stanza: compare solo nelle viste a distanza */
+    const remote = !PHYS[view];
+    lines.forEach((l) => { add(l.w); if (l.chat && remote) add(l.chat.from); });
     (extraPeople || []).forEach(add);
+    const mailLine = lines.find((l) => l.mail);
     const people = keys.slice(0, 5).map((k) => { const c = CL.castOf(sc, k); return { key: k, name: c.name, role: c.role, hue: c.hue, stance: stances[k] || undefined }; });
     S.vpKeys = keys;
     S.vpState = {
       theme: Object.assign({ bg: 'office' }, sc.theme || {}, node.bg ? { bg: node.bg } : {}),
-      view: node.view || deduceView(node.where),
+      view,
       people, when: node.when || '', where: placeOnly(f(node.where || ''), node.when), caption: node.caption || '',
     };
+    if (mailLine) S.vpState.mail = { from: f(mailLine.mail.from), subj: f(mailLine.mail.subj) };
     S.vp.set(S.vpState);
   }
+  const personOf = (l) => l.w || (l.chat && S.vpState && !PHYS[S.vpState.view] ? l.chat.from : null);
   function ensurePerson(key) {
     if (!S.vp || !key || key === 'you' || (S.vpKeys || []).indexOf(key) >= 0 || (S.vpKeys || []).length >= 5) return;
     S.vpKeys.push(key);
@@ -309,7 +316,7 @@
   }
 
   function paintDots() {
-    const total = 6, cur = S.deal.hist.filter((x) => !x.wild).length;
+    const cur = S.deal.hist.filter((x) => !x.wild).length, total = Math.max(6, cur + 1);
     S.dots.replaceChildren(...Array.from({ length: total }, (_, i) => h('i', { class: i < cur ? 'on' : i === cur ? 'cur' : '' })));
   }
 
@@ -328,7 +335,7 @@
     const lines = (typeof intro.scene === 'function' ? intro.scene(S.deal) : intro.scene);
     setView({ view: intro.view || deduceView(intro.where), where: intro.where, when: intro.when, bg: intro.bg }, lines);
     paintDots();
-    UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(l.w) }).then((ok) => {
+    UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) }).then((ok) => {
       if (!ok || tok !== S.nodeTok) return;
       S.phase = 'intro';
       go.hidden = false;
@@ -374,7 +381,7 @@
     setView(node, lines);
     if (isWild) UI.sfx('alert');
     UI.scrollTo(stage, 'start');
-    const ok = await UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(l.w) });
+    const ok = await UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) });
     if (!ok || tok !== S.nodeTok) return;
     S.phase = 'choose';
     prompt.hidden = false; box.hidden = false;
@@ -420,7 +427,7 @@
     paintDots();
     const youLine = { you: true, t: o.c.say || o.c.t };
     const reactLines = rec.react || [];
-    const ok = await UI.reveal(host, [youLine].concat(timedOut ? [{ n: 'Il tempo scade: rispondi d’istinto.' }] : [], reactLines), { sc: S.sc, vp: S.vp, onLine: (l) => ensurePerson(l.w) });
+    const ok = await UI.reveal(host, [youLine].concat(timedOut ? [{ n: 'Il tempo scade: rispondi d’istinto.' }] : [], reactLines), { sc: S.sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) });
     if (!ok || tok !== S.nodeTok) return;
     S.phase = 'feedback';
     const fb = feedbackEl(rec, node, wasWild);
@@ -529,7 +536,7 @@
       return h('li', null,
         h('button', { 'aria-expanded': 'false', onclick: (e) => { body.hidden = !body.hidden; e.currentTarget.setAttribute('aria-expanded', String(!body.hidden)); } },
           h('span', { class: 'n' }, rec.wild ? '!!' : String(i + 1).padStart(2, '0')),
-          h('span', { class: 'tt' }, (rec.wild ? 'Imprevisto · ' : '') + trunc(f(rec.t), 120)),
+          h('span', { class: 'tt' }, (rec.wild ? 'Imprevisto · ' : '') + trunc(f(rec.t), 190)),
           h('span', { class: 'q ' + Q.cls }, Q.label)),
         body);
     });
@@ -584,8 +591,8 @@
     const pct = Math.round(shock.dp * 100);
     return h('div', { class: 'shock shock--' + kind + (shock.hit ? ' hit' : ' prot') },
       h('div', { class: 'hd' },
-        h('span', { class: 'eyebrow' }, kind === 'neg' ? 'Shock del giorno di chiusura' : 'Colpo di fortuna'),
-        h('span', { class: 'chip ' + (kind === 'pos' ? 'chip--good' : shock.hit ? 'chip--bad' : 'chip--good') }, kind === 'pos' ? 'A tuo favore' : shock.hit ? 'Colpito' : 'Protetto'),
+        h('span', { class: 'eyebrow' }, kind === 'neg' ? 'Shock del giorno di chiusura' : shock.hit ? 'Colpo di fortuna' : 'Occasione mancata'),
+        h('span', { class: 'chip ' + (kind === 'pos' ? (shock.hit ? 'chip--good' : 'chip--warn') : shock.hit ? 'chip--bad' : 'chip--good') }, kind === 'pos' ? (shock.hit ? 'A tuo favore' : 'Non sfruttata') : shock.hit ? 'Colpito' : 'Protetto'),
         pct ? h('span', { class: 'delta ' + (pct > 0 ? 'up' : 'down') }, `Probabilità ${UI.signed(pct)} punti`) : h('span', { class: 'delta' }, 'Nessun effetto')),
       h('h4', null, CL.fmt(shock.title, sc)),
       h('p', null, CL.fmt(shock.text, sc)));

@@ -32,6 +32,8 @@
     scout: `Gianni conosce da vent’anni il titolare del concorrente locale. Francesca è il tuo champion ma non firma. Il direttore di produzione Sergio non è stato coinvolto e ha già detto ai capi reparto che “è la solita moda”.`,
     teaches: [`Aziende familiari`, `Concorrente locale`, `Stakeholder resistente`, `Promesse realistiche`],
     list: 260, cost: 2, window: [1, 10], stars: 2, lep: 15, slip: 0.35,
+    noWild: ['rival_offer'],   // imprevisti generici che stonano con questo scenario
+    noShock: ['g_price_cut', 'g_rival_withdraws'],   // shock generici che stonano con questo scenario
     crm: { cat: `Best Case`, prob: 50 },
     cast: CAST,
 
@@ -141,7 +143,7 @@
       },
     ],
 
-    start: { t: 30, v: 28, u: 30, c: 30, r: 42, have: ['I', 'E'] },
+    start: { t: 30, v: 28, u: 30, c: 30, r: 42, have: ['I', 'E', 'C'] },
     caps: [
       { id: 'trust', max: 0.35, if: (d) => d.m.trust < 55, why: `Il titolare firma di chi si fida. Sotto il 55% di Fiducia, l’offerta del concorrente locale basta a spazzarti via.` },
       { id: 'sergio', max: 0.55, if: (d) => !d.flags.sergioOn, why: `Senza Sergio dalla tua parte il progetto parte ma non decolla: la direzione lo sa e frena.` },

@@ -169,7 +169,8 @@
     const last = d.hist[d.hist.length - 1];
     const lastNode = last ? last.node : null;
     const mk = (w, generic) => ({ w, key: (generic ? 'g:' : 's:') + w.id, weight: (w.w || 1) * (generic ? 0.5 : 1.5), generic });
-    return [].concat((d.sc.wild || []).map((w) => mk(w, false)), (CL.wildGeneric || []).map((w) => mk(w, true)))
+    const no = d.sc.noWild || [];   /* imprevisti generici che stonano con questo scenario */
+    return [].concat((d.sc.wild || []).map((w) => mk(w, false)), (CL.wildGeneric || []).filter((w) => no.indexOf(w.id) < 0).map((w) => mk(w, true)))
       .filter((x) => !d.wildUsed[x.key] && (!x.w.after || x.w.after.indexOf(lastNode) >= 0) && (!x.w.if || x.w.if(d)));
   };
 
@@ -268,7 +269,7 @@
     if (rnd() >= (opts.pShock != null ? opts.pShock : 0.6)) return null;
     const pool = [].concat(
       (pd.sc.shocks || []).map((s) => ({ s, w: (s.w || 1) * 2 })),
-      (CL.shocksGeneric || []).map((s) => ({ s, w: s.w || 1 }))
+      (CL.shocksGeneric || []).filter((s) => (pd.sc.noShock || []).indexOf(s.id) < 0).map((s) => ({ s, w: s.w || 1 }))
     ).filter((x) => !x.s.if || x.s.if(pd));
     if (!pool.length) return null;
     let tot = 0; pool.forEach((x) => { tot += x.w; });

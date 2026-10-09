@@ -279,3 +279,12 @@ Tipi e forma dei dati:
 | `src/js/33-fc-gaps.js` | agente banca forecast A |
 | `src/js/35-fc-misc.js` | agente banca forecast B |
 | `src/js/2x-sc-*.js` | agente di ciascuno scenario (fase successiva) |
+
+## 13. Note operative emerse dalla riscrittura degli otto scenari
+
+- **Esclusioni dai banchi generici.** Campi opzionali del scenario: `noWild: ['id', …]` (imprevisti generici da non estrarre), `noShock: ['id', …]` (shock generici da non estrarre), `fc.skipGaps: ['E', 'C', …]` (lettere MEDDPICC che in questo scenario non si possono guadagnare e che quindi non devono diventare il “divario” di una sfida di Marta). Usali quando un generico ripete un fatto già dello scenario (stesso concorrente, stessa offerta) o ne contraddice il registro (scenari “a tempo”, gare pubbliche). `validate-banks.mjs` segnala gli id inesistenti.
+- **Quando vengono valutate le funzioni dei testi.** `scene`, `when`, `view`, `bg` e le righe di `scene(d)` vedono lo stato *prima* della scelta. `r(d)` e `react(d)` vedono lo stato *dopo* l'applicazione di `fx`, `mp`, `set` della mossa appena fatta, ma la mossa non è ancora in `d.hist` (quindi `picked(d, node, id)` per la scelta in corso è falso: usa i flag). `t` e `say` sono stringhe statiche: se una battuta dipende dallo stato va scritta in forma neutra.
+- **Shock e domande di Marta lavorano su uno stato ricostruito.** `CL.pseudoDeal` restituisce un deal con `hist: []`: `hit(d)`, `if(d)` degli shock e `has(d)`/`if(d)` delle domande `fc.custom` possono leggere `d.mp`, `d.flags`, `d.m`, `d.disc`, ma **non** `d.hist`. Per “essere protetto” poggia su un flag.
+- **Cartelli, tempo e luogo.** Se un nodo ha `when`, il viewport mostra l'ora a parte: scrivi `where` come luogo (`Videocall · Teams`), senza ripetere giorno e ora (se li ripeti, l'interfaccia li toglie dal cartello ma restano nella lettura per gli screen reader).
+- **Viste e persone.** Chi scrive in chat o per email non è nella stanza: compare nel viewport solo nelle viste a distanza (`call`, `phone`, `mail`, `car`, `desk`), non in `meeting` e `walk`. Nella vista `mail` il mittente è quello della prima riga `{ mail: { from, subj } }` del nodo.
+- **I finali (`endings`) sono stringhe statiche**: scrivili validi per ogni percorso che porta a quell'esito.
