@@ -1,0 +1,146 @@
+{
+  "cluster": "Americhe e Oceania",
+  "nations": {
+    "USA": [
+      { "region": "Washington & Costa Est", "lon": -77.5, "lat": 39.5, "seas": ["S.WAT"],
+        "adj": ["USA:Midwest", "USA:Sud & Texas", "CAN:Ottawa & Ontario", "CAN:Québec"],
+        "corridors": [], "sc": true },
+      { "region": "Midwest", "lon": -91, "lat": 42, "seas": [],
+        "adj": ["USA:Washington & Costa Est", "USA:Sud & Texas", "USA:California & Costa Ovest", "CAN:Ottawa & Ontario", "CAN:Prairie & Alberta (petrolio)"],
+        "corridors": [], "sc": false },
+      { "region": "Sud & Texas", "lon": -90, "lat": 32.5, "seas": ["S.GOM", "S.WAT"],
+        "adj": ["USA:Washington & Costa Est", "USA:Midwest", "USA:California & Costa Ovest", "MEX:Nord & Monterrey"],
+        "corridors": [], "sc": true },
+      { "region": "California & Costa Ovest", "lon": -119.5, "lat": 37.8, "seas": ["S.EPA"],
+        "adj": ["USA:Midwest", "USA:Sud & Texas", "CAN:Prairie & Alberta (petrolio)", "CAN:Columbia Britannica", "MEX:Nord & Monterrey"],
+        "corridors": [], "sc": true },
+      { "region": "Alaska & Hawaii", "lon": -150, "lat": 64, "seas": ["S.BER", "S.ARC", "S.EPA", "S.NPA"],
+        "adj": ["CAN:Columbia Britannica"],
+        "corridors": [], "sc": true }
+    ],
+    "CAN": [
+      { "region": "Ottawa & Ontario", "lon": -84, "lat": 49, "seas": [],
+        "adj": ["CAN:Québec", "CAN:Prairie & Alberta (petrolio)", "USA:Washington & Costa Est", "USA:Midwest"],
+        "corridors": [], "sc": true },
+      { "region": "Québec", "lon": -72, "lat": 50, "seas": ["S.NAT", "S.WAT"],
+        "adj": ["CAN:Ottawa & Ontario", "USA:Washington & Costa Est"],
+        "corridors": [], "sc": true },
+      { "region": "Prairie & Alberta (petrolio)", "lon": -108, "lat": 54, "seas": [],
+        "adj": ["CAN:Ottawa & Ontario", "CAN:Columbia Britannica", "USA:Midwest", "USA:California & Costa Ovest"],
+        "corridors": [], "sc": true },
+      { "region": "Columbia Britannica", "lon": -124, "lat": 54, "seas": ["S.EPA"],
+        "adj": ["CAN:Prairie & Alberta (petrolio)", "USA:California & Costa Ovest", "USA:Alaska & Hawaii"],
+        "corridors": [], "sc": false }
+    ],
+    "MEX": [
+      { "region": "Città del Messico & Centro", "lon": -100.5, "lat": 20.5, "seas": ["S.CPA", "S.GOM"],
+        "adj": ["MEX:Nord & Monterrey", "MEX:Sud & Yucatán"],
+        "corridors": [], "sc": true },
+      { "region": "Nord & Monterrey", "lon": -104.5, "lat": 27.5, "seas": ["S.GOM", "S.CPA"],
+        "adj": ["MEX:Città del Messico & Centro", "USA:Sud & Texas", "USA:California & Costa Ovest"],
+        "corridors": [], "sc": true },
+      { "region": "Sud & Yucatán", "lon": -91.5, "lat": 18, "seas": ["S.GOM", "S.CAR", "S.CPA"],
+        "adj": ["MEX:Città del Messico & Centro"],
+        "corridors": [{ "to": "COL:Caraibi & Pacifico", "via": "America Centrale" }], "sc": true }
+    ],
+    "CUB": [
+      { "region": "L’Avana", "lon": -81.5, "lat": 22.6, "seas": ["S.GOM", "S.CAR"],
+        "adj": ["CUB:Santiago & Oriente"],
+        "corridors": [], "sc": true },
+      { "region": "Santiago & Oriente", "lon": -76.5, "lat": 20.4, "seas": ["S.CAR", "S.WAT"],
+        "adj": ["CUB:L’Avana"],
+        "corridors": [], "sc": true }
+    ],
+    "BRA": [
+      { "region": "Brasilia & Centro", "lon": -51, "lat": -15, "seas": [],
+        "adj": ["BRA:San Paolo & Sud-Est", "BRA:Sud", "BRA:Nord-Est & Amazzonia"],
+        "corridors": [], "sc": true },
+      { "region": "San Paolo & Sud-Est", "lon": -45.5, "lat": -20, "seas": ["S.BRZ"],
+        "adj": ["BRA:Brasilia & Centro", "BRA:Sud", "BRA:Nord-Est & Amazzonia"],
+        "corridors": [], "sc": true },
+      { "region": "Sud", "lon": -52, "lat": -27.3, "seas": ["S.BRZ"],
+        "adj": ["BRA:Brasilia & Centro", "BRA:San Paolo & Sud-Est", "ARG:Pampa & Centro"],
+        "corridors": [], "sc": false },
+      { "region": "Nord-Est & Amazzonia", "lon": -52, "lat": -5, "seas": ["S.MAT", "S.SAT"],
+        "adj": ["BRA:Brasilia & Centro", "BRA:San Paolo & Sud-Est", "COL:Bogotá", "VEN:Orinoco & Sud", "PER:Amazzonia"],
+        "corridors": [], "sc": false }
+    ],
+    "ARG": [
+      { "region": "Buenos Aires", "lon": -60, "lat": -36.5, "seas": ["S.BRZ"],
+        "adj": ["ARG:Pampa & Centro", "ARG:Patagonia & Vaca Muerta"],
+        "corridors": [], "sc": true },
+      { "region": "Pampa & Centro", "lon": -63.5, "lat": -29, "seas": [],
+        "adj": ["ARG:Buenos Aires", "ARG:Patagonia & Vaca Muerta", "BRA:Sud", "CHL:Santiago", "CHL:Nord minerario (litio, rame)"],
+        "corridors": [], "sc": true },
+      { "region": "Patagonia & Vaca Muerta", "lon": -68.5, "lat": -44, "seas": ["S.BRZ"],
+        "adj": ["ARG:Buenos Aires", "ARG:Pampa & Centro", "CHL:Sud & Patagonia"],
+        "corridors": [], "sc": true }
+    ],
+    "COL": [
+      { "region": "Bogotá", "lon": -73, "lat": 3, "seas": [],
+        "adj": ["COL:Medellín & Antioquia", "COL:Caraibi & Pacifico", "VEN:Maracaibo (petrolio)", "VEN:Orinoco & Sud", "BRA:Nord-Est & Amazzonia", "PER:Amazzonia"],
+        "corridors": [], "sc": true },
+      { "region": "Medellín & Antioquia", "lon": -75.5, "lat": 6.5, "seas": ["S.CAR"],
+        "adj": ["COL:Bogotá", "COL:Caraibi & Pacifico"],
+        "corridors": [], "sc": true },
+      { "region": "Caraibi & Pacifico", "lon": -75, "lat": 9.4, "seas": ["S.CAR", "S.CPA"],
+        "adj": ["COL:Bogotá", "COL:Medellín & Antioquia", "VEN:Maracaibo (petrolio)"],
+        "corridors": [{ "to": "MEX:Sud & Yucatán", "via": "America Centrale" }], "sc": true }
+    ],
+    "VEN": [
+      { "region": "Caracas", "lon": -66.5, "lat": 9.6, "seas": ["S.CAR"],
+        "adj": ["VEN:Maracaibo (petrolio)", "VEN:Orinoco & Sud"],
+        "corridors": [], "sc": true },
+      { "region": "Maracaibo (petrolio)", "lon": -71, "lat": 9.3, "seas": ["S.CAR"],
+        "adj": ["VEN:Caracas", "VEN:Orinoco & Sud", "COL:Bogotá", "COL:Caraibi & Pacifico"],
+        "corridors": [], "sc": true },
+      { "region": "Orinoco & Sud", "lon": -64, "lat": 6, "seas": ["S.MAT"],
+        "adj": ["VEN:Caracas", "VEN:Maracaibo (petrolio)", "COL:Bogotá", "BRA:Nord-Est & Amazzonia"],
+        "corridors": [], "sc": true }
+    ],
+    "PER": [
+      { "region": "Lima", "lon": -76.8, "lat": -11.8, "seas": ["S.SEP"],
+        "adj": ["PER:Ande & miniere"],
+        "corridors": [], "sc": true },
+      { "region": "Ande & miniere", "lon": -73.5, "lat": -14, "seas": ["S.SEP"],
+        "adj": ["PER:Lima", "PER:Amazzonia", "CHL:Nord minerario (litio, rame)"],
+        "corridors": [], "sc": true },
+      { "region": "Amazzonia", "lon": -74.5, "lat": -5, "seas": [],
+        "adj": ["PER:Ande & miniere", "COL:Bogotá", "BRA:Nord-Est & Amazzonia"],
+        "corridors": [], "sc": false }
+    ],
+    "CHL": [
+      { "region": "Santiago", "lon": -71, "lat": -34, "seas": ["S.SEP"],
+        "adj": ["CHL:Nord minerario (litio, rame)", "CHL:Sud & Patagonia", "ARG:Pampa & Centro"],
+        "corridors": [], "sc": true },
+      { "region": "Nord minerario (litio, rame)", "lon": -69.5, "lat": -23.5, "seas": ["S.SEP"],
+        "adj": ["CHL:Santiago", "PER:Ande & miniere", "ARG:Pampa & Centro"],
+        "corridors": [], "sc": true },
+      { "region": "Sud & Patagonia", "lon": -72.5, "lat": -45, "seas": ["S.SEP", "S.BRZ"],
+        "adj": ["CHL:Santiago", "ARG:Patagonia & Vaca Muerta"],
+        "corridors": [], "sc": false }
+    ],
+    "AUS": [
+      { "region": "Canberra & Sydney", "lon": 147.5, "lat": -32.5, "seas": ["S.TAS"],
+        "adj": ["AUS:Melbourne & Victoria", "AUS:Perth & Ovest (miniere)", "AUS:Queensland & Nord"],
+        "corridors": [], "sc": true },
+      { "region": "Melbourne & Victoria", "lon": 144.5, "lat": -37, "seas": ["S.TAS"],
+        "adj": ["AUS:Canberra & Sydney", "AUS:Perth & Ovest (miniere)"],
+        "corridors": [], "sc": true },
+      { "region": "Perth & Ovest (miniere)", "lon": 121.5, "lat": -26, "seas": ["S.IND", "S.JAV"],
+        "adj": ["AUS:Canberra & Sydney", "AUS:Melbourne & Victoria", "AUS:Queensland & Nord"],
+        "corridors": [], "sc": true },
+      { "region": "Queensland & Nord", "lon": 141, "lat": -21, "seas": ["S.COR", "S.JAV"],
+        "adj": ["AUS:Canberra & Sydney", "AUS:Perth & Ovest (miniere)"],
+        "corridors": [], "sc": false }
+    ],
+    "NZL": [
+      { "region": "Auckland & Isola del Nord", "lon": 175.5, "lat": -38.5, "seas": ["S.TAS", "S.SPA"],
+        "adj": [],
+        "corridors": [], "sc": true },
+      { "region": "Isola del Sud", "lon": 171, "lat": -43.5, "seas": ["S.TAS", "S.SPA"],
+        "adj": [],
+        "corridors": [], "sc": true }
+    ]
+  }
+}

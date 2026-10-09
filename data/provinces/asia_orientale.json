@@ -1,0 +1,57 @@
+{
+  "cluster": "Asia orientale e sud-orientale",
+  "nations": {
+    "CHN": [
+      {"region":"Pechino & Nord","lon":117.5,"lat":41,"seas":["S.YEL"],"adj":["CHN:Shanghai & Est","CHN:Sichuan & Centro","CHN:Xinjiang & Tibet","RUS:Estremo Oriente","PRK:Nord & Confine cinese"],"corridors":[],"sc":true},
+      {"region":"Shanghai & Est","lon":118.5,"lat":31.5,"seas":["S.YEL","S.ECS"],"adj":["CHN:Pechino & Nord","CHN:Guangdong & Sud","CHN:Sichuan & Centro"],"corridors":[],"sc":true},
+      {"region":"Guangdong & Sud","lon":112,"lat":23.8,"seas":["S.SCS"],"adj":["CHN:Shanghai & Est","CHN:Sichuan & Centro","VNM:Hanoi & Nord"],"corridors":[],"sc":true},
+      {"region":"Sichuan & Centro","lon":106.5,"lat":29.5,"seas":[],"adj":["CHN:Pechino & Nord","CHN:Shanghai & Est","CHN:Guangdong & Sud","CHN:Xinjiang & Tibet","VNM:Hanoi & Nord"],"corridors":[{"to":"THA:Nord & Chiang Mai","via":"Laos"}],"sc":false},
+      {"region":"Xinjiang & Tibet","lon":88,"lat":37,"seas":[],"adj":["CHN:Pechino & Nord","CHN:Sichuan & Centro","RUS:Siberia","KAZ:Astana & Nord","KAZ:Almaty & Sud","PAK:Islamabad & Punjab","IND:Delhi & Nord","IND:Calcutta & Est"],"corridors":[],"sc":false}
+    ],
+    "JPN": [
+      {"region":"Tokyo & Kanto","lon":139.5,"lat":36.2,"seas":["S.NPA","S.PHS"],"adj":["JPN:Osaka & Kansai","JPN:Hokkaido & Nord"],"corridors":[],"sc":true},
+      {"region":"Osaka & Kansai","lon":135.8,"lat":35,"seas":["S.PHS","S.SOJ"],"adj":["JPN:Tokyo & Kanto","JPN:Hokkaido & Nord"],"corridors":[{"to":"JPN:Kyushu & Okinawa","via":"Stretto di Kanmon (ponte e tunnel)"}],"sc":true},
+      {"region":"Kyushu & Okinawa","lon":130.9,"lat":32.6,"seas":["S.ECS","S.PHS","S.SOJ"],"adj":[],"corridors":[{"to":"JPN:Osaka & Kansai","via":"Stretto di Kanmon (ponte e tunnel)"}],"sc":true},
+      {"region":"Hokkaido & Nord","lon":142.6,"lat":43.3,"seas":["S.SOJ","S.OKH","S.NPA"],"adj":["JPN:Tokyo & Kanto","JPN:Osaka & Kansai"],"corridors":[],"sc":false}
+    ],
+    "KOR": [
+      {"region":"Seul & Nord","lon":127.4,"lat":37.3,"seas":["S.YEL","S.SOJ"],"adj":["KOR:Busan & Sud","PRK:Pyongyang","PRK:Costa Est & Wonsan"],"corridors":[],"sc":true},
+      {"region":"Busan & Sud","lon":128,"lat":35.5,"seas":["S.SOJ","S.ECS","S.YEL"],"adj":["KOR:Seul & Nord"],"corridors":[],"sc":true}
+    ],
+    "PRK": [
+      {"region":"Pyongyang","lon":125.9,"lat":38.8,"seas":["S.YEL"],"adj":["PRK:Costa Est & Wonsan","PRK:Nord & Confine cinese","KOR:Seul & Nord"],"corridors":[],"sc":true},
+      {"region":"Costa Est & Wonsan","lon":127.4,"lat":39.4,"seas":["S.SOJ"],"adj":["PRK:Pyongyang","PRK:Nord & Confine cinese","KOR:Seul & Nord"],"corridors":[],"sc":false},
+      {"region":"Nord & Confine cinese","lon":127.3,"lat":40.9,"seas":["S.YEL","S.SOJ"],"adj":["PRK:Pyongyang","PRK:Costa Est & Wonsan","CHN:Pechino & Nord","RUS:Estremo Oriente"],"corridors":[],"sc":true}
+    ],
+    "TWN": [
+      {"region":"Taipei & Nord","lon":121.4,"lat":24.9,"seas":["S.ECS","S.PHS"],"adj":["TWN:Hsinchu & Taichung (fab di chip)"],"corridors":[],"sc":true},
+      {"region":"Hsinchu & Taichung (fab di chip)","lon":120.8,"lat":24.2,"seas":["S.ECS","S.SCS"],"adj":["TWN:Taipei & Nord","TWN:Kaohsiung & Sud"],"corridors":[],"sc":true},
+      {"region":"Kaohsiung & Sud","lon":120.6,"lat":22.95,"seas":["S.SCS","S.PHS"],"adj":["TWN:Hsinchu & Taichung (fab di chip)"],"corridors":[],"sc":true}
+    ],
+    "VNM": [
+      {"region":"Hanoi & Nord","lon":105.5,"lat":21.6,"seas":["S.SCS"],"adj":["VNM:Da Nang & Centro","CHN:Guangdong & Sud","CHN:Sichuan & Centro"],"corridors":[],"sc":true},
+      {"region":"Da Nang & Centro","lon":108,"lat":14.3,"seas":["S.SCS"],"adj":["VNM:Hanoi & Nord","VNM:Ho Chi Minh & Sud"],"corridors":[{"to":"THA:Nord & Chiang Mai","via":"Laos"}],"sc":false},
+      {"region":"Ho Chi Minh & Sud","lon":106,"lat":10.5,"seas":["S.SCS"],"adj":["VNM:Da Nang & Centro"],"corridors":[],"sc":true}
+    ],
+    "THA": [
+      {"region":"Bangkok","lon":100.7,"lat":14.2,"seas":["S.SCS"],"adj":["THA:Nord & Chiang Mai","THA:Sud & Istmo"],"corridors":[],"sc":true},
+      {"region":"Nord & Chiang Mai","lon":101.5,"lat":17,"seas":[],"adj":["THA:Bangkok"],"corridors":[{"to":"VNM:Da Nang & Centro","via":"Laos"},{"to":"CHN:Sichuan & Centro","via":"Laos"}],"sc":false},
+      {"region":"Sud & Istmo","lon":99.5,"lat":8.6,"seas":["S.SCS","S.AND"],"adj":["THA:Bangkok","MYS:Penang & Nord"],"corridors":[],"sc":true}
+    ],
+    "MYS": [
+      {"region":"Kuala Lumpur","lon":102.5,"lat":3.2,"seas":["S.AND","S.SCS"],"adj":["MYS:Penang & Nord"],"corridors":[],"sc":true},
+      {"region":"Penang & Nord","lon":101,"lat":5.3,"seas":["S.AND","S.SCS"],"adj":["MYS:Kuala Lumpur","THA:Sud & Istmo"],"corridors":[],"sc":false},
+      {"region":"Borneo malese","lon":113.8,"lat":2.6,"seas":["S.SCS","S.JAV"],"adj":["IDN:Borneo & Est"],"corridors":[],"sc":true}
+    ],
+    "PHL": [
+      {"region":"Manila & Luzon","lon":121,"lat":15.6,"seas":["S.SCS","S.PHS"],"adj":[],"corridors":[],"sc":true},
+      {"region":"Visayas","lon":122.9,"lat":10.5,"seas":["S.PHS","S.SCS"],"adj":[],"corridors":[],"sc":false},
+      {"region":"Mindanao","lon":124.9,"lat":7.8,"seas":["S.PHS","S.JAV"],"adj":[],"corridors":[],"sc":false}
+    ],
+    "IDN": [
+      {"region":"Giacarta & Giava","lon":109,"lat":-7.3,"seas":["S.JAV","S.IND"],"adj":[],"corridors":[],"sc":true},
+      {"region":"Sumatra","lon":101.8,"lat":-0.5,"seas":["S.AND","S.IND","S.JAV","S.SCS"],"adj":[],"corridors":[],"sc":true},
+      {"region":"Borneo & Est","lon":114.8,"lat":-0.6,"seas":["S.JAV","S.SCS","S.PHS"],"adj":["MYS:Borneo malese"],"corridors":[],"sc":true}
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "cluster": "Europa orientale, Turchia, Russia e Asia centrale",
+  "nations": {
+    "POL": [
+      {"region":"Varsavia & Centro","lon":19.5,"lat":52.1,"seas":[],"adj":["POL:Slesia & Sud","POL:Baltico & Nord","POL:Est"],"corridors":[],"sc":true},
+      {"region":"Slesia & Sud","lon":18.6,"lat":50.5,"seas":[],"adj":["POL:Varsavia & Centro","POL:Baltico & Nord","POL:Est","DEU:Berlino & Est"],"corridors":[{"to":"HUN:Budapest","via":"Slovacchia"}],"sc":true},
+      {"region":"Baltico & Nord","lon":18,"lat":54,"seas":["S.BAL"],"adj":["POL:Varsavia & Centro","POL:Slesia & Sud","POL:Est","DEU:Berlino & Est","RUS:San Pietroburgo & Nord-Ovest"],"corridors":[],"sc":true},
+      {"region":"Est","lon":22.8,"lat":51.3,"seas":[],"adj":["POL:Varsavia & Centro","POL:Slesia & Sud","POL:Baltico & Nord","BLR:Minsk","BLR:Gomel & Sud","UKR:Leopoli & Ovest"],"corridors":[],"sc":false}
+    ],
+    "UKR": [
+      {"region":"Kiev","lon":30.5,"lat":50.2,"seas":[],"adj":["UKR:Leopoli & Ovest","UKR:Kharkiv & Nord-Est","UKR:Odessa & Sud","BLR:Gomel & Sud"],"corridors":[],"sc":true},
+      {"region":"Leopoli & Ovest","lon":24.5,"lat":49.5,"seas":[],"adj":["UKR:Kiev","POL:Est","BLR:Gomel & Sud","HUN:Est","ROU:Transilvania","ROU:Bucarest"],"corridors":[],"sc":false},
+      {"region":"Kharkiv & Nord-Est","lon":35.5,"lat":49.6,"seas":[],"adj":["UKR:Kiev","UKR:Odessa & Sud","UKR:Donbass","BLR:Gomel & Sud","RUS:Mosca"],"corridors":[],"sc":false},
+      {"region":"Odessa & Sud","lon":32,"lat":47,"seas":["S.BLK"],"adj":["UKR:Kiev","UKR:Kharkiv & Nord-Est","UKR:Donbass","UKR:Crimea","ROU:Costanza & Mar Nero"],"corridors":[],"sc":true},
+      {"region":"Donbass","lon":38.3,"lat":48.2,"seas":["S.BLK"],"adj":["UKR:Kharkiv & Nord-Est","UKR:Odessa & Sud","RUS:Mosca","RUS:Caucaso & Sud"],"corridors":[],"sc":false},
+      {"region":"Crimea","lon":34.5,"lat":46,"seas":["S.BLK"],"adj":["UKR:Odessa & Sud","RUS:Caucaso & Sud"],"corridors":[],"sc":true}
+    ],
+    "BLR": [
+      {"region":"Minsk","lon":27.6,"lat":54,"seas":[],"adj":["BLR:Gomel & Sud","POL:Est","RUS:Mosca","RUS:San Pietroburgo & Nord-Ovest"],"corridors":[],"sc":true},
+      {"region":"Gomel & Sud","lon":28,"lat":52.3,"seas":[],"adj":["BLR:Minsk","POL:Est","UKR:Kiev","UKR:Leopoli & Ovest","UKR:Kharkiv & Nord-Est","RUS:Mosca"],"corridors":[],"sc":true}
+    ],
+    "ROU": [
+      {"region":"Bucarest","lon":26,"lat":44.6,"seas":[],"adj":["ROU:Transilvania","ROU:Costanza & Mar Nero","UKR:Leopoli & Ovest"],"corridors":[{"to":"GRC:Salonicco & Nord","via":"Bulgaria"}],"sc":true},
+      {"region":"Transilvania","lon":24,"lat":46.5,"seas":[],"adj":["ROU:Bucarest","HUN:Est","UKR:Leopoli & Ovest"],"corridors":[],"sc":true},
+      {"region":"Costanza & Mar Nero","lon":28.2,"lat":44.5,"seas":["S.BLK"],"adj":["ROU:Bucarest","UKR:Odessa & Sud"],"corridors":[],"sc":true}
+    ],
+    "HUN": [
+      {"region":"Budapest","lon":19.1,"lat":47.5,"seas":[],"adj":["HUN:Ovest & Győr","HUN:Est"],"corridors":[{"to":"POL:Slesia & Sud","via":"Slovacchia"}],"sc":true},
+      {"region":"Ovest & Győr","lon":17.5,"lat":47.1,"seas":[],"adj":["HUN:Budapest","HUN:Est"],"corridors":[],"sc":true},
+      {"region":"Est","lon":21.3,"lat":47.4,"seas":[],"adj":["HUN:Budapest","HUN:Ovest & Győr","ROU:Transilvania","UKR:Leopoli & Ovest"],"corridors":[],"sc":false}
+    ],
+    "GRC": [
+      {"region":"Atene & Attica","lon":23.6,"lat":38.1,"seas":["S.AEG","S.CMD"],"adj":["GRC:Salonicco & Nord"],"corridors":[],"sc":true},
+      {"region":"Salonicco & Nord","lon":23,"lat":40.8,"seas":["S.AEG"],"adj":["GRC:Atene & Attica","TUR:Istanbul & Marmara"],"corridors":[{"to":"ROU:Bucarest","via":"Bulgaria"}],"sc":true},
+      {"region":"Isole & Creta","lon":24.9,"lat":35.2,"seas":["S.AEG","S.EMD","S.CMD"],"adj":[],"corridors":[],"sc":false}
+    ],
+    "TUR": [
+      {"region":"Ankara & Anatolia","lon":33,"lat":39.5,"seas":["S.BLK","S.AEG","S.EMD"],"adj":["TUR:Istanbul & Marmara","TUR:Sud-Est"],"corridors":[],"sc":true},
+      {"region":"Istanbul & Marmara","lon":28.6,"lat":41.1,"seas":["S.BLK","S.AEG"],"adj":["TUR:Ankara & Anatolia","GRC:Salonicco & Nord"],"corridors":[],"sc":true},
+      {"region":"Sud-Est","lon":39.5,"lat":38,"seas":["S.EMD"],"adj":["TUR:Ankara & Anatolia","IRN:Teheran & Nord","IRQ:Kurdistan & Nord"],"corridors":[{"to":"ISR:Nord & Haifa","via":"Siria"},{"to":"RUS:Caucaso & Sud","via":"Georgia"}],"sc":true}
+    ],
+    "RUS": [
+      {"region":"Mosca","lon":38,"lat":54.5,"seas":[],"adj":["RUS:San Pietroburgo & Nord-Ovest","RUS:Volga & Urali","RUS:Caucaso & Sud","BLR:Minsk","BLR:Gomel & Sud","UKR:Kharkiv & Nord-Est","UKR:Donbass"],"corridors":[],"sc":true},
+      {"region":"San Pietroburgo & Nord-Ovest","lon":36,"lat":62,"seas":["S.BAL","S.BAR"],"adj":["RUS:Mosca","RUS:Volga & Urali","BLR:Minsk","POL:Baltico & Nord","FIN:Helsinki & Sud","FIN:Lapponia & Nord","NOR:Nord artico"],"corridors":[],"sc":true},
+      {"region":"Volga & Urali","lon":57,"lat":57,"seas":["S.ARC"],"adj":["RUS:Mosca","RUS:San Pietroburgo & Nord-Ovest","RUS:Siberia","RUS:Caucaso & Sud","KAZ:Astana & Nord","KAZ:Caspio (petrolio)"],"corridors":[],"sc":true},
+      {"region":"Siberia","lon":95,"lat":60,"seas":["S.ARC"],"adj":["RUS:Volga & Urali","RUS:Estremo Oriente","KAZ:Astana & Nord","CHN:Xinjiang & Tibet"],"corridors":[],"sc":false},
+      {"region":"Estremo Oriente","lon":135,"lat":62,"seas":["S.SOJ","S.OKH","S.BER","S.NPA","S.ARC"],"adj":["RUS:Siberia","CHN:Pechino & Nord","PRK:Nord & Confine cinese"],"corridors":[],"sc":true},
+      {"region":"Caucaso & Sud","lon":43,"lat":46.5,"seas":["S.BLK","S.CAS"],"adj":["RUS:Mosca","RUS:Volga & Urali","UKR:Donbass","UKR:Crimea","KAZ:Caspio (petrolio)"],"corridors":[{"to":"TUR:Sud-Est","via":"Georgia"},{"to":"IRN:Teheran & Nord","via":"Azerbaigian"}],"sc":true}
+    ],
+    "KAZ": [
+      {"region":"Astana & Nord","lon":71,"lat":51,"seas":[],"adj":["KAZ:Almaty & Sud","KAZ:Caspio (petrolio)","RUS:Volga & Urali","RUS:Siberia","CHN:Xinjiang & Tibet"],"corridors":[],"sc":true},
+      {"region":"Almaty & Sud","lon":72.5,"lat":44,"seas":[],"adj":["KAZ:Astana & Nord","KAZ:Caspio (petrolio)","CHN:Xinjiang & Tibet","UZB:Tashkent","UZB:Samarcanda & Sud"],"corridors":[],"sc":true},
+      {"region":"Caspio (petrolio)","lon":54.5,"lat":47.5,"seas":["S.CAS"],"adj":["KAZ:Astana & Nord","KAZ:Almaty & Sud","RUS:Volga & Urali","RUS:Caucaso & Sud","UZB:Samarcanda & Sud"],"corridors":[],"sc":true}
+    ],
+    "UZB": [
+      {"region":"Tashkent","lon":69.6,"lat":41.1,"seas":[],"adj":["UZB:Samarcanda & Sud","UZB:Fergana","KAZ:Almaty & Sud"],"corridors":[],"sc":true},
+      {"region":"Samarcanda & Sud","lon":64.5,"lat":40.5,"seas":[],"adj":["UZB:Tashkent","KAZ:Almaty & Sud","KAZ:Caspio (petrolio)"],"corridors":[],"sc":true},
+      {"region":"Fergana","lon":71.7,"lat":40.7,"seas":[],"adj":["UZB:Tashkent"],"corridors":[],"sc":false}
+    ]
+  }
+}

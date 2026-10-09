@@ -1,0 +1,117 @@
+{
+  "cluster": "Medio Oriente, Nord Africa e Corno d'Africa",
+  "nations": {
+    "SAU": [
+      { "region": "Riad & Najd", "lon": 44.5, "lat": 25.8, "seas": [],
+        "adj": ["SAU:Provincia Orientale (petrolio)", "SAU:Hejaz & Mar Rosso",
+                "IRQ:Baghdad", "IRQ:Bassora (petrolio)"],
+        "corridors": [], "sc": true },
+      { "region": "Provincia Orientale (petrolio)", "lon": 49.8, "lat": 24.0, "seas": ["S.PGF"],
+        "adj": ["SAU:Riad & Najd", "SAU:Hejaz & Mar Rosso",
+                "IRQ:Bassora (petrolio)", "QAT:Doha", "ARE:Abu Dhabi"],
+        "corridors": [], "sc": true },
+      { "region": "Hejaz & Mar Rosso", "lon": 40.0, "lat": 23.2, "seas": ["S.RED"],
+        "adj": ["SAU:Riad & Najd", "SAU:Provincia Orientale (petrolio)"],
+        "corridors": [], "sc": true }
+    ],
+    "ARE": [
+      { "region": "Abu Dhabi", "lon": 54.0, "lat": 23.6, "seas": ["S.PGF"],
+        "adj": ["ARE:Dubai", "SAU:Provincia Orientale (petrolio)"],
+        "corridors": [], "sc": true },
+      { "region": "Dubai", "lon": 55.6, "lat": 25.0, "seas": ["S.PGF", "S.ARS"],
+        "adj": ["ARE:Abu Dhabi"],
+        "corridors": [], "sc": true }
+    ],
+    "QAT": [
+      { "region": "Doha", "lon": 51.3, "lat": 25.15, "seas": ["S.PGF"],
+        "adj": ["QAT:Ras Laffan (GNL)", "SAU:Provincia Orientale (petrolio)"],
+        "corridors": [], "sc": true },
+      { "region": "Ras Laffan (GNL)", "lon": 51.35, "lat": 25.8, "seas": ["S.PGF"],
+        "adj": ["QAT:Doha"],
+        "corridors": [], "sc": true }
+    ],
+    "IRN": [
+      { "region": "Teheran & Nord", "lon": 50.0, "lat": 35.8, "seas": ["S.CAS"],
+        "adj": ["IRN:Khuzestan & Golfo (petrolio)", "IRN:Est & Sud",
+                "IRQ:Baghdad", "IRQ:Kurdistan & Nord", "TUR:Sud-Est"],
+        "corridors": [{ "to": "RUS:Caucaso & Sud", "via": "Azerbaigian" }], "sc": true },
+      { "region": "Khuzestan & Golfo (petrolio)", "lon": 50.5, "lat": 30.8, "seas": ["S.PGF"],
+        "adj": ["IRN:Teheran & Nord", "IRN:Est & Sud",
+                "IRQ:Bassora (petrolio)", "IRQ:Baghdad"],
+        "corridors": [], "sc": true },
+      { "region": "Est & Sud", "lon": 58.5, "lat": 29.5, "seas": ["S.PGF", "S.ARS"],
+        "adj": ["IRN:Teheran & Nord", "IRN:Khuzestan & Golfo (petrolio)",
+                "PAK:Belucistan & Nord-Ovest"],
+        "corridors": [], "sc": true }
+    ],
+    "IRQ": [
+      { "region": "Baghdad", "lon": 43.8, "lat": 33.1, "seas": [],
+        "adj": ["IRQ:Bassora (petrolio)", "IRQ:Kurdistan & Nord",
+                "IRN:Teheran & Nord", "IRN:Khuzestan & Golfo (petrolio)", "SAU:Riad & Najd"],
+        "corridors": [{ "to": "ISR:Gerusalemme & Sud", "via": "Giordania" }], "sc": true },
+      { "region": "Bassora (petrolio)", "lon": 46.6, "lat": 31.0, "seas": ["S.PGF"],
+        "adj": ["IRQ:Baghdad",
+                "IRN:Khuzestan & Golfo (petrolio)", "SAU:Riad & Najd", "SAU:Provincia Orientale (petrolio)"],
+        "corridors": [], "sc": true },
+      { "region": "Kurdistan & Nord", "lon": 44.0, "lat": 36.2, "seas": [],
+        "adj": ["IRQ:Baghdad", "IRN:Teheran & Nord", "TUR:Sud-Est"],
+        "corridors": [], "sc": false }
+    ],
+    "ISR": [
+      { "region": "Tel Aviv & Centro", "lon": 34.9, "lat": 32.1, "seas": ["S.EMD"],
+        "adj": ["ISR:Gerusalemme & Sud", "ISR:Nord & Haifa"],
+        "corridors": [], "sc": true },
+      { "region": "Gerusalemme & Sud", "lon": 34.85, "lat": 30.8, "seas": ["S.EMD", "S.RED"],
+        "adj": ["ISR:Tel Aviv & Centro", "EGY:Alessandria & Canale di Suez"],
+        "corridors": [{ "to": "IRQ:Baghdad", "via": "Giordania" }], "sc": true },
+      { "region": "Nord & Haifa", "lon": 35.25, "lat": 32.85, "seas": ["S.EMD"],
+        "adj": ["ISR:Tel Aviv & Centro"],
+        "corridors": [{ "to": "TUR:Sud-Est", "via": "Siria" }], "sc": false }
+    ],
+    "EGY": [
+      { "region": "Cairo & Delta", "lon": 31.0, "lat": 30.6, "seas": ["S.EMD"],
+        "adj": ["EGY:Alessandria & Canale di Suez", "EGY:Alto Egitto"],
+        "corridors": [], "sc": true },
+      { "region": "Alessandria & Canale di Suez", "lon": 32.5, "lat": 30.5, "seas": ["S.EMD", "S.RED"],
+        "adj": ["EGY:Cairo & Delta", "EGY:Alto Egitto", "ISR:Gerusalemme & Sud"],
+        "corridors": [], "sc": true },
+      { "region": "Alto Egitto", "lon": 31.0, "lat": 25.8, "seas": ["S.RED"],
+        "adj": ["EGY:Cairo & Delta", "EGY:Alessandria & Canale di Suez"],
+        "corridors": [{ "to": "ETH:Tigray & Nord", "via": "Sudan" }], "sc": false }
+    ],
+    "DZA": [
+      { "region": "Algeri & Nord", "lon": 3.2, "lat": 35.4, "seas": ["S.WMD"],
+        "adj": ["DZA:Hassi Messaoud (gas)", "DZA:Sud sahariano", "MAR:Nord & Tangeri"],
+        "corridors": [], "sc": true },
+      { "region": "Hassi Messaoud (gas)", "lon": 6.5, "lat": 30.0, "seas": [],
+        "adj": ["DZA:Algeri & Nord", "DZA:Sud sahariano"],
+        "corridors": [], "sc": true },
+      { "region": "Sud sahariano", "lon": 2.5, "lat": 25.0, "seas": [],
+        "adj": ["DZA:Algeri & Nord", "DZA:Hassi Messaoud (gas)",
+                "MAR:Rabat & Casablanca", "MAR:Sahara Occidentale"],
+        "corridors": [{ "to": "NGA:Nord", "via": "Niger" }], "sc": false }
+    ],
+    "MAR": [
+      { "region": "Rabat & Casablanca", "lon": -6.8, "lat": 32.4, "seas": ["S.ATE"],
+        "adj": ["MAR:Nord & Tangeri", "MAR:Sahara Occidentale", "DZA:Sud sahariano"],
+        "corridors": [], "sc": true },
+      { "region": "Nord & Tangeri", "lon": -4.3, "lat": 34.6, "seas": ["S.WMD", "S.ATE"],
+        "adj": ["MAR:Rabat & Casablanca", "DZA:Algeri & Nord", "ESP:Andalusia & Sud"],
+        "corridors": [], "sc": true },
+      { "region": "Sahara Occidentale", "lon": -12.9, "lat": 24.6, "seas": ["S.ATE", "S.MAT"],
+        "adj": ["MAR:Rabat & Casablanca", "DZA:Sud sahariano"],
+        "corridors": [], "sc": false }
+    ],
+    "ETH": [
+      { "region": "Addis Abeba & Centro", "lon": 38.9, "lat": 9.3, "seas": [],
+        "adj": ["ETH:Oromia & Sud", "ETH:Tigray & Nord"],
+        "corridors": [], "sc": true },
+      { "region": "Oromia & Sud", "lon": 39.5, "lat": 6.8, "seas": [],
+        "adj": ["ETH:Addis Abeba & Centro", "ETH:Tigray & Nord", "KEN:Ovest", "KEN:Nairobi"],
+        "corridors": [], "sc": true },
+      { "region": "Tigray & Nord", "lon": 38.6, "lat": 12.6, "seas": [],
+        "adj": ["ETH:Addis Abeba & Centro", "ETH:Oromia & Sud"],
+        "corridors": [{ "to": "EGY:Alto Egitto", "via": "Sudan" }], "sc": false }
+    ]
+  }
+}

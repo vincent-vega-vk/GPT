@@ -1,0 +1,42 @@
+{
+  "cluster": "Africa subsahariana e Asia meridionale",
+  "nations": {
+    "NGA": [
+      {"region":"Abuja & Centro","lon":7.5,"lat":8.8,"seas":[],"adj":["NGA:Lagos & Sud-Ovest","NGA:Delta del Niger (petrolio)","NGA:Nord"],"corridors":[],"sc":true},
+      {"region":"Lagos & Sud-Ovest","lon":4,"lat":7.6,"seas":["S.GGU"],"adj":["NGA:Abuja & Centro","NGA:Delta del Niger (petrolio)"],"corridors":[],"sc":true},
+      {"region":"Delta del Niger (petrolio)","lon":6.6,"lat":5.6,"seas":["S.GGU"],"adj":["NGA:Abuja & Centro","NGA:Lagos & Sud-Ovest"],"corridors":[],"sc":true},
+      {"region":"Nord","lon":9.5,"lat":11.8,"seas":[],"adj":["NGA:Abuja & Centro"],"corridors":[{"to":"DZA:Sud sahariano","via":"Niger"}],"sc":false}
+    ],
+    "COD": [
+      {"region":"Kinshasa","lon":17.5,"lat":-3,"seas":["S.GGU"],"adj":["COD:Katanga (cobalto)","COD:Kivu & Est"],"corridors":[],"sc":true},
+      {"region":"Katanga (cobalto)","lon":26.5,"lat":-9,"seas":[],"adj":["COD:Kinshasa","COD:Kivu & Est"],"corridors":[{"to":"ZAF:Pretoria & Gauteng","via":"Zambia e Zimbabwe"}],"sc":true},
+      {"region":"Kivu & Est","lon":26.8,"lat":0.5,"seas":[],"adj":["COD:Kinshasa","COD:Katanga (cobalto)"],"corridors":[{"to":"KEN:Ovest","via":"Uganda"}],"sc":false}
+    ],
+    "KEN": [
+      {"region":"Nairobi","lon":37.4,"lat":-0.9,"seas":[],"adj":["KEN:Mombasa & Costa","KEN:Ovest","ETH:Oromia & Sud"],"corridors":[],"sc":true},
+      {"region":"Mombasa & Costa","lon":39.6,"lat":-1,"seas":["S.WIO"],"adj":["KEN:Nairobi","KEN:Ovest","ETH:Oromia & Sud"],"corridors":[],"sc":true},
+      {"region":"Ovest","lon":35.8,"lat":1.5,"seas":[],"adj":["KEN:Nairobi","KEN:Mombasa & Costa","ETH:Oromia & Sud"],"corridors":[{"to":"COD:Kivu & Est","via":"Uganda"}],"sc":false}
+    ],
+    "ZAF": [
+      {"region":"Pretoria & Gauteng","lon":28,"lat":-26,"seas":[],"adj":["ZAF:Città del Capo & Ovest","ZAF:Durban & Est"],"corridors":[{"to":"COD:Katanga (cobalto)","via":"Zambia e Zimbabwe"}],"sc":true},
+      {"region":"Città del Capo & Ovest","lon":20.5,"lat":-31,"seas":["S.SAT","S.WIO"],"adj":["ZAF:Pretoria & Gauteng","ZAF:Durban & Est"],"corridors":[],"sc":true},
+      {"region":"Durban & Est","lon":29.5,"lat":-30.2,"seas":["S.WIO"],"adj":["ZAF:Pretoria & Gauteng","ZAF:Città del Capo & Ovest"],"corridors":[],"sc":true}
+    ],
+    "IND": [
+      {"region":"Delhi & Nord","lon":77.5,"lat":28.5,"seas":[],"adj":["IND:Mumbai & Ovest","IND:Calcutta & Est","PAK:Islamabad & Punjab","PAK:Karachi & Sindh","CHN:Xinjiang & Tibet"],"corridors":[],"sc":true},
+      {"region":"Mumbai & Ovest","lon":75.5,"lat":21,"seas":["S.ARS"],"adj":["IND:Delhi & Nord","IND:Bengaluru & Sud","IND:Calcutta & Est","PAK:Karachi & Sindh"],"corridors":[],"sc":true},
+      {"region":"Bengaluru & Sud","lon":77.8,"lat":14.5,"seas":["S.ARS","S.BOB"],"adj":["IND:Mumbai & Ovest","IND:Calcutta & Est"],"corridors":[],"sc":true},
+      {"region":"Calcutta & Est","lon":86,"lat":23,"seas":["S.BOB","S.AND"],"adj":["IND:Delhi & Nord","IND:Mumbai & Ovest","IND:Bengaluru & Sud","BGD:Dacca","BGD:Chittagong & Sud-Est","BGD:Nord","CHN:Xinjiang & Tibet"],"corridors":[],"sc":false}
+    ],
+    "PAK": [
+      {"region":"Islamabad & Punjab","lon":73,"lat":31.5,"seas":[],"adj":["PAK:Karachi & Sindh","PAK:Belucistan & Nord-Ovest","IND:Delhi & Nord","CHN:Xinjiang & Tibet"],"corridors":[],"sc":true},
+      {"region":"Karachi & Sindh","lon":68.8,"lat":26,"seas":["S.ARS"],"adj":["PAK:Islamabad & Punjab","PAK:Belucistan & Nord-Ovest","IND:Delhi & Nord","IND:Mumbai & Ovest"],"corridors":[],"sc":true},
+      {"region":"Belucistan & Nord-Ovest","lon":66.5,"lat":29,"seas":["S.ARS"],"adj":["PAK:Islamabad & Punjab","PAK:Karachi & Sindh","IRN:Est & Sud"],"corridors":[],"sc":true}
+    ],
+    "BGD": [
+      {"region":"Dacca","lon":90.2,"lat":23.5,"seas":["S.BOB"],"adj":["BGD:Chittagong & Sud-Est","BGD:Nord","IND:Calcutta & Est"],"corridors":[],"sc":true},
+      {"region":"Chittagong & Sud-Est","lon":91.9,"lat":22.6,"seas":["S.BOB"],"adj":["BGD:Dacca","IND:Calcutta & Est"],"corridors":[],"sc":true},
+      {"region":"Nord","lon":89,"lat":24.9,"seas":[],"adj":["BGD:Dacca","IND:Calcutta & Est"],"corridors":[],"sc":false}
+    ]
+  }
+}
