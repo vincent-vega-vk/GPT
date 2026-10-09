@@ -37,7 +37,7 @@
   CL.playerName = '';
   /* segnaposto nei testi mostrati: {nome} {client} {contact} {buyer} */
   /* "S.p.A.." → "S.p.A." (il punto della ragione sociale più quello della frase); i puntini di sospensione restano */
-  CL.tidyDots = (t) => (typeof t === 'string' ? t.replace(/([^.])\.\.(?!\.)/g, '$1.') : t);
+  CL.tidyDots = (t) => (typeof t === 'string' ? t.replace(/([^.])\.\.(?!\.)/g, '$1.').replace(/(^|[.!?…]\s+)collega\b/g, (m, a) => a + 'Collega') : t);
   CL.fmt = (s, sc) => {
     if (typeof s !== 'string' || s.indexOf('{') < 0) return s;
     const ppl = (sc && sc.fc && sc.fc.people) || {};

@@ -6,31 +6,31 @@
   document.addEventListener('keydown', (e) => {
     if (UI.modalOpen() || e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target;
-    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
     const num = /^[1-9]$/.test(e.key) ? Number(e.key) - 1 : -1;
     /* un pulsante col focus si attiva da solo con Invio/Spazio: non intercettiamo */
     const ae = document.activeElement;
-    const onButton = !!(ae && ae.tagName === 'BUTTON' && !ae.disabled);
+    const onButton = !!(ae && (ae.tagName === 'BUTTON' || ae.tagName === 'A' || ae.tagName === 'SUMMARY') && !ae.disabled);
     const root = UI.$('#app') || document;
     const clickNth = (sel, n) => { const b = root.querySelectorAll(sel)[n]; if (b && !b.disabled) { b.click(); return true; } return false; };
-    const enter = e.key === 'Enter' || e.key === ' ';
+    /* Invio avanza (una volta per pressione: tenerlo premuto non deve attraversare le schermate); Spazio resta allo scorrimento della pagina */
+    const enter = e.key === 'Enter' && !e.repeat && !onButton;
+    if (e.repeat && num >= 0) return;
     if (S.screen === 'play') {
       if (num >= 0) UI.playKey(num);
-      else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.playNext(); }
-    } else if (S.screen === 'forecast') {
-      if (num >= 0) UI.fcKey(num);
-      else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.fcAdvance(); }
-    } else if (S.screen === 'closing') {
-      if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.fcAdvance(); }
+      else if (enter) { e.preventDefault(); UI.playNext(); }
+    } else if (S.screen === 'forecast' || S.screen === 'closing') {
+      if (num >= 0 && S.screen === 'forecast') UI.fcKey(num);
+      else if (enter) { e.preventDefault(); UI.fcAdvance(); }
     } else if (S.screen === 'event') {
       /* interludi: 1-N scelgono, Invio prosegue dopo l'esito */
       if (num >= 0) { if (clickNth('.choice:not([disabled])', num)) e.preventDefault(); }
-      else if (enter && !onButton) { const b = root.querySelector('[data-autofocus], [data-next]'); if (b) { e.preventDefault(); b.click(); } }
+      else if (enter) { const b = root.querySelector('[data-autofocus], [data-next]'); if (b) { e.preventDefault(); b.click(); } }
     } else if (S.screen === 'debrief') {
-      if (enter && !onButton) { const b = root.querySelector('[data-next]') || root.querySelector('.btn--primary'); if (b) { e.preventDefault(); b.click(); } }
+      if (enter) { const b = root.querySelector('[data-next]') || root.querySelector('.btn--primary'); if (b) { e.preventDefault(); b.click(); } }
     } else if (S.screen === 'dojo') {
       if (num >= 0) UI.dojoKey(num);
-      else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.dojoAdvance(); }
+      else if (enter) { e.preventDefault(); UI.dojoAdvance(); }
     }
   });
 

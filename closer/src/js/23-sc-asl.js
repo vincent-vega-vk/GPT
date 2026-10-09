@@ -593,7 +593,7 @@
                 { think: `“Anche per interposta persona.” Lo sapevano già, o lo scrivono sempre. In ogni caso adesso c’è un caffè in più nel fascicolo di qualcun altro.` },
               ],
             }),
-          ch('d', 2, `Resto fermo: controllo il portale e la PEC ogni mattina e ogni sera, e non faccio altro finché il termine non scade, perché ogni mossa in più è un rischio.`,
+          ch('d', 2, `Non mi muovo: controllo il portale e la PEC ogni mattina e ogni sera, e non faccio altro finché il termine non scade, perché ogni mossa in più è un rischio.`,
             `Corretto, ma passivo: non commetti errori e non prepari difese. Se il ricorso arriva, il fascicolo che ti protegge è ancora da costruire, e in fretta.`,
             { c: 0 }, {
               mp: ['P'], next: 'END',

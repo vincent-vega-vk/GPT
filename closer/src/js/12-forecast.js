@@ -108,7 +108,9 @@
       chosen.push(c);
     }
     const hasCalls = entries.some((e) => e.state === 'pending');
-    if (hasCalls || kind === 'mid') chosen.push(mk('coverage', null, { sev: 1 }));
+    /* la domanda sulla copertura ha senso solo se il Commit dichiarato non arriva alla quota */
+    const commitSum = entries.filter((e) => e.state === 'pending' && e.cat === 'commit').reduce((a, e) => a + e.net, 0) + (run.bonusAcv || 0);
+    if ((hasCalls || kind === 'mid') && commitSum < CL.CONFIG.quota) chosen.push(mk('coverage', null, { sev: 1 }));
     return chosen.map((c) => CL.fcFill(c, run, kind, rnd));
   };
 
@@ -186,7 +188,7 @@
       case 'evidence:honest': {
         /* ammettere dopo essere stati sfidati vale meno che aver chiamato giusto al primo colpo, e meno ancora se lo scarto era grande */
         const miss = RANK[e.cat] - RANK[e.truth];
-        eff.rep = miss >= 2 ? 1 : 2; eff.mgr = miss >= 2 ? 2 : 4; eff.cat = e.truth; eff.boost = (HELP[gapKey] || 0.05) * 0.5; eff.score = miss >= 2 ? 0.5 : 0.8; eff.help = true; break;
+        eff.rep = miss >= 2 ? 1 : 2; eff.mgr = miss >= 2 ? 2 : 4; eff.cat = e.truth; eff.score = miss >= 2 ? 0.5 : 0.8; break;   /* nessun aiuto di Marta: l'aiuto va a chi ha chiamato giusto o ha nominato il rischio, non a chi ammette dopo essere stato sfidato */
       }
       case 'evidence:bluff': {
         const caught = rnd() < 0.85; eff.caught = caught;
@@ -290,7 +292,7 @@
       if ((e.cat === 'pipe' || e.cat === 'out') && res.status === 'won' && res.p >= 0.6) sandbagged = true;
       rows.push({ id: e.id, title: res.title, client: res.client, cat: e.cat, status: res.status, pts, p: res.p, net: res.net, bluffed: e.bluffed, sandbagged: e.sandbagged, overconf: e.overconf });
     });
-    return { n, acc: n ? sum / n : null, miss, sandbagged, rows };
+    return { n, acc: n ? Math.round((sum / n) * 1000) / 1000 : null, miss, sandbagged, rows };
   };
 
   /* penalità/premi di coda dopo il giorno di chiusura (una sola volta) */

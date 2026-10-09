@@ -93,6 +93,11 @@
               ? h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { close(); UI.startDeal(sc); } }, free ? 'Avvia la trattativa' : `Avvia la trattativa (−${sc.cost} sett.)`, UI.ic('next'))
               : null,
             h('button', { class: 'btn', onclick: close }, 'Chiudi')));
+        /* dopo ogni ridisegno il dialogo conserva nome accessibile e focus */
+        const ttl = root.querySelector('h2');
+        if (ttl && root.parentNode) { ttl.id = 'mdl-deal-title'; root.parentNode.setAttribute('aria-labelledby', 'mdl-deal-title'); }
+        const fcs = root.querySelector('[data-autofocus]') || root.querySelector('footer button');
+        if (fcs && root.isConnected) fcs.focus({ preventScroll: true });
       };
       paint();
       return root;
@@ -173,7 +178,7 @@
       else badge = h('span', { class: 'chip chip--accent' }, career ? 'Disponibile' : 'Gioca');
       const scouted = run.scouted[sc.id];
       const disabled = !!r;
-      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.label}, ${sc.client}` },
+      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.label}, ${sc.client}. ${r ? STATUS_LABEL[r.status] : av.state === 'ready' ? 'Disponibile, ' + sc.cost + ' settimane' : av.state === 'early' ? 'Dalla settimana ' + av.from : av.state === 'expired' ? 'Scaduto' : av.state === 'poor' ? 'Energia insufficiente' : 'Gioca'}` },
         h('div', { class: 'top' }, h('div', { class: 'eyebrow' }, sc.sector), badge),
         h('h3', null, sc.label),
         h('div', { class: 'small muted' }, sc.client),

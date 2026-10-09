@@ -360,7 +360,7 @@
     const shock = opts.shocks === false ? null : CL.drawShock(pd, rnd, opts);
     if (shock) p = CL.clamp(p + shock.dp, 0, 1);
     /* sopra l'80% la firma è quasi certa: una trattativa condotta bene non deve dipendere da un dado sfortunato */
-    const pe = p >= 0.9 ? 1 : p >= 0.8 ? p + (p - 0.8) * 2 : p;
+    const pe = p >= 0.9 ? 1 : p >= 0.8 ? 2 * p - 0.8 : p;   /* rampa continua: 80% → 80%, 90% → certezza */
     const u = rnd();
     let status;
     if (u < pe) status = 'won';
@@ -450,7 +450,8 @@
       run.spent += sc.cost;
       delta = -sc.cost;
       /* slancio: una trattativa condotta in modo eccellente restituisce una settimana (una volta per trimestre) */
-      if (res.status !== 'lost' && res.p >= 0.85 && res.avgQ >= 2.6 && !run.momentumUsed) { run.momentumUsed = true; run.spent = Math.max(0, run.spent - 1); delta += 1; res.momentum = true; }
+      if (!run.hard && res.status !== 'lost' && res.p >= 0.85 && res.avgQ >= 2.6 && !run.momentumUsed) {   /* senza rete lo slancio resterebbe visibile nel contatore delle settimane */
+        run.momentumUsed = true; run.spent = Math.max(0, run.spent - 1); delta += 1; res.momentum = true; }
     }
     return { energyDelta: delta };
   };

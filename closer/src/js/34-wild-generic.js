@@ -43,7 +43,7 @@
           const weak = d.mp.size <= 3 || d.m.control < 40;
           return [
             { n: `Sei in piedi accanto alla macchinetta del caffè quando il telefono vibra contro il palmo della mano.`, sfx: 'ping' },
-            chatM(`Ho dieci minuti prima della call con il Country Manager. {client}: che numero ti metto nel forecast? Due righe. E dimmi cosa non so.`),
+            chatM(`Ho dieci minuti prima della call con il CRO. {client}: che numero ti metto nel forecast? Due righe. E dimmi cosa non so.`),
             strong ? { think: `Il CRM è aggiornato e a ogni casella corrisponde un nome. Posso rispondere guardandola in faccia.` }
               : weak ? { think: `Ho più sensazioni che fatti. Sul CRM la differenza si vede, e lei la sa leggere meglio di me.` }
                 : { think: `Ho una parte di fatti e una parte di buone sensazioni. Il difficile è non scambiare l’una per l’altra.` },

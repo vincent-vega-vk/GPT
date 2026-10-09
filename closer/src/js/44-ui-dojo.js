@@ -79,7 +79,8 @@
       dots.replaceChildren(...D.qs.map((_, k) => h('i', { class: k < D.grades.length ? GL[D.grades[k]] : '' })));
       UI.sfx(o.g === 3 ? 'q3' : o.g === 2 ? 'q2' : o.g === 1 ? 'q1' : 'q0');
       const last = D.i + 1 >= D.qs.length;
-      slot.replaceChildren(h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-next': '', onclick: next }, last ? 'Vedi il risultato' : 'Prossima obiezione', UI.ic('next'))));
+      slot.setAttribute('role', 'status'); slot.setAttribute('aria-live', 'polite');
+      slot.replaceChildren(h('span', { class: 'sr-only' }, `${GTXT[o.g]}${timedOut ? ' (tempo scaduto)' : ''}. La risposta migliore è indicata nell’elenco.`), h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-next': '', onclick: next }, last ? 'Vedi il risultato' : 'Prossima obiezione', UI.ic('next'))));
       D.picks.push({ line: q.line, chosen: o.t, g: o.g, best: q.opts.find((x) => x.g === 3).t });
       const b = slot.querySelector('button'); if (b) b.focus({ preventScroll: true });
       b && UI.scrollTo(b, 'nearest');

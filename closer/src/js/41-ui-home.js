@@ -58,7 +58,7 @@
           h('div', { class: 'ic' }, UI.ic(rec.badges[b.id] ? 'trophy' : 'lock')),
           h('div', null, h('b', null, b.name), h('small', null, b.desc)))))),
       h('footer', null,
-        h('button', { class: 'btn btn--ghost btn--sm', onclick: () => { CL.store.write({ settings: UI.settings }); close(); UI.toast('Archivio azzerato'); } }, 'Azzera archivio'),
+        h('button', { class: 'btn btn--ghost btn--sm', onclick: (e) => { const b = e.currentTarget; if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Conferma: cancella record e badge'; b.classList.add('btn--bad'); return; } CL.store.write({ settings: UI.settings }); close(); UI.toast('Archivio azzerato'); UI.render(); } }, 'Azzera archivio'),
         h('div', { class: 'grow' }),
         h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: close }, 'Chiudi')));
   });
@@ -103,7 +103,7 @@
             h('label', { class: 'lbl', for: 'nm' }, 'Il tuo nome'),
             h('input', { type: 'text', id: 'nm', maxlength: '24', placeholder: 'Account Executive', value: UI.settings.name, autocomplete: 'nickname', oninput: (e) => { UI.settings.name = e.target.value.trim(); UI.saveSettings(); } })),
           toggle('t-hard', 'Senza rete', 'Cruscotto, probabilità e qualità delle mosse nascosti fino al verdetto. Commissione +10%.', 'hard'),
-          toggle('t-timer', 'Pressione', 'Ogni decisione ha 30 secondi. Se scade, rispondi d’istinto: e di solito è la risposta peggiore.', 'timer'),
+          toggle('t-timer', 'Pressione', 'Ogni decisione ha circa 30 secondi (25 nel dojo). Se scade, rispondi d’istinto: e di solito è la risposta peggiore.', 'timer'),
           toggle('t-wild', 'Imprevisti', 'Eventi casuali dentro le trattative e shock il giorno di chiusura. Spenti, il gioco è un percorso tutto tuo.', 'wild'),
           toggle('t-coach', 'Allenatore a ogni mossa', 'Dopo ogni scelta ricevi subito valutazione e lezione. Spento (come nella realtà) scopri com’è andata dai fatti e il commento arriva a fine trattativa. Vale per la carriera.', 'coachEach'),
           toggle('t-fast', 'Dialoghi rapidi', 'Le scene appaiono subito, senza il ritmo di lettura.', 'fast'),

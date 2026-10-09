@@ -52,6 +52,7 @@
       const rows = X.entries;
       const totals = h('div', { class: 'fctot' });
       const submit = h('button', { class: 'btn btn--primary btn--lg', disabled: true }, 'Presenta il forecast', UI.ic('next'));
+      const missing = h('p', { class: 'small muted', role: 'status', style: { margin: '0 0 8px', textAlign: 'right' } });
       const upd = () => {
         const sum = (c) => rows.filter((e) => e.state === 'pending' && e.cat === c).reduce((a, e) => a + e.net, 0);
         const bonus = run.bonusAcv;
@@ -60,7 +61,9 @@
           h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(sum('best')))),
           h('div', null, h('span', { class: 'eyebrow' }, 'Quota'), h('b', null, CL.fmtK(CL.CONFIG.quota))),
           h('div', null, h('span', { class: 'eyebrow' }, 'Manca (Commit)'), h('b', { class: sum('commit') + bonus >= CL.CONFIG.quota ? 'ok' : 'gap' }, CL.fmtK(Math.max(0, CL.CONFIG.quota - sum('commit') - bonus)))));
-        submit.disabled = rows.some((e) => !e.cat);
+        const left = rows.filter((e) => !e.cat).length;
+        submit.disabled = left > 0;
+        missing.textContent = left > 0 ? (left === 1 ? 'Manca una categoria: assegnala a ogni trattativa per presentare il forecast.' : `Mancano ${left} categorie: assegnale a ogni trattativa per presentare il forecast.`) : '';
       };
       const list = h('div', { class: 'fcrows' }, rows.map((e) => {
         const seg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': `Categoria per ${e.sc.client}` }, CL.CATS.map((c) => h('button', {
@@ -80,7 +83,7 @@
         h('div', { class: 'eyebrow' }, 'Foglio di forecast · assegna una categoria a ogni trattativa'),
         h('dl', { class: 'fclegend' }, CL.CATS.map((c) => h('div', null, h('dt', null, c.label), h('dd', null, c.hint)))),
         list, totals,
-        h('div', { class: 'next', style: { marginTop: '14px' } }, submit));
+        h('div', { class: 'next', style: { marginTop: '14px', flexDirection: 'column', alignItems: 'flex-end' } }, missing, submit));
       upd();
       area.replaceChildren(wrap);
       UI.scrollTo(wrap, 'nearest');
@@ -111,7 +114,7 @@
       const catBefore = e ? e.cat : null;
       const eff = CL.fcResolve(run, ch, picked.id, rnd);
       X.scores.push(eff.score);
-      if (!hard) setMgr();
+      if (!hard) { setMgr(); UI.syncTopbar(); }
       UI.sfx(hard ? 'pick' : eff.score > 0.4 ? 'q3' : eff.score < -0.2 ? 'q0' : 'q1');
       await UI.reveal(host, [{ you: true, t: picked.t }].concat(eff.lines.map((t) => ({ w: 'marta', t }))), { sc: null, vp });
       if (gone()) return;
@@ -161,10 +164,10 @@
       if (gone()) return;
       const done = h('div', { class: 'fcsheet final' },
         h('div', { class: 'eyebrow' }, 'Forecast consegnato al CRO'),
-        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.label), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (e.cat === 'commit' ? 'chip--good' : e.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(e.cat)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')))),
+        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => { const shown = hard ? (e.was || e.cat) : e.cat; return h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.label), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (shown === 'commit' ? 'chip--good' : shown === 'best' ? 'chip--warn' : '') }, CL.catLabel(shown)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')); })),
         h('div', { class: 'fctot' },
-          h('div', null, h('span', { class: 'eyebrow' }, 'Commit'), h('b', null, CL.fmtK(fin.commit + run.bonusAcv))),
-          h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(fin.best))),
+          hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Commit'), h('b', null, CL.fmtK(fin.commit + run.bonusAcv))),
+          hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(fin.best))),
           hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Fiducia di Marta'), h('b', null, String(run.mgr))),
           hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Reputazione'), h('b', null, String(run.rep)))),
         fin.rightFirst && !hard ? h('div', { class: 'note good' }, h('b', null, `Chiamate giuste al primo colpo: ${fin.rightFirst}. `), 'Marta lo mette a verbale: la fiducia si costruisce prima di essere sfidati, non dopo.') : null,
@@ -185,8 +188,8 @@
 
   UI.fcKey = (i) => { if (S.screen === 'forecast' && S.fcPhase === 'choose' && S.fcKey) S.fcKey(i); };
   UI.fcAdvance = () => {
-    if (S.screen !== 'forecast') return false;
-    if (S.fcPhase === 'fb' && S.fcNext) { S.fcNext(); return true; }
+    if (S.screen !== 'forecast' && S.screen !== 'closing') return false;
+    if ((S.fcPhase === 'fb' || S.fcPhase === 'open') && S.fcNext) { S.fcNext(); return true; }
     if (S.skip) { UI.skipReveal(); return true; }
     return false;
   };

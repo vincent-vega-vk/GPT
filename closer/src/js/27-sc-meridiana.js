@@ -93,7 +93,7 @@
     teaches: [`Paper process`, `Sicurezza e compliance`, `Limitazione di responsabilità`, `Side letter`, `Poteri di firma`],
     list: 410, cost: 2, window: [6, 12], stars: 3, lep: 15, slip: 0.35,
     noWild: ['rival_offer', 'new_decider', 'davide_recalled'],   // imprevisti generici che stonano con questo scenario
-    noShock: ['g_price_cut'],   // shock generici che stonano con questo scenario
+    noShock: ['g_price_cut', 'g_rival_withdraws'],   // shock generici che stonano con questo scenario
     crm: { cat: `Commit`, prob: 85 },
     cast: CAST,
 

@@ -83,6 +83,9 @@
     setTimeout(() => l.stop(), 900);
   }
 
+  /* con la scheda in background o lo schermo bloccato l'ambiente tace e riparte al ritorno */
+  if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { try { if (document.hidden) { if (ctx) stopLive(); } else UI.ambience.refresh(); } catch (e) { /* noop */ } });
+
   UI.ambience = {
     start(id) {
       want = id;

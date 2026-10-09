@@ -6,18 +6,6 @@
 
   CL.events = [
     {
-      id: 'forecast', title: `Pipeline review con Marta`, where: `Call · venerdì 16:00`,
-      scene: [
-        { w: 'marta', a: `scorre il CRM`, t: `Dimmi onestamente dove siamo. Ho bisogno di numeri su cui costruire, non di numeri che mi piacciono.` },
-      ],
-      cast: { marta: { name: `Marta Colombo`, role: `La tua Sales Director`, hue: 348 } },
-      choices: [
-        { id: 'a', t: `Ti do il quadro reale: cosa è solido, cosa è a rischio e cosa mi serve da te per sbloccarlo.`, r: `Marta prende appunti: “Questo è il modo giusto”. Ti ricambia con un’ora di Deal Desk in più per il resto del trimestre.`, eff: { rep: 5, jolly: { desk: 1 } } },
-        { id: 'b', t: `Sono ottimista: la maggior parte dei deal è in Commit.`, r: `Marta ti guarda un secondo di troppo. La tua credibilità sul forecast scende, e il prossimo review sarà più duro.`, eff: { rep: -8 } },
-        { id: 'c', t: `Dico che è difficile e che il trimestre è pesante: meglio non esporsi.`, r: `Marta ridimensiona il forecast. Se vincerai, sarà un successo a sorpresa. Se perdi, avevi avvisato. Un forecast difensivo non è onesto, è solo comodo.`, eff: { rep: -2 } },
-      ],
-    },
-    {
       id: 'battlecard', title: `Vertex lancia una promo aggressiva`, where: `Email · lunedì 08:40`,
       scene: [
         { n: `Il tuo principale concorrente annuncia sconti del 40% “per chi firma entro il trimestre”. In giro per i clienti, la voce corre.` },

@@ -52,8 +52,7 @@
     if (!first || !last || !first.isConnected || !last.isConnected) return;
     const a = first.getBoundingClientRect(), b = last.getBoundingClientRect(), top = stickyTop() + 8, bottom = window.innerHeight - 14;
     if (a.top >= top && b.bottom <= bottom) return;
-    if (b.bottom - a.top <= bottom - top) return scrollBy(a.top - top);
-    scrollBy(b.bottom - bottom);
+    scrollBy(a.top - top);   /* la domanda ha la precedenza: se le risposte non entrano tutte, si scorre per leggerle */
   };
 
   const speakerOf = (l) => (l.you ? 'you' : l.w ? l.w : l.chat ? l.chat.from : null);
@@ -123,7 +122,7 @@
     }
 
     /* widget firma dello scenario */
-    const specs = (sc.hud || []).filter((x) => !hard || x.type === 'clock').slice(0, 3);   /* senza rete: restano solo i widget puramente descrittivi (il tempo) */
+    const specs = hard ? [] : (sc.hud || []).slice(0, 3);   /* senza rete: nessun widget (anche l'orologio porta stato e avanzamento del deal) */
     specs.forEach((spec, i) => {
       const host = h('div', { class: 'hudw extra' });
       refs.hud.push({ spec, host, data: null });
@@ -222,8 +221,9 @@
       refs.dz2.style.left = lepP + '%'; refs.dz2.style.width = Math.max(0, ((ap.allowed - ap.lep) / scale) * 100) + '%';
       refs.dv.style.width = Math.min(100, (deal.disc / scale) * 100) + '%';
       refs.dv.className = 'v' + (ap.status === 'blocked' ? ' bad' : ap.status === 'approved' ? ' warn' : '');
-      refs.dst.className = 'dstatus ' + ap.status;
-      refs.dst.textContent = deal.disc === 0 ? 'Nessuno sconto promesso.'
+      refs.dst.className = 'dstatus ' + (hard ? '' : ap.status);
+      refs.dst.textContent = hard ? (deal.disc === 0 ? 'Nessuno sconto promesso.' : `${Math.round(deal.disc)}% promesso.`)   /* senza rete: il fatto, non il giudizio del Deal Desk */
+        : deal.disc === 0 ? 'Nessuno sconto promesso.'
         : ap.status === 'ok' ? `${Math.round(deal.disc)}% promesso, entro la soglia LEP.`
           : ap.status === 'approved' ? `${Math.round(deal.disc)}% promesso: oltre LEP ma coperto da contropartite o Deal Desk (max ${ap.allowed}%).`
             : `${Math.round(deal.disc)}% promesso: il Deal Desk approva al massimo ${ap.allowed}%. Il cliente se ne accorgerà.`;
@@ -272,6 +272,9 @@
   }
 
   /* ───── scena ───── */
+  /* la fase della scena governa l'altezza del viewport appiccicoso: pieno mentre si legge, compatto quando si sceglie (domanda e risposte devono entrare sullo schermo) */
+  const setPhase = (ph) => { S.phase = ph; const r = document.querySelector('.playroot'); if (r) r.setAttribute('data-ph', ph); };
+
   UI.screens.play = () => {
     const run = S.run, deal = S.deal, sc = S.sc;
     const stage = h('section', { class: 'card stage', 'aria-live': 'polite', 'aria-label': 'Scena' });
@@ -288,9 +291,10 @@
       dots);
     const root = h('main', { class: 'wrap playroot' }, head, h('div', { class: 'play' }, h('div', { class: 'stagecol' }, vpHost, stage), dash.el));
     applyTheme(root, sc);
+    root.setAttribute('data-ph', 'reveal');
     stage.addEventListener('click', (e) => { if (!e.target.closest('button, a, input, textarea') && S.skip) UI.skipReveal(); });
     if (UI.ambience) UI.ambience.start((sc.theme && sc.theme.ambience) || 'office');
-    S.phase = 'reveal';
+    setPhase('reveal');
     if (sc.intro && !S.skipIntro) showIntro(); else showNode();
     S.skipIntro = false;
     /* a schermata montata: porta in vista la scena (su mobile il cruscotto compatto la precede) */
@@ -338,7 +342,7 @@
   function showIntro() {
     const sc = S.sc, intro = sc.intro, stage = S.stage;
     const tok = ++S.nodeTok;
-    S.phase = 'reveal';
+    setPhase('reveal');
     const host = h('div', { class: 'transcript' });
     const go = h('div', { class: 'next intro-go', hidden: true }, h('button', { class: 'btn btn--primary btn--lg', 'data-next': '', onclick: () => { UI.sfx('pick'); showNode(); } }, 'Entra', UI.ic('next')));
     UI.fill(stage,
@@ -351,7 +355,7 @@
     paintDots();
     UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) }).then((ok) => {
       if (!ok || tok !== S.nodeTok) return;
-      S.phase = 'intro';
+      setPhase('intro');
       go.hidden = false; UI.scrollTo(go, 'nearest');
       const b = go.querySelector('button'); if (b) b.focus({ preventScroll: true });
     });
@@ -362,7 +366,7 @@
     const run = S.run, deal = S.deal, sc = S.sc, stage = S.stage;
     const node = CL.nodeOf(deal);
     const tok = ++S.nodeTok;
-    S.phase = 'reveal'; S.picked = null;
+    setPhase('reveal'); S.picked = null;
     paintDots();
     const lines = CL.sceneLines(deal, node);
     S.order = CL.shuffle(CL.choicesFor(deal, run), run.rnd);
@@ -397,7 +401,7 @@
     UI.scrollTo(stage, 'start');
     const ok = await UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) });
     if (!ok || tok !== S.nodeTok) return;
-    S.phase = 'choose';
+    setPhase('choose');
     prompt.hidden = false; box.hidden = false;
     if (timerBar) { timerBar.hidden = false; startTimer(timerBar, node.t || 30, onTimeout); }
     UI.scrollBlock(prompt, box);
@@ -422,7 +426,7 @@
     if (S.phase !== 'choose') return;
     UI.stopTimer();
     const run = S.run, deal = S.deal, o = S.order[i];
-    S.phase = 'react'; S.picked = i;
+    setPhase('react'); S.picked = i;
     const prevM = Object.assign({}, deal.m), prevMp = new Set(deal.mp);
     const node = CL.nodeOf(deal);
     const wasWild = !!deal.wild;
@@ -445,7 +449,7 @@
     const reactLines = rec.react || [];
     const ok = await UI.reveal(host, [youLine].concat(timedOut ? [{ n: 'Il tempo scade: rispondi d’istinto.' }] : [], reactLines), { sc: S.sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) });
     if (!ok || tok !== S.nodeTok) return;
-    S.phase = 'feedback';
+    setPhase('feedback');
     const fb = feedbackEl(rec, node, wasWild);
     const slot = UI.$('#fbslot', S.stage);
     slot.replaceChildren(fb);
@@ -466,8 +470,8 @@
       CL.METERS.forEach((m) => { const d = rec.delta[m.k]; if (d) chips.push(h('span', { class: 'delta ' + ((m.k === 'risk' ? d < 0 : d > 0) ? 'up' : 'down') }, `${m.label} ${UI.signed(d)}`)); });
       if (rec.delta.disc) chips.push(h('span', { class: 'delta ' + (rec.delta.disc > 0 ? 'down' : 'up') }, `Sconto ${UI.signed(rec.delta.disc)}%`));
       if (rec.delta.list) chips.push(h('span', { class: 'delta ' + (rec.delta.list > 0 ? 'up' : 'down') }, `Listino ${UI.signed(rec.delta.list)}k`));
-      rec.gained.forEach((k) => chips.push(h('span', { class: 'chip chip--good' }, UI.ic('check'), CL.MP.find((m) => m.k === k).label)));
-      rec.lost.forEach((k) => chips.push(h('span', { class: 'chip chip--bad' }, UI.ic('x'), CL.MP.find((m) => m.k === k).label)));
+      rec.gained.forEach((k) => chips.push(h('span', { class: 'chip chip--good' }, UI.ic('check'), h('span', { class: 'sr-only' }, 'Acquisito: '), CL.MP.find((m) => m.k === k).label)));
+      rec.lost.forEach((k) => chips.push(h('span', { class: 'chip chip--bad' }, UI.ic('x'), h('span', { class: 'sr-only' }, 'Perso: '), CL.MP.find((m) => m.k === k).label)));
       if (rec.integ) chips.push(h('span', { class: 'chip ' + (rec.integ > 0 ? 'chip--good' : 'chip--bad') }, UI.ic('shield'), `Reputazione ${UI.signed(rec.integ)}`));
     }
     if (rec.jolly) chips.push(h('span', { class: 'chip chip--accent' }, UI.ic(rec.jolly), CL.JOLLY[rec.jolly].name + ' usato'));
@@ -493,7 +497,7 @@
     const sealed = CL.seal(deal);
     let res;
     if (run.mode === 'career') res = sealed;
-    else res = CL.finish(deal, run, run.rnd);
+    else res = CL.finish(deal, run, run.rnd, { shocks: UI.settings.wild !== false });
     CL.commitDeal(run, sc, res);
     S.res = res;
     S.fx = false;
@@ -613,7 +617,7 @@
         mask ? null : h('div', { class: 'stat' }, h('dt', null, 'Qualità decisioni'), h('dd', null, Math.round((res.avgQ / 3) * 100) + '%')),
         mask ? null : h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC'), h('dd', null, `${res.mp}/8`)),
         h('div', { class: 'stat' }, h('dt', null, 'Imprevisti'), h('dd', null, String(res.wilds || 0), mask ? null : h('small', null, `rep. ${UI.signed(res.integ)} · ora ${run.rep}`)))) : null,
-      res.blocked ? h('div', { class: 'note mt-16' }, h('b', null, 'Deal Desk. '), `Avevi promesso il ${Math.round(res.promised)}% senza contropartite sufficienti: ne è stato approvato il ${res.disc}%. Il cliente ha notato la retromarcia e la probabilità ne ha risentito.`) : null,
+      res.blocked && !mask ? h('div', { class: 'note mt-16' }, h('b', null, 'Deal Desk. '), `Avevi promesso il ${Math.round(res.promised)}% senza contropartite sufficienti: ne è stato approvato il ${res.disc}%. Il cliente ha notato la retromarcia e la probabilità ne ha risentito.`) : null,
       !mask && res.worldNote ? h('div', { class: 'note mt-16' }, h('b', null, 'Cosa era vero davvero. '), f(res.worldNote)) : null,
       res.cap && !mask ? h('div', { class: 'note mt-16' }, h('b', null, `Limite ${Math.round(res.cap.max * 100)}%. `), f(res.cap.why)) : null,
       h('div', { class: 'two' },

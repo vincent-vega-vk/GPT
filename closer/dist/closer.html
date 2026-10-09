@@ -616,6 +616,29 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 .fclegend dt { font: 700 11px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); }
 .fclegend dd { margin: 2px 0 0; font-size: 12.5px; line-height: 1.35; color: var(--ink-2); }
 
+/* barra superiore: a 320px non deve sbordare; area sicura per notch e barre di sistema */
+.topbar .wrap { flex-wrap: wrap; row-gap: 4px; }
+@media (max-width: 400px) {
+  .topbar .brand span { display: none; }
+  .topbar .row.gap-8 { gap: 6px; font-size: 12px; }
+  .topbar .iconbtn { width: 32px; height: 32px; }
+}
+.topbar { padding-top: env(safe-area-inset-top); }
+.wrap { padding-left: max(var(--gutter), env(safe-area-inset-left)); padding-right: max(var(--gutter), env(safe-area-inset-right)); }
+body { padding-bottom: env(safe-area-inset-bottom); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.btn--bad { background: var(--bad); color: #fff; border-color: transparent; }
+
+/* viewport compatto quando si sceglie e si legge la reazione: la domanda e le risposte devono entrare nello schermo */
+.playroot[data-ph="choose"] .vp-host .vp, .playroot[data-ph="react"] .vp-host .vp, .playroot[data-ph="feedback"] .vp-host .vp { max-height: 84px; min-height: 84px; }
+@media (min-width: 981px) and (min-height: 800px) {
+  .playroot[data-ph="choose"] .vp-host .vp, .playroot[data-ph="react"] .vp-host .vp, .playroot[data-ph="feedback"] .vp-host .vp { max-height: clamp(150px, 30vh, 320px); min-height: 150px; }
+}
+
+@media (max-width: 400px) {
+  .playroot[data-ph="choose"] .vp-host .vp, .playroot[data-ph="react"] .vp-host .vp, .playroot[data-ph="feedback"] .vp-host .vp { max-height: 62px; min-height: 62px; }
+}
+
 </style>
 <style>
 /* CLOSER · viewport soggettivo
@@ -1480,7 +1503,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   CL.playerName = '';
   /* segnaposto nei testi mostrati: {nome} {client} {contact} {buyer} */
   /* "S.p.A.." → "S.p.A." (il punto della ragione sociale più quello della frase); i puntini di sospensione restano */
-  CL.tidyDots = (t) => (typeof t === 'string' ? t.replace(/([^.])\.\.(?!\.)/g, '$1.') : t);
+  CL.tidyDots = (t) => (typeof t === 'string' ? t.replace(/([^.])\.\.(?!\.)/g, '$1.').replace(/(^|[.!?…]\s+)collega\b/g, (m, a) => a + 'Collega') : t);
   CL.fmt = (s, sc) => {
     if (typeof s !== 'string' || s.indexOf('{') < 0) return s;
     const ppl = (sc && sc.fc && sc.fc.people) || {};
@@ -1904,6 +1927,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       snap: { m: Object.assign({}, d.m), mp: Array.from(d.mp), flags: Object.assign({}, d.flags), disc: d.disc, list: d.list },
       /* la valutazione delle mosse resta qui: in "senza rete" il debrief la nasconde fino al verdetto e il riepilogo la mostra */
       review: d.hist.map((h) => ({ t: h.t, say: h.say, q: h.q, r: h.r, tip: h.tip, wild: !!h.wild })),
+      worldNote: (() => { const w = (sc.worlds || []).find((x) => x.id === d.world); return w ? w.note || '' : ''; })(),
       lessons: (sc.lessons || []).filter((l) => { try { return l.if(d); } catch (e) { return false; } }).map((l) => ({ good: !!l.good, t: l.t })),
     });
   };
@@ -1942,7 +1966,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     const shock = opts.shocks === false ? null : CL.drawShock(pd, rnd, opts);
     if (shock) p = CL.clamp(p + shock.dp, 0, 1);
     /* sopra l'80% la firma è quasi certa: una trattativa condotta bene non deve dipendere da un dado sfortunato */
-    const pe = p >= 0.9 ? 1 : p >= 0.8 ? p + (p - 0.8) * 2 : p;
+    const pe = p >= 0.9 ? 1 : p >= 0.8 ? 2 * p - 0.8 : p;   /* rampa continua: 80% → 80%, 90% → certezza */
     const u = rnd();
     let status;
     if (u < pe) status = 'won';
@@ -2032,7 +2056,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       run.spent += sc.cost;
       delta = -sc.cost;
       /* slancio: una trattativa condotta in modo eccellente restituisce una settimana (una volta per trimestre) */
-      if (res.status !== 'lost' && res.p >= 0.85 && res.avgQ >= 2.6 && !run.momentumUsed) { run.momentumUsed = true; run.spent = Math.max(0, run.spent - 1); delta += 1; res.momentum = true; }
+      if (!run.hard && res.status !== 'lost' && res.p >= 0.85 && res.avgQ >= 2.6 && !run.momentumUsed) {   /* senza rete lo slancio resterebbe visibile nel contatore delle settimane */
+        run.momentumUsed = true; run.spent = Math.max(0, run.spent - 1); delta += 1; res.momentum = true; }
     }
     return { energyDelta: delta };
   };
@@ -2221,7 +2246,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       chosen.push(c);
     }
     const hasCalls = entries.some((e) => e.state === 'pending');
-    if (hasCalls || kind === 'mid') chosen.push(mk('coverage', null, { sev: 1 }));
+    /* la domanda sulla copertura ha senso solo se il Commit dichiarato non arriva alla quota */
+    const commitSum = entries.filter((e) => e.state === 'pending' && e.cat === 'commit').reduce((a, e) => a + e.net, 0) + (run.bonusAcv || 0);
+    if ((hasCalls || kind === 'mid') && commitSum < CL.CONFIG.quota) chosen.push(mk('coverage', null, { sev: 1 }));
     return chosen.map((c) => CL.fcFill(c, run, kind, rnd));
   };
 
@@ -2299,7 +2326,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       case 'evidence:honest': {
         /* ammettere dopo essere stati sfidati vale meno che aver chiamato giusto al primo colpo, e meno ancora se lo scarto era grande */
         const miss = RANK[e.cat] - RANK[e.truth];
-        eff.rep = miss >= 2 ? 1 : 2; eff.mgr = miss >= 2 ? 2 : 4; eff.cat = e.truth; eff.boost = (HELP[gapKey] || 0.05) * 0.5; eff.score = miss >= 2 ? 0.5 : 0.8; eff.help = true; break;
+        eff.rep = miss >= 2 ? 1 : 2; eff.mgr = miss >= 2 ? 2 : 4; eff.cat = e.truth; eff.score = miss >= 2 ? 0.5 : 0.8; break;   /* nessun aiuto di Marta: l'aiuto va a chi ha chiamato giusto o ha nominato il rischio, non a chi ammette dopo essere stato sfidato */
       }
       case 'evidence:bluff': {
         const caught = rnd() < 0.85; eff.caught = caught;
@@ -2403,7 +2430,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       if ((e.cat === 'pipe' || e.cat === 'out') && res.status === 'won' && res.p >= 0.6) sandbagged = true;
       rows.push({ id: e.id, title: res.title, client: res.client, cat: e.cat, status: res.status, pts, p: res.p, net: res.net, bluffed: e.bluffed, sandbagged: e.sandbagged, overconf: e.overconf });
     });
-    return { n, acc: n ? sum / n : null, miss, sandbagged, rows };
+    return { n, acc: n ? Math.round((sum / n) * 1000) / 1000 : null, miss, sandbagged, rows };
   };
 
   /* penalità/premi di coda dopo il giorno di chiusura (una sola volta) */
@@ -3752,7 +3779,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
               ],
             }),
           ch('d', 3, `Le preparo due formule e sceglie lei, Presidente. A) Listino, pagamento a fasi e canone fisso per tre anni. B) 10% di sconto con pagamento anticipato.`,
-            `Offrire due formule invece di un sì o di un no sposta il tavolo dal prezzo alla struttura, dove il concorrente locale non ha niente da dire. Gianni sceglie ciò che gli dà tranquillità, e tu non hai scontato nulla.`,
+            `Offrire due formule invece di un sì o di un no sposta il tavolo dal prezzo alla struttura, dove il concorrente locale non ha niente da dire. Gianni sceglie ciò che gli dà tranquillità, e tu hai concesso poco sul prezzo.`,
             { t: 4, v: 4, c: 12, r: -6, d: 4 }, {
               jolly: 'desk', set: { giveGet: true, deskApproved: true }, next: (d) => (d.flags.overpromise ? 'n5x' : 'n6'),
               say: `Presidente, le preparo due formule e sceglie lei. La prima: listino, pagamento a fasi e canone bloccato per tre anni. La seconda: dieci per cento di sconto, ma con pagamento anticipato.`,
@@ -6124,7 +6151,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
                 { think: `“Anche per interposta persona.” Lo sapevano già, o lo scrivono sempre. In ogni caso adesso c’è un caffè in più nel fascicolo di qualcun altro.` },
               ],
             }),
-          ch('d', 2, `Resto fermo: controllo il portale e la PEC ogni mattina e ogni sera, e non faccio altro finché il termine non scade, perché ogni mossa in più è un rischio.`,
+          ch('d', 2, `Non mi muovo: controllo il portale e la PEC ogni mattina e ogni sera, e non faccio altro finché il termine non scade, perché ogni mossa in più è un rischio.`,
             `Corretto, ma passivo: non commetti errori e non prepari difese. Se il ricorso arriva, il fascicolo che ti protegge è ancora da costruire, e in fretta.`,
             { c: 0 }, {
               mp: ['P'], next: 'END',
@@ -9764,7 +9791,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     teaches: [`Paper process`, `Sicurezza e compliance`, `Limitazione di responsabilità`, `Side letter`, `Poteri di firma`],
     list: 410, cost: 2, window: [6, 12], stars: 3, lep: 15, slip: 0.35,
     noWild: ['rival_offer', 'new_decider', 'davide_recalled'],   // imprevisti generici che stonano con questo scenario
-    noShock: ['g_price_cut'],   // shock generici che stonano con questo scenario
+    noShock: ['g_price_cut', 'g_rival_withdraws'],   // shock generici che stonano con questo scenario
     crm: { cat: `Commit`, prob: 85 },
     cast: CAST,
 
@@ -11476,7 +11503,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
           const weak = d.mp.size <= 3 || d.m.control < 40;
           return [
             { n: `Sei in piedi accanto alla macchinetta del caffè quando il telefono vibra contro il palmo della mano.`, sfx: 'ping' },
-            chatM(`Ho dieci minuti prima della call con il Country Manager. {client}: che numero ti metto nel forecast? Due righe. E dimmi cosa non so.`),
+            chatM(`Ho dieci minuti prima della call con il CRO. {client}: che numero ti metto nel forecast? Due righe. E dimmi cosa non so.`),
             strong ? { think: `Il CRM è aggiornato e a ogni casella corrisponde un nome. Posso rispondere guardandola in faccia.` }
               : weak ? { think: `Ho più sensazioni che fatti. Sul CRM la differenza si vede, e lei la sa leggere meglio di me.` }
                 : { think: `Ho una parte di fatti e una parte di buone sensazioni. Il difficile è non scambiare l’una per l’altra.` },
@@ -12826,18 +12853,6 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 
   CL.events = [
     {
-      id: 'forecast', title: `Pipeline review con Marta`, where: `Call · venerdì 16:00`,
-      scene: [
-        { w: 'marta', a: `scorre il CRM`, t: `Dimmi onestamente dove siamo. Ho bisogno di numeri su cui costruire, non di numeri che mi piacciono.` },
-      ],
-      cast: { marta: { name: `Marta Colombo`, role: `La tua Sales Director`, hue: 348 } },
-      choices: [
-        { id: 'a', t: `Ti do il quadro reale: cosa è solido, cosa è a rischio e cosa mi serve da te per sbloccarlo.`, r: `Marta prende appunti: “Questo è il modo giusto”. Ti ricambia con un’ora di Deal Desk in più per il resto del trimestre.`, eff: { rep: 5, jolly: { desk: 1 } } },
-        { id: 'b', t: `Sono ottimista: la maggior parte dei deal è in Commit.`, r: `Marta ti guarda un secondo di troppo. La tua credibilità sul forecast scende, e il prossimo review sarà più duro.`, eff: { rep: -8 } },
-        { id: 'c', t: `Dico che è difficile e che il trimestre è pesante: meglio non esporsi.`, r: `Marta ridimensiona il forecast. Se vincerai, sarà un successo a sorpresa. Se perdi, avevi avvisato. Un forecast difensivo non è onesto, è solo comodo.`, eff: { rep: -2 } },
-      ],
-    },
-    {
       id: 'battlecard', title: `Vertex lancia una promo aggressiva`, where: `Email · lunedì 08:40`,
       scene: [
         { n: `Il tuo principale concorrente annuncia sconti del 40% “per chi firma entro il trimestre”. In giro per i clienti, la voce corre.` },
@@ -13042,7 +13057,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   };
   const normRecords = (rec) => {
     const r = Object.assign({ runs: [], badges: {}, dojo: { best: 0 } }, rec && typeof rec === 'object' ? rec : {});
-    if (!Array.isArray(r.runs)) r.runs = [];
+    r.runs = Array.isArray(r.runs) ? r.runs.filter((x) => x && typeof x === 'object') : [];
     if (!r.badges || typeof r.badges !== 'object' || Array.isArray(r.badges)) r.badges = {};
     if (!r.dojo || typeof r.dojo !== 'object') r.dojo = { best: 0 };
     return r;
@@ -13174,6 +13189,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   /* ───── Topbar ───── */
   UI.syncTopbar = () => {
     const bar = UI.$('#topbar');
+    const had = document.activeElement && bar.contains(document.activeElement) ? document.activeElement.getAttribute('aria-label') : null;   /* il focus non si perde ridisegnando la barra */
     bar.replaceChildren();
     const themeIcon = { auto: 'auto', light: 'sun', dark: 'moon' }[UI.settings.theme];
     bar.appendChild(h('div', { class: 'wrap' },
@@ -13183,12 +13199,13 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         ? h('div', { class: 'row gap-8 small muted', 'aria-label': 'Stato trimestre' },
           h('span', { class: 'row gap-4' }, UI.ic('clock'), `Sett. ${CL.week(S.run)}/${CL.CONFIG.weeks}`),
           /* senza rete la reputazione resta nascosta mentre decidi: le sue variazioni rivelerebbero la qualità delle mosse */
-          S.run.hard && ['play', 'forecast', 'closing', 'event', 'debrief'].includes(S.screen) ? null : h('span', { class: 'row gap-4' }, UI.ic('shield'), `Rep. ${S.run.rep}`))
+          S.run.hard ? null : h('span', { class: 'row gap-4' }, UI.ic('shield'), `Rep. ${S.run.rep}`))
         : null,
       h('button', { class: 'iconbtn', 'aria-label': 'Come si gioca', title: 'Come si gioca', onclick: () => UI.howto() }, UI.ic('info')),
       h('button', { class: 'iconbtn', 'aria-label': 'Audio', 'aria-pressed': String(UI.settings.sound), title: 'Audio', onclick: () => { UI.settings.sound = !UI.settings.sound; UI.saveSettings(); UI.sfx('pick'); UI.syncTopbar(); if (UI.ambience) UI.ambience.refresh(); if (S.screen === 'home') UI.render(); } }, UI.ic(UI.settings.sound ? 'vol' : 'mute')),
       h('button', { class: 'iconbtn', 'aria-label': 'Tema: ' + UI.settings.theme, title: 'Tema', onclick: () => { const order = ['auto', 'light', 'dark']; UI.settings.theme = order[(order.indexOf(UI.settings.theme) + 1) % 3]; UI.saveSettings(); UI.applyTheme(); UI.syncTopbar(); } }, UI.ic(themeIcon)),
     ));
+    if (had) { const key = had.split(':')[0]; const el = Array.from(bar.querySelectorAll('[aria-label]')).find((x) => x.getAttribute('aria-label').split(':')[0] === key); if (el) el.focus({ preventScroll: true }); }
   };
 
   /* uscita dalla partita (verso la home): conferma inline, niente confirm() nativo */
@@ -13271,7 +13288,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
           h('div', { class: 'ic' }, UI.ic(rec.badges[b.id] ? 'trophy' : 'lock')),
           h('div', null, h('b', null, b.name), h('small', null, b.desc)))))),
       h('footer', null,
-        h('button', { class: 'btn btn--ghost btn--sm', onclick: () => { CL.store.write({ settings: UI.settings }); close(); UI.toast('Archivio azzerato'); } }, 'Azzera archivio'),
+        h('button', { class: 'btn btn--ghost btn--sm', onclick: (e) => { const b = e.currentTarget; if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Conferma: cancella record e badge'; b.classList.add('btn--bad'); return; } CL.store.write({ settings: UI.settings }); close(); UI.toast('Archivio azzerato'); UI.render(); } }, 'Azzera archivio'),
         h('div', { class: 'grow' }),
         h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: close }, 'Chiudi')));
   });
@@ -13285,7 +13302,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   UI.screens.home = () => {
     const rec = UI.records();
     const best = rec.runs.slice().sort((a, b) => b.att - a.att)[0];
-    const scCount = CL.scenarios.length;
+    const scCount = new Set(CL.scenarios.map((s) => s.family)).size;   /* le trattative di un trimestre: una per famiglia */
     return h('main', { class: 'wrap' },
       h('section', { class: 'hero' },
         h('div', null,
@@ -13316,7 +13333,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
             h('label', { class: 'lbl', for: 'nm' }, 'Il tuo nome'),
             h('input', { type: 'text', id: 'nm', maxlength: '24', placeholder: 'Account Executive', value: UI.settings.name, autocomplete: 'nickname', oninput: (e) => { UI.settings.name = e.target.value.trim(); UI.saveSettings(); } })),
           toggle('t-hard', 'Senza rete', 'Cruscotto, probabilità e qualità delle mosse nascosti fino al verdetto. Commissione +10%.', 'hard'),
-          toggle('t-timer', 'Pressione', 'Ogni decisione ha 30 secondi. Se scade, rispondi d’istinto: e di solito è la risposta peggiore.', 'timer'),
+          toggle('t-timer', 'Pressione', 'Ogni decisione ha circa 30 secondi (25 nel dojo). Se scade, rispondi d’istinto: e di solito è la risposta peggiore.', 'timer'),
           toggle('t-wild', 'Imprevisti', 'Eventi casuali dentro le trattative e shock il giorno di chiusura. Spenti, il gioco è un percorso tutto tuo.', 'wild'),
           toggle('t-coach', 'Allenatore a ogni mossa', 'Dopo ogni scelta ricevi subito valutazione e lezione. Spento (come nella realtà) scopri com’è andata dai fatti e il commento arriva a fine trattativa. Vale per la carriera.', 'coachEach'),
           toggle('t-fast', 'Dialoghi rapidi', 'Le scene appaiono subito, senza il ritmo di lettura.', 'fast'),
@@ -13342,7 +13359,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         h('div', { class: 'kv' },
           h('div', null, h('dt', null, 'Quota'), h('dd', null, CL.fmtK(C.quota))),
           h('div', null, h('dt', null, 'Settimane'), h('dd', null, C.weeks)),
-          h('div', null, h('dt', null, 'Trattative'), h('dd', null, CL.scenarios.length)),
+          h('div', null, h('dt', null, 'Trattative'), h('dd', null, S.run ? CL.pool(S.run).length : new Set(CL.scenarios.map((s) => s.family)).size)),
           h('div', null, h('dt', null, 'Commissione'), h('dd', null, `${Math.round(C.rate1 * 100)}% / ${Math.round(C.rate2 * 100)}%`)),
           h('div', null, h('dt', null, 'Modalità'), h('dd', null, UI.settings.hard ? 'Senza rete' : 'Con cruscotto'))),
         h('div', { class: 'mt-16' },
@@ -13450,6 +13467,11 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
               ? h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { close(); UI.startDeal(sc); } }, free ? 'Avvia la trattativa' : `Avvia la trattativa (−${sc.cost} sett.)`, UI.ic('next'))
               : null,
             h('button', { class: 'btn', onclick: close }, 'Chiudi')));
+        /* dopo ogni ridisegno il dialogo conserva nome accessibile e focus */
+        const ttl = root.querySelector('h2');
+        if (ttl && root.parentNode) { ttl.id = 'mdl-deal-title'; root.parentNode.setAttribute('aria-labelledby', 'mdl-deal-title'); }
+        const fcs = root.querySelector('[data-autofocus]') || root.querySelector('footer button');
+        if (fcs && root.isConnected) fcs.focus({ preventScroll: true });
       };
       paint();
       return root;
@@ -13464,7 +13486,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     const pend = run.results.filter((r) => r.status === 'pending');
     const weighted = pend.reduce((a, r) => a + r.p * r.net, 0) + run.bonusAcv;
     const wAtt = weighted / C.quota;
-    const list = CL.scenarios.slice().sort((a, b) => a.window[0] - b.window[0]);
+    const list = CL.pool(run).slice().sort((a, b) => (career ? a.window[0] - b.window[0] : (a.tier === b.tier ? a.family.localeCompare(b.family) || a.label.localeCompare(b.label) : (a.tier === 'real' ? -1 : 1))));   /* in allenamento: prima i casi da campo */
     const scale = Math.max(1.5, wAtt * 1.05);
 
     const nextCall = !run.fc.calls.mid && week < 6 ? 'Forecast call alla settimana 6' : !run.fc.calls.mid ? 'Forecast call: dopo il prossimo deal' : 'Commit call a fine trimestre';
@@ -13487,11 +13509,17 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         h('div', { class: 'eyebrow' }, 'Jolly'),
         h('div', { class: 'jollies' }, Object.keys(CL.JOLLY).map((k) => h('span', { class: 'jl' + (run.jolly[k] ? '' : ' zero'), title: CL.JOLLY[k].desc }, UI.ic(k), CL.JOLLY[k].short, h('b', null, '×' + run.jolly[k])))),
         h('div', { class: 'sub' }, 'Quantità limitate: usali dove pesano.')),
-      h('div', { class: 'card pad-sm cell' },
-        h('div', { class: 'eyebrow' }, 'Reputazione · Marta'),
-        h('div', { class: 'big' }, run.rep, h('small', { class: 'mono', style: { fontSize: '14px', marginLeft: '10px', color: 'var(--ink-3)' } }, 'Marta ' + run.mgr)),
-        h('div', { class: 'track' }, h('i', { style: { width: run.rep + '%', background: run.rep < 40 ? 'var(--bad)' : run.rep < 70 ? 'var(--warn)' : 'var(--good)' } })),
-        h('div', { class: 'sub' }, run.rep >= 80 ? 'Marta si fida del tuo forecast.' : run.rep >= 50 ? 'Nella media. Le scorciatoie si vedono.' : 'Sotto osservazione.'))) : null;
+      run.hard
+        ? h('div', { class: 'card pad-sm cell' },
+          h('div', { class: 'eyebrow' }, 'Reputazione · Marta'),
+          h('div', { class: 'big' }, '—'),
+          h('div', { class: 'track' }),
+          h('div', { class: 'sub' }, 'Senza rete: reputazione e fiducia di Marta restano nascoste fino al verdetto.'))
+        : h('div', { class: 'card pad-sm cell' },
+          h('div', { class: 'eyebrow' }, 'Reputazione · Marta'),
+          h('div', { class: 'big' }, run.rep, h('small', { class: 'mono', style: { fontSize: '14px', marginLeft: '10px', color: 'var(--ink-3)' } }, 'Marta ' + run.mgr)),
+          h('div', { class: 'track' }, h('i', { style: { width: run.rep + '%', background: run.rep < 40 ? 'var(--bad)' : run.rep < 70 ? 'var(--warn)' : 'var(--good)' } })),
+          h('div', { class: 'sub' }, run.rep >= 80 ? 'Marta si fida del tuo forecast.' : run.rep >= 50 ? 'Nella media. Le scorciatoie si vedono.' : 'Sotto osservazione.'))) : null;
 
     const cal = career ? h('section', { class: 'card calendar', 'aria-label': 'Calendario del trimestre' },
       h('div', { class: 'eyebrow', style: { marginBottom: '10px' } }, 'Calendario: finestre di disponibilità'),
@@ -13524,7 +13552,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       else badge = h('span', { class: 'chip chip--accent' }, career ? 'Disponibile' : 'Gioca');
       const scouted = run.scouted[sc.id];
       const disabled = !!r;
-      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.label}, ${sc.client}` },
+      return h('button', { class: 'deal', disabled: disabled || null, onclick: () => UI.dealModal(sc), 'aria-label': `${sc.label}, ${sc.client}. ${r ? STATUS_LABEL[r.status] : av.state === 'ready' ? 'Disponibile, ' + sc.cost + ' settimane' : av.state === 'early' ? 'Dalla settimana ' + av.from : av.state === 'expired' ? 'Scaduto' : av.state === 'poor' ? 'Energia insufficiente' : 'Gioca'}` },
         h('div', { class: 'top' }, h('div', { class: 'eyebrow' }, sc.sector), badge),
         h('h3', null, sc.label),
         h('div', { class: 'small muted' }, sc.client),
@@ -13533,11 +13561,12 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
           h('div', null, h('div', { class: 'eyebrow' }, 'Listino'), h('div', { class: 'acv' }, CL.fmtK(sc.list))),
           h('div', { class: 'meta', style: { justifyContent: 'flex-end' } },
             career ? h('span', { class: 'chip' }, UI.ic('clock'), `${sc.cost} sett.`) : null,
+            !career ? h('span', { class: 'chip' + (sc.tier === 'real' ? ' chip--accent' : '') }, sc.tier === 'real' ? 'Caso da campo' : 'Guidato') : null,
             h('span', { class: 'chip' }, h('span', { class: 'stars' }, UI.stars(sc.stars))))),
         h('div', { class: 'row gap-8 wrapx' },
           h('span', { class: 'chip' + (scouted && sc.crm.prob >= 80 ? ' chip--warn' : '') }, `CRM ${sc.crm.cat} ${sc.crm.prob}%`),
           scouted ? h('span', { class: 'chip chip--accent' }, UI.ic('search'), 'ispezionato') : null,
-          career && !r && run.promised && run.promised[sc.id] ? h('span', { class: 'chip chip--warn', title: 'Hai promesso a Marta di lavorare questa trattativa: se non lo fai, costa reputazione e fiducia.' }, UI.ic('flag'), `Promessa a Marta · entro sett. ${run.promised[sc.id]}`) : null));
+          career && !r && run.promised && run.promised[sc.id] ? h('span', { class: 'chip chip--warn', title: 'Hai promesso a Marta di lavorare questa trattativa: se non lo fai, costa reputazione e fiducia.' }, UI.ic('flag'), `Promessa a Marta · entro sett. ${run.promised[sc.id]} (se manchi: −4 rep.)`) : null));
     });
 
     const noReady = !CL.canPlayAny(run);
@@ -13545,7 +13574,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       noReady && CL.canWaitForAny(run) ? h('button', { class: 'btn btn--primary', onclick: () => { CL.waitWeek(run); UI.go('pipeline'); } }, UI.ic('clock'), 'Aspetta una settimana (−1)') : null,
       h('button', { class: 'btn' + (noReady && !CL.canWaitForAny(run) ? ' btn--primary' : ''), onclick: () => UI.modal((close) => h('div', null,
         h('header', null, h('div', { class: 'grow' }, h('h3', { class: 'display', style: { fontSize: '30px' } }, 'Chiudere il trimestre?'))),
-        h('div', { class: 'body' }, h('p', { class: 'muted' }, run.results.length ? 'Le trattative non giocate restano nel CRM del prossimo trimestre. Il risultato attuale diventa definitivo.' : 'Non hai giocato nessuna trattativa: il risultato sarà zero.')),
+        h('div', { class: 'body' }, h('p', { class: 'muted' }, run.results.length ? 'Non giochi altre trattative: passi alla commit call con Marta e al giorno di chiusura. Le trattative non giocate restano nel CRM del prossimo trimestre.' : 'Non hai giocato nessuna trattativa: il risultato sarà zero.')),
         h('footer', null,
           h('button', { class: 'btn btn--primary', onclick: () => { close(); UI.finishQuarter(); } }, 'Chiudi il trimestre'),
           h('button', { class: 'btn', 'data-autofocus': '', onclick: close }, 'Continua a lavorare')))) }, UI.ic('flag'), 'Chiudi il trimestre'),
@@ -13581,7 +13610,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
               const log = hardEv ? done.log.filter((l) => !/reputazione|di partenza/.test(l)) : done.log;
               return h('div', { class: 'fb' }, h('div', { class: 'hd' }, log.length ? log.map((l) => h('span', { class: 'delta' }, l)) : h('span', { class: 'delta' }, hardEv ? 'scelta registrata' : 'nessun effetto')), h('div', { class: 'bd' }, h('p', null, hardEv ? 'Senza rete: la valutazione di questa scelta arriva con il riepilogo del trimestre.' : done.text), h('div', { style: { height: '12px' } })));
             })(),
-            h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { S.ev = null; S.evDone = null; if (!CL.canPlayAny(S.run) && !CL.canWaitForAny(S.run)) UI.finishQuarter(); else UI.go('pipeline'); } }, 'Continua', UI.ic('next'))))
+            h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-autofocus': '', onclick: () => { S.ev = null; S.evDone = null; S.evFor = null; if (!CL.canPlayAny(S.run) && !CL.canWaitForAny(S.run)) UI.finishQuarter(); else UI.go('pipeline'); } }, 'Continua', UI.ic('next'))))
           : h('div', { class: 'choices' }, S.evOrder.map((c, i) => h('button', { class: 'choice', onclick: () => { UI.sfx('pick'); S.evDone = CL.applyEvent(S.run, ev, c.id); UI.render(); } }, h('span', { class: 'k' }, i + 1), h('span', { class: 'tx' }, c.t))))));
   };
 
@@ -13646,7 +13675,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
             return 'Forecast nella media: né un merito né un problema, finché non si ripete.';
           })())),
         sum.fc.sandbagged ? h('p', { class: 'small', style: { marginTop: '8px', color: 'var(--warn)' } }, 'Hai chiamato basso una trattativa che poi hai vinto. Sorprendere in alto non è un merito: è un dato nascosto.') : null) : null,
-      (sum.shocksHit || sum.shocksAbsorbed) ? h('p', { class: 'small muted mt-16' }, `Il giorno di chiusura hai assorbito ${sum.shocksAbsorbed} shock negativi senza danni e ne hai subiti ${sum.shocksHit}. ${sum.shocksAbsorbed >= sum.shocksHit ? 'La preparazione paga.' : 'Più relazioni e più paper pronto, meno sorprese.'}`) : null,
+      (sum.shocksHit || sum.shocksAbsorbed) ? h('p', { class: 'small muted mt-16' }, `Il giorno di chiusura hai assorbito ${sum.shocksAbsorbed} ${sum.shocksAbsorbed === 1 ? 'shock negativo' : 'shock negativi'} senza danni e ne hai subiti ${sum.shocksHit}. ${sum.shocksAbsorbed >= sum.shocksHit ? 'La preparazione paga.' : 'Più relazioni e più paper pronto, meno sorprese.'}`) : null,
       h('section', { class: 'card pad mt-16' },
         h('div', { class: 'eyebrow' }, 'Le tue trattative'),
         rows.length ? h('div', { class: 'tblwrap', style: { marginTop: '10px' } }, h('table', { class: 'tbl' },
@@ -13663,6 +13692,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
               h('div', { class: 'rvh' }, h('span', { class: 'n mono' }, m.wild ? '!!' : String(i + 1).padStart(2, '0')), h('span', { class: 'tt' }, fm(m.say || m.t)), h('span', { class: 'q ' + CL.QUALITY[m.q].cls }, CL.QUALITY[m.q].label)),
               h('p', { class: 'small' }, fm(m.r)),
               m.tip ? h('p', { class: 'small muted' }, fm(m.tip)) : null))),
+            r.worldNote ? h('p', { class: 'small', style: { marginTop: '8px' } }, h('b', null, 'Cosa era vero davvero. '), fm(r.worldNote)) : null,
             (r.lessons || []).length ? h('div', { class: 'ls' }, r.lessons.map((l) => h('p', { class: l.good ? 'good' : 'bad' }, fm(l.t)))) : null);
         })) : null,
       h('section', { class: 'card pad mt-16' },
@@ -13744,8 +13774,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     if (!first || !last || !first.isConnected || !last.isConnected) return;
     const a = first.getBoundingClientRect(), b = last.getBoundingClientRect(), top = stickyTop() + 8, bottom = window.innerHeight - 14;
     if (a.top >= top && b.bottom <= bottom) return;
-    if (b.bottom - a.top <= bottom - top) return scrollBy(a.top - top);
-    scrollBy(b.bottom - bottom);
+    scrollBy(a.top - top);   /* la domanda ha la precedenza: se le risposte non entrano tutte, si scorre per leggerle */
   };
 
   const speakerOf = (l) => (l.you ? 'you' : l.w ? l.w : l.chat ? l.chat.from : null);
@@ -13815,7 +13844,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     }
 
     /* widget firma dello scenario */
-    const specs = (sc.hud || []).filter((x) => !hard || x.type === 'clock').slice(0, 3);   /* senza rete: restano solo i widget puramente descrittivi (il tempo) */
+    const specs = hard ? [] : (sc.hud || []).slice(0, 3);   /* senza rete: nessun widget (anche l'orologio porta stato e avanzamento del deal) */
     specs.forEach((spec, i) => {
       const host = h('div', { class: 'hudw extra' });
       refs.hud.push({ spec, host, data: null });
@@ -13914,8 +13943,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       refs.dz2.style.left = lepP + '%'; refs.dz2.style.width = Math.max(0, ((ap.allowed - ap.lep) / scale) * 100) + '%';
       refs.dv.style.width = Math.min(100, (deal.disc / scale) * 100) + '%';
       refs.dv.className = 'v' + (ap.status === 'blocked' ? ' bad' : ap.status === 'approved' ? ' warn' : '');
-      refs.dst.className = 'dstatus ' + ap.status;
-      refs.dst.textContent = deal.disc === 0 ? 'Nessuno sconto promesso.'
+      refs.dst.className = 'dstatus ' + (hard ? '' : ap.status);
+      refs.dst.textContent = hard ? (deal.disc === 0 ? 'Nessuno sconto promesso.' : `${Math.round(deal.disc)}% promesso.`)   /* senza rete: il fatto, non il giudizio del Deal Desk */
+        : deal.disc === 0 ? 'Nessuno sconto promesso.'
         : ap.status === 'ok' ? `${Math.round(deal.disc)}% promesso, entro la soglia LEP.`
           : ap.status === 'approved' ? `${Math.round(deal.disc)}% promesso: oltre LEP ma coperto da contropartite o Deal Desk (max ${ap.allowed}%).`
             : `${Math.round(deal.disc)}% promesso: il Deal Desk approva al massimo ${ap.allowed}%. Il cliente se ne accorgerà.`;
@@ -13964,6 +13994,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   }
 
   /* ───── scena ───── */
+  /* la fase della scena governa l'altezza del viewport appiccicoso: pieno mentre si legge, compatto quando si sceglie (domanda e risposte devono entrare sullo schermo) */
+  const setPhase = (ph) => { S.phase = ph; const r = document.querySelector('.playroot'); if (r) r.setAttribute('data-ph', ph); };
+
   UI.screens.play = () => {
     const run = S.run, deal = S.deal, sc = S.sc;
     const stage = h('section', { class: 'card stage', 'aria-live': 'polite', 'aria-label': 'Scena' });
@@ -13980,9 +14013,10 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       dots);
     const root = h('main', { class: 'wrap playroot' }, head, h('div', { class: 'play' }, h('div', { class: 'stagecol' }, vpHost, stage), dash.el));
     applyTheme(root, sc);
+    root.setAttribute('data-ph', 'reveal');
     stage.addEventListener('click', (e) => { if (!e.target.closest('button, a, input, textarea') && S.skip) UI.skipReveal(); });
     if (UI.ambience) UI.ambience.start((sc.theme && sc.theme.ambience) || 'office');
-    S.phase = 'reveal';
+    setPhase('reveal');
     if (sc.intro && !S.skipIntro) showIntro(); else showNode();
     S.skipIntro = false;
     /* a schermata montata: porta in vista la scena (su mobile il cruscotto compatto la precede) */
@@ -14030,7 +14064,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   function showIntro() {
     const sc = S.sc, intro = sc.intro, stage = S.stage;
     const tok = ++S.nodeTok;
-    S.phase = 'reveal';
+    setPhase('reveal');
     const host = h('div', { class: 'transcript' });
     const go = h('div', { class: 'next intro-go', hidden: true }, h('button', { class: 'btn btn--primary btn--lg', 'data-next': '', onclick: () => { UI.sfx('pick'); showNode(); } }, 'Entra', UI.ic('next')));
     UI.fill(stage,
@@ -14043,7 +14077,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     paintDots();
     UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) }).then((ok) => {
       if (!ok || tok !== S.nodeTok) return;
-      S.phase = 'intro';
+      setPhase('intro');
       go.hidden = false; UI.scrollTo(go, 'nearest');
       const b = go.querySelector('button'); if (b) b.focus({ preventScroll: true });
     });
@@ -14054,7 +14088,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     const run = S.run, deal = S.deal, sc = S.sc, stage = S.stage;
     const node = CL.nodeOf(deal);
     const tok = ++S.nodeTok;
-    S.phase = 'reveal'; S.picked = null;
+    setPhase('reveal'); S.picked = null;
     paintDots();
     const lines = CL.sceneLines(deal, node);
     S.order = CL.shuffle(CL.choicesFor(deal, run), run.rnd);
@@ -14089,7 +14123,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     UI.scrollTo(stage, 'start');
     const ok = await UI.reveal(host, lines, { sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) });
     if (!ok || tok !== S.nodeTok) return;
-    S.phase = 'choose';
+    setPhase('choose');
     prompt.hidden = false; box.hidden = false;
     if (timerBar) { timerBar.hidden = false; startTimer(timerBar, node.t || 30, onTimeout); }
     UI.scrollBlock(prompt, box);
@@ -14114,7 +14148,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     if (S.phase !== 'choose') return;
     UI.stopTimer();
     const run = S.run, deal = S.deal, o = S.order[i];
-    S.phase = 'react'; S.picked = i;
+    setPhase('react'); S.picked = i;
     const prevM = Object.assign({}, deal.m), prevMp = new Set(deal.mp);
     const node = CL.nodeOf(deal);
     const wasWild = !!deal.wild;
@@ -14137,7 +14171,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     const reactLines = rec.react || [];
     const ok = await UI.reveal(host, [youLine].concat(timedOut ? [{ n: 'Il tempo scade: rispondi d’istinto.' }] : [], reactLines), { sc: S.sc, vp: S.vp, onLine: (l) => ensurePerson(personOf(l)) });
     if (!ok || tok !== S.nodeTok) return;
-    S.phase = 'feedback';
+    setPhase('feedback');
     const fb = feedbackEl(rec, node, wasWild);
     const slot = UI.$('#fbslot', S.stage);
     slot.replaceChildren(fb);
@@ -14158,8 +14192,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       CL.METERS.forEach((m) => { const d = rec.delta[m.k]; if (d) chips.push(h('span', { class: 'delta ' + ((m.k === 'risk' ? d < 0 : d > 0) ? 'up' : 'down') }, `${m.label} ${UI.signed(d)}`)); });
       if (rec.delta.disc) chips.push(h('span', { class: 'delta ' + (rec.delta.disc > 0 ? 'down' : 'up') }, `Sconto ${UI.signed(rec.delta.disc)}%`));
       if (rec.delta.list) chips.push(h('span', { class: 'delta ' + (rec.delta.list > 0 ? 'up' : 'down') }, `Listino ${UI.signed(rec.delta.list)}k`));
-      rec.gained.forEach((k) => chips.push(h('span', { class: 'chip chip--good' }, UI.ic('check'), CL.MP.find((m) => m.k === k).label)));
-      rec.lost.forEach((k) => chips.push(h('span', { class: 'chip chip--bad' }, UI.ic('x'), CL.MP.find((m) => m.k === k).label)));
+      rec.gained.forEach((k) => chips.push(h('span', { class: 'chip chip--good' }, UI.ic('check'), h('span', { class: 'sr-only' }, 'Acquisito: '), CL.MP.find((m) => m.k === k).label)));
+      rec.lost.forEach((k) => chips.push(h('span', { class: 'chip chip--bad' }, UI.ic('x'), h('span', { class: 'sr-only' }, 'Perso: '), CL.MP.find((m) => m.k === k).label)));
       if (rec.integ) chips.push(h('span', { class: 'chip ' + (rec.integ > 0 ? 'chip--good' : 'chip--bad') }, UI.ic('shield'), `Reputazione ${UI.signed(rec.integ)}`));
     }
     if (rec.jolly) chips.push(h('span', { class: 'chip chip--accent' }, UI.ic(rec.jolly), CL.JOLLY[rec.jolly].name + ' usato'));
@@ -14185,7 +14219,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     const sealed = CL.seal(deal);
     let res;
     if (run.mode === 'career') res = sealed;
-    else res = CL.finish(deal, run, run.rnd);
+    else res = CL.finish(deal, run, run.rnd, { shocks: UI.settings.wild !== false });
     CL.commitDeal(run, sc, res);
     S.res = res;
     S.fx = false;
@@ -14305,7 +14339,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         mask ? null : h('div', { class: 'stat' }, h('dt', null, 'Qualità decisioni'), h('dd', null, Math.round((res.avgQ / 3) * 100) + '%')),
         mask ? null : h('div', { class: 'stat' }, h('dt', null, 'MEDDPICC'), h('dd', null, `${res.mp}/8`)),
         h('div', { class: 'stat' }, h('dt', null, 'Imprevisti'), h('dd', null, String(res.wilds || 0), mask ? null : h('small', null, `rep. ${UI.signed(res.integ)} · ora ${run.rep}`)))) : null,
-      res.blocked ? h('div', { class: 'note mt-16' }, h('b', null, 'Deal Desk. '), `Avevi promesso il ${Math.round(res.promised)}% senza contropartite sufficienti: ne è stato approvato il ${res.disc}%. Il cliente ha notato la retromarcia e la probabilità ne ha risentito.`) : null,
+      res.blocked && !mask ? h('div', { class: 'note mt-16' }, h('b', null, 'Deal Desk. '), `Avevi promesso il ${Math.round(res.promised)}% senza contropartite sufficienti: ne è stato approvato il ${res.disc}%. Il cliente ha notato la retromarcia e la probabilità ne ha risentito.`) : null,
+      !mask && res.worldNote ? h('div', { class: 'note mt-16' }, h('b', null, 'Cosa era vero davvero. '), f(res.worldNote)) : null,
       res.cap && !mask ? h('div', { class: 'note mt-16' }, h('b', null, `Limite ${Math.round(res.cap.max * 100)}%. `), f(res.cap.why)) : null,
       h('div', { class: 'two' },
         h('section', { class: 'card pad' },
@@ -14424,7 +14459,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       dots.replaceChildren(...D.qs.map((_, k) => h('i', { class: k < D.grades.length ? GL[D.grades[k]] : '' })));
       UI.sfx(o.g === 3 ? 'q3' : o.g === 2 ? 'q2' : o.g === 1 ? 'q1' : 'q0');
       const last = D.i + 1 >= D.qs.length;
-      slot.replaceChildren(h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-next': '', onclick: next }, last ? 'Vedi il risultato' : 'Prossima obiezione', UI.ic('next'))));
+      slot.setAttribute('role', 'status'); slot.setAttribute('aria-live', 'polite');
+      slot.replaceChildren(h('span', { class: 'sr-only' }, `${GTXT[o.g]}${timedOut ? ' (tempo scaduto)' : ''}. La risposta migliore è indicata nell’elenco.`), h('div', { class: 'next' }, h('button', { class: 'btn btn--primary', 'data-next': '', onclick: next }, last ? 'Vedi il risultato' : 'Prossima obiezione', UI.ic('next'))));
       D.picks.push({ line: q.line, chosen: o.t, g: o.g, best: q.opts.find((x) => x.g === 3).t });
       const b = slot.querySelector('button'); if (b) b.focus({ preventScroll: true });
       b && UI.scrollTo(b, 'nearest');
@@ -16720,6 +16756,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     setTimeout(() => l.stop(), 900);
   }
 
+  /* con la scheda in background o lo schermo bloccato l'ambiente tace e riparte al ritorno */
+  if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { try { if (document.hidden) { if (ctx) stopLive(); } else UI.ambience.refresh(); } catch (e) { /* noop */ } });
+
   UI.ambience = {
     start(id) {
       want = id;
@@ -16793,6 +16832,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       const rows = X.entries;
       const totals = h('div', { class: 'fctot' });
       const submit = h('button', { class: 'btn btn--primary btn--lg', disabled: true }, 'Presenta il forecast', UI.ic('next'));
+      const missing = h('p', { class: 'small muted', role: 'status', style: { margin: '0 0 8px', textAlign: 'right' } });
       const upd = () => {
         const sum = (c) => rows.filter((e) => e.state === 'pending' && e.cat === c).reduce((a, e) => a + e.net, 0);
         const bonus = run.bonusAcv;
@@ -16801,7 +16841,9 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
           h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(sum('best')))),
           h('div', null, h('span', { class: 'eyebrow' }, 'Quota'), h('b', null, CL.fmtK(CL.CONFIG.quota))),
           h('div', null, h('span', { class: 'eyebrow' }, 'Manca (Commit)'), h('b', { class: sum('commit') + bonus >= CL.CONFIG.quota ? 'ok' : 'gap' }, CL.fmtK(Math.max(0, CL.CONFIG.quota - sum('commit') - bonus)))));
-        submit.disabled = rows.some((e) => !e.cat);
+        const left = rows.filter((e) => !e.cat).length;
+        submit.disabled = left > 0;
+        missing.textContent = left > 0 ? (left === 1 ? 'Manca una categoria: assegnala a ogni trattativa per presentare il forecast.' : `Mancano ${left} categorie: assegnale a ogni trattativa per presentare il forecast.`) : '';
       };
       const list = h('div', { class: 'fcrows' }, rows.map((e) => {
         const seg = h('div', { class: 'seg', role: 'radiogroup', 'aria-label': `Categoria per ${e.sc.client}` }, CL.CATS.map((c) => h('button', {
@@ -16821,7 +16863,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
         h('div', { class: 'eyebrow' }, 'Foglio di forecast · assegna una categoria a ogni trattativa'),
         h('dl', { class: 'fclegend' }, CL.CATS.map((c) => h('div', null, h('dt', null, c.label), h('dd', null, c.hint)))),
         list, totals,
-        h('div', { class: 'next', style: { marginTop: '14px' } }, submit));
+        h('div', { class: 'next', style: { marginTop: '14px', flexDirection: 'column', alignItems: 'flex-end' } }, missing, submit));
       upd();
       area.replaceChildren(wrap);
       UI.scrollTo(wrap, 'nearest');
@@ -16852,7 +16894,7 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       const catBefore = e ? e.cat : null;
       const eff = CL.fcResolve(run, ch, picked.id, rnd);
       X.scores.push(eff.score);
-      if (!hard) setMgr();
+      if (!hard) { setMgr(); UI.syncTopbar(); }
       UI.sfx(hard ? 'pick' : eff.score > 0.4 ? 'q3' : eff.score < -0.2 ? 'q0' : 'q1');
       await UI.reveal(host, [{ you: true, t: picked.t }].concat(eff.lines.map((t) => ({ w: 'marta', t }))), { sc: null, vp });
       if (gone()) return;
@@ -16902,10 +16944,10 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
       if (gone()) return;
       const done = h('div', { class: 'fcsheet final' },
         h('div', { class: 'eyebrow' }, 'Forecast consegnato al CRO'),
-        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.label), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (e.cat === 'commit' ? 'chip--good' : e.cat === 'best' ? 'chip--warn' : '') }, CL.catLabel(e.cat)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')))),
+        h('div', { class: 'fcrows' }, X.entries.filter((e) => e.cat).map((e) => { const shown = hard ? (e.was || e.cat) : e.cat; return h('div', { class: 'fcrow compact' }, h('div', { class: 'who' }, h('b', null, e.sc.label), h('small', null, e.sc.client)), h('span', { class: 'chip ' + (shown === 'commit' ? 'chip--good' : shown === 'best' ? 'chip--warn' : '') }, CL.catLabel(shown)), h('b', { class: 'mono' }, e.state === 'pending' ? CL.fmtK(e.net) : '—')); })),
         h('div', { class: 'fctot' },
-          h('div', null, h('span', { class: 'eyebrow' }, 'Commit'), h('b', null, CL.fmtK(fin.commit + run.bonusAcv))),
-          h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(fin.best))),
+          hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Commit'), h('b', null, CL.fmtK(fin.commit + run.bonusAcv))),
+          hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Best Case'), h('b', null, CL.fmtK(fin.best))),
           hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Fiducia di Marta'), h('b', null, String(run.mgr))),
           hard ? null : h('div', null, h('span', { class: 'eyebrow' }, 'Reputazione'), h('b', null, String(run.rep)))),
         fin.rightFirst && !hard ? h('div', { class: 'note good' }, h('b', null, `Chiamate giuste al primo colpo: ${fin.rightFirst}. `), 'Marta lo mette a verbale: la fiducia si costruisce prima di essere sfidati, non dopo.') : null,
@@ -16926,8 +16968,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 
   UI.fcKey = (i) => { if (S.screen === 'forecast' && S.fcPhase === 'choose' && S.fcKey) S.fcKey(i); };
   UI.fcAdvance = () => {
-    if (S.screen !== 'forecast') return false;
-    if (S.fcPhase === 'fb' && S.fcNext) { S.fcNext(); return true; }
+    if (S.screen !== 'forecast' && S.screen !== 'closing') return false;
+    if ((S.fcPhase === 'fb' || S.fcPhase === 'open') && S.fcNext) { S.fcNext(); return true; }
     if (S.skip) { UI.skipReveal(); return true; }
     return false;
   };
@@ -17063,31 +17105,31 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
   document.addEventListener('keydown', (e) => {
     if (UI.modalOpen() || e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target;
-    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
     const num = /^[1-9]$/.test(e.key) ? Number(e.key) - 1 : -1;
     /* un pulsante col focus si attiva da solo con Invio/Spazio: non intercettiamo */
     const ae = document.activeElement;
-    const onButton = !!(ae && ae.tagName === 'BUTTON' && !ae.disabled);
+    const onButton = !!(ae && (ae.tagName === 'BUTTON' || ae.tagName === 'A' || ae.tagName === 'SUMMARY') && !ae.disabled);
     const root = UI.$('#app') || document;
     const clickNth = (sel, n) => { const b = root.querySelectorAll(sel)[n]; if (b && !b.disabled) { b.click(); return true; } return false; };
-    const enter = e.key === 'Enter' || e.key === ' ';
+    /* Invio avanza (una volta per pressione: tenerlo premuto non deve attraversare le schermate); Spazio resta allo scorrimento della pagina */
+    const enter = e.key === 'Enter' && !e.repeat && !onButton;
+    if (e.repeat && num >= 0) return;
     if (S.screen === 'play') {
       if (num >= 0) UI.playKey(num);
-      else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.playNext(); }
-    } else if (S.screen === 'forecast') {
-      if (num >= 0) UI.fcKey(num);
-      else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.fcAdvance(); }
-    } else if (S.screen === 'closing') {
-      if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.fcAdvance(); }
+      else if (enter) { e.preventDefault(); UI.playNext(); }
+    } else if (S.screen === 'forecast' || S.screen === 'closing') {
+      if (num >= 0 && S.screen === 'forecast') UI.fcKey(num);
+      else if (enter) { e.preventDefault(); UI.fcAdvance(); }
     } else if (S.screen === 'event') {
       /* interludi: 1-N scelgono, Invio prosegue dopo l'esito */
       if (num >= 0) { if (clickNth('.choice:not([disabled])', num)) e.preventDefault(); }
-      else if (enter && !onButton) { const b = root.querySelector('[data-autofocus], [data-next]'); if (b) { e.preventDefault(); b.click(); } }
+      else if (enter) { const b = root.querySelector('[data-autofocus], [data-next]'); if (b) { e.preventDefault(); b.click(); } }
     } else if (S.screen === 'debrief') {
-      if (enter && !onButton) { const b = root.querySelector('[data-next]') || root.querySelector('.btn--primary'); if (b) { e.preventDefault(); b.click(); } }
+      if (enter) { const b = root.querySelector('[data-next]') || root.querySelector('.btn--primary'); if (b) { e.preventDefault(); b.click(); } }
     } else if (S.screen === 'dojo') {
       if (num >= 0) UI.dojoKey(num);
-      else if ((e.key === 'Enter' || e.key === ' ') && !onButton) { e.preventDefault(); UI.dojoAdvance(); }
+      else if (enter) { e.preventDefault(); UI.dojoAdvance(); }
     }
   });
 

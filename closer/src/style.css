@@ -604,3 +604,26 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
 .fclegend { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 6px 14px; margin: 10px 0 12px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: var(--r); background: var(--surface-2); }
 .fclegend dt { font: 700 11px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); }
 .fclegend dd { margin: 2px 0 0; font-size: 12.5px; line-height: 1.35; color: var(--ink-2); }
+
+/* barra superiore: a 320px non deve sbordare; area sicura per notch e barre di sistema */
+.topbar .wrap { flex-wrap: wrap; row-gap: 4px; }
+@media (max-width: 400px) {
+  .topbar .brand span { display: none; }
+  .topbar .row.gap-8 { gap: 6px; font-size: 12px; }
+  .topbar .iconbtn { width: 32px; height: 32px; }
+}
+.topbar { padding-top: env(safe-area-inset-top); }
+.wrap { padding-left: max(var(--gutter), env(safe-area-inset-left)); padding-right: max(var(--gutter), env(safe-area-inset-right)); }
+body { padding-bottom: env(safe-area-inset-bottom); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.btn--bad { background: var(--bad); color: #fff; border-color: transparent; }
+
+/* viewport compatto quando si sceglie e si legge la reazione: la domanda e le risposte devono entrare nello schermo */
+.playroot[data-ph="choose"] .vp-host .vp, .playroot[data-ph="react"] .vp-host .vp, .playroot[data-ph="feedback"] .vp-host .vp { max-height: 84px; min-height: 84px; }
+@media (min-width: 981px) and (min-height: 800px) {
+  .playroot[data-ph="choose"] .vp-host .vp, .playroot[data-ph="react"] .vp-host .vp, .playroot[data-ph="feedback"] .vp-host .vp { max-height: clamp(150px, 30vh, 320px); min-height: 150px; }
+}
+
+@media (max-width: 400px) {
+  .playroot[data-ph="choose"] .vp-host .vp, .playroot[data-ph="react"] .vp-host .vp, .playroot[data-ph="feedback"] .vp-host .vp { max-height: 62px; min-height: 62px; }
+}

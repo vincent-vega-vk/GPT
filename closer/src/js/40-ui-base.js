@@ -101,7 +101,7 @@
   };
   const normRecords = (rec) => {
     const r = Object.assign({ runs: [], badges: {}, dojo: { best: 0 } }, rec && typeof rec === 'object' ? rec : {});
-    if (!Array.isArray(r.runs)) r.runs = [];
+    r.runs = Array.isArray(r.runs) ? r.runs.filter((x) => x && typeof x === 'object') : [];
     if (!r.badges || typeof r.badges !== 'object' || Array.isArray(r.badges)) r.badges = {};
     if (!r.dojo || typeof r.dojo !== 'object') r.dojo = { best: 0 };
     return r;
@@ -249,6 +249,7 @@
       h('button', { class: 'iconbtn', 'aria-label': 'Audio', 'aria-pressed': String(UI.settings.sound), title: 'Audio', onclick: () => { UI.settings.sound = !UI.settings.sound; UI.saveSettings(); UI.sfx('pick'); UI.syncTopbar(); if (UI.ambience) UI.ambience.refresh(); if (S.screen === 'home') UI.render(); } }, UI.ic(UI.settings.sound ? 'vol' : 'mute')),
       h('button', { class: 'iconbtn', 'aria-label': 'Tema: ' + UI.settings.theme, title: 'Tema', onclick: () => { const order = ['auto', 'light', 'dark']; UI.settings.theme = order[(order.indexOf(UI.settings.theme) + 1) % 3]; UI.saveSettings(); UI.applyTheme(); UI.syncTopbar(); } }, UI.ic(themeIcon)),
     ));
+    if (had) { const key = had.split(':')[0]; const el = Array.from(bar.querySelectorAll('[aria-label]')).find((x) => x.getAttribute('aria-label').split(':')[0] === key); if (el) el.focus({ preventScroll: true }); }
   };
 
   /* uscita dalla partita (verso la home): conferma inline, niente confirm() nativo */

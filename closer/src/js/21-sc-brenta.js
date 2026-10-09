@@ -458,7 +458,7 @@
               ],
             }),
           ch('d', 3, `Le preparo due formule e sceglie lei, Presidente. A) Listino, pagamento a fasi e canone fisso per tre anni. B) 10% di sconto con pagamento anticipato.`,
-            `Offrire due formule invece di un sì o di un no sposta il tavolo dal prezzo alla struttura, dove il concorrente locale non ha niente da dire. Gianni sceglie ciò che gli dà tranquillità, e tu non hai scontato nulla.`,
+            `Offrire due formule invece di un sì o di un no sposta il tavolo dal prezzo alla struttura, dove il concorrente locale non ha niente da dire. Gianni sceglie ciò che gli dà tranquillità, e tu hai concesso poco sul prezzo.`,
             { t: 4, v: 4, c: 12, r: -6, d: 4 }, {
               jolly: 'desk', set: { giveGet: true, deskApproved: true }, next: (d) => (d.flags.overpromise ? 'n5x' : 'n6'),
               say: `Presidente, le preparo due formule e sceglie lei. La prima: listino, pagamento a fasi e canone bloccato per tre anni. La seconda: dieci per cento di sconto, ma con pagamento anticipato.`,
