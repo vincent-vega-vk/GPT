@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Quiz della cena</title>
+<meta name="description" content="Quiz live per la cena clienti SAP: il conduttore avvia e fa avanzare le domande, gli ospiti rispondono dal telefono.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Figtree:wght@400;600;700&display=swap">
+<style>
+/* Layout: one column, phone-first, dark room look (dinner, dim light). */
+:root{
+  --bg:#0f1218; --surface:#171c26; --surface-2:#202837; --line:#2c3547;
+  --fg:#f3efe6; --muted:#9aa4b8; --accent:#f3b64b; --accent-ink:#1b1403;
+  --good:#38c98a; --bad:#ff5a6e;
+  --o0:#e2434f; --o1:#2f7df6; --o2:#e9a51f; --o3:#2eb46b;
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --radius:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:17px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:0 48px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px 10px;background:var(--bg)}
+.brand{font-family:var(--font-display);font-weight:800;font-size:20px;letter-spacing:-.01em}
+.brand small{display:block;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--bad);box-shadow:0 0 0 3px rgba(255,90,110,.18)}
+.dot.on{background:var(--good);box-shadow:0 0 0 3px rgba(56,201,138,.18)}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:34px}
+h2{font-size:26px}
+h3{font-size:19px}
+p{margin:0}
+.stack{display:grid;gap:14px}
+.stack-lg{display:grid;gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.big{font-family:var(--font-display);font-size:56px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.btn{appearance:none;border:0;border-radius:12px;padding:15px 18px;font:inherit;font-weight:700;font-size:17px;cursor:pointer;width:100%;background:var(--accent);color:var(--accent-ink);transition:transform .08s ease,opacity .15s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--line)}
+.btn.sm{width:auto;padding:9px 13px;font-size:14px;border-radius:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row > *{min-width:0}
+.grow{flex:1 1 160px}
+label{display:grid;gap:6px;font-size:14px;font-weight:600;color:var(--muted)}
+input,select,textarea{width:100%;font:inherit;font-size:17px;color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 13px}
+textarea{min-height:150px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+input:focus,select:focus,textarea:focus,.btn:focus-visible,.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--surface-2);color:var(--muted);letter-spacing:.03em}
+.pill.accent{background:rgba(243,182,75,.16);color:var(--accent)}
+.pill.good{background:rgba(56,201,138,.16);color:var(--good)}
+.pill.bad{background:rgba(255,90,110,.16);color:var(--bad)}
+.err{color:var(--bad);font-size:14px}
+.ok{color:var(--good)}
+/* options */
+.opts{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:12px;padding:12px 14px 12px 12px;font:inherit;font-size:16px;line-height:1.3;cursor:pointer;transition:transform .08s ease,opacity .2s,border-color .2s}
+.opt:active{transform:scale(.985)}
+.opt .glyph{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;font-size:20px;color:#fff}
+.opt.o0 .glyph{background:var(--o0)} .opt.o1 .glyph{background:var(--o1)} .opt.o2 .glyph{background:var(--o2)} .opt.o3 .glyph{background:var(--o3)}
+.opt .count{font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--muted);font-variant-numeric:tabular-nums}
+.opt.picked{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.correct{border-color:var(--good);box-shadow:inset 0 0 0 1px var(--good)}
+.opt.correct .count{color:var(--good)}
+.opt.dim{opacity:.45}
+.opt:disabled{cursor:default}
+/* timer */
+.timer{height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:var(--accent);border-radius:999px;transition:width .1s linear}
+.timer.low i{background:var(--bad)}
+.qhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.qnum{font-family:var(--font-display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.qtext{font-size:21px;font-weight:600;line-height:1.3;text-wrap:balance}
+/* lists */
+.plist{display:grid;gap:6px;max-height:300px;overflow:auto;padding-right:4px}
+.pitem{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:10px;background:var(--surface-2);font-size:15px}
+.pitem.off{opacity:.5}
+.pitem .x{appearance:none;border:0;background:transparent;color:var(--muted);font-size:16px;cursor:pointer;padding:4px 6px}
+.qr{display:grid;place-items:center;background:#fff;border-radius:12px;padding:12px;width:fit-content;margin:0 auto}
+.linkbox{display:flex;gap:8px;align-items:center}
+.linkbox code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;background:var(--surface-2);padding:10px;border-radius:8px}
+/* podium */
+.podium{display:grid;gap:12px}
+.place{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:14px;padding:16px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--line)}
+.place .n{font-family:var(--font-display);font-weight:800;font-size:40px;line-height:1;text-align:center;color:var(--muted)}
+.place .pts{font-family:var(--font-display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.place.first{background:linear-gradient(135deg,rgba(243,182,75,.22),rgba(243,182,75,.05));border-color:var(--accent)}
+.place.first .n{color:var(--accent)}
+.place.second .n{color:#cfd6e3}
+.place.third .n{color:#d5975f}
+.rank{display:grid;gap:4px;font-size:14px}
+.rank div{display:grid;grid-template-columns:32px 1fr auto;gap:8px;padding:6px 8px;border-radius:8px}
+.rank div.me{background:rgba(243,182,75,.14)}
+.reveal{animation:pop .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.reveal{animation:none}.timer i{transition:none}}
+.center{text-align:center}
+.score{font-family:var(--font-display);font-weight:800;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.hr{height:1px;background:var(--line);margin-block:4px}
+.help{font-size:14px;color:var(--muted);line-height:1.5}
+.help ol{margin:8px 0 0;padding-left:20px;display:grid;gap:6px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Quiz della cena<small id="roleTag">Ospiti SAP</small></div>
+    <div class="status"><span class="dot" id="dot"></span><span id="statusTxt">Connessione…</span></div>
+  </header>
+  <main id="app" class="stack-lg"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ===================== CONFIG & DATA ===================== */
+// Se vuoi incorporare la configurazione Firebase nel file (QR più corto),
+// compila EMBEDDED_CONFIG: {k:"apiKey", d:"databaseURL", p:"projectId"}.
+const EMBEDDED_CONFIG = null;
+
+const Q_MS = 20000;      // 20 secondi a domanda
+const GRACE_MS = 1500;   // tolleranza di rete sulle risposte in ritardo
+const BASE_PTS = 500;    // punti per la risposta giusta
+const BONUS_PTS = 500;   // bonus massimo per la velocità
+
+const COMPANIES = ["Fameccanica","Angelini","Menarini","Recordati","Alfasigma","Kedrion","Campari","Bracco","Dompé","Diasorin","SAP"];
+
+const QUESTIONS = [
+ {co:"Fameccanica",q:"In che anno è nata Fameccanica a San Giovanni Teatino, in provincia di Chieti?",a:["1962","1975","1988","1999"],c:1,note:"Nel 2025 ha festeggiato 50 anni con oltre 1.300 macchine installate in 72 Paesi e più di 1.000 brevetti depositati."},
+ {co:"Fameccanica",q:"Dal 1992 al 2022 Fameccanica è stata una joint venture al 50% tra Angelini e quale multinazionale?",a:["Unilever","Kimberly-Clark","Procter & Gamble","Henkel"],c:2,note:"Nell'aprile 2022 Angelini Industries ha rilevato la quota di P&G: oggi Fameccanica è il cuore della divisione Angelini Technologies."},
+ {co:"Fameccanica",q:"Oltre all'Italia, in quali due Paesi Fameccanica ha stabilimenti produttivi?",a:["Germania e Brasile","Cina e Stati Uniti","India e Messico","Polonia e Turchia"],c:1,note:"Shanghai e West Chester, in Ohio. Oltre l'80% dei ricavi arriva dall'export."},
+ {co:"Angelini",q:"In quale città Francesco Angelini ha aperto nel 1919 il laboratorio da cui è nato il gruppo?",a:["Roma","Ancona","Bologna","Napoli"],c:1,note:"Partì da una farmacia di Ancona. Oggi la holding ha sede a Roma e la famiglia è alla terza generazione."},
+ {co:"Angelini",q:"Quale di questi marchi NON è del gruppo Angelini?",a:["Tachipirina","Amuchina","Moment","Aspirina"],c:3,note:"Aspirina è Bayer. Tachipirina è da anni tra i farmaci più venduti nelle farmacie italiane."},
+ {co:"Angelini",q:"Il gruppo Angelini produce anche vino. Quale storica cantina veronese ha acquisito?",a:["Allegrini","Bertani","Masi","Zenato"],c:1,note:"Bertani, fondata nel 1857, è entrata nel gruppo nel 2011 insieme a tenute in Toscana e Friuli. Buona notizia per il brindisi di stasera."},
+ {co:"Menarini",q:"Menarini ha sede a Firenze, ma in quale città è stata fondata nel 1886?",a:["Firenze","Milano","Napoli","Torino"],c:2,note:"Archimede Menarini aprì la Farmacia Internazionale a Napoli. Il trasferimento a Firenze è del 1915."},
+ {co:"Menarini",q:"Quale famiglia guida Menarini da oltre cinquant'anni?",a:["Aleotti","Angelini","Recordati","Dompé"],c:0,note:"Alberto Aleotti la rilevò negli anni Sessanta. Oggi la guidano i figli Lucia e Alberto Giovanni."},
+ {co:"Menarini",q:"In quanti Paesi è presente Menarini?",a:["Circa 40","Circa 70","Circa 100","Circa 140"],c:3,note:"Oltre 17.000 dipendenti nel mondo, e l'azienda resta non quotata e interamente familiare."},
+ {co:"Recordati",q:"In quale paese è nata Recordati nel 1926?",a:["Milano","Correggio, in provincia di Reggio Emilia","Bologna","Parma"],c:1,note:"Il Laboratorio Farmacologico Reggiano nacque nella farmacia di Giovanni Recordati. La sede milanese arriva nel 1953."},
+ {co:"Recordati",q:"Quale fondo di private equity ha preso il controllo di Recordati nel 2018?",a:["CVC","KKR","Blackstone","Permira"],c:0,note:"Con quella vendita la famiglia Recordati ha chiuso 92 anni di controllo. L'azienda è quotata a Milano dal 1984."},
+ {co:"Recordati",q:"Dal 2007 Recordati ha una divisione dedicata a quale area?",a:["Oncologia","Malattie rare","Dermatologia","Vaccini"],c:1,note:"Recordati Rare Diseases è nata comprando la francese Orphan Europe. Oggi le malattie rare valgono una fetta importante dei ricavi."},
+ {co:"Alfasigma",q:"Alfasigma è nata nel 2015 dalla fusione di Alfa Wassermann con quale azienda?",a:["Zambon","Sigma-Tau","Chiesi","Italfarmaco"],c:1,note:"Alfa Wassermann era di Bologna, Sigma-Tau di Pomezia: il nome mette insieme le due metà. La sede è rimasta a Bologna."},
+ {co:"Alfasigma",q:"Quale di questi prodotti da banco è Alfasigma?",a:["Biochetasi","Tachipirina","Enterogermina","Moment"],c:0,note:"Biochetasi, Neo-Borocillina e Yovis sono tutti Alfasigma. Tachipirina e Moment sono dei vicini di tavolo di Angelini."},
+ {co:"Alfasigma",q:"Nel 2023 Alfasigma ha comprato la biotech americana Intercept. Per quale farmaco?",a:["Ocaliva","Xifaxan","Humira","Ozempic"],c:0,note:"Ocaliva cura la colangite biliare primitiva. Xifaxan è invece la rifaximina, molecola nata in casa Alfa Wassermann. Nel 2024 i ricavi hanno superato 1,87 miliardi di euro."},
+ {co:"Kedrion",q:"Qual è la materia prima di tutti i prodotti Kedrion?",a:["Plasma umano","Cellule staminali","Lieviti","Piante officinali"],c:0,note:"Lo stabilimento di Bolognana passerà da 1,1 a 3,3 milioni di litri di plasma lavorati all'anno."},
+ {co:"Kedrion",q:"Kedrion ha sede a Castelvecchio Pascoli, in provincia di Lucca. Quale poeta dà il nome al borgo?",a:["Carducci","Pascoli","Leopardi","Ungaretti"],c:1,note:"La casa di Giovanni Pascoli è lì. Sulle stesse colline la famiglia Marcucci ha anche il resort Il Ciocco."},
+ {co:"Kedrion",q:"Nel 2022 la maggioranza di Kedrion è passata a Permira e a un fondo sovrano. Di quale Paese?",a:["Norvegia","Singapore","Emirati Arabi Uniti","Qatar"],c:2,note:"La famiglia Marcucci resta azionista. Kedrion è il quinto operatore mondiale dei plasmaderivati, con 38 prodotti e circa 5.200 dipendenti."},
+ {co:"Campari",q:"In quale città Gaspare Campari creò il suo bitter nel 1860?",a:["Milano","Torino","Novara","Venezia"],c:2,note:"Milano arrivò pochi anni dopo. Il Camparino in Galleria apre nel 1915 e serve ancora oggi."},
+ {co:"Campari",q:"Chi disegnò nel 1932 la bottiglietta conica del Campari Soda?",a:["Gio Ponti","Fortunato Depero","Bruno Munari","Giorgetto Giugiaro"],c:1,note:"Il futurista Depero la disegnò senza etichetta: il nome è in rilievo sul vetro. È ancora in produzione."},
+ {co:"Campari",q:"Fino al 2006 il rosso del Campari veniva da un colorante naturale ricavato da cosa?",a:["Barbabietole","Cocciniglia, un insetto","Petali di papavero","Vino rosso"],c:1,note:"Il carminio di cocciniglia è stato sostituito da coloranti sintetici. La ricetta completa resta segreta e la conoscono in pochissimi."},
+ {co:"Bracco",q:"In che anno Elio Bracco ha fondato l'azienda a Milano?",a:["1905","1927","1948","1963"],c:1,note:"Quasi un secolo dopo è ancora di famiglia: Diana Bracco presidente, Fulvio Renoldi Bracco amministratore delegato."},
+ {co:"Bracco",q:"In quale prodotto Bracco è leader mondiale?",a:["Antibiotici","Vaccini","Mezzi di contrasto per diagnostica per immagini","Insulina"],c:2,note:"Lo iopamidolo, nato nei laboratori Bracco e lanciato nel 1981, è ancora tra i mezzi di contrasto più usati al mondo."},
+ {co:"Bracco",q:"Quale rete di centri diagnostici fa parte del gruppo Bracco?",a:["Centro Diagnostico Italiano","Humanitas","Synlab","Auxologico"],c:0,note:"Il CDI è nato a Milano nel 1975 e oggi ha una rete di sedi tra Milano e la Lombardia."},
+ {co:"Dompé",q:"Oxervate, il farmaco biotech Dompé per la cheratite neurotrofica, si basa sul Nerve Growth Factor. Quale scienziata italiana lo scoprì?",a:["Rita Levi-Montalcini","Margherita Hack","Fabiola Gianotti","Elena Cattaneo"],c:0,note:"Nobel per la Medicina nel 1986. Dompé ne ha fatto il primo farmaco al mondo basato sull'NGF, approvato in Europa e negli Stati Uniti."},
+ {co:"Dompé",q:"Dove si trova il polo produttivo e di ricerca di Dompé, 160.000 metri quadri?",a:["Milano","L'Aquila","Latina","Parma"],c:1,note:"Aperto nel 1993, è il cuore industriale del gruppo. La sede legale resta a Milano, dove tutto è cominciato nel 1940 con Franco Dompé."},
+ {co:"Dompé",q:"Dompé fu sponsor e fornitore dei servizi medici di quali Olimpiadi invernali?",a:["Cortina 1956","Torino 2006","Milano-Cortina 2026","Nessuna"],c:0,note:"Settant'anni dopo i Giochi tornano a Cortina. Nel 2024 Dompé ha superato 1,2 miliardi di euro di ricavi, gran parte dagli Stati Uniti."},
+ {co:"Diasorin",q:"Diasorin ha sede in un paese piemontese di poco più di 4.000 abitanti. Quale?",a:["Saluggia","Ivrea","Casale Monferrato","Chivasso"],c:0,note:"Saluggia, in provincia di Vercelli. Nel 2000 Carlo Rosa e Gustavo Denegri l'hanno comprata dagli americani di American Standard con un management buyout."},
+ {co:"Diasorin",q:"Nel 2021 Diasorin ha fatto l'acquisto più grande della sua storia, la texana Luminex. Per quanto?",a:["180 milioni di dollari","800 milioni di dollari","1,8 miliardi di dollari","8 miliardi di dollari"],c:2,note:"Con Luminex sono arrivati cinque stabilimenti tra Stati Uniti e Canada e la tecnologia di multiplexing xMAP."},
+ {co:"Diasorin",q:"Come si chiama la piattaforma analitica simbolo di Diasorin?",a:["Liaison","Cobas","Alinity","Vitros"],c:0,note:"Nome francese, ma i diritti vennero dalla svedese BYC Sangtec nel 2002. Cobas è Roche, Alinity è Abbott."},
+ {co:"SAP",q:"Cosa significa oggi la sigla SAP?",a:["Software Applications Program","Systeme, Anwendungen und Produkte","Standard Accounting Platform","Sistemi Avanzati di Produzione"],c:1,note:"Nel 1972 stava per Systemanalyse Programmentwicklung. E si pronuncia lettera per lettera: S-A-P, non \"sap\"."},
+ {co:"SAP",q:"Quanti erano i fondatori di SAP nel 1972, tutti ex IBM?",a:["2","3","5","8"],c:2,note:"Cinque ingegneri a Weinheim. Il quartier generale è ancora oggi a Walldorf, nel Baden-Württemberg."},
+ {co:"SAP",q:"Secondo SAP, che quota delle transazioni commerciali mondiali tocca un sistema SAP?",a:["10%","30%","50%","77%"],c:3,note:"Il 77% è il numero che SAP ripete da anni. Chi stasera ha risposto giusto può chiedere uno sconto, ma non lo otterrà."}
+];
+const OPT = [{g:"▲",c:"o0"},{g:"◆",c:"o1"},{g:"●",c:"o2"},{g:"■",c:"o3"}];
+const LETTERS = ["A","B","C","D"];
+
+/* ===================== PURE HELPERS ===================== */
+function normCo(s){
+  return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z]/g," ").trim().split(/\s+/)[0]||"";
+}
+function sameCo(a,b){ const x=normCo(a), y=normCo(b); return !!x && x===y; }
+function isOut(co){ return normCo(co)==="sap"; }
+function pointsFor(ok, dtMs){
+  if(!ok) return 0;
+  const rem = Math.max(0, Math.min(1, 1 - dtMs/Q_MS));
+  return BASE_PTS + Math.round(BONUS_PTS*rem);
+}
+function parseConfig(text){
+  const get = k => { const m = String(text||"").match(new RegExp(k+"\\s*[:=]\\s*[\"']([^\"']+)[\"']")); return m?m[1].trim():""; };
+  return {k:get("apiKey"), d:get("databaseURL"), p:get("projectId")};
+}
+function b64u(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64ud(str){ let s=String(str||"").replace(/-/g,"+").replace(/_/g,"/"); while(s.length%4) s+="="; return decodeURIComponent(escape(atob(s))); }
+function encCfg(c){ return b64u(JSON.stringify({k:c.k,d:c.d,p:c.p})); }
+function decCfg(s){ try{ const c=JSON.parse(b64ud(s)); return (c&&c.d)?c:null; }catch(e){ return null; } }
+function rankPlayers(players){
+  return Object.entries(players||{})
+    .map(([pid,p])=>({pid, nome:p.nome||"", cognome:p.cognome||"", azienda:p.azienda||"", score:p.score||0, time:p.time||0, joinedAt:p.joinedAt||0, out:isOut(p.azienda)}))
+    .filter(p=>!p.out)
+    .sort((a,b)=> b.score-a.score || a.time-b.time || a.joinedAt-b.joinedAt);
+}
+function computeResults(q, startedAt, answers, players, rules){
+  const Q = QUESTIONS[q]; const out = {};
+  for(const pid of Object.keys(players||{})){
+    const p = players[pid]; const ans = answers && answers[pid];
+    const dt = ans && typeof ans.t==="number" ? Math.max(0, ans.t - startedAt) : null;
+    const inTime = dt!==null && dt <= Q_MS + GRACE_MS;
+    const ok = !!ans && inTime && ans.c === Q.c;
+    const own = !!(rules && rules.ownZero) && sameCo(p.azienda, Q.co);
+    const pts = own ? 0 : pointsFor(ok, dt||0);
+    out[pid] = {ok, pts, own, c: ans ? ans.c : null, dt: dt===null ? null : dt};
+  }
+  return out;
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch])); }
+function rid(n){ const a="abcdefghjkmnpqrstuvwxyz23456789"; let s=""; for(let i=0;i<n;i++) s+=a[Math.floor(Math.random()*a.length)]; return s; }
+function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){ return null; } }
+
+/* ===================== APP STATE ===================== */
+const url = new URL(location.href);
+const params = url.searchParams;
+const BASE_URL = location.origin + location.pathname;
+let cfg = null, db = null, gameRef = null, gid = null, hostKey = null, isHost = false, pid = null;
+let offset = 0, connected = false, closeT = null, answersUnsub = null;
+let S = {phase:"loading", q:-1, startedAt:null, podium:0};
+let players = {}, rules = {ownZero:true}, results = {}, podium = null, hostAnswers = {};
+let me = null, myAnswers = {}, myResult = null, lastView = "", qrDrawn = "";
+const app = document.getElementById("app");
+const now = () => Date.now() + offset;
+const TS = () => firebase.database.ServerValue.TIMESTAMP;
+
+function setStatus(on, txt){ document.getElementById("dot").className = "dot"+(on?" on":""); document.getElementById("statusTxt").textContent = txt; }
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1800); }
+
+/* ===================== BOOT ===================== */
+boot();
+function boot(){
+  const hostParam = params.get("host");
+  cfg = decCfg(params.get("c")||"") || EMBEDDED_CONFIG || (ls("quiz.cfg") ? decCfg(ls("quiz.cfg")) : null);
+  gid = params.get("g");
+  if(hostParam){
+    document.getElementById("roleTag").textContent = "Conduttore";
+    if(!cfg){ setStatus(false,"Da configurare"); renderSetup(); return; }
+    initFirebase();
+    if(hostParam==="new" || !gid){ createGame(); return; }
+    hostKey = hostParam; ls("quiz.host."+gid, hostKey);
+    attachHost();
+    return;
+  }
+  if(!cfg || !gid){ setStatus(false,"Link non valido"); renderError("Questo link non è completo. Inquadra di nuovo il QR code oppure chiedi il link al conduttore."); return; }
+  initFirebase();
+  attachPlayer();
+}
+function initFirebase(){
+  firebase.initializeApp({apiKey:cfg.k||undefined, databaseURL:cfg.d, projectId:cfg.p||undefined});
+  db = firebase.database();
+  db.ref(".info/serverTimeOffset").on("value", s=>{ offset = s.val()||0; });
+  db.ref(".info/connected").on("value", s=>{ connected = !!s.val(); onConnection(); });
+}
+function onConnection(){
+  setStatus(connected, connected ? (isHost ? "Online" : (me ? "Collegato" : "Online")) : "Non collegato");
+  if(connected && pid && gameRef){
+    const ref = gameRef.child("players/"+pid);
+    ref.onDisconnect().update({online:false});
+    ref.update({online:true, lastSeen:TS()}).catch(()=>{});
+  }
+}
+
+/* ===================== HOST ===================== */
+async function createGame(){
+  gid = "cena-"+rid(4); hostKey = rid(10);
+  gameRef = db.ref("games/"+gid);
+  try{
+    await gameRef.set({hostKey, createdAt:TS(), rules:{ownZero:true}, state:{phase:"lobby", q:-1, podium:0}});
+  }catch(e){ renderError("Non riesco a scrivere sul database Firebase: "+esc(e.message)+". Controlla che il Realtime Database sia in modalità test e che l'URL sia giusto."); return; }
+  ls("quiz.host."+gid, hostKey); ls("quiz.cfg", encCfg(cfg));
+  history.replaceState(null,"", BASE_URL+"?g="+gid+"&host="+hostKey+"&c="+encCfg(cfg));
+  attachHost();
+}
+async function attachHost(){
+  gameRef = db.ref("games/"+gid);
+  let snap;
+  try{ snap = await gameRef.child("hostKey").once("value"); }
+  catch(e){ renderError("Non riesco a leggere il database: "+esc(e.message)); return; }
+  if(!snap.exists()){ renderError("Partita non trovata. Crea una nuova partita.", true); return; }
+  if(snap.val()!==hostKey){ renderError("Chiave conduttore non valida per questa partita.", true); return; }
+  isHost = true;
+  ls("quiz.cfg", encCfg(cfg));
+  gameRef.child("state").on("value", s=>{ S = Object.assign({phase:"lobby",q:-1,podium:0}, s.val()||{}); onState(); render(); });
+  gameRef.child("players").on("value", s=>{ players = s.val()||{}; render(); });
+  gameRef.child("rules").on("value", s=>{ rules = Object.assign({ownZero:true}, s.val()||{}); render(); });
+  gameRef.child("results").on("value", s=>{ results = s.val()||{}; });
+  gameRef.child("podium").on("value", s=>{ podium = s.val()||null; render(); });
+  requestWake();
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) requestWake(); });
+}
+function requestWake(){ try{ if(navigator.wakeLock) navigator.wakeLock.request("screen").catch(()=>{}); }catch(e){} }
+function onState(){
+  if(!isHost) return;
+  if(answersUnsub){ answersUnsub(); answersUnsub=null; }
+  clearTimeout(closeT);
+  if(S.phase==="question" && S.q>=0){
+    const ref = gameRef.child("answers/"+S.q);
+    const h = s=>{ hostAnswers = s.val()||{}; render(); };
+    ref.on("value", h); answersUnsub = ()=>ref.off("value", h);
+    if(typeof S.startedAt==="number"){
+      const endsAt = S.startedAt + Q_MS;
+      closeT = setTimeout(()=>closeQuestion(S.q), Math.max(0, endsAt - now()) + 400);
+    }
+  }
+}
+async function hostStart(){
+  await gameRef.child("state").update({phase:"question", q:0, startedAt:TS(), podium:0});
+}
+async function closeQuestion(q){
+  if(!isHost || S.phase!=="question" || S.q!==q || typeof S.startedAt!=="number") return;
+  clearTimeout(closeT);
+  const [aSnap, pSnap] = await Promise.all([gameRef.child("answers/"+q).once("value"), gameRef.child("players").once("value")]);
+  const answers = aSnap.val()||{}, pl = pSnap.val()||{};
+  const res = computeResults(q, S.startedAt, answers, pl, rules);
+  const all = Object.assign({}, results, {[q]:res});
+  const upd = {}; upd["results/"+q] = res;
+  for(const p of Object.keys(pl)){
+    let score=0, time=0;
+    for(const k of Object.keys(all)){ const r = all[k] && all[k][p]; if(r){ score += r.pts||0; if(r.ok && r.dt!=null) time += r.dt; } }
+    upd["players/"+p+"/score"] = score; upd["players/"+p+"/time"] = time;
+  }
+  upd["state/phase"] = "reveal";
+  await gameRef.update(upd);
+}
+async function nextQuestion(){
+  const n = S.q+1;
+  if(n >= QUESTIONS.length){
+    const pSnap = await gameRef.child("players").once("value");
+    const ranking = rankPlayers(pSnap.val()||{}).map((p,i)=>({pos:i+1, pid:p.pid, nome:p.nome, cognome:p.cognome, azienda:p.azienda, score:p.score}));
+    await gameRef.update({"podium":{top:ranking.slice(0,3), all:ranking.slice(0,60)}, "state/phase":"finished", "state/podium":0});
+  }else{
+    await gameRef.child("state").update({phase:"question", q:n, startedAt:TS()});
+  }
+}
+async function podiumStep(){ await gameRef.child("state").update({phase:"podium", podium:Math.min(3,(S.podium||0)+1)}); }
+async function kick(p){ await gameRef.child("players/"+p).remove(); toast("Giocatore rimosso"); }
+
+/* ===================== PLAYER ===================== */
+async function attachPlayer(){
+  gameRef = db.ref("games/"+gid);
+  pid = ls("quiz.pid."+gid);
+  if(pid){
+    try{ const s = await gameRef.child("players/"+pid).once("value"); if(s.exists()) me = s.val(); else { pid=null; ls("quiz.pid."+gid, null); } }
+    catch(e){ pid=null; }
+  }
+  gameRef.child("state").on("value", s=>{ S = Object.assign({phase:"lobby",q:-1,podium:0}, s.val()||{}); onPlayerState(); render(); });
+  gameRef.child("players").on("value", s=>{ players = s.val()||{}; if(pid) me = players[pid]||me; if(pid && !players[pid]){ /* rimosso dal conduttore */ me=null; pid=null; ls("quiz.pid."+gid,null); } render(); });
+  gameRef.child("rules").on("value", s=>{ rules = Object.assign({ownZero:true}, s.val()||{}); render(); });
+  gameRef.child("podium").on("value", s=>{ podium = s.val()||null; render(); });
+  onConnection();
+}
+let lastQSeen = -1;
+async function onPlayerState(){
+  if(!pid) return;
+  if(S.phase==="question" && S.q!==lastQSeen){
+    lastQSeen = S.q; myResult = null;
+    try{ const s = await gameRef.child("answers/"+S.q+"/"+pid).once("value"); if(s.exists()) myAnswers[S.q] = s.val().c; render(); }catch(e){}
+  }
+  if(S.phase==="reveal"){
+    try{ const s = await gameRef.child("results/"+S.q+"/"+pid).once("value"); myResult = s.val()||null; render(); }catch(e){}
+  }
+}
+async function join(nome, cognome, azienda){
+  pid = rid(12);
+  const data = {nome, cognome, azienda, joinedAt:TS(), online:true, score:0, time:0};
+  me = data;
+  try{ await gameRef.child("players/"+pid).set(data); }
+  catch(e){ pid=null; me=null; return "Non riesco a entrare: "+e.message; }
+  ls("quiz.pid."+gid, pid); onConnection(); render(); return "";
+}
+async function answer(i){
+  if(!pid || S.phase!=="question" || myAnswers[S.q]!=null) return;
+  myAnswers[S.q] = i; render();
+  try{ await gameRef.child("answers/"+S.q+"/"+pid).set({c:i, t:TS()}); }
+  catch(e){ delete myAnswers[S.q]; toast("Risposta non inviata, riprova"); render(); }
+}
+
+/* ===================== RENDER ===================== */
+function render(){
+  let view, html;
+  if(isHost){
+    if(S.phase==="lobby"){ view="hlobby"; html=viewHostLobby(); }
+    else if(S.phase==="question"||S.phase==="reveal"){ view="hq"+S.q+S.phase; html=viewHostQuestion(); }
+    else { view="hpod"+(S.podium||0); html=viewHostPodium(); }
+  }else{
+    if(!pid){ view="join"; html=viewJoin(); }
+    else if(S.phase==="lobby"||S.phase==="loading"){ view="plobby"; html=viewPlayerLobby(); }
+    else if(S.phase==="question"||S.phase==="reveal"){ view="pq"+S.q+S.phase+(myAnswers[S.q]!=null?"a":"")+(myResult?"r":""); html=viewPlayerQuestion(); }
+    else { view="ppod"+(S.podium||0); html=viewPlayerPodium(); }
+  }
+  if(view==="join" && lastView==="join"){ patchJoin(); return; }
+  if(view!==lastView){ app.innerHTML = html; lastView = view; afterRender(view); }
+  else { patch(view, html); }
+}
+function patch(view, html){
+  // Aggiornamenti leggeri senza ricostruire la vista (contatori, liste).
+  const tmp = document.createElement("div"); tmp.innerHTML = html;
+  for(const el of tmp.querySelectorAll("[data-live]")){
+    const cur = app.querySelector('[data-live="'+el.dataset.live+'"]');
+    if(!cur) continue;
+    if(cur.innerHTML!==el.innerHTML && !cur.dataset.confirm) cur.innerHTML = el.innerHTML;
+    if("disabled" in cur && cur.disabled!==el.disabled) cur.disabled = el.disabled;
+    if(cur.className!==el.className) cur.className = el.className;
+  }
+}
+function afterRender(view){
+  if(view==="hlobby"){ drawQR(); }
+}
+function patchJoin(){ const c = app.querySelector("[data-live=count]"); if(c) c.textContent = onlineCount(); }
+function onlineCount(){ return Object.values(players).filter(p=>p.online).length; }
+function totalCount(){ return Object.keys(players).length; }
+function guestLink(){ return BASE_URL+"?g="+gid+"&c="+encCfg(cfg); }
+function hostLink(){ return BASE_URL+"?g="+gid+"&host="+hostKey+"&c="+encCfg(cfg); }
+function drawQR(){
+  const el = document.getElementById("qr"); if(!el) return;
+  const link = guestLink(); if(qrDrawn===link && el.childElementCount) return;
+  el.innerHTML=""; qrDrawn=link;
+  try{ new QRCode(el, {text:link, width:240, height:240, correctLevel:QRCode.CorrectLevel.L}); }catch(e){ el.textContent="QR non disponibile: usa il link."; }
+}
+function timerHtml(){ return '<div class="timer" id="timer"><i></i></div>'; }
+function remaining(){ if(S.phase!=="question"||typeof S.startedAt!=="number") return Q_MS; return Math.max(0, S.startedAt + Q_MS - now()); }
+(function tick(){
+  const t = document.getElementById("timer"); const txt = document.getElementById("timerTxt");
+  if(t){ const r = remaining(); const pct = (r/Q_MS)*100; t.firstElementChild.style.width = pct+"%"; t.classList.toggle("low", r<5000); if(txt) txt.textContent = Math.ceil(r/1000)+" s"; }
+  requestAnimationFrame(tick);
+})();
+function optsHtml(q, picked, reveal, counts, disabled){
+  const Q = QUESTIONS[q];
+  return '<div class="opts">'+Q.a.map((t,i)=>{
+    let cls = "opt "+OPT[i].c;
+    if(reveal){ if(i===Q.c) cls+=" correct"; else cls+=" dim"; }
+    if(picked===i) cls+=" picked";
+    const cnt = counts ? '<span class="count">'+counts[i]+'</span>' : (picked===i?'<span class="count">✓</span>':'<span></span>');
+    return '<button class="'+cls+'" data-act="answer" data-i="'+i+'"'+(disabled?' disabled':'')+'><span class="glyph">'+OPT[i].g+'</span><span class="txt"><b>'+LETTERS[i]+'</b> · '+esc(t)+'</span>'+cnt+'</button>';
+  }).join("")+'</div>';
+}
+
+/* ---- host views ---- */
+function viewHostLobby(){
+  const on = onlineCount(), tot = totalCount();
+  const list = Object.entries(players).sort((a,b)=>(a[1].joinedAt||0)-(b[1].joinedAt||0)).map(([p,v])=>
+    '<div class="pitem'+(v.online?'':' off')+'"><span>'+esc(v.nome)+' '+esc(v.cognome)+' <span class="muted">· '+esc(v.azienda)+'</span></span><button class="x" data-act="kick" data-p="'+p+'" aria-label="Rimuovi">✕</button></div>').join("") || '<p class="muted small">Nessuno ancora. Appena qualcuno inquadra il QR compare qui.</p>';
+  return '<div class="stack-lg">'
+   +'<div class="card stack center"><div class="eyebrow">Inquadra per giocare</div><div class="qr" id="qr"></div>'
+   +'<div class="linkbox"><code>'+esc(guestLink())+'</code><button class="btn ghost sm" data-act="copy" data-v="'+esc(guestLink())+'">Copia</button></div>'
+   +'<p class="muted small">Il link funziona anche inviato su WhatsApp. Niente app, niente account.</p></div>'
+   +'<div class="card stack"><div class="row"><div class="grow"><div class="eyebrow">Collegati ora</div><div class="big" data-live="on">'+on+'</div></div><div class="grow"><div class="eyebrow">Iscritti</div><div class="big" data-live="tot">'+tot+'</div></div></div>'
+   +'<div class="plist" data-live="list">'+list+'</div></div>'
+   +'<div class="card stack"><label style="display:flex;gap:10px;align-items:center;color:var(--fg)"><input type="checkbox" id="ownZero" data-act="rule" style="width:auto"'+(rules.ownZero?' checked':'')+'> Le domande sulla propria azienda non valgono punti</label>'
+   +'<p class="muted small">Chi lavora in SAP può giocare, ma resta fuori dalla classifica. 33 domande, 20 secondi ciascuna, punti per risposta giusta più bonus velocità.</p></div>'
+   +'<div class="stack"><button class="btn" data-act="start"'+(tot===0?' disabled':'')+' data-live="startbtn">Avvia il quiz con '+on+' giocator'+(on===1?'e':'i')+'</button>'
+   +'<div class="row"><button class="btn ghost sm" data-act="copy" data-v="'+esc(hostLink())+'">Copia link conduttore</button><button class="btn danger sm" data-act="newgame">Nuova partita</button></div>'
+   +'<p class="help">Salva il link conduttore: ti riporta a questa partita da qualsiasi telefono. Tieni lo schermo acceso durante il quiz: è il tuo telefono a chiudere le domande allo scadere dei 20 secondi.</p></div>'
+   +'</div>';
+}
+function viewHostQuestion(){
+  const q = S.q, Q = QUESTIONS[q], reveal = S.phase==="reveal";
+  const answered = Object.keys(hostAnswers).length, tot = totalCount();
+  const counts = [0,0,0,0]; for(const a of Object.values(hostAnswers)){ if(a && a.c>=0 && a.c<4) counts[a.c]++; }
+  const last = q === QUESTIONS.length-1;
+  let html = '<div class="stack-lg">'
+   +'<div class="card stack"><div class="qhead"><span class="qnum">'+(q+1)+'<span class="muted">/'+QUESTIONS.length+'</span></span><span class="pill accent">'+esc(Q.co)+'</span><span class="pill" id="timerTxt">20 s</span></div>'
+   +(reveal?'':timerHtml())
+   +'<p class="qtext">'+esc(Q.q)+'</p>'
+   +optsHtml(q, null, reveal, reveal?counts:null, true)
+   +'<div class="row" data-live="ans"><span class="pill'+(answered>=tot&&tot>0?' good':'')+'">Risposte: '+answered+'/'+tot+'</span>'+(reveal?'':(answered>=tot&&tot>0?'<span class="muted small">Tutti hanno risposto.</span>':''))+'</div>'
+   +'</div>';
+  if(reveal){
+    html += '<div class="card stack reveal"><div class="eyebrow">Da leggere a voce</div><p class="ok" style="font-weight:700">Risposta giusta: '+LETTERS[Q.c]+' · '+esc(Q.a[Q.c])+'</p><p>'+esc(Q.note)+'</p></div>'
+      +'<button class="btn" data-act="next">'+(last?'Vai alla classifica':'Prossima domanda ('+(q+2)+'/'+QUESTIONS.length+')')+'</button>';
+  }else{
+    html += '<button class="btn ghost" data-act="close">Chiudi ora la domanda</button>';
+  }
+  return html+'</div>';
+}
+function placeHtml(p, cls){
+  return '<div class="place '+cls+' reveal"><div class="n">'+p.pos+'°</div><div><div style="font-weight:700;font-size:18px">'+esc(p.nome)+' '+esc(p.cognome)+'</div><div class="muted small">'+esc(p.azienda)+'</div></div><div class="pts">'+p.score+'</div></div>';
+}
+function podiumHtml(step, mePid){
+  if(!podium || !podium.top) return '<p class="muted">Calcolo la classifica…</p>';
+  const top = podium.top; const parts = [];
+  if(step>=1 && top[2]) parts.push(placeHtml(top[2],"third"));
+  if(step>=2 && top[1]) parts.push(placeHtml(top[1],"second"));
+  if(step>=3 && top[0]) parts.push(placeHtml(top[0],"first"));
+  let html = '<div class="podium">'+parts.reverse().join("")+'</div>';
+  if(step>=3 && podium.all){
+    html += '<details class="card" style="margin-top:14px"><summary style="cursor:pointer;font-weight:700">Classifica completa</summary><div class="rank" style="margin-top:10px">'
+      + podium.all.map(p=>'<div'+(p.pid===mePid?' class="me"':'')+'><span class="muted">'+p.pos+'</span><span>'+esc(p.nome)+' '+esc(p.cognome)+' <span class="muted">· '+esc(p.azienda)+'</span></span><b>'+p.score+'</b></div>').join("")
+      +'</div></details>';
+  }
+  return html;
+}
+function viewHostPodium(){
+  const step = S.podium||0; const labels = ["Mostra il 3° posto","Mostra il 2° posto","Mostra il vincitore"];
+  return '<div class="stack-lg"><div class="card stack center"><div class="eyebrow">Quiz finito</div><h2>'+(step===0?'Pronti per il podio':'Podio')+'</h2>'
+   +'<p class="muted small">'+(step===0?'Al tuo clic il posto compare su tutti i telefoni.':(step<3?'Un altro clic per il posto successivo.':'Premio al vincitore.'))+'</p></div>'
+   + podiumHtml(step, null)
+   + (step<3 ? '<button class="btn" data-act="podium">'+labels[step]+'</button>' : '<div class="row"><button class="btn ghost sm" data-act="newgame">Nuova partita</button></div>')
+   +'</div>';
+}
+
+/* ---- player views ---- */
+function viewJoin(){
+  const opts = COMPANIES.map(c=>'<option value="'+esc(c)+'">'+esc(c)+(c==="Angelini"?" / Angelini Industries":"")+'</option>').join("")+'<option value="Altro">Altra azienda</option>';
+  return '<div class="stack-lg"><div class="stack"><h1>Benvenuto al quiz</h1><p class="muted">33 domande sulle aziende al tavolo, 20 secondi ciascuna. Scrivi chi sei e aspetta il via.</p></div>'
+   +'<form class="card stack" id="joinForm" autocomplete="on">'
+   +'<label>Nome<input id="nome" required maxlength="30" autocomplete="given-name" placeholder="Es. Giulia"></label>'
+   +'<label>Cognome<input id="cognome" required maxlength="30" autocomplete="family-name" placeholder="Es. Montebello"></label>'
+   +'<label>Azienda<select id="azienda">'+opts+'</select></label>'
+   +'<input id="aziendaAltro" maxlength="40" placeholder="Scrivi il nome dell\'azienda" hidden>'
+   +'<p class="err" id="joinErr" hidden></p>'
+   +'<button class="btn" id="joinBtn" type="submit">Entra nel quiz</button>'
+   +'<p class="muted small center">Collegati finora: <b data-live="count">'+onlineCount()+'</b></p>'
+   +'</form></div>';
+}
+function viewPlayerLobby(){
+  return '<div class="stack-lg"><div class="card stack center"><div class="eyebrow">Sei dentro</div><h2>Ciao '+esc(me&&me.nome)+'!</h2><p class="muted">Siamo in <b data-live="count">'+onlineCount()+'</b>. Il quiz parte quando il conduttore dà il via: tieni il telefono a portata di mano.</p></div>'
+   +'<div class="card stack small muted"><p><b style="color:var(--fg)">Come funziona</b></p><p>Ogni domanda dura 20 secondi. Risposta giusta: 500 punti più un bonus fino a 500 se sei veloce.</p>'+(rules.ownZero?'<p>Le domande sulla tua azienda non valgono punti: sarebbe troppo facile.</p>':'')+'<p>Se il telefono si blocca, riapri il link: ritrovi la tua partita.</p></div></div>';
+}
+function viewPlayerQuestion(){
+  const q = S.q, Q = QUESTIONS[q], reveal = S.phase==="reveal", picked = myAnswers[q];
+  const own = rules.ownZero && me && sameCo(me.azienda, Q.co);
+  let html = '<div class="stack-lg"><div class="card stack"><div class="qhead"><span class="qnum">'+(q+1)+'<span class="muted">/'+QUESTIONS.length+'</span></span><span class="pill accent">'+esc(Q.co)+'</span>'+(reveal?'':'<span class="pill" id="timerTxt">20 s</span>')+'</div>'
+   +(reveal?'':timerHtml())
+   +(own?'<span class="pill">La tua azienda: non vale punti</span>':'')
+   +'<p class="qtext">'+esc(Q.q)+'</p>'
+   +optsHtml(q, picked, reveal, null, reveal || picked!=null)
+   +(reveal?'':(picked!=null?'<p class="muted small center">Risposta inviata. Aspetta la fine dei 20 secondi.</p>':'<p class="muted small center">Tocca una risposta. Vale la prima che tocchi.</p>'))
+   +'</div>';
+  if(reveal){
+    const r = myResult;
+    if(r){
+      const head = r.ok ? '<div class="eyebrow ok">Giusto</div>' : (r.c==null ? '<div class="eyebrow muted">Nessuna risposta</div>' : '<div class="eyebrow" style="color:var(--bad)">Sbagliato</div>');
+      html += '<div class="card stack center reveal">'+head+'<div class="score">+'+r.pts+'</div>'+(r.own?'<p class="muted small">Domanda sulla tua azienda: zero punti, ma hai fatto bella figura.</p>':'')+'<p class="muted small">Totale: <b style="color:var(--fg)">'+((me&&me.score)||0)+'</b> punti</p></div>';
+    }else{
+      html += '<div class="card center muted small">Calcolo dei punti…</div>';
+    }
+    html += '<div class="card small muted"><b style="color:var(--fg)">Lo sapevi?</b> '+esc(Q.note)+'</div><p class="muted small center">Aspetta la prossima domanda.</p>';
+  }
+  return html+'</div>';
+}
+function viewPlayerPodium(){
+  const step = S.podium||0;
+  let html = '<div class="stack-lg"><div class="card stack center"><div class="eyebrow">Quiz finito</div><h2>'+(step===0?'Occhi sul telefono':'Podio')+'</h2><p class="muted small">'+(step===0?'Il conduttore sta per svelare il podio, un posto alla volta.':'')+'</p></div>'+podiumHtml(step, pid);
+  if(step>=3 && podium && podium.all){
+    const mine = podium.all.find(p=>p.pid===pid);
+    if(mine) html += '<div class="card center stack reveal"><div class="eyebrow">Il tuo risultato</div><div class="score">'+mine.pos+'°</div><p class="muted small">'+mine.score+' punti su '+podium.all.length+' giocatori</p></div>';
+    else if(me && isOut(me.azienda)) html += '<div class="card center muted small">Squadra SAP: fuori classifica, ma grazie per aver giocato.</div>';
+  }
+  return html+'</div>';
+}
+
+/* ---- setup & errors ---- */
+function renderSetup(){
+  lastView="setup";
+  app.innerHTML = '<div class="stack-lg"><div class="stack"><h1>Prima partita</h1><p class="muted">Serve un database Firebase gratuito: cinque minuti, una volta sola. Poi il quiz vive su questa pagina.</p></div>'
+   +'<div class="card help"><b style="color:var(--fg)">Come ottenere la configurazione</b><ol>'
+   +'<li>Vai su <b>console.firebase.google.com</b>, crea un progetto (es. "quiz-cena"), Analytics disattivato.</li>'
+   +'<li>Menu Build → <b>Realtime Database</b> → Crea database → località Belgio → <b>Modalità test</b> → Abilita.</li>'
+   +'<li>Ingranaggio → Impostazioni progetto → in fondo "Le tue app" → icona <b>&lt;/&gt;</b> (Web) → registra l\'app "quiz".</li>'
+   +'<li>Copia il blocco <code>const firebaseConfig = { ... }</code> e incollalo qui sotto.</li></ol></div>'
+   +'<div class="card stack"><label>Configurazione Firebase<textarea id="cfgText" placeholder="const firebaseConfig = {\n  apiKey: \"...\",\n  databaseURL: \"https://....firebasedatabase.app\",\n  projectId: \"...\"\n};"></textarea></label>'
+   +'<label>URL del Realtime Database (se non compare nel blocco)<input id="cfgDb" placeholder="https://quiz-cena-default-rtdb.europe-west1.firebasedatabase.app"></label>'
+   +'<p class="err" id="cfgErr" hidden></p>'
+   +'<button class="btn" data-act="savecfg">Salva e crea la partita</button></div></div>';
+}
+function renderError(msg, canNew){
+  lastView="error";
+  app.innerHTML = '<div class="card stack"><h2>Ops</h2><p>'+msg+'</p>'+(canNew?'<button class="btn" data-act="newgame">Crea una nuova partita</button>':'')+'</div>';
+}
+
+/* ===================== EVENTS ===================== */
+app.addEventListener("click", async e=>{
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  const act = b.dataset.act;
+  try{
+    if(act==="answer") answer(+b.dataset.i);
+    else if(act==="start"){ if(b.dataset.confirm){ b.disabled=true; await hostStart(); } else { b.dataset.confirm="1"; b.textContent="Confermi? Tocca di nuovo per partire"; setTimeout(()=>{ if(b.isConnected){ delete b.dataset.confirm; render(); } }, 4000); } }
+    else if(act==="close") closeQuestion(S.q);
+    else if(act==="next"){ b.disabled=true; await nextQuestion(); }
+    else if(act==="podium"){ b.disabled=true; await podiumStep(); }
+    else if(act==="kick") kick(b.dataset.p);
+    else if(act==="newgame"){ location.href = BASE_URL+"?host=new"; }
+    else if(act==="copy"){ const v=b.dataset.v; try{ await navigator.clipboard.writeText(v); toast("Copiato"); }catch(err){ const r=document.createRange(); const code=b.parentElement.querySelector("code"); if(code){ r.selectNodeContents(code); getSelection().removeAllRanges(); getSelection().addRange(r); } toast("Seleziona e copia il link"); } }
+    else if(act==="savecfg"){
+      const c = parseConfig(document.getElementById("cfgText").value);
+      const dbIn = document.getElementById("cfgDb").value.trim(); if(dbIn) c.d = dbIn;
+      const err = document.getElementById("cfgErr");
+      if(!/^https:\/\/.+(firebasedatabase\.app|firebaseio\.com)\/?$/.test(c.d||"")){ err.textContent="Manca l'URL del database: lo trovi in cima alla pagina Realtime Database, inizia con https:// e finisce con firebasedatabase.app"; err.hidden=false; return; }
+      cfg = c; ls("quiz.cfg", encCfg(c)); location.replace(BASE_URL+"?host=new&c="+encCfg(c));
+    }
+  }catch(err){ toast("Errore: "+err.message); }
+});
+app.addEventListener("change", e=>{
+  if(e.target.id==="azienda"){ const o=document.getElementById("aziendaAltro"); o.hidden = e.target.value!=="Altro"; if(!o.hidden) o.focus(); }
+  if(e.target.id==="ownZero" && isHost){ gameRef.child("rules").update({ownZero:e.target.checked}); }
+});
+app.addEventListener("submit", async e=>{
+  if(e.target.id!=="joinForm") return;
+  e.preventDefault();
+  const nome = document.getElementById("nome").value.trim(), cognome = document.getElementById("cognome").value.trim();
+  let azienda = document.getElementById("azienda").value; if(azienda==="Altro") azienda = document.getElementById("aziendaAltro").value.trim();
+  const err = document.getElementById("joinErr");
+  if(!nome || !cognome || !azienda){ err.textContent="Compila nome, cognome e azienda."; err.hidden=false; return; }
+  const btn = document.getElementById("joinBtn"); btn.disabled=true; btn.textContent="Un attimo…";
+  const msg = await join(nome, cognome, azienda);
+  if(msg){ err.textContent=msg; err.hidden=false; btn.disabled=false; btn.textContent="Entra nel quiz"; }
+});
+</script>
+</body>
+</html>
