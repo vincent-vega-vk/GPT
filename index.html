@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIMSOC 6 Manager</title>
+<meta name="description" content="A football management game: eight nations, twelve leagues, live matches.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%23fff%27 stroke=%27%23111%27 stroke-width=%272%27/%3E%3Cpath d=%27M16 9l6 4-2 7h-8l-2-7z%27 fill=%27%23111%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <button class="icon-btn" id="nav-toggle" aria-label="Menu" title="Menu"></button>
+    <a class="brand" data-go="home">SIMSOC<span>6</span></a>
+    <div class="tb-club" id="tb-club"></div>
+    <div class="tb-spacer"></div>
+    <div class="tb-date" id="tb-date"></div>
+    <div class="tb-money" id="tb-money"></div>
+    <a class="tb-inbox" id="tb-inbox" data-go="inbox" title="Inbox"></a>
+    <button class="btn-continue" id="btn-continue" title="Continue (Space)">Continue</button>
+  </header>
+  <nav id="sidebar"></nav>
+  <main id="view" tabindex="-1"></main>
+  <div id="scrim"></div>
+</div>
+<div id="modal-root"></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/live.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/store.js"></script>
+<script src="js/pitch.js"></script>
+<script src="js/ui-core.js"></script>
+<script src="js/ui-pages.js"></script>
+<script src="js/ui-match.js"></script>
+</body>
+</html>
