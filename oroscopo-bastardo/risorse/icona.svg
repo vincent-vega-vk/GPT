@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="alone" cx="78%" cy="6%" r="85%">
+      <stop offset="0" stop-color="#4a3a8c"/>
+      <stop offset=".55" stop-color="#15121f"/>
+      <stop offset="1" stop-color="#07070c"/>
+    </radialGradient>
+    <clipPath id="disco"><circle cx="512" cy="566" r="318"/></clipPath>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#alone)"/>
+  <g fill="#f3efe4">
+    <circle cx="150" cy="170" r="9"/><circle cx="880" cy="250" r="6"/><circle cx="120" cy="820" r="6"/>
+    <circle cx="905" cy="800" r="10"/><circle cx="250" cy="70" r="5"/><circle cx="930" cy="520" r="5"/>
+    <circle cx="70" cy="480" r="5"/>
+  </g>
+  <circle cx="906" cy="128" r="13" fill="#d9ff3f"/>
+  <!-- horns -->
+  <g fill="#ff4b33">
+    <path d="M318 318C226 262 196 168 236 84c40 86 104 132 196 158Z"/>
+    <path d="M706 318c92-56 122-150 82-234-40 86-104 132-196 158Z"/>
+  </g>
+  <!-- moon -->
+  <circle cx="512" cy="566" r="318" fill="#f3efe4"/>
+  <g clip-path="url(#disco)">
+    <g fill="#dcd6c6"><circle cx="330" cy="700" r="46"/><circle cx="716" cy="760" r="30"/><circle cx="680" cy="372" r="24"/></g>
+  </g>
+  <!-- face -->
+  <g fill="#121216">
+    <path d="M352 486l128 52c2 34-22 60-58 60-40 0-70-30-70-70Z"/>
+    <path d="M672 486l-128 52c-2 34 22 60 58 60 40 0 70-30 70-70Z"/>
+  </g>
+  <path d="M400 716c70 62 176 60 250-28" fill="none" stroke="#121216" stroke-width="30" stroke-linecap="round"/>
+  <path d="M628 660c22 6 40 20 50 40" fill="none" stroke="#121216" stroke-width="24" stroke-linecap="round"/>
+</svg>

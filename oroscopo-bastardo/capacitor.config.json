@@ -1,0 +1,16 @@
+{
+  "appId": "it.oroscopobastardo.app",
+  "appName": "Oroscopo Bastardo",
+  "webDir": "dist",
+  "backgroundColor": "#07070c",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#07070c",
+    "preferredContentMode": "mobile"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#D9FF3F"
+    }
+  }
+}
