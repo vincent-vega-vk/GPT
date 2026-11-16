@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Biscotto della Sfiga</title>
+<meta name="description" content="Scarta la bustina, spezza il biscotto della fortuna e fatti insultare dal bigliettino.">
+<meta name="theme-color" content="#5c0d0d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Biscotto Sfiga">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}</style>
+</head>
+<body>
+<!--APP-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Courier+Prime:wght@400;700&family=Figtree:wght@500;700&display=swap">
+<style>
+/* Layout: one fixed screen. Name on top, the cookie on its lacquer table in the middle, one line of instruction or two buttons at the bottom. */
+:root{
+  --lacquer:#6d1010; --lacquer-deep:#2e0606; --foil:#c8201f; --foil-dark:#8a0f12;
+  --gold:#f2c45a; --gold-dim:#c99a3a; --paper:#fbf6e6; --ink:#1c3a8a; --stamp:#c8201f;
+  --cream:#fdebc8; --biscuit:#e9ab52; --biscuit-dark:#b97524;
+  --font-display:"Bowlby One","Arial Black",Impact,sans-serif;
+  --font-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-slip:"Courier Prime","Courier New",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%}
+html{background:var(--lacquer-deep)}
+body{margin:0;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;
+  background:radial-gradient(120% 80% at 50% 38%,var(--lacquer) 0%,var(--lacquer-deep) 78%);
+  color:var(--cream);font-family:var(--font-body);font-size:16px;line-height:1.4;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.app{height:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:8px;
+  padding-block:14px 18px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px,7.4vw,34px);line-height:1;
+  letter-spacing:.01em;color:var(--gold);text-wrap:balance;text-shadow:0 2px 0 var(--lacquer-deep)}
+.tally{margin:8px 0 0;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cream);opacity:.8}
+.mute{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--gold-dim);background:transparent;
+  color:var(--gold);font-size:19px;line-height:1;cursor:pointer;padding:0}
+
+.stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
+  touch-action:none;cursor:pointer;outline:none;border-radius:20px}
+.stage:focus-visible,.mute:focus-visible,.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.scene{width:100%;max-width:440px;max-height:100%;overflow:visible;display:block}
+.scene *{transform-box:fill-box;transform-origin:center}
+.wrap-half{transition:transform .12s ease-out}
+.wrap-half.fly{transition:transform .55s cubic-bezier(.5,0,.9,.4),opacity .5s ease-in .1s}
+.half{transition:transform .7s cubic-bezier(.2,1.25,.4,1)}
+.cookie.broken #half-l{transform:translate(-84px,104px) rotate(-34deg)}
+.cookie.broken #half-r{transform:translate(84px,104px) rotate(34deg)}
+.crack{opacity:0}
+.crack.on{opacity:1}
+.cookie.broken .crack{opacity:0}
+
+.slip{position:absolute;left:50%;top:10%;width:min(94%,390px);padding:20px 22px 16px;
+  background:var(--paper);color:var(--ink);font-family:var(--font-slip);text-align:center;
+  border-inline:10px solid var(--stamp);box-shadow:0 14px 30px rgba(0,0,0,.45);
+  transform:translate(-50%,90%) scale(.12) rotate(9deg);opacity:0;pointer-events:none;
+  transition:transform .65s cubic-bezier(.2,1.2,.4,1) .12s,opacity .15s linear .12s}
+.slip.show{transform:translate(-50%,0) scale(1) rotate(-2deg);opacity:1;pointer-events:auto;
+  -webkit-user-select:text;user-select:text}
+.slip p{margin:0}
+.fortune{font-weight:700;font-size:clamp(18px,5.2vw,22px);line-height:1.3;text-wrap:balance}
+.lucky{margin-top:12px !important;padding-top:10px;border-top:1px dashed var(--ink);font-size:11.5px;white-space:nowrap;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--stamp);font-variant-numeric:tabular-nums}
+
+.crumb{position:absolute;left:50%;top:50%;width:7px;height:6px;border-radius:2px;background:var(--biscuit);pointer-events:none}
+.crumb:nth-child(odd){background:var(--biscuit-dark)}
+
+.bottom{min-height:64px;display:flex;align-items:center;justify-content:center}
+.hint{margin:0;text-align:center;font-weight:700;font-size:17px;color:var(--cream);text-wrap:balance}
+.hint span{display:block;font-weight:500;font-size:13px;opacity:.7}
+.actions{display:flex;gap:10px;width:100%}
+.btn{flex:1;min-height:54px;border-radius:14px;border:2px solid var(--gold);cursor:pointer;
+  font-family:var(--font-display);font-size:16px;letter-spacing:.02em;padding:8px 10px}
+.btn-main{background:var(--gold);color:var(--lacquer-deep)}
+.btn-ghost{flex:0 1 38%;background:transparent;color:var(--gold)}
+.btn:active{transform:translateY(2px)}
+.haptic{position:fixed;left:-200px;top:0;opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){
+  .wrap-half.fly,.half,.slip{transition-duration:.01s;transition-delay:0s}
+}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div>
+      <h1>Biscotto della Sfiga</h1>
+      <p class="tally" id="tally">Aperti: 0</p>
+    </div>
+    <button class="mute" id="mute" type="button" aria-label="Audio acceso" aria-pressed="false">🔊</button>
+  </header>
+
+  <main class="stage" id="stage" tabindex="0" role="button" aria-label="Biscotto nella bustina: strappa la bustina">
+    <svg class="scene" id="scene" viewBox="0 0 360 320" aria-hidden="true">
+      <defs>
+        <radialGradient id="gBake" cx="40%" cy="30%" r="80%">
+          <stop offset="0" stop-color="#f8d188"/><stop offset=".55" stop-color="#e9ab52"/><stop offset="1" stop-color="#c8812c"/>
+        </radialGradient>
+        <linearGradient id="gFoil" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#8a0f12"/><stop offset=".22" stop-color="#e0302c"/><stop offset=".4" stop-color="#b3181a"/>
+          <stop offset=".62" stop-color="#ee4a3c"/><stop offset=".8" stop-color="#a81417"/><stop offset="1" stop-color="#7a0c0f"/>
+        </linearGradient>
+        <linearGradient id="gSeal" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#f2c45a"/><stop offset=".5" stop-color="#fff0b8"/><stop offset="1" stop-color="#c99a3a"/>
+        </linearGradient>
+        <clipPath id="clipL"><path id="clipLp" d=""/></clipPath>
+        <clipPath id="clipR"><path id="clipRp" d=""/></clipPath>
+        <g id="wrapArt">
+          <path id="wrapBody" d="" fill="url(#gFoil)" fill-rule="evenodd"/>
+          <ellipse cx="180" cy="158" rx="92" ry="60" fill="#fff" opacity=".16"/>
+          <path d="M104 132 Q136 104 190 102" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+          <ellipse cx="180" cy="158" rx="92" ry="60" fill="none" stroke="url(#gSeal)" stroke-width="3"/>
+          <rect x="8" y="68" width="23" height="180" fill="url(#gSeal)" opacity=".9"/>
+          <rect x="329" y="68" width="23" height="180" fill="url(#gSeal)" opacity=".9"/>
+          <g stroke="#8a0f12" stroke-width="1.2" opacity=".55">
+            <path d="M14 70V246M20 70V246M26 70V246M334 70V246M340 70V246M346 70V246"/>
+          </g>
+          <text x="180" y="84" text-anchor="middle" font-family="'Bowlby One','Arial Black',sans-serif" font-size="13.5" letter-spacing="1.5" fill="#f2c45a">BISCOTTO DELLA SFIGA</text>
+          <text x="180" y="243" text-anchor="middle" font-family="'Figtree',system-ui,sans-serif" font-weight="700" font-size="10" letter-spacing="2.4" fill="#fdebc8">100% INSULTI GARANTITI</text>
+          <text x="58" y="170" text-anchor="middle" font-size="34" fill="#f2c45a">福</text>
+          <text x="302" y="170" text-anchor="middle" font-size="34" fill="#f2c45a">福</text>
+          <path d="M40 60 Q180 46 320 60" fill="none" stroke="#fff" stroke-width="2" opacity=".35"/>
+        </g>
+      </defs>
+
+      <ellipse cx="180" cy="262" rx="120" ry="16" fill="#000" opacity=".28"/>
+
+      <g class="cookie" id="cookie">
+        <g class="half" id="half-l">
+          <path d="M180 114 C150 84 92 90 70 136 C53 172 62 216 94 236 C104 204 140 188 180 186 Z" fill="url(#gBake)" stroke="#a5651d" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M180 118 C158 134 152 166 180 186 Z" fill="#a5651d" opacity=".55"/>
+          <path d="M180 116 C146 124 112 160 95 232" fill="none" stroke="#a5651d" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+          <path d="M84 134 C96 108 128 98 154 108" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".6"/>
+          <g fill="#b97524" opacity=".6"><circle cx="104" cy="170" r="2.2"/><circle cx="128" cy="176" r="1.8"/><circle cx="84" cy="186" r="1.6"/><circle cx="140" cy="150" r="1.7"/></g>
+        </g>
+        <g class="half" id="half-r">
+          <path d="M180 114 C210 84 268 90 290 136 C307 172 298 216 266 236 C256 204 220 188 180 186 Z" fill="url(#gBake)" stroke="#a5651d" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M180 118 C202 134 208 166 180 186 Z" fill="#8f5516" opacity=".6"/>
+          <path d="M180 116 C214 124 248 160 265 232" fill="none" stroke="#a5651d" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+          <path d="M206 108 C232 98 262 108 276 132" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+          <g fill="#b97524" opacity=".6"><circle cx="252" cy="172" r="2.2"/><circle cx="232" cy="178" r="1.8"/><circle cx="268" cy="150" r="1.6"/><circle cx="218" cy="152" r="1.7"/></g>
+        </g>
+        <path class="crack" id="crack1" d="M180 114 L175 130 L184 143 L177 156" fill="none" stroke="#5a3408" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="crack" id="crack2" d="M177 156 L185 168 L178 178 L180 186 M184 143 L198 148 M175 130 L162 128" fill="none" stroke="#5a3408" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+
+      <g id="wrapper">
+        <g class="wrap-half" id="wrap-l"><use href="#wrapArt" clip-path="url(#clipL)"/></g>
+        <g class="wrap-half" id="wrap-r"><use href="#wrapArt" clip-path="url(#clipR)"/></g>
+        <path id="tear" d="" fill="none" stroke="#fff6dc" stroke-width="2.5" stroke-linejoin="round"/>
+      </g>
+    </svg>
+
+    <div class="slip" id="slip" aria-live="polite">
+      <p class="fortune" id="fortune"></p>
+      <p class="lucky" id="lucky"></p>
+    </div>
+  </main>
+
+  <footer class="bottom">
+    <p class="hint" id="hint">Strappa la bustina<span>Striscia il dito sopra, o picchietta</span></p>
+    <div class="actions" id="actions" hidden>
+      <button class="btn btn-main" id="again" type="button">Un altro biscotto</button>
+      <button class="btn btn-ghost" id="share" type="button">Condividi</button>
+    </div>
+  </footer>
+</div>
+<label class="haptic" id="haptic" aria-hidden="true"><input type="checkbox" switch tabindex="-1"></label>
+
+<script>
+(() => {
+'use strict';
+
+const FORTUNES = [
+  "Sei un coglione. Ma almeno adesso è ufficiale.",
+  "Il tuo futuro è luminoso. Peccato che tu non abbia pagato la bolletta.",
+  "Grandi cose ti attendono. Aspettano da un pezzo, quindi muovi il culo.",
+  "Chi dorme non piglia pesci. Tu non pigli un cazzo nemmeno da sveglio.",
+  "Oggi incontrerai una persona speciale. Lei incontrerà te e cambierà marciapiede.",
+  "La fortuna è cieca. Ma te ti ha visto benissimo e ha tirato dritto.",
+  "Hai un potenziale enorme. Di fare cazzate.",
+  "Confucio dice: chi cerca risposte in un biscotto ha già un problema.",
+  "Questo biscotto finto è la cosa migliore che ti è capitata oggi. Pensaci.",
+  "Non sei pigro. Sei in risparmio energetico dal 2009.",
+  "Qualcuno ti pensa intensamente. È l'Agenzia delle Entrate.",
+  "La risposta che cerchi è dentro di te. Però è sbagliata.",
+  "Sei unico. Per fortuna.",
+  "Presto riceverai denaro inaspettato. Scherzo, resti un poveraccio.",
+  "Il tuo QI e la temperatura di oggi sono lo stesso numero. In gradi Celsius.",
+  "Smettila di aprire biscotti e vai a lavorare, testa di cazzo.",
+  "Sei la prova vivente che l'evoluzione ogni tanto fa retromarcia.",
+  "Anche stavolta la dieta comincia lunedì, vero, culone?",
+  "Un saggio una volta disse una cosa bellissima. Non a te, tanto non ascolti un cazzo.",
+  "Il tuo ex sta meglio senza di te. Pure il tuo divano starebbe meglio.",
+  "Hai la grinta di un bradipo sotto camomilla.",
+  "Sorridi: domani andrà peggio.",
+  "Sei come il lunedì: nessuno ti vuole, ma arrivi lo stesso.",
+  "Il tuo angelo custode ha chiesto il trasferimento.",
+  "Hai appena scartato un biscotto che non esiste. È il punto più alto della tua settimana.",
+  "Hai il carisma di un PDF protetto da password.",
+  "Sei il motivo per cui sugli shampoo scrivono le istruzioni.",
+  "Diventerai ricco e famoso. In un universo parallelo dove non sei un pirla.",
+  "Le stelle dicono che oggi farai una figura di merda. Come ieri, del resto.",
+  "Segui i tuoi sogni. Tanto a letto ci passi già tutta la giornata.",
+  "L'amore sta bussando alla tua porta. Ha sbagliato piano.",
+  "Non è vero che non sai fare niente. Rompere i coglioni ti riesce benissimo.",
+  "Chi trova un amico trova un tesoro. Chi trova te trova una rogna.",
+  "Il tuo cervello è come questo biscotto: vuoto, con dentro una stronzata.",
+  "Respira. Rilassati. Resti un cretino, ma un cretino rilassato.",
+  "Oggi è il primo giorno del resto della tua vita di merda.",
+  "La pazienza è la virtù dei forti. Cioè di chi ti sopporta.",
+  "Riprova. Magari il prossimo biscotto ti stima di più. Non credo.",
+  "Hai aperto un'app per farti insultare da un biscotto. Fatti due domande.",
+  "Sei un genio incompreso. Soprattutto incompreso. Soprattutto non genio.",
+  "Il capo ti apprezza moltissimo. Quando sei in ferie.",
+  "Vai in palestra. Almeno sarai un coglione in forma.",
+  "Se la stupidità fosse energia, illumineresti Milano da solo.",
+  "Il tuo conto in banca e la tua dignità hanno una cosa in comune: sono sotto zero.",
+  "Buone notizie: non puoi cadere più in basso. Ah no, aspetta.",
+  "Qualcuno là fuori ti ama. Io non ci scommetterei un cazzo.",
+  "Sei una persona fantastica. Ahahah, no dai, ripigliati.",
+  "Mangia meno, muoviti di più e smettila di rompere il cazzo.",
+  "Il saggio indica la luna. Tu guardi il dito e poi te lo infili nel naso.",
+  "Il successo è dietro l'angolo. Tu però giri sempre in tondo, pirla.",
+  "Sei come il Wi-Fi dell'hotel: ci sei, ma non servi a un cazzo.",
+  "Tua madre dice a tutti che sei speciale. Non specifica mai in che senso.",
+  "Farai un lungo viaggio. Ti ci manderanno gli altri, e sai già dove.",
+  "Hai gli occhi di chi ha capito tutto. Peccato sia l'unica parte che finge bene.",
+  "Chi va piano va sano e va lontano. Tu sei fermo, quindi nessuna delle tre.",
+  "Sei sveglio come una domenica pomeriggio di agosto.",
+  "Prima di parlare conta fino a dieci. Se ci arrivi.",
+  "Il tuo spirito guida è un piccione che caga sulle macchine.",
+  "Non tutti i mali vengono per nuocere. Tu sì.",
+  "Oggi qualcuno riderà grazie a te. Di te, per la precisione.",
+  "Hai letto fin qui sperando in un complimento. Che tenerezza, coglione.",
+  "La vita ti sorride. È quel sorriso che si fa prima di una fregatura.",
+  "Stanotte hai fatto un sogno bellissimo. Poi ti sei svegliato ed eri ancora tu.",
+  "Sei il tipo che spinge le porte con scritto TIRARE. E poi insiste.",
+  "Un giorno ripenserai a questo momento e dirai: quanto tempo ho buttato nel cesso."
+];
+
+const RANKS = [[60,"Coglione certificato"],[30,"Caso clinico"],[15,"Masochista"],[5,"Recidivo"],[1,"Dilettante"],[0,"Vergine di insulti"]];
+const HINTS = {
+  wrapped: ["Strappa la bustina", "Striscia il dito sopra, o picchietta"],
+  cookie:  ["Spezza il biscotto", "Picchiettalo tre volte, senza pietà"]
+};
+
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+const rand = (a, b) => a + Math.random() * (b - a);
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const stage = $('stage'), scene = $('scene'), cookie = $('cookie'), slip = $('slip');
+const wrapL = $('wrap-l'), wrapR = $('wrap-r'), tearLine = $('tear');
+const hint = $('hint'), actions = $('actions');
+
+/* ---------- wrapper geometry ---------- */
+const JAG = [];
+for (let y = 40, i = 0; y <= 268; y += 12, i++) JAG.push([180 + (i % 2 ? 7 : -6) + ((i * 37) % 5) - 2, y]);
+const jagFwd = JAG.map(p => 'L' + p[0] + ' ' + p[1]).join(' ');
+$('clipLp').setAttribute('d', 'M-60 -40 L180 -40 ' + jagFwd + ' L180 360 L-60 360 Z');
+$('clipRp').setAttribute('d', 'M420 -40 L180 -40 ' + jagFwd + ' L180 360 L420 360 Z');
+tearLine.setAttribute('d', 'M' + JAG[0][0] + ' ' + JAG[0][1] + ' ' + jagFwd);
+(() => {
+  let zr = '', zl = '';
+  for (let y = 66, i = 0; y <= 250; y += 8, i++) zr += ' L' + (i % 2 ? 346 : 352) + ' ' + y;
+  for (let y = 250, i = 0; y >= 66; y -= 8, i++) zl += ' L' + (i % 2 ? 14 : 8) + ' ' + y;
+  const outline = 'M30 60 Q180 44 330 60' + zr + ' L330 256 Q180 272 30 256' + zl + ' Z';
+  const hole = 'M88 158 a92 60 0 1 0 184 0 a92 60 0 1 0 -184 0 Z';
+  $('wrapBody').setAttribute('d', outline + ' ' + hole);
+})();
+const tearLen = tearLine.getTotalLength ? tearLine.getTotalLength() : 260;
+tearLine.style.strokeDasharray = tearLen;
+
+/* ---------- sound + haptics ---------- */
+let ac = null, noise = null, muted = store.get('bds.muted', false);
+function audio() {
+  if (muted) return null;
+  if (!ac) {
+    const C = window.AudioContext || window.webkitAudioContext;
+    if (!C) return null;
+    try { ac = new C(); } catch { return null; }
+    noise = ac.createBuffer(1, ac.sampleRate, ac.sampleRate);
+    const d = noise.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  if (ac.state === 'suspended') ac.resume();
+  return ac;
+}
+function burst(type, freq, q, dur, gain, delay) {
+  const a = audio(); if (!a) return;
+  const t = a.currentTime + (delay || 0);
+  const src = a.createBufferSource(); src.buffer = noise; src.loop = true;
+  const f = a.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+  const g = a.createGain();
+  g.gain.setValueAtTime(gain, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  src.connect(f); f.connect(g); g.connect(a.destination);
+  src.start(t, Math.random() * 0.5); src.stop(t + dur + 0.03);
+}
+const sfx = {
+  crinkle() { burst('bandpass', rand(3000, 8000), 0.8, rand(0.03, 0.08), rand(0.12, 0.28)); },
+  rip()     { for (let i = 0; i < 9; i++) burst('highpass', rand(2500, 6000), 0.6, 0.07, 0.3, i * 0.035); },
+  crack()   { burst('lowpass', 1900, 1, 0.07, 0.6); burst('highpass', 5200, 1, 0.025, 0.35); },
+  snap()    { burst('lowpass', 1400, 1, 0.12, 0.9); burst('bandpass', 3200, 2, 0.05, 0.5, 0.03); burst('highpass', 6000, 1, 0.04, 0.4, 0.06); },
+  paper()   { burst('bandpass', 2600, 0.5, 0.28, 0.1, 0.18); }
+};
+function buzz(ms) {
+  try { if (navigator.vibrate) { navigator.vibrate(ms); return; } } catch {}
+  try { $('haptic').click(); } catch {}   // iOS: toggling a native switch gives a light tap
+}
+
+/* ---------- state ---------- */
+let state = 'wrapped', progress = 0, hits = 0, lastCrinkle = 0, current = '';
+let count = store.get('bds.count', 0);
+
+function setHint(key) {
+  const h = HINTS[key];
+  hint.innerHTML = '';
+  hint.append(h[0]);
+  const s = document.createElement('span'); s.textContent = h[1]; hint.append(s);
+  stage.setAttribute('aria-label', h[0] + '. ' + h[1]);
+}
+function renderTally() {
+  const rank = RANKS.find(r => count >= r[0])[1];
+  $('tally').textContent = 'Aperti: ' + count + ' · ' + rank;
+}
+function nextFortune() {
+  let bag = store.get('bds.bag', null);
+  if (!Array.isArray(bag) || !bag.length || bag.some(i => !(i >= 0 && i < FORTUNES.length))) {
+    bag = FORTUNES.map((_, i) => i);
+    for (let i = bag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [bag[i], bag[j]] = [bag[j], bag[i]]; }
+  }
+  const idx = bag.pop();
+  store.set('bds.bag', bag);
+  return FORTUNES[idx];
+}
+function unluckyNumbers() {
+  const s = new Set();
+  while (s.size < 6) s.add(1 + Math.floor(Math.random() * 90));
+  return [...s].sort((a, b) => a - b).join(' ');
+}
+
+/* ---------- step 1: tear the wrapper ---------- */
+function renderTear() {
+  tearLine.style.strokeDashoffset = tearLen * (1 - progress);
+  wrapL.style.transform = 'translate(' + (-progress * 9) + 'px,0) rotate(' + (-progress * 2.5) + 'deg)';
+  wrapR.style.transform = 'translate(' + (progress * 9) + 'px,0) rotate(' + (progress * 2.5) + 'deg)';
+}
+function tear(dp) {
+  progress = Math.min(1, progress + dp);
+  renderTear();
+  const now = performance.now();
+  if (now - lastCrinkle > 45) { lastCrinkle = now; sfx.crinkle(); }
+  if (progress >= 1) unwrap();
+}
+function unwrap() {
+  state = 'busy';
+  sfx.rip(); buzz(30);
+  tearLine.style.opacity = 0;
+  wrapL.classList.add('fly'); wrapR.classList.add('fly');
+  wrapL.style.transform = 'translate(-300px,-50px) rotate(-30deg)';
+  wrapR.style.transform = 'translate(300px,30px) rotate(34deg)';
+  wrapL.style.opacity = 0; wrapR.style.opacity = 0;
+  setTimeout(() => { state = 'cookie'; setHint('cookie'); }, calm ? 50 : 520);
+}
+
+/* ---------- step 2: crack the cookie ---------- */
+function hit() {
+  hits++;
+  buzz(15);
+  if (!calm && cookie.animate) cookie.animate(
+    [{ transform: 'translate(0,0) rotate(0)' }, { transform: 'translate(-5px,3px) rotate(-3deg)' },
+     { transform: 'translate(5px,-2px) rotate(3deg)' }, { transform: 'translate(0,0) rotate(0)' }],
+    { duration: 220, easing: 'ease-out' });
+  if (hits < 3) {
+    sfx.crack();
+    $('crack' + hits).classList.add('on');
+    crumbs(4);
+  } else {
+    reveal();
+  }
+}
+function crumbs(n) {
+  if (calm || !stage.animate) return;
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('i');
+    c.className = 'crumb';
+    stage.append(c);
+    const dx = rand(-130, 130), up = rand(-90, -20), s = rand(0.6, 1.5);
+    c.animate(
+      [{ transform: 'translate(-50%,-50%) scale(' + s + ')', opacity: 1 },
+       { transform: 'translate(' + (dx * 0.6) + 'px,' + up + 'px) rotate(' + rand(-200, 200) + 'deg) scale(' + s + ')', opacity: 1, offset: 0.4 },
+       { transform: 'translate(' + dx + 'px,' + rand(120, 220) + 'px) rotate(' + rand(-500, 500) + 'deg) scale(' + s + ')', opacity: 0 }],
+      { duration: rand(650, 1000), easing: 'cubic-bezier(.3,.6,.6,1)' }
+    ).onfinish = () => c.remove();
+  }
+}
+
+/* ---------- step 3: read the slip ---------- */
+function reveal() {
+  state = 'open';
+  sfx.snap(); sfx.paper(); buzz(60);
+  crumbs(16);
+  cookie.classList.add('broken');
+  current = nextFortune();
+  $('fortune').textContent = current;
+  $('lucky').textContent = 'Numeri sfigati: ' + unluckyNumbers();
+  slip.classList.add('show');
+  count++; store.set('bds.count', count); renderTally();
+  hint.hidden = true; actions.hidden = false;
+  stage.setAttribute('aria-label', 'Bigliettino: ' + current);
+}
+function reset() {
+  state = 'busy';
+  slip.classList.remove('show');
+  actions.hidden = true; hint.hidden = false; setHint('wrapped');
+  hits = 0; progress = 0;
+  $('crack1').classList.remove('on'); $('crack2').classList.remove('on');
+  scene.style.visibility = 'hidden';
+  cookie.classList.remove('broken');
+  wrapL.classList.remove('fly'); wrapR.classList.remove('fly');
+  wrapL.style.opacity = ''; wrapR.style.opacity = ''; tearLine.style.opacity = '';
+  renderTear();
+  setTimeout(() => {
+    scene.style.visibility = '';
+    if (!calm && scene.animate) scene.animate(
+      [{ transform: 'translateY(-90%) rotate(-10deg)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+      { duration: 480, easing: 'cubic-bezier(.2,1.3,.5,1)' });
+    sfx.crinkle();
+    state = 'wrapped';
+  }, calm ? 30 : 260);
+}
+
+/* ---------- input ---------- */
+let down = null;
+stage.addEventListener('pointerdown', e => {
+  if (state === 'open' || state === 'busy') return;
+  down = { x: e.clientX, y: e.clientY, moved: 0 };
+  try { stage.setPointerCapture(e.pointerId); } catch {}
+  audio();
+});
+stage.addEventListener('pointermove', e => {
+  if (!down) return;
+  const d = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+  down.x = e.clientX; down.y = e.clientY; down.moved += d;
+  if (state === 'wrapped' && d > 0) tear(d / Math.max(220, stage.clientWidth * 0.95));
+});
+function release() {
+  if (!down) return;
+  const tap = down.moved < 10;
+  down = null;
+  if (!tap) return;
+  if (state === 'wrapped') tear(0.34);
+  else if (state === 'cookie') hit();
+}
+stage.addEventListener('pointerup', release);
+stage.addEventListener('pointercancel', () => { down = null; });
+stage.addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  e.preventDefault();
+  if (state === 'wrapped') tear(0.34);
+  else if (state === 'cookie') hit();
+});
+document.addEventListener('gesturestart', e => e.preventDefault());
+
+$('again').addEventListener('click', () => { audio(); reset(); });
+$('share').addEventListener('click', async () => {
+  const btn = $('share');
+  const text = '🥠 Il Biscotto della Sfiga dice: «' + current + '»';
+  const flash = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = 'Condividi'; }, 1600); };
+  try {
+    if (navigator.share) { await navigator.share({ text }); return; }
+    await navigator.clipboard.writeText(text);
+    flash('Copiato');
+  } catch (err) {
+    if (err && err.name === 'AbortError') return;
+    try { await navigator.clipboard.writeText(text); flash('Copiato'); }
+    catch { flash('Seleziona il testo'); }
+  }
+});
+function renderMute() {
+  const b = $('mute');
+  b.textContent = muted ? '🔇' : '🔊';
+  b.setAttribute('aria-pressed', String(muted));
+  b.setAttribute('aria-label', muted ? 'Audio spento' : 'Audio acceso');
+}
+$('mute').addEventListener('click', () => { muted = !muted; store.set('bds.muted', muted); renderMute(); if (!muted) sfx.crinkle(); });
+
+renderMute(); renderTally(); renderTear();
+
+try {
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && document.querySelector('link[rel="manifest"]'))
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+} catch {}
+})();
+</script>
+<!--/APP-->
+</body>
+</html>
