@@ -4,8 +4,8 @@ Web app installabile su iPhone (PWA): si strappa la bustina, si spezza il biscot
 della fortuna e il bigliettino ti insulta.
 
 - `index.html` — tutta l'app (grafica SVG, suoni generati al volo, frasi). Bustina,
-  biscotto, strappo e frattura sono generati a caso a ogni giro: lo strappo segue il dito,
-  il biscotto si crepa dove lo colpisci.
+  biscotto e pezzi sono generati a caso a ogni giro. Strappo e crepa seguono il percorso
+  del dito: la bustina si apre dove passi, il biscotto si spezza lungo il taglio che disegni.
 - `manifest.webmanifest`, `sw.js`, `icon-*.png` — installazione e uso offline.
 
 ## Mettere l'app sull'iPhone

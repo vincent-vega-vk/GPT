@@ -105,11 +105,10 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
           <stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".28" stop-color="#fff" stop-opacity="0"/>
           <stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/>
         </linearGradient>
-        <clipPath id="cookieClip"></clipPath>
+        <clipPath id="cookieClip"><path id="ccL" d=""/><path id="ccR" d=""/></clipPath>
         <clipPath id="bodyClip"><path id="bodyClipP" clip-rule="evenodd" d=""/></clipPath>
         <clipPath id="outClip"><path id="outClipP" d=""/></clipPath>
-        <clipPath id="tearClip"><path id="tearClipP" clip-rule="evenodd" d=""/></clipPath>
-        <g id="cookieArt"></g>
+                <g id="cookieArt"></g>
         <g id="wrapBack"></g>
         <g id="wrapFront"></g>
       </defs>
@@ -1350,19 +1349,19 @@ const RANKS = [[500,"Leggenda dell'umiliazione"],[250,"Zerbino professionista"],
 const HINTS = {
   wrapped: [
     ["Strappa la bustina", "Striscia il dito: si strappa dove passi"],
-    ["Aprila, dai", "Trascina il dito sulla stagnola"],
-    ["Scartalo, genio", "Passa il dito sulla bustina, o picchietta"],
+    ["Aprila, dai", "Trascina il dito sulla stagnola, da bordo a bordo"],
+    ["Scartalo, genio", "Passa il dito sulla bustina: lo strappo ti segue"],
     ["Non si apre da sola", "Strappala col dito, da dove ti pare"],
     ["Forza, strappa", "Dove passa il dito, la bustina cede"],
     ["Ce la fai ad aprirla?", "Un dito, una strisciata. Non è difficile"]
   ],
   cookie: [
-    ["Spezza il biscotto", "Picchiettalo finché cede"],
-    ["Rompilo", "Colpiscilo dove ti pare: si crepa lì"],
-    ["Dagli un paio di colpi", "Oppure un taglio secco col dito"],
-    ["Spaccalo, su", "Un colpo deciso, o tre da mollaccione"],
-    ["Ora tocca al biscotto", "Toccalo: prima si crepa, poi si apre"],
-    ["Non guardarlo, rompilo", "Picchietta o striscia il dito di taglio"]
+    ["Spezza il biscotto", "Striscia il dito sopra: si crepa dove passi"],
+    ["Rompilo", "Taglialo col dito, da un bordo all'altro"],
+    ["Ora tocca al biscotto", "Passaci il dito sopra: la crepa ti segue"],
+    ["Spaccalo, su", "Un taglio deciso col dito. O picchietta, mollaccione"],
+    ["Non guardarlo, rompilo", "Dove passa il dito, il biscotto cede"],
+    ["Aprilo in due", "Striscia il dito attraverso il biscotto"]
   ]
 };
 const TAGLINES = [
@@ -1403,6 +1402,7 @@ const flip = () => (Math.random() < 0.5 ? -1 : 1);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const n1 = v => Math.round(v * 10) / 10;
 const str = pts => pts.map(p => n1(p[0]) + "," + n1(p[1])).join(" ");
+const norm = (dx, dy) => { const d = Math.hypot(dx, dy) || 1; return [dx / d, dy / d]; };
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const NS = "http://www.w3.org/2000/svg";
 function el(tag, attrs, parent) {
@@ -1424,6 +1424,12 @@ function pickNew(key, arr) {
   last[key] = v;
   return v;
 }
+function hex(h, s, l) {   // hsl → #rrggbb, so no browser has to parse hsl() inside SVG attributes
+  s /= 100; l = clamp(l, 0, 100) / 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h / 30) % 12; return Math.round((l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))) * 255).toString(16).padStart(2, "0"); };
+  return "#" + f(0) + f(8) + f(4);
+}
 
 /* affine matrices as [a,b,c,d,e,f] */
 function mk(deg, sc, cx, cy, dx, dy) {
@@ -1437,19 +1443,183 @@ function inv(m) {
   const a = m[3] / det, b = -m[1] / det, c = -m[2] / det, d = m[0] / det;
   return [a, b, c, d, -(a * m[4] + c * m[5]), -(b * m[4] + d * m[5])];
 }
+const mul = (m, k) => [m[0] * k[0] + m[2] * k[1], m[1] * k[0] + m[3] * k[1], m[0] * k[2] + m[2] * k[3], m[1] * k[2] + m[3] * k[3],
+                       m[0] * k[4] + m[2] * k[5] + m[4], m[1] * k[4] + m[3] * k[5] + m[5]];
 const mstr = m => "matrix(" + m.map(v => +v.toFixed(5)).join(" ") + ")";
 
 const stage = $("stage"), scene = $("scene"), slip = $("slip");
 const backLayer = $("backLayer"), cookieLayer = $("cookieLayer"), frontLayer = $("frontLayer"), fxLayer = $("fxLayer"), dyn = $("dyn");
 const hint = $("hint"), actions = $("actions");
 
-function ctm() { const c = scene.getScreenCTM(); return [c.a, c.b, c.c, c.d, c.e, c.f]; }
-const toScene = (cx, cy) => ap(inv(ctm()), cx, cy);
-const toClient = (x, y) => ap(ctm(), x, y);
+/* screen ↔ drawing coordinates, from the box the drawing really occupies */
+function view() {
+  const r = scene.getBoundingClientRect(), k = Math.min(r.width / 360, r.height / 320) || 1;
+  return { k, x: r.left + (r.width - 360 * k) / 2, y: r.top + (r.height - 320 * k) / 2 };
+}
+const toScene = (cx, cy) => { const v = view(); return [(cx - v.x) / v.k, (cy - v.y) / v.k]; };
+const toClient = (x, y) => { const v = view(); return [v.x + x * v.k, v.y + y * v.k]; };
 
-/* ---------- ragged cuts ----------
-   A cut is a ragged line: origin o, unit axis u, normal n, samples [s, d] with s increasing.
-   It never doubles back, so each side of it is a simple polygon. */
+function inPoly(poly, x, y) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+let clipN = 0;
+function addClip(points) {
+  const id = "c" + (++clipN);
+  el("polygon", { points }, el("clipPath", { id }, dyn));
+  return "url(#" + id + ")";
+}
+
+/* ---------- finger cuts ----------
+   A cut is the path the finger drew through a shape (the bag, the cookie): base points plus a
+   little jitter that makes the edge ragged. The last point is the live end, the one that grows. */
+function newCut(inside, jag) { return { base: [], jit: [], inside, jag, len: 0 }; }
+function cutPush(c, x, y) {
+  c.base.push([x, y]);
+  c.jit.push(c.base.length === 1 ? [0, 0] : [R(-c.jag, c.jag), R(-c.jag, c.jag)]);
+}
+function cutTo(c, x, y, force) {          // grow the live end to (x, y) in short steps; returns the length cut inside the shape
+  const q = c.base[c.base.length - 1], d = Math.hypot(x - q[0], y - q[1]);
+  if (d < 3 && !force) return 0;
+  const n = Math.max(1, Math.round(d / R(5, 8)));
+  let grown = 0;
+  for (let i = 1; i <= n; i++) {
+    const px = q[0] + (x - q[0]) * i / n, py = q[1] + (y - q[1]) * i / n;
+    cutPush(c, px, py);
+    if (c.inside(px, py)) grown += d / n;
+  }
+  c.len += grown;
+  return grown;
+}
+const cutPts = c => c.base.map((p, i) => [p[0] + c.jit[i][0], p[1] + c.jit[i][1]]);
+function cutFlip(c) { c.base.reverse(); c.jit.reverse(); }
+function cutDir(c) {
+  const n = c.base.length;
+  if (n < 2) { const a = R(0, 6.283); return [Math.cos(a), Math.sin(a)]; }
+  const a = c.base[Math.max(0, n - 4)], b = c.base[n - 1];
+  return norm(b[0] - a[0], b[1] - a[1]);
+}
+function cutAim(c, p) {                    // a new touch grows whichever end is nearer, if that end is still inside the shape
+  const a = c.base[0], b = c.base[c.base.length - 1];
+  if (c.inside(a[0], a[1]) && Math.hypot(p[0] - a[0], p[1] - a[1]) < Math.hypot(p[0] - b[0], p[1] - b[1])) cutFlip(c);
+}
+function exitDist(inside, p, d, max) {
+  let t = 0;
+  while (t < max && inside(p[0] + d[0] * t, p[1] + d[1] * t)) t += 4;
+  return t;
+}
+function nearestExit(inside, p) {
+  let best = 1e9, dir = [1, 0];
+  for (let k = 0; k < 16; k++) {
+    const a = k * Math.PI / 8, d = [Math.cos(a), Math.sin(a)], t = exitDist(inside, p, d, 500);
+    if (t < best) { best = t; dir = d; }
+  }
+  return { t: best, dir };
+}
+function cutClose(c) {                     // run both ends out of the shape, so the cut divides it in two
+  for (let pass = 0; pass < 2; pass++) {
+    const end = c.base[c.base.length - 1];
+    if (c.inside(end[0], end[1])) {
+      const fwd = cutDir(c), near = nearestExit(c.inside, end), tf = exitDist(c.inside, end, fwd, 500);
+      const ahead = c.base.length > 1 && tf <= near.t * 2 + 24, dir = ahead ? fwd : near.dir, t = (ahead ? tf : near.t) + 8;
+      cutTo(c, end[0] + dir[0] * t, end[1] + dir[1] * t, true);
+    }
+    cutFlip(c);
+  }
+}
+/* feed one finger position to a host ({cut, inside, jag, last, prevOut, wasIn}); says how much was cut and whether the finger left the shape */
+function cutFeed(h, p) {
+  const q = h.last || p, d = Math.hypot(p[0] - q[0], p[1] - q[1]), n = Math.max(1, Math.ceil(d / 6));
+  let grown = 0, out = false;
+  for (let i = 1; i <= n && !out; i++) {
+    const s = [q[0] + (p[0] - q[0]) * i / n, q[1] + (p[1] - q[1]) * i / n];
+    if (h.inside(s[0], s[1])) {
+      if (!h.cut) {
+        h.cut = newCut(h.inside, h.jag);
+        if (h.prevOut) { cutPush(h.cut, h.prevOut[0], h.prevOut[1]); grown += cutTo(h.cut, s[0], s[1], true); }
+        else cutPush(h.cut, s[0], s[1]);
+      } else grown += cutTo(h.cut, s[0], s[1]);
+      h.wasIn = true;
+    } else if (h.cut && h.wasIn) { grown += cutTo(h.cut, s[0], s[1], true); out = true; h.wasIn = false; }
+    else h.prevOut = s;
+  }
+  h.last = p;
+  return { grown, out };
+}
+/* a tap: the cut reaches the tapped spot; tapping the same spot again pushes it further ahead */
+function cutTap(h, p, fwd) {
+  let grown = 0;
+  if (!h.cut) {
+    const near = nearestExit(h.inside, p);
+    h.cut = newCut(h.inside, h.jag);
+    cutPush(h.cut, p[0] + near.dir[0] * (near.t + 8), p[1] + near.dir[1] * (near.t + 8));
+    grown = cutTo(h.cut, p[0], p[1], true);
+  } else {
+    const c = h.cut;
+    cutAim(c, p);
+    const end = c.base[c.base.length - 1];
+    if (h.inside(p[0], p[1]) && Math.hypot(p[0] - end[0], p[1] - end[1]) > 14) grown = cutTo(c, p[0], p[1]);
+    else { const d = cutDir(c); grown = cutTo(c, end[0] + d[0] * fwd, end[1] + d[1] * fwd, true); }
+  }
+  const end = h.cut.base[h.cut.base.length - 1];
+  return { grown, out: !h.inside(end[0], end[1]) };
+}
+/* how far the two lips of a cut have opened at each point: closed at an end still inside the shape, wide open elsewhere */
+function cutWidths(c, wmax, k) {
+  const b = c.base, n = b.length, acc = [0];
+  for (let i = 1; i < n; i++) acc.push(acc[i - 1] + Math.hypot(b[i][0] - b[i - 1][0], b[i][1] - b[i - 1][1]));
+  const tailShut = c.inside(b[0][0], b[0][1]), headShut = c.inside(b[n - 1][0], b[n - 1][1]);
+  return acc.map(a => Math.min(wmax, tailShut ? a * k : wmax, headShut ? (acc[n - 1] - a) * k : wmax));
+}
+function cutEdges(c, w) {
+  const pts = cutPts(c), n = pts.length, left = [], right = [];
+  for (let i = 0; i < n; i++) {
+    const a = c.base[Math.max(0, i - 2)], b = c.base[Math.min(n - 1, i + 2)], d = norm(b[0] - a[0], b[1] - a[1]);
+    left.push([pts[i][0] - d[1] * w[i], pts[i][1] + d[0] * w[i]]);
+    right.push([pts[i][0] + d[1] * w[i], pts[i][1] - d[0] * w[i]]);
+  }
+  return { pts, left, right };
+}
+/* the two regions either side of a path that crosses the whole drawing, as polygons */
+const HUGE = { x0: -3000, y0: -3000, x1: 3360, y1: 3320 };
+const CORNERS = [[HUGE.x0, HUGE.y0], [HUGE.x1, HUGE.y0], [HUGE.x1, HUGE.y1], [HUGE.x0, HUGE.y1]];
+function hitHuge(p, d) {
+  let t = 1e9;
+  if (d[0] > 1e-9) t = Math.min(t, (HUGE.x1 - p[0]) / d[0]); else if (d[0] < -1e-9) t = Math.min(t, (HUGE.x0 - p[0]) / d[0]);
+  if (d[1] > 1e-9) t = Math.min(t, (HUGE.y1 - p[1]) / d[1]); else if (d[1] < -1e-9) t = Math.min(t, (HUGE.y0 - p[1]) / d[1]);
+  if (t > 1e8) return [HUGE.x1, p[1]];
+  return [p[0] + d[0] * t, p[1] + d[1] * t];
+}
+function perim(p) {
+  const W = HUGE.x1 - HUGE.x0, H = HUGE.y1 - HUGE.y0;
+  if (Math.abs(p[1] - HUGE.y0) < 0.5) return (p[0] - HUGE.x0) / W;
+  if (Math.abs(p[0] - HUGE.x1) < 0.5) return 1 + (p[1] - HUGE.y0) / H;
+  if (Math.abs(p[1] - HUGE.y1) < 0.5) return 2 + (HUGE.x1 - p[0]) / W;
+  return 3 + (HUGE.y1 - p[1]) / H;
+}
+function splitPolys(center, left, right) {
+  const n = center.length, o = n > 1 ? 1 : 0;
+  const A = hitHuge(center[0], norm(center[0][0] - center[o][0] || -1, center[0][1] - center[o][1]));
+  const B = hitHuge(center[n - 1], norm(center[n - 1][0] - center[n - 1 - o][0] || 1, center[n - 1][1] - center[n - 1 - o][1]));
+  const tA = perim(A), tB = perim(B), cw = [], ccw = [];
+  const dCw = ((tA - tB) % 4 + 4) % 4, dCcw = ((tB - tA) % 4 + 4) % 4;
+  for (let j = 0, k = Math.floor(tB) + 1; j < 4; j++, k++) if (k - tB < dCw) cw.push(CORNERS[k % 4]);
+  for (let j = 0, k = Math.ceil(tB) - 1; j < 4; j++, k--) if (tB - k < dCcw) ccw.push(CORNERS[((k % 4) + 4) % 4]);
+  const probePoly = [A].concat(center, [B], cw);
+  let votes = 0;
+  for (const f of [0.25, 0.5, 0.75]) {
+    const m = Math.floor((n - 1) * f), a = center[Math.max(0, m - 2)], b = center[Math.min(n - 1, m + 2)], d = norm(b[0] - a[0], b[1] - a[1]);
+    votes += inPoly(probePoly, center[m][0] - d[1] * 3, center[m][1] + d[0] * 3) ? 1 : -1;
+  }
+  const leftCw = votes > 0;
+  return { left: [A].concat(left, [B], leftCw ? cw : ccw), right: [A].concat(right, [B], leftCw ? ccw : cw) };
+}
+
+/* straight ragged cuts, for the shards that snap off beside the main break */
 function cutPoint(c, s, d) { return [c.o[0] + c.u[0] * s + c.n[0] * d, c.o[1] + c.u[1] * s + c.n[1] * d]; }
 function cutD(c, s) {
   const p = c.pts, L = p.length - 1;
@@ -1460,19 +1630,11 @@ function cutD(c, s) {
   const a = p[i - 1], b = p[i];
   return a[1] + (b[1] - a[1]) * (s - a[0]) / ((b[0] - a[0]) || 1);
 }
-function cutSide(c, x, y) {
-  const rx = x - c.o[0], ry = y - c.o[1];
-  return rx * c.n[0] + ry * c.n[1] >= cutD(c, rx * c.u[0] + ry * c.u[1]) ? 1 : -1;
-}
-function sidePoly(c, side, widths) {
-  const p = c.pts, L = p.length - 1, B = 900, out = [];
-  const w = i => (widths ? side * widths[i] : 0);
-  out.push(cutPoint(c, p[0][0] - B, p[0][1] + w(0)));
-  for (let i = 0; i <= L; i++) out.push(cutPoint(c, p[i][0], p[i][1] + w(i)));
-  out.push(cutPoint(c, p[L][0] + B, p[L][1] + w(L)));
-  out.push(cutPoint(c, p[L][0] + B, side * B * 2));
-  out.push(cutPoint(c, p[0][0] - B, side * B * 2));
-  return str(out);
+function sidePts(c, side) {
+  const p = c.pts, L = p.length - 1, B = 900, out = [cutPoint(c, p[0][0] - B, p[0][1])];
+  for (let i = 0; i <= L; i++) out.push(cutPoint(c, p[i][0], p[i][1]));
+  out.push(cutPoint(c, p[L][0] + B, p[L][1]), cutPoint(c, p[L][0] + B, side * B * 2), cutPoint(c, p[0][0] - B, side * B * 2));
+  return out;
 }
 function randomCut(o, ang, half, step, drift, jag) {
   const u = [Math.cos(ang), Math.sin(ang)], n = [-u[1], u[0]];
@@ -1496,23 +1658,9 @@ function cutLine(c, a, b) {
   out.push(cutPoint(c, b, cutD(c, b)));
   return out;
 }
-let clipN = 0;
-function addClip(points) {
-  const id = "c" + (++clipN);
-  el("polygon", { points }, el("clipPath", { id }, dyn));
-  return "url(#" + id + ")";
-}
-function inPoly(poly, x, y) {
-  let inside = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
-    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
-  }
-  return inside;
-}
 
 /* ---------- sound + haptics ---------- */
-let ac = null, noise = null, tearGain = null, muted = store.get("bds.muted", false);
+let ac = null, noise = null, tearGain = null, hushT = 0, muted = store.get("bds.muted", false);
 function audio() {
   if (muted) return null;
   if (!ac) {
@@ -1537,9 +1685,10 @@ function burst(type, freq, q, dur, gain, delay) {
   src.connect(f); f.connect(g); g.connect(a.destination);
   src.start(t, Math.random() * 0.5); src.stop(t + dur + 0.03);
 }
-/* one continuous hiss whose volume follows how fast the foil is tearing */
-function tearSound(level) {
-  if (muted || !ac) { if (tearGain) tearGain.gain.value = 0; if (muted || level <= 0) return; }
+/* one continuous hiss while the foil is tearing; it fades as soon as the finger stops */
+function hiss(level) {
+  clearTimeout(hushT);
+  if (muted || level <= 0) { if (tearGain && ac) tearGain.gain.setTargetAtTime(0, ac.currentTime, 0.02); return; }
   const a = audio(); if (!a) return;
   if (!tearGain) {
     const src = a.createBufferSource(); src.buffer = noise; src.loop = true;
@@ -1549,10 +1698,12 @@ function tearSound(level) {
     src.start();
   }
   tearGain.gain.setTargetAtTime(level, a.currentTime, 0.025);
+  hushT = setTimeout(() => hiss(0), 90);
 }
 const sfx = {
   crinkle() { burst("bandpass", R(3000, 8000), 0.8, R(0.02, 0.07), R(0.08, 0.22)); },
   rip()     { for (let i = 0; i < 7; i++) burst("highpass", R(2500, 6500), 0.6, 0.06, 0.28, i * R(0.02, 0.04)); },
+  crackle() { burst("highpass", R(3500, 6500), 1, R(0.012, 0.03), R(0.12, 0.3)); if (Math.random() < 0.3) burst("lowpass", R(1400, 2400), 1, 0.04, 0.3); },
   crack()   { burst("lowpass", R(1500, 2600), 1, R(0.05, 0.08), 0.6); burst("highpass", R(4500, 6500), 1, 0.022, 0.35); },
   snap()    { burst("lowpass", R(1100, 1700), 1, 0.13, 0.95); burst("bandpass", R(2600, 3800), 2, 0.05, 0.55, 0.02);
               burst("highpass", 6000, 1, 0.04, 0.4, 0.05); burst("lowpass", 260, 0.7, 0.09, 0.5); },
@@ -1616,28 +1767,26 @@ function frame(now) {
   raf = 0;
   const dt = clamp((now - lastT) / 1000, 0.001, 0.034);
   lastT = now;
-  let busy = false;
-  if (tear && !tear.done) {
-    const adv = Math.min(tear.goal - tear.tip, tear.speed * dt);
-    if (adv > 0.01) {
-      growTear(adv);
-      if (tear.tip > tear.sOut - 24) tear.goal = tear.sOut + 12;   // the last strip gives way by itself
+  let busy = stepBodies(dt);
+  if (ck && ck.sh) {                        // the cookie shudders under the finger
+    const s = ck.sh;
+    s.t += dt;
+    const k = 1 - s.t / 0.22;
+    if (k <= 0 || !ck.wob.parentNode) { ck.wob.removeAttribute("transform"); ck.sh = null; }
+    else {
+      const w = Math.sin(s.t * 42 + s.ph) * s.amp * k;
+      ck.wob.setAttribute("transform", "translate(" + n1(w) + " " + n1(Math.abs(w) * 0.6) + ") rotate(" + n1(w * 0.7) + " 180 165)");
       busy = true;
-      tearSound(clamp(adv / dt / 1300, 0.05, 1) * 0.3);
-      tear.noise += adv;
-      if (tear.noise > 13) { tear.noise = 0; sfx.crinkle(); shimmer(); }
-      checkTear();
-    } else tearSound(0);
+    }
   }
-  if (stepBodies(dt)) busy = true;
   if (busy) kick();
 }
+function shake(amp) { if (calm || !ck) return; ck.sh = { t: 0, amp, ph: R(0, 6) }; kick(); }
 
 /* ---------- the bag ---------- */
 const BAG = { x0: 6, x1: 354, y0: 44, y1: 272 };
-const BIG = "M-600 -600H1000V1000H-600Z";
 const inBag = (x, y) => x > BAG.x0 && x < BAG.x1 && y > BAG.y0 && y < BAG.y1;
-let wr = null, tear = null;
+let wr = null, ck = null;
 
 function buildWrapper() {
   const foil = pickNew("foil", FOILS);
@@ -1685,15 +1834,21 @@ function buildWrapper() {
     '<path d="M40 60 Q180 46 320 60" fill="none" stroke="#fff" stroke-width="2" opacity=".35"/>';
 
   const M = mk(R(-8, 8), 1, 180, 158, R(-5, 5), R(-5, 5));
-  wr = { M, Mi: inv(M) };
+  wr = { M, Mi: inv(M), inside: inBag, jag: 1.7, cut: null, last: null, prevOut: null, wasIn: false, fx: 0, clipI: 0, taps: 0 };
   wr.back = el("g", { transform: mstr(M) }, backLayer);
   use("wrapBack", wr.back);
   wr.front = el("g", { transform: mstr(M) }, frontLayer);
-  use("wrapFront", el("g", { "clip-path": "url(#tearClip)" }, wr.front));
-  const eg = el("g", { "clip-path": "url(#outClip)", fill: "none", stroke: "#f6f8fa", "stroke-width": 1.5, "stroke-linejoin": "round", opacity: 0.9 }, wr.front);
+  use("wrapFront", wr.front);
+  /* the opening: a second view of the inside of the bag and of the cookie, shown only between the two lips of the tear */
+  wr.clipPoly = [0, 1].map(i => el("polygon", { points: "" }, el("clipPath", { id: "rv" + i }, dyn)));
+  wr.rev = el("g", { "clip-path": "url(#outClip)", display: "none" }, wr.front);
+  wr.revIn = el("g", { "clip-path": "url(#rv0)" }, wr.rev);
+  use("wrapBack", wr.revIn);
+  use("cookieArt", el("g", { transform: mstr(mul(wr.Mi, ck.M)) }, wr.revIn));
+  wr.shade = el("polygon", { points: "", fill: "none", stroke: "#000", "stroke-width": 10, "stroke-linejoin": "round", opacity: 0.22 }, wr.revIn);
+  const eg = el("g", { "clip-path": "url(#outClip)", fill: "none", stroke: "#f6f8fa", "stroke-width": 1.6, "stroke-linejoin": "round", opacity: 0.92 }, wr.front);
   wr.eA = el("polyline", { points: "" }, eg);
   wr.eB = el("polyline", { points: "" }, eg);
-  $("tearClipP").setAttribute("d", BIG);
 }
 function shimmer() {
   const f = $("facets"); if (!f) return;
@@ -1702,110 +1857,72 @@ function shimmer() {
     if (c && c.tagName === "polygon") c.setAttribute("opacity", R(0.03, 0.17).toFixed(2));
   }
 }
-
-/* the tear starts at the edge behind the finger and chases it across the bag */
-function startTear(o, u) {
-  const n = [-u[1], u[0]];
-  let s0 = -1e9, s1 = 1e9;
-  for (const [p, d, lo, hi] of [[o[0], u[0], BAG.x0, BAG.x1], [o[1], u[1], BAG.y0, BAG.y1]]) {
-    if (Math.abs(d) < 1e-6) continue;
-    const a = (lo - p) / d, b = (hi - p) / d;
-    s0 = Math.max(s0, Math.min(a, b)); s1 = Math.min(s1, Math.max(a, b));
-  }
-  tear = { o, u, n, pts: [[s0 - 4, 0]], sIn: s0, sOut: s1, tip: s0 - 4, d: 0, fd: 0, wander: 0, goal: s0,
-           near: false, next: R(4.5, 9), speed: 1800, noise: 0, done: false };
-}
-function growTear(adv) {
-  const t = tear;
-  while (adv > 0) {
-    const lastP = t.pts[t.pts.length - 1];
-    const step = Math.min(adv, Math.max(0.01, lastP[0] + t.next - t.tip));
-    t.tip += step; adv -= step;
-    const want = t.near ? t.fd : t.wander;
-    t.d += clamp((want - t.d) * 0.6, -step * 1.1, step * 1.1);
-    if (t.tip >= lastP[0] + t.next - 1e-6) {
-      t.pts.push([t.tip, t.d + R(-1.7, 1.7)]);
-      t.next = R(4.5, 9);
-      t.wander = t.near ? t.d : clamp(t.wander + R(-7, 7), -34, 34);
-    }
-  }
-  renderTear();
-}
-const gapAt = (t, s) => Math.min(13, Math.max(0, t.tip - s) * 0.085);
+const lips = c => cutEdges(c, cutWidths(c, 30, 0.3));
 function renderTear() {
-  const t = tear, pts = t.pts.slice();
-  if (t.tip > pts[pts.length - 1][0] + 0.01) pts.push([t.tip, t.d]);
-  const up = [], dn = [];
-  for (const q of pts) { const w = gapAt(t, q[0]); up.push(cutPoint(t, q[0], q[1] + w)); dn.push(cutPoint(t, q[0], q[1] - w)); }
-  wr.eA.setAttribute("points", str(up));
-  wr.eB.setAttribute("points", str(dn));
-  $("tearClipP").setAttribute("d", BIG + " M" + str(up.concat(dn.reverse())).replace(/ /g, " L") + " Z");
+  const e = lips(wr.cut), poly = str(e.left.concat(e.right.slice().reverse()));
+  wr.clipI = 1 - wr.clipI;                 // swap between two clip shapes so every browser repaints the opening
+  wr.clipPoly[wr.clipI].setAttribute("points", poly);
+  wr.revIn.setAttribute("clip-path", "url(#rv" + wr.clipI + ")");
+  wr.shade.setAttribute("points", poly);
+  wr.eA.setAttribute("points", str(e.left));
+  wr.eB.setAttribute("points", str(e.right));
+  wr.rev.removeAttribute("display");
 }
-function checkTear() {
-  const t = tear, p = cutPoint(t, t.tip, t.d);
-  if (t.tip >= t.sOut + 3 || (t.tip > t.sIn + 24 && !inBag(p[0], p[1]))) splitWrapper();
-}
-function tearMove(lx, ly, dist) {
-  if (!tear) {
-    if (!inBag(lx, ly)) return;
-    const dx = lx - down.ax, dy = ly - down.ay, d = Math.hypot(dx, dy);
-    if (d < 12) return;
-    startTear([lx, ly], [dx / d, dy / d]);
-    tear.goal = 0;
-  } else {
-    const t = tear, rx = lx - t.o[0], ry = ly - t.o[1];
-    const fs = rx * t.u[0] + ry * t.u[1];
-    t.fd = rx * t.n[0] + ry * t.n[1];
-    t.near = Math.abs(fs - t.tip) < 80;
-    t.goal = Math.min(t.sOut + 12, Math.max(t.goal + dist * 0.55, fs));
-    t.speed = 1800;
+function tearAfter(r, force) {
+  const c = wr.cut;
+  if (!c) return;
+  if (r.grown > 0) {
+    renderTear();
+    wr.fx += r.grown;
+    if (wr.fx > 13) { wr.fx = 0; sfx.crinkle(); shimmer(); }
+    hiss(clamp(Math.hypot(fling[0], fling[1]) / 900, 0.2, 1) * 0.3);
   }
-  kick();
+  if (r.out && c.len < 36) {               // just a nick at the edge: the foil holds
+    wr.cut = null;
+    wr.rev.setAttribute("display", "none"); wr.eA.setAttribute("points", ""); wr.eB.setAttribute("points", "");
+  } else if (r.out || force || c.len > 300) splitWrapper();
 }
-function tearTap(lx, ly) {
-  if (!tear) {
-    const x = clamp(lx, BAG.x0 + 20, BAG.x1 - 20), y = clamp(ly, BAG.y0 + 16, BAG.y1 - 16);
-    const ang = Math.hypot(180 - x, 158 - y) < 36 ? R(0, 6.283) : Math.atan2(158 - y, 180 - x) + R(-0.7, 0.7);
-    startTear([x, y], [Math.cos(ang), Math.sin(ang)]);
-  }
-  const t = tear;
-  t.near = false; t.speed = 750;
-  t.goal = Math.min(t.sOut + 12, Math.max(t.goal, t.tip) + (t.sOut - t.sIn) * R(0.3, 0.42));
-  kick();
+function tearTap(l) {                      // taps alone get there too: the fourth one finishes the job
+  wr.taps++;
+  const r = cutTap(wr, [clamp(l[0], BAG.x0 + 14, BAG.x1 - 14), clamp(l[1], BAG.y0 + 12, BAG.y1 - 12)], R(80, 120));
+  tearAfter(r, wr.taps >= 4 && wr.cut.len >= 36);
 }
 function splitWrapper() {
-  const t = tear;
-  t.done = true; state = "busy";
-  if (t.tip > t.pts[t.pts.length - 1][0] + 0.5) t.pts.push([t.tip, t.d]);
-  const widths = t.pts.map(q => gapAt(t, q[0]));
-  tearSound(0); sfx.rip(); buzz(30);
+  const c = wr.cut;
+  state = "busy";
+  cutClose(c);
+  const e = lips(c), front = splitPolys(e.pts, e.left, e.right), back = splitPolys(e.pts, e.pts, e.pts);
+  hiss(0); sfx.rip(); buzz(30);
   wr.back.remove(); wr.front.remove();
-  if (!calm) for (const side of [1, -1]) {
-    const back = el("g", {}, backLayer);
-    use("wrapBack", el("g", { transform: mstr(wr.M), "clip-path": addClip(sidePoly(t, side)) }, back));
-    const front = el("g", {}, frontLayer);
-    const fi = el("g", { transform: mstr(wr.M), "clip-path": addClip(sidePoly(t, side, widths)) }, front);
-    use("wrapFront", fi);
-    el("polyline", { points: str(t.pts.map((q, i) => cutPoint(t, q[0], q[1] + side * widths[i]))), fill: "none",
-      stroke: "#f6f8fa", "stroke-width": 1.5, "stroke-linejoin": "round", opacity: 0.9 }, el("g", { "clip-path": "url(#outClip)" }, fi));
-    let sx = 0, sy = 0, n = 0;
-    for (let y = BAG.y0 + 10; y < BAG.y1; y += 20) for (let x = BAG.x0 + 10; x < BAG.x1; x += 20)
-      if (cutSide(t, x, y) === side) { sx += x; sy += y; n++; }
-    const C = n ? ap(wr.M, sx / n, sy / n) : ap(wr.M, 180, 158);
-    const nv = apv(wr.M, t.n[0] * side, t.n[1] * side), sp = R(230, 350);
-    addBody({ els: [back, front], cx: C[0], cy: C[1], vx: nv[0] * sp + R(-30, 30) + fling[0] * 0.2, vy: nv[1] * sp - R(60, 150) + fling[1] * 0.2,
-      va: R(70, 220) * flip(), g: 650, drag: 1.5, flutter: R(250, 520), ff: R(5, 9), fp: R(0, 6), life: R(1.7, 2.3), fade: 0.45 });
+  if (!calm) {
+    const cen = {};
+    for (const k of ["left", "right"]) {
+      let sx = 0, sy = 0, n = 0;
+      for (let y = BAG.y0 + 10; y < BAG.y1; y += 20) for (let x = BAG.x0 + 10; x < BAG.x1; x += 20)
+        if (inPoly(back[k], x, y)) { sx += x; sy += y; n++; }
+      cen[k] = n ? [sx / n, sy / n] : null;
+    }
+    for (const k of ["left", "right"]) {
+      const other = cen[k === "left" ? "right" : "left"];
+      if (!cen[k]) continue;
+      const bg = el("g", {}, backLayer);
+      use("wrapBack", el("g", { transform: mstr(wr.M), "clip-path": addClip(str(back[k])) }, bg));
+      const fg = el("g", {}, frontLayer);
+      const fi = el("g", { transform: mstr(wr.M), "clip-path": addClip(str(front[k])) }, fg);
+      use("wrapFront", fi);
+      el("polyline", { points: str(e[k]), fill: "none", stroke: "#f6f8fa", "stroke-width": 1.6, "stroke-linejoin": "round", opacity: 0.92 },
+         el("g", { "clip-path": "url(#outClip)" }, fi));
+      /* each half is pulled straight away from the other, so neither sweeps over the cookie */
+      const away = other ? norm(cen[k][0] - other[0], cen[k][1] - other[1]) : [k === "left" ? -1 : 1, 0];
+      const dir = apv(wr.M, away[0], away[1]), C = ap(wr.M, cen[k][0], cen[k][1]), sp = R(520, 700);
+      addBody({ els: [bg, fg], cx: C[0], cy: C[1], vx: dir[0] * sp + fling[0] * 0.12, vy: dir[1] * sp - R(40, 110) + fling[1] * 0.12,
+        va: R(60, 190) * flip(), g: 420, drag: 0.9, flutter: R(140, 300), ff: R(5, 9), fp: R(0, 6), life: R(0.75, 0.95), fade: 0.3 });
+    }
   }
-  setTimeout(() => {
-    state = "cookie"; setHint("cookie");
-    if (!calm && ck.wob.animate) ck.wob.animate(
-      [{ transform: "translateY(0)" }, { transform: "translateY(5px) rotate(" + R(-3, 3).toFixed(1) + "deg)" }, { transform: "translateY(0)" }],
-      { duration: 260, easing: "ease-out" });
-  }, calm ? 40 : 340);
+  setTimeout(() => { state = "cookie"; setHint("cookie"); shake(5); }, calm ? 40 : 430);
 }
 
 /* ---------- the cookie ---------- */
-let ck = null;
 const cubic = (a, b, c, d, t) => {
   const m = 1 - t, k0 = m * m * m, k1 = 3 * m * m * t, k2 = 3 * m * t * t, k3 = t * t * t;
   return [k0 * a[0] + k1 * b[0] + k2 * c[0] + k3 * d[0], k0 * a[1] + k1 * b[1] + k2 * c[1] + k3 * d[1]];
@@ -1816,14 +1933,21 @@ function lobePoly(P) {
   out.push(P[9]);
   return out;
 }
-const inCookie = (x, y) => inPoly(ck.polyL, x, y) || inPoly(ck.polyR, x, y);
+function cookieGrid() {
+  const a = [];
+  for (let y = 78; y <= 246; y += 6) for (let x = 48; x <= 312; x += 6) if (ck.inside(x, y)) a.push([x, y]);
+  return a;
+}
+function rim(parent, line) {               // the pale raw edge where the cookie has broken
+  el("polyline", { points: line, stroke: ck.pale, "stroke-width": 7 }, parent);
+  el("polyline", { points: line, stroke: ck.rim, "stroke-width": 1.5, opacity: 0.75 }, parent);
+}
 
 function buildCookie() {
   const hue = R(29, 40), l = R(-6, 5);
-  const hsl = (h, s, li) => "hsl(" + n1(h) + "," + s + "%," + n1(li) + "%)";
-  const tones = [hsl(hue + 6, 88, 76 + l), hsl(hue, 76, 62 + l), hsl(hue - 6, 66, 46 + l)];
+  const tones = [hex(hue + 6, 88, 76 + l), hex(hue, 76, 62 + l), hex(hue - 6, 66, 46 + l)];
   tones.forEach((c, i) => $("bk" + i).setAttribute("stop-color", c));
-  const rim = hsl(hue - 8, 70, 33 + l), pale = hsl(hue + 8, 90, 86);
+  const rimC = hex(hue - 8, 70, 33 + l), pale = hex(hue + 8, 90, 86);
 
   const top = [180, 114 + R(-4, 5)], bot = [180, 186 + R(-5, 5)];
   const base = [[150, 84], [92, 90], [70, 136], [53, 172], [62, 216], [94, 236], [104, 204], [140, 188]];
@@ -1833,32 +1957,41 @@ function buildCookie() {
   const dOf = P => "M" + pt(P[0]) + " C" + pt(P[1]) + " " + pt(P[2]) + " " + pt(P[3]) + " C" + pt(P[4]) + " " + pt(P[5]) + " " + pt(P[6]) +
                    " C" + pt(P[7]) + " " + pt(P[8]) + " " + pt(P[9]) + " Z";
   const dL = dOf(L), dR = dOf(Rt);
-  $("cookieClip").innerHTML = '<path d="' + dL + '"/><path d="' + dR + '"/>';
+  $("ccL").setAttribute("d", dL); $("ccR").setAttribute("d", dR);
 
-  ck = { polyL: lobePoly(L), polyR: lobePoly(Rt), tones, rim, pale, need: pick([2, 3, 3, 3, 4]), hits: 0, cut: null, hit: null };
+  const polyL = lobePoly(L), polyR = lobePoly(Rt), keep = [];
+  ck = { polyL, polyR, keep, tones, rim: rimC, pale, jag: 2.1, cut: null, last: null, prevOut: null, wasIn: false,
+         chips: 0, taps: 0, tough: R(120, 170), fx: 0, tw: 0, bz: 0, sh: null };
+  ck.inside = (x, y) => {
+    if (!inPoly(polyL, x, y) && !inPoly(polyR, x, y)) return false;
+    for (const k of keep) if (!inPoly(k.poly, x, y)) return false;
+    return true;
+  };
+  ck.samples = cookieGrid();
+  ck.area0 = ck.samples.length;
 
   let dots = "";
   for (let i = 0, made = 0; i < 80 && made < 16; i++) {
     const x = R(60, 300), y = R(92, 232);
-    if (!inCookie(x, y)) continue;
+    if (!ck.inside(x, y)) continue;
     made++;
     dots += made % 5 === 0
-      ? '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(2.4, 4)) + '" fill="' + pale + '" opacity=".45" stroke="' + rim + '" stroke-opacity=".5" stroke-width=".8"/>'
-      : '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(0.9, 2.3)) + '" fill="' + rim + '" opacity="' + R(0.35, 0.6).toFixed(2) + '"/>';
+      ? '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(2.4, 4)) + '" fill="' + pale + '" opacity=".45" stroke="' + rimC + '" stroke-opacity=".5" stroke-width=".8"/>'
+      : '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(0.9, 2.3)) + '" fill="' + rimC + '" opacity="' + R(0.35, 0.6).toFixed(2) + '"/>';
   }
   let patches = "";
   for (let i = 0; i < 4; i++)
-    patches += '<ellipse cx="' + n1(R(80, 280)) + '" cy="' + n1(R(110, 220)) + '" rx="' + n1(R(14, 34)) + '" ry="' + n1(R(8, 20)) + '" fill="' + rim + '" opacity="' + R(0.06, 0.16).toFixed(2) + '"/>';
+    patches += '<ellipse cx="' + n1(R(80, 280)) + '" cy="' + n1(R(110, 220)) + '" rx="' + n1(R(14, 34)) + '" ry="' + n1(R(8, 20)) + '" fill="' + rimC + '" opacity="' + R(0.06, 0.16).toFixed(2) + '"/>';
   const ty = top[1], by = bot[1];
   $("cookieArt").innerHTML =
-    '<path d="' + dL + '" fill="url(#gBake)" stroke="' + rim + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-    '<path d="' + dR + '" fill="url(#gBake)" stroke="' + rim + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+    '<path d="' + dL + '" fill="url(#gBake)" stroke="' + rimC + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+    '<path d="' + dR + '" fill="url(#gBake)" stroke="' + rimC + '" stroke-width="2.5" stroke-linejoin="round"/>' +
     '<g clip-path="url(#cookieClip)">' +
-      '<path d="' + dL + '" fill="none" stroke="' + rim + '" stroke-width="10" opacity=".22"/>' +
-      '<path d="' + dR + '" fill="none" stroke="' + rim + '" stroke-width="10" opacity=".3"/>' + patches +
-      '<path d="M180 ' + n1(ty + 4) + " C158 " + n1(ty + 20) + " 152 " + n1(by - 20) + " 180 " + n1(by) + " C208 " + n1(by - 20) + " 202 " + n1(ty + 20) + " 180 " + n1(ty + 4) + 'Z" fill="' + rim + '" opacity=".5"/>' +
-      '<path d="M180 ' + n1(ty + 2) + " C146 " + n1(ty + 10) + " 112 160 " + n1(L[6][0] + 1) + " " + n1(L[6][1] - 4) + '" fill="none" stroke="' + rim + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
-      '<path d="M180 ' + n1(ty + 2) + " C214 " + n1(ty + 10) + " 248 160 " + n1(Rt[6][0] - 1) + " " + n1(Rt[6][1] - 4) + '" fill="none" stroke="' + rim + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
+      '<path d="' + dL + '" fill="none" stroke="' + rimC + '" stroke-width="10" opacity=".22"/>' +
+      '<path d="' + dR + '" fill="none" stroke="' + rimC + '" stroke-width="10" opacity=".3"/>' + patches +
+      '<path d="M180 ' + n1(ty + 4) + " C158 " + n1(ty + 20) + " 152 " + n1(by - 20) + " 180 " + n1(by) + " C208 " + n1(by - 20) + " 202 " + n1(ty + 20) + " 180 " + n1(ty + 4) + 'Z" fill="' + rimC + '" opacity=".5"/>' +
+      '<path d="M180 ' + n1(ty + 2) + " C146 " + n1(ty + 10) + " 112 160 " + n1(L[6][0] + 1) + " " + n1(L[6][1] - 4) + '" fill="none" stroke="' + rimC + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
+      '<path d="M180 ' + n1(ty + 2) + " C214 " + n1(ty + 10) + " 248 160 " + n1(Rt[6][0] - 1) + " " + n1(Rt[6][1] - 4) + '" fill="none" stroke="' + rimC + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
       '<path d="M84 134 C96 108 128 98 154 108" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".55"/>' +
       '<path d="M206 108 C232 98 262 108 276 132" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".4"/>' + dots +
     "</g>";
@@ -1866,14 +1999,15 @@ function buildCookie() {
   ck.sc = R(0.93, 1.03);
   ck.M = mk(R(-14, 14), ck.sc, 180, 165, R(-5, 5), R(-4, 4));
   ck.Mi = inv(ck.M);
-  ck.wob = el("g", { style: "transform-origin:180px 165px" }, cookieLayer);
-  const baseG = el("g", { transform: mstr(ck.M) }, ck.wob);
-  use("cookieArt", baseG);
-  ck.cracks = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, baseG);
-}
-function crackLine(pts, w) {
-  el("polyline", { points: str(pts.map(p => [p[0] + 0.9, p[1] + 0.9])), stroke: ck.pale, "stroke-width": n1(w * 0.45), opacity: 0.55 }, ck.cracks);
-  return el("polyline", { points: str(pts), stroke: "#4e2c06", "stroke-width": w, opacity: 0.88 }, ck.cracks);
+  ck.wob = el("g", {}, cookieLayer);
+  ck.baseG = el("g", { transform: mstr(ck.M) }, ck.wob);
+  const content = el("g", {}, ck.baseG);
+  use("cookieArt", content);
+  const over = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, content);
+  ck.rims = el("g", {}, over);
+  ck.cracks = el("g", {}, over);
+  ck.lineHi = el("polyline", { points: "", stroke: pale, "stroke-width": 1.1, opacity: 0.55, transform: "translate(0.9 0.9)" }, over);
+  ck.line = el("polyline", { points: "", stroke: "#4e2c06", "stroke-width": 2.5, opacity: 0.9 }, over);
 }
 function twig(x, y, ang, len) {
   const pts = [[x, y]];
@@ -1882,44 +2016,127 @@ function twig(x, y, ang, len) {
     x += Math.cos(ang) * len / n; y += Math.sin(ang) * len / n;
     pts.push([x, y]);
   }
-  crackLine(pts, R(1, 1.7));
+  const w = R(1, 1.7);
+  el("polyline", { points: str(pts.map(p => [p[0] + 0.9, p[1] + 0.9])), stroke: ck.pale, "stroke-width": n1(w * 0.45), opacity: 0.55 }, ck.cracks);
+  el("polyline", { points: str(pts), stroke: "#4e2c06", "stroke-width": n1(w), opacity: 0.88 }, ck.cracks);
 }
-function hitCookie(sx, sy, dir, power) {
-  let p = ap(ck.Mi, sx, sy);
-  const home = p[0] < 180 ? [140, 160] : [220, 160];
-  for (let i = 0; i < 30 && !inCookie(p[0], p[1]); i++) p = [p[0] + (home[0] - p[0]) * 0.15, p[1] + (home[1] - p[1]) * 0.15];
-  if (!ck.cut) {
-    let ang = Math.PI / 2 + R(-0.95, 0.95);
-    if (dir) { const v = apv(ck.Mi, dir[0], dir[1]); ang = Math.atan2(v[1], v[0]); }
-    ck.cut = randomCut(p, ang, 240, 9, 0.32, 2.4);
-    ck.hit = p;
-    ck.ext = [R(0.7, 1.25), R(0.7, 1.25)];
+function clearCrack() { ck.cut = null; ck.line.setAttribute("points", ""); ck.lineHi.setAttribute("points", ""); }
+function crackAfter(r, force) {
+  const c = ck.cut;
+  if (!c) return;
+  if (r.grown > 0) {
+    const pts = cutPts(c), s = str(pts), end = pts[pts.length - 1];
+    ck.line.setAttribute("points", s); ck.lineHi.setAttribute("points", s);
+    ck.fx += r.grown; ck.tw += r.grown; ck.bz += r.grown;
+    for (let i = 0; ck.fx > 9 && i < 6; i++) { ck.fx -= 9; sfx.crackle(); }
+    if (ck.tw > 20) {
+      ck.tw = 0;
+      const d = cutDir(c);
+      if (Math.random() < 0.75) twig(end[0], end[1], Math.atan2(d[1], d[0]) + flip() * R(0.6, 1.4), R(8, 24));
+      if (ck.inside(end[0], end[1])) spawnCrumbs(ap(ck.M, end[0], end[1]), 1 + (Math.random() < 0.4 ? 1 : 0), 0.4);
+    }
+    if (ck.bz > 30) { ck.bz = 0; buzz(8); }
+    shake(1.6);
   }
-  ck.hits += power;
-  buzz(15);
-  if (ck.hits >= ck.need) { breakCookie(); return; }
-  sfx.crack();
-  if (!calm && ck.wob.animate) ck.wob.animate(
-    [{ transform: "none" }, { transform: "translate(" + R(-5, 5).toFixed(1) + "px," + R(2, 5).toFixed(1) + "px) rotate(" + R(-4, 4).toFixed(1) + "deg) scale(1.03,.97)" },
-     { transform: "translate(" + R(-3, 3).toFixed(1) + "px,-2px) rotate(" + R(-2, 2).toFixed(1) + "deg)" }, { transform: "none" }],
-    { duration: 230, easing: "ease-out" });
+  if (r.out && c.len < 18) clearCrack();   // the finger only grazed it
+  else if (r.out || force || c.len >= ck.tough) resolveCrack();
+}
+function crackTap(l) {
+  let p = l;
+  if (!ck.inside(p[0], p[1])) {
+    let bd = 1e9;
+    for (const g of ck.samples) { const d = Math.hypot(g[0] - l[0], g[1] - l[1]); if (d < bd) { bd = d; p = g; } }
+    if (bd > 1e8) return;
+  }
+  ck.taps++;
+  crackAfter(cutTap(ck, p, R(34, 52)), ck.taps >= 4);
+}
+const newStat = () => ({ n: 0, sx: 0, sy: 0, pts: [] });
+const addStat = (s, g) => { s.n++; s.sx += g[0]; s.sy += g[1]; s.pts.push(g); };
+/* the crack has crossed the cookie: a small corner chips off, a real cut opens it */
+function resolveCrack() {
+  const c = ck.cut;
+  cutClose(c);
+  const pts = cutPts(c), sp = splitPolys(pts, pts, pts), line = str(pts);
+  const sides = [{ poly: sp.left, line }, { poly: sp.right, line }], st = [newStat(), newStat()];
+  for (const g of ck.samples) addStat(st[inPoly(sp.left, g[0], g[1]) ? 0 : 1], g);
+  const small = st[0].n <= st[1].n ? 0 : 1;
+  clearCrack();
+  if (st[small].n / ck.samples.length < 0.16 && ck.chips < 3 && st[1 - small].n > 0) chip(sides[small], st[small], sides[1 - small]);
+  else breakCookie(sides, pts);
+}
+function makePiece(clips, st, H, power) {
+  const cx = st.sx / st.n, cy = st.sy / st.n;
+  let rmax = 0;
+  for (const q of st.pts) rmax = Math.max(rmax, Math.hypot(q[0] - cx, q[1] - cy));
+  const g = el("g", {}, cookieLayer);
+  let host = el("g", { transform: mstr(ck.M), "clip-path": addClip(str(clips[0].poly)) }, g);
+  for (let i = 1; i < clips.length; i++) host = el("g", { "clip-path": addClip(str(clips[i].poly)) }, host);
+  use("cookieArt", host);
+  const rimG = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linejoin": "round" }, host);
+  for (const k of clips) rim(rimG, k.line);
+  const C = ap(ck.M, cx, cy), o = norm(C[0] - H[0], C[1] - H[1]);
+  const small = 1 - st.n / ck.area0, sp = R(110, 190) * (0.7 + small) * power;
+  const floor = 268 + R(-5, 7), r = Math.max(6, rmax * 0.55 * ck.sc);
+  const b = { els: [g], cx: C[0], cy: C[1], r, vx: o[0] * sp + R(-25, 25) + fling[0] * 0.1, vy: o[1] * sp * 0.5 - R(140, 260) * power,
+    va: (o[0] >= 0 ? 1 : -1) * R(90, 260) * (0.6 + small * 1.6) * (Math.random() < 0.2 ? -1 : 1),
+    floor, rest: R(0.2, 0.34), wl: 22 + r, wr: 338 - r, clack: true };
+  if (calm) { b.x = clamp(C[0] + o[0] * 80, b.wl, b.wr) - C[0]; b.y = floor - r - C[1]; b.a = R(-35, 35); place(b); }
+  else addBody(b);
+  return C;
+}
+function chip(part, st, rest) {
+  ck.chips++;
+  const centre = ap(ck.M, 180, 165);
+  const at = st.n >= 2 ? makePiece([part].concat(ck.keep), st, centre, 0.55) : centre;
+  ck.keep.push(rest);
+  const top = ck.baseG.firstChild, g = el("g", { "clip-path": addClip(str(rest.poly)) }, ck.baseG);
+  g.appendChild(top);
+  rim(ck.rims, rest.line);
+  ck.samples = cookieGrid();
+  ck.tough = R(110, 165); ck.taps = 0;
+  sfx.crack(); buzz(20); shake(4);
+  spawnCrumbs(at, 4 + Math.floor(R(0, 4)), 0.6);
+}
+function breakCookie(sides, pts) {
+  state = "open";
+  let parts = sides.map(s => [s].concat(ck.keep));
+  const inner = pts.filter(p => ck.inside(p[0], p[1]));
+  /* sometimes a shard or two snaps off beside the main break */
+  const extra = inner.length ? pick([0, 1, 1, 1, 2, 2]) : 0, order = Math.random() < 0.5 ? [0, 1] : [1, 0];
+  for (let k = 0; k < extra; k++) {
+    const o2 = pick(inner), j = pts.indexOf(o2), a = pts[Math.max(0, j - 2)], b = pts[Math.min(pts.length - 1, j + 2)];
+    const c2 = randomCut(o2, Math.atan2(b[1] - a[1], b[0] - a[0]) + flip() * R(0.75, 1.45), 260, 9, 0.28, 2.2);
+    const line = str(cutLine(c2, -230, 230)), old = parts[order[k]];
+    parts[order[k]] = null;
+    parts.push(old.concat([{ poly: sidePts(c2, 1), line }]), old.concat([{ poly: sidePts(c2, -1), line }]));
+  }
+  parts = parts.filter(Boolean);
+  const st = parts.map(newStat);
+  for (const g of ck.samples) for (let i = 0; i < parts.length; i++)
+    if (parts[i].every(k => inPoly(k.poly, g[0], g[1]))) { addStat(st[i], g); break; }
 
-  const c = ck.cut, len = 24 + 64 * ck.hits / ck.need, a = -len * ck.ext[0], b = len * ck.ext[1];
-  if (ck.main) { ck.main.previousSibling.remove(); ck.main.remove(); }
-  ck.main = crackLine(cutLine(c, a, b), 2.3);
-  const axis = Math.atan2(c.u[1], c.u[0]);
-  for (let k = 0, n = 1 + Math.floor(R(0, 3)); k < n; k++) {
-    const s = R(a, b), o = cutPoint(c, s, cutD(c, s));
-    twig(o[0], o[1], axis + flip() * R(0.5, 1.3) + (Math.random() < 0.5 ? Math.PI : 0), R(8, 26));
-  }
-  if (Math.hypot(p[0] - ck.hit[0], p[1] - ck.hit[1]) > 12)
-    for (let k = 0, n = 2 + Math.floor(R(0, 3)), a0 = R(0, 6.28); k < n; k++) twig(p[0], p[1], a0 + k * 6.28 / n + R(-0.4, 0.4), R(7, 18));
-  const H = ap(ck.M, p[0], p[1]);
-  spawnCrumbs(H, 3 + Math.floor(R(0, 4)), 0.55);
+  let h = inner[0] || pts[Math.floor(pts.length / 2)], hd = 1e9;
+  for (const p of inner) { const d = Math.hypot(p[0] - 180, p[1] - 165); if (d < hd) { hd = d; h = p; } }
+  const H = ap(ck.M, h[0], h[1]);
+  ck.wob.remove();
+  $("shadow").setAttribute("opacity", 0.14);
+  sfx.snap(); sfx.paper(); buzz(60);
+  clacks = 0;
+  parts.forEach((clips, i) => {
+    if (st[i].n < 4) { if (st[i].n) spawnCrumbs(ap(ck.M, st[i].sx / st[i].n, st[i].sy / st[i].n), 4, 0.6); return; }
+    makePiece(clips, st[i], H, 1);
+  });
+  spawnCrumbs(H, 14 + Math.floor(R(0, 10)), 1);
+  dust(H);
+  showSlip(H);
+  count++; store.set("bds.count", count); renderTally();
+  hint.hidden = true; actions.hidden = false;
+  stage.setAttribute("aria-label", "Bigliettino: " + current);
 }
 function spawnCrumbs(H, n, power) {
   if (calm) return;
-  for (let i = 0; i < n && fxLayer.childElementCount < 70; i++) {
+  for (let i = 0; i < n && fxLayer.childElementCount < 80; i++) {
     const r = R(1.2, 4.2), k = 3 + Math.floor(R(0, 3)), pts = [];
     for (let j = 0; j < k; j++) { const a = j / k * 6.283 + R(-0.4, 0.4), q = r * R(0.6, 1); pts.push([H[0] + Math.cos(a) * q, H[1] + Math.sin(a) * q]); }
     const e = el("polygon", { points: str(pts), fill: pick(ck.tones) }, fxLayer);
@@ -1931,72 +2148,10 @@ function spawnCrumbs(H, n, power) {
 function dust(H) {
   if (calm) return;
   for (let i = 0; i < 7; i++) {
-    const e = el("circle", { cx: n1(H[0]), cy: n1(H[1]), r: n1(R(5, 11)), fill: ck.pale, opacity: 0, style: "transform-box:fill-box;transform-origin:center" }, fxLayer);
-    if (!e.animate) { e.remove(); continue; }
-    e.animate([{ transform: "translate(0,0) scale(.3)", opacity: 0.5 },
-               { transform: "translate(" + R(-60, 60).toFixed(0) + "px," + R(-50, 10).toFixed(0) + "px) scale(" + R(1.6, 2.6).toFixed(1) + ")", opacity: 0 }],
-              { duration: R(420, 820), easing: "ease-out" }).onfinish = () => e.remove();
+    const e = el("circle", { cx: n1(H[0] + R(-8, 8)), cy: n1(H[1] + R(-8, 8)), r: n1(R(6, 14)), fill: ck.pale, "fill-opacity": 0.4 }, fxLayer);
+    const life = R(0.4, 0.8);
+    addBody({ els: [e], cx: H[0], cy: H[1], vx: R(-90, 90), vy: R(-110, -10), g: 40, drag: 2.5, life, fade: life });
   }
-}
-function breakCookie() {
-  state = "open";
-  const c = ck.cut;
-  const sides = { 1: [[[c, 1]]], "-1": [[[c, -1]]] };
-  const extra = pick([0, 1, 1, 1, 2, 2]), order = Math.random() < 0.5 ? [1, -1] : [-1, 1];
-  for (let k = 0; k < extra; k++) {
-    const side = order[k], s0 = R(-42, 42), o2 = cutPoint(c, s0, cutD(c, s0));
-    const c2 = randomCut(o2, Math.atan2(c.u[1], c.u[0]) + flip() * R(0.75, 1.45), 260, 9, 0.28, 2.2);
-    sides[side] = [[[c, side], [c2, 1]], [[c, side], [c2, -1]]];
-  }
-  const parts = sides[1].concat(sides[-1]);
-  const stats = parts.map(() => ({ n: 0, sx: 0, sy: 0, pts: [] }));
-  let total = 0;
-  for (let y = 78; y <= 246; y += 6) for (let x = 48; x <= 312; x += 6) {
-    if (!inCookie(x, y)) continue;
-    total++;
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i].every(q => cutSide(q[0], x, y) === q[1])) { const st = stats[i]; st.n++; st.sx += x; st.sy += y; st.pts.push([x, y]); break; }
-    }
-  }
-  ck.wob.remove();
-  $("shadow").setAttribute("opacity", 0.14);
-  const H = ap(ck.M, ck.hit[0], ck.hit[1]);
-  sfx.snap(); sfx.paper(); buzz(60);
-  clacks = 0;
-
-  parts.forEach((cons, i) => {
-    const st = stats[i];
-    if (st.n < 5) { if (st.n) spawnCrumbs(ap(ck.M, st.sx / st.n, st.sy / st.n), 4, 0.6); return; }
-    const cx = st.sx / st.n, cy = st.sy / st.n;
-    let rmax = 0;
-    for (const q of st.pts) rmax = Math.max(rmax, Math.hypot(q[0] - cx, q[1] - cy));
-    const g = el("g", {}, cookieLayer);
-    let host = el("g", { transform: mstr(ck.M), "clip-path": addClip(sidePoly(cons[0][0], cons[0][1])) }, g);
-    if (cons[1]) host = el("g", { "clip-path": addClip(sidePoly(cons[1][0], cons[1][1])) }, host);
-    use("cookieArt", host);
-    const rimG = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linejoin": "round" }, host);
-    for (const q of cons) {
-      const line = str(cutLine(q[0], -230, 230));
-      el("polyline", { points: line, stroke: ck.pale, "stroke-width": 7 }, rimG);
-      el("polyline", { points: line, stroke: ck.rim, "stroke-width": 1.5, opacity: 0.75 }, rimG);
-    }
-    const C = ap(ck.M, cx, cy);
-    let ox = C[0] - H[0], oy = C[1] - H[1];
-    const d = Math.hypot(ox, oy) || 1; ox /= d; oy /= d;
-    const small = 1 - st.n / total, sp = R(110, 190) * (0.7 + small);
-    const floor = 268 + R(-5, 7), r = Math.max(8, rmax * 0.55 * ck.sc);
-    const b = { els: [g], cx: C[0], cy: C[1], r, vx: ox * sp + R(-25, 25), vy: oy * sp * 0.5 - R(140, 260),
-      va: (ox >= 0 ? 1 : -1) * R(90, 260) * (0.6 + small * 1.6) * (Math.random() < 0.2 ? -1 : 1),
-      floor, rest: R(0.2, 0.34), wl: 22 + r, wr: 338 - r, clack: true };
-    if (calm) { b.x = clamp(C[0] + ox * 80, b.wl, b.wr) - C[0]; b.y = floor - r - C[1]; b.a = R(-35, 35); place(b); }
-    else addBody(b);
-  });
-  spawnCrumbs(H, 14 + Math.floor(R(0, 10)), 1);
-  dust(H);
-  showSlip(H);
-  count++; store.set("bds.count", count); renderTally();
-  hint.hidden = true; actions.hidden = false;
-  stage.setAttribute("aria-label", "Bigliettino: " + current);
 }
 
 /* ---------- the slip ---------- */
@@ -2053,7 +2208,7 @@ function renderTally() {
 }
 function newRound() {
   for (const g of [backLayer, cookieLayer, frontLayer, fxLayer, dyn]) g.textContent = "";
-  bodies.length = 0; tear = null; clipN = 0; clacks = 0;
+  bodies.length = 0; clipN = 0; clacks = 0;
   $("shadow").setAttribute("opacity", 0.28);
   buildCookie();
   buildWrapper();
@@ -2067,18 +2222,23 @@ function reset() {
   setTimeout(() => {
     newRound();
     scene.style.visibility = "";
-    if (!calm && scene.animate) scene.animate(pick(ENTRIES), { duration: R(420, 560), easing: "cubic-bezier(.2,1.3,.5,1)" });
+    const ms = calm ? 0 : R(420, 560);
+    if (ms && scene.animate) scene.animate(pick(ENTRIES), { duration: ms, easing: "cubic-bezier(.2,1.3,.5,1)" });
     sfx.crinkle();
-    setTimeout(() => { state = "wrapped"; }, calm ? 0 : 380);
+    setTimeout(() => { state = "wrapped"; }, ms);
   }, calm ? 20 : 160);
 }
 
 /* ---------- input ---------- */
 let down = null, fling = [0, 0];
+const hostNow = () => (state === "wrapped" ? wr : state === "cookie" ? ck : null);
 stage.addEventListener("pointerdown", e => {
-  if (state !== "wrapped" && state !== "cookie") return;
-  const s = toScene(e.clientX, e.clientY), l = ap(wr.Mi, s[0], s[1]);
-  down = { x: e.clientX, y: e.clientY, sx0: s[0], sy0: s[1], sx: s[0], sy: s[1], ax: l[0], ay: l[1], moved: 0, t: performance.now() };
+  const h = hostNow();
+  if (!h) return;
+  const s = toScene(e.clientX, e.clientY), l = ap(h.Mi, s[0], s[1]);
+  down = { h, x: e.clientX, y: e.clientY, sx: s[0], sy: s[1], moved: 0, t: performance.now() };
+  h.last = l; h.wasIn = false; h.prevOut = h.inside(l[0], l[1]) ? null : l;
+  if (h.cut) cutAim(h.cut, l);
   fling = [0, 0];
   try { stage.setPointerCapture(e.pointerId); } catch {}
   audio();
@@ -2090,34 +2250,30 @@ stage.addEventListener("pointermove", e => {
   down.x = e.clientX; down.y = e.clientY; down.moved += d;
   const s = toScene(e.clientX, e.clientY), now = performance.now(), dt = Math.max(8, now - down.t) / 1000;
   fling = [clamp((s[0] - down.sx) / dt, -900, 900), clamp((s[1] - down.sy) / dt, -900, 900)];
-  const dist = Math.hypot(s[0] - down.sx, s[1] - down.sy);
   down.sx = s[0]; down.sy = s[1]; down.t = now;
-  if (state === "wrapped") { const l = ap(wr.Mi, s[0], s[1]); tearMove(l[0], l[1], dist); }
+  const h = down.h;
+  if (h !== hostNow() || down.moved < 6) return;
+  const r = cutFeed(h, ap(h.Mi, s[0], s[1]));
+  if (h === wr) tearAfter(r); else crackAfter(r);
 });
 function release() {
-  if (!down) return;
   const dn = down;
   down = null;
-  if (tear) tear.near = false;
-  if (state === "wrapped") {
-    if (dn.moved < 10) { const l = ap(wr.Mi, dn.sx, dn.sy); tearTap(l[0], l[1]); }
-  } else if (state === "cookie") {
-    if (dn.moved < 10) hitCookie(dn.sx, dn.sy, null, 1);
-    else {
-      const dx = dn.sx - dn.sx0, dy = dn.sy - dn.sy0, d = Math.hypot(dx, dy);
-      if (d > 14) hitCookie((dn.sx + dn.sx0) / 2, (dn.sy + dn.sy0) / 2, [dx / d, dy / d], 2);
-      else hitCookie(dn.sx, dn.sy, null, 1);
-    }
-  }
+  if (!dn || dn.h !== hostNow() || dn.moved >= 10) return;
+  const l = ap(dn.h.Mi, dn.sx, dn.sy);
+  if (dn.h === wr) tearTap(l); else crackTap(l);
 }
 stage.addEventListener("pointerup", release);
-stage.addEventListener("pointercancel", () => { down = null; if (tear) tear.near = false; });
+stage.addEventListener("pointercancel", () => { down = null; });
 stage.addEventListener("keydown", e => {
   if (e.key !== "Enter" && e.key !== " ") return;
   e.preventDefault();
   audio();
-  if (state === "wrapped") tearTap(R(60, 300), R(90, 230));
-  else if (state === "cookie") hitCookie(R(120, 240), R(130, 200), null, 1);
+  const h = hostNow();
+  if (!h) return;
+  const end = h.cut ? h.cut.base[h.cut.base.length - 1] : null;
+  if (h === wr) tearTap(end || [R(60, 300), R(90, 230)]);
+  else crackTap(end || pick(ck.samples));
 });
 document.addEventListener("gesturestart", e => e.preventDefault());
 
@@ -2144,7 +2300,7 @@ function renderMute() {
 }
 $("mute").addEventListener("click", () => {
   muted = !muted; store.set("bds.muted", muted); renderMute();
-  if (muted) tearSound(0); else sfx.crinkle();
+  if (muted) hiss(0); else sfx.crinkle();
 });
 
 renderMute(); renderTally(); newRound();
