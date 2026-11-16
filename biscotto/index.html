@@ -21,8 +21,9 @@
 <style>
 /* Layout: one fixed screen. Name on top, the cookie on its lacquer table in the middle, one line of instruction or two buttons at the bottom. */
 :root{
-  --lacquer:#6d1010; --lacquer-deep:#2e0606;
-  --gold:#f2c45a; --gold-dim:#c99a3a; --paper:#fbf6e6; --ink:#1c3a8a; --cream:#fdebc8;
+  --lacquer:#6d1010; --lacquer-deep:#2e0606; --foil:#c8201f; --foil-dark:#8a0f12;
+  --gold:#f2c45a; --gold-dim:#c99a3a; --paper:#fbf6e6; --ink:#1c3a8a; --stamp:#c8201f;
+  --cream:#fdebc8; --biscuit:#e9ab52; --biscuit-dark:#b97524;
   --font-display:"Bowlby One","Arial Black",Impact,sans-serif;
   --font-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-slip:"Courier Prime","Courier New",ui-monospace,monospace;
@@ -51,18 +52,31 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
 .stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
   touch-action:none;cursor:pointer;outline:none;border-radius:20px}
 .stage:focus-visible,.mute:focus-visible,.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.scene{width:100%;max-width:440px;max-height:100%;overflow:visible;display:block;pointer-events:none}
+.scene{width:100%;max-width:440px;max-height:100%;overflow:visible;display:block}
+.scene *{transform-box:fill-box;transform-origin:center}
+.wrap-half{transition:transform .12s ease-out}
+.wrap-half.fly{transition:transform .55s cubic-bezier(.5,0,.9,.4),opacity .5s ease-in .1s}
+.half{transition:transform .7s cubic-bezier(.2,1.25,.4,1)}
+.cookie.broken #half-l{transform:translate(-84px,104px) rotate(-34deg)}
+.cookie.broken #half-r{transform:translate(84px,104px) rotate(34deg)}
+.crack{opacity:0}
+.crack.on{opacity:1}
+.cookie.broken .crack{opacity:0}
 
-.slip{position:absolute;left:50%;top:10%;width:min(94%,390px);padding:22px 20px;
-  background:
-    linear-gradient(90deg,rgba(0,0,0,.06),rgba(0,0,0,0) 4%,rgba(0,0,0,0) 49.4%,rgba(0,0,0,.08) 50%,rgba(0,0,0,0) 50.6%,rgba(0,0,0,0) 96%,rgba(0,0,0,.06)),
-    var(--paper);
-  color:var(--ink);font-family:var(--font-slip);text-align:center;
-  border-inline:7px solid var(--ink);box-shadow:0 14px 30px rgba(0,0,0,.45);
-  transform:translate(-50%,0) rotate(var(--rot,-2deg));opacity:0;pointer-events:none}
-.slip.show{opacity:1;pointer-events:auto;-webkit-user-select:text;user-select:text}
-.fortune{margin:0;font-weight:700;font-size:clamp(18px,5.3vw,22px);line-height:1.3;text-wrap:balance}
-.fortune.long{font-size:clamp(16px,4.7vw,19px)}
+.slip{position:absolute;left:50%;top:10%;width:min(94%,390px);padding:20px 22px 16px;
+  background:var(--paper);color:var(--ink);font-family:var(--font-slip);text-align:center;
+  border-inline:10px solid var(--stamp);box-shadow:0 14px 30px rgba(0,0,0,.45);
+  transform:translate(-50%,90%) scale(.12) rotate(9deg);opacity:0;pointer-events:none;
+  transition:transform .65s cubic-bezier(.2,1.2,.4,1) .12s,opacity .15s linear .12s}
+.slip.show{transform:translate(-50%,0) scale(1) rotate(-2deg);opacity:1;pointer-events:auto;
+  -webkit-user-select:text;user-select:text}
+.slip p{margin:0}
+.fortune{font-weight:700;font-size:clamp(18px,5.2vw,22px);line-height:1.3;text-wrap:balance}
+.lucky{margin-top:12px !important;padding-top:10px;border-top:1px dashed var(--ink);font-size:11.5px;white-space:nowrap;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--stamp);font-variant-numeric:tabular-nums}
+
+.crumb{position:absolute;left:50%;top:50%;width:7px;height:6px;border-radius:2px;background:var(--biscuit);pointer-events:none}
+.crumb:nth-child(odd){background:var(--biscuit-dark)}
 
 .bottom{min-height:64px;display:flex;align-items:center;justify-content:center}
 .hint{margin:0;text-align:center;font-weight:700;font-size:17px;color:var(--cream);text-wrap:balance}
@@ -74,6 +88,9 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
 .btn-ghost{flex:0 1 38%;background:transparent;color:var(--gold)}
 .btn:active{transform:translateY(2px)}
 .haptic{position:fixed;left:-200px;top:0;opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){
+  .wrap-half.fly,.half,.slip{transition-duration:.01s;transition-delay:0s}
+}
 </style>
 
 <div class="app">
@@ -88,46 +105,72 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
   <main class="stage" id="stage" tabindex="0" role="button" aria-label="Biscotto nella bustina: strappa la bustina">
     <svg class="scene" id="scene" viewBox="0 0 360 320" aria-hidden="true">
       <defs>
-        <radialGradient id="gBake" cx=".4" cy=".3" r=".85">
-          <stop id="bk0" offset="0" stop-color="#f8d188"/><stop id="bk1" offset=".55" stop-color="#e9ab52"/><stop id="bk2" offset="1" stop-color="#c8812c"/>
+        <radialGradient id="gBake" cx="40%" cy="30%" r="80%">
+          <stop offset="0" stop-color="#f8d188"/><stop offset=".55" stop-color="#e9ab52"/><stop offset="1" stop-color="#c8812c"/>
         </radialGradient>
         <linearGradient id="gFoil" x1="0" y1="0" x2="1" y2="1">
-          <stop id="f0" offset="0" stop-color="#7a0c0f"/><stop id="f1" offset=".22" stop-color="#e0302c"/><stop id="f2" offset=".42" stop-color="#b3181a"/>
-          <stop id="f3" offset=".63" stop-color="#ee4a3c"/><stop id="f4" offset=".82" stop-color="#b3181a"/><stop id="f5" offset="1" stop-color="#7a0c0f"/>
+          <stop offset="0" stop-color="#8a0f12"/><stop offset=".22" stop-color="#e0302c"/><stop offset=".4" stop-color="#b3181a"/>
+          <stop offset=".62" stop-color="#ee4a3c"/><stop offset=".8" stop-color="#a81417"/><stop offset="1" stop-color="#7a0c0f"/>
         </linearGradient>
         <linearGradient id="gSeal" x1="0" y1="0" x2="1" y2="0">
-          <stop id="s0" offset="0" stop-color="#f2c45a"/><stop id="s1" offset=".5" stop-color="#fff0b8"/><stop id="s2" offset="1" stop-color="#c99a3a"/>
+          <stop offset="0" stop-color="#f2c45a"/><stop offset=".5" stop-color="#fff0b8"/><stop offset="1" stop-color="#c99a3a"/>
         </linearGradient>
-        <linearGradient id="gInside" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#8d949c"/><stop offset=".35" stop-color="#d9dee3"/><stop offset=".6" stop-color="#a9b0b8"/><stop offset="1" stop-color="#7b828a"/>
-        </linearGradient>
-        <linearGradient id="gVol" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".28" stop-color="#fff" stop-opacity="0"/>
-          <stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/>
-        </linearGradient>
-        <clipPath id="cookieClip"></clipPath>
-        <clipPath id="bodyClip"><path id="bodyClipP" clip-rule="evenodd" d=""/></clipPath>
-        <clipPath id="outClip"><path id="outClipP" d=""/></clipPath>
-        <clipPath id="tearClip"><path id="tearClipP" clip-rule="evenodd" d=""/></clipPath>
-        <g id="cookieArt"></g>
-        <g id="wrapBack"></g>
-        <g id="wrapFront"></g>
+        <clipPath id="clipL"><path id="clipLp" d=""/></clipPath>
+        <clipPath id="clipR"><path id="clipRp" d=""/></clipPath>
+        <g id="wrapArt">
+          <path id="wrapBody" d="" fill="url(#gFoil)" fill-rule="evenodd"/>
+          <ellipse cx="180" cy="158" rx="92" ry="60" fill="#fff" opacity=".16"/>
+          <path d="M104 132 Q136 104 190 102" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+          <ellipse cx="180" cy="158" rx="92" ry="60" fill="none" stroke="url(#gSeal)" stroke-width="3"/>
+          <rect x="8" y="68" width="23" height="180" fill="url(#gSeal)" opacity=".9"/>
+          <rect x="329" y="68" width="23" height="180" fill="url(#gSeal)" opacity=".9"/>
+          <g stroke="#8a0f12" stroke-width="1.2" opacity=".55">
+            <path d="M14 70V246M20 70V246M26 70V246M334 70V246M340 70V246M346 70V246"/>
+          </g>
+          <text x="180" y="84" text-anchor="middle" font-family="'Bowlby One','Arial Black',sans-serif" font-size="13.5" letter-spacing="1.5" fill="#f2c45a">BISCOTTO DELLA SFIGA</text>
+          <text x="180" y="243" text-anchor="middle" font-family="'Figtree',system-ui,sans-serif" font-weight="700" font-size="10" letter-spacing="2.4" fill="#fdebc8">100% INSULTI GARANTITI</text>
+          <text x="58" y="170" text-anchor="middle" font-size="34" fill="#f2c45a">福</text>
+          <text x="302" y="170" text-anchor="middle" font-size="34" fill="#f2c45a">福</text>
+          <path d="M40 60 Q180 46 320 60" fill="none" stroke="#fff" stroke-width="2" opacity=".35"/>
+        </g>
       </defs>
-      <defs id="dyn"></defs>
-      <ellipse id="shadow" cx="180" cy="266" rx="120" ry="15" fill="#000" opacity=".28"/>
-      <g id="backLayer"></g>
-      <g id="cookieLayer"></g>
-      <g id="frontLayer"></g>
-      <g id="fxLayer"></g>
+
+      <ellipse cx="180" cy="262" rx="120" ry="16" fill="#000" opacity=".28"/>
+
+      <g class="cookie" id="cookie">
+        <g class="half" id="half-l">
+          <path d="M180 114 C150 84 92 90 70 136 C53 172 62 216 94 236 C104 204 140 188 180 186 Z" fill="url(#gBake)" stroke="#a5651d" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M180 118 C158 134 152 166 180 186 Z" fill="#a5651d" opacity=".55"/>
+          <path d="M180 116 C146 124 112 160 95 232" fill="none" stroke="#a5651d" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+          <path d="M84 134 C96 108 128 98 154 108" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".6"/>
+          <g fill="#b97524" opacity=".6"><circle cx="104" cy="170" r="2.2"/><circle cx="128" cy="176" r="1.8"/><circle cx="84" cy="186" r="1.6"/><circle cx="140" cy="150" r="1.7"/></g>
+        </g>
+        <g class="half" id="half-r">
+          <path d="M180 114 C210 84 268 90 290 136 C307 172 298 216 266 236 C256 204 220 188 180 186 Z" fill="url(#gBake)" stroke="#a5651d" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M180 118 C202 134 208 166 180 186 Z" fill="#8f5516" opacity=".6"/>
+          <path d="M180 116 C214 124 248 160 265 232" fill="none" stroke="#a5651d" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+          <path d="M206 108 C232 98 262 108 276 132" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+          <g fill="#b97524" opacity=".6"><circle cx="252" cy="172" r="2.2"/><circle cx="232" cy="178" r="1.8"/><circle cx="268" cy="150" r="1.6"/><circle cx="218" cy="152" r="1.7"/></g>
+        </g>
+        <path class="crack" id="crack1" d="M180 114 L175 130 L184 143 L177 156" fill="none" stroke="#5a3408" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="crack" id="crack2" d="M177 156 L185 168 L178 178 L180 186 M184 143 L198 148 M175 130 L162 128" fill="none" stroke="#5a3408" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+
+      <g id="wrapper">
+        <g class="wrap-half" id="wrap-l"><use href="#wrapArt" clip-path="url(#clipL)"/></g>
+        <g class="wrap-half" id="wrap-r"><use href="#wrapArt" clip-path="url(#clipR)"/></g>
+        <path id="tear" d="" fill="none" stroke="#fff6dc" stroke-width="2.5" stroke-linejoin="round"/>
+      </g>
     </svg>
 
     <div class="slip" id="slip" aria-live="polite">
       <p class="fortune" id="fortune"></p>
+      <p class="lucky" id="lucky"></p>
     </div>
   </main>
 
   <footer class="bottom">
-    <p class="hint" id="hint">Strappa la bustina<span>Striscia il dito: si strappa dove passi</span></p>
+    <p class="hint" id="hint">Strappa la bustina<span>Striscia il dito sopra, o picchietta</span></p>
     <div class="actions" id="actions" hidden>
       <button class="btn btn-main" id="again" type="button">Un altro biscotto</button>
       <button class="btn btn-ghost" id="share" type="button">Condividi</button>
@@ -140,179 +183,112 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
 (() => {
 'use strict';
 
-/*F-START*/
 const FORTUNES = [
-"Sei un coglione. Ma almeno adesso è ufficiale."
+  "Sei un coglione. Ma almeno adesso è ufficiale.",
+  "Il tuo futuro è luminoso. Peccato che tu non abbia pagato la bolletta.",
+  "Grandi cose ti attendono. Aspettano da un pezzo, quindi muovi il culo.",
+  "Chi dorme non piglia pesci. Tu non pigli un cazzo nemmeno da sveglio.",
+  "Oggi incontrerai una persona speciale. Lei incontrerà te e cambierà marciapiede.",
+  "La fortuna è cieca. Ma te ti ha visto benissimo e ha tirato dritto.",
+  "Hai un potenziale enorme. Di fare cazzate.",
+  "Confucio dice: chi cerca risposte in un biscotto ha già un problema.",
+  "Questo biscotto finto è la cosa migliore che ti è capitata oggi. Pensaci.",
+  "Non sei pigro. Sei in risparmio energetico dal 2009.",
+  "Qualcuno ti pensa intensamente. È l'Agenzia delle Entrate.",
+  "La risposta che cerchi è dentro di te. Però è sbagliata.",
+  "Sei unico. Per fortuna.",
+  "Presto riceverai denaro inaspettato. Scherzo, resti un poveraccio.",
+  "Il tuo QI e la temperatura di oggi sono lo stesso numero. In gradi Celsius.",
+  "Smettila di aprire biscotti e vai a lavorare, testa di cazzo.",
+  "Sei la prova vivente che l'evoluzione ogni tanto fa retromarcia.",
+  "Anche stavolta la dieta comincia lunedì, vero, culone?",
+  "Un saggio una volta disse una cosa bellissima. Non a te, tanto non ascolti un cazzo.",
+  "Il tuo ex sta meglio senza di te. Pure il tuo divano starebbe meglio.",
+  "Hai la grinta di un bradipo sotto camomilla.",
+  "Sorridi: domani andrà peggio.",
+  "Sei come il lunedì: nessuno ti vuole, ma arrivi lo stesso.",
+  "Il tuo angelo custode ha chiesto il trasferimento.",
+  "Hai appena scartato un biscotto che non esiste. È il punto più alto della tua settimana.",
+  "Hai il carisma di un PDF protetto da password.",
+  "Sei il motivo per cui sugli shampoo scrivono le istruzioni.",
+  "Diventerai ricco e famoso. In un universo parallelo dove non sei un pirla.",
+  "Le stelle dicono che oggi farai una figura di merda. Come ieri, del resto.",
+  "Segui i tuoi sogni. Tanto a letto ci passi già tutta la giornata.",
+  "L'amore sta bussando alla tua porta. Ha sbagliato piano.",
+  "Non è vero che non sai fare niente. Rompere i coglioni ti riesce benissimo.",
+  "Chi trova un amico trova un tesoro. Chi trova te trova una rogna.",
+  "Il tuo cervello è come questo biscotto: vuoto, con dentro una stronzata.",
+  "Respira. Rilassati. Resti un cretino, ma un cretino rilassato.",
+  "Oggi è il primo giorno del resto della tua vita di merda.",
+  "La pazienza è la virtù dei forti. Cioè di chi ti sopporta.",
+  "Riprova. Magari il prossimo biscotto ti stima di più. Non credo.",
+  "Hai aperto un'app per farti insultare da un biscotto. Fatti due domande.",
+  "Sei un genio incompreso. Soprattutto incompreso. Soprattutto non genio.",
+  "Il capo ti apprezza moltissimo. Quando sei in ferie.",
+  "Vai in palestra. Almeno sarai un coglione in forma.",
+  "Se la stupidità fosse energia, illumineresti Milano da solo.",
+  "Il tuo conto in banca e la tua dignità hanno una cosa in comune: sono sotto zero.",
+  "Buone notizie: non puoi cadere più in basso. Ah no, aspetta.",
+  "Qualcuno là fuori ti ama. Io non ci scommetterei un cazzo.",
+  "Sei una persona fantastica. Ahahah, no dai, ripigliati.",
+  "Mangia meno, muoviti di più e smettila di rompere il cazzo.",
+  "Il saggio indica la luna. Tu guardi il dito e poi te lo infili nel naso.",
+  "Il successo è dietro l'angolo. Tu però giri sempre in tondo, pirla.",
+  "Sei come il Wi-Fi dell'hotel: ci sei, ma non servi a un cazzo.",
+  "Tua madre dice a tutti che sei speciale. Non specifica mai in che senso.",
+  "Farai un lungo viaggio. Ti ci manderanno gli altri, e sai già dove.",
+  "Hai gli occhi di chi ha capito tutto. Peccato sia l'unica parte che finge bene.",
+  "Chi va piano va sano e va lontano. Tu sei fermo, quindi nessuna delle tre.",
+  "Sei sveglio come una domenica pomeriggio di agosto.",
+  "Prima di parlare conta fino a dieci. Se ci arrivi.",
+  "Il tuo spirito guida è un piccione che caga sulle macchine.",
+  "Non tutti i mali vengono per nuocere. Tu sì.",
+  "Oggi qualcuno riderà grazie a te. Di te, per la precisione.",
+  "Hai letto fin qui sperando in un complimento. Che tenerezza, coglione.",
+  "La vita ti sorride. È quel sorriso che si fa prima di una fregatura.",
+  "Stanotte hai fatto un sogno bellissimo. Poi ti sei svegliato ed eri ancora tu.",
+  "Sei il tipo che spinge le porte con scritto TIRARE. E poi insiste.",
+  "Un giorno ripenserai a questo momento e dirai: quanto tempo ho buttato nel cesso."
 ];
-/*F-END*/
 
-const RANKS = [[500,"Leggenda dell'umiliazione"],[250,"Zerbino professionista"],[120,"Coglione certificato"],[60,"Caso clinico"],[30,"Masochista"],[12,"Recidivo"],[1,"Dilettante"],[0,"Vergine di insulti"]];
+const RANKS = [[60,"Coglione certificato"],[30,"Caso clinico"],[15,"Masochista"],[5,"Recidivo"],[1,"Dilettante"],[0,"Vergine di insulti"]];
 const HINTS = {
-  wrapped: [
-    ["Strappa la bustina", "Striscia il dito: si strappa dove passi"],
-    ["Aprila, dai", "Trascina il dito sulla stagnola"],
-    ["Scartalo, genio", "Passa il dito sulla bustina, o picchietta"],
-    ["Non si apre da sola", "Strappala col dito, da dove ti pare"],
-    ["Forza, strappa", "Dove passa il dito, la bustina cede"],
-    ["Ce la fai ad aprirla?", "Un dito, una strisciata. Non è difficile"]
-  ],
-  cookie: [
-    ["Spezza il biscotto", "Picchiettalo finché cede"],
-    ["Rompilo", "Colpiscilo dove ti pare: si crepa lì"],
-    ["Dagli un paio di colpi", "Oppure un taglio secco col dito"],
-    ["Spaccalo, su", "Un colpo deciso, o tre da mollaccione"],
-    ["Ora tocca al biscotto", "Toccalo: prima si crepa, poi si apre"],
-    ["Non guardarlo, rompilo", "Picchietta o striscia il dito di taglio"]
-  ]
+  wrapped: ["Strappa la bustina", "Striscia il dito sopra, o picchietta"],
+  cookie:  ["Spezza il biscotto", "Picchiettalo tre volte, senza pietà"]
 };
-const TAGLINES = [
-  "100% INSULTI GARANTITI", "SENZA ZUCCHERI, SENZA PIETÀ", "CONTIENE VERITÀ SCOMODE",
-  "PUÒ CONTENERE TRACCE DI STIMA", "APRIRE LONTANO DAI PERMALOSI", "NON ADATTO AI DEBOLI DI EGO",
-  "PRODOTTO CON VERO DISPREZZO", "DA CONSUMARSI IN SILENZIO", "FARINA, ZUCCHERO, DISPREZZO",
-  "SCADE PRIMA DELLA TUA PAZIENZA", "TENERE LONTANO DALL'AUTOSTIMA", "RICETTA ORIGINALE DEL RANCORE"
-];
-const GLYPHS = ["福", "運", "吉", "壽", "龍", "發"];
-const GOLD = ["#f2c45a", "#fff0b8", "#c99a3a"], SILVER = ["#c9ced6", "#ffffff", "#9aa3ad"], REDS = ["#b3181a", "#ee4a3c", "#8a0f12"];
-const FOILS = [
-  { a: "#7a0c0f", b: "#e0302c", c: "#b3181a", d: "#ee4a3c", text: "#f2c45a", sub: "#fdebc8", seal: GOLD, rib: "#8a0f12" },
-  { a: "#8a6414", b: "#f0c858", c: "#c79a2e", d: "#ffe08a", text: "#7a0c0f", sub: "#5c0d0d", seal: REDS, rib: "#f2c45a" },
-  { a: "#0e4a3a", b: "#1f9a78", c: "#14705a", d: "#35b892", text: "#f2c45a", sub: "#e8fff6", seal: GOLD, rib: "#0e4a3a" },
-  { a: "#12245e", b: "#2f5fd0", c: "#1c3a8a", d: "#4a7cf0", text: "#f2c45a", sub: "#e6eeff", seal: SILVER, rib: "#12245e" },
-  { a: "#7d858f", b: "#e8ecf0", c: "#aab2bc", d: "#ffffff", text: "#a3161a", sub: "#5c0d0d", seal: REDS, rib: "#f2c45a" },
-  { a: "#101014", b: "#3a3a44", c: "#1c1c22", d: "#4a4a58", text: "#f2c45a", sub: "#fdebc8", seal: GOLD, rib: "#101014" },
-  { a: "#5a1466", b: "#b03ac4", c: "#7d2390", d: "#c95adc", text: "#f2c45a", sub: "#fbe9ff", seal: GOLD, rib: "#5a1466" }
-];
-const INKS = ["#1c3a8a", "#a3161a", "#23242b", "#0f5a44"];
-const ENTRIES = [
-  [{ transform: "translateY(-95%) rotate(-12deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
-  [{ transform: "translateX(-110%) rotate(-25deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
-  [{ transform: "translateX(110%) rotate(25deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
-  [{ transform: "scale(.2) rotate(140deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
-  [{ transform: "translateY(-95%) rotate(14deg)", opacity: 0 }, { transform: "none", opacity: 1 }]
-];
 
-/* ---------- small helpers ---------- */
 const $ = id => document.getElementById(id);
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
 };
-const R = (a, b) => a + Math.random() * (b - a);
-const pick = a => a[Math.floor(Math.random() * a.length)];
-const flip = () => (Math.random() < 0.5 ? -1 : 1);
-const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
-const n1 = v => Math.round(v * 10) / 10;
-const str = pts => pts.map(p => n1(p[0]) + "," + n1(p[1])).join(" ");
-const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const NS = "http://www.w3.org/2000/svg";
-function el(tag, attrs, parent) {
-  const e = document.createElementNS(NS, tag);
-  for (const k in attrs) e.setAttribute(k, attrs[k]);
-  if (parent) parent.appendChild(e);
-  return e;
-}
-function use(id, parent) {
-  const u = el("use", {}, parent);
-  u.setAttribute("href", "#" + id);
-  u.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + id);
-  return u;
-}
-const last = {};
-function pickNew(key, arr) {
-  let v;
-  do { v = pick(arr); } while (arr.length > 1 && v === last[key]);
-  last[key] = v;
-  return v;
-}
+const rand = (a, b) => a + Math.random() * (b - a);
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* affine matrices as [a,b,c,d,e,f] */
-function mk(deg, sc, cx, cy, dx, dy) {
-  const r = deg * Math.PI / 180, a = Math.cos(r) * sc, b = Math.sin(r) * sc;
-  return [a, b, -b, a, cx + dx - a * cx + b * cy, cy + dy - b * cx - a * cy];
-}
-const ap = (m, x, y) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
-const apv = (m, x, y) => [m[0] * x + m[2] * y, m[1] * x + m[3] * y];
-function inv(m) {
-  const det = m[0] * m[3] - m[1] * m[2];
-  const a = m[3] / det, b = -m[1] / det, c = -m[2] / det, d = m[0] / det;
-  return [a, b, c, d, -(a * m[4] + c * m[5]), -(b * m[4] + d * m[5])];
-}
-const mstr = m => "matrix(" + m.map(v => +v.toFixed(5)).join(" ") + ")";
+const stage = $('stage'), scene = $('scene'), cookie = $('cookie'), slip = $('slip');
+const wrapL = $('wrap-l'), wrapR = $('wrap-r'), tearLine = $('tear');
+const hint = $('hint'), actions = $('actions');
 
-const stage = $("stage"), scene = $("scene"), slip = $("slip");
-const backLayer = $("backLayer"), cookieLayer = $("cookieLayer"), frontLayer = $("frontLayer"), fxLayer = $("fxLayer"), dyn = $("dyn");
-const hint = $("hint"), actions = $("actions");
-
-function ctm() { const c = scene.getScreenCTM(); return [c.a, c.b, c.c, c.d, c.e, c.f]; }
-const toScene = (cx, cy) => ap(inv(ctm()), cx, cy);
-const toClient = (x, y) => ap(ctm(), x, y);
-
-/* ---------- ragged cuts ----------
-   A cut is a ragged line: origin o, unit axis u, normal n, samples [s, d] with s increasing.
-   It never doubles back, so each side of it is a simple polygon. */
-function cutPoint(c, s, d) { return [c.o[0] + c.u[0] * s + c.n[0] * d, c.o[1] + c.u[1] * s + c.n[1] * d]; }
-function cutD(c, s) {
-  const p = c.pts, L = p.length - 1;
-  if (s <= p[0][0]) return p[0][1];
-  if (s >= p[L][0]) return p[L][1];
-  let i = 1;
-  while (p[i][0] < s) i++;
-  const a = p[i - 1], b = p[i];
-  return a[1] + (b[1] - a[1]) * (s - a[0]) / ((b[0] - a[0]) || 1);
-}
-function cutSide(c, x, y) {
-  const rx = x - c.o[0], ry = y - c.o[1];
-  return rx * c.n[0] + ry * c.n[1] >= cutD(c, rx * c.u[0] + ry * c.u[1]) ? 1 : -1;
-}
-function sidePoly(c, side, widths) {
-  const p = c.pts, L = p.length - 1, B = 900, out = [];
-  const w = i => (widths ? side * widths[i] : 0);
-  out.push(cutPoint(c, p[0][0] - B, p[0][1] + w(0)));
-  for (let i = 0; i <= L; i++) out.push(cutPoint(c, p[i][0], p[i][1] + w(i)));
-  out.push(cutPoint(c, p[L][0] + B, p[L][1] + w(L)));
-  out.push(cutPoint(c, p[L][0] + B, side * B * 2));
-  out.push(cutPoint(c, p[0][0] - B, side * B * 2));
-  return str(out);
-}
-function randomCut(o, ang, half, step, drift, jag) {
-  const u = [Math.cos(ang), Math.sin(ang)], n = [-u[1], u[0]];
-  const walk = dir => {
-    const a = [];
-    let s = 0, d = 0, slope = R(-drift, drift);
-    while (s < half) {
-      const ds = R(step * 0.6, step * 1.4);
-      s += ds;
-      slope = slope * 0.65 + R(-drift, drift) * 0.55;
-      d += slope * ds + R(-jag, jag);
-      a.push([dir * s, d]);
-    }
-    return a;
-  };
-  return { o, u, n, pts: walk(-1).reverse().concat([[0, 0]], walk(1)) };
-}
-function cutLine(c, a, b) {
-  const out = [cutPoint(c, a, cutD(c, a))];
-  for (const q of c.pts) if (q[0] > a && q[0] < b) out.push(cutPoint(c, q[0], q[1]));
-  out.push(cutPoint(c, b, cutD(c, b)));
-  return out;
-}
-let clipN = 0;
-function addClip(points) {
-  const id = "c" + (++clipN);
-  el("polygon", { points }, el("clipPath", { id }, dyn));
-  return "url(#" + id + ")";
-}
-function inPoly(poly, x, y) {
-  let inside = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
-    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
-  }
-  return inside;
-}
+/* ---------- wrapper geometry ---------- */
+const JAG = [];
+for (let y = 40, i = 0; y <= 268; y += 12, i++) JAG.push([180 + (i % 2 ? 7 : -6) + ((i * 37) % 5) - 2, y]);
+const jagFwd = JAG.map(p => 'L' + p[0] + ' ' + p[1]).join(' ');
+$('clipLp').setAttribute('d', 'M-60 -40 L180 -40 ' + jagFwd + ' L180 360 L-60 360 Z');
+$('clipRp').setAttribute('d', 'M420 -40 L180 -40 ' + jagFwd + ' L180 360 L420 360 Z');
+tearLine.setAttribute('d', 'M' + JAG[0][0] + ' ' + JAG[0][1] + ' ' + jagFwd);
+(() => {
+  let zr = '', zl = '';
+  for (let y = 66, i = 0; y <= 250; y += 8, i++) zr += ' L' + (i % 2 ? 346 : 352) + ' ' + y;
+  for (let y = 250, i = 0; y >= 66; y -= 8, i++) zl += ' L' + (i % 2 ? 14 : 8) + ' ' + y;
+  const outline = 'M30 60 Q180 44 330 60' + zr + ' L330 256 Q180 272 30 256' + zl + ' Z';
+  const hole = 'M88 158 a92 60 0 1 0 184 0 a92 60 0 1 0 -184 0 Z';
+  $('wrapBody').setAttribute('d', outline + ' ' + hole);
+})();
+const tearLen = tearLine.getTotalLength ? tearLine.getTotalLength() : 260;
+tearLine.style.strokeDasharray = tearLen;
 
 /* ---------- sound + haptics ---------- */
-let ac = null, noise = null, tearGain = null, muted = store.get("bds.muted", false);
+let ac = null, noise = null, muted = store.get('bds.muted', false);
 function audio() {
   if (muted) return null;
   if (!ac) {
@@ -323,7 +299,7 @@ function audio() {
     const d = noise.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
   }
-  if (ac.state === "suspended") ac.resume();
+  if (ac.state === 'suspended') ac.resume();
   return ac;
 }
 function burst(type, freq, q, dur, gain, delay) {
@@ -337,621 +313,200 @@ function burst(type, freq, q, dur, gain, delay) {
   src.connect(f); f.connect(g); g.connect(a.destination);
   src.start(t, Math.random() * 0.5); src.stop(t + dur + 0.03);
 }
-/* one continuous hiss whose volume follows how fast the foil is tearing */
-function tearSound(level) {
-  if (muted || !ac) { if (tearGain) tearGain.gain.value = 0; if (muted || level <= 0) return; }
-  const a = audio(); if (!a) return;
-  if (!tearGain) {
-    const src = a.createBufferSource(); src.buffer = noise; src.loop = true;
-    const f = a.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 4300; f.Q.value = 0.6;
-    tearGain = a.createGain(); tearGain.gain.value = 0;
-    src.connect(f); f.connect(tearGain); tearGain.connect(a.destination);
-    src.start();
-  }
-  tearGain.gain.setTargetAtTime(level, a.currentTime, 0.025);
-}
 const sfx = {
-  crinkle() { burst("bandpass", R(3000, 8000), 0.8, R(0.02, 0.07), R(0.08, 0.22)); },
-  rip()     { for (let i = 0; i < 7; i++) burst("highpass", R(2500, 6500), 0.6, 0.06, 0.28, i * R(0.02, 0.04)); },
-  crack()   { burst("lowpass", R(1500, 2600), 1, R(0.05, 0.08), 0.6); burst("highpass", R(4500, 6500), 1, 0.022, 0.35); },
-  snap()    { burst("lowpass", R(1100, 1700), 1, 0.13, 0.95); burst("bandpass", R(2600, 3800), 2, 0.05, 0.55, 0.02);
-              burst("highpass", 6000, 1, 0.04, 0.4, 0.05); burst("lowpass", 260, 0.7, 0.09, 0.5); },
-  clack(v)  { burst("bandpass", R(1800, 3400), 3, 0.028, clamp(v / 1400, 0.05, 0.3)); },
-  paper()   { burst("bandpass", R(2200, 3000), 0.5, 0.3, 0.09, 0.2); }
+  crinkle() { burst('bandpass', rand(3000, 8000), 0.8, rand(0.03, 0.08), rand(0.12, 0.28)); },
+  rip()     { for (let i = 0; i < 9; i++) burst('highpass', rand(2500, 6000), 0.6, 0.07, 0.3, i * 0.035); },
+  crack()   { burst('lowpass', 1900, 1, 0.07, 0.6); burst('highpass', 5200, 1, 0.025, 0.35); },
+  snap()    { burst('lowpass', 1400, 1, 0.12, 0.9); burst('bandpass', 3200, 2, 0.05, 0.5, 0.03); burst('highpass', 6000, 1, 0.04, 0.4, 0.06); },
+  paper()   { burst('bandpass', 2600, 0.5, 0.28, 0.1, 0.18); }
 };
 function buzz(ms) {
   try { if (navigator.vibrate) { navigator.vibrate(ms); return; } } catch {}
-  try { $("haptic").click(); } catch {}   // iOS: toggling a native switch gives a light tap
+  try { $('haptic').click(); } catch {}   // iOS: toggling a native switch gives a light tap
 }
 
-/* ---------- loose pieces: gravity, air, table ---------- */
-const bodies = [];
-let raf = 0, lastT = 0, clacks = 0;
-function addBody(b) {
-  bodies.push(Object.assign({ x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0, g: 1500, drag: 0, flutter: 0, ff: 0, fp: 0,
-    floor: null, rest: 0.28, r: 4, wl: 0, wr: 360, age: 0, life: Infinity, fade: 0, ground: false, sleep: false, clack: false }, b));
-  kick();
-}
-function place(b) {
-  const t = "translate(" + n1(b.x) + " " + n1(b.y) + ") rotate(" + n1(b.a) + " " + n1(b.cx) + " " + n1(b.cy) + ")";
-  for (const e of b.els) e.setAttribute("transform", t);
-}
-function stepBodies(dt) {
-  let awake = false;
-  for (let i = bodies.length - 1; i >= 0; i--) {
-    const b = bodies[i];
-    if (b.sleep) continue;
-    b.age += dt;
-    b.vy += b.g * dt;
-    if (b.drag) { const k = Math.exp(-b.drag * dt); b.vx *= k; b.vy *= k; b.va *= Math.exp(-b.drag * 0.4 * dt); }
-    if (b.flutter) b.vx += Math.sin(b.age * b.ff + b.fp) * b.flutter * dt;
-    b.x += b.vx * dt; b.y += b.vy * dt; b.a += b.va * dt;
-    if (b.floor != null) {
-      if (b.cy + b.y + b.r > b.floor) {
-        b.y = b.floor - b.r - b.cy;
-        if (b.vy > 0) {
-          const hit = b.vy;
-          b.vy = -hit * b.rest; b.vx *= 0.72; b.va = b.va * 0.5 + b.vx * 0.6;
-          if (b.clack && hit > 160 && clacks < 12) { clacks++; sfx.clack(hit); }
-          if (hit * b.rest < 50) { b.vy = 0; b.ground = true; }
-        }
-      }
-      if (b.ground) {
-        const k = Math.exp(-7 * dt); b.vx *= k; b.va *= k;
-        if (Math.abs(b.vx) < 2 && Math.abs(b.va) < 5) b.sleep = true;
-      }
-      const cx = b.cx + b.x;
-      if (cx < b.wl) { b.x = b.wl - b.cx; b.vx = Math.abs(b.vx) * 0.4; }
-      else if (cx > b.wr) { b.x = b.wr - b.cx; b.vx = -Math.abs(b.vx) * 0.4; }
-    }
-    if (b.age > b.life) { for (const e of b.els) e.remove(); bodies.splice(i, 1); continue; }
-    if (b.fade && b.age > b.life - b.fade) for (const e of b.els) e.setAttribute("opacity", n1((b.life - b.age) / b.fade));
-    place(b);
-    if (!b.sleep) awake = true;
-  }
-  return awake;
-}
-function kick() { if (!raf) { lastT = performance.now(); raf = requestAnimationFrame(frame); } }
-function frame(now) {
-  raf = 0;
-  const dt = clamp((now - lastT) / 1000, 0.001, 0.034);
-  lastT = now;
-  let busy = false;
-  if (tear && !tear.done) {
-    const adv = Math.min(tear.goal - tear.tip, tear.speed * dt);
-    if (adv > 0.01) {
-      growTear(adv);
-      if (tear.tip > tear.sOut - 24) tear.goal = tear.sOut + 12;   // the last strip gives way by itself
-      busy = true;
-      tearSound(clamp(adv / dt / 1300, 0.05, 1) * 0.3);
-      tear.noise += adv;
-      if (tear.noise > 13) { tear.noise = 0; sfx.crinkle(); shimmer(); }
-      checkTear();
-    } else tearSound(0);
-  }
-  if (stepBodies(dt)) busy = true;
-  if (busy) kick();
-}
+/* ---------- state ---------- */
+let state = 'wrapped', progress = 0, hits = 0, lastCrinkle = 0, current = '';
+let count = store.get('bds.count', 0);
 
-/* ---------- the bag ---------- */
-const BAG = { x0: 6, x1: 354, y0: 44, y1: 272 };
-const BIG = "M-600 -600H1000V1000H-600Z";
-const inBag = (x, y) => x > BAG.x0 && x < BAG.x1 && y > BAG.y0 && y < BAG.y1;
-let wr = null, tear = null;
-
-function buildWrapper() {
-  const foil = pickNew("foil", FOILS);
-  [foil.a, foil.b, foil.c, foil.d, foil.c, foil.a].forEach((c, i) => $("f" + i).setAttribute("stop-color", c));
-  foil.seal.forEach((c, i) => $("s" + i).setAttribute("stop-color", c));
-  const ga = R(0.25, 1.3), gf = $("gFoil");
-  gf.setAttribute("x2", n1(Math.cos(ga))); gf.setAttribute("y2", n1(Math.sin(ga)));
-
-  let zr = "", zl = "";
-  for (let y = 66, i = 0; y <= 250; y += 8, i++) zr += " L" + (i % 2 ? 346 : 352) + " " + y;
-  for (let y = 250, i = 0; y >= 66; y -= 8, i++) zl += " L" + (i % 2 ? 14 : 8) + " " + y;
-  const outline = "M30 60 Q180 44 330 60" + zr + " L330 256 Q180 272 30 256" + zl + " Z";
-  const rx = n1(R(84, 96)), ry = n1(R(54, 62)), wy = 158;
-  const hole = "M" + (180 - rx) + " " + wy + " a" + rx + " " + ry + " 0 1 0 " + (2 * rx) + " 0 a" + rx + " " + ry + " 0 1 0 " + (-2 * rx) + " 0 Z";
-  $("outClipP").setAttribute("d", outline);
-  $("bodyClipP").setAttribute("d", outline + " " + hole);
-
-  const facet = (lo, hi) => {
-    const cx = R(10, 350), cy = R(48, 268), a0 = R(0, 6.28), pts = [];
-    for (let j = 0; j < 3; j++) { const a = a0 + j * 2.09 + R(-0.5, 0.5), r = R(14, 46); pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
-    return '<polygon points="' + str(pts) + '" fill="' + (Math.random() < 0.5 ? "#fff" : "#000") + '" opacity="' + R(lo, hi).toFixed(2) + '"/>';
-  };
-  let fac = "", facBack = "";
-  for (let i = 0; i < 32; i++) fac += facet(0.03, 0.14);
-  for (let i = 0; i < 14; i++) facBack += facet(0.04, 0.12);
-
-  const tag = pickNew("tag", TAGLINES), glyph = pick(GLYPHS);
-  const ribs = "M14 58V258M20 58V258M26 58V258M334 58V258M340 58V258M346 58V258";
-  $("wrapBack").innerHTML =
-    '<path d="' + outline + '" fill="url(#gInside)"/>' +
-    '<g clip-path="url(#outClip)">' + facBack + '<ellipse cx="180" cy="176" rx="124" ry="52" fill="#000" opacity=".14"/></g>';
-  $("wrapFront").innerHTML =
-    '<path d="' + outline + " " + hole + '" fill="url(#gFoil)" fill-rule="evenodd"/>' +
-    '<g clip-path="url(#bodyClip)" id="facets">' + fac + '<rect x="0" y="40" width="360" height="236" fill="url(#gVol)"/></g>' +
-    '<ellipse cx="180" cy="' + wy + '" rx="' + rx + '" ry="' + ry + '" fill="#fff" opacity=".13"/>' +
-    '<path d="M' + n1(180 - rx * 0.82) + " " + n1(wy - ry * 0.42) + " Q" + n1(180 - rx * 0.45) + " " + n1(wy - ry * 0.92) + " " + n1(180 + rx * 0.1) + " " + n1(wy - ry * 0.9) +
-      '" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".5"/>' +
-    '<ellipse cx="180" cy="' + wy + '" rx="' + rx + '" ry="' + ry + '" fill="none" stroke="url(#gSeal)" stroke-width="3"/>' +
-    '<g clip-path="url(#outClip)"><rect x="6" y="56" width="25" height="204" fill="url(#gSeal)"/><rect x="329" y="56" width="25" height="204" fill="url(#gSeal)"/>' +
-      '<path d="' + ribs + '" stroke="' + foil.rib + '" stroke-width="1.2" opacity=".5"/></g>' +
-    '<text x="180" y="84" text-anchor="middle" font-family="\'Bowlby One\',\'Arial Black\',sans-serif" font-size="13.5" letter-spacing="1.5" fill="' + foil.text + '">BISCOTTO DELLA SFIGA</text>' +
-    '<text x="180" y="243" text-anchor="middle" font-family="\'Figtree\',system-ui,sans-serif" font-weight="700" font-size="9.5" letter-spacing="' + (tag.length > 26 ? 1.2 : 2.2) + '" fill="' + foil.sub + '">' + tag + "</text>" +
-    '<text x="58" y="170" text-anchor="middle" font-size="34" fill="' + foil.text + '">' + glyph + "</text>" +
-    '<text x="302" y="170" text-anchor="middle" font-size="34" fill="' + foil.text + '">' + glyph + "</text>" +
-    '<path d="M40 60 Q180 46 320 60" fill="none" stroke="#fff" stroke-width="2" opacity=".35"/>';
-
-  const M = mk(R(-8, 8), 1, 180, 158, R(-5, 5), R(-5, 5));
-  wr = { M, Mi: inv(M) };
-  wr.back = el("g", { transform: mstr(M) }, backLayer);
-  use("wrapBack", wr.back);
-  wr.front = el("g", { transform: mstr(M) }, frontLayer);
-  use("wrapFront", el("g", { "clip-path": "url(#tearClip)" }, wr.front));
-  const eg = el("g", { "clip-path": "url(#outClip)", fill: "none", stroke: "#f6f8fa", "stroke-width": 1.5, "stroke-linejoin": "round", opacity: 0.9 }, wr.front);
-  wr.eA = el("polyline", { points: "" }, eg);
-  wr.eB = el("polyline", { points: "" }, eg);
-  $("tearClipP").setAttribute("d", BIG);
-}
-function shimmer() {
-  const f = $("facets"); if (!f) return;
-  for (let i = 0; i < 4; i++) {
-    const c = f.children[Math.floor(Math.random() * (f.children.length - 1))];
-    if (c && c.tagName === "polygon") c.setAttribute("opacity", R(0.03, 0.17).toFixed(2));
-  }
-}
-
-/* the tear starts at the edge behind the finger and chases it across the bag */
-function startTear(o, u) {
-  const n = [-u[1], u[0]];
-  let s0 = -1e9, s1 = 1e9;
-  for (const [p, d, lo, hi] of [[o[0], u[0], BAG.x0, BAG.x1], [o[1], u[1], BAG.y0, BAG.y1]]) {
-    if (Math.abs(d) < 1e-6) continue;
-    const a = (lo - p) / d, b = (hi - p) / d;
-    s0 = Math.max(s0, Math.min(a, b)); s1 = Math.min(s1, Math.max(a, b));
-  }
-  tear = { o, u, n, pts: [[s0 - 4, 0]], sIn: s0, sOut: s1, tip: s0 - 4, d: 0, fd: 0, wander: 0, goal: s0,
-           near: false, next: R(4.5, 9), speed: 1800, noise: 0, done: false };
-}
-function growTear(adv) {
-  const t = tear;
-  while (adv > 0) {
-    const lastP = t.pts[t.pts.length - 1];
-    const step = Math.min(adv, Math.max(0.01, lastP[0] + t.next - t.tip));
-    t.tip += step; adv -= step;
-    const want = t.near ? t.fd : t.wander;
-    t.d += clamp((want - t.d) * 0.6, -step * 1.1, step * 1.1);
-    if (t.tip >= lastP[0] + t.next - 1e-6) {
-      t.pts.push([t.tip, t.d + R(-1.7, 1.7)]);
-      t.next = R(4.5, 9);
-      t.wander = t.near ? t.d : clamp(t.wander + R(-7, 7), -34, 34);
-    }
-  }
-  renderTear();
-}
-const gapAt = (t, s) => Math.min(13, Math.max(0, t.tip - s) * 0.085);
-function renderTear() {
-  const t = tear, pts = t.pts.slice();
-  if (t.tip > pts[pts.length - 1][0] + 0.01) pts.push([t.tip, t.d]);
-  const up = [], dn = [];
-  for (const q of pts) { const w = gapAt(t, q[0]); up.push(cutPoint(t, q[0], q[1] + w)); dn.push(cutPoint(t, q[0], q[1] - w)); }
-  wr.eA.setAttribute("points", str(up));
-  wr.eB.setAttribute("points", str(dn));
-  $("tearClipP").setAttribute("d", BIG + " M" + str(up.concat(dn.reverse())).replace(/ /g, " L") + " Z");
-}
-function checkTear() {
-  const t = tear, p = cutPoint(t, t.tip, t.d);
-  if (t.tip >= t.sOut + 3 || (t.tip > t.sIn + 24 && !inBag(p[0], p[1]))) splitWrapper();
-}
-function tearMove(lx, ly, dist) {
-  if (!tear) {
-    if (!inBag(lx, ly)) return;
-    const dx = lx - down.ax, dy = ly - down.ay, d = Math.hypot(dx, dy);
-    if (d < 12) return;
-    startTear([lx, ly], [dx / d, dy / d]);
-    tear.goal = 0;
-  } else {
-    const t = tear, rx = lx - t.o[0], ry = ly - t.o[1];
-    const fs = rx * t.u[0] + ry * t.u[1];
-    t.fd = rx * t.n[0] + ry * t.n[1];
-    t.near = Math.abs(fs - t.tip) < 80;
-    t.goal = Math.min(t.sOut + 12, Math.max(t.goal + dist * 0.55, fs));
-    t.speed = 1800;
-  }
-  kick();
-}
-function tearTap(lx, ly) {
-  if (!tear) {
-    const x = clamp(lx, BAG.x0 + 20, BAG.x1 - 20), y = clamp(ly, BAG.y0 + 16, BAG.y1 - 16);
-    const ang = Math.hypot(180 - x, 158 - y) < 36 ? R(0, 6.283) : Math.atan2(158 - y, 180 - x) + R(-0.7, 0.7);
-    startTear([x, y], [Math.cos(ang), Math.sin(ang)]);
-  }
-  const t = tear;
-  t.near = false; t.speed = 750;
-  t.goal = Math.min(t.sOut + 12, Math.max(t.goal, t.tip) + (t.sOut - t.sIn) * R(0.3, 0.42));
-  kick();
-}
-function splitWrapper() {
-  const t = tear;
-  t.done = true; state = "busy";
-  if (t.tip > t.pts[t.pts.length - 1][0] + 0.5) t.pts.push([t.tip, t.d]);
-  const widths = t.pts.map(q => gapAt(t, q[0]));
-  tearSound(0); sfx.rip(); buzz(30);
-  wr.back.remove(); wr.front.remove();
-  if (!calm) for (const side of [1, -1]) {
-    const back = el("g", {}, backLayer);
-    use("wrapBack", el("g", { transform: mstr(wr.M), "clip-path": addClip(sidePoly(t, side)) }, back));
-    const front = el("g", {}, frontLayer);
-    const fi = el("g", { transform: mstr(wr.M), "clip-path": addClip(sidePoly(t, side, widths)) }, front);
-    use("wrapFront", fi);
-    el("polyline", { points: str(t.pts.map((q, i) => cutPoint(t, q[0], q[1] + side * widths[i]))), fill: "none",
-      stroke: "#f6f8fa", "stroke-width": 1.5, "stroke-linejoin": "round", opacity: 0.9 }, el("g", { "clip-path": "url(#outClip)" }, fi));
-    let sx = 0, sy = 0, n = 0;
-    for (let y = BAG.y0 + 10; y < BAG.y1; y += 20) for (let x = BAG.x0 + 10; x < BAG.x1; x += 20)
-      if (cutSide(t, x, y) === side) { sx += x; sy += y; n++; }
-    const C = n ? ap(wr.M, sx / n, sy / n) : ap(wr.M, 180, 158);
-    const nv = apv(wr.M, t.n[0] * side, t.n[1] * side), sp = R(230, 350);
-    addBody({ els: [back, front], cx: C[0], cy: C[1], vx: nv[0] * sp + R(-30, 30) + fling[0] * 0.2, vy: nv[1] * sp - R(60, 150) + fling[1] * 0.2,
-      va: R(70, 220) * flip(), g: 650, drag: 1.5, flutter: R(250, 520), ff: R(5, 9), fp: R(0, 6), life: R(1.7, 2.3), fade: 0.45 });
-  }
-  setTimeout(() => {
-    state = "cookie"; setHint("cookie");
-    if (!calm && ck.wob.animate) ck.wob.animate(
-      [{ transform: "translateY(0)" }, { transform: "translateY(5px) rotate(" + R(-3, 3).toFixed(1) + "deg)" }, { transform: "translateY(0)" }],
-      { duration: 260, easing: "ease-out" });
-  }, calm ? 40 : 340);
-}
-
-/* ---------- the cookie ---------- */
-let ck = null;
-const cubic = (a, b, c, d, t) => {
-  const m = 1 - t, k0 = m * m * m, k1 = 3 * m * m * t, k2 = 3 * m * t * t, k3 = t * t * t;
-  return [k0 * a[0] + k1 * b[0] + k2 * c[0] + k3 * d[0], k0 * a[1] + k1 * b[1] + k2 * c[1] + k3 * d[1]];
-};
-function lobePoly(P) {
-  const out = [];
-  for (let k = 0; k < 3; k++) for (let i = 0; i < 12; i++) out.push(cubic(P[k * 3], P[k * 3 + 1], P[k * 3 + 2], P[k * 3 + 3], i / 12));
-  out.push(P[9]);
-  return out;
-}
-const inCookie = (x, y) => inPoly(ck.polyL, x, y) || inPoly(ck.polyR, x, y);
-
-function buildCookie() {
-  const hue = R(29, 40), l = R(-6, 5);
-  const hsl = (h, s, li) => "hsl(" + n1(h) + "," + s + "%," + n1(li) + "%)";
-  const tones = [hsl(hue + 6, 88, 76 + l), hsl(hue, 76, 62 + l), hsl(hue - 6, 66, 46 + l)];
-  tones.forEach((c, i) => $("bk" + i).setAttribute("stop-color", c));
-  const rim = hsl(hue - 8, 70, 33 + l), pale = hsl(hue + 8, 90, 86);
-
-  const top = [180, 114 + R(-4, 5)], bot = [180, 186 + R(-5, 5)];
-  const base = [[150, 84], [92, 90], [70, 136], [53, 172], [62, 216], [94, 236], [104, 204], [140, 188]];
-  const lobe = mir => [top].concat(base.map(p => [(mir ? 360 - p[0] : p[0]) + R(-5, 5), p[1] + R(-5, 5)]), [bot]);
-  const L = lobe(false), Rt = lobe(true);
-  const pt = p => n1(p[0]) + " " + n1(p[1]);
-  const dOf = P => "M" + pt(P[0]) + " C" + pt(P[1]) + " " + pt(P[2]) + " " + pt(P[3]) + " C" + pt(P[4]) + " " + pt(P[5]) + " " + pt(P[6]) +
-                   " C" + pt(P[7]) + " " + pt(P[8]) + " " + pt(P[9]) + " Z";
-  const dL = dOf(L), dR = dOf(Rt);
-  $("cookieClip").innerHTML = '<path d="' + dL + '"/><path d="' + dR + '"/>';
-
-  ck = { polyL: lobePoly(L), polyR: lobePoly(Rt), tones, rim, pale, need: pick([2, 3, 3, 3, 4]), hits: 0, cut: null, hit: null };
-
-  let dots = "";
-  for (let i = 0, made = 0; i < 80 && made < 16; i++) {
-    const x = R(60, 300), y = R(92, 232);
-    if (!inCookie(x, y)) continue;
-    made++;
-    dots += made % 5 === 0
-      ? '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(2.4, 4)) + '" fill="' + pale + '" opacity=".45" stroke="' + rim + '" stroke-opacity=".5" stroke-width=".8"/>'
-      : '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(0.9, 2.3)) + '" fill="' + rim + '" opacity="' + R(0.35, 0.6).toFixed(2) + '"/>';
-  }
-  let patches = "";
-  for (let i = 0; i < 4; i++)
-    patches += '<ellipse cx="' + n1(R(80, 280)) + '" cy="' + n1(R(110, 220)) + '" rx="' + n1(R(14, 34)) + '" ry="' + n1(R(8, 20)) + '" fill="' + rim + '" opacity="' + R(0.06, 0.16).toFixed(2) + '"/>';
-  const ty = top[1], by = bot[1];
-  $("cookieArt").innerHTML =
-    '<path d="' + dL + '" fill="url(#gBake)" stroke="' + rim + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-    '<path d="' + dR + '" fill="url(#gBake)" stroke="' + rim + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-    '<g clip-path="url(#cookieClip)">' +
-      '<path d="' + dL + '" fill="none" stroke="' + rim + '" stroke-width="10" opacity=".22"/>' +
-      '<path d="' + dR + '" fill="none" stroke="' + rim + '" stroke-width="10" opacity=".3"/>' + patches +
-      '<path d="M180 ' + n1(ty + 4) + " C158 " + n1(ty + 20) + " 152 " + n1(by - 20) + " 180 " + n1(by) + " C208 " + n1(by - 20) + " 202 " + n1(ty + 20) + " 180 " + n1(ty + 4) + 'Z" fill="' + rim + '" opacity=".5"/>' +
-      '<path d="M180 ' + n1(ty + 2) + " C146 " + n1(ty + 10) + " 112 160 " + n1(L[6][0] + 1) + " " + n1(L[6][1] - 4) + '" fill="none" stroke="' + rim + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
-      '<path d="M180 ' + n1(ty + 2) + " C214 " + n1(ty + 10) + " 248 160 " + n1(Rt[6][0] - 1) + " " + n1(Rt[6][1] - 4) + '" fill="none" stroke="' + rim + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
-      '<path d="M84 134 C96 108 128 98 154 108" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".55"/>' +
-      '<path d="M206 108 C232 98 262 108 276 132" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".4"/>' + dots +
-    "</g>";
-
-  ck.sc = R(0.93, 1.03);
-  ck.M = mk(R(-14, 14), ck.sc, 180, 165, R(-5, 5), R(-4, 4));
-  ck.Mi = inv(ck.M);
-  ck.wob = el("g", { style: "transform-origin:180px 165px" }, cookieLayer);
-  const baseG = el("g", { transform: mstr(ck.M) }, ck.wob);
-  use("cookieArt", baseG);
-  ck.cracks = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, baseG);
-}
-function crackLine(pts, w) {
-  el("polyline", { points: str(pts.map(p => [p[0] + 0.9, p[1] + 0.9])), stroke: ck.pale, "stroke-width": n1(w * 0.45), opacity: 0.55 }, ck.cracks);
-  return el("polyline", { points: str(pts), stroke: "#4e2c06", "stroke-width": w, opacity: 0.88 }, ck.cracks);
-}
-function twig(x, y, ang, len) {
-  const pts = [[x, y]];
-  for (let k = 0, n = 2 + Math.floor(R(0, 3)); k < n; k++) {
-    ang += R(-0.6, 0.6);
-    x += Math.cos(ang) * len / n; y += Math.sin(ang) * len / n;
-    pts.push([x, y]);
-  }
-  crackLine(pts, R(1, 1.7));
-}
-function hitCookie(sx, sy, dir, power) {
-  let p = ap(ck.Mi, sx, sy);
-  const home = p[0] < 180 ? [140, 160] : [220, 160];
-  for (let i = 0; i < 30 && !inCookie(p[0], p[1]); i++) p = [p[0] + (home[0] - p[0]) * 0.15, p[1] + (home[1] - p[1]) * 0.15];
-  if (!ck.cut) {
-    let ang = Math.PI / 2 + R(-0.95, 0.95);
-    if (dir) { const v = apv(ck.Mi, dir[0], dir[1]); ang = Math.atan2(v[1], v[0]); }
-    ck.cut = randomCut(p, ang, 240, 9, 0.32, 2.4);
-    ck.hit = p;
-    ck.ext = [R(0.7, 1.25), R(0.7, 1.25)];
-  }
-  ck.hits += power;
-  buzz(15);
-  if (ck.hits >= ck.need) { breakCookie(); return; }
-  sfx.crack();
-  if (!calm && ck.wob.animate) ck.wob.animate(
-    [{ transform: "none" }, { transform: "translate(" + R(-5, 5).toFixed(1) + "px," + R(2, 5).toFixed(1) + "px) rotate(" + R(-4, 4).toFixed(1) + "deg) scale(1.03,.97)" },
-     { transform: "translate(" + R(-3, 3).toFixed(1) + "px,-2px) rotate(" + R(-2, 2).toFixed(1) + "deg)" }, { transform: "none" }],
-    { duration: 230, easing: "ease-out" });
-
-  const c = ck.cut, len = 24 + 64 * ck.hits / ck.need, a = -len * ck.ext[0], b = len * ck.ext[1];
-  if (ck.main) { ck.main.previousSibling.remove(); ck.main.remove(); }
-  ck.main = crackLine(cutLine(c, a, b), 2.3);
-  const axis = Math.atan2(c.u[1], c.u[0]);
-  for (let k = 0, n = 1 + Math.floor(R(0, 3)); k < n; k++) {
-    const s = R(a, b), o = cutPoint(c, s, cutD(c, s));
-    twig(o[0], o[1], axis + flip() * R(0.5, 1.3) + (Math.random() < 0.5 ? Math.PI : 0), R(8, 26));
-  }
-  if (Math.hypot(p[0] - ck.hit[0], p[1] - ck.hit[1]) > 12)
-    for (let k = 0, n = 2 + Math.floor(R(0, 3)), a0 = R(0, 6.28); k < n; k++) twig(p[0], p[1], a0 + k * 6.28 / n + R(-0.4, 0.4), R(7, 18));
-  const H = ap(ck.M, p[0], p[1]);
-  spawnCrumbs(H, 3 + Math.floor(R(0, 4)), 0.55);
-}
-function spawnCrumbs(H, n, power) {
-  if (calm) return;
-  for (let i = 0; i < n && fxLayer.childElementCount < 70; i++) {
-    const r = R(1.2, 4.2), k = 3 + Math.floor(R(0, 3)), pts = [];
-    for (let j = 0; j < k; j++) { const a = j / k * 6.283 + R(-0.4, 0.4), q = r * R(0.6, 1); pts.push([H[0] + Math.cos(a) * q, H[1] + Math.sin(a) * q]); }
-    const e = el("polygon", { points: str(pts), fill: pick(ck.tones) }, fxLayer);
-    const ang = R(-2.9, -0.25), sp = R(60, 330) * power;
-    addBody({ els: [e], cx: H[0], cy: H[1], r: r * 0.6, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, va: R(-900, 900),
-      floor: 272 + R(-10, 12), rest: 0.2, wl: 4, wr: 356 });
-  }
-}
-function dust(H) {
-  if (calm) return;
-  for (let i = 0; i < 7; i++) {
-    const e = el("circle", { cx: n1(H[0]), cy: n1(H[1]), r: n1(R(5, 11)), fill: ck.pale, opacity: 0, style: "transform-box:fill-box;transform-origin:center" }, fxLayer);
-    if (!e.animate) { e.remove(); continue; }
-    e.animate([{ transform: "translate(0,0) scale(.3)", opacity: 0.5 },
-               { transform: "translate(" + R(-60, 60).toFixed(0) + "px," + R(-50, 10).toFixed(0) + "px) scale(" + R(1.6, 2.6).toFixed(1) + ")", opacity: 0 }],
-              { duration: R(420, 820), easing: "ease-out" }).onfinish = () => e.remove();
-  }
-}
-function breakCookie() {
-  state = "open";
-  const c = ck.cut;
-  const sides = { 1: [[[c, 1]]], "-1": [[[c, -1]]] };
-  const extra = pick([0, 1, 1, 1, 2, 2]), order = Math.random() < 0.5 ? [1, -1] : [-1, 1];
-  for (let k = 0; k < extra; k++) {
-    const side = order[k], s0 = R(-42, 42), o2 = cutPoint(c, s0, cutD(c, s0));
-    const c2 = randomCut(o2, Math.atan2(c.u[1], c.u[0]) + flip() * R(0.75, 1.45), 260, 9, 0.28, 2.2);
-    sides[side] = [[[c, side], [c2, 1]], [[c, side], [c2, -1]]];
-  }
-  const parts = sides[1].concat(sides[-1]);
-  const stats = parts.map(() => ({ n: 0, sx: 0, sy: 0, pts: [] }));
-  let total = 0;
-  for (let y = 78; y <= 246; y += 6) for (let x = 48; x <= 312; x += 6) {
-    if (!inCookie(x, y)) continue;
-    total++;
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i].every(q => cutSide(q[0], x, y) === q[1])) { const st = stats[i]; st.n++; st.sx += x; st.sy += y; st.pts.push([x, y]); break; }
-    }
-  }
-  ck.wob.remove();
-  $("shadow").setAttribute("opacity", 0.14);
-  const H = ap(ck.M, ck.hit[0], ck.hit[1]);
-  sfx.snap(); sfx.paper(); buzz(60);
-  clacks = 0;
-
-  parts.forEach((cons, i) => {
-    const st = stats[i];
-    if (st.n < 5) { if (st.n) spawnCrumbs(ap(ck.M, st.sx / st.n, st.sy / st.n), 4, 0.6); return; }
-    const cx = st.sx / st.n, cy = st.sy / st.n;
-    let rmax = 0;
-    for (const q of st.pts) rmax = Math.max(rmax, Math.hypot(q[0] - cx, q[1] - cy));
-    const g = el("g", {}, cookieLayer);
-    let host = el("g", { transform: mstr(ck.M), "clip-path": addClip(sidePoly(cons[0][0], cons[0][1])) }, g);
-    if (cons[1]) host = el("g", { "clip-path": addClip(sidePoly(cons[1][0], cons[1][1])) }, host);
-    use("cookieArt", host);
-    const rimG = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linejoin": "round" }, host);
-    for (const q of cons) {
-      const line = str(cutLine(q[0], -230, 230));
-      el("polyline", { points: line, stroke: ck.pale, "stroke-width": 7 }, rimG);
-      el("polyline", { points: line, stroke: ck.rim, "stroke-width": 1.5, opacity: 0.75 }, rimG);
-    }
-    const C = ap(ck.M, cx, cy);
-    let ox = C[0] - H[0], oy = C[1] - H[1];
-    const d = Math.hypot(ox, oy) || 1; ox /= d; oy /= d;
-    const small = 1 - st.n / total, sp = R(110, 190) * (0.7 + small);
-    const floor = 268 + R(-5, 7), r = Math.max(8, rmax * 0.55 * ck.sc);
-    const b = { els: [g], cx: C[0], cy: C[1], r, vx: ox * sp + R(-25, 25), vy: oy * sp * 0.5 - R(140, 260),
-      va: (ox >= 0 ? 1 : -1) * R(90, 260) * (0.6 + small * 1.6) * (Math.random() < 0.2 ? -1 : 1),
-      floor, rest: R(0.2, 0.34), wl: 22 + r, wr: 338 - r, clack: true };
-    if (calm) { b.x = clamp(C[0] + ox * 80, b.wl, b.wr) - C[0]; b.y = floor - r - C[1]; b.a = R(-35, 35); place(b); }
-    else addBody(b);
-  });
-  spawnCrumbs(H, 14 + Math.floor(R(0, 10)), 1);
-  dust(H);
-  showSlip(H);
-  count++; store.set("bds.count", count); renderTally();
-  hint.hidden = true; actions.hidden = false;
-  stage.setAttribute("aria-label", "Bigliettino: " + current);
-}
-
-/* ---------- the slip ---------- */
-let current = "", deck = null, deckOrder = null;
-function mulberry(a) {
-  return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
-}
-/* every slip comes out once before any repeats: a shuffled deck remembered as seed + position */
-function nextFortune() {
-  const N = FORTUNES.length;
-  if (!deck) deck = store.get("bds.deck", null);
-  if (!deck || deck.n !== N || !(deck.pos >= 0 && deck.pos < N)) { deck = { seed: Math.floor(Math.random() * 2147483647), pos: 0, n: N }; deckOrder = null; }
-  if (!deckOrder) {
-    const rnd = mulberry(deck.seed);
-    deckOrder = FORTUNES.map((_, i) => i);
-    for (let i = N - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); const t = deckOrder[i]; deckOrder[i] = deckOrder[j]; deckOrder[j] = t; }
-  }
-  const text = FORTUNES[deckOrder[deck.pos]];
-  deck.pos++;
-  if (deck.pos >= N) { deck = { seed: Math.floor(Math.random() * 2147483647), pos: 0, n: N }; deckOrder = null; }
-  store.set("bds.deck", deck);
-  return text;
-}
-function showSlip(H) {
-  current = nextFortune();
-  const f = $("fortune");
-  f.textContent = current;
-  f.classList.toggle("long", current.length > 92);
-  const rot = R(-4, 4);
-  slip.style.setProperty("--rot", rot.toFixed(1) + "deg");
-  slip.style.setProperty("--ink", pickNew("ink", INKS));
-  slip.style.top = R(6, 13).toFixed(1) + "%";
-  slip.classList.add("show");
-  if (calm || !slip.animate) return;
-  const sr = stage.getBoundingClientRect(), w = slip.offsetWidth, h = slip.offsetHeight, c = toClient(H[0], H[1]);
-  const tx = c[0] - (sr.left + slip.offsetLeft + w / 2), ty = c[1] - (sr.top + slip.offsetTop + h / 2);
-  slip.animate([
-    { transform: "translate(" + tx.toFixed(1) + "px," + ty.toFixed(1) + "px) scale(.06) rotate(" + R(-50, 50).toFixed(0) + "deg)", opacity: 0 },
-    { opacity: 1, offset: 0.2 },
-    { transform: "translate(" + (-w / 2).toFixed(1) + "px,0px) scale(1) rotate(" + rot.toFixed(1) + "deg)", opacity: 1 }
-  ], { duration: R(620, 820), delay: 150, easing: "cubic-bezier(.2,1.15,.4,1)", fill: "backwards" });
-}
-
-/* ---------- rounds ---------- */
-let state = "wrapped", count = store.get("bds.count", 0);
 function setHint(key) {
-  const h = pickNew("hint-" + key, HINTS[key]);
-  hint.textContent = h[0];
-  const s = document.createElement("span"); s.textContent = h[1]; hint.append(s);
-  stage.setAttribute("aria-label", h[0] + ". " + h[1]);
+  const h = HINTS[key];
+  hint.innerHTML = '';
+  hint.append(h[0]);
+  const s = document.createElement('span'); s.textContent = h[1]; hint.append(s);
+  stage.setAttribute('aria-label', h[0] + '. ' + h[1]);
 }
 function renderTally() {
-  $("tally").textContent = "Aperti: " + count + " · " + RANKS.find(r => count >= r[0])[1];
+  const rank = RANKS.find(r => count >= r[0])[1];
+  $('tally').textContent = 'Aperti: ' + count + ' · ' + rank;
 }
-function newRound() {
-  for (const g of [backLayer, cookieLayer, frontLayer, fxLayer, dyn]) g.textContent = "";
-  bodies.length = 0; tear = null; clipN = 0; clacks = 0;
-  $("shadow").setAttribute("opacity", 0.28);
-  buildCookie();
-  buildWrapper();
-  setHint("wrapped");
+function nextFortune() {
+  let bag = store.get('bds.bag', null);
+  if (!Array.isArray(bag) || !bag.length || bag.some(i => !(i >= 0 && i < FORTUNES.length))) {
+    bag = FORTUNES.map((_, i) => i);
+    for (let i = bag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [bag[i], bag[j]] = [bag[j], bag[i]]; }
+  }
+  const idx = bag.pop();
+  store.set('bds.bag', bag);
+  return FORTUNES[idx];
+}
+function unluckyNumbers() {
+  const s = new Set();
+  while (s.size < 6) s.add(1 + Math.floor(Math.random() * 90));
+  return [...s].sort((a, b) => a - b).join(' ');
+}
+
+/* ---------- step 1: tear the wrapper ---------- */
+function renderTear() {
+  tearLine.style.strokeDashoffset = tearLen * (1 - progress);
+  wrapL.style.transform = 'translate(' + (-progress * 9) + 'px,0) rotate(' + (-progress * 2.5) + 'deg)';
+  wrapR.style.transform = 'translate(' + (progress * 9) + 'px,0) rotate(' + (progress * 2.5) + 'deg)';
+}
+function tear(dp) {
+  progress = Math.min(1, progress + dp);
+  renderTear();
+  const now = performance.now();
+  if (now - lastCrinkle > 45) { lastCrinkle = now; sfx.crinkle(); }
+  if (progress >= 1) unwrap();
+}
+function unwrap() {
+  state = 'busy';
+  sfx.rip(); buzz(30);
+  tearLine.style.opacity = 0;
+  wrapL.classList.add('fly'); wrapR.classList.add('fly');
+  wrapL.style.transform = 'translate(-300px,-50px) rotate(-30deg)';
+  wrapR.style.transform = 'translate(300px,30px) rotate(34deg)';
+  wrapL.style.opacity = 0; wrapR.style.opacity = 0;
+  setTimeout(() => { state = 'cookie'; setHint('cookie'); }, calm ? 50 : 520);
+}
+
+/* ---------- step 2: crack the cookie ---------- */
+function hit() {
+  hits++;
+  buzz(15);
+  if (!calm && cookie.animate) cookie.animate(
+    [{ transform: 'translate(0,0) rotate(0)' }, { transform: 'translate(-5px,3px) rotate(-3deg)' },
+     { transform: 'translate(5px,-2px) rotate(3deg)' }, { transform: 'translate(0,0) rotate(0)' }],
+    { duration: 220, easing: 'ease-out' });
+  if (hits < 3) {
+    sfx.crack();
+    $('crack' + hits).classList.add('on');
+    crumbs(4);
+  } else {
+    reveal();
+  }
+}
+function crumbs(n) {
+  if (calm || !stage.animate) return;
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('i');
+    c.className = 'crumb';
+    stage.append(c);
+    const dx = rand(-130, 130), up = rand(-90, -20), s = rand(0.6, 1.5);
+    c.animate(
+      [{ transform: 'translate(-50%,-50%) scale(' + s + ')', opacity: 1 },
+       { transform: 'translate(' + (dx * 0.6) + 'px,' + up + 'px) rotate(' + rand(-200, 200) + 'deg) scale(' + s + ')', opacity: 1, offset: 0.4 },
+       { transform: 'translate(' + dx + 'px,' + rand(120, 220) + 'px) rotate(' + rand(-500, 500) + 'deg) scale(' + s + ')', opacity: 0 }],
+      { duration: rand(650, 1000), easing: 'cubic-bezier(.3,.6,.6,1)' }
+    ).onfinish = () => c.remove();
+  }
+}
+
+/* ---------- step 3: read the slip ---------- */
+function reveal() {
+  state = 'open';
+  sfx.snap(); sfx.paper(); buzz(60);
+  crumbs(16);
+  cookie.classList.add('broken');
+  current = nextFortune();
+  $('fortune').textContent = current;
+  $('lucky').textContent = 'Numeri sfigati: ' + unluckyNumbers();
+  slip.classList.add('show');
+  count++; store.set('bds.count', count); renderTally();
+  hint.hidden = true; actions.hidden = false;
+  stage.setAttribute('aria-label', 'Bigliettino: ' + current);
 }
 function reset() {
-  state = "busy";
-  slip.classList.remove("show");
-  actions.hidden = true; hint.hidden = false;
-  scene.style.visibility = "hidden";
+  state = 'busy';
+  slip.classList.remove('show');
+  actions.hidden = true; hint.hidden = false; setHint('wrapped');
+  hits = 0; progress = 0;
+  $('crack1').classList.remove('on'); $('crack2').classList.remove('on');
+  scene.style.visibility = 'hidden';
+  cookie.classList.remove('broken');
+  wrapL.classList.remove('fly'); wrapR.classList.remove('fly');
+  wrapL.style.opacity = ''; wrapR.style.opacity = ''; tearLine.style.opacity = '';
+  renderTear();
   setTimeout(() => {
-    newRound();
-    scene.style.visibility = "";
-    if (!calm && scene.animate) scene.animate(pick(ENTRIES), { duration: R(420, 560), easing: "cubic-bezier(.2,1.3,.5,1)" });
+    scene.style.visibility = '';
+    if (!calm && scene.animate) scene.animate(
+      [{ transform: 'translateY(-90%) rotate(-10deg)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+      { duration: 480, easing: 'cubic-bezier(.2,1.3,.5,1)' });
     sfx.crinkle();
-    setTimeout(() => { state = "wrapped"; }, calm ? 0 : 380);
-  }, calm ? 20 : 160);
+    state = 'wrapped';
+  }, calm ? 30 : 260);
 }
 
 /* ---------- input ---------- */
-let down = null, fling = [0, 0];
-stage.addEventListener("pointerdown", e => {
-  if (state !== "wrapped" && state !== "cookie") return;
-  const s = toScene(e.clientX, e.clientY), l = ap(wr.Mi, s[0], s[1]);
-  down = { x: e.clientX, y: e.clientY, sx0: s[0], sy0: s[1], sx: s[0], sy: s[1], ax: l[0], ay: l[1], moved: 0, t: performance.now() };
-  fling = [0, 0];
+let down = null;
+stage.addEventListener('pointerdown', e => {
+  if (state === 'open' || state === 'busy') return;
+  down = { x: e.clientX, y: e.clientY, moved: 0 };
   try { stage.setPointerCapture(e.pointerId); } catch {}
   audio();
 });
-stage.addEventListener("pointermove", e => {
+stage.addEventListener('pointermove', e => {
   if (!down) return;
   const d = Math.hypot(e.clientX - down.x, e.clientY - down.y);
-  if (d <= 0) return;
   down.x = e.clientX; down.y = e.clientY; down.moved += d;
-  const s = toScene(e.clientX, e.clientY), now = performance.now(), dt = Math.max(8, now - down.t) / 1000;
-  fling = [clamp((s[0] - down.sx) / dt, -900, 900), clamp((s[1] - down.sy) / dt, -900, 900)];
-  const dist = Math.hypot(s[0] - down.sx, s[1] - down.sy);
-  down.sx = s[0]; down.sy = s[1]; down.t = now;
-  if (state === "wrapped") { const l = ap(wr.Mi, s[0], s[1]); tearMove(l[0], l[1], dist); }
+  if (state === 'wrapped' && d > 0) tear(d / Math.max(220, stage.clientWidth * 0.95));
 });
 function release() {
   if (!down) return;
-  const dn = down;
+  const tap = down.moved < 10;
   down = null;
-  if (tear) tear.near = false;
-  if (state === "wrapped") {
-    if (dn.moved < 10) { const l = ap(wr.Mi, dn.sx, dn.sy); tearTap(l[0], l[1]); }
-  } else if (state === "cookie") {
-    if (dn.moved < 10) hitCookie(dn.sx, dn.sy, null, 1);
-    else {
-      const dx = dn.sx - dn.sx0, dy = dn.sy - dn.sy0, d = Math.hypot(dx, dy);
-      if (d > 14) hitCookie((dn.sx + dn.sx0) / 2, (dn.sy + dn.sy0) / 2, [dx / d, dy / d], 2);
-      else hitCookie(dn.sx, dn.sy, null, 1);
-    }
-  }
+  if (!tap) return;
+  if (state === 'wrapped') tear(0.34);
+  else if (state === 'cookie') hit();
 }
-stage.addEventListener("pointerup", release);
-stage.addEventListener("pointercancel", () => { down = null; if (tear) tear.near = false; });
-stage.addEventListener("keydown", e => {
-  if (e.key !== "Enter" && e.key !== " ") return;
+stage.addEventListener('pointerup', release);
+stage.addEventListener('pointercancel', () => { down = null; });
+stage.addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
   e.preventDefault();
-  audio();
-  if (state === "wrapped") tearTap(R(60, 300), R(90, 230));
-  else if (state === "cookie") hitCookie(R(120, 240), R(130, 200), null, 1);
+  if (state === 'wrapped') tear(0.34);
+  else if (state === 'cookie') hit();
 });
-document.addEventListener("gesturestart", e => e.preventDefault());
+document.addEventListener('gesturestart', e => e.preventDefault());
 
-$("again").addEventListener("click", () => { audio(); reset(); });
-$("share").addEventListener("click", async () => {
-  const btn = $("share");
-  const text = "🥠 Il Biscotto della Sfiga dice: «" + current + "»";
-  const flash = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = "Condividi"; }, 1600); };
+$('again').addEventListener('click', () => { audio(); reset(); });
+$('share').addEventListener('click', async () => {
+  const btn = $('share');
+  const text = '🥠 Il Biscotto della Sfiga dice: «' + current + '»';
+  const flash = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = 'Condividi'; }, 1600); };
   try {
     if (navigator.share) { await navigator.share({ text }); return; }
     await navigator.clipboard.writeText(text);
-    flash("Copiato");
+    flash('Copiato');
   } catch (err) {
-    if (err && err.name === "AbortError") return;
-    try { await navigator.clipboard.writeText(text); flash("Copiato"); }
-    catch { flash("Seleziona il testo"); }
+    if (err && err.name === 'AbortError') return;
+    try { await navigator.clipboard.writeText(text); flash('Copiato'); }
+    catch { flash('Seleziona il testo'); }
   }
 });
 function renderMute() {
-  const b = $("mute");
-  b.textContent = muted ? "🔇" : "🔊";
-  b.setAttribute("aria-pressed", String(muted));
-  b.setAttribute("aria-label", muted ? "Audio spento" : "Audio acceso");
+  const b = $('mute');
+  b.textContent = muted ? '🔇' : '🔊';
+  b.setAttribute('aria-pressed', String(muted));
+  b.setAttribute('aria-label', muted ? 'Audio spento' : 'Audio acceso');
 }
-$("mute").addEventListener("click", () => {
-  muted = !muted; store.set("bds.muted", muted); renderMute();
-  if (muted) tearSound(0); else sfx.crinkle();
-});
+$('mute').addEventListener('click', () => { muted = !muted; store.set('bds.muted', muted); renderMute(); if (!muted) sfx.crinkle(); });
 
-renderMute(); renderTally(); newRound();
+renderMute(); renderTally(); renderTear();
 
 try {
-  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && document.querySelector('link[rel="manifest"]'))
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && document.querySelector('link[rel="manifest"]'))
+    navigator.serviceWorker.register('sw.js').catch(() => {});
 } catch {}
 })();
 </script>
