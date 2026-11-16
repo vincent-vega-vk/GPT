@@ -1,0 +1,45 @@
+# Checks that Oroscopo Bastardo still passes its tests and that the Xcode project compiles.
+# The iOS build targets the simulator and is not signed: publishing still happens from Xcode.
+name: Oroscopo Bastardo
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'oroscopo-bastardo/**'
+      - '.github/workflows/oroscopo-bastardo.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oroscopo-bastardo-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    name: Prove e build iOS
+    runs-on: macos-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: oroscopo-bastardo
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: oroscopo-bastardo/package-lock.json
+      - run: npm ci
+      - run: npm run contenuti
+      - run: npm test
+      - run: npm run build
+      - run: npx cap sync ios
+      - name: Build Xcode per il simulatore, senza firma
+        run: |
+          xcodebuild -version
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO build | tail -n 60
