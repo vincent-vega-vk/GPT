@@ -168,7 +168,9 @@ svg { display: block; }
   display: grid; place-items: center;
   border-radius: 28px;
   color: var(--el);
+  background: var(--carta);
   background: color-mix(in srgb, var(--el) 12%, var(--carta));
+  border: 1px solid var(--el);
   border: 1px solid color-mix(in srgb, var(--el) 45%, transparent);
   transform: rotate(-4deg);
 }
@@ -330,7 +332,9 @@ svg { display: block; }
 .scelta-segno {
   display: grid; justify-items: center; gap: 6px;
   padding: 14px 8px 16px;
+  background: var(--carta);
   background: color-mix(in srgb, var(--el) 10%, var(--carta));
+  border: 1px solid var(--el);
   border: 1px solid color-mix(in srgb, var(--el) 45%, transparent);
   border-radius: 22px;
 }
@@ -393,7 +397,7 @@ svg { display: block; }
 .tessera .glifo { width: 34px; height: 34px; color: var(--el); }
 .tessera strong { font-family: var(--display); font-weight: 400; font-size: 18px; text-transform: uppercase; letter-spacing: .03em; }
 .tessera small { font-size: 9.5px; color: var(--fumo); letter-spacing: -.01em; }
-.tessera.scelta { background: color-mix(in srgb, var(--el) 16%, var(--carta)); border-color: var(--el); }
+.tessera.scelta { background: var(--carta-2); background: color-mix(in srgb, var(--el) 16%, var(--carta)); border-color: var(--el); }
 
 .nascita { display: grid; gap: 10px; margin-top: 14px; padding-top: 18px; border-top: 1px dashed var(--linea); }
 .nascita label { font-weight: 600; }
@@ -413,7 +417,9 @@ input[type="date"], input[type="time"] {
 .esito {
   display: grid; gap: 10px; justify-items: start;
   padding: 16px;
+  background: var(--carta);
   background: color-mix(in srgb, var(--el) 10%, var(--carta));
+  border: 1px solid var(--el);
   border: 1px solid color-mix(in srgb, var(--el) 45%, transparent);
   border-radius: var(--raggio);
 }

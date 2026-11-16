@@ -49,6 +49,8 @@ Servono un Mac con Xcode aggiornato e l'iscrizione all'Apple Developer Program (
 
 L'app è solo per iPhone e solo in verticale, quindi bastano le schermate da 6,9".
 
+A ogni modifica, `.github/workflows/oroscopo-bastardo.yml` esegue le prove e compila il progetto Xcode per il simulatore su un runner macOS. La build non è firmata: dice che il progetto compila, non sostituisce la prova su un iPhone.
+
 ## Struttura
 
 ```

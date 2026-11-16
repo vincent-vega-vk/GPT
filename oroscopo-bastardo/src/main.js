@@ -47,7 +47,7 @@ function carica() {
     if (!Number.isInteger(m.segno) || m.segno < 0 || m.segno > 11) m.segno = null;
     return m;
   } catch {
-    return structuredClone(VUOTA);
+    return JSON.parse(JSON.stringify(VUOTA));
   }
 }
 const memoria = carica();
@@ -625,6 +625,9 @@ accendiStelle($('#stelle'), chiaveGiorno(new Date()));
 if (memoria.segno == null) disegna();
 else apri('oggi');
 if (memoria.notifiche.attive) programmaNotifiche(true, memoria.notifiche.ora);
-if (!nativo && 'serviceWorker' in navigator && location.protocol === 'https:') {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
-}
+// Offline support for the web version; sandboxed frames refuse it, and that is fine.
+try {
+  if (!nativo && location.protocol === 'https:' && 'serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+} catch { /* no service worker here */ }
