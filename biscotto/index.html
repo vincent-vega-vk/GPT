@@ -21,9 +21,8 @@
 <style>
 /* Layout: one fixed screen. Name on top, the cookie on its lacquer table in the middle, one line of instruction or two buttons at the bottom. */
 :root{
-  --lacquer:#6d1010; --lacquer-deep:#2e0606; --foil:#c8201f; --foil-dark:#8a0f12;
-  --gold:#f2c45a; --gold-dim:#c99a3a; --paper:#fbf6e6; --ink:#1c3a8a; --stamp:#c8201f;
-  --cream:#fdebc8; --biscuit:#e9ab52; --biscuit-dark:#b97524;
+  --lacquer:#6d1010; --lacquer-deep:#2e0606;
+  --gold:#f2c45a; --gold-dim:#c99a3a; --paper:#fbf6e6; --ink:#1c3a8a; --cream:#fdebc8;
   --font-display:"Bowlby One","Arial Black",Impact,sans-serif;
   --font-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-slip:"Courier Prime","Courier New",ui-monospace,monospace;
@@ -52,31 +51,18 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
 .stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
   touch-action:none;cursor:pointer;outline:none;border-radius:20px}
 .stage:focus-visible,.mute:focus-visible,.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.scene{width:100%;max-width:440px;max-height:100%;overflow:visible;display:block}
-.scene *{transform-box:fill-box;transform-origin:center}
-.wrap-half{transition:transform .12s ease-out}
-.wrap-half.fly{transition:transform .55s cubic-bezier(.5,0,.9,.4),opacity .5s ease-in .1s}
-.half{transition:transform .7s cubic-bezier(.2,1.25,.4,1)}
-.cookie.broken #half-l{transform:translate(-84px,104px) rotate(-34deg)}
-.cookie.broken #half-r{transform:translate(84px,104px) rotate(34deg)}
-.crack{opacity:0}
-.crack.on{opacity:1}
-.cookie.broken .crack{opacity:0}
+.scene{width:100%;max-width:440px;max-height:100%;overflow:visible;display:block;pointer-events:none}
 
-.slip{position:absolute;left:50%;top:10%;width:min(94%,390px);padding:20px 22px 16px;
-  background:var(--paper);color:var(--ink);font-family:var(--font-slip);text-align:center;
-  border-inline:10px solid var(--stamp);box-shadow:0 14px 30px rgba(0,0,0,.45);
-  transform:translate(-50%,90%) scale(.12) rotate(9deg);opacity:0;pointer-events:none;
-  transition:transform .65s cubic-bezier(.2,1.2,.4,1) .12s,opacity .15s linear .12s}
-.slip.show{transform:translate(-50%,0) scale(1) rotate(-2deg);opacity:1;pointer-events:auto;
-  -webkit-user-select:text;user-select:text}
-.slip p{margin:0}
-.fortune{font-weight:700;font-size:clamp(18px,5.2vw,22px);line-height:1.3;text-wrap:balance}
-.lucky{margin-top:12px !important;padding-top:10px;border-top:1px dashed var(--ink);font-size:11.5px;white-space:nowrap;
-  letter-spacing:.05em;text-transform:uppercase;color:var(--stamp);font-variant-numeric:tabular-nums}
-
-.crumb{position:absolute;left:50%;top:50%;width:7px;height:6px;border-radius:2px;background:var(--biscuit);pointer-events:none}
-.crumb:nth-child(odd){background:var(--biscuit-dark)}
+.slip{position:absolute;left:50%;top:10%;width:min(94%,390px);padding:22px 20px;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.06),rgba(0,0,0,0) 4%,rgba(0,0,0,0) 49.4%,rgba(0,0,0,.08) 50%,rgba(0,0,0,0) 50.6%,rgba(0,0,0,0) 96%,rgba(0,0,0,.06)),
+    var(--paper);
+  color:var(--ink);font-family:var(--font-slip);text-align:center;
+  border-inline:7px solid var(--ink);box-shadow:0 14px 30px rgba(0,0,0,.45);
+  transform:translate(-50%,0) rotate(var(--rot,-2deg));opacity:0;pointer-events:none}
+.slip.show{opacity:1;pointer-events:auto;-webkit-user-select:text;user-select:text}
+.fortune{margin:0;font-weight:700;font-size:clamp(18px,5.3vw,22px);line-height:1.3;text-wrap:balance}
+.fortune.long{font-size:clamp(16px,4.7vw,19px)}
 
 .bottom{min-height:64px;display:flex;align-items:center;justify-content:center}
 .hint{margin:0;text-align:center;font-weight:700;font-size:17px;color:var(--cream);text-wrap:balance}
@@ -88,9 +74,6 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
 .btn-ghost{flex:0 1 38%;background:transparent;color:var(--gold)}
 .btn:active{transform:translateY(2px)}
 .haptic{position:fixed;left:-200px;top:0;opacity:0;pointer-events:none}
-@media (prefers-reduced-motion:reduce){
-  .wrap-half.fly,.half,.slip{transition-duration:.01s;transition-delay:0s}
-}
 </style>
 
 <div class="app">
@@ -105,72 +88,46 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
   <main class="stage" id="stage" tabindex="0" role="button" aria-label="Biscotto nella bustina: strappa la bustina">
     <svg class="scene" id="scene" viewBox="0 0 360 320" aria-hidden="true">
       <defs>
-        <radialGradient id="gBake" cx="40%" cy="30%" r="80%">
-          <stop offset="0" stop-color="#f8d188"/><stop offset=".55" stop-color="#e9ab52"/><stop offset="1" stop-color="#c8812c"/>
+        <radialGradient id="gBake" cx=".4" cy=".3" r=".85">
+          <stop id="bk0" offset="0" stop-color="#f8d188"/><stop id="bk1" offset=".55" stop-color="#e9ab52"/><stop id="bk2" offset="1" stop-color="#c8812c"/>
         </radialGradient>
         <linearGradient id="gFoil" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#8a0f12"/><stop offset=".22" stop-color="#e0302c"/><stop offset=".4" stop-color="#b3181a"/>
-          <stop offset=".62" stop-color="#ee4a3c"/><stop offset=".8" stop-color="#a81417"/><stop offset="1" stop-color="#7a0c0f"/>
+          <stop id="f0" offset="0" stop-color="#7a0c0f"/><stop id="f1" offset=".22" stop-color="#e0302c"/><stop id="f2" offset=".42" stop-color="#b3181a"/>
+          <stop id="f3" offset=".63" stop-color="#ee4a3c"/><stop id="f4" offset=".82" stop-color="#b3181a"/><stop id="f5" offset="1" stop-color="#7a0c0f"/>
         </linearGradient>
         <linearGradient id="gSeal" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stop-color="#f2c45a"/><stop offset=".5" stop-color="#fff0b8"/><stop offset="1" stop-color="#c99a3a"/>
+          <stop id="s0" offset="0" stop-color="#f2c45a"/><stop id="s1" offset=".5" stop-color="#fff0b8"/><stop id="s2" offset="1" stop-color="#c99a3a"/>
         </linearGradient>
-        <clipPath id="clipL"><path id="clipLp" d=""/></clipPath>
-        <clipPath id="clipR"><path id="clipRp" d=""/></clipPath>
-        <g id="wrapArt">
-          <path id="wrapBody" d="" fill="url(#gFoil)" fill-rule="evenodd"/>
-          <ellipse cx="180" cy="158" rx="92" ry="60" fill="#fff" opacity=".16"/>
-          <path d="M104 132 Q136 104 190 102" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55"/>
-          <ellipse cx="180" cy="158" rx="92" ry="60" fill="none" stroke="url(#gSeal)" stroke-width="3"/>
-          <rect x="8" y="68" width="23" height="180" fill="url(#gSeal)" opacity=".9"/>
-          <rect x="329" y="68" width="23" height="180" fill="url(#gSeal)" opacity=".9"/>
-          <g stroke="#8a0f12" stroke-width="1.2" opacity=".55">
-            <path d="M14 70V246M20 70V246M26 70V246M334 70V246M340 70V246M346 70V246"/>
-          </g>
-          <text x="180" y="84" text-anchor="middle" font-family="'Bowlby One','Arial Black',sans-serif" font-size="13.5" letter-spacing="1.5" fill="#f2c45a">BISCOTTO DELLA SFIGA</text>
-          <text x="180" y="243" text-anchor="middle" font-family="'Figtree',system-ui,sans-serif" font-weight="700" font-size="10" letter-spacing="2.4" fill="#fdebc8">100% INSULTI GARANTITI</text>
-          <text x="58" y="170" text-anchor="middle" font-size="34" fill="#f2c45a">福</text>
-          <text x="302" y="170" text-anchor="middle" font-size="34" fill="#f2c45a">福</text>
-          <path d="M40 60 Q180 46 320 60" fill="none" stroke="#fff" stroke-width="2" opacity=".35"/>
-        </g>
+        <linearGradient id="gInside" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#8d949c"/><stop offset=".35" stop-color="#d9dee3"/><stop offset=".6" stop-color="#a9b0b8"/><stop offset="1" stop-color="#7b828a"/>
+        </linearGradient>
+        <linearGradient id="gVol" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".28" stop-color="#fff" stop-opacity="0"/>
+          <stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/>
+        </linearGradient>
+        <clipPath id="cookieClip"></clipPath>
+        <clipPath id="bodyClip"><path id="bodyClipP" clip-rule="evenodd" d=""/></clipPath>
+        <clipPath id="outClip"><path id="outClipP" d=""/></clipPath>
+        <clipPath id="tearClip"><path id="tearClipP" clip-rule="evenodd" d=""/></clipPath>
+        <g id="cookieArt"></g>
+        <g id="wrapBack"></g>
+        <g id="wrapFront"></g>
       </defs>
-
-      <ellipse cx="180" cy="262" rx="120" ry="16" fill="#000" opacity=".28"/>
-
-      <g class="cookie" id="cookie">
-        <g class="half" id="half-l">
-          <path d="M180 114 C150 84 92 90 70 136 C53 172 62 216 94 236 C104 204 140 188 180 186 Z" fill="url(#gBake)" stroke="#a5651d" stroke-width="2.5" stroke-linejoin="round"/>
-          <path d="M180 118 C158 134 152 166 180 186 Z" fill="#a5651d" opacity=".55"/>
-          <path d="M180 116 C146 124 112 160 95 232" fill="none" stroke="#a5651d" stroke-width="2" stroke-linecap="round" opacity=".55"/>
-          <path d="M84 134 C96 108 128 98 154 108" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".6"/>
-          <g fill="#b97524" opacity=".6"><circle cx="104" cy="170" r="2.2"/><circle cx="128" cy="176" r="1.8"/><circle cx="84" cy="186" r="1.6"/><circle cx="140" cy="150" r="1.7"/></g>
-        </g>
-        <g class="half" id="half-r">
-          <path d="M180 114 C210 84 268 90 290 136 C307 172 298 216 266 236 C256 204 220 188 180 186 Z" fill="url(#gBake)" stroke="#a5651d" stroke-width="2.5" stroke-linejoin="round"/>
-          <path d="M180 118 C202 134 208 166 180 186 Z" fill="#8f5516" opacity=".6"/>
-          <path d="M180 116 C214 124 248 160 265 232" fill="none" stroke="#a5651d" stroke-width="2" stroke-linecap="round" opacity=".55"/>
-          <path d="M206 108 C232 98 262 108 276 132" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".45"/>
-          <g fill="#b97524" opacity=".6"><circle cx="252" cy="172" r="2.2"/><circle cx="232" cy="178" r="1.8"/><circle cx="268" cy="150" r="1.6"/><circle cx="218" cy="152" r="1.7"/></g>
-        </g>
-        <path class="crack" id="crack1" d="M180 114 L175 130 L184 143 L177 156" fill="none" stroke="#5a3408" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path class="crack" id="crack2" d="M177 156 L185 168 L178 178 L180 186 M184 143 L198 148 M175 130 L162 128" fill="none" stroke="#5a3408" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      </g>
-
-      <g id="wrapper">
-        <g class="wrap-half" id="wrap-l"><use href="#wrapArt" clip-path="url(#clipL)"/></g>
-        <g class="wrap-half" id="wrap-r"><use href="#wrapArt" clip-path="url(#clipR)"/></g>
-        <path id="tear" d="" fill="none" stroke="#fff6dc" stroke-width="2.5" stroke-linejoin="round"/>
-      </g>
+      <defs id="dyn"></defs>
+      <ellipse id="shadow" cx="180" cy="266" rx="120" ry="15" fill="#000" opacity=".28"/>
+      <g id="backLayer"></g>
+      <g id="cookieLayer"></g>
+      <g id="frontLayer"></g>
+      <g id="fxLayer"></g>
     </svg>
 
     <div class="slip" id="slip" aria-live="polite">
       <p class="fortune" id="fortune"></p>
-      <p class="lucky" id="lucky"></p>
     </div>
   </main>
 
   <footer class="bottom">
-    <p class="hint" id="hint">Strappa la bustina<span>Striscia il dito sopra, o picchietta</span></p>
+    <p class="hint" id="hint">Strappa la bustina<span>Striscia il dito: si strappa dove passi</span></p>
     <div class="actions" id="actions" hidden>
       <button class="btn btn-main" id="again" type="button">Un altro biscotto</button>
       <button class="btn btn-ghost" id="share" type="button">Condividi</button>
@@ -183,112 +140,1379 @@ h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px
 (() => {
 'use strict';
 
+/*F-START*/
 const FORTUNES = [
-  "Sei un coglione. Ma almeno adesso è ufficiale.",
-  "Il tuo futuro è luminoso. Peccato che tu non abbia pagato la bolletta.",
-  "Grandi cose ti attendono. Aspettano da un pezzo, quindi muovi il culo.",
-  "Chi dorme non piglia pesci. Tu non pigli un cazzo nemmeno da sveglio.",
-  "Oggi incontrerai una persona speciale. Lei incontrerà te e cambierà marciapiede.",
-  "La fortuna è cieca. Ma te ti ha visto benissimo e ha tirato dritto.",
-  "Hai un potenziale enorme. Di fare cazzate.",
-  "Confucio dice: chi cerca risposte in un biscotto ha già un problema.",
-  "Questo biscotto finto è la cosa migliore che ti è capitata oggi. Pensaci.",
-  "Non sei pigro. Sei in risparmio energetico dal 2009.",
-  "Qualcuno ti pensa intensamente. È l'Agenzia delle Entrate.",
-  "La risposta che cerchi è dentro di te. Però è sbagliata.",
-  "Sei unico. Per fortuna.",
-  "Presto riceverai denaro inaspettato. Scherzo, resti un poveraccio.",
-  "Il tuo QI e la temperatura di oggi sono lo stesso numero. In gradi Celsius.",
-  "Smettila di aprire biscotti e vai a lavorare, testa di cazzo.",
-  "Sei la prova vivente che l'evoluzione ogni tanto fa retromarcia.",
-  "Anche stavolta la dieta comincia lunedì, vero, culone?",
-  "Un saggio una volta disse una cosa bellissima. Non a te, tanto non ascolti un cazzo.",
-  "Il tuo ex sta meglio senza di te. Pure il tuo divano starebbe meglio.",
-  "Hai la grinta di un bradipo sotto camomilla.",
-  "Sorridi: domani andrà peggio.",
-  "Sei come il lunedì: nessuno ti vuole, ma arrivi lo stesso.",
-  "Il tuo angelo custode ha chiesto il trasferimento.",
-  "Hai appena scartato un biscotto che non esiste. È il punto più alto della tua settimana.",
-  "Hai il carisma di un PDF protetto da password.",
-  "Sei il motivo per cui sugli shampoo scrivono le istruzioni.",
-  "Diventerai ricco e famoso. In un universo parallelo dove non sei un pirla.",
-  "Le stelle dicono che oggi farai una figura di merda. Come ieri, del resto.",
-  "Segui i tuoi sogni. Tanto a letto ci passi già tutta la giornata.",
-  "L'amore sta bussando alla tua porta. Ha sbagliato piano.",
-  "Non è vero che non sai fare niente. Rompere i coglioni ti riesce benissimo.",
-  "Chi trova un amico trova un tesoro. Chi trova te trova una rogna.",
-  "Il tuo cervello è come questo biscotto: vuoto, con dentro una stronzata.",
-  "Respira. Rilassati. Resti un cretino, ma un cretino rilassato.",
-  "Oggi è il primo giorno del resto della tua vita di merda.",
-  "La pazienza è la virtù dei forti. Cioè di chi ti sopporta.",
-  "Riprova. Magari il prossimo biscotto ti stima di più. Non credo.",
-  "Hai aperto un'app per farti insultare da un biscotto. Fatti due domande.",
-  "Sei un genio incompreso. Soprattutto incompreso. Soprattutto non genio.",
-  "Il capo ti apprezza moltissimo. Quando sei in ferie.",
-  "Vai in palestra. Almeno sarai un coglione in forma.",
-  "Se la stupidità fosse energia, illumineresti Milano da solo.",
-  "Il tuo conto in banca e la tua dignità hanno una cosa in comune: sono sotto zero.",
-  "Buone notizie: non puoi cadere più in basso. Ah no, aspetta.",
-  "Qualcuno là fuori ti ama. Io non ci scommetterei un cazzo.",
-  "Sei una persona fantastica. Ahahah, no dai, ripigliati.",
-  "Mangia meno, muoviti di più e smettila di rompere il cazzo.",
-  "Il saggio indica la luna. Tu guardi il dito e poi te lo infili nel naso.",
-  "Il successo è dietro l'angolo. Tu però giri sempre in tondo, pirla.",
-  "Sei come il Wi-Fi dell'hotel: ci sei, ma non servi a un cazzo.",
-  "Tua madre dice a tutti che sei speciale. Non specifica mai in che senso.",
-  "Farai un lungo viaggio. Ti ci manderanno gli altri, e sai già dove.",
-  "Hai gli occhi di chi ha capito tutto. Peccato sia l'unica parte che finge bene.",
-  "Chi va piano va sano e va lontano. Tu sei fermo, quindi nessuna delle tre.",
-  "Sei sveglio come una domenica pomeriggio di agosto.",
-  "Prima di parlare conta fino a dieci. Se ci arrivi.",
-  "Il tuo spirito guida è un piccione che caga sulle macchine.",
-  "Non tutti i mali vengono per nuocere. Tu sì.",
-  "Oggi qualcuno riderà grazie a te. Di te, per la precisione.",
-  "Hai letto fin qui sperando in un complimento. Che tenerezza, coglione.",
-  "La vita ti sorride. È quel sorriso che si fa prima di una fregatura.",
-  "Stanotte hai fatto un sogno bellissimo. Poi ti sei svegliato ed eri ancora tu.",
-  "Sei il tipo che spinge le porte con scritto TIRARE. E poi insiste.",
-  "Un giorno ripenserai a questo momento e dirai: quanto tempo ho buttato nel cesso."
+"Sei un coglione. Ma almeno adesso è ufficiale.",
+"Il tuo futuro è luminoso. Peccato che tu non abbia pagato la bolletta.",
+"Grandi cose ti attendono. Aspettano da un pezzo, quindi muovi il culo.",
+"Chi dorme non piglia pesci. Tu non pigli un cazzo nemmeno da sveglio.",
+"Oggi incontrerai una persona speciale. Lei incontrerà te e cambierà marciapiede.",
+"La fortuna è cieca. Ma te ti ha visto benissimo e ha tirato dritto.",
+"Hai un potenziale enorme. Di fare cazzate.",
+"Confucio dice: chi cerca risposte in un biscotto ha già un problema.",
+"Questo biscotto finto è la cosa migliore che ti è capitata oggi. Pensaci.",
+"Non sei pigro. Sei in risparmio energetico dal 2009.",
+"Qualcuno ti pensa intensamente. È l'Agenzia delle Entrate.",
+"La risposta che cerchi è dentro di te. Però è sbagliata.",
+"Presto riceverai denaro inaspettato. Scherzo, resti un poveraccio.",
+"Il tuo QI e la temperatura di oggi sono lo stesso numero. In gradi Celsius.",
+"Smettila di aprire biscotti e vai a lavorare, testa di cazzo.",
+"Sei la prova vivente che l'evoluzione ogni tanto fa retromarcia.",
+"Anche stavolta la dieta comincia lunedì, vero, culone?",
+"Un saggio una volta disse una cosa bellissima. Non a te, tanto non ascolti un cazzo.",
+"Il tuo ex sta meglio senza di te. Pure il tuo divano starebbe meglio.",
+"Hai la grinta di un bradipo sotto camomilla.",
+"Sorridi: domani andrà peggio.",
+"Sei come il lunedì: nessuno ti vuole, ma arrivi lo stesso.",
+"Il tuo angelo custode ha chiesto il trasferimento.",
+"Hai appena scartato un biscotto che non esiste. È il punto più alto della tua settimana.",
+"Hai il carisma di un PDF protetto da password.",
+"Sei il motivo per cui sugli shampoo scrivono le istruzioni.",
+"Diventerai ricco e famoso. In un universo parallelo dove non sei un pirla.",
+"Le stelle dicono che oggi farai una figura di merda. Come ieri, del resto.",
+"Segui i tuoi sogni. Tanto a letto ci passi già tutta la giornata.",
+"L'amore sta bussando alla tua porta. Ha sbagliato piano.",
+"Non è vero che non sai fare niente. Rompere i coglioni ti riesce benissimo.",
+"Chi trova un amico trova un tesoro. Chi trova te trova una rogna.",
+"Il tuo cervello è come questo biscotto: vuoto, con dentro una stronzata.",
+"Respira. Rilassati. Resti un cretino, ma un cretino rilassato.",
+"Oggi è il primo giorno del resto della tua vita di merda.",
+"La pazienza è la virtù dei forti. Cioè di chi ti sopporta.",
+"Riprova. Magari il prossimo biscotto ti stima di più. Non credo.",
+"Hai aperto un'app per farti insultare da un biscotto. Fatti due domande.",
+"Sei un genio incompreso. Soprattutto incompreso. Soprattutto non genio.",
+"Il capo ti apprezza moltissimo. Quando sei in ferie.",
+"Vai in palestra. Almeno sarai un coglione in forma.",
+"Se la stupidità fosse energia, illumineresti Milano da solo.",
+"Il tuo conto in banca e la tua dignità hanno una cosa in comune: sono sotto zero.",
+"Buone notizie: non puoi cadere più in basso. Ah no, aspetta.",
+"Qualcuno là fuori ti ama. Io non ci scommetterei un cazzo.",
+"Sei una persona fantastica. Ahahah, no dai, ripigliati.",
+"Mangia meno, muoviti di più e smettila di rompere il cazzo.",
+"Il saggio indica la luna. Tu guardi il dito e poi te lo infili nel naso.",
+"Il successo è dietro l'angolo. Tu però giri sempre in tondo, pirla.",
+"Sei come il Wi-Fi dell'hotel: ci sei, ma non servi a un cazzo.",
+"Tua madre dice a tutti che sei speciale. Non specifica mai in che senso.",
+"Farai un lungo viaggio. Ti ci manderanno gli altri, e sai già dove.",
+"Hai gli occhi di chi ha capito tutto. Peccato sia l'unica parte che finge bene.",
+"Chi va piano va sano e va lontano. Tu sei fermo, quindi nessuna delle tre.",
+"Sei sveglio come una domenica pomeriggio di agosto.",
+"Prima di parlare conta fino a dieci. Se ci arrivi.",
+"Il tuo spirito guida è un piccione che caga sulle macchine.",
+"Non tutti i mali vengono per nuocere. Tu sì.",
+"Oggi qualcuno riderà grazie a te. Di te, per la precisione.",
+"Hai letto fin qui sperando in un complimento. Che tenerezza, coglione.",
+"La vita ti sorride. È quel sorriso che si fa prima di una fregatura.",
+"Stanotte hai fatto un sogno bellissimo. Poi ti sei svegliato ed eri ancora tu.",
+"Sei il tipo che spinge le porte con scritto TIRARE. E poi insiste.",
+"Un giorno ripenserai a questo momento e dirai: quanto tempo ho buttato nel cesso.",
+"Il tuo QI e la tua età stanno per incontrarsi. Uno dei due sta salendo.",
+"Un neurone solo, e lo usi per ricordarti di respirare.",
+"Gli astri dicono che oggi avrai un'idea. Sarà una cazzata, come le altre.",
+"Quando pensi si sente odore di frizione bruciata.",
+"Chi tace passa per intelligente. Tu riesci a sembrare scemo anche zitto.",
+"Non sei stupido: sei coglione con metodo e costanza.",
+"Ragioni con più buchi di un colapasta, e trattieni anche meno.",
+"Attenzione: può contenere tracce di cervello. Molto più spesso, segatura.",
+"Sei lento a capire, ma in compenso capisci a cazzo.",
+"Mai avuto un pensiero tutto tuo? No, quella era fame.",
+"Complimenti: anche oggi sei riuscito a non capire una beata minchia.",
+"La tua testa è un monolocale sfitto: tanta eco e nessuno in casa.",
+"Presto risolverai un problema. L'avevi creato tu, coglione.",
+"La logica ti ha visto arrivare e ha cambiato marciapiede.",
+"Due più due fa quattro. Lo scrivo qui perché so con chi sto parlando.",
+"Tu non perdi il filo del discorso: non l'hai mai avuto in mano.",
+"Dici cazzate così contorte che servirebbero i sottotitoli. E non basterebbero.",
+"Chi va piano va lontano. Tu vai piano perché non hai capito dove cazzo andare.",
+"A te le idee non vengono: passano, ti guardano in faccia e tirano dritto.",
+"Prontezza mentale di un semaforo spento, e ti incazzi pure se te lo dicono.",
+"È ancora in garanzia quel cervello di merda? Riportalo: non è mai partito.",
+"Te lo spiegano tre volte e alla quarta annuisci a caso, come il cagnolino sul lunotto.",
+"Vedo nel tuo futuro un lampo di genio. Ah no, è il flash dell'autovelox.",
+"Con la testa di cazzo che ti ritrovi, pure il cappello è un investimento sbagliato.",
+"Non è che non ci arrivi: non parti proprio. Batteria a terra da sempre.",
+"I tuoi due neuroni si incontrano una volta l'anno, e si mandano a fanculo.",
+"Fai fatica con i ragionamenti a due passaggi. Soprattutto col primo.",
+"Scommetto che questa frase l'hai letta due volte e ancora non ti torna, pirla.",
+"Il tuo pensiero più profondo arriva alle caviglie.",
+"Minchia, che testa: dura fuori, vuota dentro, inutile dappertutto.",
+"Sveglio come un'assemblea di condominio alle undici di sera, e rompi le palle uguale.",
+"Usiamo solo il dieci per cento del cervello, dicono. A te hanno fatto lo sconto.",
+"Il congiuntivo ti ha denunciato per maltrattamenti. E i testimoni siamo tutti.",
+"L'unico libro che hai finito aveva le figure da colorare. E sei uscito dai bordi.",
+"Scrivi qual è con l'apostrofo e pretendi pure di spiegarci il mondo. Ma vaffanculo.",
+"A scuola eri l'esempio: quello che i prof usavano per spaventare gli altri.",
+"La tua laurea all'università della vita al bar la usano come sottobicchiere.",
+"Leggi solo i titoli, li capisci male e ci rompi pure le palle a cena.",
+"Chi apre un libro apre la mente. Tu apri solo il frigo.",
+"Ogni tua frase scritta è una scena del crimine, e il colpevole sei sempre tu.",
+"Presto ti chiederanno la capitale di qualcosa. Sarà una figura di merda.",
+"Studiato poco, capito un cazzo: un rendimento da incorniciare.",
+"La tua maestra si ricorda ancora di te. È per questo che ha smesso.",
+"Metti le acca come il sale sulla pasta: a occhio e a cazzo di cane.",
+"Di storia non sai una sega, e infatti continui a ripetere la tua.",
+"Avviso: questo biglietto contiene parole. Fatti aiutare da un adulto.",
+"I tuoi temi andavano sempre fuori tema. La tua vita ha preso esempio.",
+"Hai preso il diploma come si prende una multa: senza capire com'è successo.",
+"Dici piuttosto che al posto di oppure e ti senti elegante. Sei solo un pirla.",
+"Le tue non sono lacune: è un vuoto unico con qualche nozione sparsa intorno.",
+"L'ultima volta che hai aperto un libro era per schiacciare una zanzara.",
+"Una vita passata a copiare, e sei riuscito a copiare dal più coglione della classe.",
+"Vorresti scrivere un libro. Comincia a leggerne uno, testa di cazzo.",
+"Il tuo vocabolario ha duecento parole. Cento sono cioè, le altre parolacce.",
+"Antico proverbio: chi non studia da giovane, da grande diventa te.",
+"Sai le tabelline fino a quella del tre, e sul tre vai già nel pallone.",
+"Ti hanno promosso per levarti dai coglioni, mica per merito.",
+"Bello il titolo di studio: sta nel cassetto come tu sul divano, a non fare un cazzo.",
+"Imparato a leggere, hai deciso che per una vita poteva bastare.",
+"Tutta la tua cultura viene da video di trenta secondi, visti a metà e sul cesso.",
+"Con te la punteggiatura ha chiuso: troppe virgole buttate a culo.",
+"In pagella avevi solo sei politici. Anche oggi campi di elemosina.",
+"Chi legge vive mille vite. Tu ne hai una sola e la stai già mandando a rotoli.",
+"Citi libri che non hai mai aperto a gente che non ti ha chiesto una minchia.",
+"Vedo un bivio nel tuo futuro. Prenderai la strada sbagliata, come sempre.",
+"Sbagliando si impara. Tu sbagli da anni e non hai imparato un cazzo.",
+"Le tue scelte di vita sembrano prese da uno stronzo che ti odia. Invece sei tu.",
+"Decidi con la precisione di una bussola rotta e la sicurezza di chi non lo sa.",
+"Ogni volta che decidi tu, da qualche parte un commercialista piange.",
+"Massima orientale: il saggio impara dagli errori, tu li collezioni come figurine.",
+"Segui il cuore, dicevano. E guarda dove cazzo ti ha portato.",
+"Tra due opzioni tu trovi sempre la terza: la cazzata.",
+"Rifare la stessa stronzata dieci volte non è esperienza: è recidiva.",
+"Non hai rimpianti solo perché non hai ancora capito cos'hai combinato.",
+"Presto dovrai prendere una decisione importante. Fatti sostituire.",
+"Fiuto per gli affari ne hai: li annusi da lontano e corri verso la fregatura.",
+"Sei un manuale vivente di cosa non fare, già alla terza ristampa.",
+"Il tuo piano B è il piano A con meno soldi e la stessa faccia da pirla.",
+"Inciampi nello stesso sasso da così tanto che ormai ti dà del tu. E del coglione.",
+"Butti via le occasioni come i calzini spaiati: senza neanche guardarle.",
+"Utilissimo, il tuo istinto: basta fare l'esatto contrario.",
+"Ti sei fidato un'altra volta della persona sbagliata: te.",
+"Non è sfortuna, coglione: sono le tue decisioni che passano a salutarti.",
+"Prima di firmare leggi bene. Scherzo: tanto firmi lo stesso, pirla.",
+"Nelle stelle era scritto un bel destino. Poi l'hai corretto tu, coi piedi.",
+"Hai fatto di testa tua. Si vede: è venuta fuori una merda.",
+"Potevi scegliere peggio? No. Ma tranquillo, ci stai lavorando.",
+"Avvertenza: tenere lontano da contratti, bivi e pulsanti rossi.",
+"Investire su te stesso è stato il tuo peggior affare. E di affari di merda ne hai fatti.",
+"La vita ti ha dato i limoni e tu, pirla, ci hai comprato un corso per diventare ricco.",
+"Ogni tuo errore ha un seguito, e i seguiti sono sempre peggio dell'originale.",
+"Stessi buoni propositi ogni anno, stesso fallimento. Almeno in questo sei puntuale.",
+"Dormici sopra, ti dicono. Ci dormi, ti svegli e fai la stessa identica cazzata.",
+"Il destino ti offrirà una seconda possibilità. La manderai a fanculo come la prima.",
+"Perfino sulla via più facile ti sei perso. Ci vuole impegno, stronzo.",
+"A furia di toccare il fondo col culo ci hai preso la residenza.",
+"Memoria da pesce rosso. Il pesce, però, almeno non rompe i coglioni.",
+"Entri in una stanza e non sai più che cazzo ci fai. Come nella vita.",
+"Oggi ritroverai le chiavi. Erano in mano tua, coglione.",
+"Ti ricordi ogni torto subito e nessuna password. Rancoroso e pure chiuso fuori.",
+"La tua attenzione dura meno di questa frase. Ecco, sei già altrove.",
+"Hai dimenticato il compleanno di tua madre. Lei prova a dimenticare il tuo.",
+"Ascolti con la stessa attenzione con cui leggi i contratti: zero. Infatti ti fregano.",
+"Dove hai messo il telefono? Ce l'hai in mano, genio del cazzo.",
+"Presto ti verrà in mente una cosa importante. Tre giorni dopo la scadenza.",
+"Memoria selettiva, la tua: tiene solo le stronzate.",
+"Fai il nodo al fazzoletto e poi perdi il fazzoletto. Fine della strategia.",
+"Dopo tre secondi dalle presentazioni, il nome dell'altro ti è già evaporato.",
+"Mentre ti parlano annuisci e pensi alla cena. Si vede, e fa girare le palle.",
+"Assente ingiustificato dalla nascita: altro che distratto.",
+"Fatta la lista della spesa, bravo. È rimasta sul tavolo a ridere di te.",
+"Hai parcheggiato da qualche parte. Buona ricerca, testa di minchia.",
+"Leggi un messaggio, pensi rispondo dopo, e dopo è il mese prossimo.",
+"Uno starnuto dura più della tua concentrazione, e serve anche di più.",
+"Sai a memoria le canzoni di vent'anni fa e non cosa cazzo dovevi fare oggi.",
+"Si prega il proprietario di questa testa di passare a ritirarla. Nessuno la vuole.",
+"Me lo segno, hai detto. Dove? Non lo sai. Cosa? Nemmeno. Bella merda.",
+"Anche oggi ti sei scordato una cosa importante. Quale? Cazzi tuoi.",
+"Sei quello che chiede a che ora dopo che l'hanno detto tre volte. Che palle.",
+"Racconti la stessa storia per la quarta volta e sbagli pure il finale.",
+"Segui i discorsi come un cane segue una mosca: per poco e a bocca aperta.",
+"Ombrelli, caricabatterie, occasioni, dignità: perdi tutto con la stessa disinvoltura.",
+"Tre sveglie puntate e arrivi tardi lo stesso, dando la colpa al traffico. Paraculo.",
+"Esci di casa e torni indietro due volte. La terza è per la vergogna.",
+"Non stai ascoltando neanche adesso, vero? Appunto. Vaffanculo.",
+"Dimentichi i favori ricevuti con una velocità da stronzo professionista.",
+"Dice il saggio: il passato è passato. Per te lo è già anche stamattina.",
+"Metti le cose in un posto sicuro. Così sicuro che non le trovi più manco tu.",
+"Ti credi un genio incompreso. Ti hanno compreso benissimo: sei un coglione.",
+"Vedo un grande esperto nel tuo futuro. Ti spiegherà dove hai sbagliato: ovunque.",
+"Hai la sicurezza di un chirurgo e la preparazione di un passante.",
+"Ti senti furbo. Anche il tacchino si sente al sicuro fino a dicembre.",
+"Un video di dieci minuti e ti senti del mestiere. Fai tenerezza, e pure un po' schifo.",
+"Al tuo ego serve una stanza tutta sua. Il talento sta comodo in un taschino.",
+"Chi sa di non sapere è saggio. Tu non sai un cazzo e nemmeno lo sospetti.",
+"Parli come uno che ha capito tutto. Non hai capito una sega, ma lo dici bene.",
+"Convinto di essere la volpe, sei la gallina che le tiene aperta la porta.",
+"L'umiltà non ti manca: semplicemente non vi siete mai incontrati.",
+"Esperto di tutto, tranne che del tuo lavoro. Lì fai cagare.",
+"Complimenti per l'autostima. Peccato sia l'unica cosa che hai costruito.",
+"Dopo ogni disastro dici che tu l'avevi detto. Prima, mai un cazzo.",
+"Pensi di averli fregati tutti. Ti lasciano fare perché gli fai pena.",
+"La modestia è la virtù dei grandi. A te, infatti, non è mai servita.",
+"Il mondo non ti capisce. Ci ha provato, ma non c'era niente da capire.",
+"Sai tutto tu. Strano che nessuno ti chieda mai un cazzo.",
+"Di te hai un'opinione altissima. Da lassù la merda che combini non si vede.",
+"Ti vanti di dire sempre quello che pensi. Il guaio è che pensi minchiate.",
+"Sei convinto di avere un talento nascosto. Complimenti per il nascondiglio.",
+"Fai il maestro con chi ne sa il triplo di te. E loro, zitti, ti prendono per il culo.",
+"Etichetta: novanta per cento presunzione, dieci per cento stronzate. Agitare prima dell'uso.",
+"Sottovalutato, tu? Tranquillo: la valutazione è corretta.",
+"Sei un visionario: vedi cose che non esistono, tipo le tue capacità.",
+"Dai lezioni di vita con quella vita lì? Ci vuole una bella faccia da culo.",
+"Rispondi sempre al volo e sempre a cazzo. Almeno sei rapido.",
+"Sei autodidatta e si vede: il maestro era un coglione.",
+"Simpatico ti ci trovi solo tu: sei in netta minoranza, uno contro tutti.",
+"Pensavi di aver letto tra le righe. Non avevi capito manco le righe.",
+"Fai il furbo sugli spiccioli e ti fottono sul conto.",
+"Ti atteggi a lupo solitario. Sei solo uno stronzo che nessuno invita.",
+"Nessuno ha chiesto il tuo parere. Guarda caso, sta arrivando lo stesso.",
+"Ogni volta che intervieni, il silenzio ci rimette. Ed era meglio lui.",
+"Presto vincerai una discussione. Da solo, sotto la doccia, due giorni dopo.",
+"Parli tanto perché appena ti fermi si sente il vuoto. E il nostro sollievo.",
+"C'è chi parla perché ha qualcosa da dire. Tu parli perché hai la bocca.",
+"A cena aspettano tutti che tu vada in bagno per parlare di cose serie.",
+"Discuti come guidi: contromano, senza freccia e convinto che i coglioni siano gli altri.",
+"Quando hai torto alzi la voce. Infatti urli sempre, testa di cazzo.",
+"Dici la tua su tutto. Su niente sarebbe già troppo.",
+"Premetti sempre che non sei un esperto. Ecco, fermati lì: era la parte giusta.",
+"Ogni tuo messaggio nel gruppo è seguito da un silenzio che dovrebbe dirti qualcosa.",
+"Se ti danno ragione è per toglierti dalle palle, non perché ce l'hai.",
+"Gli amici leggono e non rispondono. Non è un caso: gli stai sul cazzo.",
+"Stai per dire una cosa intelligente. No, falso allarme: è la solita cazzata.",
+"Cambi argomento appena perdi. Con te infatti non si finisce mai un discorso.",
+"Spieghi il lavoro a chi lo fa di mestiere e ti stupisci se ti mandano a cagare.",
+"Parla poco e ascolta molto, dice il proverbio. Tu fai schifo in entrambe.",
+"Le tue figure di merda ormai hanno un pubblico affezionato.",
+"Ai tuoi discorsi mancano tre cose: un senso, una fine e qualcuno che ascolti.",
+"Quando racconti una barzelletta, il bello è guardarti fallire.",
+"Regali il tuo parere a tutti perché vale quello che costa: un cazzo.",
+"Hai torto anche quando stai zitto, ma almeno rompi meno i coglioni.",
+"Commenti tutto senza capirci una minchia: un servizio pubblico al contrario.",
+"In bocca chiusa non entrano mosche. Nella tua ormai ci hanno fatto il nido.",
+"Quando parli la gente annuisce. È il modo educato di dire vaffanculo.",
+"Fai giri lunghissimi per arrivare a conclusioni di merda. Almeno accorcia.",
+"Tra il dire e il fare, tu hai scelto il dire stronzate.",
+"Alla riunione hai parlato dieci minuti. Nessuno ricorda di cosa, tu compreso.",
+"Stai pensando che adesso gliela dici tu. No. Per una volta, taci.",
+"Appena attacchi con secondo me, a qualcuno cascano le palle.",
+"Le tue opinioni sono come il prezzemolo: dappertutto, e hanno già rotto il cazzo.",
+"La tua carriera è un ascensore guasto: ci stai dentro da anni e premi ancora il bottone.",
+"Sul curriculum hai scritto capacità di risolvere problemi. Il problema sei tu, e sei ancora lì.",
+"La promozione arriverà. A quello che hai formato tu, coglione.",
+"Inglese fluente, c'è scritto. Poi al primo straniero ti caghi sotto e parli a gesti.",
+"Vedo una convocazione dall'ufficio del personale. Porta uno scatolone, che fai prima.",
+"Dieci anni nella stessa azienda, stessa scrivania, stesso stipendio. Non è fedeltà, è muffa.",
+"Il tuo curriculum è un romanzo fantasy: tanta immaginazione e nessuno che ci crede.",
+"Ti definisci una risorsa. Anche la merda lo è, nei campi. Ma lei almeno fa crescere qualcosa.",
+"La tua crescita professionale è una pianura: piatta, nebbiosa e non ci vuole venire nessuno.",
+"Il colloquio è andato bene, dici. Infatti stanno ancora ridendo.",
+"Sai perché non ti promuovono? Perché ti hanno visto lavorare.",
+"Le faremo sapere: la frase più affettuosa che tu abbia mai ricevuto da un'azienda.",
+"Non sei sottopagato. Sei pagato esattamente quanto vale uno che si lamenta e non muove il culo.",
+"Leader, dice il tuo profilo. I colleghi dicono quello stronzo là, e nei giorni buoni.",
+"Complimenti per i vent'anni di esperienza. È lo stesso anno di merda ripetuto venti volte.",
+"In azienda sei come il tasto Bloc Scorr: ci sei da sempre e nessuno sa a che cazzo servi.",
+"Ottima capacità di lavorare in gruppo: infatti lavora il gruppo e tu ti gratti le palle.",
+"L'ultima cosa che hai letto per intero è l'etichetta dello shampoo, sul cesso. E scrivi hobby: lettura.",
+"Lo stagista guadagnerà più di te entro tre anni. E ti darà del lei per pietà.",
+"Aspetti la promozione come l'autobus a Ferragosto: sudando, da solo e senza speranza.",
+"Attenzione: questo dipendente contiene tracce di competenza. Pochissime, e per puro caso.",
+"Presto avrai un ufficio tutto tuo. Si chiama sgabuzzino, e lo dividi con la scopa.",
+"Hai fatto carriera come un gambero nella nebbia: all'indietro e senza accorgertene.",
+"Più responsabilità, stessi soldi. E tu hai pure ringraziato, testa di cazzo.",
+"Laurea, master, due corsi online. E fai ancora le fotocopie storte, minchione.",
+"Il tuo lavoro potrebbe farlo una pianta grassa. E romperebbe meno i coglioni.",
+"Dici che il tuo talento non viene riconosciuto. Tranquillo: non c'è un cazzo da riconoscere.",
+"Consiglio gratuito: ai colloqui smetti di dire che il tuo difetto è il perfezionismo. Si vede che menti, e male.",
+"La gavetta prima o poi finisce, dicevano. La tua ha messo radici e paga pure l'affitto.",
+"Davvero pensavi che bastasse arrivare puntuale per fare carriera? Che ingenuità, che pirla.",
+"Etichetta: dipendente lavabile a mano. Non stirare, non candeggiare, non promuovere.",
+"Fatti un favore: togli visionario dalla biografia. Sei un impiegato col cartellino e il panino nella stagnola.",
+"Questa riunione poteva essere un'email. Tu potevi essere una sedia vuota. Nessuna differenza.",
+"In smart working muovi il mouse ogni cinque minuti. È tutta la tua attività fisica e lavorativa.",
+"Come da mia precedente email: sei un coglione. Cordiali saluti.",
+"Dopo sei anni il capo non ricorda il tuo nome. Ti chiama coso, e gli sembra pure troppo.",
+"In call tieni la telecamera spenta. È il contributo migliore che dai al gruppo.",
+"Hai risposto a tutti per sbaglio. Ora l'intera azienda sa quanto sei pirla, e per iscritto.",
+"I colleghi organizzano l'aperitivo in una chat dove tu non ci sei. Ne hanno tre, e in tutte parlano di te.",
+"Lavori da casa in mutande dalle nove alle sei. Di lavoro, venti minuti. Di mutande, tutto il resto.",
+"Dice il saggio: chi parla molto in riunione ha fatto poco prima. Tu parli tantissimo.",
+"Sei quello della domanda veloce alle 17:58. Ti odiano tutti, e hanno ragione, rompicoglioni.",
+"Stato: occupato. Tua madre scriverebbe: sdraiato sul divano a grattarsi il culo.",
+"In ufficio ti trattano come la stampante: se funzioni si stupiscono, se no ti mandano affanculo.",
+"Metti il capo in copia per fare la spia. Stronzo e pure inutile: le tue email non le legge.",
+"Le stelle parlano chiaro: riunione di due ore, non serve a un cazzo e l'hai convocata tu.",
+"Il microfono era acceso. Sì, hanno sentito tutto. Sì, anche quello.",
+"Porti le brioche in ufficio per farti voler bene. Le mangiano e continuano a pensare che sei uno stronzo.",
+"Il capo ti ha chiesto un parere. Tranquillo: voleva solo sapere cosa non fare.",
+"Scrivi urgente nell'oggetto di ogni email. Di urgente c'è solo che impari a lavorare, cazzo.",
+"Quando parli in riunione tutti guardano il telefono. Anche quelli che ce l'hanno scarico.",
+"Ridi a tutte le battute del capo da anni. Leccaculo senza risultati: il mestiere più triste che c'è.",
+"Avviso: quello in fondo all'ufficio non è un attaccapanni, sei tu. Stessa utilità, meno stile.",
+"Unico tuo intervento in call: scusate, mi sentite? Ti sentivano. Speravano di no.",
+"Fai finta di prendere appunti. Sul foglio c'è solo un cazzo disegnato male.",
+"Hai detto ci penso io. In ufficio hanno già aperto le scommesse sul tipo di cazzata.",
+"Smart working, per te, vuol dire un solo collega: il divano. Ed è più produttivo di te.",
+"Mandi email alle undici di sera per sembrare instancabile. Sembri solo uno che di giorno non combina una minchia.",
+"Alla cena aziendale ti mettono in fondo, vicino ai cappotti. I cappotti si sono lamentati.",
+"Chi dorme non piglia pesci. Tu dormi in call e pigli lo stipendio: più ladro che pescatore.",
+"Quando vai in ferie nessuno ti sostituisce. Non è stima: non c'è niente da sostituire.",
+"In ufficio sei una leggenda. Raccontano ancora di quella presentazione. Ridendo.",
+"Porta sempre aperta, dice il capo. Spera solo che tu la usi per levarti dai coglioni.",
+"Quante riunioni servono per non decidere niente? Chiedilo a te, che le convochi tutte, rompipalle.",
+"Persino il bancomat ti ha riso in faccia. Poi si è ricordato che è una macchina e ha riso di nuovo.",
+"Risparmi: zero. Debiti: tanti. Faccia da culo per chiedere altri prestiti: illimitata.",
+"Arriverà un bonifico importante. Sul conto di un altro, ma tu continua pure a controllare, minchione.",
+"Sei così in rosso che la banca ti manda i fiori a San Valentino. Poi ti addebita i fiori.",
+"Chi trova un amico trova un tesoro. Chi trova te ci rimette cinquanta euro e si incazza pure.",
+"Controlli il saldo con un occhio chiuso, come se facesse meno male. Fa male uguale, poveraccio.",
+"Per te la fine del mese comincia il giorno dodici. Il tredici sei già a pane, acqua e vaffanculo.",
+"Carta rifiutata. Anche lei ha una dignità, a differenza tua.",
+"Piano pensionistico: sperare. Non funziona, ma è gratis, come piace a te.",
+"Dici che i soldi non fanno la felicità. Lo dici perché non hai nessuna delle due.",
+"Dal tuo portafoglio, quando lo apri, esce l'eco. E pure l'eco ti chiede venti euro.",
+"Proverbio contadino: la formica mette da parte. Tu metti da parte solo gli scontrini, per piangerci sopra.",
+"Vivi sopra le tue possibilità. Bella forza: le tue possibilità sono rasoterra.",
+"In banca il direttore ti saluta per nome. Non è cortesia: sei il suo caso di studio.",
+"Hai chiesto un aumento. Ti hanno aumentato solo le prese per il culo.",
+"Dividi il conto alla romana fino al centesimo. Non sei preciso, sei un pidocchio con la calcolatrice.",
+"Lo stipendio entra, saluta e se ne va. È l'unico in casa tua che sa quando levarsi dalle palle.",
+"I tuoi risparmi stanno tutti in una mano. Chiusa. Vuota.",
+"Fondo di emergenza: il divano dei tuoi. E stanno pensando di cambiare la serratura.",
+"Paghi a rate anche la pizza. Tra poco ti finanziano pure il coperto.",
+"Sei ricco dentro, dici. Ecco, prova a pagarci la spesa, coglione.",
+"Prestare soldi a te è come buttarli nel cesso. Ma il cesso almeno non giura di restituirli.",
+"A trent'anni passati chiedi ancora la paghetta, ma la chiami aiutino temporaneo. Dura da nove anni.",
+"Il tuo stipendio è come te a letto: si fa aspettare, dura poco e lascia tutti delusi.",
+"Ogni volta che passi la carta trattieni il fiato e stringi il culo. Il cassiere ormai ti compatisce.",
+"I tuoi creditori hanno fatto un gruppo. Si vedono il giovedì e parlano di quanto sei stronzo.",
+"Collezioni più debiti che amici. E gli amici calano proprio per via dei debiti.",
+"Bilancio familiare, voce unica: boh. E pure quella è in passivo.",
+"Guadagni poco e spendi male. Bisogna pur essere coerenti nella vita, almeno nella merda.",
+"Ti sei mai chiesto dove finiscono i tuoi soldi? In cazzate. Fine dell'indagine.",
+"Insegna il maestro zen: chi non possiede nulla è libero. Tu sei liberissimo, e pure moroso.",
+"Prima di chiedere l'aumento, prova a meritarti lo stipendio. Un passo alla volta, campione.",
+"Trent'anni di mutuo per un bilocale con la muffa. La muffa ci vive gratis, il coglione che paga sei tu.",
+"Seicento euro per un armadio con la finestra, e ringrazi pure il padrone di casa. Minchia che affare.",
+"Modulo sbagliato. Di nuovo. Prendi il numero e siediti: sei il 947, e servono il 12.",
+"Gli astri annunciano una busta verde in arrivo. Non è un invito a una festa, cazzone.",
+"Al tuo commercialista basta leggere il tuo nome per sospirare. Poi alza la parcella, perché sei una rottura di palle.",
+"Dimentichi sempre le scadenze. La mora no: lei si ricorda di te, ed è l'unica.",
+"Chi fa da sé fa per tre. Tu hai fatto la dichiarazione da solo e hai fatto danni per sei.",
+"Riscaldamento spento tutto l'inverno e la bolletta ti ha inculato lo stesso. Un genio al gelo.",
+"Per entrare nel portale hai rifatto la password quattro volte. L'operatore la pazienza l'ha persa una.",
+"Ti hanno aumentato l'affitto e hai risposto grazie, buona giornata. Hai meno palle che metri quadri.",
+"Quando finirai di pagare il mutuo, la casa avrà più crepe di te. E varrà comunque di più.",
+"Conservi tutte le ricevute in una scatola da scarpe. Tutte tranne quella che ti serviva, ovviamente.",
+"Multa presa, multa dimenticata, multa raddoppiata. Sei un piano di accumulo al contrario.",
+"Spese condominiali straordinarie: l'unica cosa straordinaria della tua vita, e la paghi tu.",
+"Avviso di giacenza: la tua voglia di aprire la posta giace lì da anni. Gli interessi invece corrono.",
+"Due ore di fila allo sportello sbagliato. Con la faccia giusta, però: quella da pirla.",
+"Ti lamenti delle tasse come se ne pagassi tante. Con quel reddito lì fai solo ridere.",
+"Certo, la burocrazia è lenta. Ma tu che compili i moduli a matita sei coglione di tuo.",
+"Paghi le bollette sempre all'ultimo giorno. Cioè una settimana dopo l'ultimo giorno.",
+"L'amministratore di condominio ti cerca. Non è amicizia: sei indietro di tre rate, stronzo.",
+"Lo sportello chiude alle 12:30. Tu arrivi alle 12:31, da sempre, per vocazione.",
+"Il contatore gira più veloce del tuo cervello. Ci riuscirebbe anche una lumaca in salita.",
+"Hai chiesto un rimborso tre anni fa. Arriverà come tutte le cose belle della tua vita: col cazzo.",
+"Affitto in nero, niente contratto, e ti senti furbo. Il furbo è quello che incassa, minchione.",
+"Mutuo a tasso variabile. Varia sempre in una direzione sola: nel culo a te.",
+"Alla voce stato civile hai scritto stanco. Per una volta sei stato sincero, e hai sbagliato lo stesso.",
+"La caldaia si è rotta il giorno dopo la fine della garanzia. Persino lei sa come fotterti.",
+"Marca da bollo sbagliata. Torna indietro, rifai la fila, ripensa alle tue scelte di vita.",
+"Di sicuro, dicono, ci sono solo le tasse. Nel tuo caso anche le figure di merda allo sportello.",
+"Canone, rifiuti, bollo, condominio: tutti sanno dove abiti. Tranne il successo.",
+"Nella causale del bonifico dell'affitto scrivi: scusi il ritardo. Ormai la banca te la precompila.",
+"Ma il contratto l'hai letto prima di firmare? No. I biscotti invece li leggi. Vaffanculo, va.",
+"Paghi la palestra da tre anni. Ci sei andato due volte, e una era per iscriverti.",
+"Comprato al massimo, venduto al minimo. Non è sfortuna, è talento: sei una sega con metodo.",
+"Gratta, gratta. Tanto l'unica cosa che vinci è la polvere argentata sotto le unghie.",
+"Friggitrice ad aria, macchina del pane, cyclette. In casa tua si chiamano tutte mensola.",
+"Era in offerta, dici. Lo dicevi anche delle altre nove stronzate che hai in cantina.",
+"I tuoi investimenti sono rossi come la faccia di tua madre quando le chiedono che lavoro fai.",
+"Ti sei pagato un corso per diventare ricco. Uno dei due è diventato ricco, e non sei tu.",
+"Sei abbonato a sei piattaforme e riguardi sempre la stessa serie. Coglione in alta definizione.",
+"Massima del mercante: compra quando ti serve. Tu compri quando c'è scritto ultimi pezzi, pirla.",
+"Cento euro di gratta e vinci per vincerne cinque. E hai pure esultato in tabaccheria, babbeo.",
+"Investi seguendo i consigli di tuo cugino. Tuo cugino, da allora, non risponde al telefono.",
+"Prova gratuita di sette giorni. La paghi da due anni e non sai più nemmeno che cazzo è.",
+"Bici da duemila euro. Fa una figura bellissima in cantina, accanto alla tua forza di volontà.",
+"Al tabaccaio stai simpatico: gli hai pagato la macchina nuova, un gratta e vinci alla volta.",
+"Complimenti per l'affare: la garanzia estesa ti è costata più del frullatore. Un vero squalo.",
+"Tutti i risparmi in una moneta digitale col nome di un cane. Ora abbai tu, incazzato e al verde.",
+"Scarpe da corsa nuove ogni anno, corsa mai. Il culo dal divano non lo alzi nemmeno a pagamento.",
+"Occhio: l'offerta scade tra dieci minuti. La tua capacità di giudizio è scaduta da un pezzo.",
+"Quel cassetto pieno di cavi di cose che non hai più è il ritratto fedele della tua testa.",
+"Hai comprato un libro su come smettere di comprare cazzate. Era una cazzata.",
+"Paghi ogni mese per conservare foto che non riguardi mai. Come la tua vita: archiviata e inutile.",
+"Da lontano il venditore ti ha visto arrivare e ha sorriso. Hai proprio la camminata del pollo.",
+"Compri azioni quando ne parla il barbiere e vendi quando piangi. Strategia del cazzo, ma costante.",
+"Giochi i numeri che ti dà la nonna in sogno. La nonna, in sogno, ti prende per il culo.",
+"Telefono nuovo a rate per fare le stesse stronzate di prima, ma più nitide.",
+"Diversificare, dicevano. E tu hai diversificato: hai perso soldi in sei modi diversi.",
+"L'unica cosa che porti a termine è il carrello online. Alle tre di notte e senza un motivo.",
+"Ti è arrivato un pacco. Non ricordi cosa hai ordinato, né perché, né con quali cazzo di soldi.",
+"Smetti di chiamarlo investimento. Si chiama beneficenza a gente più furba di te.",
+"Che dono per gli affari: ogni volta che compri tu, dall'altra parte qualcuno stappa.",
+"Ti serviva davvero il terzo abbonamento? No. Ti serviva qualcuno che ti dicesse: fermati, testa di minchia.",
+"La tua idea geniale esiste dal 2009. E chi l'ha avuta è già fallito.",
+"Domani inizi sul serio, come no. Domani ha chiesto di non essere tirato in mezzo alle tue stronzate.",
+"Dominio registrato, logo fatto, biglietti da visita stampati. Manca solo l'azienda, coglione.",
+"Vedo un grande progetto nel tuo futuro. Resterà lì, nel futuro, insieme a tutti gli altri.",
+"Sei imprenditore di te stesso. Infatti l'azienda è in perdita e il personale fa cagare.",
+"Undici progetti aperti, zero finiti. Non sei creativo, sei un cantiere abusivo.",
+"Vuoi aprire un chiringuito sulla spiaggia. Non sai aprire una lattina senza farti male.",
+"Scadenza: ieri. Oggi hai riordinato le icone sul desktop. Priorità, cazzo.",
+"Chi ben comincia è a metà dell'opera. Tu cominci di merda e ti fermi al titolo.",
+"Un'idea da un milione di euro, la tua. Di debiti, se qualcuno è così fesso da finanziarti.",
+"Tutto il tuo piano aziendale sta su un tovagliolo del bar. Macchiato di spritz, come la tua credibilità.",
+"Procrastinare è un'arte. Tu sei l'imbianchino che non si presenta.",
+"Prima di iniziare ti fai un caffè. Poi un altro. Poi è sera, e sei un coglione molto sveglio.",
+"Vuoi fare soldi vendendo corsi su come fare soldi, senza aver mai fatto soldi. Paraculo e pure scarso.",
+"Scrivi un romanzo da sei anni e sei a pagina tre. Si sono rotti le palle anche i lettori immaginari.",
+"La lista delle cose da fare è il tuo capolavoro. Peccato che farle non fosse nella lista.",
+"Mi metto in proprio, hai detto. Di proprio hai solo il divano, e non hai finito di pagarlo.",
+"Ogni lunedì rinasci. Ogni martedì sei lo stesso pirla di prima, ma con un quaderno nuovo.",
+"Vuoi aprire un bar con gli amici. Così perdi soldi e amici in un colpo solo: efficienza.",
+"Antica massima orientale: un viaggio di mille miglia comincia con un passo. Tu stai ancora scegliendo le scarpe.",
+"Hai chiamato l'attività col tuo cognome. Primo errore di marketing: quello non lo vuole nessuno.",
+"Sotto pressione lavori meglio, giuri. Sotto pressione fai le stesse cazzate, solo più in fretta.",
+"Tieni il progetto in fase di analisi dal 2020. Più che analisi, ormai, è archeologia.",
+"Apri la partita IVA per sentirti imprenditore. Ora sei lo sfigato di prima, ma con più tasse.",
+"Volevi rivoluzionare il mercato. Hai rivoluzionato solo il conto corrente dei tuoi genitori.",
+"Sei ore di video su come essere produttivi. Minchia, lo vedi il problema o te lo disegno?",
+"Unico cliente del tuo negozio online: tua zia. Ha chiesto il reso.",
+"Riesci a fallire in tre settori senza nemmeno entrarci. Questo sì che è spirito imprenditoriale.",
+"Idea, entusiasmo, tre giorni di lavoro, vaffanculo a tutto. Sei prevedibile come una bolletta.",
+"Candele artigianali vendute in rete: chi te l'ha fatto fare? Ah già, la tua testa di cazzo.",
+"Contiene: due per cento di impegno, novantotto di scuse. Può contenere tracce di lunedì.",
+"Ha visualizzato tre giorni fa. Non è timidezza, non è lavoro: sei tu che fai cagare.",
+"Un consiglio: smetti di scrivere per primo. E per secondo. E per terzo, minchia.",
+"Sul profilo ti descrivi solare e ironico. In chat scrivi ciao, ehi, ci sei, ok scusa.",
+"Presto qualcuno ti scriverà per primo. È il corriere, e ha pure sbagliato numero.",
+"Restiamo amici, ti ha detto. Due parole e due cazzate.",
+"Il due di picche non è una carta. Nel tuo caso è lo stemma di famiglia.",
+"Corteggi come parcheggi: male, a lungo e rompendo i coglioni a tutti.",
+"Hai il fascino di un modulo da compilare in triplice copia.",
+"Non ti risponde perché ha da fare. Qualunque cosa, pur di non risponderti.",
+"Dice il saggio: chi scrive ehi alle due di notte raccoglie una spunta grigia e un vaffanculo.",
+"Volevi rompere il ghiaccio con una battuta. Hai rotto solo le palle.",
+"L'ultimo match che hai fatto era un errore di dito. Ha già rimediato.",
+"Sostieni che i bravi ragazzi restano soli. Tu resti solo perché sei una lagna, non perché sei bravo.",
+"Otto messaggi di fila senza risposta non sono una chat. Sono un monologo, coglione.",
+"L'anima gemella esiste. Ti ha visto arrivare e ha disinstallato l'app.",
+"Complimenti per la costanza: tre anni di corte e non sa ancora come cazzo ti chiami.",
+"Le foto del tuo profilo sono di sei anni e dodici chili fa. Se ne accorgono tutti, pirla.",
+"Al primo appuntamento parli solo di chi ti ha mollato. Al secondo non ci arrivi mai.",
+"Metti le mani avanti: non cerco niente di serio. Tranquillo, nessuno ti stava offrendo un cazzo.",
+"Un giorno qualcuno ti guarderà come tu guardi il telefono: con delusione.",
+"Lo chiami amore non corrisposto solo perché amore non richiesto suonava peggio.",
+"Mandi il buongiorno ogni mattina a chi non ti caga dal 2019. Puntuale come una multa.",
+"Avviso: il tuo fascino può causare sbadigli, fughe e improvvisi impegni di lavoro.",
+"Ti ha detto: non sei tu, sono io. Mentiva: sei proprio tu, cazzo.",
+"Flirti con la grazia di un frigorifero che cade dalle scale.",
+"Vedo un grande amore nel tuo futuro. Non è il tuo: tu reggi il moccolo, come sempre.",
+"A un tuo cuore ha risposto con un pollice. Traduzione: levati dal cazzo, ma con garbo.",
+"Scrivi ti penso a chi, intanto, pensa a come bloccarti senza passare per stronzo.",
+"Cena, cinema e taxi pagati da te, per una stretta di mano e un ci sentiamo. Affare di merda.",
+"In amore vince chi fugge. Da te scappano tutti: hai fatto vincere un sacco di gente.",
+"Nella bio hai scritto: amo viaggiare. L'unico viaggio che fai è da un vaffanculo all'altro.",
+"Sono le tre di notte e stai per scrivere a chi sai tu. Posa il telefono, testa di cazzo.",
+"Chi ti ha lasciato festeggia ancora l'anniversario. Quello della liberazione.",
+"Dopo di te ha rivalutato la solitudine, il silenzio e perfino quello stronzo di prima.",
+"Guardi ancora le sue storie con un profilo finto. Lo sa. Ci ridono su in tanti, coglione.",
+"Avvertenza per chi ci convive: il soggetto lascia briciole, peli nel lavandino e scuse del cazzo.",
+"Vuoi sapere perché è finita? Prova a passare una settimana con te stesso, senza scappare.",
+"Racconti che vi siete lasciati di comune accordo. L'accordo era suo: tu hai solo frignato.",
+"Chi dorme accanto a te non russa: sospira.",
+"Lasci le mutande in giro come il cane lascia i ricordini. Stessa accoglienza, stesso schifo.",
+"Hai chiesto una pausa di riflessione. Dall'altra parte hanno riflettuto dodici secondi, poi hanno stappato.",
+"Sei entrato nella sua vita e ha capito subito cosa cercava: l'uscita.",
+"Per tutti i tuoi ex sei stato una lezione: adesso riconoscono un coglione da lontano.",
+"Ti ha lasciato con un vocale di nove secondi. Sette erano un sospiro di sollievo.",
+"Antico proverbio: chi torna dall'ex trova la minestra riscaldata e il cuoco incazzato.",
+"Non lavi un piatto dal giorno del trasloco. Non sei un partner, sei un coinquilino di merda.",
+"Dopo due sedute con voi, il terapeuta di coppia ha cercato un terapeuta. E un altro lavoro.",
+"Alle cene raccontano ancora di te. Sei la storia che comincia con: e poi c'era quel pirla.",
+"Tre anniversari dimenticati di fila. Tranquillo: presto non ci sarà più un cazzo da ricordare.",
+"All'altare, chi ti sposa non dice sì. Dice vabbè, ormai siamo qui.",
+"Ha cambiato taglio, casa e numero di telefono. Manca solo il vaffanculo per raccomandata.",
+"I suoi amici ti chiamavano quello lì. Adesso ti chiamano quello stronzo lì.",
+"Russi, scoreggi e rubi la coperta. Dormire con te è un lavoro usurante.",
+"Le tue relazioni durano meno dello yogurt aperto in frigo. E finiscono con lo stesso odore.",
+"Solo tu potevi farti mollare anche dal gatto. E il gatto mangiava gratis, cazzo.",
+"Hai scritto: mi manchi. Ha risposto: chi sei? E no, non aveva cambiato telefono.",
+"Il tuo matrimonio durerà. Come dura una coda in tangenziale: tutti fermi e incazzati.",
+"Gli astri annunciano una proposta di matrimonio in ginocchio. E, subito dopo, una risata in faccia.",
+"Chi ti ha mollato non ha voltato pagina: ha dato fuoco al libro e pisciato sulla cenere.",
+"Il divano dove dormi dopo ogni lite ha ormai la forma precisa del tuo culo.",
+"Lo scatolone con le tue cose è tornato indietro. Dentro c'erano pure i regali che avevi fatto tu.",
+"Prima di conoscerti credeva nell'amore. Adesso crede nella porta blindata.",
+"Per San Valentino hai regalato un frullatore. Ti ha ringraziato con un avvocato.",
+"A casa tua il romanticismo è abbassare la tavoletta. E non fai manco quello, cazzo.",
+"A letto sei come il treno regionale: parti in ritardo, finisci subito e lasci tutti incazzati.",
+"La tua prestazione dura meno della pubblicità prima di un video. E quella almeno si salta.",
+"Dopo una notte con te nessuno chiede com'è stato. Chiedono: ah, era già finito?",
+"Record personale a letto: otto ore filate. Di sonno, coglione.",
+"Chi finisce a letto con te poi fissa il soffitto e ripensa a tutte le sue scelte di merda.",
+"Per te i preliminari sono toglierti i calzini. E metà delle volte te li tieni.",
+"Consiglio non richiesto: spegni la luce prima. Non per l'atmosfera, per pietà.",
+"Massima orientale: la tigre ruggisce tutta la notte, il coniglio fa in fretta. Indovina chi sei.",
+"Dicono che il tuo sex appeal sia stato avvistato una volta, nel 2014. Era un riflesso.",
+"Fai l'occhiolino e la gente ti chiede se ti è entrato un moscerino. Seduttore dei miei coglioni.",
+"Le lenzuola, dopo di te, non vanno lavate: vanno consolate.",
+"Sussurri porcate all'orecchio con la voce di uno che legge il bugiardino dello sciroppo.",
+"Avevi promesso un'esperienza indimenticabile. Infatti nessuno si scorda più che palle è stata.",
+"La tua vita sessuale è come il wifi dell'albergo: promesso ovunque, non prende in camera.",
+"Ti spogli e cala il silenzio. Non quello bello: quello da ma che cazzo ho fatto.",
+"I vicini si lamentano dei rumori di tutto il palazzo. Casa tua la scambiano per una biblioteca.",
+"A letto ti chiamano il notaio: una firma veloce e arrivederci.",
+"Balli per sedurre e sembri uno con una vespa nelle mutande.",
+"La tua mossa segreta a letto è chiedere scusa. Ed è l'unica che ti riesce.",
+"Togli la maglietta con lentezza studiata. Chi guarda, intanto, studia l'orario dei bus.",
+"Profumo da predatore, sguardo da predatore. Tutto il resto, da assemblea di condominio.",
+"Scopi come compili la dichiarazione dei redditi: una volta l'anno, con l'ansia e sbagliando.",
+"Credi di essere una notte da leoni. Sei un pomeriggio da criceto.",
+"Dopo l'amore accendi la luce e chiedi com'è andata. Lo sai com'è andata, pirla.",
+"Tra voi la scintilla c'era. Poi hai aperto la bocca e, peggio ancora, la camicia.",
+"Da lontano, al buio e in silenzio hai il tuo fascino. Poi ti avvicini e va tutto in merda.",
+"L'ultima volta che qualcuno ha urlato il tuo nome era per farti spostare quella cazzo di macchina.",
+"Vanti notti di fuoco in giro. L'unica cosa che hai mai acceso è la stufetta, cazzaro.",
+"Annunci una serata da urlo. L'unico urlo è il tuo, quando ti prende il crampo al polpaccio.",
+"Con te fingere non è una bugia. È l'unico modo per andare a dormire prima.",
+"Hai comprato le lenzuola di seta per fare colpo. Ci scivoli sopra da solo, ogni cazzo di sera.",
+"Mesi di palestra a farti il culo per sedurre. È rimasto solo il culo, e nemmeno bello.",
+"Esiste una chat di gruppo senza di te. Ha lo stesso nome dell'altra, più la parola veri.",
+"Scrivi nel gruppo e calano tre giorni di silenzio. Poi qualcuno manda la foto del cane.",
+"I tuoi amici ti vogliono bene. Da lontano, in differita e a piccole dosi.",
+"Non si sono dimenticati di invitarti. Ti hanno non invitato con molta cura.",
+"Il calcetto del giovedì si fa ancora. Hanno solo smesso di dirtelo, coglione.",
+"Si ricordano di te solo per i traslochi. Non sei un amico, sei un furgone con le braccia.",
+"Quando arrivi tu la festa non finisce. Diventa solo di colpo tardi per tutti.",
+"Le tue battute nel gruppo prendono un solo pollice in su. È il tuo.",
+"Sei minuti di vocale per dire un cazzo. Li ascoltano a doppia velocità e con rancore.",
+"Presto riceverai un invito speciale. Era per un altro con il tuo stesso nome.",
+"In rubrica hai duecento contatti. Alle tre di notte ti risponderebbe solo l'idraulico, a pagamento.",
+"Gli altri hanno un soprannome per te. Non lo saprai mai, ma fa pisciare dal ridere.",
+"Ti hanno fatto gli auguri con quattro giorni di ritardo, col copia e incolla e il nome sbagliato.",
+"Hai proposto una pizza nel gruppo. Tre hanno da fare, due stanno scrivendo dal 2022.",
+"Le foto della serata sono bellissime. Tu sei quel gomito tagliato sul bordo.",
+"Ai tuoi amici stai sul cazzo da anni. Non te lo dicono perché poi dovrebbero parlarti.",
+"Dici: ci vediamo presto. Gli altri la prendono come una minaccia.",
+"Nessuno ha mai avuto il coraggio di dirti che rompi i coglioni. Eccolo scritto: rompi i coglioni.",
+"Al tuo compleanno sono venuti in quattro. Due erano camerieri, uno aveva sbagliato sala.",
+"Prima ti hanno silenziato per otto ore, poi per una settimana, poi per sempre. Stanno benissimo.",
+"Organizzi sempre tu. E poi ti ritrovi da solo a un tavolo da otto come un pirla.",
+"Per il tuo migliore amico sei un conoscente simpatico. E sul simpatico ha esitato.",
+"Racconti la stessa storia da dieci anni. La sanno a memoria e fa cagare uguale.",
+"Alla cena di classe qualcuno ha chiesto di te? No. Nessuno. Manco per il cazzo.",
+"Ti danno ragione solo per farti stare zitto. Non hai convinto nessuno: sei una spina nel culo.",
+"Chiedi passaggi, non metti mai benzina e vuoi pure scegliere la musica. Scroccone di merda.",
+"Domandi chi c'è stasera e ti rispondono: poi ti dico. Indovina chi è il problema, genio.",
+"Gli amici si vedono nel momento del bisogno. I tuoi, quando hai bisogno, spariscono che è una meraviglia.",
+"Al matrimonio ti invitano dal taglio della torta in poi. Il regalo però lo vogliono intero.",
+"Un vero amico ti dice in faccia che sei uno stronzo. I tuoi se lo dicono tra loro, ridendo.",
+"Dimmi con chi vai e ti dirò chi sei. Tu non vai con nessuno: sei un coglione e basta.",
+"Nel gruppo ti hanno fatto amministratore. Così ogni cazzata è ufficialmente colpa tua.",
+"A Natale la nonna chiede a tutti del lavoro. A te chiede solo se mangi.",
+"Tuo cugino ha casa, carriera e due figli. Tu hai la cameretta e una scusa nuova ogni anno.",
+"Tuo padre non è deluso. Per restare delusi bisogna averci creduto almeno un po'.",
+"Nelle foto di famiglia sei sempre quello che scatta. Non è un caso, è una scelta di gruppo.",
+"I tuoi ripetono che l'importante è che tu sia felice. Si dice quando il resto è andato a farsi fottere.",
+"Al pranzo di Natale ti mettono al tavolo dei bambini. E i bambini si incazzano.",
+"Ogni anno la zia chiede se hai trovato qualcuno. Ormai lo fa solo per farsi due risate.",
+"Ti senti la pecora nera della famiglia. Magari. Sei quella grigia: non ti caga nessuno.",
+"Tua madre conserva i tuoi disegni delle elementari. È l'ultima cosa tua che ha potuto mostrare in giro.",
+"Una grossa eredità è in arrivo. Per tuo cugino, quello venuto bene. A te il servizio di piatti brutto.",
+"I panni sporchi si lavano in famiglia. Le tue mutande le lava ancora mamma, e hai quarant'anni.",
+"Tuo nonno alla tua età aveva costruito una casa. Tu non sai montare una mensola, minchia.",
+"Se i parenti chiedono che cazzo fai nella vita, i tuoi cambiano discorso a velocità olimpica.",
+"A tavola lo zio elenca i successi di suo figlio. I tuoi stanno zitti e passano il sale.",
+"Sei la prova che l'educazione dei tuoi ha funzionato. Ma solo con tuo fratello.",
+"Hai preso il naso del nonno, gli occhi di mamma e la voglia di lavorare di nessuno.",
+"Sai perché a Natale ti fanno portare solo il pane? Perché il pane non riesci a sbagliarlo. Forse.",
+"Tuo padre al bar parla di te. Usa solo il condizionale e il passato remoto.",
+"Tua madre ha smesso di chiederti dei nipoti. Ora chiede solo se almeno ti lavi.",
+"La nonna ti allunga venti euro di nascosto. Ha novant'anni e ti mantiene lei, cazzo.",
+"Il cugino riuscito meglio non è un genio. È che tu abbassi la media di tutta la famiglia.",
+"Nel gruppo dei parenti mandi il buongiorno e risponde solo la zia. Con un gattino. Per pietà.",
+"Tua sorella ti presenta così: mio fratello, lascia stare.",
+"Ogni famiglia ha il suo coglione ufficiale. Guardati attorno a tavola: se non lo vedi, sei tu.",
+"In ogni pranzo di famiglia c'è un argomento da evitare. Da qualche anno sei tu.",
+"Chiedi ancora i soldi a tuo padre e gli spieghi pure come va il mondo. Che faccia da culo.",
+"Quando torni per le feste tuo padre guarda il calendario. Vuole sapere quando ti levi dalle palle.",
+"La tua famiglia ti accetta per quello che sei. Ha chiesto se c'erano alternative: non c'erano.",
+"Lo zio che non ha mai combinato un cazzo in vita sua ti guarda e si sente un vincente.",
+"Buon sangue non mente. Il tuo, però, qualche cazzata deve averla raccontata.",
+"In famiglia sei il metro di paragone. A ogni nipote che fa una stronzata dicono: vuoi finire così?",
+"Alle feste stai accanto alle patatine a parlare col cane di casa. E pure lui si rompe le palle.",
+"Quando racconti qualcosa la gente guarda il telefono. Anche chi ce l'ha scarico.",
+"La tua conversazione è come l'acqua tiepida: non fa male, ma nessuno la chiede.",
+"All'aperitivo paghi sempre tu. È l'unico motivo per cui ti fanno sedere, pirla.",
+"Simpatico come un citofono alle sei di mattina. Solo che il citofono, a un certo punto, smette.",
+"Ti hanno salutato da lontano con la mano. Non era un saluto: voleva dire resta dove cazzo sei.",
+"Per non salutarti la gente finge telefonate. Uno ieri ha finto di essere un palo.",
+"Entri in una stanza e la conversazione si ferma. Riparte appena esci, e viene meglio.",
+"Dici sempre: io sono uno diretto. No, sei uno stronzo con la scusa pronta.",
+"Parli di te per un'ora. Poi domandi all'altro come sta, mentre ti stai già alzando.",
+"Vedo una folla che grida il tuo nome. Ah no: ti stanno dicendo di abbassare la voce, cazzo.",
+"Sei l'anima della festa. Quella in pena, che vaga e che nessuno vuole incontrare.",
+"L'ospite è come il pesce: dopo tre giorni puzza. Tu ci metti tre minuti.",
+"Fai una battuta di merda, poi la spieghi, poi la rispieghi. Intanto sono andati tutti a bere.",
+"Il barista ti chiama capo. Lo fa con tutti quelli di cui non ricorda la faccia.",
+"Sai tutto tu, hai visto tutto tu, hai sempre ragione tu. E infatti il sabato sera sei a casa da solo, stronzo.",
+"In pista balli come se nessuno ti guardasse. Purtroppo guardano tutti, e uno sta filmando.",
+"Per la prossima festa: arriva tardi, parla poco, vattene presto. O meglio ancora, non venire.",
+"Al brindisi alzi il bicchiere e nessuno incrocia il tuo. Resti lì col braccio in aria, coglione.",
+"Complimenti, hai un talento raro: svuoti un locale più in fretta dell'allarme antincendio.",
+"Etichetta: maneggiare con pazienza. Tenere lontano da feste, cene e microfoni.",
+"Chi ti incontra per caso dice: dobbiamo vederci. È il modo educato per dire col cazzo.",
+"Canti al karaoke con tutto il cuore. È il resto che manca: voce, ritmo e dignità.",
+"La gente ride con te? No. Ride dopo, in macchina, di te.",
+"Finto modesto, finto simpatico, finto interessato. L'unica cosa vera è che stai sul culo a tutti.",
+"A cena ti mettono sempre in fondo al tavolo. Così rompi il cazzo a una persona sola.",
+"Hai l'alito delle grandi occasioni e la conversazione delle piccole.",
+"Porti una bottiglia da tre euro e ne bevi per trenta. Ti hanno visto tutti, pezzente di merda.",
+"Come stai è una formula di cortesia. Non un invito a raccontare tutto, minchia.",
+"Complimenti: hai una parola buona per tutti. Peccato per le altre tremila, rompicoglioni.",
+"Se il silenzio è d'oro, quando parli tu è tutta bigiotteria.",
+"Il divano ha preso la forma del tuo culo. Nella vita non hai lasciato altri segni.",
+"Rimandi la sveglia nove volte: riesci a fallire già prima di alzarti dal letto.",
+"Gli astri vedono per te un grande cambiamento: di posizione, sul divano, verso le sei.",
+"La tua voglia di fare è stata vista l'ultima volta nel 2014. Le ricerche sono sospese.",
+"Della pigrizia hai fatto un'arte. Peccato che tu sia un artista di merda.",
+"Attenzione: questo individuo si spegne da solo dopo tre minuti di qualsiasi sforzo.",
+"Dici che domani ti svegli presto. Col cazzo: lo sa pure il tuo cuscino, e ride.",
+"Ogni grande viaggio comincia con un passo, dice il saggio. Tu quel passo lo stai ancora valutando dal letto.",
+"Ti svegli stanco, ti riposi dal sonno e vai a letto sfinito. Sfinito da cosa, coglione?",
+"Persino la tua ombra si è rotta il cazzo di aspettarti e si è seduta.",
+"Domani farai grandi cose. È la stessa cazzata che ti racconti da quindici anni.",
+"Se la pigrizia pagasse saresti ricco. Invece sei solo un pirla sdraiato.",
+"Il tuo letto ti conosce meglio di tua madre. E come lei, si vergogna di te.",
+"Riesci a stancarti al solo pensiero di doverti stancare. Una merda, ma efficiente.",
+"Ancora cinque minuti, dici alla sveglia. Lo dici anche alla vita, e guarda che vita di merda.",
+"Un pisolino di tre ore al pomeriggio e poi ti lamenti che la notte non dormi. Genio, minchia.",
+"La montagna non va da nessuno. Tu nemmeno, ma almeno lei ha un bel panorama.",
+"Sdraiato dai il meglio di te. Il che spiega bene che razza di coglione sei in piedi.",
+"Hai l'energia di un telefono al due per cento, e nessuno che ti cerchi il caricatore.",
+"Giri il cuscino dal lato fresco e ti viene il fiatone. Poi dici che hai avuto una giornata pesante.",
+"Fare un cazzo tutto il giorno ti riesce benissimo. Finalmente un talento, pirla.",
+"Antico detto: chi ha tempo non aspetti tempo. Tu aspetti che finisca da solo.",
+"Nei tuoi sogni dormi. Nemmeno lì riesci a combinare qualcosa.",
+"Spegni la sveglia e ti senti furbo. Sei l'unico stronzo che riesce a fregarsi da solo.",
+"Aprire questo biscotto è stato lo sforzo più grande della tua settimana. Ora riposati, campione.",
+"Procrastini così bene che la crisi di mezza età ti arriverà a ottant'anni.",
+"Una lumaca ti ha superato e si è pure girata a mandarti a fanculo.",
+"Sulla tua lista di cose da fare, vecchia di sei anni, la prima voce è: fare la lista.",
+"Avvertenza: contiene tracce di buona volontà. Tracce, eh. Roba da microscopio.",
+"Arrivi sempre dopo: dopo pranzo, dopo le scuse, dopo che gli altri si sono fatti il culo.",
+"La tua dieta dura quanto la tua dignità davanti a un vassoio di fritti: dodici secondi.",
+"Nel tuo frigo ci sono mezzo limone, una birra e le tue ambizioni. Scaduti tutti e tre.",
+"Le stelle annunciano una svolta epocale nella tua vita. No, scusa: è solo un'altra pizza a domicilio.",
+"Mangi leggero a pranzo per sentirti a posto quando a cena ti sfondi come un maiale.",
+"Il fattorino conosce il tuo citofono meglio dei tuoi amici. E a differenza loro, almeno lui si fa vivo.",
+"Solo un assaggio, avevi detto. Il vassoio vuoto dice che sei un bugiardo di merda.",
+"Chi va piano va sano e va lontano. Tu vai al frigo, di notte, di corsa.",
+"Conti le calorie come conti i tuoi successi: smetti subito perché il numero ti deprime.",
+"La bilancia non è rotta. Sei tu che sei un coglione con la forchetta in mano.",
+"Antica saggezza: il corpo è un tempio. Il tuo è una friggitoria aperta tutta la notte.",
+"L'insalata comprata per sentirti a posto è marcita nel cassetto, insieme ai tuoi buoni propositi.",
+"In rosticceria ti chiamano per nome e ti preparano il solito. Il solito è una teglia intera, ingordo di merda.",
+"Per metà sei fatto d'acqua. L'altra metà è maionese e rimorso.",
+"Ordini la bibita senza zucchero accanto a tre panini. A chi cazzo la racconti?",
+"Da lunedì si cambia, dici. Lunedì ti ascolta e si piscia addosso dal ridere.",
+"Quel pacco di biscotti era formato famiglia. La famiglia eri tu, da solo, in dieci minuti.",
+"Il frigo vuoto ti somiglia: luce accesa, dentro un cazzo.",
+"Apri il frigo ogni dieci minuti sperando che sia cambiato qualcosa. Con la tua vita fai uguale.",
+"Alla base della tua piramide alimentare c'è il fritto. Sopra, altre cazzate impanate.",
+"Complimenti per la forza di volontà: hai resistito al dolce per un intero antipasto.",
+"Dicono che siamo quello che mangiamo. Tu sei un avanzo riscaldato male.",
+"Tonno in scatola mangiato sopra il lavandino: stasera cucina lo chef stellato del cazzo.",
+"Non è fame nervosa. È che sei un pozzo senza fondo, e pure senza vergogna.",
+"Il tuo metabolismo ha dato le dimissioni. Dice che in quelle condizioni di merda non lavora.",
+"Proverbio: l'appetito vien mangiando. A te viene anche dormendo, guidando e respirando.",
+"Fai la spesa a stomaco vuoto e torni con sei pacchi di patatine e niente per cena. Un genio.",
+"Hai sgarrato una volta sola. È cominciata nel 2011 e non è ancora finita.",
+"Al buffet ti temono. I camerieri hanno la tua foto in cucina con scritto: occhio a questo stronzo.",
+"Leggi i valori nutrizionali, annuisci serio e ti finisci il pacco. Un coglione, ma informato.",
+"La verdura nel tuo piatto è lì solo per fare da testimone al massacro.",
+"Ingredienti: grassi saturi, zuccheri aggiunti e una montagna di scuse del cazzo.",
+"Ti abbuffi come se domani ci fosse la carestia. Domani c'è solo il tuo culo, più grosso.",
+"Paghi la palestra da tre anni senza metterci piede. Il cliente perfetto: un pollo che non rompe le palle.",
+"Due rampe di scale e ansimi come una locomotiva. È il tuo corpo che ti manda a fanculo.",
+"Vedo muscoli scolpiti nel tuo futuro. Sono del tizio accanto: tu sei lo stronzo molle che guarda.",
+"Il tapis roulant di casa tua fa da appendiabiti da tre anni. Almeno lui serve a qualcosa.",
+"Hai il fisico di chi corre solo quando perde l'autobus. E l'autobus lo perdi lo stesso, pirla.",
+"Ti allacci le scarpe e devi sederti a riprendere fiato. Atleta di merda.",
+"Mente sana in corpo sano, insegnano i saggi. Tu hai fatto zero su due, minchione.",
+"La tessera della palestra è la cosa che usi di meno al mondo, subito dopo il cervello.",
+"Le scarpe da corsa le usi solo per andare a prendere il kebab. Corri, cazzo, che si fredda.",
+"Gli addominali ce li hai, tranquillo. Sono solo in incognito sotto anni di cazzate fritte.",
+"Fai stretching solo per arrivare al telecomando. E ti stiri pure qualcosa.",
+"In palestra ti ricordano bene: sei il fenomeno venuto una volta a gennaio per farsi la foto.",
+"Il tuo sport è criticare dal divano chi lo fa davvero. Il coraggio non ti manca, il fiato sì.",
+"Le punte dei piedi le tocchi solo con lo sguardo. E con quella pancia ormai manco con quello.",
+"Chi si ferma è perduto. Tu non sei mai partito, quindi tecnicamente sei a posto.",
+"Cammini solo fino al frigo, e al ritorno ti devi già sedere. Che fisico di merda.",
+"L'istruttore ti ha preparato la scheda. È un foglio bianco con scritto: lascia perdere.",
+"Sudi mentre mangi. Almeno un'attività fisica che ti viene spontanea c'è.",
+"Volevi la tartaruga e hai ottenuto solo il guscio. Molle, tra l'altro.",
+"Quel fiatone dopo dieci gradini non è l'età. È il conto di tutte le volte che hai detto domani.",
+"Un chilometro a piedi lo chiami escursione. Poi rompi le palle a tutti con le foto per una settimana.",
+"Avviso: questo corpo non è mai stato collaudato sotto sforzo. E si vede, cazzo se si vede.",
+"Una flessione, una sola, e l'hai raccontata a tutti per un mese. Eroe dei miei coglioni.",
+"La prova costume tu la superi tutti gli anni: non ti presenti.",
+"Con la mandibola ti alleni duro tutti i giorni. Lì sì che sei un professionista.",
+"L'app contapassi dopo una settimana ti ha chiesto se il telefono era rimasto in un cassetto.",
+"Ossa grosse un cazzo: quella è imbottitura, e ce l'hai messa tu una forchettata alla volta.",
+"Proverbio orientale: il bambù si piega ma non si spezza. Tu ti pieghi e poi per rialzarti chiami aiuto.",
+"I tuoi muscoli sono come i tuoi amici veri: ne parli tanto, ma nessuno li ha mai visti.",
+"Tre piani con la spesa in mano e già ti senti un atleta. Siediti, pagliaccio sudato.",
+"Minchia che fisico, ti dicono. Poi scoppiano a ridere, perché era una battuta.",
+"Quest'anno hai fatto un solo scatto, verso l'ultima fetta di torta. Hai vinto, stronzo, ma a che prezzo.",
+"Bruciare l'acqua della pasta non è da tutti. Ci vuole un talento del cazzo, bisogna dirlo.",
+"Dopo due birre racconti i cazzi tuoi agli sconosciuti. Da sobrio almeno hai la decenza di tacere.",
+"Presto scriverai alla tua ex alle tre di notte. Il biscotto vede anche la figura di merda che segue.",
+"L'allarme antincendio è il tuo timer da cucina: quando suona, la cena è pronta.",
+"Reggi l'alcol come reggi le critiche: due sorsi e sei già per terra a piangere.",
+"Senza caffè sei inutile. Con il caffè sei inutile uguale, ma più veloce a fare cazzate.",
+"Chi beve per dimenticare dovrebbe ricordarsi almeno dove ha lasciato i pantaloni, coglione.",
+"Metti il ketchup sulla pasta e poi ti chiedi perché nessuno ti invita a cena. Bestia.",
+"Ieri sera ti sentivi l'anima della festa. Per gli altri eri lo stronzo che ha vomitato nel vaso.",
+"Stamattina hai il mal di testa del giorno dopo e la dignità del giorno prima: zero.",
+"Tre caffè prima delle nove e capisci comunque un cazzo fino a mezzogiorno.",
+"Il tuo piatto forte è il toast. E riesci a sbagliare pure quello, pirla.",
+"In vino veritas, dicevano. La verità è che dopo un bicchiere sei un rompicoglioni.",
+"Giuri che non berrai mai più. Lo giuri ogni domenica mattina, con la faccia nel cesso.",
+"Gli ospiti che inviti a cena mangiano prima di venire. Ti conoscono bene.",
+"Cucini con amore, e si sente: sa di bruciato e di triste, come tutte le tue storie.",
+"Al terzo bicchiere ti credi simpatico. Al quarto lo dici a tutti. Al quinto ti portano via di peso.",
+"Persino il microonde a volte si rifiuta di scaldare la merda che cucini.",
+"Hai assaggiato il tuo sugo e hai fatto una smorfia. Almeno su questo sei onesto.",
+"Quando fai tu il caffè si svegliano tutti: dallo schifo.",
+"Dopo ogni sbronza prometti di cambiare vita. Cambi solo bar, perché nel vecchio non ti vogliono più.",
+"Segui le ricette come segui i consigli: leggi tutto, fai di testa tua e il risultato fa cagare.",
+"Sale nel caffè e zucchero nella pasta. Non sei distratto, sei proprio una testa di cazzo.",
+"Pasta scotta con sugo di barattolo: la tua specialità. E hai pure la faccia da culo di impiattarla.",
+"Balli solo da ubriaco. Fidati di chi ti ha visto: bevi di meno.",
+"Bere responsabilmente, dice l'etichetta. Tu di responsabile non hai mai fatto un cazzo.",
+"Ti sei svegliato vestito, con una scarpa sola e un panino sul cuscino. Signori si nasce.",
+"Tranquillo, il tuo fegato vuole solo parlarti. Per mandarti a fanculo di persona.",
+"Bevi il caffè per carburare. Ma il motore è quello di un tosaerba rotto.",
+"Sulla mensola hai venti spezie mai aperte e in tavola pasta in bianco. Tutta scena, come sempre.",
+"Un vero cuoco assaggia mentre cucina. Tu assaggi, sputi e ordini una pizza.",
+"Moka sul fuoco senz'acqua, di nuovo. In cucina non sei scarso: sei una minaccia.",
+"Ti vesti come uno che ha perso una scommessa. E conoscendoti, l'hai persa davvero.",
+"Quel taglio di capelli è una richiesta d'aiuto. Il barbiere se n'è fottuto e si è preso i soldi.",
+"Vedo uno specchio nel tuo futuro. Usalo, cazzo, prima di uscire di casa.",
+"Hai la faccia da lunedì mattina anche il sabato sera. Uno spettacolo di merda in replica fissa.",
+"Quella barba non ti dà un'aria vissuta. Ti dà l'aria di uno che ha finito le lamette e la voglia.",
+"Museo delle cazzate: è il tuo armadio. Ingresso libero, fuga consigliata.",
+"L'abito non fa il monaco. Nel tuo caso fa solo il coglione, e pure fuori taglia.",
+"Stamattina ti sei vestito al buio? No? Allora è peggio di quanto pensassi.",
+"Le tue scarpe chiedono pietà da tre inverni. Chi ti sta vicino pure, ma per la puzza.",
+"Complimenti per l'abbinamento: nemmeno uno spaventapasseri avrebbe avuto tanto coraggio.",
+"Hai il gusto estetico di un semaforo rotto: tutti i colori insieme e non ne funziona uno.",
+"Quella camicia è stata di moda, sì. Per un pomeriggio, e solo nella tua testa di cazzo.",
+"La tua faccia al mattino sembra un letto disfatto. Al pomeriggio pure, a dirla tutta.",
+"Lo specchio non mente, dice il proverbio. Il tuo ogni mattina vorrebbe tanto poterlo fare.",
+"Con quella giacca ti credi elegante. Sembri un cameriere licenziato a metà turno.",
+"Porti i calzini bianchi con i mocassini. C'è gente finita in esilio per molto meno.",
+"I tuoi capelli fanno il cazzo che vogliono. Sono l'unica parte di te con un po' di carattere.",
+"Spendi una fortuna in vestiti e sembri comunque uno stronzo in saldo.",
+"Quel profumo non copre niente. Aggiunge solo un secondo problema al primo.",
+"Uscire in tuta non è uno stile, è una resa. E tu ti sei arreso anni fa, pirla.",
+"Lo stile che hai ha un nome preciso: chi cazzo se ne frega, ma fatto con impegno.",
+"Occhiaie fino alle ginocchia e ciabatte ai piedi: l'eleganza ti ha visto e se l'è data a gambe.",
+"Chi bello vuole apparire un po' deve soffrire. Tu invece fai soffrire gli altri.",
+"Quella maglietta ha più buchi delle tue scuse. E fa cagare uguale.",
+"Pettinato dal cuscino e stirato dalla speranza: esci pure così, tanto a chi cazzo devi piacere.",
+"Con quei baffi hai la faccia di uno che vende motorini rubati. E li vende pure male.",
+"Avviso ai passanti: l'accostamento di colori qui presente può provocare nausea e imbarazzo.",
+"Erano ridicole già da nuove, quelle scarpe a punta. Adesso sono ridicole e vecchie, come chi le porta.",
+"Tua madre ti guarda uscire conciato così e fa finta di non conoscerti. Ha ragione lei.",
+"Sembri vestito da qualcuno che ti odia. E sappiamo tutti e due che ti sei vestito da solo.",
+"No, il pizzetto non ti sfina la faccia. Ti fa solo sembrare un coglione col pizzetto.",
+"Casa tua non è disordinata. È una discarica con il wifi e uno stronzo dentro.",
+"I piatti nel tuo lavandino hanno sviluppato una civiltà. Tra poco eleggono un sindaco.",
+"Grande scoperta in arrivo: sotto quei vestiti ammucchiati c'è un pavimento. Sporco, ovviamente.",
+"Quella sedia in camera regge più vestiti dell'armadio. E più responsabilità di te.",
+"Cambiato le lenzuola di recente? No, testa di minchia, il cambio di stagione non vale.",
+"Invecchi come il latte, non come il vino. E si sente pure dall'odore.",
+"Proverbio: una mano lava l'altra. Tu a quanto pare non ne lavi nessuna delle due, zozzone.",
+"Sui tuoi mobili la polvere ha più anzianità di te al lavoro. E pure più prospettive.",
+"Sotto il tuo letto c'è roba che la scienza non ha ancora classificato. E col cazzo che ci si avvicina.",
+"Ti fa male la schiena ad alzarti dal divano. Benvenuto nell'età in cui fai schifo anche da fermo.",
+"Più che un bagno, il tuo è un esperimento biologico. Fallito, come tutti i tuoi progetti.",
+"Lavi i piatti solo quando finiscono le forchette. E certe volte mangi con le mani, animale.",
+"Hai l'età in cui la serata perfetta finisce alle dieci. E ti incazzi pure perché si è fatto tardi.",
+"Camera tua sembra svaligiata. Solo che i ladri avrebbero lasciato meno casino.",
+"Massima orientale: la casa è lo specchio dell'anima. La tua anima puzza di chiuso e di fritto.",
+"Quando ti alzi ti scricchiolano le ginocchia. È il tuo corpo che ti dà del vecchio rincoglionito.",
+"Usi la stessa tazza da una settimana senza lavarla. Fai schifo con una costanza che altrove non hai.",
+"Una volta vedevi l'alba perché eri ancora in giro. Ora la vedi perché ti scappa da pisciare.",
+"Quell'odore in casa non è umidità. Sei tu, oppure qualcosa che hai dimenticato in frigo nel 2021.",
+"Tra poco il cesto dei panni sporchi tocca il soffitto. In casa tua non cresce nient'altro.",
+"Dici che nel tuo casino trovi tutto. Tranne la dignità: quella non salta più fuori.",
+"Gli anni ti hanno dato esperienza. Soprattutto nel fare cazzate e nel lamentarti dei giovani.",
+"Lo scarico della tua doccia è intasato da mesi. Come te: fermo, sporco, e nessuno ci mette mano.",
+"Ricordi quando reggevi tre serate di fila? Ora ti serve il pisolino dopo pranzo, vecchio rottame.",
+"Quella spugna è più sporca dei piatti che ci lavi. Stai solo spostando la merda, genio.",
+"Etichetta: lavare a sessanta gradi. Vale per gli asciugamani, per le mutande e pure per te, lurido.",
+"Passi l'aspirapolvere una volta a stagione e ti aspetti pure l'applauso. Ma vai a cagare.",
+"Dai la colpa al tempo che passa. Ma passa per tutti, e ridotto così di merda ci sei solo tu.",
+"Tieni le finestre chiuse da ottobre. Chi entra trattiene il fiato e pure i vaffanculo.",
+"Hai compiuto gli anni e l'unica cosa che è maturata è la muffa in bagno.",
+"Da grande, dicevi, avresti avuto tutto sotto controllo. Non trovi nemmeno due cazzo di calzini uguali.",
+"Fai le pulizie solo quando aspetti ospiti. Cioè mai: in quel merdaio non ci viene più nessuno.",
+"Le tue storie le guardano in tre: tua madre, un bot e uno che ti odia.",
+"Chi manda vocali da sette minuti non ha amici: ha ostaggi.",
+"Vedo un futuro luminoso: è lo schermo del telefono alle tre di notte, coglione.",
+"Trentotto selfie per sceglierne uno. Il problema non era l'angolazione: era la tua faccia da culo.",
+"Dice il saggio: chi mendica like raccoglie pollici di pietà.",
+"I tuoi vocali vanno ascoltati a velocità doppia. Tu invece andresti proprio saltato.",
+"Complimenti per i duecento follower: centonovanta sono profili finti, gli altri dieci si sono rotti le palle.",
+"Etichetta del tuo profilo: novanta per cento selfie, dieci per cento frasi rubate, zero motivi per seguirti.",
+"Dieci minuti con la scritta sta scrivendo, poi mandi ok. Riesci a deludere anche in anteprima.",
+"Nove ore al giorno sul telefono, dice lo schermo. E in nove ore non hai combinato un cazzo.",
+"Fotografi ogni piatto che mangi. Nessuno ha chiesto il menù della tua mediocrità.",
+"I tuoi post sono come i termini e condizioni: lunghi, inutili, e non li legge nessuno.",
+"Più filtri in faccia che idee in testa. E i filtri, almeno, funzionano.",
+"Ti hanno visualizzato e non risposto. Non è un problema di rete, è un giudizio.",
+"Nel gruppo di famiglia ti hanno silenziato tutti. Pure la nonna, che non sa nemmeno come si fa.",
+"Posti il tramonto come se l'avessi fatto tu. Tu fai tramontare solo le conversazioni.",
+"Chi ti segue non ti ammira: aspetta solo la prossima stronzata.",
+"Rispondi dopo tre giorni fingendoti impegnato. Sappiamo tutti che eri sul divano a non fare una sega.",
+"Stato: occupato. Occupato a fare cosa, testa di cazzo, a scorrere il nulla?",
+"Cancelli la foto e la ripubblichi perché aveva pochi like. Ne prende meno. Fattene una ragione, sfigato.",
+"Un giorno diventerai virale. Per sbaglio, e per la peggior figura di merda della tua vita.",
+"Allora niente: così iniziava il tuo vocale. E niente è rimasto, per sei minuti. Minchia.",
+"Bella la tua foto profilo. Peccato che dal vivo poi arrivi tu.",
+"Proverbio antico: selfie allo specchio del bagno, dignità nello scarico.",
+"Hai scritto buongiorno nel gruppo e sono usciti in due. Bel potere, stronzo.",
+"La fotocamera frontale ti ha inquadrato da sotto per sbaglio. Non si è più ripresa.",
+"Ogni tuo commento sotto i post degli altri è un piccolo monumento alla cazzata.",
+"Parli in vivavoce in mezzo alla strada. Sei il motivo per cui la gente odia la gente.",
+"Mandi ancora le catene di messaggi. Portano sfiga solo a chi ti ha in rubrica, pirla.",
+"Ti chiedi perché nel gruppo non ti risponde nessuno? Rileggi cosa scrivi, coglione.",
+"Consiglio: prima di postare conta fino a dieci. Poi conta ancora, e alla fine non postare un cazzo.",
+"Quella frase motivazionale sul tuo profilo ha motivato una cosa sola: il vaffanculo di chi l'ha letta.",
+"Usi il computer come una gallina userebbe un pianoforte: ci cammini sopra e speri.",
+"Hai dimenticato la password, poi la domanda segreta, poi perché eri entrato in cucina.",
+"Rimandi l'aggiornamento da otto mesi. Tanto la versione di merda sei tu, mica il telefono.",
+"Sei al tre per cento di batteria da quando sei nato. E nessuno ha voglia di ricaricarti.",
+"La stampante non è rotta. Ha solo capito prima degli altri che sei un coglione.",
+"Quaranta schede aperte e nemmeno mezza idea. Il computer rallenta per solidarietà.",
+"Provato a spegnere e riaccendere? Il modem è ripartito. Tu sei rimasto lo stesso pirla.",
+"Accetti tutti i cookie senza leggere. È così che hai firmato anche il resto della tua vita.",
+"Quando è venuto il tecnico ha guardato il computer, poi te. Ha capito subito qual era il pezzo guasto.",
+"Fatti un favore: scrivi le password da qualche parte. E poi scrivi anche dove cazzo le hai scritte.",
+"Chiami l'assistenza infuriato ed era la spina staccata. Il guasto sei tu, testa di cazzo.",
+"Trecento icone sul desktop: il ritratto fedele della tua testa. Tanto casino e niente di utile.",
+"Rispondi a tutti nelle mail aziendali. Ora quattrocento colleghi sanno quanto sei minchione.",
+"Il Wi-Fi di casa tua prende male in ogni stanza. Ha preso da te.",
+"Clicchi su ogni link che promette un premio. Hai vinto solo un virus, coglione.",
+"Scrivi con due dita fissando la tastiera. E dopo tutta quella fatica, guarda che cazzate scrivi.",
+"Memoria piena. Come le palle di chiunque debba spiegarti come si usa un telefono.",
+"Tieni il telefono in carica tutta la notte. Al mattino almeno uno dei due è al cento per cento.",
+"Per allegare un file hai chiesto aiuto a tuo nipote di dodici anni. Da allora ti guarda con pietà.",
+"L'intelligenza artificiale non ti ruberà il lavoro. Nessuno ruba roba fatta così di merda.",
+"Fai lo screenshot fotografando lo schermo col telefono. Minchia, con te l'evoluzione ha messo la retromarcia.",
+"Codice di sblocco: uno due tre quattro. Proteggi i tuoi segreti come la dignità: a cazzo.",
+"Profezia: oggi premerai invio troppo presto. Lo leggerà la persona sbagliata, e saranno cazzi amari.",
+"In videochiamata hai parlato dieci minuti col microfono spento. È stato il tuo intervento migliore.",
+"Salvi tutto come nuovo documento sette. Poi ti chiedi perché non trovi mai un cazzo.",
+"Sei bravissimo col computer: nessuno riesce a romperlo in così tanti modi diversi.",
+"Quel caricabatterie tenuto insieme dal nastro adesivo è il progetto più solido della tua vita.",
+"Persino il correttore automatico ha smesso di correggerti. Dice che tanto è fatica sprecata.",
+"Dici che il computer è lento. Lui dice lo stesso di te, ma ha le prove.",
+"Lo schermo del telefono è crepato da due anni. Si è spaccato da solo, pur di non vedere quella faccia.",
+"Non sai cos'è un backup. Lo imparerai il giorno in cui perderai tutto. Io rido già.",
+"Da giorni il modem lampeggia rosso. È l'unico in casa che prova ancora a dirti qualcosa.",
+"Parcheggi occupando due posti. È l'unico modo che hai per lasciare un segno.",
+"Il navigatore dice ricalcolo. Tua madre lo ripete da trent'anni.",
+"Lo sai che la freccia si mette prima di girare, vero? Dopo è solo un riassunto, coglione.",
+"Guidi come scrivi i messaggi: senza guardare, senza senso e facendo incazzare tutti.",
+"In rotonda sei come nella vita: giri, giri e non sai dove cazzo uscire.",
+"Antico detto: chi ignora il navigatore arriva tardi, ma convinto di avere ragione.",
+"Manovra in dodici mosse davanti al bar. Hanno applaudito, ma per prenderti per il culo.",
+"Monopattino sul marciapiede a quarant'anni. La dignità l'hai lasciata a casa in carica.",
+"Corsia centrale, ottanta all'ora. Non sei prudente: sei un tappo con la patente.",
+"Sull'autobus guardi i video senza cuffie. Trenta passeggeri ti stanno mandando a fanculo in silenzio.",
+"Le quattro frecce in doppia fila non sono un permesso. Sono la confessione di uno stronzo.",
+"La patente te l'hanno data per sfinimento. Quello dell'esaminatore.",
+"Suoni il clacson mezzo secondo dopo il verde. Che fretta hai? Non ti aspetta nessuno, cazzone.",
+"Avviso ai passeggeri: il treno è partito in orario. In ritardo sei tu, come in tutto il resto.",
+"Hai parcheggiato così storto che i vigili prima hanno riso, poi hanno scritto.",
+"Guidi col gomito fuori dal finestrino come un duro. Poi ti si spegne il motore in salita, fenomeno.",
+"Un consiglio: vendi la macchina e fatti l'abbonamento. Sull'autobus almeno guida un altro.",
+"Al semaforo guardi il telefono e riparti quando ti suonano. Sveglia, testa di cazzo.",
+"Non dai mai la precedenza. Tranquillo: nella vita ti passano davanti tutti lo stesso.",
+"Presto riceverai una busta verde. Dentro c'è una tua foto, e sei venuto di merda anche lì.",
+"Scontrini, briciole e bottiglie vuote: dentro, la tua auto è identica a te. Un cesso con le ruote.",
+"Fai benzina cinque euro alla volta. Pianifichi il futuro con la stessa lungimiranza.",
+"Posto libero, largo e in piano. Hai preso lo stesso il palo, pirla.",
+"Segui il navigatore fin dentro una scalinata. Poi dai la colpa a lui, che almeno ha studiato.",
+"Chi ti sta dietro in macchina invecchia. Chi ti sta accanto prega.",
+"Quella spia è accesa da sei mesi. Fai finta di niente, come con tutto il resto della tua vita.",
+"Ti perdi nel parcheggio del supermercato cercando la tua macchina. Ogni cazzo di volta. Da sobrio.",
+"Lasci il monopattino in mezzo al marciapiede. Esiste un nome per quelli come te: stronzo.",
+"Timbri il biglietto solo quando sale il controllore. Furbo no. Patetico sì.",
+"Vedo una strada dritta e ben segnalata davanti a te. La sbaglierai lo stesso.",
+"Lavora più di te perfino il tergicristallo posteriore della tua auto. E combina di più.",
+"Tieni gli abbaglianti accesi in faccia a tutti. È l'unica cosa brillante che hai, e rompe le palle.",
+"Quattrocento foto in vacanza, tutte uguali. E in tutte hai la stessa faccia da pirla.",
+"La prossima vacanza falla a casa: tu risparmi e il resto del mondo respira.",
+"Paghi il volo nove euro e la valigia sessanta. Sei il pollo su cui campa qualcun altro.",
+"Tre valigie per un fine settimana e hai dimenticato il passaporto. Un genio della logistica.",
+"All'estero parli italiano più forte e più lento. Non capiscono le parole, ma capiscono che sei un coglione.",
+"Applaudi quando l'aereo atterra. Il pilota ha solo fatto il suo lavoro: a te non capita mai.",
+"Ti alzi appena l'aereo tocca terra e resti venti minuti in piedi col collo storto. Hai vinto, pirla.",
+"Dodici ore di volo per mangiare una pizza scongelata? Complimenti, esploratore del cazzo.",
+"Scottato il primo giorno: sulla spiaggia il gambero più fesso eri tu.",
+"Racconti le vacanze per due mesi a chiunque. Nessuno te l'ha chiesto, a nessuno frega un cazzo.",
+"Vedo un viaggio nel tuo futuro: scalo di undici ore, valigia persa. E sarà comunque colpa tua.",
+"Una stella alla spiaggia perché c'era troppa sabbia. Il rompicoglioni delle vacanze altrui sei tu.",
+"Compri una calamita in ogni città. Il tuo frigo ha visto più mondo del tuo cervello.",
+"Metti l'asciugamano sul lettino alle sei di mattina. Non sei furbo: sei solo uno stronzo mattiniero.",
+"Fotografi i tuoi piedi col mare dietro. Ci mancavano giusto i tuoi piedi, a un mondo già provato.",
+"In aeroporto arrivi quattro ore prima e riesci comunque a sbagliare gate. Ci vuole impegno.",
+"Quel viaggio doveva cambiarti la vita. Sei tornato uguale, solo più povero e con più foto di merda.",
+"Ti sei perso con la mappa in una mano e il telefono nell'altra. Minchia, a modo suo è un'impresa.",
+"Dici di amare l'avventura e poi ti incazzi se in camera manca il phon.",
+"Massima orientale: chi viaggia per trovare se stesso, nel tuo caso, resta deluso.",
+"Chiedi indicazioni, non ascolti e vai dall'altra parte. Sei un somaro con lo zaino.",
+"Ai controlli sei sempre quello con le monete in tasca, la cintura e la bottiglia. Sempre tu, cazzo.",
+"Vista mare, diceva la prenotazione. Si vede, se ti sporgi dal bagno con uno specchietto.",
+"Fregato dal tassista, dal cameriere e dal tizio delle foto col pappagallo. In quaranta minuti.",
+"Sei come il bagaglio a mano troppo grosso: non entri da nessuna parte e fai perdere tempo a tutti.",
+"Al buffet riempi tre piatti come se arrivasse la carestia, e poi ne lasci metà. Un signore, proprio.",
+"Viaggi per aprire la mente. Con la tua servirebbe il piede di porco.",
+"Porti a tutti lo stesso souvenir di merda preso in aeroporto. Conta il pensiero, e il tuo vale poco.",
+"Filmi il concerto, il museo e i fuochi. Non riguarderai mai niente, e fai bene: fanno cagare.",
+"Partenza intelligente alle quattro di mattina, e coda lo stesso. Di intelligente non c'era un cazzo.",
+"Attenzione: turista fermo di colpo in mezzo al marciapiede. Sei tu. Levati dalle palle.",
+"Hai chiuso la valigia sedendoti sopra. Si è aperta sul nastro, davanti a tutti, mutande comprese.",
+"A calcetto ti scelgono sempre per ultimo. Dopo il cono.",
+"Racchetta da padel da trecento euro. La pallina continua a non saperlo.",
+"Corri tre chilometri e pubblichi il tracciato. Sticazzi, campione.",
+"Al fantacalcio studi tutto l'anno e arrivi ultimo. Fai cagare anche nelle cose finte.",
+"Vendi quella chitarra: sai due accordi e li sbagli tutti e due. La musica ti ringrazia.",
+"Ai videogiochi muori nel tutorial. E dai la colpa al controller, coglione.",
+"Paghi la palestra da un anno e ci sei andato due volte. Sei il loro cliente preferito.",
+"Ti fanno giocare solo perché porti il pallone. E stanno già facendo la colletta per comprarne uno.",
+"Legge del campetto: chi gioca di merda paga da bere. Tu al bar hai il conto aperto.",
+"Stirato durante il riscaldamento. Il tuo corpo ti ha mandato a fanculo prima degli amici.",
+"Scarpe da corsa da duecento euro e il fiato di un citofono rotto. Soldi buttati nel cesso.",
+"Insulti online ragazzini di dodici anni. E loro continuano a batterti, pirla.",
+"Corri come una lavatrice in centrifuga: tanto rumore, zero strada, e alla fine perdi acqua.",
+"Dici che a padel sei migliorato. Il tuo compagno ha cambiato circolo, e pure numero.",
+"Nel tuo futuro c'è una grande vittoria. No, scusa: era dell'altra squadra.",
+"Yoga, pittura, uncinetto, arrampicata: hai mollato tutto. Almeno in questo sei costante.",
+"Urli all'arbitro in televisione. Lui non ti sente. I vicini sì, e ti danno dello stronzo.",
+"Comprare l'attrezzatura è il tuo vero hobby. Poi resta in cantina, come le tue ambizioni.",
+"Avvertenza: tenere questo giocatore lontano dal pallone, dalla porta e possibilmente dal campo.",
+"Chiami fallo ogni volta che ti rubano palla. Cioè sempre. E le palle le rompi tu.",
+"Sei capitano solo perché prenoti il campo. E sbagli pure l'orario, testa di cazzo.",
+"Che tiro potente che hai. L'ultimo ha centrato una macchina nel parcheggio, bomber.",
+"Cyclette in vendita, usata solo come appendiabiti. Descrizione onesta: mai sudata.",
+"Il pescatore paziente prende il pesce. Tu prendi freddo, zanzare e per il culo.",
+"Fai le pagelle agli altri dopo ogni partitella. La tua è sempre la stessa: quattro, e rompe i coglioni.",
+"Sbagli il rigore e ti guardi la scarpa. La scarpa non c'entra un cazzo.",
+"In bici ti vesti da professionista. Poi ti sorpassa una signora con la spesa nel cestino.",
+"Suoni sempre gli stessi quattro accordi alle feste. È lì che tutti si ricordano di avere da fare.",
+"Passi le notti a giocare online e la chiami carriera. Tua madre la chiama in un altro modo.",
+"Borraccia, fascia e orologio da atleta per dieci minuti di camminata. Ma vaffanculo, va'.",
+"Chi ti ha detto che sei portato per lo sport? Chiunque fosse, voleva venderti qualcosa.",
+"Hai montato l'armadio e sono avanzate undici viti. L'armadio lo sa, e aspetta.",
+"Sei riuscito a far seccare un cactus. Viveva nel deserto, ma tu eri troppo anche per lui.",
+"Dall'alto dell'armadio il gatto ti fissa. Non è affetto: sta cercando un padrone meno pirla.",
+"Per appendere un quadro: sei buchi, un tubo forato e il quadro storto. Capolavoro, testa di cazzo.",
+"Il cane ti riporta la pallina solo perché gli fai pena.",
+"Alle piante parli per farle crescere. Loro si lasciano seccare pur di non sentire altre cazzate.",
+"Chi fa da sé fa per tre. Tu fai da te e fai tre danni, coglione.",
+"La mensola che hai montato regge solo le tue illusioni. E manco tanto bene.",
+"Il gatto butta le cose giù dal tavolo guardandoti negli occhi. È una recensione.",
+"In casa tua il nastro adesivo è un materiale da costruzione. E si vede, cazzo.",
+"Hai comprato il trapano per sentirti capace. Il muro, a ogni buco, ti dà del coglione.",
+"Dalla boccia il pesce rosso ti guarda e pensa: e quello in gabbia sarei io?",
+"Tinteggi senza coprire i mobili. Ora il divano è a pois e tu sei un pirla a tinta unita.",
+"Il rubinetto perde da marzo. Tu perdi da molto prima.",
+"Detto del falegname: misura due volte, taglia una. Tu tagli a occhio, e hai un occhio di merda.",
+"Quattro giorni: tanto è durato il tuo basilico. Ed è il tuo record personale.",
+"Regola d'oro del bricolage: posa il martello, prendi il telefono e chiama uno capace.",
+"Una volta il cane ti ha visto ballare in cucina. Da allora dorme col culo girato verso di te.",
+"Parli al gatto con la vocina. Lui capisce tutto e ti disprezza con precisione.",
+"Quel silicone in bagno sembra steso da uno che starnutiva. Che lavoro di merda.",
+"Grandi cambiamenti in arrivo in casa tua: sta per venire giù il pensile che hai montato tu.",
+"Monti i mobili come vivi: senza leggere le istruzioni, a cazzo di cane, e poi ti stupisci se crolla tutto.",
+"Da te il pappagallo ha imparato una frase sola: che palle.",
+"Sturi il lavandino con la forchetta e la speranza. Si sono piegate tutte e due.",
+"Sembra un terreno sotto sequestro, il tuo giardino. I vicini hanno alzato la siepe per non vederlo.",
+"Mai visto il tuo cane sospirare mentre ti guarda? Ecco. Ha capito tutto anche lui.",
+"Hai aggiustato la sedia con la colla. Ci si è seduto tuo zio. A Natale non ti invitano più.",
+"Cassetta degli attrezzi: un martello e un coltello da burro. Ed è già troppa roba per te.",
+"Al parco il cane fa finta di non conoscerti. Ha una reputazione da difendere.",
+"Cartello sul tuo cancello: attenti al padrone. Il cane è a posto, lo stronzo è lui.",
+"Cambi una lampadina e salta la corrente in tutto il palazzo. Bel talento del cazzo.",
+"Le stelle hanno parlato di te. Poi si sono messe a ridere e non la smettevano più.",
+"Oroscopo di oggi: Mercurio è retrogrado, ma mai quanto te.",
+"Il karma non ti punisce: ti guarda fare da solo e prende appunti.",
+"Vedo nel tuo futuro una grande occasione. La perdi perché stavi guardando il telefono.",
+"La sfortuna non ti perseguita: abitate insieme e l'affitto lo paghi tu.",
+"Presto incontrerai una persona che ti cambierà la vita. In peggio, ovviamente, pirla.",
+"Il destino aveva un piano per te. Poi ti ha conosciuto e ha detto vaffanculo.",
+"Un quadrifoglio, incontrandoti, si tocca le palle.",
+"Numeri fortunati di oggi: nessuno. Come i tuoi talenti.",
+"Giove entra nel tuo segno, dà un'occhiata in giro ed esce schifato.",
+"Una grande fortuna sta per bussare alla tua porta. Ha sbagliato piano, cerca il vicino.",
+"Quando attraversi la strada, è il gatto nero che torna indietro.",
+"Non è sfiga, è statistica: se fai solo cazzate, prima o poi ti tornano tutte indietro.",
+"Le carte dicono che avrai ciò che meriti. Io al posto tuo mi cagherei sotto.",
+"Profezia: oggi qualcuno penserà a te. Con fastidio.",
+"Hai l'ascendente in coglione, con luna in figura di merda.",
+"Conto del karma: in rosso da anni. E il recupero crediti sta arrivando, stronzo.",
+"Arriveranno giorni migliori. Per gli altri, appena ti levi dalle palle.",
+"Una forza misteriosa guida la tua vita. Si chiama coglionaggine.",
+"Per te il destino ha riservato un posto speciale: in fondo, vicino ai cessi.",
+"Quando la fortuna ti bacia, poi si sciacqua la bocca.",
+"Attenzione: la tua giornata fortunata era ieri. L'hai passata sul divano a grattarti il culo.",
+"Troverai un tesoro inaspettato. Scherzo: troverai una multa.",
+"Sette anni di guai e non hai rotto nemmeno uno specchio. Solo le palle a tutti.",
+"Talento raro, il tuo: trasformi ogni botta di culo in un calcio nel culo.",
+"Vedo molti soldi nel tuo futuro. Sono quelli che devi agli altri.",
+"L'universo ti manda segnali da anni. Dicono tutti la stessa cosa: hai rotto il cazzo.",
+"Previsioni per domani: nuvoloso, con figure di merda dal primo pomeriggio.",
+"Alla lotteria della vita hai grattato il biglietto: sotto c'era scritto ritenta, coglione.",
+"Pestare una merda porta fortuna, dici. No: porta solo te in giro con la scarpa sporca.",
+"Profezia solenne: farai grandi cose. No, aspetta, ho letto male: grandi cazzate.",
+"Fortuna in amore zero, fortuna al gioco zero. Però a rompere il cazzo sei un fenomeno.",
+"Prima di parlare conta fino a dieci, dice il saggio. Tu conta pure fino a mille e poi stai zitto lo stesso.",
+"Antico detto: quando l'allievo è pronto, il maestro arriva. Con te ha cambiato mestiere.",
+"Chi fa da sé fa per tre. Infatti da solo fai cazzate per tre persone.",
+"Dice il saggio: conosci te stesso. Poi, se ce la fai, chiedi scusa agli altri.",
+"La goccia scava la roccia, dice l'antica massima. Con la stessa costanza tu rompi i coglioni.",
+"Non tutte le ciambelle riescono col buco. Tu, per esempio, sei solo il buco. Del culo.",
+"L'erba del vicino è sempre più verde. Grazie al cazzo: lui la innaffia, tu ti lamenti.",
+"Un viaggio di mille miglia comincia con un passo. Sono anni che cerchi le scarpe.",
+"Dice il saggio: il silenzio è d'oro. Il tuo varrebbe un patrimonio, prova ogni tanto.",
+"Ride bene chi ride ultimo. Infatti ridi per ultimo: le battute le capisci dopo.",
+"Chi si accontenta gode. Chi si accontenta di te, invece, si è proprio arreso.",
+"Maestro, qual è il senso della vita? Non lo so, ma di sicuro non sei tu.",
+"Sbagliando si impara. Tu sbagli e basta, con una dedizione commovente.",
+"Un vecchio saggio diceva: chi non ha nulla da dire taccia. Ce l'aveva con te, pirla.",
+"Antica massima orientale: il bambù si piega ma non si spezza. Tu ti spezzi e poi frigni.",
+"Non rimandare a domani quello che puoi fare oggi. Tanto lo fai di merda in entrambi i casi.",
+"Quando il gatto non c'è i topi ballano. Quando non ci sei tu, festeggiano tutti.",
+"Chi ben comincia è a metà dell'opera. E a metà, puntuale, ti stufi e dai la colpa agli altri.",
+"Il saggio tace, lo stolto parla. Tu mandi vocali da sei minuti.",
+"Dice l'antico maestro: il saggio impara dai propri errori. Con i tuoi dovresti avere tre lauree.",
+"Sii come l'acqua, dice il saggio. Hai capito male: sei una pozzanghera.",
+"Antica massima: nel vuoto c'è la pienezza. Allora la tua testa di cazzo è strapiena.",
+"Meglio un uovo oggi che una gallina domani. Tu rompi l'uovo oggi e le palle domani.",
+"Non è tutto oro quel che luccica. Nel tuo caso non luccica proprio un cazzo.",
+"Buon sangue non mente. I tuoi parenti sì: in giro dicono di non conoscerti.",
+"A buon intenditor poche parole. Con te servono i disegnini, e non capisci una minchia lo stesso.",
+"Tutti i nodi vengono al pettine. Tu sei il nodo.",
+"Il saggio sa di non sapere. Tu non sai un cazzo e fai pure il professore.",
+"Una rondine non fa primavera. Un coglione, invece, basta e avanza per rovinare la serata.",
+"Ogni promessa è debito. Con quello che hai promesso a te stesso sei da pignoramento.",
+"Stai fissando un biscotto finto su uno schermo. Il biscotto, almeno, ha uno scopo.",
+"Riprova pure, stronzo. Il prossimo bigliettino è peggio, ma te lo meriti uguale.",
+"Complimenti: hai appena scartato l'unica cosa che oggi ti dirà la verità. Sei un pirla.",
+"Il biscotto ti ha valutato. Esito: briciole.",
+"Un biscotto vero costa pochi centesimi. Tu hai scelto quello finto che ti dà del coglione.",
+"Biglietto vuoto. No, scherzo: è che su di te non c'era niente da dire.",
+"Avviso: questo biscotto può contenere tracce di verità. Tu contieni solo cazzate.",
+"Ogni volta che apri questa app, da qualche parte un tuo vecchio insegnante si sente un fallito.",
+"Sono un biscotto disegnato e ho comunque più personalità di te.",
+"Ancora qui? Nemmeno gli insulti ti fanno andare via. Che vita di merda devi avere.",
+"Tocca di nuovo. Tanto è l'unica cosa che oggi si lascia toccare da te.",
+"Questa frase è uscita a caso. E ci ha preso lo stesso: pensa come sei messo.",
+"Errore: fortuna non trovata. Riprovare è inutile, ma tu sei un coglione e lo farai lo stesso.",
+"Ti fai insultare gratis da un biscotto. Di solito per sopportarti la gente vuole essere pagata.",
+"Ingredienti: farina, zucchero e tutto il disprezzo che ti meriti.",
+"Se cercavi conforto hai sbagliato app. Se cercavi la verità: sei una testa di cazzo.",
+"Batteria al dodici per cento e la sprechi così. È il riassunto perfetto della tua vita.",
+"Scartare biscotti finti non è un hobby. È la prova che non hai una minchia da fare.",
+"Da conservare in luogo fresco e asciutto, lontano dai coglioni. Troppo tardi.",
+"Aprine un altro, dai. Magari il prossimo dice che sei intelligente. No, non diciamo cazzate.",
+"Fai vedere questo bigliettino agli amici. Ah già: prima dovresti farteli.",
+"Io sono finto, ma almeno lo so. Tu ti credi pure una persona interessante.",
+"Dentro un biscotto vero c'è una frase carina. Qui dentro ci sei tu, quindi merda.",
+"Questo telefono è più intelligente di te e si vergogna di stare nella tua tasca.",
+"Grazie per aver scelto il Biscotto della Sfiga. La sfiga ringrazia, tu resti un pirla.",
+"Potevi leggere un libro, chiamare tua madre, farti una doccia. Invece sei qui a farti insultare.",
+"C'era un complimento, dentro questo biscotto. L'ho tolto: non era credibile.",
+"Mi apri ogni giorno e ogni giorno ti do del coglione. È la tua relazione più stabile.",
+"Vuoi una frase motivazionale? Motivati ad andare a fare qualcosa di utile, cazzo.",
+"Leggi a voce alta: sono un pirla. Bravo. Adesso lo sanno anche quelli vicino a te.",
+"Biscotto finto, sfiga vera, coglione autentico: almeno una cosa originale c'è.",
+"Reclami? Il biscotto non ne accetta. Per le lamentele rivolgiti allo specchio.",
+"Il te di dieci anni fa si vergogna di come sei finito. E lui andava in giro con quei capelli.",
+"Da grande volevi fare l'astronauta. Sei arrivato al divano, ed è già stata una missione.",
+"I tuoi buoni propositi durano quanto una scoreggia nel vento.",
+"Hai grandi sogni e una gran voglia di non fare un cazzo. Indovina chi vince.",
+"Futuro luminoso, il tuo: è la luce del frigo alle tre di notte.",
+"La palestra ti ringrazia: sei il cliente perfetto, paghi e non ti fai mai vedere.",
+"Insegui i tuoi sogni. Tanto corrono più forte di te, pigrone del cazzo.",
+"Da lunedì cambi vita. Lo dici da così tanti lunedì che ormai ti mandano affanculo pure loro.",
+"Da bambino sognavi in grande. Quel bambino oggi chiederebbe il rimborso.",
+"Che potenziale enorme. È ancora lì, intatto, mai usato, nella plastica.",
+"Il tuo piano B è peggio del piano A, e il piano A era già una stronzata.",
+"Presto realizzerai un sogno. Non il tuo: quello di tutti, che tu stia zitto.",
+"La dieta la inizi domani, il libro lo scrivi l'anno prossimo, il coglione lo fai oggi.",
+"Vuoi lasciare un segno nel mondo. Per ora hai lasciato solo i piatti nel lavandino.",
+"Tra cinque anni dove ti vedi? Tranquillo, non ti ci vede nessuno neanche adesso.",
+"Volevi diventare qualcuno. Sei diventato quello a cui non rispondono nei gruppi.",
+"Chitarra, inglese, corsa: mollati tutti. La costanza la tieni solo per le cazzate.",
+"Quella lista di cose da fare ha compiuto tre anni. Falle almeno gli auguri.",
+"Tieni la vita come il garage: piena di merda che un giorno, giuri, sistemerai.",
+"Dici che il meglio deve ancora venire. Ha visto com'eri messo e ha fatto inversione.",
+"Quel treno che passa una volta sola è già passato. Tu eri al bar a lamentarti dei ritardi.",
+"Avevi detto entro i trenta. Poi entro i quaranta. Fai prima a dire mai, pirla.",
+"Messaggio dal tuo io del futuro: grazie di niente, stronzo.",
+"A scuola dicevano: è intelligente ma non si applica. Sulla prima parte erano stati gentili.",
+"Peccato per la tua ambizione: è enorme, ma si alza a mezzogiorno come te.",
+"Se i tuoi fallimenti pagassero l'affitto, vivresti in un attico.",
+"Volevi cambiare il mondo. Non riesci a cambiare nemmeno le lenzuola con regolarità.",
+"Duecento video motivazionali salvati, zero applicati. Bella media, campione.",
+"Un giorno racconterai ai nipoti i tuoi successi. Sarà una serata brevissima.",
+"L'anno prossimo sarà il tuo anno. L'hai detto anche degli ultimi otto, coglione.",
+"Un sogno in un cassetto e le palle nell'altro: non apri mai nessuno dei due.",
+"Tra dieci anni sarai esattamente dove sei adesso, solo con più scuse del cazzo.",
+"Hai l'autostima di un campione e i risultati di uno che ha sbagliato palazzetto.",
+"Ti offendi per tutto. Bene: offenditi anche per questo, permaloso del cazzo.",
+"Non è il mondo che ce l'ha con te. È che ti conosce.",
+"Ti lamenti di tutto e non cambi niente: sei una riunione di condominio con le gambe.",
+"Hai proprio un bel carattere. Bello di merda, intendo.",
+"La gente non ti capisce, dici. Ti capisce benissimo: è per quello che ti evita.",
+"Se la presunzione facesse curriculum, saresti amministratore delegato.",
+"Sei convinto di essere simpatico. È l'unica battuta che ti riesce.",
+"Fai la vittima così bene che meriteresti un premio. Poi ti lamenteresti pure di quello.",
+"Dici sempre quello che pensi. Il guaio è che pensi cazzate.",
+"Non sei incompreso, sei insopportabile. La differenza la conoscono tutti tranne te.",
+"Sempre ragione tu, eh? Strano, allora, che ti vada sempre tutto di merda.",
+"Ti credi un lupo solitario. Sei solo uno che nessuno invita.",
+"Quando entri in una stanza l'atmosfera cambia. Si chiama: che palle, è arrivato.",
+"Colpa del capo, del traffico, del meteo, dei colleghi. Mai del coglione nello specchio.",
+"Modestia da pavone, talento da piccione: sei un volatile del cazzo.",
+"Sincero e diretto, dici tu. Maleducato e stronzo, dicono tutti gli altri.",
+"Chiedi sempre un parere e poi ti incazzi se non è il tuo.",
+"Ogni tua frase comincia con io. Ogni sbadiglio di chi ti ascolta, pure.",
+"Pelle sottile e testa dura: il kit completo del rompicoglioni.",
+"Dai consigli a tutti con la vita che ti ritrovi. Ci vuole una gran faccia da culo.",
+"Lamentarsi non brucia calorie, altrimenti saresti un figurino.",
+"Ti senti sottovalutato. Fidati: ti hanno valutato benissimo.",
+"Tieni il muso tre giorni per una battuta. Con questa arriviamo al mese.",
+"Pensi di essere il protagonista. Sei la comparsa che inciampa sullo sfondo.",
+"Con quell'ego enorme potresti fare grandi cose. Peccato che dentro ci sia solo l'eco.",
+"Sei una persona complicata, dici. No: sei una testa di cazzo semplice semplice.",
+"Nessuno ti apprezza come meriti. Ed è la tua più grande fortuna.",
+"Opinioni su tutto, competenze su niente. E il volume sempre al massimo.",
+"Fai l'offeso così spesso che ormai è la tua faccia a riposo.",
+"Umile, simpatico, brillante: tre parole mai usate per te. Coglione, invece, va fortissimo.",
+"Bilancio di fine anno: dodici mesi, zero risultati, un abbonamento che non usi.",
+"Buon compleanno in anticipo: un altro anno di esperienza nel non concludere un cazzo.",
+"Lunedì ti odia quanto lo odi tu. Lui però almeno arriva puntuale.",
+"Oggi non hai combinato una minchia. In compenso l'hai fatto con grande impegno.",
+"Alla tua festa vengono solo per la torta. E la torta, onestamente, fa cagare.",
+"Giornata tipo: sveglia, lamentela, telefono, lamentela, letto. Che spreco di corrente.",
+"Nel weekend voli alto: pigiama fino alle quattro e rimorsi dalle sei.",
+"Sulla torta ci sono più candeline che risultati nella tua vita. E non hai cent'anni.",
+"Riassunto della tua settimana: cinque giorni a sbuffare, due a non fare una mazza.",
+"Tre parole per il tuo anno: boh, vabbè, domani.",
+"A ogni compleanno esprimi un desiderio. Anche gli invitati: che la festa finisca presto.",
+"Domenica sera hai l'ansia del lunedì. Il lunedì ha l'ansia di rivedere te.",
+"La sveglia suona e tu la rimandi. È la sintesi più onesta della tua esistenza.",
+"Ogni giorno è una nuova opportunità. Di fare la figura del pirla, nel tuo caso.",
+"Passi la giornata a guardare la vita degli altri. Ti capisco: la tua è una palla clamorosa.",
+"Fine anno, tempo di bilanci. Il tuo è in rosso, come la faccia di chi deve presentarti agli amici.",
+"Auguri, stronzo: un anno più vecchio e nemmeno un giorno più sveglio.",
+"Oggi hai detto ci penso domani undici volte. Domani ha già risposto col cazzo.",
+"Se la tua vita fosse un film, la gente uscirebbe dalla sala dopo dieci minuti.",
+"Lunedì mattina, stessa faccia di merda di venerdì sera. Almeno sei coerente.",
+"A Capodanno brindi all'anno nuovo. L'anno nuovo ti guarda e chiede chi ti ha invitato.",
+"Punto più alto della tua carriera: la pausa caffè. E il caffè fa pure schifo.",
+"Sul calendario è cambiato l'anno. Tu no: sempre lo stesso pirla, solo più stagionato.",
+"Per te ogni giorno è lunedì: ti trascini, ti lamenti e rompi i coglioni fino a sera.",
+"Ti hanno fatto una festa a sorpresa: non è venuto nessuno. Sorpresa.",
+"Tre ore sul divano a scegliere cosa guardare. Poi ti sei addormentato, genio.",
+"Diario di oggi: niente da segnalare. Come ieri, come sempre, come te.",
+"Trecentosessantacinque giorni all'anno e non ne azzecchi uno.",
+"Lunedì riparti da zero. Che poi è esattamente dove ti eri fermato.",
+"Regalo di compleanno consigliato per te: un carattere nuovo. Quello vecchio è da buttare.",
+"Stasera a letto chiediti: ma oggi che cazzo ho fatto? Niente, appunto."
+];
+/*F-END*/
+
+const RANKS = [[500,"Leggenda dell'umiliazione"],[250,"Zerbino professionista"],[120,"Coglione certificato"],[60,"Caso clinico"],[30,"Masochista"],[12,"Recidivo"],[1,"Dilettante"],[0,"Vergine di insulti"]];
+const HINTS = {
+  wrapped: [
+    ["Strappa la bustina", "Striscia il dito: si strappa dove passi"],
+    ["Aprila, dai", "Trascina il dito sulla stagnola"],
+    ["Scartalo, genio", "Passa il dito sulla bustina, o picchietta"],
+    ["Non si apre da sola", "Strappala col dito, da dove ti pare"],
+    ["Forza, strappa", "Dove passa il dito, la bustina cede"],
+    ["Ce la fai ad aprirla?", "Un dito, una strisciata. Non è difficile"]
+  ],
+  cookie: [
+    ["Spezza il biscotto", "Picchiettalo finché cede"],
+    ["Rompilo", "Colpiscilo dove ti pare: si crepa lì"],
+    ["Dagli un paio di colpi", "Oppure un taglio secco col dito"],
+    ["Spaccalo, su", "Un colpo deciso, o tre da mollaccione"],
+    ["Ora tocca al biscotto", "Toccalo: prima si crepa, poi si apre"],
+    ["Non guardarlo, rompilo", "Picchietta o striscia il dito di taglio"]
+  ]
+};
+const TAGLINES = [
+  "100% INSULTI GARANTITI", "SENZA ZUCCHERI, SENZA PIETÀ", "CONTIENE VERITÀ SCOMODE",
+  "PUÒ CONTENERE TRACCE DI STIMA", "APRIRE LONTANO DAI PERMALOSI", "NON ADATTO AI DEBOLI DI EGO",
+  "PRODOTTO CON VERO DISPREZZO", "DA CONSUMARSI IN SILENZIO", "FARINA, ZUCCHERO, DISPREZZO",
+  "SCADE PRIMA DELLA TUA PAZIENZA", "TENERE LONTANO DALL'AUTOSTIMA", "RICETTA ORIGINALE DEL RANCORE"
+];
+const GLYPHS = ["福", "運", "吉", "壽", "龍", "發"];
+const GOLD = ["#f2c45a", "#fff0b8", "#c99a3a"], SILVER = ["#c9ced6", "#ffffff", "#9aa3ad"], REDS = ["#b3181a", "#ee4a3c", "#8a0f12"];
+const FOILS = [
+  { a: "#7a0c0f", b: "#e0302c", c: "#b3181a", d: "#ee4a3c", text: "#f2c45a", sub: "#fdebc8", seal: GOLD, rib: "#8a0f12" },
+  { a: "#8a6414", b: "#f0c858", c: "#c79a2e", d: "#ffe08a", text: "#7a0c0f", sub: "#5c0d0d", seal: REDS, rib: "#f2c45a" },
+  { a: "#0e4a3a", b: "#1f9a78", c: "#14705a", d: "#35b892", text: "#f2c45a", sub: "#e8fff6", seal: GOLD, rib: "#0e4a3a" },
+  { a: "#12245e", b: "#2f5fd0", c: "#1c3a8a", d: "#4a7cf0", text: "#f2c45a", sub: "#e6eeff", seal: SILVER, rib: "#12245e" },
+  { a: "#7d858f", b: "#e8ecf0", c: "#aab2bc", d: "#ffffff", text: "#a3161a", sub: "#5c0d0d", seal: REDS, rib: "#f2c45a" },
+  { a: "#101014", b: "#3a3a44", c: "#1c1c22", d: "#4a4a58", text: "#f2c45a", sub: "#fdebc8", seal: GOLD, rib: "#101014" },
+  { a: "#5a1466", b: "#b03ac4", c: "#7d2390", d: "#c95adc", text: "#f2c45a", sub: "#fbe9ff", seal: GOLD, rib: "#5a1466" }
+];
+const INKS = ["#1c3a8a", "#a3161a", "#23242b", "#0f5a44"];
+const ENTRIES = [
+  [{ transform: "translateY(-95%) rotate(-12deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
+  [{ transform: "translateX(-110%) rotate(-25deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
+  [{ transform: "translateX(110%) rotate(25deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
+  [{ transform: "scale(.2) rotate(140deg)", opacity: 0 }, { transform: "none", opacity: 1 }],
+  [{ transform: "translateY(-95%) rotate(14deg)", opacity: 0 }, { transform: "none", opacity: 1 }]
 ];
 
-const RANKS = [[60,"Coglione certificato"],[30,"Caso clinico"],[15,"Masochista"],[5,"Recidivo"],[1,"Dilettante"],[0,"Vergine di insulti"]];
-const HINTS = {
-  wrapped: ["Strappa la bustina", "Striscia il dito sopra, o picchietta"],
-  cookie:  ["Spezza il biscotto", "Picchiettalo tre volte, senza pietà"]
-};
-
+/* ---------- small helpers ---------- */
 const $ = id => document.getElementById(id);
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
 };
-const rand = (a, b) => a + Math.random() * (b - a);
-const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const R = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const flip = () => (Math.random() < 0.5 ? -1 : 1);
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const n1 = v => Math.round(v * 10) / 10;
+const str = pts => pts.map(p => n1(p[0]) + "," + n1(p[1])).join(" ");
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function use(id, parent) {
+  const u = el("use", {}, parent);
+  u.setAttribute("href", "#" + id);
+  u.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + id);
+  return u;
+}
+const last = {};
+function pickNew(key, arr) {
+  let v;
+  do { v = pick(arr); } while (arr.length > 1 && v === last[key]);
+  last[key] = v;
+  return v;
+}
 
-const stage = $('stage'), scene = $('scene'), cookie = $('cookie'), slip = $('slip');
-const wrapL = $('wrap-l'), wrapR = $('wrap-r'), tearLine = $('tear');
-const hint = $('hint'), actions = $('actions');
+/* affine matrices as [a,b,c,d,e,f] */
+function mk(deg, sc, cx, cy, dx, dy) {
+  const r = deg * Math.PI / 180, a = Math.cos(r) * sc, b = Math.sin(r) * sc;
+  return [a, b, -b, a, cx + dx - a * cx + b * cy, cy + dy - b * cx - a * cy];
+}
+const ap = (m, x, y) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
+const apv = (m, x, y) => [m[0] * x + m[2] * y, m[1] * x + m[3] * y];
+function inv(m) {
+  const det = m[0] * m[3] - m[1] * m[2];
+  const a = m[3] / det, b = -m[1] / det, c = -m[2] / det, d = m[0] / det;
+  return [a, b, c, d, -(a * m[4] + c * m[5]), -(b * m[4] + d * m[5])];
+}
+const mstr = m => "matrix(" + m.map(v => +v.toFixed(5)).join(" ") + ")";
 
-/* ---------- wrapper geometry ---------- */
-const JAG = [];
-for (let y = 40, i = 0; y <= 268; y += 12, i++) JAG.push([180 + (i % 2 ? 7 : -6) + ((i * 37) % 5) - 2, y]);
-const jagFwd = JAG.map(p => 'L' + p[0] + ' ' + p[1]).join(' ');
-$('clipLp').setAttribute('d', 'M-60 -40 L180 -40 ' + jagFwd + ' L180 360 L-60 360 Z');
-$('clipRp').setAttribute('d', 'M420 -40 L180 -40 ' + jagFwd + ' L180 360 L420 360 Z');
-tearLine.setAttribute('d', 'M' + JAG[0][0] + ' ' + JAG[0][1] + ' ' + jagFwd);
-(() => {
-  let zr = '', zl = '';
-  for (let y = 66, i = 0; y <= 250; y += 8, i++) zr += ' L' + (i % 2 ? 346 : 352) + ' ' + y;
-  for (let y = 250, i = 0; y >= 66; y -= 8, i++) zl += ' L' + (i % 2 ? 14 : 8) + ' ' + y;
-  const outline = 'M30 60 Q180 44 330 60' + zr + ' L330 256 Q180 272 30 256' + zl + ' Z';
-  const hole = 'M88 158 a92 60 0 1 0 184 0 a92 60 0 1 0 -184 0 Z';
-  $('wrapBody').setAttribute('d', outline + ' ' + hole);
-})();
-const tearLen = tearLine.getTotalLength ? tearLine.getTotalLength() : 260;
-tearLine.style.strokeDasharray = tearLen;
+const stage = $("stage"), scene = $("scene"), slip = $("slip");
+const backLayer = $("backLayer"), cookieLayer = $("cookieLayer"), frontLayer = $("frontLayer"), fxLayer = $("fxLayer"), dyn = $("dyn");
+const hint = $("hint"), actions = $("actions");
+
+function ctm() { const c = scene.getScreenCTM(); return [c.a, c.b, c.c, c.d, c.e, c.f]; }
+const toScene = (cx, cy) => ap(inv(ctm()), cx, cy);
+const toClient = (x, y) => ap(ctm(), x, y);
+
+/* ---------- ragged cuts ----------
+   A cut is a ragged line: origin o, unit axis u, normal n, samples [s, d] with s increasing.
+   It never doubles back, so each side of it is a simple polygon. */
+function cutPoint(c, s, d) { return [c.o[0] + c.u[0] * s + c.n[0] * d, c.o[1] + c.u[1] * s + c.n[1] * d]; }
+function cutD(c, s) {
+  const p = c.pts, L = p.length - 1;
+  if (s <= p[0][0]) return p[0][1];
+  if (s >= p[L][0]) return p[L][1];
+  let i = 1;
+  while (p[i][0] < s) i++;
+  const a = p[i - 1], b = p[i];
+  return a[1] + (b[1] - a[1]) * (s - a[0]) / ((b[0] - a[0]) || 1);
+}
+function cutSide(c, x, y) {
+  const rx = x - c.o[0], ry = y - c.o[1];
+  return rx * c.n[0] + ry * c.n[1] >= cutD(c, rx * c.u[0] + ry * c.u[1]) ? 1 : -1;
+}
+function sidePoly(c, side, widths) {
+  const p = c.pts, L = p.length - 1, B = 900, out = [];
+  const w = i => (widths ? side * widths[i] : 0);
+  out.push(cutPoint(c, p[0][0] - B, p[0][1] + w(0)));
+  for (let i = 0; i <= L; i++) out.push(cutPoint(c, p[i][0], p[i][1] + w(i)));
+  out.push(cutPoint(c, p[L][0] + B, p[L][1] + w(L)));
+  out.push(cutPoint(c, p[L][0] + B, side * B * 2));
+  out.push(cutPoint(c, p[0][0] - B, side * B * 2));
+  return str(out);
+}
+function randomCut(o, ang, half, step, drift, jag) {
+  const u = [Math.cos(ang), Math.sin(ang)], n = [-u[1], u[0]];
+  const walk = dir => {
+    const a = [];
+    let s = 0, d = 0, slope = R(-drift, drift);
+    while (s < half) {
+      const ds = R(step * 0.6, step * 1.4);
+      s += ds;
+      slope = slope * 0.65 + R(-drift, drift) * 0.55;
+      d += slope * ds + R(-jag, jag);
+      a.push([dir * s, d]);
+    }
+    return a;
+  };
+  return { o, u, n, pts: walk(-1).reverse().concat([[0, 0]], walk(1)) };
+}
+function cutLine(c, a, b) {
+  const out = [cutPoint(c, a, cutD(c, a))];
+  for (const q of c.pts) if (q[0] > a && q[0] < b) out.push(cutPoint(c, q[0], q[1]));
+  out.push(cutPoint(c, b, cutD(c, b)));
+  return out;
+}
+let clipN = 0;
+function addClip(points) {
+  const id = "c" + (++clipN);
+  el("polygon", { points }, el("clipPath", { id }, dyn));
+  return "url(#" + id + ")";
+}
+function inPoly(poly, x, y) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
 
 /* ---------- sound + haptics ---------- */
-let ac = null, noise = null, muted = store.get('bds.muted', false);
+let ac = null, noise = null, tearGain = null, muted = store.get("bds.muted", false);
 function audio() {
   if (muted) return null;
   if (!ac) {
@@ -299,7 +1523,7 @@ function audio() {
     const d = noise.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
   }
-  if (ac.state === 'suspended') ac.resume();
+  if (ac.state === "suspended") ac.resume();
   return ac;
 }
 function burst(type, freq, q, dur, gain, delay) {
@@ -313,200 +1537,621 @@ function burst(type, freq, q, dur, gain, delay) {
   src.connect(f); f.connect(g); g.connect(a.destination);
   src.start(t, Math.random() * 0.5); src.stop(t + dur + 0.03);
 }
+/* one continuous hiss whose volume follows how fast the foil is tearing */
+function tearSound(level) {
+  if (muted || !ac) { if (tearGain) tearGain.gain.value = 0; if (muted || level <= 0) return; }
+  const a = audio(); if (!a) return;
+  if (!tearGain) {
+    const src = a.createBufferSource(); src.buffer = noise; src.loop = true;
+    const f = a.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 4300; f.Q.value = 0.6;
+    tearGain = a.createGain(); tearGain.gain.value = 0;
+    src.connect(f); f.connect(tearGain); tearGain.connect(a.destination);
+    src.start();
+  }
+  tearGain.gain.setTargetAtTime(level, a.currentTime, 0.025);
+}
 const sfx = {
-  crinkle() { burst('bandpass', rand(3000, 8000), 0.8, rand(0.03, 0.08), rand(0.12, 0.28)); },
-  rip()     { for (let i = 0; i < 9; i++) burst('highpass', rand(2500, 6000), 0.6, 0.07, 0.3, i * 0.035); },
-  crack()   { burst('lowpass', 1900, 1, 0.07, 0.6); burst('highpass', 5200, 1, 0.025, 0.35); },
-  snap()    { burst('lowpass', 1400, 1, 0.12, 0.9); burst('bandpass', 3200, 2, 0.05, 0.5, 0.03); burst('highpass', 6000, 1, 0.04, 0.4, 0.06); },
-  paper()   { burst('bandpass', 2600, 0.5, 0.28, 0.1, 0.18); }
+  crinkle() { burst("bandpass", R(3000, 8000), 0.8, R(0.02, 0.07), R(0.08, 0.22)); },
+  rip()     { for (let i = 0; i < 7; i++) burst("highpass", R(2500, 6500), 0.6, 0.06, 0.28, i * R(0.02, 0.04)); },
+  crack()   { burst("lowpass", R(1500, 2600), 1, R(0.05, 0.08), 0.6); burst("highpass", R(4500, 6500), 1, 0.022, 0.35); },
+  snap()    { burst("lowpass", R(1100, 1700), 1, 0.13, 0.95); burst("bandpass", R(2600, 3800), 2, 0.05, 0.55, 0.02);
+              burst("highpass", 6000, 1, 0.04, 0.4, 0.05); burst("lowpass", 260, 0.7, 0.09, 0.5); },
+  clack(v)  { burst("bandpass", R(1800, 3400), 3, 0.028, clamp(v / 1400, 0.05, 0.3)); },
+  paper()   { burst("bandpass", R(2200, 3000), 0.5, 0.3, 0.09, 0.2); }
 };
 function buzz(ms) {
   try { if (navigator.vibrate) { navigator.vibrate(ms); return; } } catch {}
-  try { $('haptic').click(); } catch {}   // iOS: toggling a native switch gives a light tap
+  try { $("haptic").click(); } catch {}   // iOS: toggling a native switch gives a light tap
 }
 
-/* ---------- state ---------- */
-let state = 'wrapped', progress = 0, hits = 0, lastCrinkle = 0, current = '';
-let count = store.get('bds.count', 0);
+/* ---------- loose pieces: gravity, air, table ---------- */
+const bodies = [];
+let raf = 0, lastT = 0, clacks = 0;
+function addBody(b) {
+  bodies.push(Object.assign({ x: 0, y: 0, a: 0, vx: 0, vy: 0, va: 0, g: 1500, drag: 0, flutter: 0, ff: 0, fp: 0,
+    floor: null, rest: 0.28, r: 4, wl: 0, wr: 360, age: 0, life: Infinity, fade: 0, ground: false, sleep: false, clack: false }, b));
+  kick();
+}
+function place(b) {
+  const t = "translate(" + n1(b.x) + " " + n1(b.y) + ") rotate(" + n1(b.a) + " " + n1(b.cx) + " " + n1(b.cy) + ")";
+  for (const e of b.els) e.setAttribute("transform", t);
+}
+function stepBodies(dt) {
+  let awake = false;
+  for (let i = bodies.length - 1; i >= 0; i--) {
+    const b = bodies[i];
+    if (b.sleep) continue;
+    b.age += dt;
+    b.vy += b.g * dt;
+    if (b.drag) { const k = Math.exp(-b.drag * dt); b.vx *= k; b.vy *= k; b.va *= Math.exp(-b.drag * 0.4 * dt); }
+    if (b.flutter) b.vx += Math.sin(b.age * b.ff + b.fp) * b.flutter * dt;
+    b.x += b.vx * dt; b.y += b.vy * dt; b.a += b.va * dt;
+    if (b.floor != null) {
+      if (b.cy + b.y + b.r > b.floor) {
+        b.y = b.floor - b.r - b.cy;
+        if (b.vy > 0) {
+          const hit = b.vy;
+          b.vy = -hit * b.rest; b.vx *= 0.72; b.va = b.va * 0.5 + b.vx * 0.6;
+          if (b.clack && hit > 160 && clacks < 12) { clacks++; sfx.clack(hit); }
+          if (hit * b.rest < 50) { b.vy = 0; b.ground = true; }
+        }
+      }
+      if (b.ground) {
+        const k = Math.exp(-7 * dt); b.vx *= k; b.va *= k;
+        if (Math.abs(b.vx) < 2 && Math.abs(b.va) < 5) b.sleep = true;
+      }
+      const cx = b.cx + b.x;
+      if (cx < b.wl) { b.x = b.wl - b.cx; b.vx = Math.abs(b.vx) * 0.4; }
+      else if (cx > b.wr) { b.x = b.wr - b.cx; b.vx = -Math.abs(b.vx) * 0.4; }
+    }
+    if (b.age > b.life) { for (const e of b.els) e.remove(); bodies.splice(i, 1); continue; }
+    if (b.fade && b.age > b.life - b.fade) for (const e of b.els) e.setAttribute("opacity", n1((b.life - b.age) / b.fade));
+    place(b);
+    if (!b.sleep) awake = true;
+  }
+  return awake;
+}
+function kick() { if (!raf) { lastT = performance.now(); raf = requestAnimationFrame(frame); } }
+function frame(now) {
+  raf = 0;
+  const dt = clamp((now - lastT) / 1000, 0.001, 0.034);
+  lastT = now;
+  let busy = false;
+  if (tear && !tear.done) {
+    const adv = Math.min(tear.goal - tear.tip, tear.speed * dt);
+    if (adv > 0.01) {
+      growTear(adv);
+      if (tear.tip > tear.sOut - 24) tear.goal = tear.sOut + 12;   // the last strip gives way by itself
+      busy = true;
+      tearSound(clamp(adv / dt / 1300, 0.05, 1) * 0.3);
+      tear.noise += adv;
+      if (tear.noise > 13) { tear.noise = 0; sfx.crinkle(); shimmer(); }
+      checkTear();
+    } else tearSound(0);
+  }
+  if (stepBodies(dt)) busy = true;
+  if (busy) kick();
+}
 
+/* ---------- the bag ---------- */
+const BAG = { x0: 6, x1: 354, y0: 44, y1: 272 };
+const BIG = "M-600 -600H1000V1000H-600Z";
+const inBag = (x, y) => x > BAG.x0 && x < BAG.x1 && y > BAG.y0 && y < BAG.y1;
+let wr = null, tear = null;
+
+function buildWrapper() {
+  const foil = pickNew("foil", FOILS);
+  [foil.a, foil.b, foil.c, foil.d, foil.c, foil.a].forEach((c, i) => $("f" + i).setAttribute("stop-color", c));
+  foil.seal.forEach((c, i) => $("s" + i).setAttribute("stop-color", c));
+  const ga = R(0.25, 1.3), gf = $("gFoil");
+  gf.setAttribute("x2", n1(Math.cos(ga))); gf.setAttribute("y2", n1(Math.sin(ga)));
+
+  let zr = "", zl = "";
+  for (let y = 66, i = 0; y <= 250; y += 8, i++) zr += " L" + (i % 2 ? 346 : 352) + " " + y;
+  for (let y = 250, i = 0; y >= 66; y -= 8, i++) zl += " L" + (i % 2 ? 14 : 8) + " " + y;
+  const outline = "M30 60 Q180 44 330 60" + zr + " L330 256 Q180 272 30 256" + zl + " Z";
+  const rx = n1(R(84, 96)), ry = n1(R(54, 62)), wy = 158;
+  const hole = "M" + (180 - rx) + " " + wy + " a" + rx + " " + ry + " 0 1 0 " + (2 * rx) + " 0 a" + rx + " " + ry + " 0 1 0 " + (-2 * rx) + " 0 Z";
+  $("outClipP").setAttribute("d", outline);
+  $("bodyClipP").setAttribute("d", outline + " " + hole);
+
+  const facet = (lo, hi) => {
+    const cx = R(10, 350), cy = R(48, 268), a0 = R(0, 6.28), pts = [];
+    for (let j = 0; j < 3; j++) { const a = a0 + j * 2.09 + R(-0.5, 0.5), r = R(14, 46); pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+    return '<polygon points="' + str(pts) + '" fill="' + (Math.random() < 0.5 ? "#fff" : "#000") + '" opacity="' + R(lo, hi).toFixed(2) + '"/>';
+  };
+  let fac = "", facBack = "";
+  for (let i = 0; i < 32; i++) fac += facet(0.03, 0.14);
+  for (let i = 0; i < 14; i++) facBack += facet(0.04, 0.12);
+
+  const tag = pickNew("tag", TAGLINES), glyph = pick(GLYPHS);
+  const ribs = "M14 58V258M20 58V258M26 58V258M334 58V258M340 58V258M346 58V258";
+  $("wrapBack").innerHTML =
+    '<path d="' + outline + '" fill="url(#gInside)"/>' +
+    '<g clip-path="url(#outClip)">' + facBack + '<ellipse cx="180" cy="176" rx="124" ry="52" fill="#000" opacity=".14"/></g>';
+  $("wrapFront").innerHTML =
+    '<path d="' + outline + " " + hole + '" fill="url(#gFoil)" fill-rule="evenodd"/>' +
+    '<g clip-path="url(#bodyClip)" id="facets">' + fac + '<rect x="0" y="40" width="360" height="236" fill="url(#gVol)"/></g>' +
+    '<ellipse cx="180" cy="' + wy + '" rx="' + rx + '" ry="' + ry + '" fill="#fff" opacity=".13"/>' +
+    '<path d="M' + n1(180 - rx * 0.82) + " " + n1(wy - ry * 0.42) + " Q" + n1(180 - rx * 0.45) + " " + n1(wy - ry * 0.92) + " " + n1(180 + rx * 0.1) + " " + n1(wy - ry * 0.9) +
+      '" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".5"/>' +
+    '<ellipse cx="180" cy="' + wy + '" rx="' + rx + '" ry="' + ry + '" fill="none" stroke="url(#gSeal)" stroke-width="3"/>' +
+    '<g clip-path="url(#outClip)"><rect x="6" y="56" width="25" height="204" fill="url(#gSeal)"/><rect x="329" y="56" width="25" height="204" fill="url(#gSeal)"/>' +
+      '<path d="' + ribs + '" stroke="' + foil.rib + '" stroke-width="1.2" opacity=".5"/></g>' +
+    '<text x="180" y="84" text-anchor="middle" font-family="\'Bowlby One\',\'Arial Black\',sans-serif" font-size="13.5" letter-spacing="1.5" fill="' + foil.text + '">BISCOTTO DELLA SFIGA</text>' +
+    '<text x="180" y="243" text-anchor="middle" font-family="\'Figtree\',system-ui,sans-serif" font-weight="700" font-size="9.5" letter-spacing="' + (tag.length > 26 ? 1.2 : 2.2) + '" fill="' + foil.sub + '">' + tag + "</text>" +
+    '<text x="58" y="170" text-anchor="middle" font-size="34" fill="' + foil.text + '">' + glyph + "</text>" +
+    '<text x="302" y="170" text-anchor="middle" font-size="34" fill="' + foil.text + '">' + glyph + "</text>" +
+    '<path d="M40 60 Q180 46 320 60" fill="none" stroke="#fff" stroke-width="2" opacity=".35"/>';
+
+  const M = mk(R(-8, 8), 1, 180, 158, R(-5, 5), R(-5, 5));
+  wr = { M, Mi: inv(M) };
+  wr.back = el("g", { transform: mstr(M) }, backLayer);
+  use("wrapBack", wr.back);
+  wr.front = el("g", { transform: mstr(M) }, frontLayer);
+  use("wrapFront", el("g", { "clip-path": "url(#tearClip)" }, wr.front));
+  const eg = el("g", { "clip-path": "url(#outClip)", fill: "none", stroke: "#f6f8fa", "stroke-width": 1.5, "stroke-linejoin": "round", opacity: 0.9 }, wr.front);
+  wr.eA = el("polyline", { points: "" }, eg);
+  wr.eB = el("polyline", { points: "" }, eg);
+  $("tearClipP").setAttribute("d", BIG);
+}
+function shimmer() {
+  const f = $("facets"); if (!f) return;
+  for (let i = 0; i < 4; i++) {
+    const c = f.children[Math.floor(Math.random() * (f.children.length - 1))];
+    if (c && c.tagName === "polygon") c.setAttribute("opacity", R(0.03, 0.17).toFixed(2));
+  }
+}
+
+/* the tear starts at the edge behind the finger and chases it across the bag */
+function startTear(o, u) {
+  const n = [-u[1], u[0]];
+  let s0 = -1e9, s1 = 1e9;
+  for (const [p, d, lo, hi] of [[o[0], u[0], BAG.x0, BAG.x1], [o[1], u[1], BAG.y0, BAG.y1]]) {
+    if (Math.abs(d) < 1e-6) continue;
+    const a = (lo - p) / d, b = (hi - p) / d;
+    s0 = Math.max(s0, Math.min(a, b)); s1 = Math.min(s1, Math.max(a, b));
+  }
+  tear = { o, u, n, pts: [[s0 - 4, 0]], sIn: s0, sOut: s1, tip: s0 - 4, d: 0, fd: 0, wander: 0, goal: s0,
+           near: false, next: R(4.5, 9), speed: 1800, noise: 0, done: false };
+}
+function growTear(adv) {
+  const t = tear;
+  while (adv > 0) {
+    const lastP = t.pts[t.pts.length - 1];
+    const step = Math.min(adv, Math.max(0.01, lastP[0] + t.next - t.tip));
+    t.tip += step; adv -= step;
+    const want = t.near ? t.fd : t.wander;
+    t.d += clamp((want - t.d) * 0.6, -step * 1.1, step * 1.1);
+    if (t.tip >= lastP[0] + t.next - 1e-6) {
+      t.pts.push([t.tip, t.d + R(-1.7, 1.7)]);
+      t.next = R(4.5, 9);
+      t.wander = t.near ? t.d : clamp(t.wander + R(-7, 7), -34, 34);
+    }
+  }
+  renderTear();
+}
+const gapAt = (t, s) => Math.min(13, Math.max(0, t.tip - s) * 0.085);
+function renderTear() {
+  const t = tear, pts = t.pts.slice();
+  if (t.tip > pts[pts.length - 1][0] + 0.01) pts.push([t.tip, t.d]);
+  const up = [], dn = [];
+  for (const q of pts) { const w = gapAt(t, q[0]); up.push(cutPoint(t, q[0], q[1] + w)); dn.push(cutPoint(t, q[0], q[1] - w)); }
+  wr.eA.setAttribute("points", str(up));
+  wr.eB.setAttribute("points", str(dn));
+  $("tearClipP").setAttribute("d", BIG + " M" + str(up.concat(dn.reverse())).replace(/ /g, " L") + " Z");
+}
+function checkTear() {
+  const t = tear, p = cutPoint(t, t.tip, t.d);
+  if (t.tip >= t.sOut + 3 || (t.tip > t.sIn + 24 && !inBag(p[0], p[1]))) splitWrapper();
+}
+function tearMove(lx, ly, dist) {
+  if (!tear) {
+    if (!inBag(lx, ly)) return;
+    const dx = lx - down.ax, dy = ly - down.ay, d = Math.hypot(dx, dy);
+    if (d < 12) return;
+    startTear([lx, ly], [dx / d, dy / d]);
+    tear.goal = 0;
+  } else {
+    const t = tear, rx = lx - t.o[0], ry = ly - t.o[1];
+    const fs = rx * t.u[0] + ry * t.u[1];
+    t.fd = rx * t.n[0] + ry * t.n[1];
+    t.near = Math.abs(fs - t.tip) < 80;
+    t.goal = Math.min(t.sOut + 12, Math.max(t.goal + dist * 0.55, fs));
+    t.speed = 1800;
+  }
+  kick();
+}
+function tearTap(lx, ly) {
+  if (!tear) {
+    const x = clamp(lx, BAG.x0 + 20, BAG.x1 - 20), y = clamp(ly, BAG.y0 + 16, BAG.y1 - 16);
+    const ang = Math.hypot(180 - x, 158 - y) < 36 ? R(0, 6.283) : Math.atan2(158 - y, 180 - x) + R(-0.7, 0.7);
+    startTear([x, y], [Math.cos(ang), Math.sin(ang)]);
+  }
+  const t = tear;
+  t.near = false; t.speed = 750;
+  t.goal = Math.min(t.sOut + 12, Math.max(t.goal, t.tip) + (t.sOut - t.sIn) * R(0.3, 0.42));
+  kick();
+}
+function splitWrapper() {
+  const t = tear;
+  t.done = true; state = "busy";
+  if (t.tip > t.pts[t.pts.length - 1][0] + 0.5) t.pts.push([t.tip, t.d]);
+  const widths = t.pts.map(q => gapAt(t, q[0]));
+  tearSound(0); sfx.rip(); buzz(30);
+  wr.back.remove(); wr.front.remove();
+  if (!calm) for (const side of [1, -1]) {
+    const back = el("g", {}, backLayer);
+    use("wrapBack", el("g", { transform: mstr(wr.M), "clip-path": addClip(sidePoly(t, side)) }, back));
+    const front = el("g", {}, frontLayer);
+    const fi = el("g", { transform: mstr(wr.M), "clip-path": addClip(sidePoly(t, side, widths)) }, front);
+    use("wrapFront", fi);
+    el("polyline", { points: str(t.pts.map((q, i) => cutPoint(t, q[0], q[1] + side * widths[i]))), fill: "none",
+      stroke: "#f6f8fa", "stroke-width": 1.5, "stroke-linejoin": "round", opacity: 0.9 }, el("g", { "clip-path": "url(#outClip)" }, fi));
+    let sx = 0, sy = 0, n = 0;
+    for (let y = BAG.y0 + 10; y < BAG.y1; y += 20) for (let x = BAG.x0 + 10; x < BAG.x1; x += 20)
+      if (cutSide(t, x, y) === side) { sx += x; sy += y; n++; }
+    const C = n ? ap(wr.M, sx / n, sy / n) : ap(wr.M, 180, 158);
+    const nv = apv(wr.M, t.n[0] * side, t.n[1] * side), sp = R(230, 350);
+    addBody({ els: [back, front], cx: C[0], cy: C[1], vx: nv[0] * sp + R(-30, 30) + fling[0] * 0.2, vy: nv[1] * sp - R(60, 150) + fling[1] * 0.2,
+      va: R(70, 220) * flip(), g: 650, drag: 1.5, flutter: R(250, 520), ff: R(5, 9), fp: R(0, 6), life: R(1.7, 2.3), fade: 0.45 });
+  }
+  setTimeout(() => {
+    state = "cookie"; setHint("cookie");
+    if (!calm && ck.wob.animate) ck.wob.animate(
+      [{ transform: "translateY(0)" }, { transform: "translateY(5px) rotate(" + R(-3, 3).toFixed(1) + "deg)" }, { transform: "translateY(0)" }],
+      { duration: 260, easing: "ease-out" });
+  }, calm ? 40 : 340);
+}
+
+/* ---------- the cookie ---------- */
+let ck = null;
+const cubic = (a, b, c, d, t) => {
+  const m = 1 - t, k0 = m * m * m, k1 = 3 * m * m * t, k2 = 3 * m * t * t, k3 = t * t * t;
+  return [k0 * a[0] + k1 * b[0] + k2 * c[0] + k3 * d[0], k0 * a[1] + k1 * b[1] + k2 * c[1] + k3 * d[1]];
+};
+function lobePoly(P) {
+  const out = [];
+  for (let k = 0; k < 3; k++) for (let i = 0; i < 12; i++) out.push(cubic(P[k * 3], P[k * 3 + 1], P[k * 3 + 2], P[k * 3 + 3], i / 12));
+  out.push(P[9]);
+  return out;
+}
+const inCookie = (x, y) => inPoly(ck.polyL, x, y) || inPoly(ck.polyR, x, y);
+
+function buildCookie() {
+  const hue = R(29, 40), l = R(-6, 5);
+  const hsl = (h, s, li) => "hsl(" + n1(h) + "," + s + "%," + n1(li) + "%)";
+  const tones = [hsl(hue + 6, 88, 76 + l), hsl(hue, 76, 62 + l), hsl(hue - 6, 66, 46 + l)];
+  tones.forEach((c, i) => $("bk" + i).setAttribute("stop-color", c));
+  const rim = hsl(hue - 8, 70, 33 + l), pale = hsl(hue + 8, 90, 86);
+
+  const top = [180, 114 + R(-4, 5)], bot = [180, 186 + R(-5, 5)];
+  const base = [[150, 84], [92, 90], [70, 136], [53, 172], [62, 216], [94, 236], [104, 204], [140, 188]];
+  const lobe = mir => [top].concat(base.map(p => [(mir ? 360 - p[0] : p[0]) + R(-5, 5), p[1] + R(-5, 5)]), [bot]);
+  const L = lobe(false), Rt = lobe(true);
+  const pt = p => n1(p[0]) + " " + n1(p[1]);
+  const dOf = P => "M" + pt(P[0]) + " C" + pt(P[1]) + " " + pt(P[2]) + " " + pt(P[3]) + " C" + pt(P[4]) + " " + pt(P[5]) + " " + pt(P[6]) +
+                   " C" + pt(P[7]) + " " + pt(P[8]) + " " + pt(P[9]) + " Z";
+  const dL = dOf(L), dR = dOf(Rt);
+  $("cookieClip").innerHTML = '<path d="' + dL + '"/><path d="' + dR + '"/>';
+
+  ck = { polyL: lobePoly(L), polyR: lobePoly(Rt), tones, rim, pale, need: pick([2, 3, 3, 3, 4]), hits: 0, cut: null, hit: null };
+
+  let dots = "";
+  for (let i = 0, made = 0; i < 80 && made < 16; i++) {
+    const x = R(60, 300), y = R(92, 232);
+    if (!inCookie(x, y)) continue;
+    made++;
+    dots += made % 5 === 0
+      ? '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(2.4, 4)) + '" fill="' + pale + '" opacity=".45" stroke="' + rim + '" stroke-opacity=".5" stroke-width=".8"/>'
+      : '<circle cx="' + n1(x) + '" cy="' + n1(y) + '" r="' + n1(R(0.9, 2.3)) + '" fill="' + rim + '" opacity="' + R(0.35, 0.6).toFixed(2) + '"/>';
+  }
+  let patches = "";
+  for (let i = 0; i < 4; i++)
+    patches += '<ellipse cx="' + n1(R(80, 280)) + '" cy="' + n1(R(110, 220)) + '" rx="' + n1(R(14, 34)) + '" ry="' + n1(R(8, 20)) + '" fill="' + rim + '" opacity="' + R(0.06, 0.16).toFixed(2) + '"/>';
+  const ty = top[1], by = bot[1];
+  $("cookieArt").innerHTML =
+    '<path d="' + dL + '" fill="url(#gBake)" stroke="' + rim + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+    '<path d="' + dR + '" fill="url(#gBake)" stroke="' + rim + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+    '<g clip-path="url(#cookieClip)">' +
+      '<path d="' + dL + '" fill="none" stroke="' + rim + '" stroke-width="10" opacity=".22"/>' +
+      '<path d="' + dR + '" fill="none" stroke="' + rim + '" stroke-width="10" opacity=".3"/>' + patches +
+      '<path d="M180 ' + n1(ty + 4) + " C158 " + n1(ty + 20) + " 152 " + n1(by - 20) + " 180 " + n1(by) + " C208 " + n1(by - 20) + " 202 " + n1(ty + 20) + " 180 " + n1(ty + 4) + 'Z" fill="' + rim + '" opacity=".5"/>' +
+      '<path d="M180 ' + n1(ty + 2) + " C146 " + n1(ty + 10) + " 112 160 " + n1(L[6][0] + 1) + " " + n1(L[6][1] - 4) + '" fill="none" stroke="' + rim + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
+      '<path d="M180 ' + n1(ty + 2) + " C214 " + n1(ty + 10) + " 248 160 " + n1(Rt[6][0] - 1) + " " + n1(Rt[6][1] - 4) + '" fill="none" stroke="' + rim + '" stroke-width="2" stroke-linecap="round" opacity=".5"/>' +
+      '<path d="M84 134 C96 108 128 98 154 108" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".55"/>' +
+      '<path d="M206 108 C232 98 262 108 276 132" fill="none" stroke="#fff3d0" stroke-width="5" stroke-linecap="round" opacity=".4"/>' + dots +
+    "</g>";
+
+  ck.sc = R(0.93, 1.03);
+  ck.M = mk(R(-14, 14), ck.sc, 180, 165, R(-5, 5), R(-4, 4));
+  ck.Mi = inv(ck.M);
+  ck.wob = el("g", { style: "transform-origin:180px 165px" }, cookieLayer);
+  const baseG = el("g", { transform: mstr(ck.M) }, ck.wob);
+  use("cookieArt", baseG);
+  ck.cracks = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, baseG);
+}
+function crackLine(pts, w) {
+  el("polyline", { points: str(pts.map(p => [p[0] + 0.9, p[1] + 0.9])), stroke: ck.pale, "stroke-width": n1(w * 0.45), opacity: 0.55 }, ck.cracks);
+  return el("polyline", { points: str(pts), stroke: "#4e2c06", "stroke-width": w, opacity: 0.88 }, ck.cracks);
+}
+function twig(x, y, ang, len) {
+  const pts = [[x, y]];
+  for (let k = 0, n = 2 + Math.floor(R(0, 3)); k < n; k++) {
+    ang += R(-0.6, 0.6);
+    x += Math.cos(ang) * len / n; y += Math.sin(ang) * len / n;
+    pts.push([x, y]);
+  }
+  crackLine(pts, R(1, 1.7));
+}
+function hitCookie(sx, sy, dir, power) {
+  let p = ap(ck.Mi, sx, sy);
+  const home = p[0] < 180 ? [140, 160] : [220, 160];
+  for (let i = 0; i < 30 && !inCookie(p[0], p[1]); i++) p = [p[0] + (home[0] - p[0]) * 0.15, p[1] + (home[1] - p[1]) * 0.15];
+  if (!ck.cut) {
+    let ang = Math.PI / 2 + R(-0.95, 0.95);
+    if (dir) { const v = apv(ck.Mi, dir[0], dir[1]); ang = Math.atan2(v[1], v[0]); }
+    ck.cut = randomCut(p, ang, 240, 9, 0.32, 2.4);
+    ck.hit = p;
+    ck.ext = [R(0.7, 1.25), R(0.7, 1.25)];
+  }
+  ck.hits += power;
+  buzz(15);
+  if (ck.hits >= ck.need) { breakCookie(); return; }
+  sfx.crack();
+  if (!calm && ck.wob.animate) ck.wob.animate(
+    [{ transform: "none" }, { transform: "translate(" + R(-5, 5).toFixed(1) + "px," + R(2, 5).toFixed(1) + "px) rotate(" + R(-4, 4).toFixed(1) + "deg) scale(1.03,.97)" },
+     { transform: "translate(" + R(-3, 3).toFixed(1) + "px,-2px) rotate(" + R(-2, 2).toFixed(1) + "deg)" }, { transform: "none" }],
+    { duration: 230, easing: "ease-out" });
+
+  const c = ck.cut, len = 24 + 64 * ck.hits / ck.need, a = -len * ck.ext[0], b = len * ck.ext[1];
+  if (ck.main) { ck.main.previousSibling.remove(); ck.main.remove(); }
+  ck.main = crackLine(cutLine(c, a, b), 2.3);
+  const axis = Math.atan2(c.u[1], c.u[0]);
+  for (let k = 0, n = 1 + Math.floor(R(0, 3)); k < n; k++) {
+    const s = R(a, b), o = cutPoint(c, s, cutD(c, s));
+    twig(o[0], o[1], axis + flip() * R(0.5, 1.3) + (Math.random() < 0.5 ? Math.PI : 0), R(8, 26));
+  }
+  if (Math.hypot(p[0] - ck.hit[0], p[1] - ck.hit[1]) > 12)
+    for (let k = 0, n = 2 + Math.floor(R(0, 3)), a0 = R(0, 6.28); k < n; k++) twig(p[0], p[1], a0 + k * 6.28 / n + R(-0.4, 0.4), R(7, 18));
+  const H = ap(ck.M, p[0], p[1]);
+  spawnCrumbs(H, 3 + Math.floor(R(0, 4)), 0.55);
+}
+function spawnCrumbs(H, n, power) {
+  if (calm) return;
+  for (let i = 0; i < n && fxLayer.childElementCount < 70; i++) {
+    const r = R(1.2, 4.2), k = 3 + Math.floor(R(0, 3)), pts = [];
+    for (let j = 0; j < k; j++) { const a = j / k * 6.283 + R(-0.4, 0.4), q = r * R(0.6, 1); pts.push([H[0] + Math.cos(a) * q, H[1] + Math.sin(a) * q]); }
+    const e = el("polygon", { points: str(pts), fill: pick(ck.tones) }, fxLayer);
+    const ang = R(-2.9, -0.25), sp = R(60, 330) * power;
+    addBody({ els: [e], cx: H[0], cy: H[1], r: r * 0.6, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, va: R(-900, 900),
+      floor: 272 + R(-10, 12), rest: 0.2, wl: 4, wr: 356 });
+  }
+}
+function dust(H) {
+  if (calm) return;
+  for (let i = 0; i < 7; i++) {
+    const e = el("circle", { cx: n1(H[0]), cy: n1(H[1]), r: n1(R(5, 11)), fill: ck.pale, opacity: 0, style: "transform-box:fill-box;transform-origin:center" }, fxLayer);
+    if (!e.animate) { e.remove(); continue; }
+    e.animate([{ transform: "translate(0,0) scale(.3)", opacity: 0.5 },
+               { transform: "translate(" + R(-60, 60).toFixed(0) + "px," + R(-50, 10).toFixed(0) + "px) scale(" + R(1.6, 2.6).toFixed(1) + ")", opacity: 0 }],
+              { duration: R(420, 820), easing: "ease-out" }).onfinish = () => e.remove();
+  }
+}
+function breakCookie() {
+  state = "open";
+  const c = ck.cut;
+  const sides = { 1: [[[c, 1]]], "-1": [[[c, -1]]] };
+  const extra = pick([0, 1, 1, 1, 2, 2]), order = Math.random() < 0.5 ? [1, -1] : [-1, 1];
+  for (let k = 0; k < extra; k++) {
+    const side = order[k], s0 = R(-42, 42), o2 = cutPoint(c, s0, cutD(c, s0));
+    const c2 = randomCut(o2, Math.atan2(c.u[1], c.u[0]) + flip() * R(0.75, 1.45), 260, 9, 0.28, 2.2);
+    sides[side] = [[[c, side], [c2, 1]], [[c, side], [c2, -1]]];
+  }
+  const parts = sides[1].concat(sides[-1]);
+  const stats = parts.map(() => ({ n: 0, sx: 0, sy: 0, pts: [] }));
+  let total = 0;
+  for (let y = 78; y <= 246; y += 6) for (let x = 48; x <= 312; x += 6) {
+    if (!inCookie(x, y)) continue;
+    total++;
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i].every(q => cutSide(q[0], x, y) === q[1])) { const st = stats[i]; st.n++; st.sx += x; st.sy += y; st.pts.push([x, y]); break; }
+    }
+  }
+  ck.wob.remove();
+  $("shadow").setAttribute("opacity", 0.14);
+  const H = ap(ck.M, ck.hit[0], ck.hit[1]);
+  sfx.snap(); sfx.paper(); buzz(60);
+  clacks = 0;
+
+  parts.forEach((cons, i) => {
+    const st = stats[i];
+    if (st.n < 5) { if (st.n) spawnCrumbs(ap(ck.M, st.sx / st.n, st.sy / st.n), 4, 0.6); return; }
+    const cx = st.sx / st.n, cy = st.sy / st.n;
+    let rmax = 0;
+    for (const q of st.pts) rmax = Math.max(rmax, Math.hypot(q[0] - cx, q[1] - cy));
+    const g = el("g", {}, cookieLayer);
+    let host = el("g", { transform: mstr(ck.M), "clip-path": addClip(sidePoly(cons[0][0], cons[0][1])) }, g);
+    if (cons[1]) host = el("g", { "clip-path": addClip(sidePoly(cons[1][0], cons[1][1])) }, host);
+    use("cookieArt", host);
+    const rimG = el("g", { "clip-path": "url(#cookieClip)", fill: "none", "stroke-linejoin": "round" }, host);
+    for (const q of cons) {
+      const line = str(cutLine(q[0], -230, 230));
+      el("polyline", { points: line, stroke: ck.pale, "stroke-width": 7 }, rimG);
+      el("polyline", { points: line, stroke: ck.rim, "stroke-width": 1.5, opacity: 0.75 }, rimG);
+    }
+    const C = ap(ck.M, cx, cy);
+    let ox = C[0] - H[0], oy = C[1] - H[1];
+    const d = Math.hypot(ox, oy) || 1; ox /= d; oy /= d;
+    const small = 1 - st.n / total, sp = R(110, 190) * (0.7 + small);
+    const floor = 268 + R(-5, 7), r = Math.max(8, rmax * 0.55 * ck.sc);
+    const b = { els: [g], cx: C[0], cy: C[1], r, vx: ox * sp + R(-25, 25), vy: oy * sp * 0.5 - R(140, 260),
+      va: (ox >= 0 ? 1 : -1) * R(90, 260) * (0.6 + small * 1.6) * (Math.random() < 0.2 ? -1 : 1),
+      floor, rest: R(0.2, 0.34), wl: 22 + r, wr: 338 - r, clack: true };
+    if (calm) { b.x = clamp(C[0] + ox * 80, b.wl, b.wr) - C[0]; b.y = floor - r - C[1]; b.a = R(-35, 35); place(b); }
+    else addBody(b);
+  });
+  spawnCrumbs(H, 14 + Math.floor(R(0, 10)), 1);
+  dust(H);
+  showSlip(H);
+  count++; store.set("bds.count", count); renderTally();
+  hint.hidden = true; actions.hidden = false;
+  stage.setAttribute("aria-label", "Bigliettino: " + current);
+}
+
+/* ---------- the slip ---------- */
+let current = "", deck = null, deckOrder = null;
+function mulberry(a) {
+  return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+}
+/* every slip comes out once before any repeats: a shuffled deck remembered as seed + position */
+function nextFortune() {
+  const N = FORTUNES.length;
+  if (!deck) deck = store.get("bds.deck", null);
+  if (!deck || deck.n !== N || !(deck.pos >= 0 && deck.pos < N)) { deck = { seed: Math.floor(Math.random() * 2147483647), pos: 0, n: N }; deckOrder = null; }
+  if (!deckOrder) {
+    const rnd = mulberry(deck.seed);
+    deckOrder = FORTUNES.map((_, i) => i);
+    for (let i = N - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); const t = deckOrder[i]; deckOrder[i] = deckOrder[j]; deckOrder[j] = t; }
+  }
+  const text = FORTUNES[deckOrder[deck.pos]];
+  deck.pos++;
+  if (deck.pos >= N) { deck = { seed: Math.floor(Math.random() * 2147483647), pos: 0, n: N }; deckOrder = null; }
+  store.set("bds.deck", deck);
+  return text;
+}
+function showSlip(H) {
+  current = nextFortune();
+  const f = $("fortune");
+  f.textContent = current;
+  f.classList.toggle("long", current.length > 92);
+  const rot = R(-4, 4);
+  slip.style.setProperty("--rot", rot.toFixed(1) + "deg");
+  slip.style.setProperty("--ink", pickNew("ink", INKS));
+  slip.style.top = R(6, 13).toFixed(1) + "%";
+  slip.classList.add("show");
+  if (calm || !slip.animate) return;
+  const sr = stage.getBoundingClientRect(), w = slip.offsetWidth, h = slip.offsetHeight, c = toClient(H[0], H[1]);
+  const tx = c[0] - (sr.left + slip.offsetLeft + w / 2), ty = c[1] - (sr.top + slip.offsetTop + h / 2);
+  slip.animate([
+    { transform: "translate(" + tx.toFixed(1) + "px," + ty.toFixed(1) + "px) scale(.06) rotate(" + R(-50, 50).toFixed(0) + "deg)", opacity: 0 },
+    { opacity: 1, offset: 0.2 },
+    { transform: "translate(" + (-w / 2).toFixed(1) + "px,0px) scale(1) rotate(" + rot.toFixed(1) + "deg)", opacity: 1 }
+  ], { duration: R(620, 820), delay: 150, easing: "cubic-bezier(.2,1.15,.4,1)", fill: "backwards" });
+}
+
+/* ---------- rounds ---------- */
+let state = "wrapped", count = store.get("bds.count", 0);
 function setHint(key) {
-  const h = HINTS[key];
-  hint.innerHTML = '';
-  hint.append(h[0]);
-  const s = document.createElement('span'); s.textContent = h[1]; hint.append(s);
-  stage.setAttribute('aria-label', h[0] + '. ' + h[1]);
+  const h = pickNew("hint-" + key, HINTS[key]);
+  hint.textContent = h[0];
+  const s = document.createElement("span"); s.textContent = h[1]; hint.append(s);
+  stage.setAttribute("aria-label", h[0] + ". " + h[1]);
 }
 function renderTally() {
-  const rank = RANKS.find(r => count >= r[0])[1];
-  $('tally').textContent = 'Aperti: ' + count + ' · ' + rank;
+  $("tally").textContent = "Aperti: " + count + " · " + RANKS.find(r => count >= r[0])[1];
 }
-function nextFortune() {
-  let bag = store.get('bds.bag', null);
-  if (!Array.isArray(bag) || !bag.length || bag.some(i => !(i >= 0 && i < FORTUNES.length))) {
-    bag = FORTUNES.map((_, i) => i);
-    for (let i = bag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [bag[i], bag[j]] = [bag[j], bag[i]]; }
-  }
-  const idx = bag.pop();
-  store.set('bds.bag', bag);
-  return FORTUNES[idx];
-}
-function unluckyNumbers() {
-  const s = new Set();
-  while (s.size < 6) s.add(1 + Math.floor(Math.random() * 90));
-  return [...s].sort((a, b) => a - b).join(' ');
-}
-
-/* ---------- step 1: tear the wrapper ---------- */
-function renderTear() {
-  tearLine.style.strokeDashoffset = tearLen * (1 - progress);
-  wrapL.style.transform = 'translate(' + (-progress * 9) + 'px,0) rotate(' + (-progress * 2.5) + 'deg)';
-  wrapR.style.transform = 'translate(' + (progress * 9) + 'px,0) rotate(' + (progress * 2.5) + 'deg)';
-}
-function tear(dp) {
-  progress = Math.min(1, progress + dp);
-  renderTear();
-  const now = performance.now();
-  if (now - lastCrinkle > 45) { lastCrinkle = now; sfx.crinkle(); }
-  if (progress >= 1) unwrap();
-}
-function unwrap() {
-  state = 'busy';
-  sfx.rip(); buzz(30);
-  tearLine.style.opacity = 0;
-  wrapL.classList.add('fly'); wrapR.classList.add('fly');
-  wrapL.style.transform = 'translate(-300px,-50px) rotate(-30deg)';
-  wrapR.style.transform = 'translate(300px,30px) rotate(34deg)';
-  wrapL.style.opacity = 0; wrapR.style.opacity = 0;
-  setTimeout(() => { state = 'cookie'; setHint('cookie'); }, calm ? 50 : 520);
-}
-
-/* ---------- step 2: crack the cookie ---------- */
-function hit() {
-  hits++;
-  buzz(15);
-  if (!calm && cookie.animate) cookie.animate(
-    [{ transform: 'translate(0,0) rotate(0)' }, { transform: 'translate(-5px,3px) rotate(-3deg)' },
-     { transform: 'translate(5px,-2px) rotate(3deg)' }, { transform: 'translate(0,0) rotate(0)' }],
-    { duration: 220, easing: 'ease-out' });
-  if (hits < 3) {
-    sfx.crack();
-    $('crack' + hits).classList.add('on');
-    crumbs(4);
-  } else {
-    reveal();
-  }
-}
-function crumbs(n) {
-  if (calm || !stage.animate) return;
-  for (let i = 0; i < n; i++) {
-    const c = document.createElement('i');
-    c.className = 'crumb';
-    stage.append(c);
-    const dx = rand(-130, 130), up = rand(-90, -20), s = rand(0.6, 1.5);
-    c.animate(
-      [{ transform: 'translate(-50%,-50%) scale(' + s + ')', opacity: 1 },
-       { transform: 'translate(' + (dx * 0.6) + 'px,' + up + 'px) rotate(' + rand(-200, 200) + 'deg) scale(' + s + ')', opacity: 1, offset: 0.4 },
-       { transform: 'translate(' + dx + 'px,' + rand(120, 220) + 'px) rotate(' + rand(-500, 500) + 'deg) scale(' + s + ')', opacity: 0 }],
-      { duration: rand(650, 1000), easing: 'cubic-bezier(.3,.6,.6,1)' }
-    ).onfinish = () => c.remove();
-  }
-}
-
-/* ---------- step 3: read the slip ---------- */
-function reveal() {
-  state = 'open';
-  sfx.snap(); sfx.paper(); buzz(60);
-  crumbs(16);
-  cookie.classList.add('broken');
-  current = nextFortune();
-  $('fortune').textContent = current;
-  $('lucky').textContent = 'Numeri sfigati: ' + unluckyNumbers();
-  slip.classList.add('show');
-  count++; store.set('bds.count', count); renderTally();
-  hint.hidden = true; actions.hidden = false;
-  stage.setAttribute('aria-label', 'Bigliettino: ' + current);
+function newRound() {
+  for (const g of [backLayer, cookieLayer, frontLayer, fxLayer, dyn]) g.textContent = "";
+  bodies.length = 0; tear = null; clipN = 0; clacks = 0;
+  $("shadow").setAttribute("opacity", 0.28);
+  buildCookie();
+  buildWrapper();
+  setHint("wrapped");
 }
 function reset() {
-  state = 'busy';
-  slip.classList.remove('show');
-  actions.hidden = true; hint.hidden = false; setHint('wrapped');
-  hits = 0; progress = 0;
-  $('crack1').classList.remove('on'); $('crack2').classList.remove('on');
-  scene.style.visibility = 'hidden';
-  cookie.classList.remove('broken');
-  wrapL.classList.remove('fly'); wrapR.classList.remove('fly');
-  wrapL.style.opacity = ''; wrapR.style.opacity = ''; tearLine.style.opacity = '';
-  renderTear();
+  state = "busy";
+  slip.classList.remove("show");
+  actions.hidden = true; hint.hidden = false;
+  scene.style.visibility = "hidden";
   setTimeout(() => {
-    scene.style.visibility = '';
-    if (!calm && scene.animate) scene.animate(
-      [{ transform: 'translateY(-90%) rotate(-10deg)', opacity: 0 }, { transform: 'none', opacity: 1 }],
-      { duration: 480, easing: 'cubic-bezier(.2,1.3,.5,1)' });
+    newRound();
+    scene.style.visibility = "";
+    if (!calm && scene.animate) scene.animate(pick(ENTRIES), { duration: R(420, 560), easing: "cubic-bezier(.2,1.3,.5,1)" });
     sfx.crinkle();
-    state = 'wrapped';
-  }, calm ? 30 : 260);
+    setTimeout(() => { state = "wrapped"; }, calm ? 0 : 380);
+  }, calm ? 20 : 160);
 }
 
 /* ---------- input ---------- */
-let down = null;
-stage.addEventListener('pointerdown', e => {
-  if (state === 'open' || state === 'busy') return;
-  down = { x: e.clientX, y: e.clientY, moved: 0 };
+let down = null, fling = [0, 0];
+stage.addEventListener("pointerdown", e => {
+  if (state !== "wrapped" && state !== "cookie") return;
+  const s = toScene(e.clientX, e.clientY), l = ap(wr.Mi, s[0], s[1]);
+  down = { x: e.clientX, y: e.clientY, sx0: s[0], sy0: s[1], sx: s[0], sy: s[1], ax: l[0], ay: l[1], moved: 0, t: performance.now() };
+  fling = [0, 0];
   try { stage.setPointerCapture(e.pointerId); } catch {}
   audio();
 });
-stage.addEventListener('pointermove', e => {
+stage.addEventListener("pointermove", e => {
   if (!down) return;
   const d = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+  if (d <= 0) return;
   down.x = e.clientX; down.y = e.clientY; down.moved += d;
-  if (state === 'wrapped' && d > 0) tear(d / Math.max(220, stage.clientWidth * 0.95));
+  const s = toScene(e.clientX, e.clientY), now = performance.now(), dt = Math.max(8, now - down.t) / 1000;
+  fling = [clamp((s[0] - down.sx) / dt, -900, 900), clamp((s[1] - down.sy) / dt, -900, 900)];
+  const dist = Math.hypot(s[0] - down.sx, s[1] - down.sy);
+  down.sx = s[0]; down.sy = s[1]; down.t = now;
+  if (state === "wrapped") { const l = ap(wr.Mi, s[0], s[1]); tearMove(l[0], l[1], dist); }
 });
 function release() {
   if (!down) return;
-  const tap = down.moved < 10;
+  const dn = down;
   down = null;
-  if (!tap) return;
-  if (state === 'wrapped') tear(0.34);
-  else if (state === 'cookie') hit();
+  if (tear) tear.near = false;
+  if (state === "wrapped") {
+    if (dn.moved < 10) { const l = ap(wr.Mi, dn.sx, dn.sy); tearTap(l[0], l[1]); }
+  } else if (state === "cookie") {
+    if (dn.moved < 10) hitCookie(dn.sx, dn.sy, null, 1);
+    else {
+      const dx = dn.sx - dn.sx0, dy = dn.sy - dn.sy0, d = Math.hypot(dx, dy);
+      if (d > 14) hitCookie((dn.sx + dn.sx0) / 2, (dn.sy + dn.sy0) / 2, [dx / d, dy / d], 2);
+      else hitCookie(dn.sx, dn.sy, null, 1);
+    }
+  }
 }
-stage.addEventListener('pointerup', release);
-stage.addEventListener('pointercancel', () => { down = null; });
-stage.addEventListener('keydown', e => {
-  if (e.key !== 'Enter' && e.key !== ' ') return;
+stage.addEventListener("pointerup", release);
+stage.addEventListener("pointercancel", () => { down = null; if (tear) tear.near = false; });
+stage.addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
   e.preventDefault();
-  if (state === 'wrapped') tear(0.34);
-  else if (state === 'cookie') hit();
+  audio();
+  if (state === "wrapped") tearTap(R(60, 300), R(90, 230));
+  else if (state === "cookie") hitCookie(R(120, 240), R(130, 200), null, 1);
 });
-document.addEventListener('gesturestart', e => e.preventDefault());
+document.addEventListener("gesturestart", e => e.preventDefault());
 
-$('again').addEventListener('click', () => { audio(); reset(); });
-$('share').addEventListener('click', async () => {
-  const btn = $('share');
-  const text = '🥠 Il Biscotto della Sfiga dice: «' + current + '»';
-  const flash = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = 'Condividi'; }, 1600); };
+$("again").addEventListener("click", () => { audio(); reset(); });
+$("share").addEventListener("click", async () => {
+  const btn = $("share");
+  const text = "🥠 Il Biscotto della Sfiga dice: «" + current + "»";
+  const flash = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = "Condividi"; }, 1600); };
   try {
     if (navigator.share) { await navigator.share({ text }); return; }
     await navigator.clipboard.writeText(text);
-    flash('Copiato');
+    flash("Copiato");
   } catch (err) {
-    if (err && err.name === 'AbortError') return;
-    try { await navigator.clipboard.writeText(text); flash('Copiato'); }
-    catch { flash('Seleziona il testo'); }
+    if (err && err.name === "AbortError") return;
+    try { await navigator.clipboard.writeText(text); flash("Copiato"); }
+    catch { flash("Seleziona il testo"); }
   }
 });
 function renderMute() {
-  const b = $('mute');
-  b.textContent = muted ? '🔇' : '🔊';
-  b.setAttribute('aria-pressed', String(muted));
-  b.setAttribute('aria-label', muted ? 'Audio spento' : 'Audio acceso');
+  const b = $("mute");
+  b.textContent = muted ? "🔇" : "🔊";
+  b.setAttribute("aria-pressed", String(muted));
+  b.setAttribute("aria-label", muted ? "Audio spento" : "Audio acceso");
 }
-$('mute').addEventListener('click', () => { muted = !muted; store.set('bds.muted', muted); renderMute(); if (!muted) sfx.crinkle(); });
+$("mute").addEventListener("click", () => {
+  muted = !muted; store.set("bds.muted", muted); renderMute();
+  if (muted) tearSound(0); else sfx.crinkle();
+});
 
-renderMute(); renderTally(); renderTear();
+renderMute(); renderTally(); newRound();
 
 try {
-  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && document.querySelector('link[rel="manifest"]'))
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && document.querySelector('link[rel="manifest"]'))
+    navigator.serviceWorker.register("sw.js").catch(() => {});
 } catch {}
 })();
 </script>
